@@ -21,8 +21,9 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation group: 'org.hibernate', name: 'hibernate-core', version: '6.1.5.Final', ext: 'pom'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.5'
+	implementation group: 'org.hibernate', name: 'hibernate-core', ext: 'pom'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
@@ -30,29 +31,29 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-// 통합 빌드
-// npm install
-task appNpmInstall(type: NpmTask) {
-	workingDir = file("${project.projectDir}/front-end")
-	args = ["install"]
-}
-
-// npm build
-task npmBuild(type: NpmTask) {
-	workingDir = file("${project.projectDir}/front-end")
-	args = ["run", "build"]
-}
-
-// 빌드된 결과 이동
-task copyWebApp(type: Copy) {
-	from "front-end/build"
-	into 'build/resources/main/static/'
-}
-
-// appNpmInstall -> npmBuild -> copyWebApp 순으로 빌드 과정이 실행된다.
-npmBuild.dependsOn appNpmInstall
-copyWebApp.dependsOn npmBuild
-compileJava.dependsOn copyWebApp
+//// 통합 빌드
+//// npm install
+//task appNpmInstall(type: NpmTask) {
+//	workingDir = file("${project.projectDir}/front-end")
+//	args = ["install"]
+//}
+//
+//// npm build
+//task npmBuild(type: NpmTask) {
+//	workingDir = file("${project.projectDir}/front-end")
+//	args = ["run", "build"]
+//}
+//
+//// 빌드된 결과 이동
+//task copyWebApp(type: Copy) {
+//	from "front-end/build"
+//	into 'build/resources/main/static/'
+//}
+//
+//// appNpmInstall -> npmBuild -> copyWebApp 순으로 빌드 과정이 실행된다.
+//npmBuild.dependsOn appNpmInstall
+//copyWebApp.dependsOn npmBuild
+//compileJava.dependsOn copyWebApp
 
 
 tasks.named('test') {
