@@ -1,0 +1,6 @@
+{
+  "compilerOptions": {
+    "baseUrl": "."
+  },
+  "include": ["src", "../../react/not-a-gardener/src/login/Login.js"]
+}

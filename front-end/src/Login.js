@@ -26,16 +26,17 @@ function Login(){
     e.preventDefault(); // reload 막기
 
     if(!id){
-      return alert("아이디를 입력하세요");
+      return alert("ID를 입력하세요");
     } else if(!pw){
-      return alert("패스워드를 입력하세요");
+      return alert("PW를 입력하세요");
     } else {
+      console.log("id: " + id);
+      console.log(typeof id)
+      console.log("pw: " + pw);
+      console.log(typeof pw)
+
       // object의 key, value 이름이 같으면 생략 가능
       const data = {id, pw};
-      console.log(data);
-      // data = JSON.stringify(data);
-      // console.log(data);
-      // console.log(typeof data);
 
       axios.post("/", data)
       .then((res) => {
@@ -51,11 +52,11 @@ function Login(){
         if(res.data.code === 400) {
           setMsg("아이디와 비밀번호를 입력해주세요.");
         }
-
+        
         if(res.data.code === 401) {
           setMsg("존재하지 않는 ID입니다.");
         }
-
+        
         if(res.data.code === 402) {
           setMsg("비밀번호가 틀립니다.");
         }

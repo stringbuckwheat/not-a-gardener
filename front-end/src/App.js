@@ -14,6 +14,7 @@ const loading = (
 
 // Pages
 const Login = React.lazy(() => import('./login/Login'))
+const Register = React.lazy(() => import('./login/Register'))
 
 class App extends Component {
   render() {
@@ -21,9 +22,10 @@ class App extends Component {
       <HashRouter>
         <Suspense fallback={loading}>
           <Routes>
-            
+
             <Route path="/" name="Login Page" element={<Login/>} />
-          
+            <Route path="/register" name="Register Page" element={<Register/>} />
+
           </Routes>
         </Suspense>
       </HashRouter>

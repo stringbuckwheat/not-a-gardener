@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import {
   CButton,
@@ -15,55 +15,8 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
-import axios from 'axios'
 
-function Login(){
-  const [id, setId] = useState("");
-  const [pw, setPw] = useState("");
-
-  // 입력 값 확인 및 submit
-  const inputCheck = (e) => {
-    e.preventDefault(); // reload 막기
-
-    if(!id){
-      return alert("아이디를 입력하세요");
-    } else if(!pw){
-      return alert("패스워드를 입력하세요");
-    } else {
-      // object의 key, value 이름이 같으면 생략 가능
-      const data = {id, pw};
-      console.log(data);
-      // data = JSON.stringify(data);
-      // console.log(data);
-      // console.log(typeof data);
-
-      axios.post("/", data)
-      .then((res) => {
-        console.log(res);
-
-        /*
-        if(res.data.code === 200) {
-          console.log("로그인");
-          dispatch(loginUser(res.data.userInfo));
-          setMsg("");
-        }
-
-        if(res.data.code === 400) {
-          setMsg("아이디와 비밀번호를 입력해주세요.");
-        }
-
-        if(res.data.code === 401) {
-          setMsg("존재하지 않는 ID입니다.");
-        }
-
-        if(res.data.code === 402) {
-          setMsg("비밀번호가 틀립니다.");
-        }
-        */
-      });
-    }
-  }
-
+const Login = () => {
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
@@ -72,33 +25,34 @@ function Login(){
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
-                  <CForm onSubmit={inputCheck}>
-                    <h1>로그인</h1>
-                    <p className="text-medium-emphasis"></p>
+                  <CForm>
+                    <h1>Login</h1>
+                    <p className="text-medium-emphasis">Sign In to your account</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput placeholder="ID" name="id" onChange={(e) => setId(e.target.value)}/>
+                      <CFormInput placeholder="Username" autoComplete="username" />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
                         <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
                       <CFormInput
-                        name="pw"
                         type="password"
-                        placeholder="PW"
-                        onChange={(e) => setPw(e.target.value)}
+                        placeholder="Password"
+                        autoComplete="current-password"
                       />
                     </CInputGroup>
                     <CRow>
                       <CCol xs={6}>
-                        <CButton type="submit" color="primary" className="px-4">로그인</CButton>
+                        <CButton color="primary" className="px-4">
+                          Login
+                        </CButton>
                       </CCol>
                       <CCol xs={6} className="text-right">
                         <CButton color="link" className="px-0">
-                          비밀번호 찾기
+                          Forgot password?
                         </CButton>
                       </CCol>
                     </CRow>
@@ -108,13 +62,14 @@ function Login(){
               <CCard className="text-white bg-primary py-5" style={{ width: '44%' }}>
                 <CCardBody className="text-center">
                   <div>
-                    <h2>식물 키우기!</h2>
+                    <h2>Sign up</h2>
                     <p>
-                      가드너가 되지 못한 당신을 위한 해결 방안
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                      tempor incididunt ut labore et dolore magna aliqua.
                     </p>
                     <Link to="/register">
                       <CButton color="primary" className="mt-3" active tabIndex={-1}>
-                        가입하세요
+                        Register Now!
                       </CButton>
                     </Link>
                   </div>
