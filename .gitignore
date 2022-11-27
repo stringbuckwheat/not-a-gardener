@@ -22,7 +22,7 @@ bin/
 *.iws
 *.iml
 *.ipr
-out/
+/out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
@@ -37,7 +37,7 @@ out/
 .vscode/
 
 # dependencies
-**/node_modules/
+front-end/node_modules/
 /.pnp
 .pnp.js
 
