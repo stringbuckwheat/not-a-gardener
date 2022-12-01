@@ -96,6 +96,8 @@ const Register = () => {
 //    } else {
       console.log(register);
 
+      // TODO 유효성 검사 함수 만들기
+
       axios.post("/register", register)
       .then((res) => {
         console.log("register form submit")

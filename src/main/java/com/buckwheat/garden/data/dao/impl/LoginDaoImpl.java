@@ -29,4 +29,9 @@ public class LoginDaoImpl implements LoginDao {
     public MemberEntity addMember(MemberEntity memberEntity) {
         return loginRepository.save(memberEntity);
     }
+
+    @Override
+    public Optional<MemberEntity> getMemberByIdAndPw(MemberEntity memberEntity) {
+        return loginRepository.findById(memberEntity.getId());
+    }
 }

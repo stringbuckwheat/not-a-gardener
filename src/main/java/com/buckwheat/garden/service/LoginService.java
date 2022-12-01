@@ -1,5 +1,6 @@
 package com.buckwheat.garden.service;
 
+import com.buckwheat.garden.data.dto.MemberDto;
 import com.buckwheat.garden.data.dto.RegisterDto;
 
 public interface LoginService {
@@ -8,4 +9,7 @@ public interface LoginService {
 
     // 회원 추가
     RegisterDto addMember(RegisterDto registerDto);
+
+    // 로그인
+    String login(MemberDto memberDto);
 }

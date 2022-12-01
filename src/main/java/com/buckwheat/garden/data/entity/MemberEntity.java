@@ -27,7 +27,5 @@ public class MemberEntity {
     @Column(name="create_date")
     private LocalDateTime createDate;
 
-    // DTO -> entity
-
-
+    // TODO DTO -> entity
 }

@@ -10,4 +10,7 @@ public interface LoginDao {
 
     /* 회원 가입 */
     MemberEntity addMember(MemberEntity memberEntity);
+
+    /* 로그인: MemberEntity를 사용하여 조회*/
+    Optional<MemberEntity> getMemberByIdAndPw(MemberEntity memberEntity);
 }

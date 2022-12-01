@@ -17,11 +17,21 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping("/")
-    public MemberDto login(@RequestBody MemberDto memberDto){
+    // public ResponseEntity<Response> login(@RequestBody MemberDto memberDto){
+    public String login(@RequestBody MemberDto memberDto){
+        // return ResponseEntity: value 뿐 아니라 상태코드, 응답 메시지 등을 반환 가능
         log.debug("login() 메소드 호출");
         log.debug("member: " + memberDto);
 
-        return memberDto;
+        String token = loginService.login(memberDto);
+        log.debug("final token: " + token);
+
+//        return new ResponseEntity<>(Response.builder()
+//                .response(Result.builder.token(token).build())
+//                .content("success")
+//                .build(), HttpStatus.OK
+//        );
+        return token;
     }
 
     @PostMapping("/register")
