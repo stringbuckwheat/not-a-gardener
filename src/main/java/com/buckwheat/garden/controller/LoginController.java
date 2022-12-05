@@ -17,9 +17,7 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping("/")
-    // public ResponseEntity<Response> login(@RequestBody MemberDto memberDto){
     public String login(@RequestBody MemberDto memberDto){
-        // return ResponseEntity: value 뿐 아니라 상태코드, 응답 메시지 등을 반환 가능
         log.debug("login() 메소드 호출");
         log.debug("member: " + memberDto);
 

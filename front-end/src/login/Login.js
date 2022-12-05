@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -20,46 +20,43 @@ import axios from 'axios'
 function Login(){
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
+  const [msg, setMsg] = useState("");
+
+  const navigate = useNavigate();
 
   // 입력 값 확인 및 submit
   const inputCheck = (e) => {
     e.preventDefault(); // reload 막기
 
     if(!id){
-      return alert("아이디를 입력하세요");
+      setMsg("아이디를 입력하세요");
     } else if(!pw){
-      return alert("패스워드를 입력하세요");
+      setMsg("패스워드를 입력하세요");
     } else {
       // object의 key, value 이름이 같으면 생략 가능
       const data = {id, pw};
-      console.log(data);
-      // data = JSON.stringify(data);
       // console.log(data);
-      // console.log(typeof data);
 
       axios.post("/", data)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
 
-        /*
-        if(res.data.code === 200) {
-          console.log("로그인");
-          dispatch(loginUser(res.data.userInfo));
-          setMsg("");
-        }
+        const { accessToken } = res.data;
 
-        if(res.data.code === 400) {
-          setMsg("아이디와 비밀번호를 입력해주세요.");
-        }
+        // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
+        // accessToken을 localStorage, cookie 등에 저장하지 않는다!
+        axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
-        if(res.data.code === 401) {
-          setMsg("존재하지 않는 ID입니다.");
-        }
+        // garden 페이지로 이동
+        navigate('/garden');
+      })
+      .catch((error) => {
+         // console.log("error catch");
+         // console.log(error);
 
-        if(res.data.code === 402) {
-          setMsg("비밀번호가 틀립니다.");
-        }
-        */
+         // const code = error.response.data.code;
+         setMsg(error.response.data.message);
+
       });
     }
   }
@@ -74,7 +71,7 @@ function Login(){
                 <CCardBody>
                   <CForm onSubmit={inputCheck}>
                     <h1>로그인</h1>
-                    <p className="text-medium-emphasis"></p>
+                    <p className="text-medium-emphasis">{msg}</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
