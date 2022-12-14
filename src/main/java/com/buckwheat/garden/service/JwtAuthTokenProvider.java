@@ -1,6 +1,6 @@
 package com.buckwheat.garden.service;
 
-import com.buckwheat.garden.data.dto.JwtAuthToken;
+import com.buckwheat.garden.data.token.JwtAuthToken;
 import org.springframework.security.core.Authentication;
 
 import java.util.Date;

@@ -10,17 +10,18 @@ const loading = (
 )
 
 // Containers
-// const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
+const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
 // Pages
 const Login = React.lazy(() => import('./login/Login'))
 const Register = React.lazy(() => import('./login/Register'))
-const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
-const LoginTest = React.lazy(() => import('./login/LoginTest'))
+// const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
+const GardenMain = React.lazy(() => import('./garden/GardenMain'))
 
 
 class App extends Component {
   render() {
+    console.log("render()!");
     return (
       <HashRouter>
         <Suspense fallback={loading}>
@@ -28,8 +29,8 @@ class App extends Component {
 
             <Route path="/" name="Login Page" element={<Login/>} />
             <Route path="/register" name="Register Page" element={<Register/>} />
-            <Route path="/garden" name="Login Test" element={<LoginTest/>} />
-
+            // <Route path="*" name="Home" element={<DefaultLayout />} />
+            <Route path="/garden" name="GardenMain" element={<GardenMain />} />
           </Routes>
         </Suspense>
       </HashRouter>

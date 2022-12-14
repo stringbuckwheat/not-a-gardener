@@ -1,6 +1,6 @@
 package com.buckwheat.garden.data.dto;
 
-import com.buckwheat.garden.data.entity.MemberEntity;
+import com.buckwheat.garden.data.entity.Member;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -17,8 +17,8 @@ public class RegisterDto {
         this.pw = BCryptpassword;
     }
 
-    public MemberEntity toEntity(){
-        return MemberEntity
+    public Member toEntity(){
+        return Member
                 .builder()
                 .id(id)
                 .email(email)

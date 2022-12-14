@@ -24,11 +24,6 @@ public class LoginController {
         String token = loginService.login(memberDto);
         log.debug("final token: " + token);
 
-//        return new ResponseEntity<>(Response.builder()
-//                .response(Result.builder.token(token).build())
-//                .content("success")
-//                .build(), HttpStatus.OK
-//        );
         return token;
     }
 
@@ -41,7 +36,6 @@ public class LoginController {
     @PostMapping("/idCheck")
     public String idCheck(@RequestBody RegisterDto registerDto){
         log.debug("idcheck: " + registerDto);
-
         return loginService.getIdByInputId(registerDto.getId());
     }
 }

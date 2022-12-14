@@ -1,6 +1,6 @@
-package com.buckwheat.garden.data.dao.impl;
+package com.buckwheat.garden.dao.impl;
 
-import com.buckwheat.garden.data.dto.PasswordAuthenticationToken;
+import com.buckwheat.garden.data.token.PasswordAuthenticationToken;
 import com.buckwheat.garden.data.entity.MemberAuth;
 import com.buckwheat.garden.repository.MemberAuthRepository;
 import lombok.RequiredArgsConstructor;

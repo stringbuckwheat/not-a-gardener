@@ -1,4 +1,4 @@
-package com.buckwheat.garden.data.dto;
+package com.buckwheat.garden.data.token;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.impl.DefaultClaims;

@@ -1,4 +1,4 @@
-package com.buckwheat.garden.data.dto;
+package com.buckwheat.garden.data.token;
 
 import lombok.Getter;
 import lombok.Setter;

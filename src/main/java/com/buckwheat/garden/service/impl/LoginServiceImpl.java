@@ -1,11 +1,11 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.data.dao.LoginDao;
-import com.buckwheat.garden.data.dto.JwtAuthToken;
+import com.buckwheat.garden.dao.RegisterDao;
+import com.buckwheat.garden.data.token.JwtAuthToken;
 import com.buckwheat.garden.data.dto.MemberDto;
-import com.buckwheat.garden.data.dto.PasswordAuthenticationToken;
+import com.buckwheat.garden.data.token.PasswordAuthenticationToken;
 import com.buckwheat.garden.data.dto.RegisterDto;
-import com.buckwheat.garden.data.entity.MemberEntity;
+import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.service.JwtAuthTokenProvider;
 import com.buckwheat.garden.service.LoginService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ import java.util.Optional;
 @Slf4j
 public class LoginServiceImpl implements LoginService {
     @Autowired
-    private LoginDao loginDao;
+    private RegisterDao registerDao;
 
     @Autowired
     private BCryptPasswordEncoder encoder;
@@ -43,7 +43,7 @@ public class LoginServiceImpl implements LoginService {
     public String getIdByInputId(String id) {
         log.debug("id: " + id);
 
-        Optional<MemberEntity> registerEntity = loginDao.selectIdByInputId(id);
+        Optional<Member> registerEntity = registerDao.selectIdByInputId(id);
 
         if(registerEntity.isEmpty()){
             return null;
@@ -60,7 +60,7 @@ public class LoginServiceImpl implements LoginService {
         paramRegisterDto.encryptPassword(encoder.encode(paramRegisterDto.getPw()));
 
         // DB에 저장
-        MemberEntity memberEntity = loginDao.addMember(paramRegisterDto.toEntity());
+        Member memberEntity = registerDao.addMember(paramRegisterDto.toEntity());
         log.debug("DB save: " + memberEntity);
 
         // TODO 회원 가입 시 자동 로그인
