@@ -1,6 +1,6 @@
 package com.buckwheat.garden.config.filter;
 
-import com.buckwheat.garden.data.dto.JwtAuthToken;
+import com.buckwheat.garden.data.token.JwtAuthToken;
 import com.buckwheat.garden.service.JwtAuthTokenProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -18,7 +18,7 @@ import java.util.Optional;
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
     // 로그인 이후 토큰 자체에 대한 검증
-    public static final String AUTHORIZATION_HEADER = "x-auth-token";
+    public static final String AUTHORIZATION_HEADER = "Authorization";
     private JwtAuthTokenProvider tokenProvider;
 
     public JwtFilter(JwtAuthTokenProvider tokenProvider){
@@ -27,8 +27,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private Optional<String> resolveToken(HttpServletRequest request){
         // Request의 Header에 담긴 토큰 값을 가져온다
-        // x-auth-token: 토큰값 형태로 저장
+
         String authToken = request.getHeader(AUTHORIZATION_HEADER);
+        log.debug("authToken: " + authToken);
 
         // 공백 혹은 null이 아니면
         if(StringUtils.hasText(authToken)){
@@ -42,12 +43,15 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.debug("*** JWT FILTER ***");
 
-        Optional<String> token = resolveToken(request);
+        Optional<String> header = resolveToken(request);
 
         // Optional 안의 객체가 null이 아니면
-        if(token.isPresent()){
+        if(header.isPresent()){
+            String token = header.get().split(" ")[1].trim();
+            log.debug("split 이후: " + token);
+
             // header의 token로 token, key를 포함하는 새로운 JwtAuthToken 만들기
-            JwtAuthToken jwtAuthToken = (JwtAuthToken) tokenProvider.convertAuthToken(token.get());
+            JwtAuthToken jwtAuthToken = (JwtAuthToken) tokenProvider.convertAuthToken(token);
 
             // boolean validate() -> getData(): claims or null
             // 정상 토큰이면 해당 토큰으로 Authentication을 가져와서 SecurityContext에 저장

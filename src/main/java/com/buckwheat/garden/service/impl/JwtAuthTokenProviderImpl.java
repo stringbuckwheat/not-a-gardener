@@ -1,11 +1,12 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.data.dto.JwtAuthToken;
+import com.buckwheat.garden.data.token.JwtAuthToken;
 import com.buckwheat.garden.service.JwtAuthTokenProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,7 @@ import javax.annotation.PostConstruct;
 import java.security.Key;
 import java.util.*;
 
+@Slf4j
 @Component
 public class JwtAuthTokenProviderImpl implements JwtAuthTokenProvider {
 
@@ -51,11 +53,13 @@ public class JwtAuthTokenProviderImpl implements JwtAuthTokenProvider {
         if(authToken.validate()){
             // authToken에 담긴 데이터를 받아온다
             Claims claims = authToken.getData();
+            log.debug(claims.toString());
 
             // Colletions.singleton(T o): Returns an immutable set containing only the specified object.
             // SimpleGrantedAuthority: 권한 객체. "user" 같은 String 값을 생성자 파라미터로 넣어주면 된다.
             // claims.get(JwtAuthToken.AUTHORITIES_KEY, String.class): 	get(String claimName, Class<T> requiredType)
-            Collection<? extends GrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority(claims.get(JwtAuthToken.AUTHORITIES_KEY, String.class)));
+            // Collection<? extends GrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority(claims.get(JwtAuthToken.AUTHORITIES_KEY, String.class)));
+            Collection<? extends GrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("user"));
 
             // public User(String username, String password, Collection<? extends GrantedAuthority> authorities)
             User principal = new User(claims.getSubject(), "", authorities);
