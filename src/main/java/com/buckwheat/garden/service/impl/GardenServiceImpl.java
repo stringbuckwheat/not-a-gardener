@@ -42,7 +42,7 @@ public class GardenServiceImpl implements GardenService {
     }
 
     @Override
-    public PlantDto calculateCode(PlantDto plantDto){
+    public void calculateCode(PlantDto plantDto){
         int recentWateringPeriod = plantDto.getAverageWateringPeriod();
         LocalDate latestWateringDay = wateringDao.getLatestWateringDayByPlantNo(plantDto.getPlantNo());
         LocalDate latestFertilizedDay = wateringDao.getLatestFertilizedDayByPlantNo(plantDto.getPlantNo());
@@ -86,7 +86,5 @@ public class GardenServiceImpl implements GardenService {
         plantDto.setFertilizingCode(fertilizingCode);
 
         log.debug("after calculate: " + plantDto);
-
-        return plantDto;
     }
 }

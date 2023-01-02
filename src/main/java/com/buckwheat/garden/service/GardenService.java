@@ -9,5 +9,5 @@ public interface GardenService {
     List<PlantDto> getPlantList(String id);
 
     /* 해당 식물의 wateringCode와 fertilizingCode를 반환 */
-    PlantDto calculateCode(PlantDto plantDto);
+    void calculateCode(PlantDto plantDto);
 }
