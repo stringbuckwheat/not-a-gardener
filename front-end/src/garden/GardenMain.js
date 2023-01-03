@@ -21,8 +21,8 @@ const GardenMain = () => {
       plantNo: ''
       , plantName: ''
       , averageWateringPeriod: ''
-      , latestWateringDay: ''
-      , latestFertilizedDay: ''
+      , wateringCode: ''
+      , fertilizingCode: ''
   }]);
 
   // 백엔드에서 식물 리스트를 받아온다
@@ -40,18 +40,35 @@ const GardenMain = () => {
   <>
       <CRow>
        {plantList.map((plant, idx) => {
+          console.log(plant);
+
           const color = ["primary", "warning", "danger", "success"];
           let message = "";
 
           if(plant.wateringCode == 0){
             message = "이 식물은 목이 말라요!";
+
+            if(plant.fertilizingCode == 0){
+              message += "맹물을 주세요!";
+            } else {
+              message += "비료를 주세요!";
+            }
+
           } else if(plant.wateringCode == 1) {
-            message = "최근 물주기 하루 전입니다. 흙이 말랐는지 확인해보세요!"
+            message = "최근 물주기 하루 전입니다. 흙이 말랐는지 확인해보세요! 말랐다면 "
+
+            if(plant.fertilizingCode == 0){
+              message += "맹물을 주세요!";
+            } else {
+              message += "비료를 주세요!";
+            }
+
           } else if(plant.wateringCode == 2) {
             message = "물 줄 날짜를 놓쳤어요! 비료 절대 안 됨!"
           } else if(plant.wateringCode == 3) {
             message = "놔두세요. 그냥 관상하세요.";
           }
+
 
          return (
             <CCol sm={6} lg={3}>

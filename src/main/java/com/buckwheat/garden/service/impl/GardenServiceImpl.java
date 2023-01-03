@@ -77,6 +77,7 @@ public class GardenServiceImpl implements GardenService {
         // 음수가 나오면 물주기를 놓친 것이므로
         if(wateringCode < 0){
             wateringCode = 2;
+            fertilizingCode = 0;
         } else if (wateringCode > 2){
             // 3 이상이면... 딱히 할 일 없는 식물
             wateringCode = 3;

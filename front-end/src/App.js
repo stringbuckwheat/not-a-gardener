@@ -24,9 +24,7 @@ class App extends Component {
           <Routes>
             <Route path="/" name="Login Page" element={<Login />} />
             <Route path="/register" name="Register Page" element={<Register />} />
-            <Route element = {<DefaultLayout />}>
-              <Route path="/garden" name="GardenMain" element={<GardenMain />} />
-            </Route>
+            <Route path="/garden/*" element = {<DefaultLayout />} />
           </Routes>
         </Suspense>
       </HashRouter>
