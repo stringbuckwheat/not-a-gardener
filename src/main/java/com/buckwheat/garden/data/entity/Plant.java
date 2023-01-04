@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 public class Plant {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO) // auto-increment
     private int plantNo;
 
     @NotNull

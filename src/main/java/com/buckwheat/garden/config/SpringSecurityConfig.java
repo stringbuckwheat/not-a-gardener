@@ -59,8 +59,8 @@ public class SpringSecurityConfig {
                 // .anyRequest().hasRole("USER")
 
                 .and()
-                .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .addFilter(this.corsFilter()) // ** CorsFilter 등록 **
+                .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

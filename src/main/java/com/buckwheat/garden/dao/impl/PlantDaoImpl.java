@@ -22,4 +22,9 @@ public class PlantDaoImpl implements PlantDao {
     public List<Plant> getPlantListByUsername(String id) {
         return plantRepository.findAllByUsername(id);
     }
+
+    @Override
+    public Plant savePlant(Plant plant) {
+        return plantRepository.save(plant);
+    }
 }

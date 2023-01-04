@@ -7,12 +7,13 @@ import {
   CDropdownItem,
   CDropdownToggle,
   CWidgetStatsA,
+  CButton,
 } from '@coreui/react'
 import { getStyle } from '@coreui/utils'
 // import { CChartBar, CChartLine } from '@coreui/react-chartjs'
 import CIcon from '@coreui/icons-react'
 import { cilArrowBottom, cilArrowTop, cilOptions } from '@coreui/icons'
-import axios from 'axios'
+import authAxios from './requestInterceptor'
 
 const GardenMain = () => {
   console.log("GardenMain start");
@@ -27,7 +28,7 @@ const GardenMain = () => {
 
   // 백엔드에서 식물 리스트를 받아온다
   useEffect(() => {
-     axios.get("/garden", "")
+    authAxios.get("/garden", "")
         .then((res) => {
           console.log("res.data");
           console.log(res.data);
@@ -44,6 +45,7 @@ const GardenMain = () => {
 
           const color = ["primary", "warning", "danger", "success"];
           let message = "";
+          let periodMessage = `이 식물의 평균 물주기는 ${plant.averageWateringPeriod}일입니다.`
 
           if(plant.wateringCode == 0){
             message = "이 식물은 목이 말라요!";
@@ -67,6 +69,9 @@ const GardenMain = () => {
             message = "물 줄 날짜를 놓쳤어요! 비료 절대 안 됨!"
           } else if(plant.wateringCode == 3) {
             message = "놔두세요. 그냥 관상하세요.";
+          } else if(plant.wateringCode == 4) {
+            message = "아직 물주기 정보가 부족해요. 우리 함께 매일 체크해보아요!";
+            periodMessage = "";
           }
 
 
@@ -74,7 +79,7 @@ const GardenMain = () => {
             <CCol sm={6} lg={3}>
               <CWidgetStatsA
                 className="mb-4"
-                color={color[plant.wateringCode]}
+                color={color[plant.wateringCode % 4]} // 일단 4로 나눈 나머지로 해결
                 value={
                   <>
                     <span role="img" aria-label="herb">🌿 </span>
@@ -83,7 +88,9 @@ const GardenMain = () => {
 
                     <div className="fs-6 fw-normal">
                       <div>{plant.plantSpecies}</div>
-                      (이 식물의 평균 물주기는 {plant.averageWateringPeriod}일입니다.)
+                      <div>
+                        {periodMessage}
+                      </div>
                     </div>
                   </>
                 }

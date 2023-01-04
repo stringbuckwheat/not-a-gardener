@@ -12,7 +12,6 @@ const loading = (
 // Pages
 const Login = React.lazy(() => import('./login/Login'))
 const Register = React.lazy(() => import('./login/Register'))
-const GardenMain = React.lazy(() => import('./garden/GardenMain'))
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
 class App extends Component {

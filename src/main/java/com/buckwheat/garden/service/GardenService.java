@@ -1,7 +1,9 @@
 package com.buckwheat.garden.service;
 
+import com.buckwheat.garden.data.dto.AddPlantDto;
 import com.buckwheat.garden.data.dto.PlantDto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface GardenService {
@@ -10,4 +12,13 @@ public interface GardenService {
 
     /* 해당 식물의 wateringCode와 fertilizingCode를 반환 */
     void calculateCode(PlantDto plantDto);
+
+    /* 비료든 물이든 마지막으로 물 준 날짜 구하기 */
+    LocalDate getLastDrinkingDay(int plantNo);
+
+    /* 비료 시비 여부 */
+    int getFertilizingCode(int plantNo);
+
+    /* 식물 추가 */
+    void addPlant(AddPlantDto addPlantDto);
 }
