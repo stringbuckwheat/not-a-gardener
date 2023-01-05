@@ -27,4 +27,18 @@ public class PlantDaoImpl implements PlantDao {
     public Plant savePlant(Plant plant) {
         return plantRepository.save(plant);
     }
+
+    @Override
+    public Plant getPlantOne(int plantNo) {
+        return plantRepository.findById(plantNo).get();
+    }
+
+    @Override
+    public void updateAverageWateringPeriod(int plantNo, int avgWateringPeriod) {
+        Plant plant = plantRepository.findById(plantNo).get();
+        plant.setAverageWateringPeriod(avgWateringPeriod);
+
+        // plantNo 값이 있으므로 update가 실행된다.
+        plantRepository.save(plant);
+    }
 }

@@ -7,13 +7,11 @@ import {
   CDropdownItem,
   CDropdownToggle,
   CWidgetStatsA,
-  CButton,
 } from '@coreui/react'
-import { getStyle } from '@coreui/utils'
-// import { CChartBar, CChartLine } from '@coreui/react-chartjs'
 import CIcon from '@coreui/icons-react'
-import { cilArrowBottom, cilArrowTop, cilOptions } from '@coreui/icons'
+import { cilOptions } from '@coreui/icons'
 import authAxios from './requestInterceptor'
+import WaterModal from './WaterModal'
 
 const GardenMain = () => {
   console.log("GardenMain start");
@@ -37,13 +35,26 @@ const GardenMain = () => {
         .catch(error => console.log(error))
   }, [])
 
+  const [visible, setVisible] = useState(false);
+  const [clickedPlant, setClickedPlant] = useState(0);
+
+  const onClick = (plantNo) => {
+    setVisible(!visible);
+    setClickedPlant(plantNo);
+  }
+
+  const closeModal = () => {
+    setVisible(false);
+  }
+
+  const [ wateringMsg, setAfterWateringMsg ] = useState("");
+
   return (
   <>
       <CRow>
        {plantList.map((plant, idx) => {
-          console.log(plant);
-
           const color = ["primary", "warning", "danger", "success"];
+          
           let message = "";
           let periodMessage = `이 식물의 평균 물주기는 ${plant.averageWateringPeriod}일입니다.`
 
@@ -77,7 +88,9 @@ const GardenMain = () => {
 
          return (
             <CCol sm={6} lg={3}>
+              <WaterModal visible={visible} clickedPlant={clickedPlant} closeModal={closeModal}/>
               <CWidgetStatsA
+                onClick={() => {onClick(plant.plantNo)}}
                 className="mb-4"
                 color={color[plant.wateringCode % 4]} // 일단 4로 나눈 나머지로 해결
                 value={
@@ -108,66 +121,7 @@ const GardenMain = () => {
                     </CDropdownMenu>
                   </CDropdown>
                 }
-
-      //          chart={
-      //            <CChartLine
-      //              className="mt-3 mx-3"
-      //              style={{ height: '70px' }}
-      //              data={{
-      //                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-      //                datasets: [
-      //                  {
-      //                    label: 'My First dataset',
-      //                    backgroundColor: 'transparent',
-      //                    borderColor: 'rgba(255,255,255,.55)',
-      //                    pointBackgroundColor: getStyle('--cui-primary'),
-      //                    data: [65, 59, 84, 84, 51, 55, 40],
-      //                  },
-      //                ],
-      //              }}
-      //              options={{
-      //                plugins: {
-      //                  legend: {
-      //                    display: false,
-      //                  },
-      //                },
-      //                maintainAspectRatio: false,
-      //                scales: {
-      //                  x: {
-      //                    grid: {
-      //                      display: false,
-      //                      drawBorder: false,
-      //                    },
-      //                    ticks: {
-      //                      display: false,
-      //                    },
-      //                  },
-      //                  y: {
-      //                    min: 30,
-      //                    max: 89,
-      //                    display: false,
-      //                    grid: {
-      //                      display: false,
-      //                    },
-      //                    ticks: {
-      //                      display: false,
-      //                    },
-      //                  },
-      //                },
-      //                elements: {
-      //                  line: {
-      //                    borderWidth: 1,
-      //                    tension: 0.4,
-      //                  },
-      //                  point: {
-      //                    radius: 4,
-      //                    hitRadius: 10,
-      //                    hoverRadius: 4,
-      //                  },
-      //                },
-      //              }}
-      //            />
-      //          }
+                icon={<CIcon icon={cilOptions} className="text-high-emphasis-inverse" />}
               />
             </CCol>
           )

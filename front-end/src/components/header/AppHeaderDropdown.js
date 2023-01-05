@@ -1,7 +1,6 @@
 import React from 'react'
 import {
   CAvatar,
-  CBadge,
   CDropdown,
   CDropdownDivider,
   CDropdownHeader,
@@ -10,22 +9,23 @@ import {
   CDropdownToggle,
 } from '@coreui/react'
 import {
-  cilBell,
-  cilCreditCard,
-  cilCommentSquare,
-  cilEnvelopeOpen,
-  cilFile,
   cilLockUnlocked,
   cilSettings,
-  cilTask,
   cilUser,
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
-
+import { useNavigate } from 'react-router-dom'
 import sprout from './../../assets/images/sprout.png'
 
 // account, setting 부분
 const AppHeaderDropdown = () => {
+  const navigate = useNavigate();
+
+  const logOut = () => {
+    localStorage.removeItem("login");
+    navigate("/");
+  }
+
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0" caret={false}>
@@ -42,7 +42,7 @@ const AppHeaderDropdown = () => {
           설정
         </CDropdownItem>
         <CDropdownDivider />
-        <CDropdownItem href="#">
+        <CDropdownItem onClick={logOut}>
           <CIcon icon={cilLockUnlocked} className="me-2" />
           로그아웃
         </CDropdownItem>
