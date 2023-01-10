@@ -1,6 +1,5 @@
 package com.buckwheat.garden.controller;
 
-import com.buckwheat.garden.data.dto.AddPlantDto;
 import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.service.GardenService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,13 +25,4 @@ public class GardenController {
 
         return gardenService.getPlantList(user.getUsername());
     }
-
-    @PostMapping("/plant")
-    public void addPlant(@AuthenticationPrincipal User user, @RequestBody AddPlantDto addPlantDto){
-        addPlantDto.setUsername(user.getUsername());
-        log.debug("addPlantDto: " + addPlantDto);
-
-        gardenService.addPlant(addPlantDto);
-    }
-
 }

@@ -23,35 +23,40 @@ public class WateringServiceImpl implements WateringService {
     private PlantDao plantDao;
 
     @Override
-    public String addWatering(WaterDto waterDto) {
-        wateringDao.addWatering(waterDto.toEntity());
+    public int addWatering(WaterDto waterDto) {
 
+        wateringDao.addWatering(waterDto.toEntity());
+        return getWateringPeriodCode(waterDto.getPlantNo());
+    }
+
+    @Override
+    public int getWateringPeriodCode(int plantNo){
         // 이전 물주기와 비교
-        int prevWateringPeriod = plantDao.getPlantOne(waterDto.getPlantNo()).getAverageWateringPeriod();
+        int prevWateringPeriod = plantDao.getPlantOne(plantNo).getAverageWateringPeriod();
 
         // DB에서 마지막 물주기 row 2개 들고와서 주기 계산
-        List<Watering> recentWateringList = wateringDao.getRecentTwoWateringDays(waterDto.getPlantNo());
-        int tmpPeriod = Period.between(recentWateringList.get(1).getWateringDate(), recentWateringList.get(0).getWateringDate()).getDays();
-        log.debug("tmpPeriod: " + tmpPeriod);
+        List<Watering> recentWateringList = wateringDao.getRecentTwoWateringDays(plantNo);
+        log.debug("recentWateringList: " + recentWateringList);
 
-        String message = "";
-
-        // 물주기가 짧아진 경우
-        if(prevWateringPeriod > tmpPeriod){
-            // 식물이 성장해서 물주기가 짧아짐
-            message = "물 주기가 짧아졌어요! 식물이 잘 성장하고 있다는 뜻입니다!";
-
-            // DB 업데이트
-            plantDao.updateAverageWateringPeriod(waterDto.getPlantNo(), tmpPeriod);
-
-        } else if (prevWateringPeriod < tmpPeriod){
-            // 사람이 물 주기를 놓쳤거나 날씨가 안 좋아서 물이 늦게 마른 경우
-            // 메시지만 보냄
-            message = "물 주기가 길어졌어요! 물 줄 날짜를 놓쳤거나 날씨가 좋지 않았던 모양이에요.";
-
-            // DB 업데이트 안 함
+        if(recentWateringList.size() == 1){
+            // 물주기 기록이 오직 한 개인 경우
+            // TODO plant 테이블의 create_date과 비교하거나, 데이터 두 개 모일 때까지 기다리거나!
+            return 0;
         }
 
-        return message;
+        int tmpPeriod = Period.between(recentWateringList.get(1).getWateringDate(), recentWateringList.get(0).getWateringDate()).getDays();
+
+        if(prevWateringPeriod > tmpPeriod){
+            // 물주기가 짧아진 경우 -> DB에 반영
+            plantDao.updateAverageWateringPeriod(plantNo, tmpPeriod);
+            return -1;
+        } else if (prevWateringPeriod == tmpPeriod){
+            // 물주기 똑같음
+            return 0;
+        } else {
+            // 물주기 길어짐
+            // 인간의 게으름 혹은 환경 문제이므로 DB 반영하지 않음
+            return 1;
+        }
     }
 }

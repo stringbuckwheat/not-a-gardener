@@ -24,6 +24,10 @@ public interface WateringRepository extends JpaRepository<Watering, Integer> {
             + " AND w.fertilized != 'Y'", nativeQuery = true)
     LocalDate findLatestWateringDayByPlantNo(@Param("plantNo") int plantNo);
 
+    // 쿼리 메소드 테스트
+    Watering findTopByPlantNoAndFertilizedOrderByWateringNoDesc(int plantNo, String y);
+    Watering findTopByPlantNoAndFertilizedNotOrderByWateringNoDesc(int plantNo, String y);
+
     // Top == limit
     // ORDER BY Watering_no DESC
     /* 가장 최근 물 준 날짜 두 개를 들고 옴 */

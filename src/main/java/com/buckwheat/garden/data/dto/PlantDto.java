@@ -1,11 +1,13 @@
 package com.buckwheat.garden.data.dto;
 
 import com.buckwheat.garden.data.entity.Plant;
+import com.buckwheat.garden.data.entity.Watering;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class PlantDto {
@@ -20,6 +22,7 @@ public class PlantDto {
     // 0     1
     // 맹물   비료
     private int fertilizingCode;
+    private List<WaterDto> waterDtoList;
 
     public PlantDto(Plant plant){
         this.plantNo = plant.getPlantNo();

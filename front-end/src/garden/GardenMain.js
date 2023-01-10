@@ -1,4 +1,5 @@
 import React, { useState, useEffect }  from 'react'
+import { Link } from 'react-router-dom'
 import {
   CRow,
   CCol,
@@ -10,8 +11,10 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilOptions } from '@coreui/icons'
-import authAxios from './requestInterceptor'
+import authAxios from '../requestInterceptor'
 import WaterModal from './WaterModal'
+import ModifyPlant from '../plant/Plant'
+import DeletePlant from '../plant/DeletePlant'
 
 const GardenMain = () => {
   console.log("GardenMain start");
@@ -23,22 +26,20 @@ const GardenMain = () => {
       , wateringCode: ''
       , fertilizingCode: ''
   }]);
+  const [visible, setVisible] = useState(false);
+  const [clickedPlant, setClickedPlant] = useState(0);
 
   // 백엔드에서 식물 리스트를 받아온다
   useEffect(() => {
     authAxios.get("/garden", "")
         .then((res) => {
-          console.log("res.data");
-          console.log(res.data);
+          console.log("res.data", res.data);
           setPlantList(res.data);
           })
         .catch(error => console.log(error))
   }, [])
 
-  const [visible, setVisible] = useState(false);
-  const [clickedPlant, setClickedPlant] = useState(0);
-
-  const onClick = (plantNo) => {
+  const openModal = (plantNo) => {
     setVisible(!visible);
     setClickedPlant(plantNo);
   }
@@ -47,14 +48,28 @@ const GardenMain = () => {
     setVisible(false);
   }
 
-  const [ wateringMsg, setAfterWateringMsg ] = useState("");
+  const [ deleteVisible, setDeleteVisible ] = useState(false);
+
+  const deletePlant = (plantNo) => {
+    setDeleteVisible(true);
+    setClickedPlant(plantNo);
+  }
+
+  const closeDeleteModal = () => {
+    setDeleteVisible(false)
+  }
+
+  // 삭제 시 plantNo가 일치하지 않는 원소만 추출해서 새로운 배열 만듦
+  const onRemove = () => {
+    setPlantList(plantList.filter(plant => plant.plantNo !== clickedPlant))
+  }
 
   return (
   <>
       <CRow>
        {plantList.map((plant, idx) => {
           const color = ["primary", "warning", "danger", "success"];
-          
+
           let message = "";
           let periodMessage = `이 식물의 평균 물주기는 ${plant.averageWateringPeriod}일입니다.`
 
@@ -83,40 +98,45 @@ const GardenMain = () => {
           } else if(plant.wateringCode == 4) {
             message = "아직 물주기 정보가 부족해요. 우리 함께 매일 체크해보아요!";
             periodMessage = "";
+          } else if(plant.wateringCode == 5){
+            message = "오늘 물 마신 식물!";
           }
+
+          const modifyUrl = `/garden/modify-plant/${plant.plantNo}`;
 
 
          return (
             <CCol sm={6} lg={3}>
-              <WaterModal visible={visible} clickedPlant={clickedPlant} closeModal={closeModal}/>
+              <WaterModal visible={visible} clickedPlant={clickedPlant} closeModal={closeModal} />
               <CWidgetStatsA
-                onClick={() => {onClick(plant.plantNo)}}
                 className="mb-4"
                 color={color[plant.wateringCode % 4]} // 일단 4로 나눈 나머지로 해결
                 value={
-                  <>
+                  <div onClick={() => {openModal(plant.plantNo)}}>
                     <span role="img" aria-label="herb">🌿 </span>
                         {plant.plantName}{' '}
                     <span role="img" aria-label="herb">🌿</span>
-
                     <div className="fs-6 fw-normal">
                       <div>{plant.plantSpecies}</div>
-                      <div>
-                        {periodMessage}
-                      </div>
+                    <div>
+                        {message}
                     </div>
-                  </>
+                    </div>
+                  </div>
                 }
-                title={message}
                 action={
                   <CDropdown alignment="end">
                     <CDropdownToggle color="transparent" caret={false} className="p-0">
                       <CIcon icon={cilOptions} className="text-high-emphasis-inverse" />
                     </CDropdownToggle>
                     <CDropdownMenu>
-                      <CDropdownItem>Action</CDropdownItem>
-                      <CDropdownItem>Another action</CDropdownItem>
-                      <CDropdownItem>Something else here...</CDropdownItem>
+                      <Link to={modifyUrl} component={ModifyPlant}>
+                        <CDropdownItem>상세 정보</CDropdownItem>
+                      </Link>
+                      <div onClick={() => {deletePlant(plant.plantNo)}}>
+                        <CDropdownItem>삭제</CDropdownItem>
+                        <DeletePlant deleteVisible={deleteVisible} clickedPlant={clickedPlant} closeDeleteModal={closeDeleteModal} onRemove={onRemove}/>
+                      </div>
                       <CDropdownItem disabled>Disabled action</CDropdownItem>
                     </CDropdownMenu>
                   </CDropdown>

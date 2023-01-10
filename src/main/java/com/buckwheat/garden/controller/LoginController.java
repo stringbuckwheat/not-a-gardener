@@ -18,24 +18,16 @@ public class LoginController {
 
     @PostMapping("/")
     public String login(@RequestBody MemberDto memberDto){
-        log.debug("login() 메소드 호출");
-        log.debug("member: " + memberDto);
-
-        String token = loginService.login(memberDto);
-        log.debug("final token: " + token);
-
-        return token;
+        return loginService.login(memberDto);
     }
 
     @PostMapping("/register")
     public RegisterDto register(@RequestBody RegisterDto registerDto){
-        log.debug("RegisterDto: " + registerDto);
         return loginService.addMember(registerDto);
     }
 
     @PostMapping("/idCheck")
     public String idCheck(@RequestBody RegisterDto registerDto){
-        log.debug("idcheck: " + registerDto);
         return loginService.getIdByInputId(registerDto.getId());
     }
 }

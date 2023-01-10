@@ -41,4 +41,9 @@ public class PlantDaoImpl implements PlantDao {
         // plantNo 값이 있으므로 update가 실행된다.
         plantRepository.save(plant);
     }
+
+    @Override
+    public void deletePlantByPlantNo(int plantNo) {
+        plantRepository.deleteById(plantNo);
+    }
 }

@@ -2,7 +2,6 @@ package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.dao.WateringDao;
-import com.buckwheat.garden.data.dto.AddPlantDto;
 import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.service.GardenService;
@@ -18,7 +17,6 @@ import java.util.List;
 @Slf4j
 @Service
 public class GardenServiceImpl implements GardenService {
-
     // 비료 주기는 일단 내가 하던대로 5일에 맞춰놓았다.
     // TODO 비료 주기 커스터마이징 기능
     private final int FERTILIZING_SCHEDULE = 5;
@@ -51,7 +49,7 @@ public class GardenServiceImpl implements GardenService {
             return null;
         } else if(latestWateringDay != null && latestFertilizedDay == null){
             return latestWateringDay;
-        } else if(latestWateringDay == null){
+        } else if(latestWateringDay == null) {
             // 이 입력은 아직 불가능
             return latestFertilizedDay;
         }
@@ -63,16 +61,24 @@ public class GardenServiceImpl implements GardenService {
         return lastDrinkingDay;
     }
 
+    // 비료줘야 하면 1, 안 줘도 되면 0
     @Override
     public int getFertilizingCode(int plantNo){
         LocalDate latestFertilizedDay = wateringDao.getLatestFertilizedDayByPlantNo(plantNo);
+
+        // 비료를 준 적이 없는 경우
+        if(latestFertilizedDay == null){
+            // 일단 맹물 주도록
+            // TODO 첫 비료 스케줄 잡는 로직 추가
+            return 0;
+        }
+
         // 비료준지 얼마나 지났는지 계산
         int fertilizingSchedule = Period.between(latestFertilizedDay, LocalDate.now()).getDays();
         // log.debug("fertilizingSchedule: " + fertilizingSchedule);
 
         // 비료준 지 5일이 지났는지 확인하고 해당하는 코드 반환
-        int fertilizingCode = (fertilizingSchedule - FERTILIZING_SCHEDULE >= 0) ? 1 : 0;
-        return fertilizingCode;
+        return (fertilizingSchedule - FERTILIZING_SCHEDULE >= 0) ? 1 : 0;
     }
 
     @Override
@@ -80,7 +86,7 @@ public class GardenServiceImpl implements GardenService {
         int recentWateringPeriod = plantDto.getAverageWateringPeriod();
         LocalDate lastDrinkingDay = getLastDrinkingDay(plantDto.getPlantNo());
 
-        // 아예 물주기 데이터가 없는 경우
+        // 물을 준 적이 한 번도 없는 경우
         if(lastDrinkingDay == null){
             plantDto.setWateringCode(4);
             plantDto.setFertilizingCode(0);
@@ -108,15 +114,14 @@ public class GardenServiceImpl implements GardenService {
             wateringCode = 3;
         }
 
+        // 오늘 물 준 식물
+        if(period == 0){
+            wateringCode = 5;
+        }
+
         plantDto.setWateringCode(wateringCode);
         plantDto.setFertilizingCode(fertilizingCode);
 
         log.debug("after calculate: " + plantDto);
-    }
-
-    @Override
-    public void addPlant(AddPlantDto addPlantDto) {
-        // AddPlantDto -> Plant
-        plantDao.savePlant(addPlantDto.toEntity());
     }
 }

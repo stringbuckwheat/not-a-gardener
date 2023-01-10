@@ -1,6 +1,5 @@
 package com.buckwheat.garden.service;
 
-import com.buckwheat.garden.data.dto.AddPlantDto;
 import com.buckwheat.garden.data.dto.PlantDto;
 
 import java.time.LocalDate;
@@ -19,6 +18,5 @@ public interface GardenService {
     /* 비료 시비 여부 */
     int getFertilizingCode(int plantNo);
 
-    /* 식물 추가 */
-    void addPlant(AddPlantDto addPlantDto);
+
 }

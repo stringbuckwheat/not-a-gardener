@@ -14,4 +14,7 @@ public interface PlantDao {
 
     /* 최근 물주기 업데이트 */
     void updateAverageWateringPeriod(int plantNo, int avgWateringPeriod);
+
+    /* 식물 삭제 */
+    void deletePlantByPlantNo(int plantNo);
 }

@@ -14,8 +14,6 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilBell, cilEnvelopeOpen, cilList, cilMenu } from '@coreui/icons'
-
-import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
 
 const AppHeader = () => {
@@ -25,13 +23,13 @@ const AppHeader = () => {
   return (
     <CHeader position="sticky" className="mb-4">
       <CContainer fluid>
-        <CHeaderToggler
+      <CHeaderToggler
           className="ps-1"
           onClick={() => dispatch({ type: 'set', sidebarShow: !sidebarShow })}
         >
-          <CIcon icon={cilMenu} size="lg" />
+          <CIcon icon={cilMenu} size="lg"/>
         </CHeaderToggler>
-        <CHeaderBrand className="mx-auto d-md-none" to="/">
+        <CHeaderBrand className="mx-auto d-md-none" to="/garden">
           <span> Not a Gardener </span>
         </CHeaderBrand>
         <CHeaderNav className="d-none d-md-flex me-auto">
@@ -41,15 +39,15 @@ const AppHeader = () => {
             </CNavLink>
           </CNavItem>
           <CNavItem>
-            <CNavLink href="#">Users</CNavLink>
+            <CNavLink to="/garden/user" component={NavLink}>Users</CNavLink>
           </CNavItem>
           <CNavItem>
-            <CNavLink href="#">Settings</CNavLink>
+            <CNavLink to="/garden/setting" component={NavLink}>Settings</CNavLink>
           </CNavItem>
         </CHeaderNav>
         <CHeaderNav>
           <CNavItem>
-            <CNavLink href="#/garden/addPlant">
+            <CNavLink to="/garden/addPlant" component={NavLink}>
               <CButton color='success'>식물 추가</CButton>
             </CNavLink>
           </CNavItem>
@@ -62,10 +60,6 @@ const AppHeader = () => {
         <CHeaderNav className="ms-3">
           <AppHeaderDropdown />
         </CHeaderNav>
-      </CContainer>
-      <CHeaderDivider />
-      <CContainer fluid>
-        <AppBreadcrumb />
       </CContainer>
     </CHeader>
   )

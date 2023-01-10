@@ -15,10 +15,7 @@ public class WaterController {
     private WateringService wateringService;
 
     @PostMapping("/garden/water")
-    public String water(@RequestBody WaterDto waterDto){
-        log.debug("water controller");
-        log.debug(waterDto.toString());
-
+    public int water(@RequestBody WaterDto waterDto){
         return wateringService.addWatering(waterDto);
     }
 }

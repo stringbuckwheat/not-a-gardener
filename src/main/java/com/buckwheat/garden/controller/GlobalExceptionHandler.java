@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
-    protected HttpEntity<ErrorResponse> handleException(BadCredentialsException e){
+    public HttpEntity<ErrorResponse> handleException(BadCredentialsException e){
         log.debug("Exception Handler 호출");
 
-        // TODO 에러 메시지는 프론트에서 보내는 게 낫나?
         ErrorResponse er = new ErrorResponse();
         er.setCode(401);
         er.setMessage("아이디 또는 비밀번호를 잘못 입력했습니다.\n" +
