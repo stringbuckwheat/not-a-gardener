@@ -16,7 +16,7 @@ public class WaterDto {
 
     // DB -> client
     public WaterDto(Watering watering){
-        this.plantNo = watering.getPlantNo();
+        this.plantNo = watering.getPlant().getNo();
         this.fertilized = watering.getFertilized();
         this.wateringDate = watering.getWateringDate();
     }

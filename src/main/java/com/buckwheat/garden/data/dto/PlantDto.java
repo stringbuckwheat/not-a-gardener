@@ -25,7 +25,7 @@ public class PlantDto {
     private List<WaterDto> waterDtoList;
 
     public PlantDto(Plant plant){
-        this.plantNo = plant.getPlantNo();
+        this.plantNo = plant.getNo();
         this.plantName = plant.getPlantName();
         this.plantSpecies = plant.getPlantSpecies();
         this.averageWateringPeriod = plant.getAverageWateringPeriod();

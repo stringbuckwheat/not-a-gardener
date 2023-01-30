@@ -17,7 +17,8 @@ import java.util.List;
 public class Plant {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) // auto-increment
-    private int plantNo;
+    @Column(name="plant_no")
+    private int no;
 
     @NotNull
     private String plantName;
@@ -35,8 +36,7 @@ public class Plant {
     @NotNull
     private String username;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name="plantNo")
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="plant")
     @OrderBy("watering_date desc")
     private List<Watering> wateringList = new ArrayList<>();
 

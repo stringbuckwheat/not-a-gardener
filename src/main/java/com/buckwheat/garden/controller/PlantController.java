@@ -23,19 +23,13 @@ public class PlantController {
 
     @PostMapping("")
     public void addPlant(@AuthenticationPrincipal User user, @RequestBody PlantRequestDto plantRequestDto){
-        log.debug("add plant");
         plantRequestDto.setUsername(user.getUsername());
-        log.debug("addPlantDto: " + plantRequestDto);
-
         plantService.addPlant(plantRequestDto);
     }
 
     @PutMapping("/{plantNo}")
     public void modifyPlant(@PathVariable("plantNo") int plantNo, @RequestBody PlantRequestDto plantRequestDto, @AuthenticationPrincipal User user){
-        log.debug("modify plant");
         plantRequestDto.setUsername(user.getUsername());
-        log.debug("addPlantDto: " + plantRequestDto);
-
         plantService.modifyPlant(plantRequestDto);
     }
 

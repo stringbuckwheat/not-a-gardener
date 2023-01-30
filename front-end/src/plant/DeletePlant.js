@@ -15,7 +15,6 @@ const DeletePlant = (props) => {
 
   // props.closeModal로 부모 컴포넌트의 state 변경 함수 넘겨줌
   const { deleteVisible, clickedPlant } = props;
-  const navigate = useNavigate();
   console.log("props", props)
 
   const onClick = () => {

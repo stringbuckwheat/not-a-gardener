@@ -1,16 +1,14 @@
 package com.buckwheat.garden.data.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "watering")
 @Builder
 @AllArgsConstructor // Builder 쓰려면 있어야 함
@@ -25,5 +23,8 @@ public class Watering {
 
     private String fertilized;
 
-    private int plantNo;
+    // private int plantNo;
+    @ManyToOne
+    @JoinColumn(name="plant_no")
+    private Plant plant;
 }

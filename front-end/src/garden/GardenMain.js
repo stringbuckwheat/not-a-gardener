@@ -13,7 +13,7 @@ import CIcon from '@coreui/icons-react'
 import { cilOptions } from '@coreui/icons'
 import authAxios from '../requestInterceptor'
 import WaterModal from './WaterModal'
-import ModifyPlant from '../plant/Plant'
+import Plant from '../plant/Plant'
 import DeletePlant from '../plant/DeletePlant'
 
 const GardenMain = () => {
@@ -130,7 +130,7 @@ const GardenMain = () => {
                       <CIcon icon={cilOptions} className="text-high-emphasis-inverse" />
                     </CDropdownToggle>
                     <CDropdownMenu>
-                      <Link to={modifyUrl} component={ModifyPlant}>
+                      <Link to={modifyUrl} component={Plant}>
                         <CDropdownItem>상세 정보</CDropdownItem>
                       </Link>
                       <div onClick={() => {deletePlant(plant.plantNo)}}>

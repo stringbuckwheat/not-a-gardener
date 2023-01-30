@@ -16,7 +16,7 @@ public class PlantRequestDto {
     public Plant toEntity(){
         return Plant
                 .builder()
-                .plantNo(plantNo)
+                .no(plantNo)
                 .plantName(plantName)
                 .plantSpecies(plantSpecies)
                 .averageWateringPeriod(averageWateringPeriod)
