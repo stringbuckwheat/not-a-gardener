@@ -63,3 +63,4 @@ yarn-error.log*
 persistence.xml
 
 application.properties
+application-oauth.properties
