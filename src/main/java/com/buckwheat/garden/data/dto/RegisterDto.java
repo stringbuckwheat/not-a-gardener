@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class RegisterDto {
-    private String id;
+    private String username;
     private String email;
     private String pw;
     private String name;
@@ -20,7 +20,7 @@ public class RegisterDto {
     public Member toEntity(){
         return Member
                 .builder()
-                .id(id)
+                .username(username)
                 .email(email)
                 .pw(pw)
                 .name(name)

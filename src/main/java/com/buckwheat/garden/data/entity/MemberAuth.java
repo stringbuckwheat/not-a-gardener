@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Table(name = "member")
 public class MemberAuth {
     @Id
-    private String id;
+    private String username;
     private String pw;
     private String name;
 }

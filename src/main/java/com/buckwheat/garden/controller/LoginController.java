@@ -28,6 +28,6 @@ public class LoginController {
 
     @PostMapping("/idCheck")
     public String idCheck(@RequestBody RegisterDto registerDto){
-        return loginService.getIdByInputId(registerDto.getId());
+        return loginService.getIdByInputId(registerDto.getUsername());
     }
 }

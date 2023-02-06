@@ -20,7 +20,7 @@ public class PlantRequestDto {
                 .plantName(plantName)
                 .plantSpecies(plantSpecies)
                 .averageWateringPeriod(averageWateringPeriod)
-                .username(username)
+                // .member(member)
                 .createDate(LocalDateTime.now())
                 .build();
     }

@@ -9,5 +9,7 @@ import java.util.List;
 
 @Repository
 public interface PlantRepository extends JpaRepository<Plant, Integer> {
-    List<Plant> findAllByUsername(String id);
+    // FK로 조회하는 method 명명 규칙
+    // findBy + [fk를 관리하는 entity의 필드명] + _ + [fk entity의 식별자 필드명]
+    List<Plant> findByMember_Username(String username);
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class MemberDto {
-    private String id;
+    private String username;
     private String pw;
 
     public void encryptPassword(String BCryptpassword) {
@@ -15,7 +15,7 @@ public class MemberDto {
     public Member toEntity(){
         return Member
                 .builder()
-                .id(id)
+                .username(username)
                 .pw(pw)
                 .build();
     }

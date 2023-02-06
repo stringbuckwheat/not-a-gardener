@@ -21,10 +21,12 @@ public class Watering {
     @NotNull
     private LocalDate wateringDate; // 물 준 날짜
 
-    private String fertilized;
-
-    // private int plantNo;
+    // FK
     @ManyToOne
     @JoinColumn(name="plant_no")
     private Plant plant;
+
+    @ManyToOne
+    @JoinColumn(name = "fertilizer_no")
+    private Fertilizer fertilizer;
 }

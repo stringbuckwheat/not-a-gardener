@@ -61,10 +61,10 @@ public class PasswordAuthAuthenticationManager implements AuthenticationProvider
         // 현 시점으론 role이 필요 없다.
         // 아무튼 조상 생성자(UsernamePasswordAuthenticationToken)를 호출하는 코드
         // 조상의 principal, credentials를 채움
-        PasswordAuthenticationToken token = new PasswordAuthenticationToken(memberAuth.getId(), memberAuth.getPw());
+        PasswordAuthenticationToken token = new PasswordAuthenticationToken(memberAuth.getUsername(), memberAuth.getPw());
 
         // token 자신의 data 세팅
-        token.setId(memberAuth.getId());
+        token.setId(memberAuth.getUsername());
         token.setName(memberAuth.getName());
 
         return token;

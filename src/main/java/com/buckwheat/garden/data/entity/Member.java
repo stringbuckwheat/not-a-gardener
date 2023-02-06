@@ -17,17 +17,17 @@ import java.time.LocalDateTime;
 @Builder
 public class Member {
     @Id
-    private String id;
-
-    @NotNull
-    private String email;
+    private String username;
 
     @NotNull
     private String pw;
 
     @NotNull
+    private String email;
+
+    @NotNull
     private String name;
 
-    @Column(name="create_date")
+    @NotNull
     private LocalDateTime createDate;
 }

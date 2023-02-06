@@ -49,7 +49,7 @@ public class LoginServiceImpl implements LoginService {
             return null;
         }
 
-        return registerEntity.get().getId();
+        return registerEntity.get().getUsername();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class LoginServiceImpl implements LoginService {
         // PasswordAuthAuthenticationToken(UsernamePasswordAuthenticationToken를 상속받은 클래스)의
         // (Object principal, Object credentials) 생성자로 조상 생성자 초기화
         // principal: 사용자 본인 / credentials: 자격 증명
-        PasswordAuthenticationToken token = new PasswordAuthenticationToken(memberDto.getId(), memberDto.getPw());
+        PasswordAuthenticationToken token = new PasswordAuthenticationToken(memberDto.getUsername(), memberDto.getPw());
 
         // 위 객체로 인증하러 가서 PasswordAuthenticationToken 받아옴
         Authentication authentication = passwordAuthAuthenticationManager.authenticate(token);

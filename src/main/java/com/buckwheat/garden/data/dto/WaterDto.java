@@ -10,14 +10,16 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class WaterDto {
     private int plantNo;
-    private String fertilized;
+    private int fertilizerNo;
+    private String fertilizerName;
 
     private LocalDate wateringDate;
 
     // DB -> client
     public WaterDto(Watering watering){
         this.plantNo = watering.getPlant().getNo();
-        this.fertilized = watering.getFertilized();
+        this.fertilizerNo = watering.getFertilizer().getFertilizerNo();
+        this.fertilizerName = watering.getFertilizer().getFertilizerName();
         this.wateringDate = watering.getWateringDate();
     }
 
@@ -25,7 +27,7 @@ public class WaterDto {
     public Watering toEntity(){
         return Watering
                 .builder()
-                .fertilized(fertilized)
+                // .fertilizer.(fertilizer)
                 .wateringDate(LocalDate.now())
                 .build();
     }

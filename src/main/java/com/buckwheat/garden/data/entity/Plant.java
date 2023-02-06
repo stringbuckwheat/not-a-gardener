@@ -28,13 +28,25 @@ public class Plant {
     @NotNull
     private int averageWateringPeriod; // 평균 관수 주기
 
-    // private int wateringStatusCode; // 물주기 상태 코드 저장
+    private int earlyWateringPeriod;
+
+    private int fertilizingPeriod;
 
     @NotNull
     private LocalDateTime createDate;
 
-    @NotNull
-    private String username;
+    // FK
+    @ManyToOne
+    @JoinColumn(name="username")
+    private Member member;
+
+    @OneToOne
+    @JoinColumn(name="place_no")
+    private Place place;
+
+    @OneToOne
+    @JoinColumn(name="medium_no")
+    private Medium medium;
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy="plant")
     @OrderBy("watering_date desc")

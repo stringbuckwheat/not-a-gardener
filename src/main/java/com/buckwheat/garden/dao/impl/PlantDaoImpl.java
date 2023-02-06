@@ -19,8 +19,8 @@ public class PlantDaoImpl implements PlantDao {
 
     // 유저의 전체 식물리스트를 반환
     @Override
-    public List<Plant> getPlantListByUsername(String id) {
-        return plantRepository.findAllByUsername(id);
+    public List<Plant> getPlantListByUsername(String username) {
+        return plantRepository.findByMember_Username(username);
     }
 
     @Override
