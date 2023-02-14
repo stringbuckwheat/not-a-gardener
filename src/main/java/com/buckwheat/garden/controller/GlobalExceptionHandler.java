@@ -20,8 +20,7 @@ public class GlobalExceptionHandler {
 
         ErrorResponse er = new ErrorResponse();
         er.setCode(401);
-        er.setMessage("아이디 또는 비밀번호를 잘못 입력했습니다.\n" +
-                "입력 내용을 다시 확인해주세요.");
+        er.setMessage("아이디 또는 비밀번호를 다시 확인해주세요.");
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(er);
     }

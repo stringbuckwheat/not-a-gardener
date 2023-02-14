@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -15,98 +16,96 @@ import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import axios from 'axios'
 
-// 아이디 중복검사
-// 패스워드 확인 검사
-// 제출 검사
-
 const Register = () => {
   // submit용 객체
   const [register, setRegister] = useState({
-    id: "",
+    username: "",
     email: "",
     name: "",
     pw: ""
   })
 
-  // ID 중복 검사와 그에 따른 메시지를 담을 변수
-  const [idCheck, setIdCheck] = useState(false);
-  const [idCheckMsg, setIdCheckMsg] = useState("");
-
-  // 비밀번호 확인 여부와 그에 따른 메시지를 담을 변수
-  const [repeatPw, setRepeatPw] = useState("");
-  const [pwCheck, setPwCheck] = useState(false);
-  const [pwCheckMsg, setPwCheckMsg] = useState("");
-
+  // 상태
+  const [usernameCheck, setUsernameCheck] = useState(false);
+  const [emailCheck, setEmailCheck] = useState(false);
+  const [repeatPw, setRepeatPw] = useState(false);
+  
   // input 값의 변동이 있을 시 객체 데이터 setting
   const onChange = (e) => {
     // 객체 세팅
     const {name, value} = e.target;
-    setRegister(setRegister => ({...register, [name]: value }))
+    setRegister(setRegister => ({...register, [name]: value }));
   }
 
-  // ID 중복 검사를 위한 useEffect
-  useEffect(() => {
-    if(register.id == ""){
-       return;
+  // 유효성 검사
+  // 아이디: 반드시 영문으로 시작 숫자+언더바/하이픈 허용 6~20자리
+  const idRegex = /^[A-Za-z]{1}[A-Za-z0-9_-]{5,19}$/
+  // 비밀번호: 숫자, 특문 각 1회 이상, 영문은 2개 이상 사용하여 8자리 이상 입력
+  const pwRegex = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,50}$/;
+  // 이메일
+  const emailRegex = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/
+
+  const username = (username) => {
+    // setUsernameCheck(false);
+    setRegister(setRegister => ({...register, username: username }));
+
+    if(!idRegex.test(username)){
+      return;
     }
 
-    console.log("useEffect: " + register.id);
-
-    // 아이디 중복 검사
-    axios.post("/idCheck", {'id': register.id})
+    // 서버 가서 확인
+    axios.post("/idCheck", {'username': username})
     .then((res) => {
-      console.log(res);
+      console.log("data: " + res.data);
 
-      if(res.data == ''){
-        setIdCheck(true);
-        setIdCheckMsg(register.id + "은(는) 사용 가능한 아이디입니다.");
+      if(res.data != ''){
+        setUsernameCheck(false);
       } else {
-        setIdCheck(false);
-        setIdCheckMsg(register.id + "은(는) 이미 사용중인 아이디입니다.");
+        setUsernameCheck(true);
       }
-
-      console.log("idCheck: " + idCheck)
     })
-  }, [register.id]);
+  }
 
-  // 비밀번호 검사
-  useEffect(() => {
-    if(register.pw == ''){
-      // 비밀번호란이 공란인 경우
-      setPwCheck(false);
-      setPwCheckMsg("");
-    } else if(repeatPw !== register.pw){
-      setPwCheck(false);
-      setPwCheckMsg("비밀번호를 확인해주세요");
-    } else {
-      setPwCheck(true);
-      setPwCheckMsg("비밀번호 확인 완료");
+  // 이메일 중복 확인
+  const email = (email) => {
+    setRegister(setRegister => ({...register, email: email}));
+
+    if(!emailRegex.test(email)){
+      return;
     }
 
-  }, [register.pw, repeatPw])
+    // 서버 가서 확인
+    axios.post("/emailCheck", {'email': email})
+    .then((res) => {
+      console.log("email data: " + res.data);
 
+      if(res.data != ''){
+        setEmailCheck(false);
+      } else {
+        setEmailCheck(true);
+      }
+    })
+  }
 
+  const navigate = useNavigate();
+
+  // 제출
   const onSubmit = (e) => {
     e.preventDefault();
 
-//    if(!idCheck){
-//      return alert("아이디 중복 검사를 완료해주세요")
-//    } else if(!pwCheck){
-//      return alert("비밀번호 확인을 완료해주세요")
-//    } else {
-      console.log(register);
+    axios.post("/register", register)
+    .then((res) => {
+      // 콜백으로 로그인 실행
+      const data = {username: register.username, pw: register.pw};
 
-      // TODO 유효성 검사 함수 만들기
-
-      axios.post("/register", register)
+      axios.post("/", data)
       .then((res) => {
-        console.log("register form submit")
-        console.log(res);
+        // local storage에 토큰 저장
+        localStorage.setItem("login", res.data);
+        navigate('/garden');
       })
- //   }
-
+    })
   } // end for onSubmit
-
 
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
@@ -122,19 +121,33 @@ const Register = () => {
                     <CInputGroupText>
                       <CIcon icon={cilUser} />
                     </CInputGroupText>
-                    <CFormInput placeholder="아이디" name="id" required onChange={onChange}/>
+                    <CFormInput placeholder="아이디" name="username" required onChange={(e) => username(e.target.value)}/>
                   </CInputGroup>
-                  <p>{idCheckMsg}</p>
+                  {
+                    !idRegex.test(register.username) 
+                    ? <p>아이디는 영문 소문자, 숫자, 6자 이상 20자 이하여야합니다.</p>
+                    : ( usernameCheck
+                      ? <p>사용 가능한 아이디입니다.</p>
+                      : <p>이미 사용중인 아이디입니다.</p>
+                    )
+                  }
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <CIcon icon={cilUser} />
                     </CInputGroupText>
                     <CFormInput placeholder="이름" name="name" required onChange={onChange}/>
                   </CInputGroup>
+                  <p>{register.name === '' ? "이름은 비워둘 수 없습니다." : ""}</p>
                   <CInputGroup className="mb-3">
                     <CInputGroupText>@</CInputGroupText>
-                    <CFormInput placeholder="이메일" name="email" required onChange={onChange}/>
+                    <CFormInput placeholder="이메일" name="email" required onChange={(e) => email(e.target.value)}/>
                   </CInputGroup>
+                  <p>{
+                  !emailRegex.test(register.email) 
+                  ? "이메일 형식을 확인해주세요" 
+                  : ( emailCheck
+                    ? "사용 가능한 이메일입니다."
+                    : "이미 가입된 이메일입니다.")}</p>
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <CIcon icon={cilLockLocked} />
@@ -147,6 +160,9 @@ const Register = () => {
                       required
                     />
                   </CInputGroup>
+                  <p>
+                  {!pwRegex.test(register.pw) ? "비밀번호는 숫자, 특수문자를 포함하여 8자리 이상이어야 합니다.": ""}
+                  </p>
                   <CInputGroup className="mb-4">
                     <CInputGroupText>
                       <CIcon icon={cilLockLocked} />
@@ -154,14 +170,16 @@ const Register = () => {
                     <CFormInput
                       type="password"
                       placeholder="비밀번호 확인"
-                      name="confirmPw"
-                      onChange = {(e) => setRepeatPw(e.target.value)}
+                      onChange = {(e) => setRepeatPw(e.target.value === register.pw)}
                       required
                     />
                   </CInputGroup>
-                  <p>{pwCheckMsg}</p>
+                  <p>{!repeatPw ? "비밀번호를 확인해주세요": ""}</p>
                   <div className="d-grid">
-                    <CButton type="submit" color="success">가입하기</CButton>
+                  {usernameCheck && idRegex.test(register.username) && pwRegex.test(register.pw) && emailRegex.test(register.email) && emailCheck && register.name !== '' && repeatPw
+                  ? <CButton type="submit" color="success" >가입하기</CButton>
+                  : <CButton type="submit" color="secondary" disabled>가입하기</CButton>
+                  }
                   </div>
                 </CForm>
               </CCardBody>
@@ -172,5 +190,7 @@ const Register = () => {
     </div>
   )
 }
+
+
 
 export default Register

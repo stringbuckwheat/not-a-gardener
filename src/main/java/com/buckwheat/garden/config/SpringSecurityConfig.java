@@ -1,7 +1,11 @@
 package com.buckwheat.garden.config;
 
 import com.buckwheat.garden.config.filter.JwtFilter;
+import com.buckwheat.garden.config.oauth2.CustomOAuth2UserServiceImpl;
+import com.buckwheat.garden.config.oauth2.OAuth2SuccessHandler;
+import com.buckwheat.garden.config.oauth2.OAuthFilter;
 import com.buckwheat.garden.service.JwtAuthTokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -18,12 +23,13 @@ import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor // TODO
 public class SpringSecurityConfig {
-    private JwtAuthTokenProvider tokenProvider;
+    private final JwtAuthTokenProvider tokenProvider;
 
-    public SpringSecurityConfig(JwtAuthTokenProvider tokenProvider) {
-        this.tokenProvider = tokenProvider;
-    }
+    // 추가
+    private final CustomOAuth2UserServiceImpl oAuth2UserService;
+    private final OAuth2SuccessHandler successHandler;
 
     @Bean
     public CorsFilter corsFilter() {
@@ -46,7 +52,7 @@ public class SpringSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
+        httpSecurity
                 .httpBasic().disable()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -61,7 +67,13 @@ public class SpringSecurityConfig {
                 .and()
                 .addFilter(this.corsFilter()) // ** CorsFilter 등록 **
                 .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
-                .build();
+                .addFilterBefore(new OAuthFilter(tokenProvider), OAuth2LoginAuthenticationFilter.class)
+
+                .oauth2Login().loginPage("/")
+                .successHandler(successHandler)
+                .userInfoEndpoint().userService(oAuth2UserService);
+
+        return httpSecurity.build();
     }
 
     // 해당 메서드에서 리턴되는 객체를 빈으로 등록

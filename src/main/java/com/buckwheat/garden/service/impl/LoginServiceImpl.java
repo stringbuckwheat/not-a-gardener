@@ -41,15 +41,13 @@ public class LoginServiceImpl implements LoginService {
     // DTO <-> Entity <-> DTO
     @Override
     public String getIdByInputId(String id) {
-        log.debug("id: " + id);
+        Optional<Member> member = registerDao.selectIdByInputId(id);
 
-        Optional<Member> registerEntity = registerDao.selectIdByInputId(id);
-
-        if(registerEntity.isEmpty()){
+        if(member.isEmpty()){
             return null;
         }
 
-        return registerEntity.get().getUsername();
+        return member.get().getUsername();
     }
 
     @Override
@@ -89,6 +87,7 @@ public class LoginServiceImpl implements LoginService {
         return createToken((PasswordAuthenticationToken) authentication);
     }
 
+    @Override
     public String createToken(PasswordAuthenticationToken token){
         log.debug("token: " + token);
 
@@ -119,5 +118,16 @@ public class LoginServiceImpl implements LoginService {
         );
 
         return jwtAuthToken.getToken();
+    }
+
+    @Override
+    public String getEmailByInputEmail(String email) {
+        Optional<Member> member = registerDao.selectEmailByInputEmail(email);
+
+        if(member.isEmpty()){
+            return null;
+        }
+
+        return member.get().getEmail();
     }
 }

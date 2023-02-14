@@ -30,4 +30,10 @@ public class LoginController {
     public String idCheck(@RequestBody RegisterDto registerDto){
         return loginService.getIdByInputId(registerDto.getUsername());
     }
+
+    @PostMapping("/emailCheck")
+    public String emailCheck(@RequestBody RegisterDto registerDto){
+        log.debug("email check");
+        return loginService.getEmailByInputEmail(registerDto.getEmail());
+    }
 }

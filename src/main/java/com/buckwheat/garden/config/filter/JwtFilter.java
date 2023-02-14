@@ -2,6 +2,7 @@ package com.buckwheat.garden.config.filter;
 
 import com.buckwheat.garden.data.token.JwtAuthToken;
 import com.buckwheat.garden.service.JwtAuthTokenProvider;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,14 +17,11 @@ import java.io.IOException;
 import java.util.Optional;
 
 @Slf4j
+@RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     // 로그인 이후 토큰 자체에 대한 검증
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    private JwtAuthTokenProvider tokenProvider;
-
-    public JwtFilter(JwtAuthTokenProvider tokenProvider){
-        this.tokenProvider = tokenProvider;
-    }
+    private final JwtAuthTokenProvider tokenProvider;
 
     private Optional<String> resolveToken(HttpServletRequest request){
         // Request의 Header에 담긴 토큰 값을 가져온다

@@ -26,6 +26,11 @@ public class RegisterDaoImpl implements RegisterDao {
     }
 
     @Override
+    public Optional<Member> selectEmailByInputEmail(String email) {
+        return loginRepository.findByEmail(email);
+    }
+
+    @Override
     public Member addMember(Member memberEntity) {
         return loginRepository.save(memberEntity);
     }

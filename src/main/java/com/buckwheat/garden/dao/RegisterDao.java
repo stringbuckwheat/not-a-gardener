@@ -10,4 +10,7 @@ public interface RegisterDao {
 
     /* 회원 가입 */
     Member addMember(Member memberEntity);
+
+    /* 이메일 중복 검사 */
+    Optional<Member> selectEmailByInputEmail(String email);
 }

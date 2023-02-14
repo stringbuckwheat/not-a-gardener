@@ -19,7 +19,6 @@ public class Member {
     @Id
     private String username;
 
-    @NotNull
     private String pw;
 
     @NotNull
