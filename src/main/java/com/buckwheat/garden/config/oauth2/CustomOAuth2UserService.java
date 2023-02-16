@@ -1,6 +1,6 @@
 package com.buckwheat.garden.config.oauth2;
 
-import com.buckwheat.garden.repository.LoginRepository;
+import com.buckwheat.garden.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,8 +24,8 @@ import java.util.Map;
 // from the UserInfo Endpoint
 // using the Access Token granted to the Client
 // and returning an AuthenticatedPrincipal in the form of an OAuth2User.
-public class CustomOAuth2UserServiceImpl implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
-    private final LoginRepository loginRepository;
+public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+    private final MemberRepository loginRepository;
     private final HttpSession httpSession;
 
     // 하나의 메소드를 오버라이딩 해야함

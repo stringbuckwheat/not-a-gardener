@@ -2,12 +2,14 @@ package com.buckwheat.garden.config.oauth2;
 
 import com.buckwheat.garden.data.token.JwtAuthToken;
 import com.buckwheat.garden.service.JwtAuthTokenProvider;
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletException;
@@ -21,12 +23,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Component
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtAuthTokenProvider jwtAuthTokenProvider;
+    private final ObjectMapper objectMapper;
 
     @Override // 로그인 성공 시 부가작업을 하는 메소드
+    @ResponseBody
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         // 최초 로그인인지 확인
         // Access/Refresh token 생성 및 발급
@@ -50,14 +54,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         Date expiredDate = Date.from(LocalDateTime.now().plusMinutes(180).atZone(ZoneId.systemDefault()).toInstant());
 
         JwtAuthToken token = jwtAuthTokenProvider.createAuthToken(id, claims, expiredDate);
-        log.debug("token: {}", token);
+        log.debug("token: {}", token.getData());
 
-        String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/garden")
-                        .queryParam("token", token)
-                                .build().toUriString();
+        String targetUrl = "http://localhost:3000/oauth/" + token.getToken();
 
-        getRedirectStrategy().sendRedirect(request, response, "http://localhost:3000/#/garden");
-
-        log.debug("targetUrl: {}", targetUrl);
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 }

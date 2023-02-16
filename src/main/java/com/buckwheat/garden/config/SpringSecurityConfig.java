@@ -1,9 +1,8 @@
 package com.buckwheat.garden.config;
 
 import com.buckwheat.garden.config.filter.JwtFilter;
-import com.buckwheat.garden.config.oauth2.CustomOAuth2UserServiceImpl;
+import com.buckwheat.garden.config.oauth2.CustomOAuth2UserService;
 import com.buckwheat.garden.config.oauth2.OAuth2SuccessHandler;
-import com.buckwheat.garden.config.oauth2.OAuthFilter;
 import com.buckwheat.garden.service.JwtAuthTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +13,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -22,13 +20,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
-@EnableWebSecurity
-@RequiredArgsConstructor // TODO
+@EnableWebSecurity // (debug = true)
+@RequiredArgsConstructor
 public class SpringSecurityConfig {
     private final JwtAuthTokenProvider tokenProvider;
-
-    // 추가
-    private final CustomOAuth2UserServiceImpl oAuth2UserService;
+    private final CustomOAuth2UserService oAuth2UserService;
     private final OAuth2SuccessHandler successHandler;
 
     @Bean
@@ -60,6 +56,7 @@ public class SpringSecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/oauth").permitAll()
                 .antMatchers("/register").permitAll()
                 .antMatchers("/garden/**").authenticated()
                 // .anyRequest().hasRole("USER")
@@ -67,7 +64,6 @@ public class SpringSecurityConfig {
                 .and()
                 .addFilter(this.corsFilter()) // ** CorsFilter 등록 **
                 .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new OAuthFilter(tokenProvider), OAuth2LoginAuthenticationFilter.class)
 
                 .oauth2Login().loginPage("/")
                 .successHandler(successHandler)

@@ -2,6 +2,7 @@ package com.buckwheat.garden.data.token;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.impl.DefaultClaims;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.security.Key;
@@ -10,6 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
+@Getter
 public class JwtAuthToken {
     public static final String AUTHORITIES_KEY = "user";
     private final String token;

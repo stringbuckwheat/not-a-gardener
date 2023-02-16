@@ -25,6 +25,7 @@ function Login(){
     username: "",
     pw: ""
   })
+
   const [msg, setMsg] = useState('');
 
   const onChange = (e) => {
@@ -40,6 +41,8 @@ function Login(){
 
       axios.post("/", login)
       .then((res) => {
+        console.log("token", res);
+
         // local storage에 토큰 저장
         localStorage.setItem("login", res.data);
 
@@ -50,13 +53,6 @@ function Login(){
          setMsg(error.response.data.message);
       });
 
-  }
-
-  const onGoogleLogin = () => {
-    axios.get("/oauth2/authorization/google")
-    .then((res) => {
-      console.log(res);
-    })
   }
 
   return (
@@ -104,12 +100,22 @@ function Login(){
                     </div>
                   </CForm>
                   <CRow>
-                      <CCol xs={4}>
-                        <a href="http://localhost:8080/oauth2/authorization/google">
-                          <CButton color="link" className="px-0 align-self-end">구글 로그인</CButton>
-                        </a>
-                      </CCol>
-                    </CRow>
+                    <div class="login-box">
+                      <CRow>
+                        <h6>간편 로그인</h6>
+                        <hr />
+                        <CCol xs={4}>
+                        <a href="#" class="social-button" id="facebook-connect"></a>
+                        </CCol>
+                        <CCol xs={4}>
+                        <a href="http://localhost:8080/oauth2/authorization/google" class="social-button" id="google-connect"></a>
+                        </CCol>
+                        <CCol xs={4}>
+                        <a href="#" class="social-button" id="twitter-connect"></a>
+                        </CCol>
+                      </CRow>
+                    </div>
+                  </CRow>
                 </CCardBody>
               </CCard>
               <CCard className="text-white bg-primary py-5" sm={{width: '100%'}} lg={{width: '44%'}}>
