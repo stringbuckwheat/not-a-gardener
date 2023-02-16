@@ -1,7 +1,7 @@
 package com.buckwheat.garden.config;
 
 import com.buckwheat.garden.config.filter.JwtFilter;
-import com.buckwheat.garden.config.oauth2.CustomOAuth2UserService;
+import com.buckwheat.garden.config.oauth2.OAuth2MemberService;
 import com.buckwheat.garden.config.oauth2.OAuth2SuccessHandler;
 import com.buckwheat.garden.service.JwtAuthTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import org.springframework.web.filter.CorsFilter;
 @RequiredArgsConstructor
 public class SpringSecurityConfig {
     private final JwtAuthTokenProvider tokenProvider;
-    private final CustomOAuth2UserService oAuth2UserService;
+    private final OAuth2MemberService oAuth2UserService;
     private final OAuth2SuccessHandler successHandler;
 
     @Bean

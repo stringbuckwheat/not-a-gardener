@@ -24,8 +24,8 @@ import java.util.Map;
 // from the UserInfo Endpoint
 // using the Access Token granted to the Client
 // and returning an AuthenticatedPrincipal in the form of an OAuth2User.
-public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
-    private final MemberRepository loginRepository;
+public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+    private final MemberRepository memberRepository;
     private final HttpSession httpSession;
 
     // 하나의 메소드를 오버라이딩 해야함
@@ -58,7 +58,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         log.debug("userNameAttributeName: " + userNameAttributeName);
 
         // OAuth2UserService를 통해 가져온 데이터를 담을 클래스
-        // attribute: {name=최서경, id=sub, key=sub, email=stringbuckwheat@gmail.com, picture=https://lh3.googleusercontent.com/a/AEdFTp6LDv3ehxMKkXSnPuHZDM9vQrdwJtEdJfFclfIn=s96-c}
+        // attribute: {name, id, key, email, picture}
         OAuth2Attribute oAuth2Attribute = OAuth2Attribute.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
         Map<String, Object> memberAttribute = oAuth2Attribute.convertToMap();
 
@@ -66,7 +66,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         log.debug("memberAttribute: {}", memberAttribute.toString());
 
         // save or update
-        loginRepository.save(oAuth2Attribute.toEntity(memberAttribute));
+        memberRepository.save(oAuth2Attribute.toEntity(memberAttribute));
 
         // 로그인한 유저를 리턴
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),

@@ -30,17 +30,12 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private final ObjectMapper objectMapper;
 
     @Override // 로그인 성공 시 부가작업을 하는 메소드
-    @ResponseBody
+    // @ResponseBody
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        // 최초 로그인인지 확인
-        // Access/Refresh token 생성 및 발급
-        // token을 포함하여 리다이렉트
+        // token 생성 및 발급 후 token과 함께 리다이렉트
 
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 
-        // Name: [stringbuckwheat@gmail.com],
-        // Granted Authorities: [[ROLE_USER]],
-        // User Attributes: [{name=최서경, id=sub, key=sub, email=stringbuckwheat@gmail.com, picture=https://lh3.googleusercontent.com/a/AEdFTp6LDv3ehxMKkXSnPuHZDM9vQrdwJtEdJfFclfIn=s96-c}]
         log.debug("principal에서 꺼낸 OAuth2User: {}", oAuth2User);
         log.debug("토큰 발행 시작");
 
@@ -53,10 +48,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         Date expiredDate = Date.from(LocalDateTime.now().plusMinutes(180).atZone(ZoneId.systemDefault()).toInstant());
 
-        JwtAuthToken token = jwtAuthTokenProvider.createAuthToken(id, claims, expiredDate);
-        log.debug("token: {}", token.getData());
-
-        String targetUrl = "http://localhost:3000/oauth/" + token.getToken();
+        String targetUrl = "http://localhost:3000/oauth/"
+                + jwtAuthTokenProvider.createAuthToken(id, claims, expiredDate).getToken();
 
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }

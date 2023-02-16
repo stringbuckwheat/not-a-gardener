@@ -56,17 +56,17 @@ function Login(){
   }
 
   return (
-    <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
-      <CContainer>
+    <div className="bg-light min-vh-100 d-flex align-items-center">
+      <CContainer fluid>
         <CRow className="justify-content-center">
           <CCol md={8}>
             <CCardGroup>
               <CCard className="p-4">
-                <CCardHeader className="mb-5">
-                  <h1>로그인</h1>
-                  <p className="text-medium-emphasis">{msg}</p>
+                <CCardHeader className="mb-0">
+                  <h2>로그인</h2>
                 </CCardHeader>
                 <CCardBody>
+                  <p className="text-medium-emphasis">{msg}</p>
                   <CForm onSubmit={inputCheck}>
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
@@ -85,42 +85,35 @@ function Login(){
                         onChange={onChange}
                       />
                     </CInputGroup>
-                    <div className="mt-1">
                     <CRow>
                       <CCol xs={4}>
                         <CButton type="submit" color="primary" className="px-4 align-self-start">로그인</CButton>
                       </CCol>
                       <CCol xs={4}></CCol>
                       <CCol xs={4}>
-                        <CButton color="link" className="px-0 align-self-end">
-                          아이디/비밀번호 찾기
+                        <CButton type="submit" color="light" className="px-4 align-self-end">
+                          계정 찾기
                         </CButton>
                       </CCol>
                     </CRow>
-                    </div>
                   </CForm>
-                  <CRow>
-                    <div class="login-box">
-                      <CRow>
-                        <h6>간편 로그인</h6>
-                        <hr />
-                        <CCol xs={4}>
-                        <a href="#" class="social-button" id="facebook-connect"></a>
-                        </CCol>
-                        <CCol xs={4}>
-                        <a href="http://localhost:8080/oauth2/authorization/google" class="social-button" id="google-connect"></a>
-                        </CCol>
-                        <CCol xs={4}>
-                        <a href="#" class="social-button" id="twitter-connect"></a>
-                        </CCol>
-                      </CRow>
-                    </div>
+                  <CRow className='mt-5'>
+                    <h6>간편 로그인</h6>
+                    <hr />
+                    <CCol xs={4}>
+                     <a href="http://localhost:8080/oauth2/authorization/kakao" class="social-button" id="kakao-connect"></a>
+                    </CCol>
+                    <CCol xs={4}>
+                      <a href="http://localhost:8080/oauth2/authorization/google" class="social-button" id="google-connect"></a>
+                    </CCol>
+                    <CCol xs={4}>
+                      <a href="http://localhost:8080/oauth2/authorization/naver" class="social-button" id="naver-connect"></a>
+                    </CCol>
                   </CRow>
                 </CCardBody>
               </CCard>
               <CCard className="text-white bg-primary py-5" sm={{width: '100%'}} lg={{width: '44%'}}>
                 <CCardBody className="text-center">
-                  <div>
                     <h2>식물 키우기!</h2>
                     <CImage fluid src={sprout} style={{width: '50%'}} />
                     <p>
@@ -131,7 +124,6 @@ function Login(){
                         가입하세요
                       </CButton>
                     </Link>
-                  </div>
                 </CCardBody>
               </CCard>
             </CCardGroup>
