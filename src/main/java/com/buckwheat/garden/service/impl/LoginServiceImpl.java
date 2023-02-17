@@ -1,19 +1,15 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.dao.RegisterDao;
-import com.buckwheat.garden.data.token.JwtAuthToken;
 import com.buckwheat.garden.data.dto.MemberDto;
+import com.buckwheat.garden.data.token.JwtAuthToken;
 import com.buckwheat.garden.data.token.PasswordAuthenticationToken;
-import com.buckwheat.garden.data.dto.RegisterDto;
-import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.service.JwtAuthTokenProvider;
 import com.buckwheat.garden.service.LoginService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,50 +17,14 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
-@Service
 @Slf4j
+@Service
+@RequiredArgsConstructor
 public class LoginServiceImpl implements LoginService {
-    @Autowired
-    private RegisterDao registerDao;
+    private final AuthenticationManager passwordAuthAuthenticationManager;
+    private final JwtAuthTokenProvider tokenProvider;
 
-    @Autowired
-    private BCryptPasswordEncoder encoder;
-
-    @Autowired
-    private AuthenticationManager passwordAuthAuthenticationManager;
-
-    @Autowired
-    private JwtAuthTokenProvider tokenProvider;
-
-    // DTO <-> Entity <-> DTO
-    @Override
-    public String getIdByInputId(String id) {
-        Optional<Member> member = registerDao.selectIdByInputId(id);
-
-        if(member.isEmpty()){
-            return null;
-        }
-
-        return member.get().getUsername();
-    }
-
-    @Override
-    public RegisterDto addMember(RegisterDto paramRegisterDto) {
-        log.debug("addMember(): " + paramRegisterDto);
-
-        // DTO에 암호화된 비밀번호 저장하기
-        paramRegisterDto.encryptPassword(encoder.encode(paramRegisterDto.getPw()));
-
-        // DB에 저장
-        Member memberEntity = registerDao.addMember(paramRegisterDto.toEntity());
-        log.debug("DB save: " + memberEntity);
-
-        // TODO 회원 가입 시 자동 로그인
-
-        return null;
-    }
 
     @Override
     public String login(MemberDto memberDto) {
@@ -79,7 +39,7 @@ public class LoginServiceImpl implements LoginService {
         Authentication authentication = passwordAuthAuthenticationManager.authenticate(token);
         log.debug("authenticationManager.authenticate(token): " + authentication);
 
-        // SecurityContextHolder: Spring Security가 인증한 내용들을 저장하는 공감
+        // SecurityContextHolder: Spring Security가 인증한 내용들을 저장하는 공간
         // 내부에 SecurityContext가 있고, 이를 현재 스레드와 연결해주는 역할
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -103,10 +63,8 @@ public class LoginServiceImpl implements LoginService {
         // claim: 그 정보의 한 조각 (name, value 쌍으로 구성)
         Map<String, String> claims = new HashMap<>();
 
-        // String이 아니야??
         claims.put("id", token.getId());
         claims.put("name", token.getName());
-        // claims.put("role", token.getRole());
 
         // key를 넣은 JwtAuthToken을 반환
         // String id, Map<String, String> claims, Date expiredDate
@@ -118,16 +76,5 @@ public class LoginServiceImpl implements LoginService {
         );
 
         return jwtAuthToken.getToken();
-    }
-
-    @Override
-    public String getEmailByInputEmail(String email) {
-        Optional<Member> member = registerDao.selectEmailByInputEmail(email);
-
-        if(member.isEmpty()){
-            return null;
-        }
-
-        return member.get().getEmail();
     }
 }

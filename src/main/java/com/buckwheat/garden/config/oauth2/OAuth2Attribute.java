@@ -20,6 +20,7 @@ public class OAuth2Attribute {
     private String email;
     private String name;
     private String picture;
+    private String provider;
 
     static OAuth2Attribute of(String provider, String attributeKey, Map<String, Object> attributes){
         switch(provider){
@@ -41,6 +42,7 @@ public class OAuth2Attribute {
                 .picture(String.valueOf(attributes.get("picture")))
                 .attributes(attributes)
                 .attributeKey(attributeKey)
+                .provider("google")
                 .build();
     }
 
@@ -55,6 +57,7 @@ public class OAuth2Attribute {
                 .picture(String.valueOf(kakaoProfile.get("profile_image_url")))
                 .attributes(kakaoAccount)
                 .attributeKey(attributeKey)
+                .provider("kakao")
                 .build();
     }
 
@@ -68,29 +71,18 @@ public class OAuth2Attribute {
                 .picture(String.valueOf(response.get("profile_image")))
                 .attributes(response)
                 .attributeKey(attributeKey)
+                .provider("naver")
                 .build();
     }
 
-    Map<String, Object> convertToMap() {
-        Map<String, Object> map = new HashMap<>();
-
-        map.put("id", attributeKey);
-        map.put("key", attributeKey);
-        map.put("name", name);
-        map.put("email", email);
-        map.put("picture", picture);
-
-        return map;
-    }
-
-    // TODO 카카오 가입 이메일과 구글 로그인이 같으면 중복 가입 안되므로 이후 수정해야함
-    public Member toEntity(Map<String, Object> attributes){
+    public Member toEntity(){
         return Member
                 .builder()
-                .username(String.valueOf(attributes.get("email")))
-                .email(String.valueOf(attributes.get("email")))
+                .username(this.getEmail())
+                .email(this.getEmail())
                 .pw(null)
-                .name(String.valueOf(attributes.get("name")))
+                .name(this.getName())
+                .provider(this.provider)
                 .createDate(LocalDateTime.now())
                 .build();
     }

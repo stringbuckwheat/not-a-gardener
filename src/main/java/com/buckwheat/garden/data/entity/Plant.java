@@ -37,7 +37,7 @@ public class Plant {
 
     // FK
     @ManyToOne
-    @JoinColumn(name="username")
+    @JoinColumn(name="member_no")
     private Member member;
 
     @OneToOne

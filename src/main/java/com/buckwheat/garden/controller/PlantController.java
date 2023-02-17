@@ -3,8 +3,8 @@ package com.buckwheat.garden.controller;
 import com.buckwheat.garden.data.dto.PlantRequestDto;
 import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.service.PlantService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/garden/plant")
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 public class PlantController {
-    @Autowired
-    private PlantService plantService;
+    private final PlantService plantService;
 
     @GetMapping("/{plantNo}")
     public PlantDto getOnePlant(@PathVariable("plantNo") int plantNo){

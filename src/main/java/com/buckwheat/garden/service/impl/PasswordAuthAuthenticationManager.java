@@ -1,4 +1,4 @@
-package com.buckwheat.garden.dao.impl;
+package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.data.token.PasswordAuthenticationToken;
 import com.buckwheat.garden.data.entity.MemberAuth;

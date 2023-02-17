@@ -1,12 +1,12 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.dao.PlantDao;
-import com.buckwheat.garden.dao.WateringDao;
 import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.entity.Plant;
+import com.buckwheat.garden.repository.PlantRepository;
+import com.buckwheat.garden.repository.WateringRepository;
 import com.buckwheat.garden.service.GardenService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,21 +16,20 @@ import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class GardenServiceImpl implements GardenService {
     // 비료 주기는 일단 내가 하던대로 5일에 맞춰놓았다.
     // TODO 비료 주기 커스터마이징 기능
     private final int FERTILIZING_SCHEDULE = 5;
-    @Autowired
-    private PlantDao plantDao;
 
-    @Autowired
-    private WateringDao wateringDao;
+    private final PlantRepository plantRepository;
+    private final WateringRepository wateringRepository;
 
     @Override
-    public List<PlantDto> getPlantList(String id) {
+    public List<PlantDto> getPlantList(String username) {
         List<PlantDto> plantList = new ArrayList<>();
 
-        for(Plant p : plantDao.getPlantListByUsername(id)){
+        for(Plant p : plantRepository.findByMember_Username(username)){
             PlantDto plantDto = new PlantDto(p);
             calculateCode(plantDto);
 
@@ -42,8 +41,8 @@ public class GardenServiceImpl implements GardenService {
 
     @Override
     public LocalDate getLastDrinkingDay(int plantNo){
-        LocalDate latestWateringDay = wateringDao.getLatestWateringDayByPlantNo(plantNo);
-        LocalDate latestFertilizedDay = wateringDao.getLatestFertilizedDayByPlantNo(plantNo);
+        LocalDate latestWateringDay = wateringRepository.findLatestWateringDayByPlantNo(plantNo);
+        LocalDate latestFertilizedDay = wateringRepository.findLatestFertilizedDayByPlantNo(plantNo);
 
         if(latestWateringDay == null && latestFertilizedDay == null){
             return null;
@@ -64,7 +63,7 @@ public class GardenServiceImpl implements GardenService {
     // 비료줘야 하면 1, 안 줘도 되면 0
     @Override
     public int getFertilizingCode(int plantNo){
-        LocalDate latestFertilizedDay = wateringDao.getLatestFertilizedDayByPlantNo(plantNo);
+        LocalDate latestFertilizedDay = wateringRepository.findLatestFertilizedDayByPlantNo(plantNo);
 
         // 비료를 준 적이 없는 경우
         if(latestFertilizedDay == null){

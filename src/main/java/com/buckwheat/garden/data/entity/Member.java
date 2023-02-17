@@ -2,10 +2,7 @@ package com.buckwheat.garden.data.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -17,6 +14,9 @@ import java.time.LocalDateTime;
 @Builder
 public class Member {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int memberNo;
+
     private String username;
 
     private String pw;
@@ -29,4 +29,11 @@ public class Member {
 
     @NotNull
     private LocalDateTime createDate;
+
+    private String provider;
+
+    public Member changePassword(String encryptPassword){
+        this.pw = encryptPassword;
+        return this;
+    }
 }

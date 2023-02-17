@@ -1,28 +1,29 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.data.dto.PlantRequestDto;
 import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.dto.WaterDto;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Watering;
+import com.buckwheat.garden.repository.PlantRepository;
 import com.buckwheat.garden.service.PlantService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class PlantServiceImpl implements PlantService {
-    @Autowired
-    private PlantDao plantDao;
+    private final PlantRepository plantRepository;
 
     @Override
     public PlantDto getOnePlant(int plantNo) {
-        Plant plant = plantDao.getPlantOne(plantNo);
+        Plant plant = plantRepository.findById(plantNo).orElseThrow(NoSuchElementException::new);
         log.debug("plant: " + plant);
 
         // DTO로 변환
@@ -42,20 +43,21 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public void addPlant(PlantRequestDto plantRequestDto) {
-        plantDao.savePlant(plantRequestDto.toEntity());
+        plantRepository.save(plantRequestDto.toEntity());
     }
 
     @Override
     public void modifyPlant(PlantRequestDto plantRequestDto) {
-        Plant plant = plantDao.getPlantOne(plantRequestDto.getPlantNo())
+        Plant plant = plantRepository.findById(plantRequestDto.getPlantNo())
+                .orElseThrow(NoSuchElementException::new)
                 .update(plantRequestDto.getPlantName(),
                         plantRequestDto.getPlantSpecies(),
                         plantRequestDto.getAverageWateringPeriod());
-        plantDao.savePlant(plant);
+        plantRepository.save(plant);
     }
 
     @Override
     public void deletePlantByPlantNo(int plantNo) {
-        plantDao.deletePlantByPlantNo(plantNo);
+        plantRepository.deleteById(plantNo);
     }
 }

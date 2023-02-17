@@ -27,6 +27,6 @@ public class Goal {
     private Plant plant;
 
     @ManyToOne
-    @JoinColumn(name="username")
+    @JoinColumn(name="member_no")
     private Member member;
 }

@@ -1,5 +1,6 @@
 package com.buckwheat.garden.config.oauth2;
 
+import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,6 @@ import java.util.Map;
 // and returning an AuthenticatedPrincipal in the form of an OAuth2User.
 public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final MemberRepository memberRepository;
-    private final HttpSession httpSession;
 
     // 하나의 메소드를 오버라이딩 해야함
     @Override
@@ -37,10 +37,9 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
         // 성공정보를 바탕으로 DefaultOAuth2UserService 객체를 만든다
         // OAuth2UserService<R extends OAuth2UserRequest, U extends OAuth2User>
         // DefaultOAuth2User 서비스를 통해 User 정보를 가져와야 하기 때문에 대리자 생성
-        OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService = new DefaultOAuth2UserService();
-
+        OAuth2UserService defaultOAuth2UserService = new DefaultOAuth2UserService();
         // 생성된 서비스 객체로부터 User를 받는다
-        OAuth2User oAuth2User = oAuth2UserService.loadUser(userRequest);
+        OAuth2User oAuth2User = defaultOAuth2UserService.loadUser(userRequest);
         log.debug("oAuth2User: {}", oAuth2User.getAttributes());
 
         // User 정보 받기
@@ -60,13 +59,15 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
         // OAuth2UserService를 통해 가져온 데이터를 담을 클래스
         // attribute: {name, id, key, email, picture}
         OAuth2Attribute oAuth2Attribute = OAuth2Attribute.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
-        Map<String, Object> memberAttribute = oAuth2Attribute.convertToMap();
+        // Map<String, Object> memberAttribute = oAuth2Attribute.convertToMap();
 
         log.debug("oAuth2Attribute: {}", oAuth2Attribute);
-        log.debug("memberAttribute: {}", memberAttribute.toString());
+        // log.debug("memberAttribute: {}", memberAttribute.toString());
 
         // save or update
-        memberRepository.save(oAuth2Attribute.toEntity(memberAttribute));
+        Member member = memberRepository.findByUsernameAndProvider(oAuth2Attribute.getEmail(), registrationId)
+                .orElse(oAuth2Attribute.toEntity());
+        memberRepository.save(member);
 
         // 로그인한 유저를 리턴
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),

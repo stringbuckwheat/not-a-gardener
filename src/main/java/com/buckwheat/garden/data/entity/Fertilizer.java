@@ -26,6 +26,6 @@ public class Fertilizer {
     // 양방향 매핑 시 반대편에 mappedBy
     // 그러나 Member는 Fertilizer를 몰라도 상관없으므로 단방향 매핑
     @ManyToOne
-    @JoinColumn(name="username")
+    @JoinColumn(name="member_no")
     private Member member;
 }
