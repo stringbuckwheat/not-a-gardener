@@ -54,7 +54,7 @@ const Register = () => {
     }
 
     // 서버 가서 확인
-    axios.post("/idCheck", {'username': username})
+    axios.post("/register/idCheck", {'username': username})
     .then((res) => {
       console.log("data: " + res.data);
 
@@ -75,7 +75,7 @@ const Register = () => {
     }
 
     // 서버 가서 확인
-    axios.post("/emailCheck", {'email': email})
+    axios.post("/register/emailCheck", {'email': email})
     .then((res) => {
       console.log("email data: " + res.data);
 

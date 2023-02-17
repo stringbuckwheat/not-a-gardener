@@ -12,42 +12,72 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 const _nav = [
   {
     component: CNavItem,
-    name: 'Garden',
+    name: '나의 정원',
     to: '/garden',
     icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
-//    badge: {
-//      color: 'info',
-//      text: 'NEW',
-//    },
   },
   {
     component: CNavTitle,
-    name: '이후 구현 기능',
+    name: '정원 기록',
   },
   {
     component: CNavItem,
-    name: '이런 기능',
-    to: '/garden/this',
+    name: '정원 기록',
+    to: '/garden/watering',
+    icon: <CIcon icon={cilChartPie} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavTitle,
+    name: '나의 계획',
+  },
+  {
+    component: CNavItem,
+    name: '나의 목표',
+    to: '/garden/goal',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: '위시리스트',
+    to: '/garden/wishlist',
     icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
   {
     component: CNavTitle,
-    name: '이후 구현 기능',
+    name: '나의 장비',
   },
   {
     component: CNavGroup,
-    name: '저런 기능',
+    name: '나의 비료',
     to: '/garden/that',
     icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: '내부 기능',
+        name: '액체 비료',
         to: '/garden/inner',
       },
       {
         component: CNavItem,
-        name: '내부 기능2',
+        name: '완효성 비료',
+        to: '/garden/inner2',
+      }
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: '살충/살균제',
+    to: '/garden/that',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: '액체 비료',
+        to: '/garden/inner',
+      },
+      {
+        component: CNavItem,
+        name: '완효성 비료',
         to: '/garden/inner2',
       }
     ],
@@ -68,12 +98,6 @@ const _nav = [
       text: 'NEW',
     },
   },
-//  {
-//    component: CNavItem,
-//    name: 'Docs',
-//    href: 'https://coreui.io/react/docs/templates/installation/',
-//    icon: <CIcon icon={cilDescription} customClassName="nav-icon" />,
-//  },
 ]
 
 export default _nav

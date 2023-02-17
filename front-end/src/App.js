@@ -1,5 +1,5 @@
-import React, {Component, Suspense } from 'react';
-import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom'
+import React, {Component, Suspense, useState } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './scss/style.scss'
 
 
@@ -15,22 +15,25 @@ const Register = React.lazy(() => import('./login/Register'))
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 const GetToken = React.lazy(() => import('./login/GetToken'))
 
-class App extends Component {
-  render() {
+// class App extends Component {
+//   render() {
+
+function App() {
     console.log("render()!");
+
     return (
       <BrowserRouter>
         <Suspense fallback={loading}>
           <Routes>
+            <Route path="/" name="Login Page" element={<Login />}/>
+            <Route path="/oauth/:token" element={<GetToken />} />
             <Route path="/register" name="Register Page" element={<Register />} />
             <Route path="/garden/*" element = {<DefaultLayout />} />
-            <Route path="/oauth/:token" element={<GetToken />} />
-            <Route path="/" name="Login Page" element={<Login />}/>
           </Routes>
         </Suspense>
       </BrowserRouter>
     )
   }
-}
+
 
 export default App;

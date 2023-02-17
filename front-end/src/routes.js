@@ -3,6 +3,7 @@ import React from 'react'
 const GardenMain = React.lazy(() => import('./garden/GardenMain'))
 const AddPlant = React.lazy(() => import('./garden/AddPlant'))
 const ModifyPlant = React.lazy(() => import('./plant/Plant'))
+const NoPlant = React.lazy(() => import('./garden/NoPlant'))
 
 const routes = [
   { path: '/', exact: true, name: 'GardenMain', element: GardenMain },

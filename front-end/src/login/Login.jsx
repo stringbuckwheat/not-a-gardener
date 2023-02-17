@@ -117,7 +117,7 @@ function Login(){
                     <h2>식물 키우기!</h2>
                     <CImage fluid src={sprout} style={{width: '50%'}} />
                     <p>
-                      가드너가 되지 못한 당신을 위한 해결 방안
+                      함께 키워요!
                     </p>
                     <Link to="/register">
                       <CButton color="primary" className="mt-3" active tabIndex={-1} >

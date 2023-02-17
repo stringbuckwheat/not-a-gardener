@@ -9,7 +9,7 @@ import { AppSidebarNav } from './AppSidebarNav'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 
-// sidebar nav config
+// 사이드바 내용들
 import navigation from '../_nav'
 
 const AppSidebar = () => {
