@@ -21,6 +21,8 @@ import axios from 'axios'
 import sprout from '../assets/images/sprout.png'
 
 function Login(){
+  console.log("Login");
+  
   const [login, setLogin] = useState({
     username: "",
     pw: ""
@@ -38,6 +40,8 @@ function Login(){
   // 입력 값 확인 및 submit
   const inputCheck = (e) => {
     e.preventDefault(); // reload 막기
+    console.log("Login.inputCheck")
+    console.log("login 객체", login);
 
       axios.post("/", login)
       .then((res) => {
@@ -67,7 +71,7 @@ function Login(){
                 </CCardHeader>
                 <CCardBody>
                   <p className="text-medium-emphasis">{msg}</p>
-                  <CForm onSubmit={inputCheck}>
+                  <CForm onSubmit={inputCheck} method="POST">
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
@@ -91,10 +95,10 @@ function Login(){
                       </CCol>
                       <CCol xs={4}></CCol>
                       <CCol xs={4}>
-                        <CButton type="submit" color="light" className="px-4 align-self-end">
+                        <CButton type="button" color="light" className="px-4 align-self-end">
                           계정 찾기
                         </CButton>
-                      </CCol>
+                      </CCol> 
                     </CRow>
                   </CForm>
                   <CRow className='mt-5'>
@@ -120,7 +124,7 @@ function Login(){
                       함께 키워요!
                     </p>
                     <Link to="/register">
-                      <CButton color="primary" className="mt-3" active tabIndex={-1} >
+                      <CButton type="button" color="primary" className="mt-3" active tabIndex={-1} >
                         가입하세요
                       </CButton>
                     </Link>

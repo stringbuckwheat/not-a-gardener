@@ -4,17 +4,13 @@ import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
-import java.util.Collections;
 import java.util.Map;
 
 @Service
@@ -37,9 +33,8 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
         // 성공정보를 바탕으로 DefaultOAuth2UserService 객체를 만든다
         // OAuth2UserService<R extends OAuth2UserRequest, U extends OAuth2User>
         // DefaultOAuth2User 서비스를 통해 User 정보를 가져와야 하기 때문에 대리자 생성
-        OAuth2UserService defaultOAuth2UserService = new DefaultOAuth2UserService();
         // 생성된 서비스 객체로부터 User를 받는다
-        OAuth2User oAuth2User = defaultOAuth2UserService.loadUser(userRequest);
+        OAuth2User oAuth2User = new DefaultOAuth2UserService().loadUser(userRequest);
         log.debug("oAuth2User: {}", oAuth2User.getAttributes());
 
         // User 정보 받기
@@ -61,17 +56,20 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
         OAuth2Attribute oAuth2Attribute = OAuth2Attribute.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
         // Map<String, Object> memberAttribute = oAuth2Attribute.convertToMap();
 
-        log.debug("oAuth2Attribute: {}", oAuth2Attribute);
-        // log.debug("memberAttribute: {}", memberAttribute.toString());
+        // 기존 회원이면 update, 신규 회원이면 save
+        Member member = saveOrUpdate(oAuth2Attribute);
 
-        // save or update
-        Member member = memberRepository.findByUsernameAndProvider(oAuth2Attribute.getEmail(), registrationId)
+        Map<String, Object> attributes = oAuth2Attribute.toMap();
+        attributes.put("memberNo", member.getMemberNo());
+
+        // UserPrincipal: Authentication에 담을 OAuth2User와 (일반 로그인 용) UserDetails를 implements한 커스텀 클래스
+        return UserPrincipal.create(member, oAuth2Attribute.getAttributes());
+    }
+
+    public Member saveOrUpdate(OAuth2Attribute oAuth2Attribute){
+        Member member = memberRepository.findByUsernameAndProvider(oAuth2Attribute.getEmail(), oAuth2Attribute.getProvider())
                 .orElse(oAuth2Attribute.toEntity());
-        memberRepository.save(member);
 
-        // 로그인한 유저를 리턴
-        return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
-                oAuth2Attribute.getAttributes(),
-                oAuth2Attribute.getAttributeKey());
+        return memberRepository.save(member);
     }
 }

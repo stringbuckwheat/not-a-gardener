@@ -75,7 +75,20 @@ public class OAuth2Attribute {
                 .build();
     }
 
+    Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("id", attributeKey);
+        map.put("key", attributeKey);
+        map.put("name", name);
+        map.put("email", email);
+        map.put("picture", picture);
+
+        return map;
+    }
+
     public Member toEntity(){
+        // 신규 생성에만 쓰기 때문에 MemberNo는 없음
         return Member
                 .builder()
                 .username(this.getEmail())

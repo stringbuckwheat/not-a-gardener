@@ -1,11 +1,14 @@
 package com.buckwheat.garden.service.impl;
 
+import com.buckwheat.garden.config.oauth2.UserPrincipal;
+import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.data.token.JwtAuthToken;
 import com.buckwheat.garden.service.JwtAuthTokenProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,14 +16,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtAuthTokenProviderImpl implements JwtAuthTokenProvider {
 
     // property의 값을 읽어오는 어노테이션
@@ -28,6 +35,7 @@ public class JwtAuthTokenProviderImpl implements JwtAuthTokenProvider {
     private String secret;
     private Key key;
 
+    private final UserDetailsService userDetailsService;
 
     @PostConstruct // 의존성 주입 후 초기화
     public void init(){
@@ -38,14 +46,27 @@ public class JwtAuthTokenProviderImpl implements JwtAuthTokenProvider {
     }
 
     @Override
-    public JwtAuthToken createAuthToken(String id, Map<String, String> claims, Date expiredDate) {
-        return new JwtAuthToken(id, key, claims, expiredDate);
-    }
-
-    @Override
     public JwtAuthToken convertAuthToken(String token) {
         // 멤버변수로 지정된 key 값을 포함하여 새로운 JwtAuthToken 객체 지정
         return new JwtAuthToken(token, key);
+    }
+
+    @Override
+    public JwtAuthToken createAuthToken(UserPrincipal userPrincipal){
+        // PK
+        int memberNo = userPrincipal.getMember().getMemberNo();
+
+        // claims 만들기
+        Map<String, String> claims = new HashMap<>();
+
+        claims.put("memberNo", String.valueOf(memberNo));
+        claims.put("email", userPrincipal.getMember().getEmail());
+        claims.put("name", userPrincipal.getMember().getName());
+
+        // 기한
+        Date expiredDate = Date.from(LocalDateTime.now().plusMinutes(180).atZone(ZoneId.systemDefault()).toInstant());
+
+        return new JwtAuthToken(String.valueOf(memberNo), key, claims, expiredDate);
     }
 
     @Override
@@ -53,20 +74,24 @@ public class JwtAuthTokenProviderImpl implements JwtAuthTokenProvider {
         if(authToken.validate()){
             // authToken에 담긴 데이터를 받아온다
             Claims claims = authToken.getData();
-            log.debug(claims.toString());
 
-            // Colletions.singleton(T o): Returns an immutable set containing only the specified object.
-            // SimpleGrantedAuthority: 권한 객체. "user" 같은 String 값을 생성자 파라미터로 넣어주면 된다.
-            // claims.get(JwtAuthToken.AUTHORITIES_KEY, String.class): 	get(String claimName, Class<T> requiredType)
-            // Collection<? extends GrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority(claims.get(JwtAuthToken.AUTHORITIES_KEY, String.class)));
-            Collection<? extends GrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("user"));
+            log.debug("claims.getSubject(): {}", claims.getSubject());
 
-            // public User(String username, String password, Collection<? extends GrantedAuthority> authorities)
-            User principal = new User(claims.getSubject(), "", authorities);
+            UserPrincipal userPrincipal = (UserPrincipal) userDetailsService.loadUserByUsername(claims.getSubject());
 
-            // UsernamePasswordAuthenticationToken(Object principal, Object credentials,
-            //			Collection<? extends GrantedAuthority> authorities)
-            return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);
+//            UserPrincipal userPrincipal = UserPrincipal.create(
+//                    Member.builder()
+//                            .memberNo(Integer.parseInt(claims.getSubject()))
+//                            .name((String) claims.get("name"))
+//                            .email((String) claims.get("email"))
+//                    .build());
+
+            // 권한 없으면 authenticate false임 => too many redirect
+            // principal, credential, role 다 쓰는 생성자 써야 super.setAuthenticated(true); 호출됨!
+            return new UsernamePasswordAuthenticationToken(
+                    userPrincipal,
+                    null,
+                    Collections.singleton(new SimpleGrantedAuthority("USER")));
         } else {
             throw new JwtException("token error!");
         }

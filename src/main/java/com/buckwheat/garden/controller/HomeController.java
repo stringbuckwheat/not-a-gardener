@@ -14,7 +14,7 @@ public class HomeController {
 
     /* 로그인 */
     // 소셜 로그인은 Security Filter에서 처리
-    @PostMapping("/")
+    @PostMapping("")
     public String login(@RequestBody MemberDto memberDto){
         return loginService.login(memberDto);
     }

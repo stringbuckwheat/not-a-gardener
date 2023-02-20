@@ -5,6 +5,7 @@ import com.buckwheat.garden.config.oauth2.OAuth2MemberService;
 import com.buckwheat.garden.config.oauth2.OAuth2SuccessHandler;
 import com.buckwheat.garden.service.JwtAuthTokenProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,19 +17,23 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
-@EnableWebSecurity // (debug = true)
+@EnableWebSecurity//(debug = true)
 @RequiredArgsConstructor
+@Slf4j
 public class SpringSecurityConfig {
     private final JwtAuthTokenProvider tokenProvider;
-    private final OAuth2MemberService oAuth2UserService;
+    private final OAuth2MemberService oAuth2MemberService;
     private final OAuth2SuccessHandler successHandler;
 
     @Bean
     public CorsFilter corsFilter() {
+        log.debug("*** CORS filter ***");
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 
@@ -55,9 +60,8 @@ public class SpringSecurityConfig {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/oauth").permitAll()
-                .antMatchers("/register").permitAll()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .antMatchers("/", "/oauth", "/register").permitAll()
                 .antMatchers("/garden/**").authenticated()
                 // .anyRequest().hasRole("USER")
 
@@ -67,7 +71,7 @@ public class SpringSecurityConfig {
 
                 .oauth2Login().loginPage("/")
                 .successHandler(successHandler)
-                .userInfoEndpoint().userService(oAuth2UserService);
+                .userInfoEndpoint().userService(oAuth2MemberService);
 
         return httpSecurity.build();
     }
@@ -77,4 +81,5 @@ public class SpringSecurityConfig {
     public BCryptPasswordEncoder encodePw(){
         return new BCryptPasswordEncoder();
     }
+
 }

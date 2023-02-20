@@ -25,30 +25,18 @@ public class RegisterServiceImpl implements RegisterService {
         // DTO에 암호화된 비밀번호 저장하기
         paramRegisterDto.encryptPassword(encoder.encode(paramRegisterDto.getPw()));
 
-        // DB에 저장
-        // TODO 리턴값 다시
         memberRepository.save(paramRegisterDto.toEntity());
         return paramRegisterDto;
     }
+
     @Override
     public String getIdByInputId(String id) {
-        Optional<Member> member = memberRepository.findById(id);
+        Optional<Member> member = memberRepository.findByUsername(id);
 
         if(member.isEmpty()){
             return null;
         }
 
         return member.get().getUsername();
-    }
-
-    @Override
-    public String getEmailByInputEmail(String email) {
-        Optional<Member> member = memberRepository.findByEmail(email);
-
-        if(member.isEmpty()){
-            return null;
-        }
-
-        return member.get().getEmail();
     }
 }

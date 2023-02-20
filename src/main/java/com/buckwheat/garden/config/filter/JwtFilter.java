@@ -40,6 +40,7 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.debug("*** JWT FILTER ***");
+        log.debug("주소: {}", request.getRequestURL());
 
         Optional<String> header = resolveToken(request);
 
@@ -49,7 +50,7 @@ public class JwtFilter extends OncePerRequestFilter {
             log.debug("split 이후: " + token);
 
             // header의 token로 token, key를 포함하는 새로운 JwtAuthToken 만들기
-            JwtAuthToken jwtAuthToken = (JwtAuthToken) tokenProvider.convertAuthToken(token);
+            JwtAuthToken jwtAuthToken = tokenProvider.convertAuthToken(token);
 
             // boolean validate() -> getData(): claims or null
             // 정상 토큰이면 해당 토큰으로 Authentication을 가져와서 SecurityContext에 저장
