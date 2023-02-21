@@ -1,5 +1,6 @@
 package com.buckwheat.garden.data.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "fertilizer")
 @Getter
+@Builder
 public class Fertilizer {
     /* 비료 정보 기록 */
 

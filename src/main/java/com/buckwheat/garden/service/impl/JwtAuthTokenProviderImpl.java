@@ -79,13 +79,6 @@ public class JwtAuthTokenProviderImpl implements JwtAuthTokenProvider {
 
             UserPrincipal userPrincipal = (UserPrincipal) userDetailsService.loadUserByUsername(claims.getSubject());
 
-//            UserPrincipal userPrincipal = UserPrincipal.create(
-//                    Member.builder()
-//                            .memberNo(Integer.parseInt(claims.getSubject()))
-//                            .name((String) claims.get("name"))
-//                            .email((String) claims.get("email"))
-//                    .build());
-
             // 권한 없으면 authenticate false임 => too many redirect
             // principal, credential, role 다 쓰는 생성자 써야 super.setAuthenticated(true); 호출됨!
             return new UsernamePasswordAuthenticationToken(
