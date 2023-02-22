@@ -13,7 +13,7 @@ import java.util.Optional;
 @Slf4j
 @Getter
 public class JwtAuthToken {
-    public static final String AUTHORITIES_KEY = "user";
+    public static final String AUTHORITIES_KEY = "USER";
     private final String token;
     private final Key key;
 
@@ -28,7 +28,6 @@ public class JwtAuthToken {
     }
 
     public String getToken(){
-        // return token.token;
         return this.token;
     }
 

@@ -4,6 +4,7 @@ import React from "react";
 import forNoPlant from "./forNoPlant.png";
 
 const NoPlant = () => {
+    console.log("no plant page")
 
     return(
         <CContainer fluid className="text-center">

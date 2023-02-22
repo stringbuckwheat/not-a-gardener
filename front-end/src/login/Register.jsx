@@ -27,7 +27,6 @@ const Register = () => {
 
   // 상태
   const [usernameCheck, setUsernameCheck] = useState(false);
-  const [emailCheck, setEmailCheck] = useState(false);
   const [repeatPw, setRepeatPw] = useState(false);
   
   // input 값의 변동이 있을 시 객체 데이터 setting
@@ -66,32 +65,12 @@ const Register = () => {
     })
   }
 
-  // 이메일 중복 확인
-  const email = (email) => {
-    setRegister(setRegister => ({...register, email: email}));
-
-    if(!emailRegex.test(email)){
-      return;
-    }
-
-    // 서버 가서 확인
-    axios.post("/register/emailCheck", {'email': email})
-    .then((res) => {
-      console.log("email data: " + res.data);
-
-      if(res.data != ''){
-        setEmailCheck(false);
-      } else {
-        setEmailCheck(true);
-      }
-    })
-  }
-
   const navigate = useNavigate();
 
   // 제출
   const onSubmit = (e) => {
     e.preventDefault();
+    console.log("Register.registerf")
 
     axios.post("/register", register)
     .then((res) => {
@@ -102,7 +81,7 @@ const Register = () => {
       .then((res) => {
         // local storage에 토큰 저장
         localStorage.setItem("login", res.data);
-        navigate('/garden');
+        navigate('/');
       })
     })
   } // end for onSubmit
@@ -140,14 +119,12 @@ const Register = () => {
                   <p>{register.name === '' ? "이름은 비워둘 수 없습니다." : ""}</p>
                   <CInputGroup className="mb-3">
                     <CInputGroupText>@</CInputGroupText>
-                    <CFormInput placeholder="이메일" name="email" required onChange={(e) => email(e.target.value)}/>
+                    <CFormInput placeholder="이메일" name="email" required onChange={onChange}/>
                   </CInputGroup>
                   <p>{
                   !emailRegex.test(register.email) 
                   ? "이메일 형식을 확인해주세요" 
-                  : ( emailCheck
-                    ? "사용 가능한 이메일입니다."
-                    : "이미 가입된 이메일입니다.")}</p>
+                  : ""}</p>
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
                       <CIcon icon={cilLockLocked} />
@@ -176,7 +153,7 @@ const Register = () => {
                   </CInputGroup>
                   <p>{!repeatPw ? "비밀번호를 확인해주세요": ""}</p>
                   <div className="d-grid">
-                  {usernameCheck && idRegex.test(register.username) && pwRegex.test(register.pw) && emailRegex.test(register.email) && emailCheck && register.name !== '' && repeatPw
+                  {usernameCheck && idRegex.test(register.username) && pwRegex.test(register.pw) && emailRegex.test(register.email) && register.name !== '' && repeatPw
                   ? <CButton type="submit" color="success" >가입하기</CButton>
                   : <CButton type="submit" color="secondary" disabled>가입하기</CButton>
                   }

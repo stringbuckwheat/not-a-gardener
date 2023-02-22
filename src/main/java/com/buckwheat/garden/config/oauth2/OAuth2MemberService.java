@@ -13,32 +13,30 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+/**
+ * access token을 사용하여 OAuth2 서버에서 유저 정보를 가져온다.
+ * 데이터베이스에 Member를 저장/수정한다.
+ * 가져온 유저 정보로 UserPrincipal을 만들어 반환한다.
+ * UserPrincipal: UserDetails, OAuth2User를 implements한 커스텀 클래스
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
-// Implementations of this interface
-// are responsible for obtaining the user attributes of the End-User(Resource Owner)
-// from the UserInfo Endpoint
-// using the Access Token granted to the Client
-// and returning an AuthenticatedPrincipal in the form of an OAuth2User.
 public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final MemberRepository memberRepository;
 
-    // 하나의 메소드를 오버라이딩 해야함
+    /**
+     * OAuth2 로그인 성공 정보를 바탕으로 UserPrincipal을 만들어 반환한다
+     * @param userRequest 로그인한 유저 리퀘스트
+     * @return Authenticaion 객체에 담을 UserPrincipal(Custom)
+     * @throws OAuth2AuthenticationException
+     */
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        // Returns an OAuth2User after obtaining the user attributes of the End-User from the UserInfo Endpoint.
-
-        // OAuth2UserService, OAuth2User, DefaultOAuth2UserService()는 모두 security.oauth2 안에 있는 클래스
-        // 성공정보를 바탕으로 DefaultOAuth2UserService 객체를 만든다
-        // OAuth2UserService<R extends OAuth2UserRequest, U extends OAuth2User>
-        // DefaultOAuth2User 서비스를 통해 User 정보를 가져와야 하기 때문에 대리자 생성
-        // 생성된 서비스 객체로부터 User를 받는다
+        // 성공정보를 바탕으로 DefaultOAuth2UserService 객체를 만든 뒤 User를 받는다
         OAuth2User oAuth2User = new DefaultOAuth2UserService().loadUser(userRequest);
-        log.debug("oAuth2User: {}", oAuth2User.getAttributes());
 
-        // User 정보 받기
-        // 구글 로그인인지, 네이버 로그인인지 등등을 알려줌
+        // 구글 로그인인지, 네이버 로그인인지
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
         // OAuth를 지원하는 소셜 서비스들간의 약속
@@ -54,18 +52,25 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
         // OAuth2UserService를 통해 가져온 데이터를 담을 클래스
         // attribute: {name, id, key, email, picture}
         OAuth2Attribute oAuth2Attribute = OAuth2Attribute.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
-        // Map<String, Object> memberAttribute = oAuth2Attribute.convertToMap();
 
         // 기존 회원이면 update, 신규 회원이면 save
         Member member = saveOrUpdate(oAuth2Attribute);
 
+        // oAuth2User.getAttributes()로 가져오는 map은 수정 불가능한 맵
+        // Member 테이블의 PK를 (username이 아니라) member_no로 잡고 있으므로
+        // PK 값을 함께 Security Context에 저장하기 위해 평범한 map으로 변환
         Map<String, Object> attributes = oAuth2Attribute.toMap();
         attributes.put("memberNo", member.getMemberNo());
 
-        // UserPrincipal: Authentication에 담을 OAuth2User와 (일반 로그인 용) UserDetails를 implements한 커스텀 클래스
+        // UserPrincipal: Authentication에 담을 OAuth2User와 (일반 로그인 용)UserDetails를 implements한 커스텀 클래스
         return UserPrincipal.create(member, oAuth2Attribute.getAttributes());
     }
 
+    /**
+     * DB에 사용자 정보를 저장/수정한다
+     * @param oAuth2Attribute 엔티티를 만들 정보들
+     * @return
+     */
     public Member saveOrUpdate(OAuth2Attribute oAuth2Attribute){
         Member member = memberRepository.findByUsernameAndProvider(oAuth2Attribute.getEmail(), oAuth2Attribute.getProvider())
                 .orElse(oAuth2Attribute.toEntity());

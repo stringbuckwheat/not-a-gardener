@@ -4,6 +4,7 @@ import com.buckwheat.garden.data.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -83,17 +84,18 @@ public class UserPrincipal implements UserDetails, OAuth2User {
     }
 
     @Override
+    @Nullable
     public <A> A getAttribute(String name) {
-        return OAuth2User.super.getAttribute(name);
+        return (A) oauth2UserAttributes.get(name);
     }
 
     @Override
     public Map<String, Object> getAttributes() {
-        return null;
+        return Collections.unmodifiableMap(oauth2UserAttributes);
     }
 
     @Override
     public String getName() {
-        return null;
+        return member.getName();
     }
 }

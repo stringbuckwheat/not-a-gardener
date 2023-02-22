@@ -16,14 +16,16 @@ import {
 import CIcon from '@coreui/icons-react'
 import { useNavigate } from 'react-router-dom'
 import sprout from './../../assets/images/sprout.png'
+import MemberDetail from '../../member/MemberDetail';
 
 // account, setting 부분
 const AppHeaderDropdown = () => {
   const navigate = useNavigate();
+  const memberUrl = "garden/member/" + localStorage.getItem("memberNo");
 
   const logOut = () => {
-    localStorage.removeItem("login");
-    navigate("/");
+    localStorage.clear();
+    navigate("/login");
   }
 
   return (
@@ -33,14 +35,14 @@ const AppHeaderDropdown = () => {
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
         <CDropdownHeader className="bg-light fw-semibold py-2">Settings</CDropdownHeader>
-        <CDropdownItem href="#">
+        <CDropdownItem href={memberUrl}>
           <CIcon icon={cilUser} className="me-2" />
           개인정보 수정
         </CDropdownItem>
-        <CDropdownItem href="#">
+        {/* <CDropdownItem >
           <CIcon icon={cilSettings} className="me-2" />
           설정
-        </CDropdownItem>
+        </CDropdownItem> */}
         <CDropdownDivider />
         <CDropdownItem onClick={logOut}>
           <CIcon icon={cilLockUnlocked} className="me-2" />

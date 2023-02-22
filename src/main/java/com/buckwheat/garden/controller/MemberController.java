@@ -1,8 +1,11 @@
 package com.buckwheat.garden.controller;
 
+import com.buckwheat.garden.config.oauth2.UserPrincipal;
 import com.buckwheat.garden.data.dto.MemberDetailDto;
 import com.buckwheat.garden.data.dto.MemberDto;
+import com.buckwheat.garden.data.dto.MemberInfo;
 import com.buckwheat.garden.data.dto.RegisterDto;
+import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,9 +21,15 @@ public class MemberController {
     private final MemberService memberService;
 
     /* 회원정보 보기 */
-    @GetMapping("/{username}")
-    public MemberDetailDto getMember(@PathVariable("username") String username){
-        return memberService.getMember(username);
+    @GetMapping("/{memberNo}")
+    public MemberDetailDto getMember(@PathVariable("memberNo") int memberNo){
+        return memberService.getMember(memberNo);
+    }
+
+    @GetMapping("/member-info")
+    public MemberInfo getMemberInfo(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        Member member = userPrincipal.getMember();
+        return MemberInfo.getMemberInfo(member.getMemberNo(), member.getName());
     }
 
     /* 비밀번호 변경 전 한 번 입력받아서 확인 */

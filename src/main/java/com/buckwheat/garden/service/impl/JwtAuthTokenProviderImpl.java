@@ -45,12 +45,12 @@ public class JwtAuthTokenProviderImpl implements JwtAuthTokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    @Override
-    public JwtAuthToken convertAuthToken(String token) {
-        // 멤버변수로 지정된 key 값을 포함하여 새로운 JwtAuthToken 객체 지정
-        return new JwtAuthToken(token, key);
-    }
-
+    /**
+     * 일반/소셜 로그인 성공 시 UserPrincipal을 만들어 전달하면 JwtAuthToken 발급
+     * LoginService, OAuth2SuccessHandler에서 사용
+     * @param userPrincipal Authenticaion에 넣어 Security Context에 저장할 유저 정보
+     * @return JwtAuthToken 객체
+     */
     @Override
     public JwtAuthToken createAuthToken(UserPrincipal userPrincipal){
         // PK
@@ -69,17 +69,35 @@ public class JwtAuthTokenProviderImpl implements JwtAuthTokenProvider {
         return new JwtAuthToken(String.valueOf(memberNo), key, claims, expiredDate);
     }
 
+    /**
+     * JwtFilter에서 사용
+     * 헤더에서 받아온 token을 주면 이 클래스의 멤버변수로 지정된 key 값을 포함하여 JwtAuthToken 객체 리턴
+     * 유효한 토큰인지 확인하기 위해 쓴다.
+     * @param token 헤더에서 받아온 token
+     * @return JwtAuthToken 객체
+     */
+    @Override
+    public JwtAuthToken convertAuthToken(String token) {
+        return new JwtAuthToken(token, key);
+    }
+
+    /**
+     * JwtFilter에서 유효한 토큰인지를 확인한 후 Security Context에 저장할 Authentication 리턴
+     * @param authToken 헤더에 담겨 온 Jwt를 decode한 것
+     * @return UsernamePasswordAuthenticationToken(userPrincipal, null, role)
+     */
     @Override
     public Authentication getAuthentication(JwtAuthToken authToken) {
         if(authToken.validate()){
             // authToken에 담긴 데이터를 받아온다
             Claims claims = authToken.getData();
 
+            // memberNo가 들어있다.
             log.debug("claims.getSubject(): {}", claims.getSubject());
 
             UserPrincipal userPrincipal = (UserPrincipal) userDetailsService.loadUserByUsername(claims.getSubject());
 
-            // 권한 없으면 authenticate false임 => too many redirect
+            // 권한 없으면 authenticate false => too many redirect 오류 발생
             // principal, credential, role 다 쓰는 생성자 써야 super.setAuthenticated(true); 호출됨!
             return new UsernamePasswordAuthenticationToken(
                     userPrincipal,

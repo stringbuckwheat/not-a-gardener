@@ -47,6 +47,12 @@ const _nav = [
     name: '나의 장비',
   },
   {
+    component: CNavItem,
+    name: '나의 장소',
+    to: '/place',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
+  },
+  {
     component: CNavGroup,
     name: '나의 비료',
     to: '/garden/that',
@@ -69,18 +75,6 @@ const _nav = [
     name: '살충/살균제',
     to: '/garden/that',
     icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: '액체 비료',
-        to: '/garden/inner',
-      },
-      {
-        component: CNavItem,
-        name: '완효성 비료',
-        to: '/garden/inner2',
-      }
-    ],
   },
   {
     component: CNavItem,

@@ -17,10 +17,16 @@ import java.util.NoSuchElementException;
 public class CustomUserDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
 
+    /**
+     *
+     * @param username memberNo가 저장되어 있다
+     * @return member 객체를 포함한 UserPrincipal -> UsernamePasswordAuthenticationToken에 넣는다
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberRepository.findById(Integer.parseInt(username))
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> new UsernameNotFoundException("해당 유저를 찾을 수 없습니다."));
 
         return new UserPrincipal(member);
     }

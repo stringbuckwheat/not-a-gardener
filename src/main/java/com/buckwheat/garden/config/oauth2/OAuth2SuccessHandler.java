@@ -19,11 +19,17 @@ import java.io.IOException;
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final JwtAuthTokenProvider jwtAuthTokenProvider;
 
-    @Override // 로그인 성공 시 부가작업을 하는 메소드
-    // @ResponseBody
+    /**
+     * 로그인 성공 시 부가작업
+     * JWT 발급 후 token과 함께 리다이렉트
+     * @param request 인증 성공된 리퀘스트
+     * @param response
+     * @param authentication Security Context의 Authentication
+     * @throws IOException
+     * @throws ServletException
+     */
+    @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        // token 생성 및 발급 후 token과 함께 리다이렉트
-
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         JwtAuthToken token = jwtAuthTokenProvider.createAuthToken(userPrincipal);
 

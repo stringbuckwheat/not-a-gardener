@@ -22,6 +22,8 @@ import sprout from '../assets/images/sprout.png'
 
 function Login(){
   console.log("Login");
+
+  const navigate = useNavigate();
   
   const [login, setLogin] = useState({
     username: "",
@@ -35,28 +37,28 @@ function Login(){
     setLogin(setLogin => ({...login, [name]: value}))
   }
 
-  const navigate = useNavigate();
+  
 
   // 입력 값 확인 및 submit
   const inputCheck = (e) => {
     e.preventDefault(); // reload 막기
     console.log("Login.inputCheck")
-    console.log("login 객체", login);
 
       axios.post("/", login)
       .then((res) => {
-        console.log("token", res);
+        console.log("res", res);
 
-        // local storage에 토큰 저장
-        localStorage.setItem("login", res.data);
+        // local storage에 토큰과 기본 정보 저장
+        localStorage.setItem("login", res.data.token);
+        localStorage.setItem("memberNo", res.data.memberNo);
+        localStorage.setItem("name", res.data.name);
 
         // garden 페이지로 이동
-        navigate('/garden');
+        navigate('/');
       })
       .catch((error) => {
          setMsg(error.response.data.message);
       });
-
   }
 
   return (

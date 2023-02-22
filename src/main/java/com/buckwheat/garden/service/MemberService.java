@@ -7,7 +7,7 @@ import com.buckwheat.garden.data.token.PasswordAuthenticationToken;
 
 public interface MemberService {
     // 회원 정보 보기
-    MemberDetailDto getMember(String username);
+    MemberDetailDto getMember(int memberNo);
 
     // 회원 정보 변경
     RegisterDto updateMember(RegisterDto registerDto);

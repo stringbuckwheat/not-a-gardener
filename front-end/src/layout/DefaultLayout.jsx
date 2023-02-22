@@ -1,14 +1,14 @@
 import React from 'react'
 import { Navigate } from 'react-router-dom';
 import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/index'
-import { isLogin } from './isLogin';
 
 const DefaultLayout = () => {
-  const accessToken = localStorage.getItem("login");
-  console.log("accessToken: ", accessToken);
+  console.log("default layout")
+  const isLogin = localStorage.getItem("login");
+  console.log("login", isLogin !== undefined)
 
   return (
-    accessToken
+    isLogin
     ? 
     <div>
       <AppSidebar />
@@ -20,8 +20,7 @@ const DefaultLayout = () => {
         <AppFooter />
       </div>
     </div>
-    : <Navigate to="/" replace={true}/>
-    
+    : <Navigate to="/login" replace={true}/>
   )
 }
 
