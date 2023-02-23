@@ -20,15 +20,22 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     @Override
-    public MemberDetailDto getMember(String username) {
-        Member member = memberRepository.findById(username).orElseThrow(NoSuchElementException::new);
-        return new MemberDetailDto(member.getUsername(), member.getEmail(), member.getName());
+    public MemberDetailDto getMember(int userNo) {
+        Member member = memberRepository.findById(userNo).orElseThrow(NoSuchElementException::new);
+
+        return MemberDetailDto.builder()
+                .username(member.getUsername())
+                .email(member.getEmail())
+                .name(member.getName())
+                .createDate(member.getCreateDate())
+                .provider(member.getProvider())
+                .build();
     }
 
     @Override
     public void updatePassword(MemberDto memberDto) {
-        Member member = memberRepository.findById(memberDto.getUsername()).orElseThrow(NoSuchElementException::new);
-        member.changePassword(encoder.encode(memberDto.getPw()));
+//        Member member = memberRepository.findById(memberDto.getUsername()).orElseThrow(NoSuchElementException::new);
+//        member.changePassword(encoder.encode(memberDto.getPw()));
     }
 
     @Override
@@ -37,13 +44,22 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public RegisterDto updateMember(RegisterDto registerDto){
-        memberRepository.save(registerDto.toEntity());
-        return registerDto;
+    public MemberDetailDto updateMember(MemberDetailDto memberDetailDto){
+        Member member = memberRepository.findById(memberDetailDto.getMemberNo()).orElseThrow(NoSuchElementException::new);
+
+        member.updateEmailAndName(memberDetailDto.getEmail(), memberDetailDto.getName());
+        memberRepository.save(member);
+
+        return MemberDetailDto.builder()
+                .username(member.getUsername())
+                .email(member.getEmail())
+                .name(member.getName())
+                .createDate(member.getCreateDate())
+                .build();
     }
 
     @Override
-    public void removeMember(String username) {
-        memberRepository.deleteById(username);
+    public void removeMember(int memberNo) {
+        memberRepository.deleteById(memberNo);
     }
 }

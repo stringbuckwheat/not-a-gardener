@@ -120,7 +120,7 @@ function Login(){
               </CCard>
               <CCard className="text-white bg-primary py-5" sm={{width: '100%'}} lg={{width: '44%'}}>
                 <CCardBody className="text-center">
-                    <h2>식물 키우기!</h2>
+                    <h2>not-a-gardener</h2>
                     <CImage fluid src={sprout} style={{width: '50%'}} />
                     <p>
                       함께 키워요!

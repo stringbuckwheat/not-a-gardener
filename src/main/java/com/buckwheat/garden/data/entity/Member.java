@@ -36,4 +36,11 @@ public class Member {
         this.pw = encryptPassword;
         return this;
     }
+
+    public Member updateEmailAndName(String email, String name){
+        this.email = email;
+        this.name = name;
+
+        return this;
+    }
 }

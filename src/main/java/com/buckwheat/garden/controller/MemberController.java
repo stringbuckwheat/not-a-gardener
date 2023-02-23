@@ -47,15 +47,14 @@ public class MemberController {
     }
 
     /* 회원정보 변경 */
-    @PutMapping("/{username}")
-    public void updateMember(@RequestBody RegisterDto registerDto){
-        memberService.updateMember(registerDto);
+    @PutMapping("/{memberNo}")
+    public MemberDetailDto updateMember(@RequestBody MemberDetailDto memberDetailDto, @PathVariable int memberNo){
+        return memberService.updateMember(memberDetailDto);
     }
 
     /* 탈퇴 */
-    @DeleteMapping("/{username}")
-    public void deleteMember(@PathVariable("username") String username){
-        memberService.removeMember(username);
+    @DeleteMapping("/{memberNo}")
+    public void deleteMember(@PathVariable("memberNo") int memberNo){
+        memberService.removeMember(memberNo);
     }
-
 }

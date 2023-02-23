@@ -13,7 +13,7 @@ const _nav = [
   {
     component: CNavItem,
     name: '나의 정원',
-    to: '/garden',
+    to: '/',
     icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
   },
   {

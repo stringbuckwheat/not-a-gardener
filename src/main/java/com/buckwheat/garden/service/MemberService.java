@@ -10,7 +10,7 @@ public interface MemberService {
     MemberDetailDto getMember(int memberNo);
 
     // 회원 정보 변경
-    RegisterDto updateMember(RegisterDto registerDto);
+    MemberDetailDto updateMember(MemberDetailDto memberDetailDto);
 
     // id, pw으로 본인 확인
     boolean identifyMember(MemberDto memberDto);
@@ -19,5 +19,5 @@ public interface MemberService {
     void updatePassword(MemberDto memberDto);
 
     // 회원 탈퇴
-    void removeMember(String username);
+    void removeMember(int memberNo);
 }

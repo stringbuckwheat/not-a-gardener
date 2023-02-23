@@ -21,7 +21,7 @@ import MemberDetail from '../../member/MemberDetail';
 // account, setting 부분
 const AppHeaderDropdown = () => {
   const navigate = useNavigate();
-  const memberUrl = "garden/member/" + localStorage.getItem("memberNo");
+  const memberUrl = "member/" + localStorage.getItem("memberNo");
 
   const logOut = () => {
     localStorage.clear();
