@@ -9,7 +9,7 @@ import {
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
-const _nav = [
+const SidebarList = [
   {
     component: CNavItem,
     name: '나의 정원',
@@ -94,4 +94,4 @@ const _nav = [
   },
 ]
 
-export default _nav
+export default SidebarList;

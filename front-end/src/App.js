@@ -10,10 +10,10 @@ const loading = (
 )
 
 // Pages
-const Login = React.lazy(() => import('./login/Login'))
-const Register = React.lazy(() => import('./login/Register'))
-const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
-const GetToken = React.lazy(() => import('./login/GetToken'))
+const Login = React.lazy(() => import('./pages/login/Login'))
+const Register = React.lazy(() => import('./pages/login/Register'))
+const DefaultLayout = React.lazy(() => import('./components/layout/DefaultLayout'))
+const GetToken = React.lazy(() => import('./pages/login/GetToken'))
 
 function App() {
     console.log("render()!");

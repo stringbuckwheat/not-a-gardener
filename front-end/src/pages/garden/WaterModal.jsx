@@ -7,9 +7,11 @@ import {
   CModalHeader,
   CModalTitle,
 } from '@coreui/react'
-import authAxios from '../requestInterceptor';
+import authAxios from '../../utils/requestInterceptor';
 
 const WaterModal = (props) => {
+  console.log("water modal");
+
   // props.closeModal로 부모 컴포넌트의 state 변경 함수 넘겨줌
   const { visible, clickedPlant } = props;
   console.log("clickedPlant", clickedPlant);
@@ -21,6 +23,8 @@ const WaterModal = (props) => {
   }
 
   const submit = () => {
+    console.log("water submit")
+
     authAxios.post("/garden/water", {plantNo: clickedPlant, fertilized: fertilized})
     .then((res) => {
       console.log("res", res);

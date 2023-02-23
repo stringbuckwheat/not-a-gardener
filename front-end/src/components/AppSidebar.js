@@ -10,7 +10,7 @@ import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 
 // 사이드바 내용들
-import navigation from '../_nav'
+import navigation from '../utils/sidebar-list'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()

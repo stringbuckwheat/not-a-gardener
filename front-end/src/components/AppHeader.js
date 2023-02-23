@@ -34,7 +34,7 @@ const AppHeader = () => {
            Not a Gardener 
         </CHeaderBrand>
         <CHeaderNav className="ms-3">
-          <div className="ms-3 mt-2">안녕하세요, {localStorage.getItem("name")}님</div>
+          <div className="ms-3 mt-2 d-none d-sm-block">안녕하세요, {localStorage.getItem("name")}님</div>
           <AppHeaderDropdown />
         </CHeaderNav>
       </CContainer>

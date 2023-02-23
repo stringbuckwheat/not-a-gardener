@@ -16,7 +16,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import { useNavigate } from 'react-router-dom'
 import sprout from './../../assets/images/sprout.png'
-import MemberDetail from '../../member/MemberDetail';
+import MemberDetail from '../../pages/member/MemberDetail';
 
 // account, setting 부분
 const AppHeaderDropdown = () => {

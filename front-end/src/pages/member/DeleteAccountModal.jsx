@@ -8,7 +8,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from '@coreui/react'
-import authAxios from '../requestInterceptor';
+import authAxios from '../../utils/requestInterceptor';
 
 const DeleteAccountModal = (props) => {
     const {visible, memberNo} = props;

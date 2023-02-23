@@ -1,5 +1,3 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -10,10 +8,11 @@ import {
   CForm,
   CFormInput,
   CInputGroup,
-  CInputGroupText,
-  CRow,
+  CInputGroupText
 } from '@coreui/react'
-import authAxios from '../requestInterceptor'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import authAxios from '../../utils/requestInterceptor'
 
 const AddPlant = () => {
   // submit용 객체
@@ -59,7 +58,6 @@ const AddPlant = () => {
   return (
     <CContainer>
       <div className="row justify-content-md-center">
-
       <CCol md="auto">
           <CCard sm={6} className="mb-4">
             <CCardHeader>
@@ -109,7 +107,7 @@ const AddPlant = () => {
           </CCol>
           </div>
       </CContainer>
-          
+
   )
 }
 

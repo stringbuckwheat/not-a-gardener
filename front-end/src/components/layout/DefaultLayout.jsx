@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navigate } from 'react-router-dom';
-import { AppContent, AppSidebar, AppFooter, AppHeader } from '../components/index'
+import { AppContent, AppSidebar, AppFooter, AppHeader } from '../index'
 
 const DefaultLayout = () => {
   console.log("default layout")

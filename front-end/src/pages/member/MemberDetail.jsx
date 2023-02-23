@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import authAxios from "src/requestInterceptor";
+import { useParams } from "react-router-dom";
+import authAxios from '../../utils/requestInterceptor';
 import {
     CButton,
     CCard,

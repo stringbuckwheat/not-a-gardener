@@ -18,7 +18,7 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import axios from 'axios'
-import sprout from '../assets/images/sprout.png'
+import sprout from '../../assets/images/sprout.png'
 
 function Login(){
   console.log("Login");

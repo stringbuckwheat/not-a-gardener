@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import {
-  CButton,
   CCard,
   CCardBody,
   CCardHeader,
   CCol,
-  CForm,
-  CFormInput,
-  CInputGroup,
-  CInputGroupText,
   CRow,
   CFormSwitch,
-  CFormCheck,
 } from '@coreui/react'
-import authAxios from '../requestInterceptor'
+import authAxios from '../../utils/requestInterceptor'
 import PlantLog from './PlantLog'
 import ModifyPlant from './ModifyPlant'
 import { useParams } from 'react-router-dom'
