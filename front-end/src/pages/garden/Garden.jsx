@@ -55,28 +55,28 @@ const Garden = (props) => {
         <CRow>
          {props.plantList.map((plant, idx) => {
             const color = ["primary", "warning", "danger", "success"];
-  
+
             let message = "";
             let periodMessage = `이 식물의 평균 물주기는 ${plant.averageWateringPeriod}일입니다.`
-  
+
             if(plant.wateringCode == 0){
               message = "이 식물은 목이 말라요!";
-  
+
               if(plant.fertilizingCode == 0){
                 message += "맹물을 주세요!";
               } else {
                 message += "비료를 주세요!";
               }
-  
+
             } else if(plant.wateringCode == 1) {
               message = "최근 물주기 하루 전입니다. 흙이 말랐는지 확인해보세요! 말랐다면 "
-  
+
               if(plant.fertilizingCode == 0){
                 message += "맹물을 주세요!";
               } else {
                 message += "비료를 주세요!";
               }
-  
+
             } else if(plant.wateringCode == 2) {
               message = "물 줄 날짜를 놓쳤어요! 비료 절대 안 됨!"
             } else if(plant.wateringCode == 3) {
@@ -87,10 +87,10 @@ const Garden = (props) => {
             } else if(plant.wateringCode == 5){
               message = "오늘 물 마신 식물!";
             }
-  
+
             const modifyUrl = `/garden/modify-plant/${plant.plantNo}`;
-  
-  
+
+
            return (
               <CCol sm={6} lg={3}>
                 <WaterModal visible={visible} clickedPlant={clickedPlant} closeModal={closeModal} />
@@ -104,9 +104,9 @@ const Garden = (props) => {
                       <span role="img" aria-label="herb">🌿</span>
                       <div className="fs-6 fw-normal">
                         <div>{plant.plantSpecies}</div>
-                      <div>
-                          {message}
-                      </div>
+                        <div>
+                            {message}
+                        </div>
                       </div>
                     </div>
                   }

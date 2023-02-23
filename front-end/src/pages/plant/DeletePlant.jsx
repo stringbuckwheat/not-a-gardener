@@ -7,7 +7,7 @@ import {
   CModalHeader,
   CModalTitle,
 } from '@coreui/react'
-import authAxios from '../requestInterceptor';
+import authAxios from '../../utils/requestInterceptor'
 import { useNavigate } from 'react-router-dom';
 
 const DeletePlant = (props) => {
