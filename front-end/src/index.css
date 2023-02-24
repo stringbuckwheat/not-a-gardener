@@ -56,14 +56,14 @@ body {
 }
 
 #kakao-connect {
-  background: rgb(255, 255, 255) url('./login/kakao.png') no-repeat scroll 0px 5px / 30px 30px padding-box border-box;
+  background: rgb(255, 255, 255) url('./assets/images/kakao.png') no-repeat scroll 0px 5px / 30px 30px padding-box border-box;
   background-position: center;
   border: 1px solid #FEE500;
 }
 
 #kakao-connect:hover {
   border-color: #FEE500;  
-  background: #FEE500 url('./login/kakao.png')  no-repeat scroll 0px 0px / 30px 30px padding-box border-box;
+  background: #FEE500 url('./assets/images/kakao.png')  no-repeat scroll 0px 0px / 30px 30px padding-box border-box;
   -webkit-transition: all .8s ease-out;
   -moz-transition: all .3s ease;
   -ms-transition: all .3s ease;
@@ -90,14 +90,14 @@ body {
 }
 
 #naver-connect {
-  background: rgb(255, 255, 255) url('./login/naver-w.png') no-repeat scroll 5px 1px / 45px 45px padding-box border-box;
+  background: rgb(255, 255, 255) url('./assets/images/naver-w.png') no-repeat scroll 5px 1px / 45px 45px padding-box border-box;
   border: 1px solid #02C75A;
   background-position: center;
 }
 
 #naver-connect:hover {
   border-color: #02C75A;
-  background: #02C75A url('./login/naver-g.png') no-repeat scroll 5px 1px / 45px 45px padding-box border-box;
+  background: #02C75A url('./assets/images/naver-g.png') no-repeat scroll 5px 1px / 45px 45px padding-box border-box;
   -webkit-transition: all .8s ease-out;
   -moz-transition: all .3s ease;
   -ms-transition: all .3s ease;

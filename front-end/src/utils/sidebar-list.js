@@ -55,13 +55,12 @@ const SidebarList = [
   {
     component: CNavGroup,
     name: '나의 비료',
-    to: '/garden/that',
     icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
         name: '액체 비료',
-        to: '/garden/inner',
+        to: '/fertilizer',
       },
       {
         component: CNavItem,

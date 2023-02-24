@@ -9,14 +9,15 @@ public class PlaceDto {
     private int placeNo;
     private String placeName;
     private String artificialLight;
-    private String outside;
+    private String option;
     private int memberNo;
+    private int plantQuantity;
 
     public Place toEntityWithMember(Member member){
         return Place.builder()
                 .placeName(placeName)
                 .artificialLight(artificialLight)
-                .outside(outside)
+                .option(option)
                 .member(member)
                 .build();
     }

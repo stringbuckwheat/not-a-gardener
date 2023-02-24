@@ -1,5 +1,6 @@
 package com.buckwheat.garden.controller;
 
+import com.buckwheat.garden.config.oauth2.UserPrincipal;
 import com.buckwheat.garden.data.dto.PlaceDto;
 import com.buckwheat.garden.service.PlaceService;
 import lombok.RequiredArgsConstructor;
@@ -19,17 +20,18 @@ public class PlaceController {
     private final PlaceService placeService;
 
     @GetMapping("")
-    public List<PlaceDto> getPlaceList(@AuthenticationPrincipal User user){
-        return placeService.getPlaceList(Integer.parseInt(user.getUsername()));
+    public List<PlaceDto> getPlaceList(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        return placeService.getPlaceList(userPrincipal.getMember().getMemberNo());
     }
 
-    @GetMapping("{placeNo}")
+    @GetMapping("/{placeNo}")
     public PlaceDto getPlace(@PathVariable int placeNo){
         return placeService.getPlace(placeNo);
     }
 
     @PostMapping("")
-    public PlaceDto addPlace(@RequestBody PlaceDto placeDto){
+    public PlaceDto addPlace(@RequestBody PlaceDto placeDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        placeDto.setMemberNo(userPrincipal.getMember().getMemberNo());
         return placeService.addOrUpdatePlace(placeDto);
     }
 

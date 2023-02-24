@@ -2,8 +2,6 @@ package com.buckwheat.garden.service;
 
 import com.buckwheat.garden.data.dto.MemberDetailDto;
 import com.buckwheat.garden.data.dto.MemberDto;
-import com.buckwheat.garden.data.dto.RegisterDto;
-import com.buckwheat.garden.data.token.PasswordAuthenticationToken;
 
 public interface MemberService {
     // 회원 정보 보기

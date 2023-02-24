@@ -9,6 +9,7 @@ import {
   CModalTitle,
 } from '@coreui/react'
 import authAxios from '../../utils/requestInterceptor';
+import LogOut from 'src/utils/logout';
 
 const DeleteAccountModal = (props) => {
     const {visible, memberNo} = props;
@@ -18,8 +19,7 @@ const DeleteAccountModal = (props) => {
     const deleteAccount = () => {
         authAxios.delete("/member/" + memberNo)
         .then(() => {
-            localStorage.clear();
-            navigate("/login");
+          LogOut();
         })
     }
 

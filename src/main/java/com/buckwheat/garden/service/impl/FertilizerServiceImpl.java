@@ -25,6 +25,7 @@ public class FertilizerServiceImpl implements FertilizerService {
        return new FertilizerDto(
                fertilizer.getFertilizerNo(),
                fertilizer.getFertilizerName(),
+               fertilizer.getFertilizerType(),
                fertilizer.getFertilizingPeriod(),
                fertilizer.getFertilizerNo()
        );
@@ -46,7 +47,12 @@ public class FertilizerServiceImpl implements FertilizerService {
         Member member = memberRepository.findById(fertilizerDto.getMemberNo()).orElseThrow(NoSuchElementException::new);
         Fertilizer fertilizer = fertilizerRepository.save(fertilizerDto.toEntityWithMember(member));
 
-        return getFertilizerDto(fertilizer);
+        return FertilizerDto.builder()
+                .fertilizerNo(fertilizer.getFertilizerNo())
+                .fertilizerName(fertilizer.getFertilizerName())
+                .fertilizerType(fertilizer.getFertilizerType())
+                .fertilizingPeriod(fertilizer.getFertilizingPeriod())
+                .build();
     }
 
     @Override

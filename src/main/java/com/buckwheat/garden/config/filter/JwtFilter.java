@@ -2,6 +2,10 @@ package com.buckwheat.garden.config.filter;
 
 import com.buckwheat.garden.data.token.JwtAuthToken;
 import com.buckwheat.garden.service.JwtAuthTokenProvider;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -21,20 +25,22 @@ import java.util.Optional;
 public class JwtFilter extends OncePerRequestFilter {
     // 로그인 이후 토큰 자체에 대한 검증
     public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String BEARER_PREFIX = "Bearer ";
     private final JwtAuthTokenProvider tokenProvider;
 
-    private Optional<String> resolveToken(HttpServletRequest request){
+    private String resolveToken(HttpServletRequest request){
         // Request의 Header에 담긴 토큰 값을 가져온다
 
-        String authToken = request.getHeader(AUTHORIZATION_HEADER);
-        log.debug("authToken: " + authToken);
+        String token = request.getHeader(AUTHORIZATION_HEADER);
+        log.debug("authToken: " + token);
 
-        // 공백 혹은 null이 아니면
-        if(StringUtils.hasText(authToken)){
-            return Optional.of(authToken);
-        } else {
-            return Optional.empty();
+        // 공백 혹은 null이 아니고 Bearer로 시작하면
+        if(StringUtils.hasText(token) && token.startsWith(BEARER_PREFIX)){
+            // Bearer 떼고 줌
+            return token.split(" ")[1].trim();
         }
+
+        return null;
     }
 
     @Override
@@ -42,24 +48,36 @@ public class JwtFilter extends OncePerRequestFilter {
         log.debug("*** JWT FILTER ***");
         log.debug("주소: {}", request.getRequestURL());
 
-        Optional<String> header = resolveToken(request);
+        String token = resolveToken(request);
 
-        // Optional 안의 객체가 null이 아니면
-        if(header.isPresent()){
-            String token = header.get().split(" ")[1].trim();
-            log.debug("split 이후: " + token);
+        try{
+            // 디코딩할만한 토큰이 왔으면
+            if(token != null){
+                // header의 token로 token, key를 포함하는 새로운 JwtAuthToken 만들기
+                JwtAuthToken jwtAuthToken = tokenProvider.convertAuthToken(token);
 
-            // header의 token로 token, key를 포함하는 새로운 JwtAuthToken 만들기
-            JwtAuthToken jwtAuthToken = tokenProvider.convertAuthToken(token);
+                // boolean validate() -> getData(): claims or null
+                // 정상 토큰이면 해당 토큰으로 Authentication을 가져와서 SecurityContext에 저장
+                if(jwtAuthToken.validate()){
+                    // UsernamePasswordAuthenticationToken(유저, authToken, 권한)
+                    Authentication authentication = tokenProvider.getAuthentication(jwtAuthToken);
 
-            // boolean validate() -> getData(): claims or null
-            // 정상 토큰이면 해당 토큰으로 Authentication을 가져와서 SecurityContext에 저장
-            if(jwtAuthToken.validate()){
-                // UsernamePasswordAuthenticationToken(유저, authToken, 권한)
-                Authentication authentication = tokenProvider.getAuthentication(jwtAuthToken);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
+        } catch (ExpiredJwtException e) {
+            log.debug("토큰 만료");
+            throw new JwtException("토큰 기한 만료");
+        } catch(SecurityException e){
+            log.info("Invalid JWT signature.");
+        } catch(MalformedJwtException e){
+            log.info("Invalid JWT token.");
+        } catch(UnsupportedJwtException e){
+            log.info("Unsupported JWT token.");
+        } catch(IllegalArgumentException e){
+            log.info("JWT token compact of handler are invalid");
         }
+
 
         filterChain.doFilter(request, response);
     }

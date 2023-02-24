@@ -1,7 +1,9 @@
 package com.buckwheat.garden.data.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -10,6 +12,8 @@ import javax.validation.constraints.NotNull;
 @Table(name = "place")
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Place {
     /* 식물을 놓은 장소 */
     @Id
@@ -21,10 +25,10 @@ public class Place {
 
     private String artificialLight;
 
-    private String outside;
+    private String option;
 
     // FK
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="member_no")
     private Member member;
 }

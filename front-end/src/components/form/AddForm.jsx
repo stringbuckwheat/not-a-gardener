@@ -10,22 +10,27 @@ import {
     CInputGroup,
     CInputGroupText,
     CFormSelect,
-    CFormSwitch
+    CFormSwitch,
+    CFormFeedback
   } from '@coreui/react'
   import { useState } from 'react'
   import { useNavigate } from 'react-router-dom'
   import authAxios from '../../utils/requestInterceptor'
 
-const AddPlace = () => {
+const AddForm = () => {
     const [place, setPlace] = useState({
         placeName: "",
-        option: "",
+        option: "실내",
         artificialLight: false
     })
 
     const onChange = (e) => {
         const { name, value } = e.target;
         setPlace(setPlace => ({...place, [name]: value}));
+
+        if(name === "placeName"){
+          setValidation(place.placeName !== "" ? true : false);
+        }
 
         console.log("place", place);
     }
@@ -38,9 +43,10 @@ const AddPlace = () => {
         console.log("onSubmit place", place);
     }
 
+    const [validation, setValidation] = useState(false);
 
     return(
-        <CContainer>
+      <CContainer>
       <div className="row justify-content-md-center">
       <CCol md="auto">
           <CCard sm={6} className="mb-4">
@@ -48,15 +54,17 @@ const AddPlace = () => {
               <h4 className="mt-3">새 장소 추가하기</h4>
             </CCardHeader>
             <CCardBody>
+              <CForm validated={true}>
                 <CInputGroup className="mb-3 mt-3">
-                  <CInputGroupText id="basic-addon1">이 장소의 이름은</CInputGroupText>
+                  <CInputGroupText id="basic-addon1">장소 이름</CInputGroupText>
                   <CFormInput
+                    value={place.placeName}
                     aria-describedby="basic-addon1"
                     name="placeName"
                     required
                     onChange={onChange}
+                    feedbackInvalid={place.placeName === "" ? "장소 이름은 비워둘 수 없습니다" : ""}
                   />
-                  <CInputGroupText id="basic-addon1">이에요!</CInputGroupText>
                 </CInputGroup>
                 <CInputGroup className="mb-3">
                   <CInputGroupText id="basic-addon1">이 장소는</CInputGroupText>
@@ -77,8 +85,11 @@ const AddPlace = () => {
                         : "식물등을 사용합니다"} 
                     id="formSwitchCheckChecked"/>
                 <div className="d-flex justify-content-end">
-                    <CButton type="button" color='success' onClick={onSubmit}>추가</CButton>
+                  {validation
+                  ? <CButton type="button" color='success' onClick={onSubmit}>추가</CButton>
+                  : <CButton type="button" color='secondary' variant="outline" disabled>추가</CButton>}
                 </div>
+                </CForm>
             </CCardBody>
           </CCard>
           </CCol>
@@ -87,4 +98,4 @@ const AddPlace = () => {
     );
 }
 
-export default AddPlace;
+export default AddForm;

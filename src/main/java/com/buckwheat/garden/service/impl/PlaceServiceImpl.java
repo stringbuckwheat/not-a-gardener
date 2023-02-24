@@ -27,7 +27,7 @@ public class PlaceServiceImpl implements PlaceService {
 
         placeDto.setPlaceNo(place.getPlaceNo());
         placeDto.setPlaceName(place.getPlaceName());
-        placeDto.setOutside(place.getOutside());
+        placeDto.setOption(place.getOption());
         placeDto.setArtificialLight(place.getArtificialLight());
         placeDto.setMemberNo(place.getMember().getMemberNo());
 
@@ -37,6 +37,8 @@ public class PlaceServiceImpl implements PlaceService {
     @Override
     public List<PlaceDto> getPlaceList(int memberNo) {
         List<PlaceDto> list = new ArrayList<>();
+
+        // TODO 식물 몇 갠지 세어서 넘기기 -> 양방향 매핑
 
         for(Place p : placeRepository.findByMember_memberNo(memberNo)){
             list.add(getPlaceDto(p));

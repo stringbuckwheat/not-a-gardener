@@ -10,23 +10,15 @@ import {
 } from '@coreui/react'
 import {
   cilLockUnlocked,
-  cilSettings,
   cilUser,
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
-import { useNavigate } from 'react-router-dom'
 import sprout from './../../assets/images/sprout.png'
-import MemberDetail from '../../pages/member/MemberDetail';
+import LogOut from 'src/utils/logout'
 
 // account, setting 부분
 const AppHeaderDropdown = () => {
-  const navigate = useNavigate();
   const memberUrl = "member/" + localStorage.getItem("memberNo");
-
-  const logOut = () => {
-    localStorage.clear();
-    navigate("/login");
-  }
 
   return (
     <CDropdown variant="nav-item">
@@ -44,7 +36,7 @@ const AppHeaderDropdown = () => {
           설정
         </CDropdownItem> */}
         <CDropdownDivider />
-        <CDropdownItem onClick={logOut}>
+        <CDropdownItem onClick={LogOut}>
           <CIcon icon={cilLockUnlocked} className="me-2" />
           로그아웃
         </CDropdownItem>

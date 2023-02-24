@@ -1,5 +1,6 @@
 package com.buckwheat.garden.config;
 
+import com.buckwheat.garden.config.filter.JwtExceptionFilter;
 import com.buckwheat.garden.config.filter.JwtFilter;
 import com.buckwheat.garden.config.oauth2.OAuth2MemberService;
 import com.buckwheat.garden.config.oauth2.OAuth2SuccessHandler;
@@ -27,6 +28,7 @@ public class SpringSecurityConfig {
     private final JwtAuthTokenProvider tokenProvider;
     private final OAuth2MemberService oAuth2MemberService;
     private final OAuth2SuccessHandler successHandler;
+    private final JwtExceptionFilter jwtExceptionFilter;
 
     /**
      * 리액트 서버와 통신하기 위해 CORS 문제 해결
@@ -72,8 +74,11 @@ public class SpringSecurityConfig {
 
                 .and()
                 .addFilter(this.corsFilter()) // CORS 필터 등록
+
                 // 기본 인증 필터인 UsernamePasswordAuthenticationFilter 대신 Custom 필터 등록
                 .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
+
+                .addFilterBefore(jwtExceptionFilter, JwtFilter.class)
 
                 // OAuth2 로그인 설정
                 .oauth2Login().loginPage("/")
