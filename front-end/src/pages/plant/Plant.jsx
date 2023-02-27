@@ -1,85 +1,80 @@
-import React, { useEffect, useState } from 'react'
-import {
-  CCard,
-  CCardBody,
-  CCardHeader,
-  CCol,
-  CRow,
-  CFormSwitch,
-} from '@coreui/react'
-import authAxios from '../../utils/requestInterceptor'
-import PlantLog from './PlantLog'
-import ModifyPlant from './ModifyPlant'
-import { useParams } from 'react-router-dom'
+import { CTable, CTableHead, CTableHeaderCell, CTableBody, CTableRow, CTableDataCell } from "@coreui/react";
+import TableHead from "src/components/table/TableHead";
+import TableBody from "src/components/table/TableBody";
+import { useNavigate } from "react-router-dom";
+import AddPlantButton from "src/components/button/AddPlantButton";
 
-const Plant = (props) => {
-  // useParam: URL 파라미터를 받아온다.
-  // :plantNo 꼴로 Route에 정의해놓으면, 객체 모양으로 받아옴
-  const paramPlantNo = useParams().plantNo;
-  
-  // 스위치가 active 상태가 되면, input창 disabled 풀리고 물주기 초기화 체크박스와 수정 버튼 생김
-  const [ modifySwitch, setModifySwitch ] = useState(false);
-  const [ plant, setPlant ] = useState({
-    averageWateringPeriod: 0,
-    fertilizingCode: -1,
-    plantName: '',
-    plantNo: -1,
-    plantSpecies: ''
-  })
-  const [ waterList, setWaterList ] = useState([{
-      plantNo: -1,
-      fertilized: '',
-      wateringDate: ''
-  }])
+const Plant = () => {
+    const navigate = useNavigate();
 
-  const [ logArrival, setLogArrival ] = useState(false);
+    const initObject = {
+        plantNo: 1,
+        plantName: '여우',
+        placeName: '창가',
+        medium: '흙과 화분',
+        plantSpecies: '알로카시아 프라이덱',
+        createDate: '2022-02-27'
+    }
 
-  // 이 식물의 detail 정보 받아오기
-  // plant 테이블의 1 row와 물주기 정보들
-  // 왜 axios는 useEffect랑 같이 쓰지?
-  useEffect(() => {
-    authAxios.get("/garden/plant/" + paramPlantNo, "")
-      .then((res) => {
-        console.log("res", res);
-        setPlant(res.data);
-        setWaterList(res.data.waterDtoList);
-        setLogArrival(true);
-      })
-      .catch(error => console.log(error))
-  }, [])
+    const testPlantList = [{
+        plantNo: 1,
+        plantName: '여우',
+        placeName: '창가',
+        medium: '흙과 화분',
+        plantSpecies: '알로카시아 프라이덱',
+        createDate: '2022-02-27'
+    },
+    {
+        plantNo: 1,
+        plantName: '온시디움',
+        placeName: '책상',
+        medium: '수태',
+        plantSpecies: '온시디움',
+        createDate: '2022-02-27'
+    }]
 
-  const modifySwitchOff = () => {
-    setModifySwitch(false);
-  }
+    const tableHeadArr = ["식물 이름", "장소", "재배법?", "종", "createDate"];
+      
+      const columns = [
+        {
+          title: '식물 이름',
+          dataIndex: 'plantName',
+          key: 'plantName',
+          render: (plantNo) => {navigate('/plant/' + plantNo)}
+        },
+        {
+          title: '장소',
+          dataIndex: 'placeName',
+          key: 'placeName',
+        },
+        {
+          title: 'medium',
+          dataIndex: 'medium',
+          key: 'medium',
+        },
+        {
+            title: '종',
+            dataIndex: 'plantSpecies',
+            key: 'plantSpecies',
+        },
+        {
+            title: 'createDate',
+            dataIndex: 'createDate',
+            key: 'createDate',
+        },
+      ];
 
-  
-  return (
-    <CRow>
-      <CCol xs={12}>
-        <CCard className="mb-4">
-          <CCardHeader>
-            <div>
-            <strong>{plant.plantName}</strong> <small>🌱</small>
+    return(
+        <>
+            <div className="mb-3">
+                <AddPlantButton />
             </div>
-            <div>
-              {plant.plantSpecies}, 최근 물주기: {plant.averageWateringPeriod}
-            </div>
-            <div className="d-flex justify-content-end">
-              <CFormSwitch className="text-medium-emphasis small" label="수정하기" id="formSwitchCheckDefault" onClick={() => setModifySwitch(!modifySwitch)}/>
-            </div>    
-          </CCardHeader>
-          <CCardBody>
-            {modifySwitch
-              ? <ModifyPlant plant={plant} modifySwitchOff={modifySwitchOff}/>
-              : <></>}
-            { logArrival && !modifySwitch
-              ? <PlantLog waterList={waterList}/>
-              : <></>}
-          </CCardBody>
-        </CCard>
-      </CCol>
-    </CRow>
-  )
+            <CTable>
+                <TableHead item={tableHeadArr}/>
+                <TableBody list={testPlantList} />
+            </CTable>
+        </>
+    )
 }
 
-export default Plant
+export default Plant;
