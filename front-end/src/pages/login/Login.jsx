@@ -37,8 +37,6 @@ function Login(){
     setLogin(setLogin => ({...login, [name]: value}))
   }
 
-  
-
   // 입력 값 확인 및 submit
   const inputCheck = (e) => {
     e.preventDefault(); // reload 막기
@@ -57,7 +55,7 @@ function Login(){
         navigate('/');
       })
       .catch((error) => {
-         setMsg(error.response.data.message);
+        setMsg(error.response.data.errorDescription);
       });
   }
 

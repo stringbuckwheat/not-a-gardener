@@ -15,6 +15,7 @@ public class PlaceDto {
 
     public Place toEntityWithMember(Member member){
         return Place.builder()
+                .placeNo(placeNo)
                 .placeName(placeName)
                 .artificialLight(artificialLight)
                 .option(option)

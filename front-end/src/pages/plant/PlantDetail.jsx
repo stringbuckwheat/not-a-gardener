@@ -14,7 +14,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import authAxios from '../../utils/requestInterceptor'
 
-const AddPlant = () => {
+const PlantDetail = () => {
   // submit용 객체
   const [plant, setPlant] = useState({
     plantName: "",
@@ -61,12 +61,9 @@ const AddPlant = () => {
       <CCol md="auto">
           <CCard sm={6} className="mb-4">
             <CCardHeader>
-              <strong>새 식물 추가하기 </strong> <small>🌱</small>
+              <h5 className="mt-3">새 식물 추가하기 </h5>
             </CCardHeader>
             <CCardBody>
-              <p className="text-medium-emphasis small">
-                함께 키워요!
-              </p>
               <CForm onSubmit={onSubmit}>
                 <CInputGroup className="mb-3 mt-3">
                   <CInputGroupText id="basic-addon1">이 식물의 이름은</CInputGroupText>
@@ -107,8 +104,7 @@ const AddPlant = () => {
           </CCol>
           </div>
       </CContainer>
-
   )
 }
 
-export default AddPlant
+export default PlantDetail
