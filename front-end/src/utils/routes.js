@@ -3,8 +3,9 @@ import React from 'react'
 const GardenMain = React.lazy(() => import('../pages/garden/GardenMain'))
 const Member = React.lazy(() => import('../pages/member/MemberDetail'))
 
-const PlantDetail = React.lazy(() => import('../pages/plant/PlantDetail'))
-const ModifyPlant = React.lazy(() => import('../pages/plant/Plant'))
+const Plant = React.lazy(() => import('../pages/plant/Plant'))
+const AddPlant = React.lazy(() => import('../pages/plant/AddPlant'))
+const ModifyPlant = React.lazy(() => import('../pages/plant/ModifyPlant'))
 
 const Place = React.lazy(() => import('../pages/place/Place'))
 const PlaceDetail = React.lazy(() => import('../pages/place/PlaceDetail'))
@@ -21,10 +22,9 @@ const routes = [
   { path: '/fertilizer', name: 'fertilizer', element: Fertilizer},
   { path: '/fertilizer/:fertilizerNo', name: 'fertilizer detail', element: FertilizerDetail},
   { path: '/fertilizer/add', name: 'add fertilizer', element: FertilizerDetail},
-  { path: '/plant', exact: true, name: 'plant', element: PlantDetail },
-  { path: '/plant/add', exact: true, name: 'plant', element: PlantDetail },
-  { path: '/plant/:plantNo', exact: true, name: 'plant', element: PlantDetail },
-  { path: '/modify-plant/:plantNo', exact: true, name: 'modifyPlant', element: ModifyPlant },
+  { path: '/plant', exact: true, name: 'plant', element: Plant },
+  { path: '/plant/add', exact: true, name: 'plant', element: AddPlant },
+  { path: '/plant/:plantNo', exact: true, name: 'plant', element: ModifyPlant },
 ]
 
 export default routes

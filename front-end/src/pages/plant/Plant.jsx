@@ -1,77 +1,41 @@
-import { CTable, CTableHead, CTableHeaderCell, CTableBody, CTableRow, CTableDataCell } from "@coreui/react";
+import { CTable, CAlert } from "@coreui/react";
 import TableHead from "src/components/table/TableHead";
 import TableBody from "src/components/table/TableBody";
-import { useNavigate } from "react-router-dom";
 import AddPlantButton from "src/components/button/AddPlantButton";
+import { useEffect, useState } from "react";
+import authAxios from "src/utils/requestInterceptor";
 
 const Plant = () => {
-    const navigate = useNavigate();
+    const [ plantList, setPlantList ] = useState([{
+        plantNo: 0,
+        plantName: '',
+        placeNo: 0,
+        placeName: '',
+        medium: '',
+        plantSpecies: '',
+        createDate: ''
+    }]);
 
-    const initObject = {
-        plantNo: 1,
-        plantName: '여우',
-        placeName: '창가',
-        medium: '흙과 화분',
-        plantSpecies: '알로카시아 프라이덱',
-        createDate: '2022-02-27'
-    }
+    useEffect(() => {
+        authAxios.get("/plant")
+        .then((res) => {
+            console.log("res.data", res.data);
+            setPlantList(res.data);
+        })
+    }, []);
 
-    const testPlantList = [{
-        plantNo: 1,
-        plantName: '여우',
-        placeName: '창가',
-        medium: '흙과 화분',
-        plantSpecies: '알로카시아 프라이덱',
-        createDate: '2022-02-27'
-    },
-    {
-        plantNo: 1,
-        plantName: '온시디움',
-        placeName: '책상',
-        medium: '수태',
-        plantSpecies: '온시디움',
-        createDate: '2022-02-27'
-    }]
-
-    const tableHeadArr = ["식물 이름", "장소", "재배법?", "종", "createDate"];
-      
-      const columns = [
-        {
-          title: '식물 이름',
-          dataIndex: 'plantName',
-          key: 'plantName',
-          render: (plantNo) => {navigate('/plant/' + plantNo)}
-        },
-        {
-          title: '장소',
-          dataIndex: 'placeName',
-          key: 'placeName',
-        },
-        {
-          title: 'medium',
-          dataIndex: 'medium',
-          key: 'medium',
-        },
-        {
-            title: '종',
-            dataIndex: 'plantSpecies',
-            key: 'plantSpecies',
-        },
-        {
-            title: 'createDate',
-            dataIndex: 'createDate',
-            key: 'createDate',
-        },
-      ];
+    const tableHeadArr = ["식물 이름", "종", "장소", "식재 환경", "평균 물주기", "createDate"];
+    const keySet = ["plantName", "plantSpecies", "placeName", "medium", "averageWateringPeriod", "createDate"]
 
     return(
         <>
             <div className="mb-3">
-                <AddPlantButton />
+                <CAlert color="dark">{plantList.length}개의 식물이 함께하고 있어요!</CAlert>
+                <AddPlantButton size="sm"/>
             </div>
-            <CTable>
+            <CTable hover>
                 <TableHead item={tableHeadArr}/>
-                <TableBody list={testPlantList} />
+                <TableBody list={plantList} keySet={keySet} linkUrl="/plant/" />
             </CTable>
         </>
     )

@@ -3,7 +3,7 @@ import { CContainer, CRow, CCol, CWidgetStatsF, CLink } from "@coreui/react";
 import { cilPlus } from "@coreui/icons";
 import CIcon from '@coreui/icons-react';
 import { useNavigate } from "react-router-dom";
-import PlaceCard from "./PlaceCard";
+import PlaceCard from "../../components/card/PlaceCard";
 import authAxios from "src/utils/requestInterceptor";
 
 const Place = () => {

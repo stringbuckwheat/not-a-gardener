@@ -1,7 +1,8 @@
 import { CContainer, CImage, CRow, CCol, CButton } from "@coreui/react";
 import { Link } from "react-router-dom";
 import React from "react";
-import forNoPlant from "./forNoPlant.png";
+import forNoPlant from "../../assets/images/forNoPlant.png";
+import AddPlantButton from "src/components/button/AddPlantButton";
 
 const NoPlant = () => {
     console.log("no plant page")
@@ -11,9 +12,7 @@ const NoPlant = () => {
             <CRow className="text-center">
                 <h2>아직 정원에 아무도 없네요!</h2>
                 <div className="d-grid gap-2 col-6 mx-auto mt-2">
-                    <Link to="/plant/add">
-                        <CButton color="success" size="lg" variant="outline" shape="rounded-pill">식물 추가하기</CButton>
-                    </Link>
+                    <AddPlantButton size="lg" />
                 </div>
             </CRow>
             <CRow >

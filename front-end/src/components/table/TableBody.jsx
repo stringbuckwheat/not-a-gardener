@@ -1,26 +1,43 @@
 import {CTableRow,CNavLink, CTableHeaderCell, CTableDataCell, CLink, CTableBody} from "@coreui/react";
 import { Link, useNavigate } from "react-router-dom";
+import authAxios from "src/utils/requestInterceptor";
 const TableBody = (props) => {
     const list = props.list;
+    const keySet = props.keySet;
 
     const navigate = useNavigate();
+    const onClick = (url, data) => {
+        authAxios.get("/place")
+        .then((res) => {
+            console.log("onclick res", res.data);
 
-    const onClick = () => {
-        navigate('/plant')
+            const placeList = [];
+  
+            res.data.map((item) => {
+                placeList.push({
+                    key: item.placeNo,
+                    value: item.placeName
+                })
+            })
+
+            navigate(url, {state: {data: data, placeList: placeList}});
+        })
+
+        
     }
 
     return (
         <CTableBody>
         {list.map((data, idx) => {
-            const url = "/plant/" + data.plantNo;
+            const url = props.linkUrl + data.plantNo;
 
             return(
-                <CTableRow onClick={() => navigate(url, {state: data})}>
-                    <CTableDataCell >{data.plantName}</CTableDataCell>
-                    <CTableDataCell>{data.placeName}</CTableDataCell>
-                    <CTableDataCell>{data.medium}</CTableDataCell>
-                    <CTableDataCell>{data.plantSpecies}</CTableDataCell>
-                    <CTableDataCell>{data.createDate}</CTableDataCell>
+                <CTableRow onClick={() => onClick(url, data)}>
+                    {keySet.map((cellName) => {
+                        return(
+                            <CTableDataCell >{data[cellName]}</CTableDataCell>
+                        )
+                    })}
                 </CTableRow>
             )
         })} 

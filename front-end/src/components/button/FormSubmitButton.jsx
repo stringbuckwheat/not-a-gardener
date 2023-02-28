@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 const FormSubmitButton = (props) => {
     const navigate = useNavigate();
-    console.log("버튼 props", props);
 
     const saveOrUpdate = () => {
         console.log("data", props.data);

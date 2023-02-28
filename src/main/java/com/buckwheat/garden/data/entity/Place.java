@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "place")
@@ -31,4 +33,9 @@ public class Place {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="member_no")
     private Member member;
+
+    // 양방향 매핑
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "place")
+    @OrderBy("create_date desc")
+    private List<Plant> plantList = new ArrayList<>();
 }

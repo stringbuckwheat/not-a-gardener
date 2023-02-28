@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "plant")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,7 +19,7 @@ public class Plant {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) // auto-increment
     @Column(name="plant_no")
-    private int no;
+    private int plantNo;
 
     @NotNull
     private String plantName;
@@ -32,11 +33,13 @@ public class Plant {
 
     private int fertilizingPeriod;
 
+    private String medium;
+
     @NotNull
     private LocalDateTime createDate;
 
     // FK
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="member_no")
     private Member member;
 
@@ -44,19 +47,20 @@ public class Plant {
     @JoinColumn(name="place_no")
     private Place place;
 
-    @OneToOne
-    @JoinColumn(name="medium_no")
-    private Medium medium;
-
     @OneToMany(fetch=FetchType.LAZY, mappedBy="plant")
     @OrderBy("watering_date desc")
     private List<Watering> wateringList = new ArrayList<>();
 
-    public Plant update(String plantName, String plantSpecies, int averageWateringPeriod){
+    public Plant update(String plantName, String plantSpecies, String medium){
         this.plantName = plantName;
         this.plantSpecies = plantSpecies;
-        this.averageWateringPeriod = averageWateringPeriod;
+        this.medium = medium;
 
+        return this;
+    }
+
+    public Plant updatePlace(Place place){
+        this.place = place;
         return this;
     }
 }

@@ -3,7 +3,7 @@ import { CContainer, CRow, CCol, CWidgetStatsF, CLink } from "@coreui/react";
 import { cilPlus } from "@coreui/icons";
 import CIcon from '@coreui/icons-react';
 import { useNavigate } from "react-router-dom";
-import FertilizerCard from "./FertilizerCard";
+import FertilizerCard from "../../components/card/FertilizerCard";
 import authAxios from "src/utils/requestInterceptor";
 
 const Fertilizer = () => {

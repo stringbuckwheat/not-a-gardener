@@ -6,11 +6,14 @@ const FormInputSelect = (props) => {
     return(
         <CInputGroup className="mb-3">
             <CInputGroupText id="basic-addon1">{inputItem.label}</CInputGroupText>
-            <CFormSelect name={inputItem.name} onChange={props.onChange} defaultValue={inputItem.defaultValue}>
+            <CFormSelect 
+                name={inputItem.name} 
+                onChange={props.onChange} 
+                defaultValue={inputItem.defaultValue}>
                 {
-                    inputItem.optionArray.map((option, idx) => {
+                    inputItem.optionArray.map((item) => {
                         return(
-                            <option value={option}>{option}</option>
+                            <option value={item.key}>{item.value}</option>
                         )     
                     })
                 }

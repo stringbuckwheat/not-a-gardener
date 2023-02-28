@@ -1,33 +1,21 @@
 package com.buckwheat.garden.data.dto;
 
-import com.buckwheat.garden.data.entity.Plant;
-import com.buckwheat.garden.data.entity.Watering;
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDate;
-import java.util.List;
 
-@Data
+@AllArgsConstructor
+@Builder
+@Getter // InvalidDefinitionException: Serialize 하는 과정에서 접근 제한자가 public이거나 Getter/Setter를 이용하기 때문에 필드가 private로 선언되어있으면 JSON 변환 과정에서 문제가 발생
 public class PlantDto {
     private int plantNo;
     private String plantName;
     private String plantSpecies;
     private int averageWateringPeriod;
-    // 0        1       2           3
-    // 물주기  체크하기    주기 놓침   놔두세요
-    private int wateringCode;
-
-    // 0     1
-    // 맹물   비료
-    private int fertilizingCode;
-    private List<WaterDto> waterDtoList;
-
-    public PlantDto(Plant plant){
-        this.plantNo = plant.getNo();
-        this.plantName = plant.getPlantName();
-        this.plantSpecies = plant.getPlantSpecies();
-        this.averageWateringPeriod = plant.getAverageWateringPeriod();
-    }
+    private int placeNo;
+    private String placeName;
+    private LocalDate createDate;
+    private String medium;
 }

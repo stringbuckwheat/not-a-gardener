@@ -12,13 +12,19 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 const SidebarList = [
   {
     component: CNavItem,
-    name: '나의 정원',
+    name: '나의 할일',
     to: '/',
     icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
   },
   {
     component: CNavTitle,
     name: '정원 기록',
+  },
+  {
+    component: CNavItem,
+    name: '나의 식물',
+    to: '/plant',
+    icon: <CIcon icon={cilChartPie} customClassName="nav-icon" />,
   },
   {
     component: CNavItem,

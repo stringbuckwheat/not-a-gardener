@@ -8,18 +8,19 @@ import {
     CForm,
   } from '@coreui/react'
   import { useState } from 'react'
-  import FormInputText from './input/FormInputText'
   import FormInputSelect from './input/FormInputSelect'
   import DeleteModal from 'src/components/modal/DeleteModal'
   import FormInputSwitch from './input/FormInputSwitch'
   import FormSubmitButton from '../button/FormSubmitButton'
+import FormInput from './input/FormInput'
 
 const DefaultForm = (props) => {
     const itemObjectArray = props.itemObjectArray;
     const [inputObject, setInputObject] = useState(props.inputObject);
     const requiredValueArray = [];
     const [validation, setValidation] = useState(false);
-
+    
+    console.log("default form path", props.path);
     const onChange = (e) => {
       const { name, value } = e.target;
 
@@ -29,12 +30,19 @@ const DefaultForm = (props) => {
       }
 
       setInputObject(setInputObject => ({...inputObject, [name]: value}));
+      console.log("=====================")
+      console.log("inputObject: onchange", inputObject)
     }
 
-    // 빈칸 검사 후 메시지
+    // 유효성 검사 후 메시지
     const invalidMsg = () => {
       if(inputObject.placeName == ""){
         return "장소 이름은 비워둘 수 없어요";
+      } else if(inputObject.plantName == ""){
+        return "식물 이름은 비워둘 수 없어요";
+      } else if(!Number.isInteger(inputObject.averageWateringPeriod)){
+        console.log("숫자 아님");
+        return "숫자를 입력해주세요"
       }
 
       return "";
@@ -65,7 +73,7 @@ const DefaultForm = (props) => {
           <CCol md="auto">
             <CCard sm={6} className="mb-4">
               <CCardHeader>
-                <h4 className="mt-3">{props.title + " " + props.action}</h4>
+                <h4 className="mt-3">{ props.title + " " + (props.isNew ? " 추가" : " 수정")}</h4>
               </CCardHeader>
               <CCardBody>
                 <CForm validated={true}>
@@ -78,22 +86,13 @@ const DefaultForm = (props) => {
                       requiredValueArray.push(inputItem.name);
                     }
 
-                    if(inputItem.inputType === "text"){
-                      return(
-                        <FormInputText 
-                          inputItem={inputItem} 
-                          onChange={onChange} 
-                          feedbackInvalid={invalidMsg()}
-                          />
-                      )
-                    } else if(inputItem.inputType === "select"){
+                    if(inputItem.inputType === "select"){
                       return(
                         <FormInputSelect 
                           inputItem={inputItem} 
                           onChange={onChange} />
                       )
                     } else if(inputItem.inputType === "switch"){
-
                       return(
                         <FormInputSwitch 
                           inputItem={inputItem} 
@@ -101,7 +100,16 @@ const DefaultForm = (props) => {
                           value={inputObject[inputItem.name]}
                           label={getLabelForSwitch(inputItem.name)}/>
                       )
-                    }
+                    } else {
+                      return(
+                        <FormInput 
+                          inputItem={inputItem} 
+                          onChange={onChange} 
+                          feedbackInvalid={invalidMsg()}
+                          />
+                      )
+                  }
+
                   })
                 }
                   <div className="d-flex justify-content-end">
@@ -122,7 +130,7 @@ const DefaultForm = (props) => {
                       url={props.submitUrl} 
                       path={props.path}
                       data={inputObject} 
-                      buttonName={props.action} 
+                      buttonName={props.isNew ? "추가" : "수정"} 
                       validation={validation} />
                   </div>
                   </CForm>
