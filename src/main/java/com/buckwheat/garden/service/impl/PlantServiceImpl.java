@@ -1,9 +1,6 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.data.dto.PlantDto;
-import com.buckwheat.garden.data.dto.PlantRequestDto;
-import com.buckwheat.garden.data.dto.GardenDto;
-import com.buckwheat.garden.data.dto.WaterDto;
+import com.buckwheat.garden.data.dto.*;
 import com.buckwheat.garden.data.entity.Place;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Watering;
@@ -95,6 +92,19 @@ public class PlantServiceImpl implements PlantService {
                 .update(plantRequestDto.getPlantName(), plantRequestDto.getPlantSpecies(), plantRequestDto.getMedium());
 
         plantRepository.save(plant);
+    }
+
+    @Override
+    public void modifyPlantPlace(ModifyPlantPlaceDto modifyPlantPlaceDto) {
+        Place place = placeRepository.findById(modifyPlantPlaceDto.getPlaceNo()).orElseThrow(NoSuchElementException::new);
+
+        for(int plantNo : modifyPlantPlaceDto.getPlantList()){
+            Plant plant = plantRepository.findById(plantNo).orElseThrow(NoSuchElementException::new);
+
+            plant.updatePlace(place);
+            log.debug("place update: {}", plant);
+            plantRepository.save(plant);
+        }
     }
 
     @Override

@@ -36,7 +36,8 @@ public class PlaceController {
     }
 
     @PutMapping("/{placeNo}")
-    public PlaceDto updatePlace(@RequestBody PlaceDto placeDto){
+    public PlaceDto updatePlace(@RequestBody PlaceDto placeDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        placeDto.setMemberNo(userPrincipal.getMember().getMemberNo());
         return placeService.addOrUpdatePlace(placeDto);
     }
 

@@ -1,6 +1,6 @@
 import { CTable, CAlert } from "@coreui/react";
 import TableHead from "src/components/table/TableHead";
-import TableBody from "src/components/table/TableBody";
+import PlantTableBody from "src/components/table/PlantTableBody";
 import AddPlantButton from "src/components/button/AddPlantButton";
 import { useEffect, useState } from "react";
 import authAxios from "src/utils/requestInterceptor";
@@ -35,7 +35,7 @@ const Plant = () => {
             </div>
             <CTable hover>
                 <TableHead item={tableHeadArr}/>
-                <TableBody list={plantList} keySet={keySet} linkUrl="/plant/" />
+                <PlantTableBody list={plantList} keySet={keySet} linkUrl="/plant/" />
             </CTable>
         </>
     )

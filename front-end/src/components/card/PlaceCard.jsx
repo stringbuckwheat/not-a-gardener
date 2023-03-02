@@ -1,5 +1,5 @@
 import { CContainer, CRow, CCol, CWidgetStatsF, CLink } from "@coreui/react";
-import { cilLightbulb, cilHouse, cilEco, cilWindow, cilPlus } from "@coreui/icons";
+import { cilLightbulb, cilHouse, cilEco, cilWindow, cilPlus, cilArrowRight } from "@coreui/icons";
 import CIcon from '@coreui/icons-react';
 import { useNavigate } from "react-router-dom";
 
@@ -34,18 +34,29 @@ const PlaceCard = (props) => {
                 title={
                     <>
                         <div>{place.option}</div>
-                        <div className="mt-2"><small>{place.plantQuantity}개의 식물이 살고 있어요</small></div>
+                        <div className="mt-2"><small>{place.plantList.length}개의 식물이 살고 있어요</small></div>
                     </>}
                 value={
                     <>
                         <div className="d-flex justify-content-between">
                             <div>{place.placeName}</div>
-                            {place.artificialLight === "true"
+                            {place.artificialLight === "사용"
                             ? <div> <CIcon icon={cilLightbulb}/></div>
                             : <></>}
                         </div>
                     </>
                     }
+                // footer={
+                //     <CLink
+                //         className="font-weight-bold font-xs text-medium-emphasis"
+                //         href="https://coreui.io/"
+                //         rel="noopener norefferer"
+                //         target="_blank"
+                //     >
+                //         View more
+                //         <CIcon icon={cilArrowRight} className="float-end" width={16} />
+                //     </CLink>
+                //     }
                 />
         </CCol>
     )

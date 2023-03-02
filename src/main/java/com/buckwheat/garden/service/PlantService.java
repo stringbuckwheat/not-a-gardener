@@ -1,5 +1,6 @@
 package com.buckwheat.garden.service;
 
+import com.buckwheat.garden.data.dto.ModifyPlantPlaceDto;
 import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.dto.PlantRequestDto;
 import com.buckwheat.garden.data.dto.GardenDto;
@@ -21,4 +22,7 @@ public interface PlantService {
 
     /* 식물 삭제 */
     void deletePlantByPlantNo(int plantNo);
+
+    /* 식물들의 장소 정보 수정 */
+    void modifyPlantPlace(ModifyPlantPlaceDto modifyPlantPlaceDto);
 }

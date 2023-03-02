@@ -1,15 +1,19 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.data.dto.PlaceDto;
+import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.data.entity.Place;
+import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.repository.MemberRepository;
 import com.buckwheat.garden.repository.PlaceRepository;
 import com.buckwheat.garden.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -35,13 +39,36 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
+    @Transactional(readOnly = true) // LazyInitializationException
     public List<PlaceDto> getPlaceList(int memberNo) {
         List<PlaceDto> list = new ArrayList<>();
 
-        // TODO 식물 몇 갠지 세어서 넘기기 -> 양방향 매핑
-
         for(Place p : placeRepository.findByMember_memberNo(memberNo)){
-            list.add(getPlaceDto(p));
+            List<PlantDto> plantDtoList = new ArrayList<>();
+
+            for(Plant pl : p.getPlantList()){
+                PlantDto plantDto = PlantDto.builder()
+                        .plantNo(pl.getPlantNo())
+                        .plantName(pl.getPlantName())
+                        .plantSpecies(pl.getPlantSpecies())
+                        .averageWateringPeriod(pl.getAverageWateringPeriod())
+                        .medium(pl.getMedium())
+                        .createDate(LocalDate.from(pl.getCreateDate()))
+                        .build();
+
+                plantDtoList.add(plantDto);
+            }
+
+            PlaceDto placeDto = PlaceDto.builder()
+                    .placeNo(p.getPlaceNo())
+                    .placeName(p.getPlaceName())
+                    .artificialLight(p.getArtificialLight())
+                    .option(p.getOption())
+                    .plantList(plantDtoList)
+                    .build();
+
+            log.debug("placeDto: {}", placeDto);
+            list.add(placeDto);
         }
 
         return list;

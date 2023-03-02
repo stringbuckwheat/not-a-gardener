@@ -1,6 +1,7 @@
 package com.buckwheat.garden.controller;
 
 import com.buckwheat.garden.config.oauth2.UserPrincipal;
+import com.buckwheat.garden.data.dto.ModifyPlantPlaceDto;
 import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.dto.PlantRequestDto;
 import com.buckwheat.garden.data.dto.GardenDto;
@@ -41,6 +42,11 @@ public class PlantController {
         plantRequestDto.setMemberNo(userPrincipal.getMember().getMemberNo());
 
         plantService.modifyPlant(plantRequestDto);
+    }
+
+    @PutMapping("/modify-place")
+    public void modifyPlantPlace(@RequestBody ModifyPlantPlaceDto modifyPlantPlaceDto){
+        plantService.modifyPlantPlace(modifyPlantPlaceDto);
     }
 
     @DeleteMapping("/{plantNo}")

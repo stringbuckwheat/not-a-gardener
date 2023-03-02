@@ -14,17 +14,25 @@ const Place = () => {
         placeName: "",
         option: '',
         artificialLight: '',
-        plantQuantity: -1
+        plantQuantity: -1,
+        plantList: [{
+            plantNo: 0,
+            plantName: "",
+            plantSpecies: "",
+            averageWateringPeriod: 0,
+            medium: "",
+            createDate: ""
+        }]
     }]);
 
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         authAxios.get("/place")
-        .then((res) => {
-            console.log("res", res);
-            setPlaceList(res.data);
-        })
+            .then((res) => {
+                console.log("res", res);
+                setPlaceList(res.data);
+            })
     }, [])
 
     return (
@@ -36,15 +44,21 @@ const Place = () => {
                         color="dark"
                         icon={<CIcon icon={cilPlus} height={30} />}
                         value="새로운 장소 추가"
-                        onClick={() => {navigate("/place/add", {state: {placeName: "나의 장소",
-                                                                        option: "실내",
-                                                                        artificialLight: false}})}}
-                        />
+                        onClick={() => {
+                            navigate("/place/add", {
+                                state: {
+                                    placeName: "나의 장소",
+                                    option: "실내",
+                                    artificialLight: "미사용"
+                                }
+                            })
+                        }}
+                    />
                 </CCol>
-                
+
                 {/* 카드 컴포넌트 반복 */}
                 {placeList.map((place) => (
-                    <PlaceCard place={place}/>
+                    <PlaceCard place={place} />
                 ))}
             </CRow>
         </CContainer>

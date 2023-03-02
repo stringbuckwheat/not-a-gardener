@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
 import DefaultForm from "src/components/form/DefaultForm";
+import mediumArray from "src/utils/mediumArray";
 
 const ModifyPlant = () => {
     const { state } = useLocation();
@@ -32,12 +33,9 @@ const ModifyPlant = () => {
             label: "식재 환경",
             name: "medium",
             defaultValue: state.data.medium,
-            optionArray:[
-              {key: "흙과 화분", value: "흙과 화분"},
-              {key: "수태", value: "수태"},
-              {key: "반수경", value: "반수경"},
-              {key: "수경", value: "수경"}
-            ]
+            optionArray: mediumArray.map((medium) => {
+              return {key: medium, value: medium}
+            })
         },
         {
             inputType: "number",

@@ -1,8 +1,12 @@
 import {CTableRow,CNavLink, CTableHeaderCell, CTableDataCell, CLink, CTableBody} from "@coreui/react";
 import { Link, useNavigate } from "react-router-dom";
 import authAxios from "src/utils/requestInterceptor";
-const TableBody = (props) => {
+import { cilSwapHorizontal } from "@coreui/icons";
+import CIcon from "@coreui/icons-react";
+
+const PlaceTableBody = (props) => {
     const list = props.list;
+    console.log("table body list", list);
     const keySet = props.keySet;
 
     const navigate = useNavigate();
@@ -22,8 +26,6 @@ const TableBody = (props) => {
 
             navigate(url, {state: {data: data, placeList: placeList}});
         })
-
-        
     }
 
     return (
@@ -35,7 +37,7 @@ const TableBody = (props) => {
                 <CTableRow onClick={() => onClick(url, data)}>
                     {keySet.map((cellName) => {
                         return(
-                            <CTableDataCell >{data[cellName]}</CTableDataCell>
+                            <CTableDataCell>{data[cellName]}</CTableDataCell>
                         )
                     })}
                 </CTableRow>
@@ -45,4 +47,4 @@ const TableBody = (props) => {
     )
 }
 
-export default TableBody;
+export default PlaceTableBody;
