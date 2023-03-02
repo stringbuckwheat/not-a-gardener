@@ -1,11 +1,16 @@
 package com.buckwheat.garden.data.dto;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class GoalDto {
-    private String username;
+    private int goalNo;
+    private String goal;
+    private String complete;
     private int plantNo;
-    private String goalTitle;
-    private String goalContent;
+    private String plantName;
 }

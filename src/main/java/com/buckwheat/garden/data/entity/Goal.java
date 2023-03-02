@@ -1,10 +1,20 @@
 package com.buckwheat.garden.data.entity;
 
+import com.buckwheat.garden.data.dto.GoalDto;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "goal")
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Goal {
     /* 올해 식물 키우기 목표 */
 
@@ -13,20 +23,28 @@ public class Goal {
     private int goalNo;
 
     @NotNull
-    private String goalTitle;
+    private String goal;
 
-    // mysql 컬럼 타입 text를 사용하기 위한 어노테이션
-    @Column(columnDefinition = "TEXT")
-    private String goalContent;
-
-    private int complete;
+    private String complete;
 
     // FK
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="plant_no")
     private Plant plant;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_no")
     private Member member;
+
+    public Goal update(String goal, Plant plant){
+        this.goal = goal;
+        this.plant = plant;
+
+        return this;
+    }
+
+    public Goal completeGoal(String complete){
+        this.complete = complete;
+        return this;
+    }
 }

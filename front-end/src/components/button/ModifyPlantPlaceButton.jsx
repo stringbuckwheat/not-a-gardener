@@ -1,11 +1,8 @@
-import { Space, Form, Button, Row, Col } from 'antd';
+import { Space, Button, Select } from 'antd';
 import authAxios from 'src/utils/requestInterceptor';
-import { Input, Badge, Select } from 'antd';
-import { CInputGroup, CInputGroupText, CFormSelect } from '@coreui/react';
 import getPlaceList from 'src/utils/getPlaceList';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-const { Option } = Select;
 
 const ModifyPlantPlaceButton = (props) => {
   const thisPlaceNo = useParams().placeNo;
@@ -36,7 +33,6 @@ const ModifyPlantPlaceButton = (props) => {
     getPlaceListForOption();
   }, [])
 
-
   const navigate = useNavigate();
 
     const onClick = () => {
@@ -49,10 +45,9 @@ const ModifyPlantPlaceButton = (props) => {
       console.log("data", data);
 
       authAxios.put("/plant/modify-place", data)
-        .then(
-          
-          navigate("/place")
-        )
+      .then(
+        navigate("/place")
+      )
     }
 
     const [ placeNo, setPlaceNo ] = useState();
