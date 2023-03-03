@@ -8,8 +8,8 @@ import {
   CModalHeader,
   CModalTitle,
 } from '@coreui/react'
-import authAxios from '../../utils/requestInterceptor';
-import LogOut from 'src/utils/logout';
+import authAxios from '../../utils/interceptors';
+import LogOut from 'src/utils/function/logout';
 
 const DeleteAccountModal = (props) => {
     const {visible, memberNo} = props;

@@ -1,8 +1,6 @@
-import {CTableRow,CNavLink, CTableHeaderCell, CTableDataCell, CLink, CTableBody} from "@coreui/react";
-import { Link, useNavigate } from "react-router-dom";
-import authAxios from "src/utils/requestInterceptor";
-import { cilSwapHorizontal } from "@coreui/icons";
-import CIcon from "@coreui/icons-react";
+import {CTableRow, CTableDataCell, CTableBody} from "@coreui/react";
+import { useNavigate } from "react-router-dom";
+import authAxios from "src/utils/interceptors";
 
 const PlaceTableBody = (props) => {
     const list = props.list;

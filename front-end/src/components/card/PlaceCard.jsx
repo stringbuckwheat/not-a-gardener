@@ -1,5 +1,5 @@
-import { CContainer, CRow, CCol, CWidgetStatsF, CLink } from "@coreui/react";
-import { cilLightbulb, cilHouse, cilEco, cilWindow, cilPlus, cilArrowRight } from "@coreui/icons";
+import { CCol, CWidgetStatsF } from "@coreui/react";
+import { cilLightbulb, cilHouse, cilEco, cilWindow } from "@coreui/icons";
 import CIcon from '@coreui/icons-react';
 import { useNavigate } from "react-router-dom";
 
@@ -46,17 +46,6 @@ const PlaceCard = (props) => {
                         </div>
                     </>
                     }
-                // footer={
-                //     <CLink
-                //         className="font-weight-bold font-xs text-medium-emphasis"
-                //         href="https://coreui.io/"
-                //         rel="noopener norefferer"
-                //         target="_blank"
-                //     >
-                //         View more
-                //         <CIcon icon={cilArrowRight} className="float-end" width={16} />
-                //     </CLink>
-                //     }
                 />
         </CCol>
     )

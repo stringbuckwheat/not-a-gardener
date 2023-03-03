@@ -7,8 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class PesticideDto {
     private int pesticideNo;
     private String pesticideName;
+    private String pesticideType;
     private int pesticidePeriod;
 }

@@ -1,5 +1,5 @@
 import axios from "axios";
-import LogOut from "./logout";
+import LogOut from "./function/logout";
 
 // axios 인스턴스 생성
 const authAxios = axios.create({
@@ -27,15 +27,9 @@ authAxios.interceptors.request.use(
 
 authAxios.interceptors.response.use(
     function (response) {
-        console.log(response);
-    
         return response;
-       
       },
     function(error) {
-        console.log("response interceptor - error", error);
-        console.log("error.response.data", error.response.data);
-        console.log("error.response.data.errorDescription", error.response.data.errorDescription);
 
         if(error.response.data.code === 401){
             console.log("로그아웃");

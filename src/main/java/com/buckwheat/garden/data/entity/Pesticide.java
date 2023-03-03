@@ -9,7 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "pesticide_info")
+@Table(name = "pesticide")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,6 +25,8 @@ public class Pesticide {
 
     @NotNull
     private int pesticidePeriod;
+
+    private String pesticideType;
 
     // FK
     @ManyToOne(fetch=FetchType.LAZY)

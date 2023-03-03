@@ -1,5 +1,5 @@
 import { CButton } from "@coreui/react"
-import getPlaceList from "src/utils/getPlaceList"
+import getPlaceList from "src/utils/function/getPlaceList"
 import { useNavigate } from "react-router-dom"
 
 const AddPlantButton = (props) => {
@@ -8,18 +8,10 @@ const AddPlantButton = (props) => {
     const onClick = async () => {
       const placeList = await getPlaceList()
 
-      const state = {
-        placeList: placeList,
-        initPlant: {
-          plantName: "",
-          plantSpecies: "",
-          placeNo: placeList[0].key,
-          medium: "흙과 화분",
-          earlyWateringPeriod: 5
-        }
-      }
+      console.log("placeList", placeList);
 
-      navigate("/plant/add", { state: state });
+      navigate("/plant/add", { state: placeList });
+      console.log("navigate");
     }
 
     return (

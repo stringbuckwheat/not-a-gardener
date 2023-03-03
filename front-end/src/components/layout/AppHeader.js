@@ -1,21 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   CContainer,
   CHeader,
   CHeaderBrand,
-  CHeaderDivider,
   CHeaderNav,
-  CHeaderToggler,
-  CNavLink,
-  CNavItem,
-  CButton,
-  CNav
+  CHeaderToggler
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilBell, cilEnvelopeOpen, cilList, cilMenu } from '@coreui/icons'
-import { AppHeaderDropdown } from './header/index'
+import { cilMenu } from '@coreui/icons'
+import { AppHeaderDropdown } from '../header'
 
 const AppHeader = () => {
   const dispatch = useDispatch()

@@ -1,4 +1,4 @@
-import authAxios from "./requestInterceptor";
+import authAxios from "../interceptors";
 
 const getPlaceList = async () => {
 

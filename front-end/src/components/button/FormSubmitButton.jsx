@@ -1,4 +1,4 @@
-import authAxios from "src/utils/requestInterceptor";
+import authAxios from "src/utils/interceptors";
 import { CButton } from "@coreui/react";
 import { useNavigate } from "react-router-dom";
 

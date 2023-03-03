@@ -1,8 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { CSidebar, CSidebarBrand, CSidebarNav, CSidebarToggler } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+import { CSidebar, CSidebarBrand, CSidebarNav } from '@coreui/react'
 
 import { AppSidebarNav } from './AppSidebarNav'
 
@@ -10,7 +9,7 @@ import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 
 // 사이드바 내용들
-import navigation from '../utils/sidebar-list'
+import navigation from '../../utils/sidebar-list'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()

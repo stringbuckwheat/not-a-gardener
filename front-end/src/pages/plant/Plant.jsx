@@ -3,7 +3,7 @@ import TableHead from "src/components/table/TableHead";
 import PlantTableBody from "src/components/table/PlantTableBody";
 import AddPlantButton from "src/components/button/AddPlantButton";
 import { useEffect, useState } from "react";
-import authAxios from "src/utils/requestInterceptor";
+import authAxios from "src/utils/interceptors";
 
 const Plant = () => {
     const [ plantList, setPlantList ] = useState([{

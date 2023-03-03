@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
-import DefaultForm from "src/components/form/DefaultForm";
-import mediumArray from "src/utils/mediumArray";
+import DefaultForm from "src/components/form/DetailLayout";
+import mediumArray from "src/utils/dataArray/mediumArray";
 
 const ModifyPlant = () => {
     const { state } = useLocation();

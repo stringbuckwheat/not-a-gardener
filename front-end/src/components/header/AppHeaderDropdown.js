@@ -14,7 +14,7 @@ import {
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import sprout from './../../assets/images/sprout.png'
-import LogOut from 'src/utils/logout'
+import LogOut from 'src/utils/function/logout'
 
 // account, setting 부분
 const AppHeaderDropdown = () => {

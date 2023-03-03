@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import authAxios from '../../utils/requestInterceptor';
+import authAxios from '../../utils/interceptors';
 import {
     CButton,
     CCard,
@@ -15,7 +15,7 @@ import {
     CButtonGroup
   } from '@coreui/react'
   import CIcon from '@coreui/icons-react'
-  import { cilLockLocked, cilUser, cilCalendarCheck } from '@coreui/icons'
+  import { cilUser, cilCalendarCheck } from '@coreui/icons'
   import DeleteAccountModal from "./DeleteAccountModal";
 
 const MemberDetail = () => {

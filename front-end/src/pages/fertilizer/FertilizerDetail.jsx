@@ -10,11 +10,10 @@ import {
     CInputGroup,
     CInputGroupText,
     CFormSelect,
-    CFormSwitch,
   } from '@coreui/react'
   import { useState } from 'react'
   import { useNavigate } from 'react-router-dom'
-  import authAxios from '../../utils/requestInterceptor'
+  import authAxios from '../../utils/interceptors'
   import { useLocation } from 'react-router-dom'
   import DeleteModal from 'src/components/modal/DeleteModal'
 

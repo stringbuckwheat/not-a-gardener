@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
-import authAxios from '../../utils/requestInterceptor'
+import authAxios from '../../utils/interceptors'
 
 
 const GetToken = () => {

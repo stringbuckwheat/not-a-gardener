@@ -19,12 +19,21 @@ import java.util.NoSuchElementException;
 public class PesticideServiceImpl implements PesticideService {
     private final PesticideRepository pesticideRepository;
 
+    private PesticideDto toDto(Pesticide pesticide){
+        return PesticideDto.builder()
+                .pesticideNo(pesticide.getPesticideNo())
+                .pesticideName(pesticide.getPesticideName())
+                .pesticideType(pesticide.getPesticideType())
+                .pesticidePeriod(pesticide.getPesticidePeriod())
+                .build();
+    }
+
     @Override
     public List<PesticideDto> getPesticideList(int memberNo) {
         List<PesticideDto> pesticideList = new ArrayList<>();
 
         for(Pesticide p : pesticideRepository.findByMember_MemberNo(memberNo)){
-            pesticideList.add(new PesticideDto(p.getPesticideNo(), p.getPesticideName(), p.getPesticidePeriod()));
+            pesticideList.add(toDto(p));
         }
 
         return pesticideList;
@@ -33,18 +42,19 @@ public class PesticideServiceImpl implements PesticideService {
     @Override
     public PesticideDto getOnePesticide(int pesticideNo) {
         Pesticide pesticide = pesticideRepository.findById(pesticideNo).orElseThrow(NoSuchElementException::new);
-        return new PesticideDto(pesticide.getPesticideNo(), pesticide.getPesticideName(), pesticide.getPesticidePeriod());
+        return toDto(pesticide);
     }
 
     @Override
     public PesticideDto addPesticide(PesticideDto pesticideDto, Member member) {
         Pesticide pesticide = pesticideRepository.save(Pesticide.builder()
                 .pesticideName(pesticideDto.getPesticideName())
+                .pesticideType(pesticideDto.getPesticideType())
                 .pesticidePeriod(pesticideDto.getPesticidePeriod())
                 .member(member)
                 .build());
 
-        return new PesticideDto(pesticide.getPesticideNo(), pesticide.getPesticideName(), pesticide.getPesticidePeriod());
+        return toDto(pesticide);
     }
 
     @Override
@@ -54,7 +64,7 @@ public class PesticideServiceImpl implements PesticideService {
         pesticide.update(pesticideDto.getPesticideName(), pesticideDto.getPesticidePeriod());
         Pesticide paramPesticide = pesticideRepository.save(pesticide);
 
-        return new PesticideDto(paramPesticide.getPesticideNo(), paramPesticide.getPesticideName(), paramPesticide.getPesticidePeriod());
+        return toDto(paramPesticide);
     }
 
     @Override

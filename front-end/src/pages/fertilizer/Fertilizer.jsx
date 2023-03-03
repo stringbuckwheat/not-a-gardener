@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { CContainer, CRow, CCol, CWidgetStatsF, CLink } from "@coreui/react";
+import { CContainer, CRow, CCol, CWidgetStatsF } from "@coreui/react";
 import { cilPlus } from "@coreui/icons";
 import CIcon from '@coreui/icons-react';
 import { useNavigate } from "react-router-dom";
 import FertilizerCard from "../../components/card/FertilizerCard";
-import authAxios from "src/utils/requestInterceptor";
+import authAxios from "src/utils/interceptors";
 
 const Fertilizer = () => {
     console.log("Fertilizer");
@@ -35,11 +35,7 @@ const Fertilizer = () => {
                         color="dark"
                         icon={<CIcon icon={cilPlus} height={30} />}
                         value="새로운 비료 추가"
-                        onClick={() => {navigate("/fertilizer/add", {state: {
-                                                                        fertilizerName: "",
-                                                                        fertilizerType: "기본 NPK 비료",
-                                                                        fertilizingPeriod: 14
-                                                                    }})}}
+                        onClick={() => {navigate("/fertilizer/add")}}
                     />
                 </CCol>
                 

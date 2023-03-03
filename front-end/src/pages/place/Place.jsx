@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { CContainer, CRow, CCol, CWidgetStatsF, CLink } from "@coreui/react";
+import { CContainer, CRow, CCol, CWidgetStatsF } from "@coreui/react";
 import { cilPlus } from "@coreui/icons";
 import CIcon from '@coreui/icons-react';
 import { useNavigate } from "react-router-dom";
 import PlaceCard from "../../components/card/PlaceCard";
-import authAxios from "src/utils/requestInterceptor";
+import authAxios from "src/utils/interceptors";
 
 const Place = () => {
     console.log("Place");
@@ -44,15 +44,7 @@ const Place = () => {
                         color="dark"
                         icon={<CIcon icon={cilPlus} height={30} />}
                         value="새로운 장소 추가"
-                        onClick={() => {
-                            navigate("/place/add", {
-                                state: {
-                                    placeName: "나의 장소",
-                                    option: "실내",
-                                    artificialLight: "미사용"
-                                }
-                            })
-                        }}
+                        onClick={() => {navigate("/place/add")}}
                     />
                 </CCol>
 

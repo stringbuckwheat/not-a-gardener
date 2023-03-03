@@ -1,7 +1,5 @@
 import {CTableRow, CTableDataCell, CTableBody} from "@coreui/react";
 import { useNavigate } from "react-router-dom";
-import getPlaceList from "src/utils/getPlaceList";
-import authAxios from "src/utils/requestInterceptor";
 
 const PlantTableBody = (props) => {
     const list = props.list;
@@ -9,9 +7,8 @@ const PlantTableBody = (props) => {
     const keySet = props.keySet;
 
     const navigate = useNavigate();
-    const onClick = async (url, data) => {
-        const placeList = await getPlaceList();
-        navigate(url, {state: {data: data, placeList: placeList}});
+    const onClick = (url, data) => {
+        navigate(url, {state: data});
     }
 
     return (

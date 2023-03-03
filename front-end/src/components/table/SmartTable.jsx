@@ -1,11 +1,11 @@
 import { Space, Table, Tag } from 'antd';
 import { useState } from 'react';
-import mediumArray from 'src/utils/mediumArray';
+import mediumArray from 'src/utils/dataArray/mediumArray';
 import { useNavigate } from 'react-router-dom';
 import { cilPlant } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import ModifyPlantPlaceButton from '../button/ModifyPlantPlaceButton';
-import getPlaceList from 'src/utils/getPlaceList';
+import getPlaceList from 'src/utils/function/getPlaceList';
 import { useParams } from 'react-router-dom';
 
 const DefaultTable = (props) => {

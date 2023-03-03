@@ -1,5 +1,5 @@
-import { CContainer, CRow, CCol, CWidgetStatsF, CLink } from "@coreui/react";
-import { cilRestaurant } from "@coreui/icons";
+import { CCol, CWidgetStatsF } from "@coreui/react";
+import { cilRestaurant, cilFlower, cilMugTea, cilDrop } from "@coreui/icons";
 import CIcon from '@coreui/icons-react';
 import { useNavigate } from "react-router-dom";
 
@@ -9,6 +9,7 @@ const FertilizerCard = (props) => {
     const fertilizer = props.fertilizer;
 
     let color = "";
+    let icon = {};
 
     // 기본 NPK 비료
     // 개화용 비료
@@ -17,12 +18,16 @@ const FertilizerCard = (props) => {
 
     if(fertilizer.fertilizerType === "기본 NPK 비료"){
         color = "primary";
+        icon = cilRestaurant;
     } else if(fertilizer.fertilizerType === "개화용 비료"){
         color = "warning";
+        icon = cilFlower;
     } else if(fertilizer.fertilizerType === "미량 원소 비료"){
         color = "success";
+        icon = cilMugTea;
     } else {
         color = "info";
+        icon = cilDrop;
     }
 
     return(
@@ -31,7 +36,7 @@ const FertilizerCard = (props) => {
                 className="mb-3"
                 onClick={() => navigate("/fertilizer/" + fertilizer.fertilizerNo, {state: fertilizer})}
                 color={color}
-                icon={<CIcon icon={cilRestaurant} height={30} />}
+                icon={<CIcon icon={icon} height={30} />}
                 title={
                     <>
                         <div>{fertilizer.fertilizerType}</div>

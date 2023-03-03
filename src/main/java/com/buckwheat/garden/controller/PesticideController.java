@@ -2,7 +2,6 @@ package com.buckwheat.garden.controller;
 
 import com.buckwheat.garden.config.oauth2.UserPrincipal;
 import com.buckwheat.garden.data.dto.PesticideDto;
-import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.service.PesticideService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

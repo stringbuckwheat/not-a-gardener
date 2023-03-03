@@ -1,6 +1,6 @@
 import { Space, Button, Select } from 'antd';
-import authAxios from 'src/utils/requestInterceptor';
-import getPlaceList from 'src/utils/getPlaceList';
+import authAxios from 'src/utils/interceptors';
+import getPlaceList from 'src/utils/function/getPlaceList';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
