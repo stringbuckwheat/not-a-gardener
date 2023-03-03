@@ -17,12 +17,12 @@ public class PesticideDate {
     private LocalDate pesticideDate;
 
     // FK
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="plant_no")
     private Plant plant;
 
-    @ManyToOne
-    @JoinColumn(name="pesticide_info_no")
-    private PesticideInfo pesticideInfo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pesticide_no")
+    private Pesticide pesticideInfo;
 
 }
