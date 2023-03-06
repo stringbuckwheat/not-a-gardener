@@ -23,7 +23,7 @@ const AddForm = (props) => {
 
   // 빈칸 검사를 해야 할 input 목록
   const requiredValueArray = props.requiredValueArray;
-  
+
   // 숫자인지 검사해야 할 input 목록
   const isNumberArray = props.isNumberArray;
 
@@ -66,6 +66,7 @@ const AddForm = (props) => {
                   onChange={onChange}
                   inputObject={inputObject} />
 
+                {/* 등록 제출 버튼 */}
                 <div className="d-flex justify-content-end">
                   <SubmitForAddButton
                     url={url}

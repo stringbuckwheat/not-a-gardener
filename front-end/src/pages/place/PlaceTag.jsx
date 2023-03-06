@@ -2,6 +2,8 @@ import { Space, Tag } from 'antd';
 
 const PlaceTag = (props) => {
     const place = props.place;
+    console.log("tag props", place);
+
     let artificialLightTag = "식물등을 사용하지 않아요";
 
     if(place.artificialLight === "사용"){
@@ -11,7 +13,7 @@ const PlaceTag = (props) => {
     return(
         <Space size={[0, 8]} wrap>
             <Tag color="blue">{place.option}</Tag>
-            <Tag color="green">{place.plantList.length}개의 식물</Tag>
+            <Tag color="green">{place.plantListSize}개의 식물</Tag>
             <Tag color="gold">{artificialLightTag}</Tag>
         </Space>
     )

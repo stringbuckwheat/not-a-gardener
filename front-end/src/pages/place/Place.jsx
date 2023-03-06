@@ -7,22 +7,13 @@ import PlaceCard from "../../components/card/PlaceCard";
 import authAxios from "src/utils/interceptors";
 
 const Place = () => {
-    console.log("Place");
-
     const [placeList, setPlaceList] = useState([{
         placeNo: 0,
         placeName: "",
         option: '',
         artificialLight: '',
         plantQuantity: -1,
-        plantList: [{
-            plantNo: 0,
-            plantName: "",
-            plantSpecies: "",
-            averageWateringPeriod: 0,
-            medium: "",
-            createDate: ""
-        }]
+        plantListSize: 0
     }]);
 
     const navigate = useNavigate();
@@ -30,8 +21,11 @@ const Place = () => {
     useEffect(() => {
         authAxios.get("/place")
             .then((res) => {
-                console.log("res", res);
+                console.log("Place res.data", res.data);
                 setPlaceList(res.data);
+            })
+            .catch((error) => {
+                console.log("error");
             })
     }, [])
 
@@ -44,7 +38,7 @@ const Place = () => {
                         color="dark"
                         icon={<CIcon icon={cilPlus} height={30} />}
                         value="새로운 장소 추가"
-                        onClick={() => {navigate("/place/add")}}
+                        onClick={() => { navigate("/place/add") }}
                     />
                 </CCol>
 

@@ -43,7 +43,7 @@ public class Plant {
     @JoinColumn(name="member_no")
     private Member member;
 
-    @OneToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="place_no")
     private Place place;
 

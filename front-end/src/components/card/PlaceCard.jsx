@@ -7,8 +7,7 @@ import { useNavigate } from "react-router-dom";
 const PlaceCard = (props) => {
     const navigate = useNavigate();
     const place = props.place;
-
-    console.log("place", place)
+    console.log("PlaceCard props", place);
 
     let color = "";
     let icon = {};
@@ -28,13 +27,14 @@ const PlaceCard = (props) => {
         <CCol md={3} xs={12}>
             <CWidgetStatsF
                 className="mb-3"
+                // PlaceDetail로 감
                 onClick={() => navigate("/place/" + place.placeNo, {state: place})}
                 color={color}
                 icon={<CIcon icon={icon} height={30} />}
                 title={
                     <>
                         <div>{place.option}</div>
-                        <div className="mt-2"><small>{place.plantList.length}개의 식물이 살고 있어요</small></div>
+                        <div className="mt-2"><small>{place.plantListSize}개의 식물이 살고 있어요</small></div>
                     </>}
                 value={
                     <>

@@ -11,6 +11,8 @@ import { useParams } from 'react-router-dom';
 const DefaultTable = (props) => {
   const navigate = useNavigate();
   const placeNo = useParams().placeNo;
+  const list = props.list;
+  console.log("default table props.list", list);
 
   const columns = [
     {
@@ -38,14 +40,10 @@ const DefaultTable = (props) => {
       render: (_, { tags }) => (
         <>
           {tags.map((tag) => {
-            // const mediumArray = ["흙과 화분", "수태", "반수경", "수경", "테라리움"];
             const colorArr = ["green", "orange", "volcano", "cyan", "geekblue"];
 
-            // mediumArray의 index와 동일한 컬러
-            const color = colorArr[mediumArray.indexOf(tag)];
-
             return (
-              <Tag color={color} key={tag}>
+              <Tag color={colorArr[getColorIdxFromMediumArray(tag)]} key={tag}>
                 {tag}
               </Tag>
             );
@@ -64,6 +62,14 @@ const DefaultTable = (props) => {
       )
     }
   ];
+  
+  const getColorIdxFromMediumArray = (medium) => {
+    for(let i = 0; i < mediumArray.length; i++){
+      if(mediumArray[i].value === medium){
+        return i;
+      }
+    }
+  }
 
   const onClickPlantDetail = async (record) => {
     const placeList = await getPlaceList();

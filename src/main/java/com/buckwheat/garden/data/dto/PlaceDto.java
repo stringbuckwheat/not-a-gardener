@@ -18,8 +18,21 @@ public class PlaceDto {
     private String artificialLight;
     private String option;
     private int memberNo;
+    private int plantListSize;
 
-    private List<PlantDto> plantList;
+    /**
+     * 장소 리스트 카드에서 사용할 정보들
+     */
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class PlaceCard{
+        private int placeNo;
+        private String placeName;
+        private String artificialLight;
+        private String option;
+        private int plantListSize;
+    }
 
     public Place toEntityWithMember(Member member){
         return Place.builder()

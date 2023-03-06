@@ -1,9 +1,6 @@
 package com.buckwheat.garden.data.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -35,7 +32,25 @@ public class Place {
     private Member member;
 
     // 양방향 매핑
-    @OneToMany(fetch=FetchType.LAZY, mappedBy = "place")
-    @OrderBy("create_date desc")
+    @OneToMany(mappedBy = "place")
+    @OrderBy("create_date DESC")
     private List<Plant> plantList = new ArrayList<>();
+
+    public Place update(String placeName, String option, String artificialLight){
+        this.placeName = placeName;
+        this.option = option;
+        this.artificialLight = artificialLight;
+
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Place{" +
+                "placeNo=" + placeNo +
+                ", placeName='" + placeName + '\'' +
+                ", artificialLight='" + artificialLight + '\'' +
+                ", option='" + option + '\'' +
+                '}';
+    }
 }
