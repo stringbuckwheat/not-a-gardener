@@ -1,12 +1,13 @@
-import { CTable, CAlert } from "@coreui/react";
-import TableHead from "src/components/table/TableHead";
-import PlantTableBody from "src/components/table/PlantTableBody";
+import { CAlert } from "@coreui/react";
 import AddPlantButton from "src/components/button/AddPlantButton";
 import { useEffect, useState } from "react";
 import authAxios from "src/utils/interceptors";
+import PlantTable from "./PlantTable";
+import PlantListLayout from "src/data-layout/PlantListLayout";
+import PlantListTag from "./PlantListTag";
 
 const Plant = () => {
-    const [ plantList, setPlantList ] = useState([{
+    const [plantList, setPlantList] = useState([{
         plantNo: 0,
         plantName: '',
         placeNo: 0,
@@ -18,26 +19,21 @@ const Plant = () => {
 
     useEffect(() => {
         authAxios.get("/plant")
-        .then((res) => {
-            console.log("res.data", res.data);
-            setPlantList(res.data);
-        })
-    }, []);
+            .then((res) => {
+                console.log("res.data", res.data);
+                setPlantList(res.data);
+            })
+    }, [plantList]);
 
-    const tableHeadArr = ["식물 이름", "종", "장소", "식재 환경", "평균 물주기", "createDate"];
-    const keySet = ["plantName", "plantSpecies", "placeName", "medium", "averageWateringPeriod", "createDate"]
-
-    return(
-        <>
-            <div className="mb-3">
-                <CAlert color="dark">{plantList.length}개의 식물이 함께하고 있어요!</CAlert>
-                <AddPlantButton size="sm"/>
-            </div>
-            <CTable hover>
-                <TableHead item={tableHeadArr}/>
-                <PlantTableBody list={plantList} keySet={keySet} linkUrl="/plant/" />
-            </CTable>
-        </>
+    return (
+        <PlantListLayout
+            title=""
+            url="/plant"
+            path={"test"}
+            deleteTitle="식물"
+            tags={<PlantListTag howManyPlants={plantList.length} />}
+            bottomData={<PlantTable plantList={plantList} />}
+        />
     )
 }
 

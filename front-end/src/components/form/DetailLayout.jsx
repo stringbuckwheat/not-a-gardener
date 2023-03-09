@@ -35,7 +35,7 @@ const DetailLayout = (props) => {
                 <h4 className="mt-3 mb-3">{title}</h4>
                 {tags}
               </div>
-              <div className="d-flex justify-content-end mb-3">
+              <div className="d-flex justify-content-end mt-3 mb-3">
                 <DeleteModal
                   url={url}
                   path={path}

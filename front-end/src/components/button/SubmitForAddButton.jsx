@@ -13,7 +13,7 @@ const SubmitForAddButton = (props) => {
     const insertData = () => {
         authAxios.post(url, data)
         .then(() => {
-            navigate(url);
+            navigate(url, {replace: true});
         })
     }
 

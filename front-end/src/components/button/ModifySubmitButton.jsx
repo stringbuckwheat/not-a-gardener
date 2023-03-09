@@ -15,7 +15,7 @@ const ModifySubmitButton = (props) => {
         authAxios.put(`${url}/${path}`, data)
             .then((res) => {
                 changeModifyState();
-                navigate("", { state: res.data });
+                navigate("", { replace: true, state: res.data });
             })
     }
 

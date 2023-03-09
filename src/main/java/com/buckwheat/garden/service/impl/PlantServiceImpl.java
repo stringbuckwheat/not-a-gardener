@@ -1,9 +1,9 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.data.dto.*;
+import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.data.entity.Place;
 import com.buckwheat.garden.data.entity.Plant;
-import com.buckwheat.garden.data.entity.Watering;
 import com.buckwheat.garden.repository.PlaceRepository;
 import com.buckwheat.garden.repository.PlantRepository;
 import com.buckwheat.garden.service.PlantService;
@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -25,25 +24,12 @@ public class PlantServiceImpl implements PlantService {
     private final PlaceRepository placeRepository;
 
     @Override
-    public GardenDto getOnePlant(int plantNo) {
-        Plant plant = plantRepository.findById(plantNo).orElseThrow(NoSuchElementException::new);
-        log.debug("plant: " + plant);
+    public PlantDto.PlantResponse getOnePlant(int plantNo) {
+        // @EntityGraph
+        Plant plant = plantRepository.findByPlantNo(plantNo).orElseThrow(NoSuchElementException::new);
 
         // DTO로 변환
-        GardenDto gardenDto = new GardenDto(plant);
-
-        List<WaterDto> waterDtoList = new ArrayList<>();
-
-        for(Watering w : plant.getWateringList()){
-            waterDtoList.add(new WaterDto(w));
-        }
-
-        gardenDto.setWaterDtoList(waterDtoList);
-
-        log.debug("plantDto: " + gardenDto);
-        // return plantDto;
-
-        return null;
+        return PlantDto.PlantResponse.from(plant);
     }
 
     @Override
@@ -51,7 +37,8 @@ public class PlantServiceImpl implements PlantService {
         log.debug("getPlantList");
         List<PlantDto> plantList = new ArrayList<>();
 
-        for(Plant p : plantRepository.findByMember_MemberNo(memberNo)){
+        // @EntityGraph 메소드
+        for(Plant p : plantRepository.findByMember_MemberNoOrderByCreateDateDesc(memberNo)){
             plantList.add(PlantDto.builder()
                             .plantNo(p.getPlantNo())
                             .placeNo(p.getPlace().getPlaceNo())
@@ -67,22 +54,10 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public void addPlant(PlantRequestDto plantRequestDto) {
+    public void addPlant(PlantDto.PlantRequestDto plantRequestDto, Member member) {
         Place place = placeRepository.findById(plantRequestDto.getPlaceNo()).orElseThrow(NoSuchElementException::new);
-        // Member member = memberRepository.findById(plantRequestDto.getMemberNo()).orElseThrow(NoSuchElementException::new);
 
-        Plant plant = Plant.builder()
-                .plantName(plantRequestDto.getPlantName())
-                .plantSpecies(plantRequestDto.getPlantSpecies())
-                .medium(plantRequestDto.getMedium())
-                .createDate(LocalDateTime.now())
-                .earlyWateringPeriod(plantRequestDto.getAverageWateringPeriod()) // 초기값은 유저가 입력한 평균 물주기
-                .averageWateringPeriod(plantRequestDto.getAverageWateringPeriod())
-                .place(place)
-                .member(plantRequestDto.getMember())
-                .build();
-
-        plantRepository.save(plant);
+        plantRepository.save(plantRequestDto.toEntityWithMemberAndPlace(member, place));
     }
 
     @Override
@@ -110,5 +85,31 @@ public class PlantServiceImpl implements PlantService {
     @Override
     public void deletePlantByPlantNo(int plantNo) {
         plantRepository.deleteById(plantNo);
+    }
+
+    /**
+     * 장소 디테일 페이지에서 해당 장소에 속한 식물 리스트를 반환
+     * @param placeNo 장소 번호(PK)
+     * @return 해당 장소에 속한 식물(DTO) 리스트
+     */
+    @Override
+    public List<PlantDto> getPlantlistInPlace(int placeNo) {
+        List<PlantDto> plantList = new ArrayList<>();
+
+        for(Plant pl : plantRepository.findByPlace_PlaceNo(placeNo)){
+            plantList.add(
+                    PlantDto.builder()
+                        .plantNo(pl.getPlantNo())
+                        .plantName(pl.getPlantName())
+                        .plantSpecies(pl.getPlantSpecies())
+                        .averageWateringPeriod(pl.getAverageWateringPeriod())
+                        .medium(pl.getMedium())
+                        .createDate(LocalDate.from(pl.getCreateDate()))
+                        .build()
+
+            );
+        }
+        return plantList;
+
     }
 }

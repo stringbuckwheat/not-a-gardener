@@ -8,8 +8,6 @@ const AddPlantButton = (props) => {
     const onClick = async () => {
       const placeList = await getPlaceList()
 
-      console.log("placeList", placeList);
-
       navigate("/plant/add", { state: placeList });
       console.log("navigate");
     }

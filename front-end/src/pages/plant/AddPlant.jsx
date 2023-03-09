@@ -9,6 +9,7 @@ const AddPlant = () => {
   const initPlant = {
     plantName: "",
     plantSpecies: "",
+    placeNo: placeList[0].key,
     medium: "흙과 화분",
     earlyWateringPeriod: 5
   }
@@ -52,7 +53,7 @@ const AddPlant = () => {
   ];
 
   const requiredValueArray = ["plantName"];
-  const isNumberArray = ["averageWateringPeriod"];
+  const isNumberArray = ["averageWateringPeriod", "placeNo"];
 
   return (
     <AddForm 

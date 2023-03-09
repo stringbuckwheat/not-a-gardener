@@ -1,10 +1,7 @@
 package com.buckwheat.garden.controller;
 
 import com.buckwheat.garden.config.oauth2.UserPrincipal;
-import com.buckwheat.garden.data.dto.ModifyPlantPlaceDto;
-import com.buckwheat.garden.data.dto.PlantDto;
-import com.buckwheat.garden.data.dto.PlantRequestDto;
-import com.buckwheat.garden.data.dto.GardenDto;
+import com.buckwheat.garden.data.dto.*;
 import com.buckwheat.garden.service.PlantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +18,7 @@ public class PlantController {
     private final PlantService plantService;
 
     @GetMapping("/{plantNo}")
-    public GardenDto getOnePlant(@PathVariable("plantNo") int plantNo){
+    public PlantDto.PlantResponse getOnePlant(@PathVariable("plantNo") int plantNo){
         return plantService.getOnePlant(plantNo);
     }
 
@@ -31,9 +28,9 @@ public class PlantController {
     }
 
     @PostMapping("")
-    public void addPlant(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody PlantRequestDto plantRequestDto){
-        plantRequestDto.setMember(userPrincipal.getMember());
-        plantService.addPlant(plantRequestDto);
+    public void addPlant(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody PlantDto.PlantRequestDto plantRequestDto){
+        log.debug("plantRequestDto: {}", plantRequestDto);
+        plantService.addPlant(plantRequestDto, userPrincipal.getMember());
     }
 
     @PutMapping("/{plantNo}")
