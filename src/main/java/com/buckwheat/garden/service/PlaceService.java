@@ -9,13 +9,13 @@ import java.util.List;
 public interface PlaceService {
     List<PlaceDto.PlaceCard> getPlaceList(int memberNo);
 
-    PlaceDto getPlace(int placeNo);
+    PlaceDto.PlaceResponseDto getPlace(int placeNo);
 
     List<PlantDto.PlantInPlace> getPlantlistInPlace(int placeNo);
 
-    PlaceDto addPlace(PlaceDto placeDto, Member member);
+    PlaceDto.PlaceResponseDto addPlace(PlaceDto.PlaceRequestDto placeRequestDto, Member member);
 
-    void modifyPlace(PlaceDto placeDto, Member member);
+    PlaceDto.PlaceResponseDto modifyPlace(PlaceDto.PlaceRequestDto placeRequestDto, Member member);
 
     void deletePlace(int placeNo);
 }

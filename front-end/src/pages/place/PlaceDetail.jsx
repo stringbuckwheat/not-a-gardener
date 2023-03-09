@@ -1,10 +1,10 @@
 import { useLocation } from 'react-router-dom'
-import SmartTable from 'src/components/table/DefaultTable';
 import DetailLayout from 'src/components/form/DetailLayout';
 import PlaceTag from './PlaceTag';
 import { useEffect, useState } from 'react';
 import ModifyPlace from './ModifyPlace';
 import authAxios from 'src/utils/interceptors';
+import PlantListInPlaceTable from './PlantListInPlacetable';
 
 const PlaceDetail = () => {
   // props
@@ -29,8 +29,6 @@ const PlaceDetail = () => {
   }
 
   useEffect(() => {
-    const data = {placeNo: state.placeNo};
-
     authAxios.get(`/place/${state.placeNo}/plant-list`)
     .then((res) => {
       console.log("res.data", res.data);
@@ -46,9 +44,9 @@ const PlaceDetail = () => {
         url="/place"
         path={state.placeNo}
         deleteTitle="장소"
-        tags={<PlaceTag place={state} />}
+        tags={<PlaceTag place={state} howManyPlant={plantList.length}/>}
         onClickModifyBtn={onClickModifyBtn}
-        bottomData={<SmartTable list={plantList} />}
+        bottomData={<PlantListInPlaceTable list={plantList}/>}
       />
       :
       <ModifyPlace

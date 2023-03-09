@@ -24,7 +24,7 @@ public class PlaceController {
     }
 
     @GetMapping("/{placeNo}")
-    public PlaceDto getPlace(@PathVariable int placeNo){
+    public PlaceDto.PlaceResponseDto getPlace(@PathVariable int placeNo){
         return placeService.getPlace(placeNo);
     }
 
@@ -35,16 +35,13 @@ public class PlaceController {
     }
 
     @PostMapping("")
-    public PlaceDto addPlace(@RequestBody PlaceDto placeDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        return placeService.addPlace(placeDto, userPrincipal.getMember());
+    public PlaceDto.PlaceResponseDto addPlace(@RequestBody PlaceDto.PlaceRequestDto placeRequestDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        return placeService.addPlace(placeRequestDto, userPrincipal.getMember());
     }
 
     @PutMapping("/{placeNo}")
-    public PlaceDto updatePlace(@RequestBody PlaceDto placeDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        placeService.modifyPlace(placeDto, userPrincipal.getMember());
-
-        // 메소드 내부 호출 시 @Transactional이 작동하지 않아 일단 이렇게 처리
-        return placeService.getPlace(placeDto.getPlaceNo());
+    public PlaceDto.PlaceResponseDto modifyPlace(@RequestBody PlaceDto.PlaceRequestDto placeRequestDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        return placeService.modifyPlace(placeRequestDto, userPrincipal.getMember());
     }
 
     @DeleteMapping("/{placeNo}")
