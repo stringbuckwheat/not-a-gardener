@@ -31,5 +31,5 @@ public interface WateringRepository extends JpaRepository<Watering, Integer> {
     // Top == limit
     // ORDER BY Watering_no DESC
     /* 가장 최근 물 준 날짜 두 개를 들고 옴 */
-    List<Watering> findTop2ByPlantNoOrderByWateringNoDesc(int plantNo);
+    List<Watering> findTop2ByPlant_PlantNoOrderByWateringNoDesc(int plantNo);
 }

@@ -22,11 +22,19 @@ public class Watering {
     private LocalDate wateringDate; // 물 준 날짜
 
     // FK
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="plant_no")
     private Plant plant;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "fertilizer_no")
     private Fertilizer fertilizer;
+
+    public Watering update(LocalDate wateringDate, Plant plant, Fertilizer fertilizer){
+        this.wateringDate = wateringDate;
+        this.plant = plant;
+        this.fertilizer = fertilizer;
+
+        return this;
+    }
 }

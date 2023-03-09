@@ -23,8 +23,6 @@ public interface PlantRepository extends JpaRepository<Plant, Integer> {
     @EntityGraph(attributePaths = {"place"}, type = EntityGraph.EntityGraphType.LOAD)
     List<Plant> findByMember_MemberNoOrderByCreateDateDesc(int memberNo);
 
-    List<Plant> findByPlace_PlaceNo(int placeNo);
-
     @EntityGraph(attributePaths = {"place", "wateringList"}, type= EntityGraph.EntityGraphType.FETCH)
     Optional<Plant> findByPlantNo(int plantNo);
 }

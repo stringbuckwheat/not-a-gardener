@@ -8,25 +8,13 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
-@Builder
-@Getter // InvalidDefinitionException: Serialize 하는 과정에서 접근 제한자가 public이거나 Getter/Setter를 이용하기 때문에 필드가 private로 선언되어있으면 JSON 변환 과정에서 문제가 발생
-@ToString
-@NoArgsConstructor
 public class PlantDto {
-    private int plantNo;
-    private String plantName;
-    private String plantSpecies;
-    private int averageWateringPeriod;
-    private String medium;
-    private int placeNo;
-    private String placeName;
-    private LocalDate createDate;
-
     @AllArgsConstructor
     @Builder
     @Getter
+    @ToString
     public static class PlantResponse{
+        private int plantNo;
         private String plantName;
         private String plantSpecies;
         private int averageWateringPeriod;
@@ -37,6 +25,7 @@ public class PlantDto {
 
         public static PlantResponse from(Plant plant){
             return PlantResponse.builder()
+                    .plantNo(plant.getPlantNo())
                     .plantName(plant.getPlantName())
                     .plantSpecies(plant.getPlantSpecies())
                     .averageWateringPeriod(plant.getAverageWateringPeriod())
@@ -52,7 +41,7 @@ public class PlantDto {
     @Getter
     @NoArgsConstructor
     @ToString
-    public static class PlantRequestDto{
+    public static class PlantRequest{
         private int plantNo;
         private int placeNo;
         private String plantName;

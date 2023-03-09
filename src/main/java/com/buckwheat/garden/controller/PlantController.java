@@ -23,22 +23,24 @@ public class PlantController {
     }
 
     @GetMapping("")
-    public List<PlantDto> getPlantList(@AuthenticationPrincipal UserPrincipal userPrincipal){
+    public List<PlantDto.PlantResponse> getPlantList(@AuthenticationPrincipal UserPrincipal userPrincipal){
         return plantService.getPlantList(userPrincipal.getMember().getMemberNo());
     }
 
+    @GetMapping("/{plantNo}/watering")
+    public List<WateringDto.WateringList> getWateringListForPlant(@PathVariable("plantNo") int plantNo){
+        return plantService.getWateringListForPlant(plantNo);
+    }
+
     @PostMapping("")
-    public void addPlant(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody PlantDto.PlantRequestDto plantRequestDto){
-        log.debug("plantRequestDto: {}", plantRequestDto);
+    public void addPlant(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody PlantDto.PlantRequest plantRequestDto){
         plantService.addPlant(plantRequestDto, userPrincipal.getMember());
     }
 
     @PutMapping("/{plantNo}")
-    public void modifyPlant(@PathVariable("plantNo") int plantNo, @RequestBody PlantRequestDto plantRequestDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        log.debug("modify plant");
-        plantRequestDto.setMemberNo(userPrincipal.getMember().getMemberNo());
-
-        plantService.modifyPlant(plantRequestDto);
+    public PlantDto.PlantResponse modifyPlant(@PathVariable("plantNo") int plantNo, @RequestBody PlantDto.PlantRequest plantRequestDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        log.debug("modify plant dto: {}", plantRequestDto);
+        return plantService.modifyPlant(plantRequestDto, userPrincipal.getMember());
     }
 
     @PutMapping("/modify-place")
