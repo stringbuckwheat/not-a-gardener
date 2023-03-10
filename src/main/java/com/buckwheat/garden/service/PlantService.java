@@ -14,9 +14,6 @@ public interface PlantService {
     /* 식물 리스트 */
     List<PlantDto.PlantResponse> getPlantList(int memberNo);
 
-    /* 한 식물의 물주기 기록 */
-    List<WateringDto.WateringList> getWateringListForPlant(int plantNo);
-
     /* 식물 추가 */
     void addPlant(PlantDto.PlantRequest plantRequestDto, Member member);
 

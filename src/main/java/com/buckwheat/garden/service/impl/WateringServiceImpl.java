@@ -53,11 +53,31 @@ public class WateringServiceImpl implements WateringService {
     @Override
     public WateringDto.WateringResponse addWatering(WateringDto.WateringRequest wateringRequest) {
         Plant plant = plantRepository.findById(wateringRequest.getPlantNo()).orElseThrow(NoSuchElementException::new);
+
+        // 맹물을 줬으면
+        if(wateringRequest.getFertilizerNo() == 0){
+            Watering watering = wateringRepository.save(wateringRequest.toEntityWithPlant(plant));
+            return WateringDto.WateringResponse.from(watering);
+        }
+
+        // 비료도 줬으면
         Fertilizer fertilizer = fertilizerRepository.findById(wateringRequest.getFertilizerNo()).orElseThrow(NoSuchElementException::new);
-
         Watering watering = wateringRepository.save(wateringRequest.toEntityWithPlantAndFertilizer(plant, fertilizer));
-
         return WateringDto.WateringResponse.from(watering);
+    }
+
+    public List<WateringDto.WateringForOnePlant> getWateringListForPlant(int plantNo) {
+        log.debug("getWateringListForPlant");
+
+        List<WateringDto.WateringForOnePlant> wateringList = new ArrayList<>();
+
+        for(Watering watering : wateringRepository.findByPlant_plantNo(plantNo)){
+            wateringList.add(
+                    WateringDto.WateringForOnePlant.from(watering)
+            );
+        }
+
+        return wateringList;
     }
 
     // 지금은 save 로직과 같지만 일단은 분리

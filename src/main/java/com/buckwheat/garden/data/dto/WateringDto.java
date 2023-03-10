@@ -14,9 +14,9 @@ public class WateringDto {
 //    private String fertilizerName;
 //    private LocalDate wateringDate;
 
-    @AllArgsConstructor
-    @Builder
+    @NoArgsConstructor
     @Getter
+    @ToString
     public static class WateringRequest{
         private int plantNo;
         private int fertilizerNo;
@@ -26,6 +26,13 @@ public class WateringDto {
             return Watering.builder()
                     .plant(plant)
                     .fertilizer(fertilizer)
+                    .wateringDate(wateringDate)
+                    .build();
+        }
+
+        public Watering toEntityWithPlant(Plant plant){
+            return Watering.builder()
+                    .plant(plant)
                     .wateringDate(wateringDate)
                     .build();
         }
@@ -40,10 +47,39 @@ public class WateringDto {
         private LocalDate wateringDate;
 
         public static WateringResponse from(Watering watering){
+            String fertilizerName = "맹물";
+
+            if(watering.getFertilizer() != null){
+                fertilizerName = watering.getFertilizer().getFertilizerName();
+            }
+
             return WateringResponse.builder()
                     .wateringNo(watering.getWateringNo())
                     .plantName(watering.getPlant().getPlantName())
-                    .fertilizerName(watering.getFertilizer().getFertilizerName())
+                    .fertilizerName(fertilizerName)
+                    .wateringDate(watering.getWateringDate())
+                    .build();
+        }
+    }
+
+    @AllArgsConstructor
+    @Builder
+    @Getter // (InvalidDefinitionException - No serializer found for class)
+    public static class WateringForOnePlant{
+        private int wateringNo;
+        private String fertilizerName;
+        private LocalDate wateringDate;
+
+        public static WateringForOnePlant from(Watering watering){
+            String fertilizerName = "맹물";
+
+            if(watering.getFertilizer() != null){
+                fertilizerName = watering.getFertilizer().getFertilizerName();
+            }
+
+            return WateringForOnePlant.builder()
+                    .wateringNo(watering.getWateringNo())
+                    .fertilizerName(fertilizerName)
                     .wateringDate(watering.getWateringDate())
                     .build();
         }

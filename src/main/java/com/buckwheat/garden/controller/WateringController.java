@@ -21,4 +21,10 @@ public class WateringController {
     public List<WateringDto.WateringList> getWateringList(@AuthenticationPrincipal UserPrincipal userPrincipal){
         return wateringService.getWateringList(userPrincipal.getMember().getMemberNo());
     }
+
+    @PostMapping("")
+    public WateringDto.WateringResponse addWatering(@RequestBody  WateringDto.WateringRequest wateringRequest){
+        log.debug("wateringRequest: {}", wateringRequest);
+        return wateringService.addWatering(wateringRequest);
+    }
 }

@@ -3,6 +3,7 @@ package com.buckwheat.garden.controller;
 import com.buckwheat.garden.config.oauth2.UserPrincipal;
 import com.buckwheat.garden.data.dto.*;
 import com.buckwheat.garden.service.PlantService;
+import com.buckwheat.garden.service.WateringService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlantController {
     private final PlantService plantService;
+    private final WateringService wateringService;
 
     @GetMapping("/{plantNo}")
     public PlantDto.PlantResponse getOnePlant(@PathVariable("plantNo") int plantNo){
@@ -28,8 +30,8 @@ public class PlantController {
     }
 
     @GetMapping("/{plantNo}/watering")
-    public List<WateringDto.WateringList> getWateringListForPlant(@PathVariable("plantNo") int plantNo){
-        return plantService.getWateringListForPlant(plantNo);
+    public List<WateringDto.WateringForOnePlant> getWateringListForPlant(@PathVariable("plantNo") int plantNo){
+        return wateringService.getWateringListForPlant(plantNo);
     }
 
     @PostMapping("")

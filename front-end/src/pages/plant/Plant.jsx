@@ -1,10 +1,9 @@
-import { CAlert } from "@coreui/react";
-import AddPlantButton from "src/components/button/AddPlantButton";
 import { useEffect, useState } from "react";
 import authAxios from "src/utils/interceptors";
 import PlantTable from "./PlantTable";
 import PlantListLayout from "src/data-layout/PlantListLayout";
 import PlantListTag from "./PlantListTag";
+import { useLocation } from "react-router-dom";
 
 const Plant = () => {
     const [plantList, setPlantList] = useState([{
@@ -17,13 +16,26 @@ const Plant = () => {
         createDate: ''
     }]);
 
+    const { state } = useLocation();
+    console.log("plant 메인 페이지 state", state);
+
     useEffect(() => {
         authAxios.get("/plant")
             .then((res) => {
                 console.log("res.data", res.data);
                 setPlantList(res.data);
             })
-    }, [plantList]);
+    }, []);
+
+    useEffect(() => {
+        if(state != null){
+            authAxios.get("/plant")
+            .then((res) => {
+                console.log("res.data", res.data);
+                setPlantList(res.data);
+            })
+        }
+    }, [state])
 
     return (
         <PlantListLayout

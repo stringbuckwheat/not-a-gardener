@@ -1,15 +1,19 @@
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import PlantTag from './PlantTag';
 import DetailLayout from 'src/components/form/DetailLayout';
 import authAxios from 'src/utils/interceptors';
 import { useState, useEffect } from 'react';
 import ModifyPlant from './ModifyPlant';
 import getPlaceList from 'src/utils/function/getPlaceList';
+import WateringList from '../watering/WateringList';
 
 const PlantDetail = () => {
     const plantNo = useParams().plantNo;
     console.log("plantNo", plantNo);
-    const [plant, setPlant] = useState({})
+
+    const { state } = useLocation();
+
+    const [plant, setPlant] = useState({});
 
     useEffect(() => {
         authAxios.get(`/plant/${plantNo}`)
@@ -21,6 +25,12 @@ const PlantDetail = () => {
                 console.log("error", error);
             })
     }, [])
+
+    useEffect(() => {
+        if(state != null){
+            setPlant(state);
+        }
+    }, [state])
 
     const [ onModify, setOnModify ] = useState(false);
     const [ placeList, setPlaceList ] = useState({});
@@ -42,7 +52,7 @@ const PlantDetail = () => {
                 deleteTitle="식물"
                 tags={<PlantTag plant={plant} />}
                 onClickModifyBtn={onClickModifyBtn}
-                bottomData={<div>plantLog 들어갈 자리</div>}
+                bottomData={<WateringList plant={plant}/>}
             />
             :
             <ModifyPlant

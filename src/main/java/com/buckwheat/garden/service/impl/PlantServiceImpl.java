@@ -4,9 +4,9 @@ import com.buckwheat.garden.data.dto.*;
 import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.data.entity.Place;
 import com.buckwheat.garden.data.entity.Plant;
-import com.buckwheat.garden.data.entity.Watering;
 import com.buckwheat.garden.repository.PlaceRepository;
 import com.buckwheat.garden.repository.PlantRepository;
+import com.buckwheat.garden.repository.WateringRepository;
 import com.buckwheat.garden.service.PlantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,20 +43,6 @@ public class PlantServiceImpl implements PlantService {
         }
 
         return plantList;
-    }
-
-    @Override
-    public List<WateringDto.WateringList> getWateringListForPlant(int plantNo) {
-        List<WateringDto.WateringList> wateringList = new ArrayList<>();
-        Plant plant = plantRepository.findByPlantNo(plantNo).orElseThrow(NoSuchElementException::new);
-
-        for(Watering watering : plant.getWateringList()){
-            wateringList.add(
-                    WateringDto.WateringList.from(watering)
-            );
-        }
-
-        return wateringList;
     }
 
     @Override
