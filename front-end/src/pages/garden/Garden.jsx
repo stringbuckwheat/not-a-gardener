@@ -1,4 +1,4 @@
-import React, { useState, useEffect }  from 'react'
+import React, { useState }  from 'react'
 import { Link } from 'react-router-dom'
 import {
     CRow,
@@ -13,8 +13,8 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilOptions } from '@coreui/icons'
 import WaterModal from './WaterModal'
-import Plant from '../plant/Plant'
-import DeletePlant from '../plant/DeletePlant'
+import Plant from '../plant2/Plant2'
+import DeletePlant from '../plant2/DeletePlant'
 
 const Garden = (props) => {
     // 물주기 모달 표시 여부

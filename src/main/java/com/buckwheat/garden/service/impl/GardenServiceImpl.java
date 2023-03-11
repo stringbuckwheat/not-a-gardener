@@ -1,7 +1,10 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.data.dto.PlantDto;
+import com.buckwheat.garden.data.dto.GardenDto;
+import com.buckwheat.garden.data.entity.Fertilizer;
 import com.buckwheat.garden.data.entity.Plant;
+import com.buckwheat.garden.data.entity.Watering;
+import com.buckwheat.garden.repository.FertilizerRepository;
 import com.buckwheat.garden.repository.PlantRepository;
 import com.buckwheat.garden.repository.WateringRepository;
 import com.buckwheat.garden.service.GardenService;
@@ -9,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,55 +23,123 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class GardenServiceImpl implements GardenService {
-    // 비료 주기는 일단 내가 하던대로 5일에 맞춰놓았다.
-    // TODO 비료 주기 커스터마이징 기능
-    private final int FERTILIZING_SCHEDULE = 5;
-
     private final PlantRepository plantRepository;
     private final WateringRepository wateringRepository;
+    private final FertilizerRepository fertilizerRepository;
 
     @Override
-    public List<PlantDto> getPlantList(String username) {
-        List<PlantDto> plantList = new ArrayList<>();
+    public List<GardenDto> getGarden(int memberNo) {
+        List<GardenDto> gardenList = new ArrayList<>();
 
-        for(Plant p : plantRepository.findByMember_Username(username)){
-            PlantDto plantDto = new PlantDto(p);
-            calculateCode(plantDto);
+        List<Fertilizer> fertilizerList = fertilizerRepository.findByMember_memberNo(memberNo);
+        List<Plant> plantList = plantRepository.findByMember_MemberNo(memberNo);
 
-            plantList.add(plantDto);
+        // 필요한 것들 계산해서 gardenDto list 리턴
+        for (Plant plant : plantList) {
+            List<Watering> wateringList = plant.getWateringList();
+            String anniversary = "";
+
+            // 키운 지 며칠이나 지났는지 (nullable)
+            if (plant.getBirthday() != null) {
+                anniversary = getAnniversary(plant.getBirthday());
+//                log.debug("{}: {}", plant.getPlantName(), anniversary);
+            }
+
+            // watering code: 계산 값에 따라 화면에서 물주기, 물줄 날짜 놓침 등의 메시지를 띄울 용도
+            // 물을 준 적이 한 번도 없는 경우
+            int wateringDDay = getWateringDDay(plant.getAverageWateringPeriod(), getLastDrinkingDay(plant));
+//            log.debug("{}의 wateringDDay: {}일 남음", plant.getPlantName(), wateringDDay);
+
+            int wateringCode = getWateringCode(plant.getAverageWateringPeriod(), wateringDDay);
+//            log.debug("{}의 watering code: {}", plant.getPlantName(), wateringCode);
+
+            // TODO 비료 계산
+            // fertilizingCode: 물을 줄 식물에 대해서 맹물을 줄지 비료를 줄지 알려주는 용도
+
+            gardenList.add(
+                    GardenDto.from(plant, anniversary, wateringDDay, wateringCode)
+            );
         }
 
-        return plantList;
+        // TODO 정렬
+        log.debug("gardenList: {}", gardenList);
+        return gardenList;
     }
 
-    @Override
-    public LocalDate getLastDrinkingDay(int plantNo){
-        LocalDate latestWateringDay = wateringRepository.findLatestWateringDayByPlantNo(plantNo);
-        LocalDate latestFertilizedDay = wateringRepository.findLatestFertilizedDayByPlantNo(plantNo);
-
-        if(latestWateringDay == null && latestFertilizedDay == null){
-            return null;
-        } else if(latestWateringDay != null && latestFertilizedDay == null){
-            return latestWateringDay;
-        } else if(latestWateringDay == null) {
-            // 이 입력은 아직 불가능
-            return latestFertilizedDay;
+    private String getAnniversary(LocalDate birthday) {
+        LocalDate today = LocalDate.now();
+        // 생일이면
+        if ((today.getMonth() == birthday.getMonth()) && (today.getDayOfMonth() == birthday.getDayOfMonth())) {
+            return "생일 축하해요";
         }
 
-        // 둘 중에 더 큰 날짜를 반환
-        // true면 latestFertilizedDay가 더 큰 날짜
-        LocalDate lastDrinkingDay = (latestFertilizedDay.isAfter(latestWateringDay)) ? latestFertilizedDay : latestWateringDay;
-
-        return lastDrinkingDay;
+        return Duration.between(birthday.atStartOfDay(), today.atStartOfDay()).toDays() + "일 째 반려중";
     }
 
-    // 비료줘야 하면 1, 안 줘도 되면 0
-    @Override
-    public int getFertilizingCode(int plantNo){
+    private LocalDate getLastDrinkingDay(Plant plant) {
+        // 물주기 정보가 있으면 진짜 제일 최근 물 준 날짜를 리턴
+        if (plant.getWateringList().size() != 0) {
+            return plant.getWateringList().get(0).getWateringDate();
+        }
+
+        // 물주기 정보가 없으면 식물을 데려온 날과 식물을 등록한 날짜를 가져옴
+        LocalDate birthday = plant.getBirthday(); // nullable
+        LocalDate createDate = plant.getCreateDate().toLocalDate();
+
+        // createDate은 무조건 데려온 날짜보다 같거나 미래 + not null
+        // 더 자세히 관찰하도록 과거의 날짜를 리턴
+        if (birthday != null) {
+            return birthday;
+        }
+
+        return createDate;
+    }
+
+
+    private int getWateringDDay(int recentWateringPeriod, LocalDate lastDrinkingDay) {
+        // 비료든 물이든 뭐라도 준지 며칠이나 지났는지 계산
+        int period = (int) Duration.between(lastDrinkingDay.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays();
+        return recentWateringPeriod - period;
+    }
+
+    private int getWateringCode(int recentWateringPeriod, int wateringDDay) {
+        // 음수           0        1          2         3
+        // 물주기 놓침     물주기     체크하기     놔두세요    오늘 물 줌
+
+        int wateringCode = 999;
+
+        if (wateringDDay == 0) {
+            // 물주기
+            wateringCode = 0;
+        } else if (wateringDDay == 1) {
+            // 물주기 하루 전
+            // 체크하세요
+            wateringCode = 1;
+        } else if (wateringDDay >= 2) {
+            // 물주기까지 이틀 이상 남음
+            // 놔두세요
+            wateringCode = 2;
+        } else if (recentWateringPeriod == wateringDDay) {
+            // 오늘 물 줌
+            wateringCode = 3;
+        } else if (wateringDDay < 0) {
+            // 음수가 나왔으면 물주기 놓침
+            // 며칠 늦었는지 알려줌
+            wateringCode = wateringDDay;
+        }
+
+        return wateringCode;
+    }
+
+    // -1           0           1
+    // 비료 사용 안함  맹물 주기
+    public int getFertilizingCode(List<Fertilizer> fertilizerList, int plantNo) {
+
+
         LocalDate latestFertilizedDay = wateringRepository.findLatestFertilizedDayByPlantNo(plantNo);
 
         // 비료를 준 적이 없는 경우
-        if(latestFertilizedDay == null){
+        if (latestFertilizedDay == null) {
             // 일단 맹물 주도록
             // TODO 첫 비료 스케줄 잡는 로직 추가
             return 0;
@@ -77,50 +150,7 @@ public class GardenServiceImpl implements GardenService {
         // log.debug("fertilizingSchedule: " + fertilizingSchedule);
 
         // 비료준 지 5일이 지났는지 확인하고 해당하는 코드 반환
-        return (fertilizingSchedule - FERTILIZING_SCHEDULE >= 0) ? 1 : 0;
+        return 0;
     }
 
-    @Override
-    public void calculateCode(PlantDto plantDto){
-        int recentWateringPeriod = plantDto.getAverageWateringPeriod();
-        LocalDate lastDrinkingDay = getLastDrinkingDay(plantDto.getPlantNo());
-
-        // 물을 준 적이 한 번도 없는 경우
-        if(lastDrinkingDay == null){
-            plantDto.setWateringCode(4);
-            plantDto.setFertilizingCode(0);
-
-            return;
-        }
-
-        // 비료 줄지 말지 여부 계산
-        int fertilizingCode = getFertilizingCode(plantDto.getPlantNo());
-
-        // 비료든 물이든 뭐라도 준지 며칠이나 지났는지 계산
-        // 관엽이라 한달 넘어갈 일은 없으므로 일만 계산
-        int period = Period.between(lastDrinkingDay, LocalDate.now()).getDays();
-
-        // 0이면 물 줄 날짜
-        // 1이면 물 주기 하루 전이니까 체크해보기
-        int wateringCode = recentWateringPeriod - period;
-
-        // 음수가 나오면 물주기를 놓친 것이므로
-        if(wateringCode < 0){
-            wateringCode = 2;
-            fertilizingCode = 0; // 비료 주기가 지났어도 비료 금지
-        } else if (wateringCode > 2){
-            // 3 이상이면... 딱히 할 일 없는 식물
-            wateringCode = 3;
-        }
-
-        // 오늘 물 준 식물
-        if(period == 0){
-            wateringCode = 5;
-        }
-
-        plantDto.setWateringCode(wateringCode);
-        plantDto.setFertilizingCode(fertilizingCode);
-
-        log.debug("after calculate: " + plantDto);
-    }
 }

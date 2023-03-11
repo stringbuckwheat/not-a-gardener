@@ -48,6 +48,7 @@ public class PlantDto {
         private String medium;
         private String plantSpecies;
         private int averageWateringPeriod;
+        private LocalDate birthday;
 
         public Plant toEntityWithMemberAndPlace(Member member, Place place){
             return Plant.builder()
@@ -59,6 +60,7 @@ public class PlantDto {
                     .plantSpecies(plantSpecies)
                     .averageWateringPeriod(averageWateringPeriod)
                     .createDate(LocalDateTime.now())
+                    .birthday(birthday)
                     .build();
         }
     }

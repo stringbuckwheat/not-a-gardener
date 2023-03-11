@@ -40,6 +40,7 @@ public class WateringDto {
 
     @AllArgsConstructor
     @Builder
+    @Getter
     public static class WateringResponse{
         private int wateringNo;
         private String plantName;
@@ -65,22 +66,31 @@ public class WateringDto {
     @AllArgsConstructor
     @Builder
     @Getter // (InvalidDefinitionException - No serializer found for class)
+    @ToString
     public static class WateringForOnePlant{
         private int wateringNo;
         private String fertilizerName;
         private LocalDate wateringDate;
+        private int wateringPeriod;
+
+        private static String getFertilizerName(Fertilizer fertilizer){
+            return fertilizer == null ? "맹물" : fertilizer.getFertilizerName();
+        }
 
         public static WateringForOnePlant from(Watering watering){
-            String fertilizerName = "맹물";
-
-            if(watering.getFertilizer() != null){
-                fertilizerName = watering.getFertilizer().getFertilizerName();
-            }
-
             return WateringForOnePlant.builder()
                     .wateringNo(watering.getWateringNo())
-                    .fertilizerName(fertilizerName)
+                    .fertilizerName(getFertilizerName(watering.getFertilizer()))
                     .wateringDate(watering.getWateringDate())
+                    .build();
+        }
+
+        public static WateringForOnePlant withWateringPeriodFrom(Watering watering, int wateringPeriod){
+            return WateringForOnePlant.builder()
+                    .wateringNo(watering.getWateringNo())
+                    .fertilizerName(getFertilizerName(watering.getFertilizer()))
+                    .wateringDate(watering.getWateringDate())
+                    .wateringPeriod(wateringPeriod)
                     .build();
         }
     }

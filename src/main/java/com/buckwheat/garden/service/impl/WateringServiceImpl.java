@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,12 +67,50 @@ public class WateringServiceImpl implements WateringService {
         return WateringDto.WateringResponse.from(watering);
     }
 
+    /**
+     *
+     * @param list 물 준 날짜의 DESC
+     * @return
+     */
+    public List<WateringDto.WateringForOnePlant> withWateringPeriodList(List<Watering> list){
+        List<WateringDto.WateringForOnePlant> wateringList = new ArrayList<>();
+
+        for(int i = 0; i < list.size(); i++){
+            if(i == list.size() - 1){
+                wateringList.add(
+                        WateringDto.WateringForOnePlant.from(list.get(i))
+                );
+
+                continue;
+            }
+
+            // 두 번째 데이터 부터는
+            LocalDate afterWateringDate = list.get(i).getWateringDate();
+            LocalDate prevWateringDate = list.get(i+1).getWateringDate();
+
+            int wateringPeriod = Period.between(prevWateringDate, afterWateringDate).getDays();
+
+            wateringList.add(
+                    WateringDto.WateringForOnePlant.withWateringPeriodFrom(list.get(i), wateringPeriod)
+            );
+        }
+
+        log.debug("wateringList: {}", wateringList);
+
+        return wateringList;
+    }
+
     public List<WateringDto.WateringForOnePlant> getWateringListForPlant(int plantNo) {
-        log.debug("getWateringListForPlant");
+        List<Watering> list = wateringRepository.findByPlant_plantNoOrderByWateringDateDesc(plantNo);
+
+        // 며칠만에 물 줬는지도 계산해줌
+        if(list.size() >= 2){
+            return withWateringPeriodList(list);
+        }
 
         List<WateringDto.WateringForOnePlant> wateringList = new ArrayList<>();
 
-        for(Watering watering : wateringRepository.findByPlant_plantNo(plantNo)){
+        for(Watering watering : list){
             wateringList.add(
                     WateringDto.WateringForOnePlant.from(watering)
             );

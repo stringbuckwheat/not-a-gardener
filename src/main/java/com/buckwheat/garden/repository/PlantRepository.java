@@ -20,9 +20,22 @@ public interface PlantRepository extends JpaRepository<Plant, Integer> {
     // EntityGraphType.LOAD: entity graph에 명시한 attribute는 eager,
     // 나머지 attribute는 entity에 명시한 fetchType이나 디폴트 fetchType
     // ex. @OneToMany는 LAZY, @ManyToOne은 EAGER가 디폴트
-    @EntityGraph(attributePaths = {"place"}, type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(attributePaths = {"place"}, type = EntityGraph.EntityGraphType.FETCH)
     List<Plant> findByMember_MemberNoOrderByCreateDateDesc(int memberNo);
 
+    /**
+     * GardenController에서 식물 카드를 만들 데이터
+     * @param memberNo
+     * @return Place, WateringList가 매핑된 Plant 객체 리스트
+     */
+    @EntityGraph(attributePaths = {"place", "wateringList"}, type = EntityGraph.EntityGraphType.FETCH)
+    List<Plant> findByMember_MemberNo(int memberNo);
+
+    /**
+     * Plant 페이지에서 식물 카드를 만들 데이터
+     * @param plantNo
+     * @return Place만 포함하는 plant 객체 하나
+     */
     @EntityGraph(attributePaths = {"place", "wateringList"}, type= EntityGraph.EntityGraphType.FETCH)
     Optional<Plant> findByPlantNo(int plantNo);
 }
