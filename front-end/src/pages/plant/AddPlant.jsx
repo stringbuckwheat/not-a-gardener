@@ -11,7 +11,8 @@ const AddPlant = () => {
     plantSpecies: "",
     placeNo: placeList[0].key,
     medium: "흙과 화분",
-    earlyWateringPeriod: 5
+    earlyWateringPeriod: 5,
+    birthday: ""
   }
 
   const itemObjectArray = [
@@ -48,6 +49,13 @@ const AddPlant = () => {
       label: "평균 물주기",
       name: "averageWateringPeriod",
       defaultValue: initPlant.averageWateringPeriod,
+      required: false
+    },
+    {
+      inputType: "date",
+      label: "반려 일자",
+      name: "birthday",
+      defaultValue: initPlant.birthday,
       required: false
     }
   ];

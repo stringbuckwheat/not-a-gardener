@@ -39,7 +39,7 @@ const Plant = () => {
 
     return (
         <PlantListLayout
-            title=""
+            title="나의 식물"
             url="/plant"
             path={"test"}
             deleteTitle="식물"

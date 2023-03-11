@@ -13,7 +13,8 @@ const PlantDetail = () => {
 
     const { state } = useLocation();
 
-    const [plant, setPlant] = useState({});
+    const [ plant, setPlant ] = useState({});
+    const [ wateringList, setWateringList ] = useState([{}]);
 
     useEffect(() => {
         authAxios.get(`/plant/${plantNo}`)
@@ -21,19 +22,21 @@ const PlantDetail = () => {
                 console.log("plant detail response", res.data);
                 setPlant(res.data);
             })
-            .catch((error) => {
-                console.log("error", error);
+
+        authAxios.get(`/plant/${plantNo}/watering`)
+            .then((res) => {
+                setWateringList(res.data);
             })
     }, [])
 
     useEffect(() => {
-        if(state != null){
+        if (state != null) {
             setPlant(state);
         }
     }, [state])
 
-    const [ onModify, setOnModify ] = useState(false);
-    const [ placeList, setPlaceList ] = useState({});
+    const [onModify, setOnModify] = useState(false);
+    const [placeList, setPlaceList] = useState({});
     const onClickModifyBtn = async () => {
         const places = await getPlaceList();
         console.log("places", places);
@@ -50,9 +53,9 @@ const PlantDetail = () => {
                 url="/plant"
                 path={plant.plantNo}
                 deleteTitle="식물"
-                tags={<PlantTag plant={plant} />}
+                tags={<PlantTag plant={plant} latestWateringDate={wateringList[0]}/>}
                 onClickModifyBtn={onClickModifyBtn}
-                bottomData={<WateringList plant={plant}/>}
+                bottomData={<WateringList plant={plant} wateringList={wateringList} />}
             />
             :
             <ModifyPlant

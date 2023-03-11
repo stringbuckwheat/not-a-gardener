@@ -12,7 +12,7 @@ const SubmitForAddButton = (props) => {
 
     const onClick = async () => {
         const res = await insertData(url, data);
-        navigate(url, { replace: true });
+        navigate(url, { replace: true, state: "insert" });
     }
 
     return (

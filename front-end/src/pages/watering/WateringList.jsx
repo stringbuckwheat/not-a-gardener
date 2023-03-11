@@ -1,17 +1,11 @@
 import authAxios from "src/utils/interceptors";
 import { useEffect, useState } from "react";
 import DefaultTable from "src/components/table/DefaultTable";
-import { CButton, CRow } from "@coreui/react";
-import AddWateringButton from "src/components/button/AddWateringButton";
-import { CCol, CFormSelect, CCard } from "@coreui/react";
-import { DatePicker } from 'antd';
+import { CButton } from "@coreui/react";
 import 'dayjs/locale/ko';
-import locale from 'antd/es/date-picker/locale/ko_KR';
-import CIcon from "@coreui/icons-react";
-import { cilDrop } from "@coreui/icons";
 import getFertilizerList from "src/api/backend-api/fertilizer/getFertilizerList";
-import { Select } from "antd";
 import AddWatering from "./AddWatering";
+import { Table } from "antd";
 
 /**
  * plant detail 아래쪽에 table로 들어감
@@ -21,34 +15,23 @@ import AddWatering from "./AddWatering";
 
 const WateringList = (props) => {
     const plant = props.plant;
-    console.log("watering list plant", plant);
-    const [wateringList, setWateringList] = useState([{}]);
-
-    useEffect(() => {
-        console.log("use effect plantNo", plant.plantNo);
-
-        authAxios.get(`/plant/${plant.plantNo}/watering`)
-            .then((res) => {
-                console.log("watering list response", res);
-                setWateringList(res.data);
-            })
-    }, [plant])
+    const wateringList = props.wateringList;
 
     const wateringTableColumnArray = [
         {
-            title: '날짜',
+            title: '언제',
             dataIndex: 'wateringDate',
             key: 'wateringDate'
         },
         {
-            title: 'fertilizerName',
+            title: '무엇을',
             dataIndex: 'fertilizerName',
             key: 'fertilizerName',
         },
         {
             title: '며칠만에',
-            dataIndex: 'fertilizerName',
-            key: 'fertilizerName',
+            dataIndex: 'wateringPeriod',
+            key: 'wateringPeriod',
         },
         {
             title: '해석',
@@ -64,7 +47,6 @@ const WateringList = (props) => {
     // 비료 
     const onClickFormBtn = async () => {
         const fetchFertilizerList = await getFertilizerList();
-        console.log("fetchFertilizerList", fetchFertilizerList);
 
         const fertilizerListForSelect = fetchFertilizerList.data.map((fertilizer) => {
             return (
@@ -74,15 +56,12 @@ const WateringList = (props) => {
                 }
             )
         })
-        console.log("map 이후", fertilizerListForSelect)
 
         // 맨 앞에 맹물 추가
         fertilizerListForSelect.unshift({
             value: 0,
             label: '맹물'
         })
-
-        console.log("맹물 추가", fertilizerListForSelect);
 
         setFertilizerList(fertilizerListForSelect);
         setFormOpen(true);
@@ -96,16 +75,24 @@ const WateringList = (props) => {
         <>
             {formOpen
                 ?
-                <AddWatering plantNo={plant.plantNo} closeForm={closeForm} fertilizerList={fertilizerList}/>
+                <AddWatering plantNo={plant.plantNo} closeForm={closeForm} fertilizerList={fertilizerList} />
                 : <>
                     {/* <AddWateringButton plantNo={plant.plantNo}/> */}
                     <CButton onClick={onClickFormBtn} color="info" size={"sm"} variant="outline" shape="rounded-pill">form 열기</CButton>
                     <CButton color="info" size={"sm"} variant="outline" shape="rounded-pill">물주기 정보 초기화</CButton>
                 </>}
-            <DefaultTable
-                path={plant.plantNo}
+
+            <Table
+                className="mt-3"
                 columns={wateringTableColumnArray}
-                list={wateringList} />
+                dataSource={wateringList.map((watering) => {
+                    return ({
+                        wateringDate: watering.wateringDate,
+                        fertilizerName: watering.fertilizerName,
+                        wateringPeriod: watering.wateringPeriod == 0 ? "" : `${watering.wateringPeriod}일만에`
+                    })
+                })}
+            />
         </>
 
     )

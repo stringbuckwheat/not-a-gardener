@@ -1,8 +1,9 @@
 import { Space, Button, Select } from 'antd';
-import authAxios from 'src/utils/interceptors';
 import getPlaceList from 'src/utils/function/getPlaceList';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import modifyPlantPlace from 'src/api/backend-api/place/modifyPlantPlace';
+import getPlaceListForOptionExceptHere from 'src/api/service/getPlaceListForOptionExceptHere';
 
 const ModifyPlantPlaceButton = (props) => {
   // 장소 번호
@@ -21,15 +22,7 @@ const ModifyPlantPlaceButton = (props) => {
     const data = await getPlaceList()
 
     // 이 장소가 아닌 장소만 select에 추가
-    const optionPlaceList = data.filter((place) => place.key != thisPlaceNo)
-    .map((place) => {
-        return (
-          {
-            label: place.value,
-            value: place.key
-          }
-        )
-      })
+    const optionPlaceList = getPlaceListForOptionExceptHere(data, thisPlaceNo);
 
     setPlaceList(optionPlaceList);
   }
@@ -42,39 +35,33 @@ const ModifyPlantPlaceButton = (props) => {
   // 장소 수정 함수
   const navigate = useNavigate();
 
-    const onClick = () => {
-      console.log("props.selectedPlantNo", props.selectedPlantNo);
+  const onClick = () => {
+    console.log("props.selectedPlantNo", props.selectedPlantNo);
 
-      const data = {
-        placeNo: placeNo,
-        plantList: props.selectedPlantNo
-      }
-
-      console.log("data", data);
-
-      authAxios.put("/plant/modify-place", data)
-      .then(() => {
-        navigate(`/place`, {replace: true})
-      }
-
-      )
+    const data = {
+      placeNo: placeNo,
+      plantList: props.selectedPlantNo
     }
 
-    // 변경할 장소의 placeNo 받아오기
-    const [ placeNo, setPlaceNo ] = useState();
-
-    const handleSelect = (value) => {
-      setPlaceNo(value);
-    }
-
-    return (
-      <Space size="small">
-        {`${props.selectedPlantNo.length}개의 식물을`}
-        <Select onChange={handleSelect} defaultValue={placeList[0].value} options={placeList} style={{ width: 100,}}/>
-        으로
-        <Button onClick={onClick} type="primary" ghost>이동</Button>
-      </Space>
-    )
+    modifyPlantPlace(data);
+    navigate(`/place`, { replace: true });
   }
 
-  export default ModifyPlantPlaceButton;
+  // 변경할 장소의 placeNo 받아오기
+  const [placeNo, setPlaceNo] = useState();
+
+  const handleSelect = (value) => {
+    setPlaceNo(value);
+  }
+
+  return (
+    <Space size="small">
+      {`${props.selectedPlantNo.length}개의 식물을`}
+      <Select onChange={handleSelect} defaultValue={placeList[0].value} options={placeList} style={{ width: 100, }} />
+      으로
+      <Button onClick={onClick} type="primary" ghost>이동</Button>
+    </Space>
+  )
+}
+
+export default ModifyPlantPlaceButton;
