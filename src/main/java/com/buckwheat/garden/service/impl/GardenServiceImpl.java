@@ -82,17 +82,7 @@ public class GardenServiceImpl implements GardenService {
             return plant.getWateringList().get(0).getWateringDate();
         }
 
-        // 물주기 정보가 없으면 식물을 데려온 날과 식물을 등록한 날짜를 가져옴
-        LocalDate birthday = plant.getBirthday(); // nullable
-        LocalDate createDate = plant.getCreateDate().toLocalDate();
-
-        // createDate은 무조건 데려온 날짜보다 같거나 미래 + not null
-        // 더 자세히 관찰하도록 과거의 날짜를 리턴
-        if (birthday != null) {
-            return birthday;
-        }
-
-        return createDate;
+        return plant.getCreateDate().toLocalDate();
     }
 
 
@@ -103,26 +93,33 @@ public class GardenServiceImpl implements GardenService {
     }
 
     private int getWateringCode(int recentWateringPeriod, int wateringDDay) {
-        // 음수           0        1          2         3
-        // 물주기 놓침     물주기     체크하기     놔두세요    오늘 물 줌
+        // 음수           0             1          2         3         4
+        // 물주기 놓침   물주기 정보 부족    물주기     체크하기     놔두세요    오늘 물 줌
 
         int wateringCode = 999;
 
-        if (wateringDDay == 0) {
-            // 물주기
+        if (recentWateringPeriod == 0) {
+            // 물주기 정보 부족
             wateringCode = 0;
+        } else if (wateringDDay == 0) {
+            // 물주기
+            wateringCode = 1;
         } else if (wateringDDay == 1) {
             // 물주기 하루 전
             // 체크하세요
-            wateringCode = 1;
+
+            wateringCode = 2;
         } else if (wateringDDay >= 2) {
             // 물주기까지 이틀 이상 남음
             // 놔두세요
-            wateringCode = 2;
-        } else if (recentWateringPeriod == wateringDDay) {
-            // 오늘 물 줌
+
             wateringCode = 3;
+        } else if(recentWateringPeriod == wateringDDay){
+            // 오늘 물 줌
+
+            wateringCode = 4;
         } else if (wateringDDay < 0) {
+
             // 음수가 나왔으면 물주기 놓침
             // 며칠 늦었는지 알려줌
             wateringCode = wateringDDay;
@@ -134,8 +131,6 @@ public class GardenServiceImpl implements GardenService {
     // -1           0           1
     // 비료 사용 안함  맹물 주기
     public int getFertilizingCode(List<Fertilizer> fertilizerList, int plantNo) {
-
-
         LocalDate latestFertilizedDay = wateringRepository.findLatestFertilizedDayByPlantNo(plantNo);
 
         // 비료를 준 적이 없는 경우

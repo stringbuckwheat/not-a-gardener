@@ -53,9 +53,12 @@ const PlantDetail = () => {
                 url="/plant"
                 path={plant.plantNo}
                 deleteTitle="식물"
-                tags={<PlantTag plant={plant} latestWateringDate={wateringList[0]}/>}
+                tags={<PlantTag
+                        plant={plant}
+                        latestWateringDate={wateringList[0]}
+                        wateringListSize={wateringList.length}/>}
                 onClickModifyBtn={onClickModifyBtn}
-                bottomData={<WateringList plant={plant} wateringList={wateringList} />}
+                bottomData={<WateringList plant={plant} wateringList={wateringList} setWateringList={setWateringList}/>}
             />
             :
             <ModifyPlant

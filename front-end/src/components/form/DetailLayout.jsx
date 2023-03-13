@@ -9,8 +9,6 @@ import DeleteModal from '../modal/DeleteModal';
 import { useState } from 'react';
 
 const DetailLayout = (props) => {
-  console.log("======== detail layout props", props);
-
   const url = props.url;
   const path = props.path;
   const title = props.title;
@@ -26,9 +24,8 @@ const DetailLayout = (props) => {
   }
 
   return (
-    <CContainer>
       <div className="row justify-content-md-center">
-        <CCol md="auto">
+        <CCol md="auto" style={{minWidth: '70%'}}>
           <CCard sm={6} className="mb-4">
             <CCardBody>
               <div>
@@ -51,7 +48,7 @@ const DetailLayout = (props) => {
           </CCard>
         </CCol>
       </div>
-    </CContainer>
+
   );
 }
 
