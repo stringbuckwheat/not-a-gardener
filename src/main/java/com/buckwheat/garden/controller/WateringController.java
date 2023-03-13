@@ -27,4 +27,9 @@ public class WateringController {
         log.debug("wateringRequest: {}", wateringRequest);
         return wateringService.addWatering(wateringRequest);
     }
+
+    @DeleteMapping("/{wateringNo}")
+    public void deleteWatering(@PathVariable int wateringNo){
+        wateringService.deleteWatering(wateringNo);
+    }
 }

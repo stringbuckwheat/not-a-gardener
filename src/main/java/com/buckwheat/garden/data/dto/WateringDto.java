@@ -46,21 +46,43 @@ public class WateringDto {
         private String plantName;
         private String fertilizerName;
         private LocalDate wateringDate;
+        private WateringMsg wateringMsg;
+
+        public static String getFertilizerName(Fertilizer fertilizer){
+            if(fertilizer != null){
+                return fertilizer.getFertilizerName();
+            }
+
+            return "맹물";
+        }
 
         public static WateringResponse from(Watering watering){
-            String fertilizerName = "맹물";
 
-            if(watering.getFertilizer() != null){
-                fertilizerName = watering.getFertilizer().getFertilizerName();
-            }
 
             return WateringResponse.builder()
                     .wateringNo(watering.getWateringNo())
                     .plantName(watering.getPlant().getPlantName())
-                    .fertilizerName(fertilizerName)
+                    .fertilizerName(getFertilizerName(watering.getFertilizer()))
                     .wateringDate(watering.getWateringDate())
                     .build();
         }
+
+        public static WateringResponse withWateringMsgFrom(Watering watering, WateringMsg wateringMsg){
+            return WateringResponse.builder()
+                    .wateringNo(watering.getWateringNo())
+                    .plantName(watering.getPlant().getPlantName())
+                    .fertilizerName(getFertilizerName(watering.getFertilizer()))
+                    .wateringDate(watering.getWateringDate())
+                    .wateringMsg(wateringMsg)
+                    .build();
+        }
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class WateringMsg{
+        private int wateringCode;
+        private int averageWateringDate; // 며칠만에 물 줬는지
     }
 
     @AllArgsConstructor
