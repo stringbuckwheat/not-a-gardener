@@ -1,13 +1,13 @@
 import authAxios from "src/utils/interceptors";
-import { useEffect, useState } from "react";
-import DefaultTable from "src/components/table/DefaultTable";
+import { useState } from "react";
 import { CButton } from "@coreui/react";
 import 'dayjs/locale/ko';
 import getFertilizerList from "src/api/backend-api/fertilizer/getFertilizerList";
 import AddWatering from "./AddWatering";
-import { Table, message, notification, Popconfirm } from "antd";
+import { Table, notification, Popconfirm } from "antd";
 import CIcon from "@coreui/icons-react";
-import { cilTrash, cilX } from "@coreui/icons";
+import { cilTrash } from "@coreui/icons";
+import getWateringNotificationMsg from "src/components/notification/getWateringNotificationMsg";
 
 /**
  * plant detail 아래쪽에 table로 들어감
@@ -21,7 +21,7 @@ const WateringList = (props) => {
     const setWateringList = props.setWateringList;
 
     // 오늘 물 줬는지
-    // == 불가능
+    // ==로 비교 불가능
     let isPlantWateredToday = false;
 
     if (wateringList.length > 0) {
@@ -117,51 +117,14 @@ const WateringList = (props) => {
 
     const [api, contextHolder] = notification.useNotification();
     const openNotification = (wateringMsg) => {
-        let title = "";
-        let content = "";
-
-        if (wateringMsg.wateringCode == -1) {
-            title = "물주기가 줄어들었어요!"
-            content = ```
-            물주기가 줄어든 이유는 다음과 같습니다.
-            1) 식물이 성장함
-            2) 볕이 잘 드는 장소로 옮김
-            3) 날씨가 더워졌거나 줄곧 맑았음
-            4) 식물이 있는 장소의 습도가 낮아짐
-            ```
-        } else if (wateringMsg.wateringCode == 0) {
-            title = "물주기 계산에 변동이 없습니다."
-            content = ""
-        } else if (wateringMsg.wateringCode == 1) {
-            title = "물주기가 늘어났어요"
-            content = ```
-            물주기가 늘어난 이유는 다음과 같습니다.
-            1) 식물에 문제가 생겼을 수 있어요. 점검해보세요.
-            2) 볕이 덜 드는 장소로 옮김
-            3) 날씨가 추워졌거나 줄곧 흐렸음
-            4) 식물이 있는 장소의 습도가 높아짐
-            ```
-        } else if (wateringMsg.wateringCode == 2) {
-            title = "축하합니다! 처음으로 물주기를 기록하셨네요"
-            content = "관수 주기를 기록하며 함께 키워요"
-        }
-
-        api.open({
-            message: title,
-            description: content,
-            duration: 4,
-        });
-    };
-
-    const addWatering = (fertilizerName, wateringPeriod) => {
-        const newWateringList = wateringList.push({
-            wateringDate: Date.now().toString,
-            fertilizerName: fertilizerName,
-            wateringPeriod: wateringPeriod == 0 ? "" : `${wateringPeriod}일만에`
-        })
-    }
-
+        const msg = getWateringNotificationMsg(wateringMsg.wateringCode)
     
+        api.open({
+          message: msg.title,
+          description: msg.content,
+          duration: 4,
+        });
+      };
 
     return (
         <>

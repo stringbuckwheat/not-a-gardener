@@ -6,7 +6,6 @@ import com.buckwheat.garden.data.entity.Place;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.repository.PlaceRepository;
 import com.buckwheat.garden.repository.PlantRepository;
-import com.buckwheat.garden.repository.WateringRepository;
 import com.buckwheat.garden.service.PlantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,12 +53,22 @@ public class PlantServiceImpl implements PlantService {
     @Override
     public PlantDto.PlantResponse modifyPlant(PlantDto.PlantRequest plantRequest, Member member) {
         Place place = placeRepository.findById(plantRequest.getPlaceNo()).orElseThrow(NoSuchElementException::new);
-        Plant updatedPlace = plantRequest.toEntityWithMemberAndPlace(member, place);
+        Plant updatedPlant = plantRequest.toEntityWithMemberAndPlace(member, place);
 
-        plantRepository.save(updatedPlace);
-        log.debug("PlantDto.PlantResponse.from(updatedPlace): {}", PlantDto.PlantResponse.from(updatedPlace));
+        plantRepository.save(updatedPlant);
+        log.debug("PlantDto.PlantResponse.from(updatedPlace): {}", PlantDto.PlantResponse.from(updatedPlant));
 
-        return PlantDto.PlantResponse.from(updatedPlace);
+        return PlantDto.PlantResponse.from(updatedPlant);
+    }
+
+    @Override
+    public PlantDto.PlantResponse postponeAverageWateringPeriod(int plantNo) {
+        Plant plant = plantRepository.findByPlantNo(plantNo).orElseThrow(NoSuchElementException::new);
+
+        // 물주기 하루 미룸!
+        Plant updatedPlant = plantRepository.save(plant.updateAverageWateringPeriod(plant.getAverageWateringPeriod() + 1));
+
+        return PlantDto.PlantResponse.from(updatedPlant);
     }
 
     @Override

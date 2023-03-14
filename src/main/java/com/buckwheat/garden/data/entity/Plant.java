@@ -32,8 +32,6 @@ public class Plant {
 
     private int earlyWateringPeriod;
 
-    private int fertilizingPeriod;
-
     private String medium;
 
     @NotNull
@@ -64,6 +62,11 @@ public class Plant {
 
     public Plant updatePlace(Place place){
         this.place = place;
+        return this;
+    }
+
+    public Plant updateAverageWateringPeriod(int averageWateringPeriod){
+        this.averageWateringPeriod = averageWateringPeriod;
         return this;
     }
 }

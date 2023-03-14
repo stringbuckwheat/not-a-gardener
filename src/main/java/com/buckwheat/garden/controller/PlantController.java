@@ -45,6 +45,11 @@ public class PlantController {
         return plantService.modifyPlant(plantRequestDto, userPrincipal.getMember());
     }
 
+    @PutMapping("/{plantNo}/averageWateringPeriod")
+    public PlantDto.PlantResponse postponeAverageWateringPeriod(@PathVariable("plantNo") int plantNo){
+        return plantService.postponeAverageWateringPeriod(plantNo);
+    }
+
     @PutMapping("/modify-place")
     public void modifyPlantPlace(@RequestBody ModifyPlantPlaceDto modifyPlantPlaceDto){
         plantService.modifyPlantPlace(modifyPlantPlaceDto);

@@ -20,6 +20,8 @@ public interface PlantService {
     /* 식물 수정 */
     PlantDto.PlantResponse modifyPlant(PlantDto.PlantRequest plantRequestDto, Member member);
 
+    PlantDto.PlantResponse postponeAverageWateringPeriod(int plantNo);
+
     /* 식물 삭제 */
     void deletePlantByPlantNo(int plantNo);
 

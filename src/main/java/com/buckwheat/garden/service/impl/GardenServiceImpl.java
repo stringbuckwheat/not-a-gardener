@@ -107,17 +107,14 @@ public class GardenServiceImpl implements GardenService {
         } else if (wateringDDay == 1) {
             // 물주기 하루 전
             // 체크하세요
-
             wateringCode = 2;
-        } else if (wateringDDay >= 2) {
-            // 물주기까지 이틀 이상 남음
-            // 놔두세요
-
-            wateringCode = 3;
         } else if(recentWateringPeriod == wateringDDay){
             // 오늘 물 줌
-
             wateringCode = 4;
+        } else if (wateringDDay >= 2) { // 얘가 wateringCode == 4 보다 먼저 걸린다
+            // 물주기까지 이틀 이상 남음
+            // 놔두세요
+            wateringCode = 3;
         } else if (wateringDDay < 0) {
 
             // 음수가 나왔으면 물주기 놓침

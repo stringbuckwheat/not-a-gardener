@@ -22,16 +22,12 @@ const AddWatering = (props) => {
     const [fertlizerNo, setFertilizerNo] = useState(0);
 
     const onSubmit = () => {
-        console.log("add watering submit")
-        console.log("typeof wateringDate", typeof wateringDate)
-
         authAxios.post("/watering", {
             plantNo: plantNo,
             fertilizerNo: fertlizerNo,
             wateringDate: wateringDate
         })
             .then((res) => {
-                const wateringMsg = res.data.wateringMsg;
                 openNotification(res.data.wateringMsg);
                 closeForm();
             })
@@ -41,10 +37,6 @@ const AddWatering = (props) => {
                     .then((res) => {
                         setWateringList(res.data);
                     })
-            }
-            )
-            .catch((err) => {
-                console.log("error", err);
             })
     }
 
