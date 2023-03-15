@@ -3,7 +3,6 @@ import { Space, Tag } from 'antd';
 const PlaceTag = (props) => {
     const place = props.place;
     const howManyPlant = props.howManyPlant;
-    console.log("tag props", place);
 
     let artificialLightTag = "식물등을 사용하지 않아요";
 

@@ -18,32 +18,62 @@ import java.util.List;
 public class PlaceController {
     private final PlaceService placeService;
 
+    /**
+     * 유저의 전체 장소 리스트
+     * @param userPrincipal
+     * @return 유저의 전체 장소 리스트, 카드용 DTO에 담아 보낸다.
+     */
     @GetMapping("")
     public List<PlaceDto.PlaceCard> getPlaceList(@AuthenticationPrincipal UserPrincipal userPrincipal){
         return placeService.getPlaceList(userPrincipal.getMember().getMemberNo());
     }
 
+    /**
+     * 하나의 장소 정보
+     * @param placeNo
+     * @return
+     */
     @GetMapping("/{placeNo}")
     public PlaceDto.PlaceResponseDto getPlace(@PathVariable int placeNo){
         return placeService.getPlace(placeNo);
     }
 
+    /**
+     * 해당 장소에 있는 식물 리스트 리턴
+     * @param placeNo PK
+     * @return
+     */
     @GetMapping("/{placeNo}/plant-list")
     public List<PlantDto.PlantInPlace> getPlantlistInPlace(@PathVariable int placeNo){
-        log.debug("placeNo: {}", placeNo);
         return placeService.getPlantlistInPlace(placeNo);
     }
 
+    /**
+     * 장소 추가
+     * @param placeRequestDto
+     * @param userPrincipal
+     * @return
+     */
     @PostMapping("")
     public PlaceDto.PlaceResponseDto addPlace(@RequestBody PlaceDto.PlaceRequestDto placeRequestDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
         return placeService.addPlace(placeRequestDto, userPrincipal.getMember());
     }
 
+    /**
+     * 장소 수정
+     * @param placeRequestDto
+     * @param userPrincipal Member
+     * @return 수정한 장소 정보
+     */
     @PutMapping("/{placeNo}")
     public PlaceDto.PlaceResponseDto modifyPlace(@RequestBody PlaceDto.PlaceRequestDto placeRequestDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
         return placeService.modifyPlace(placeRequestDto, userPrincipal.getMember());
     }
 
+    /**
+     * 하나의 장소 삭제
+     * @param placeNo
+     */
     @DeleteMapping("/{placeNo}")
     public void deletePlace(@PathVariable int placeNo){
         placeService.deletePlace(placeNo);

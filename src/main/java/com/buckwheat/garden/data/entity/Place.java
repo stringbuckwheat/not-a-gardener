@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,11 @@ public class Place {
 
     private String artificialLight;
 
+    @NotNull
     private String option;
+
+    @NotNull
+    private LocalDateTime createDate;
 
     // FK
     @ManyToOne(fetch=FetchType.LAZY)
@@ -42,15 +47,5 @@ public class Place {
         this.artificialLight = artificialLight;
 
         return this;
-    }
-
-    @Override
-    public String toString() {
-        return "Place{" +
-                "placeNo=" + placeNo +
-                ", placeName='" + placeName + '\'' +
-                ", artificialLight='" + artificialLight + '\'' +
-                ", option='" + option + '\'' +
-                '}';
     }
 }

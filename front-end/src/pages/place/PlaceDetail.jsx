@@ -1,16 +1,18 @@
-import { useLocation } from 'react-router-dom'
-import DetailLayout from 'src/components/form/DetailLayout';
+import { useLocation, useParams } from 'react-router-dom'
+import DetailLayout from 'src/data/layout/DetailLayout';
 import PlaceTag from './PlaceTag';
 import { useEffect, useState } from 'react';
 import ModifyPlace from './ModifyPlace';
-import authAxios from 'src/utils/interceptors';
-import PlantListInPlaceTable from './PlantListInPlacetable';
+import onMount from 'src/api/service/onMount';
+import DefaultTable from 'src/components/table/DefaultTable';
+import plantTableColArrInPlace from "src/utils/dataArray/plantTableColArrInPlace";
+import getPlantListForPlacePlantTable from 'src/utils/function/getPlantListForPlacePlantTable';
 
 const PlaceDetail = () => {
-  // props
+  const path = useParams().place;
   const { state } = useLocation();
-  console.log("placeDetail props", state);
-  const [ plantList, setPlantList ] = useState([{
+
+  const [plantList, setPlantList] = useState([{
     placeNo: 0,
     placeName: "",
     plantNo: 0,
@@ -23,18 +25,18 @@ const PlaceDetail = () => {
 
   const title = state.placeName; // 장소 이름
 
+  // 수정 컴포넌트를 띄울지, 상세보기 컴포넌트를 띄울지
   const [onModify, setOnModify] = useState(false);
+
+  // 부모 컴포넌트(PlaceDetail)의 state를 변경할 함수
+  // 자식인 DetailLayout, ModifyPlace 컴포넌트로 넘겨준다(수정하기/돌아가기 버튼)
   const onClickModifyBtn = () => {
     setOnModify(!onModify);
   }
 
   useEffect(() => {
-    authAxios.get(`/place/${state.placeNo}/plant-list`)
-    .then((res) => {
-      console.log("res.data", res.data);
-      setPlantList(res.data);
-    })
-  }, []);
+    onMount(`/place/${state.placeNo}/plant-list`, setPlantList)
+  }, [state]);
 
   return (
     !onModify
@@ -44,9 +46,16 @@ const PlaceDetail = () => {
         url="/place"
         path={state.placeNo}
         deleteTitle="장소"
-        tags={<PlaceTag place={state} howManyPlant={plantList.length}/>}
+        tags={<PlaceTag place={state} howManyPlant={plantList.length} />}
         onClickModifyBtn={onClickModifyBtn}
-        bottomData={<PlantListInPlaceTable list={plantList}/>}
+        deleteTooltipMsg="이 장소에 포함된 식물이 함께 삭제됩니다."
+        bottomData={
+          <DefaultTable
+            path={path}
+            columns={plantTableColArrInPlace}
+            list={getPlantListForPlacePlantTable(plantList)}
+            setPlantList={setPlantList}
+          />}
       />
       :
       <ModifyPlace

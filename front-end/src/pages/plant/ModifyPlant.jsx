@@ -11,6 +11,7 @@ const ModifyPlant = (props) => {
   const requiredValueArray = ["plantName"];
   const placeList = props.placeList;
   const isNumberArray = ["averageWateringPeriod"]
+  const setPlant = props.setPlant;
 
   const itemObjectArray = [
     {
@@ -58,6 +59,7 @@ const ModifyPlant = (props) => {
       isNumberArray={isNumberArray}
       submitUrl="plant"
       path={plant.plantNo}
+      callBackFunction={setPlant}
       onClickGetBackBtn={onClickGetBackBtn}
     />
   )

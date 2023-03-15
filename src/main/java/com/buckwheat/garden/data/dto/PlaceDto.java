@@ -4,10 +4,12 @@ import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.data.entity.Place;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 public class PlaceDto {
 
     /**
-     * Place INSERT, UPDATE 시에 사용할 DTO
+     * Place INSERT, UPDATE 요청 시에 사용할 DTO
      */
     @Getter
     @NoArgsConstructor
@@ -18,17 +20,22 @@ public class PlaceDto {
         private String artificialLight;
         private String option;
 
+        /**
+         * createDate로 쓸 LocalDateTime.now()를 포함한 엔티티를 반환
+         * @param member FK 매핑
+         * @return Place
+         */
         public Place toEntityWithMember(Member member){
             return Place.builder()
                     .placeNo(placeNo)
                     .placeName(placeName)
                     .artificialLight(artificialLight)
                     .option(option)
+                    .createDate(LocalDateTime.now())
                     .member(member)
                     .build();
         }
     }
-
 
     /**
      * 장소 리스트 카드에서 사용할 정보들
@@ -42,6 +49,7 @@ public class PlaceDto {
         private String artificialLight;
         private String option;
         private int plantListSize;
+        private LocalDateTime createDate;
 
         public static PlaceCard from(Place place){
             return PlaceDto.PlaceCard.builder()
@@ -50,6 +58,7 @@ public class PlaceDto {
                     .artificialLight(place.getArtificialLight())
                     .option(place.getOption())
                     .plantListSize(place.getPlantList().size())
+                    .createDate(place.getCreateDate())
                     .build();
         }
     }
@@ -57,7 +66,6 @@ public class PlaceDto {
     /**
      * 장소 CRUD의 Response로 사용할 DTO
      */
-    // @Getter
     @AllArgsConstructor
     @Builder
     @ToString

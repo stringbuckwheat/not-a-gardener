@@ -17,8 +17,8 @@ const SubmitForAddButton = (props) => {
 
     return (
         validation
-            ? <CButton type="button" color='success' onClick={onClick}>추가</CButton>
-            : <CButton type="button" color='secondary' variant="outline" disabled>추가</CButton>
+            ? <CButton type="button" color="success" onClick={onClick} className="float-end mt-1">추가</CButton>
+            : <CButton type="button" color="secondary" variant="outline" disabled className="float-end mt-1">추가</CButton>
     )
 }
 

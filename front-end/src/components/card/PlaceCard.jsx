@@ -1,52 +1,53 @@
 import { CCol, CWidgetStatsF } from "@coreui/react";
 import { cilLightbulb, cilHouse, cilEco, cilWindow } from "@coreui/icons";
 import CIcon from '@coreui/icons-react';
-import { useNavigate } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import PlaceDetail from "src/pages/place/PlaceDetail";
+import { Tag } from "antd";
 
 const PlaceCard = (props) => {
     const navigate = useNavigate();
     const place = props.place;
-    console.log("PlaceCard props", place);
 
     let color = "";
     let icon = {};
 
-    if(place.option === "실내"){
+    if (place.option === "실내") {
         color = "success";
         icon = cilHouse;
-    } else if(place.option === "베란다") {
+    } else if (place.option === "베란다") {
         color = "primary";
         icon = cilWindow;
-    } else if(place.option === "야외"){
+    } else if (place.option === "야외") {
         color = "warning";
         icon = cilEco;
     }
 
-    return(
+    return (
         <CCol md={3} xs={12}>
-            <CWidgetStatsF
-                className="mb-3"
-                // PlaceDetail로 감
-                onClick={() => navigate("/place/" + place.placeNo, {state: place})}
-                color={color}
-                icon={<CIcon icon={icon} height={30} />}
-                title={
-                    <>
-                        <div>{place.option}</div>
-                        <div className="mt-2"><small>{place.plantListSize}개의 식물이 살고 있어요</small></div>
-                    </>}
-                value={
-                    <>
-                        <div className="d-flex justify-content-between">
-                            <div>{place.placeName}</div>
-                            {place.artificialLight === "사용"
-                            ? <div> <CIcon icon={cilLightbulb}/></div>
-                            : <></>}
-                        </div>
-                    </>
+            <Link to={`/place/${place.placeNo}`} state={place} style={{ textDecoration: "none" }}>
+                <CWidgetStatsF
+                    className="mb-3"
+                    color={color}
+                    icon={<CIcon icon={icon} height={30} />}
+                    title={
+                        <>
+                            <div>{place.option}</div>
+                            <div className="mt-2 d-flex justify-content-end"><small>{place.plantListSize}개의 식물이 살고 있어요</small></div>
+                        </>
+                    }
+                    value={
+                        <>
+                            <div className="d-flex justify-content-between">
+                                <div>{place.placeName}</div>
+                                {place.artificialLight === "사용"
+                                    ? <div className="float-end"><CIcon icon={cilLightbulb} /></div>
+                                    : <></>}
+                            </div>
+                        </>
                     }
                 />
+            </Link>
         </CCol>
     )
 }

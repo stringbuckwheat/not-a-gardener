@@ -8,33 +8,34 @@ import {
   CModalHeader,
   CModalTitle,
 } from '@coreui/react'
-import authAxios from '../../utils/interceptors';
+import deleteData from 'src/api/backend-api/common/deleteData';
+import { useState } from 'react';
+import { DeleteOutlined } from '@ant-design/icons';
+import { Tooltip } from 'antd';
 
 const DeleteModal = (props) => {
-  const { visible, title, url, path, closeDeleteModal } = props;
-
+  const { title, url, path, deleteTooltipMsg } = props;
   const navigate = useNavigate();
 
   // 삭제 모달 메시지 만들기
-  
+
   const isEndWithVowel = (title) => {
     const finalCharCode = title.charCodeAt(title.length - 1);
 
-    if(finalCharCode >= 48 && finalCharCode <= 57){ // 숫자
+    if (finalCharCode >= 48 && finalCharCode <= 57) { // 숫자
       return isNumberEndWithVowel(finalCharCode); // 조사 구하기
-    } else if (finalCharCode >= 45032 && finalCharCode <= 55203){ // 한글
+    } else if (finalCharCode >= 45032 && finalCharCode <= 55203) { // 한글
       return isKoreanEndWithVowel(finalCharCode)
     } else if (
       (finalCharCode >= 65 && finalCharCode <= 90) // 영문 대문자
       || (finalCharCode >= 97 && finalCharCode <= 122) // 소문자
-    ){
+    ) {
       return isEnglishEndWithVowel(finalCharCode)
     } else {
       // 숫자, 한글, 영어에 해당하지 않으면 뒤에서 두 번째거로
       // isEndWithVowel(title.substring(title.length - 2));
     }
   }
-
 
   const isNumberEndWithVowel = (finalCharCode) => {
     const number = finalCharCode - 48;
@@ -50,9 +51,6 @@ const DeleteModal = (props) => {
 
   const isEnglishEndWithVowel = (finalCharCode) => {
     const finalCharacter = String.fromCharCode(finalCharCode).toLowerCase();
-    console.log("finalCharacter", finalCharacter);
-    const result = (finalCharacter == "a" || finalCharacter == "e" || finalCharacter == "i" || finalCharacter == "o" || finalCharacter == "u" || finalCharacter == "y");
-    console.log("result", result);
     return (finalCharacter == "a" || finalCharacter == "e" || finalCharacter == "i" || finalCharacter == "o" || finalCharacter == "u" || finalCharacter == "y")
   }
 
@@ -60,12 +58,15 @@ const DeleteModal = (props) => {
   const modalBodyMsg = title + (isEndWithVowel(title) ? '는' : '은');
 
   const remove = () => {
-    authAxios.delete(`${url}/${path}`)
-      .then(() => {
-        closeDeleteModal();
-        navigate(url);
-      })
+    deleteData(url, path);
+    closeDeleteModal();
+    navigate(url, { replace: true, state: "delete" });
   };
+
+  const [visible, setVisible] = useState(false);
+  const closeDeleteModal = () => {
+    setVisible(false);
+  }
 
   return (
     <>
@@ -79,6 +80,10 @@ const DeleteModal = (props) => {
           <CButton color="success" onClick={closeDeleteModal}>돌아가기</CButton>
         </CModalFooter>
       </CModal>
+
+      <Tooltip title={deleteTooltipMsg}>
+        <DeleteOutlined onClick={() => { setVisible(true) }} style={{ fontSize: '18px', color: 'grey' }} />
+      </Tooltip>
     </>
   )
 }

@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { CContainer, CRow, CCol, CWidgetStatsF } from "@coreui/react";
+import { CRow, CCol, CWidgetStatsF } from "@coreui/react";
 import { cilPlus } from "@coreui/icons";
 import CIcon from '@coreui/icons-react';
-import { useNavigate } from "react-router-dom";
 import PlaceCard from "../../components/card/PlaceCard";
-import authAxios from "src/utils/interceptors";
+import onMount from "src/api/service/onMount";
+import { Link } from "react-router-dom";
+import ListHeader from "src/data/header/ListHeader";
+import NoItem from "src/components/NoItem";
+import AddItemButton from "src/components/button/AddItemButton";
 
 const Place = () => {
     const [placeList, setPlaceList] = useState([{
@@ -13,41 +16,44 @@ const Place = () => {
         option: '',
         artificialLight: '',
         plantQuantity: -1,
-        plantListSize: 0
+        plantListSize: 0,
+        createDate: ''
     }]);
 
-    const navigate = useNavigate();
-
+    // add시에는 페이지 이동때문에 자동으로 마운트됨
     useEffect(() => {
-        authAxios.get("/place")
-            .then((res) => {
-                console.log("Place res.data", res.data);
-                setPlaceList(res.data);
-            })
-            .catch((error) => {
-                console.log("error");
-            })
+        onMount("/place", setPlaceList);
     }, [])
 
     return (
-        <CContainer fluid>
-            <CRow>
-                <CCol md={3} xs={12}>
-                    <CWidgetStatsF
-                        className="mb-3"
-                        color="dark"
-                        icon={<CIcon icon={cilPlus} height={30} />}
-                        value="새로운 장소 추가"
-                        onClick={() => { navigate("/place/add") }}
-                    />
-                </CCol>
+        <>
+            {
+                placeList.length == 0
+                    ? <NoItem title="등록된 장소가 없어요" button={<AddItemButton addUrl="/place/add" size="lg" title="장소 추가하기"/>} />
+                    :
+                    <>
+                        <ListHeader placeList={placeList} setPlaceList={setPlaceList} />
+                        <CRow>
+                            <CCol md={3} xs={12}>
+                                <Link to="/place/add" style={{ textDecoration: "none" }}>
+                                    <CWidgetStatsF
+                                        className="mb-3"
+                                        color="dark"
+                                        icon={<CIcon icon={cilPlus} height={30} />}
+                                        value="새로운 장소 추가"
+                                    />
+                                </Link>
+                            </CCol>
 
-                {/* 카드 컴포넌트 반복 */}
-                {placeList.map((place) => (
-                    <PlaceCard place={place} />
-                ))}
-            </CRow>
-        </CContainer>
+                            {/* 카드 컴포넌트 반복 */}
+                            {placeList.map((place) => (
+                                <PlaceCard place={place} />
+                            ))}
+                        </CRow>
+                    </>
+
+            }
+        </>
     );
 }
 

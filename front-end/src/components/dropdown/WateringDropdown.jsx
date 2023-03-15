@@ -86,7 +86,9 @@ const WateringDropdown = (props) => {
             className="float-end"
             placement="bottomRight"
             arrow>
-            <Button type="link">bottomRight</Button>
+            <div>
+                <Button type="link">물 주기/미루기</Button>
+            </div>
         </Dropdown>
     )
 }

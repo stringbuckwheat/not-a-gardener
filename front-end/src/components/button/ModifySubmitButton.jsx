@@ -1,6 +1,6 @@
 import { CButton } from "@coreui/react";
 import { useNavigate } from "react-router-dom";
-import authAxios from "src/utils/interceptors";
+import updateData from "src/api/backend-api/common/updateData";
 
 const ModifySubmitButton = (props) => {
     const data = props.data; // 제출할 데이터
@@ -11,12 +11,13 @@ const ModifySubmitButton = (props) => {
 
     const navigate = useNavigate();
 
-    const updateData = async () => {
-        authAxios.put(`/${url}/${path}`, data)
-        .then((res) => {
-            changeModifyState();
-            navigate("", { replace: true, state: res.data });
-        })
+    const submit = async (e) => {
+        console.log("url, path, data", {url, path, data});
+        const res = await updateData(url, path, data);
+        console.log("res", res);
+
+        navigate("", { replace: true, state: res });
+        changeModifyState();
     }
 
 
@@ -24,7 +25,7 @@ const ModifySubmitButton = (props) => {
         <>
             {
                 validation
-                    ? <CButton type="button" color='success' onClick={updateData}>수정</CButton>
+                    ? <CButton type="button" color='success' onClick={submit}>수정</CButton>
                     : <CButton type="button" color='secondary' variant="outline" disabled>수정</CButton>
             }
         </>

@@ -1,8 +1,9 @@
-import { CContainer, CForm, CButton, CCol, CCard, CCardBody } from "@coreui/react";
+import { CForm, CCol, CCard, CCardBody, CRow } from "@coreui/react";
 import { useState } from "react";
 import FormInputHandler from "./FormInputHandler";
-import DeleteModal from "../modal/DeleteModal";
 import ModifySubmitButton from "../button/ModifySubmitButton";
+import { RollbackOutlined } from "@ant-design/icons";
+import { Tooltip } from 'antd';
 
 const ModifyForm = (props) => {
     //// props
@@ -31,6 +32,9 @@ const ModifyForm = (props) => {
     // 수정 취소 버튼(뒤로가기)의 onClick 함수
     const onClickGetBackBtn = props.onClickGetBackBtn;
 
+    // 수정 후 콜백 함수
+    const callBackFunction = props.callBackFunction;
+
     //// ModifyForm의 변수와 함수
     // form이 유효성 검사를 완료했는지
     const [validation, setValidation] = useState(false);
@@ -51,39 +55,46 @@ const ModifyForm = (props) => {
     }
 
     return (
-        <CContainer>
-            <div className="row justify-content-md-center">
-                <CCol md="auto">
-                    <CCard sm={6} className="mb-4">
-                        <CCardBody>
-                            <div>
+        <div className="row justify-content-md-center">
+            <CCol md="auto" style={{ minWidth: '60%' }}>
+                <CCard sm={6} className="mb-4" >
+                    <CCardBody>
+                        <CRow className="mb-3">
+                            <CCol>
                                 <h4 className="mt-3">{title} 수정</h4>
-                                <div className="d-flex justify-content-end">
-                                    <CButton onClick={onClickGetBackBtn} type="button" color="success" variant="outline" size="sm">뒤로 가기</CButton>
+                            </CCol>
+                            <CCol>
+                                <div className="d-flex justify-content-end mt-4">
+                                    <Tooltip title="뒤로가기">
+                                        <RollbackOutlined 
+                                            onClick={onClickGetBackBtn}
+                                            style={{ fontSize: '18px', color: 'grey' }} />
+                                    </Tooltip>
                                 </div>
-                            </div>
-                            <CForm validated={true}>
-                                {/* input, select 등을 구해서 채움 */}
-                                <FormInputHandler
-                                    itemObjectArray={itemObjectArray}
-                                    onChange={onChange}
-                                    inputObject={inputObject} />
+                            </CCol>
+                        </CRow>
+                        <CForm validated={true}>
+                            {/* input, select 등을 구해서 채움 */}
+                            <FormInputHandler
+                                itemObjectArray={itemObjectArray}
+                                onChange={onChange}
+                                inputObject={inputObject} />
 
-                                {/* 수정 제출 버튼 */}
-                                <div className="d-flex justify-content-end">
-                                    <ModifySubmitButton
-                                        url={url}
-                                        path={path}
-                                        data={inputObject}
-                                        changeModifyState={onClickGetBackBtn}
-                                        validation={validation} />
-                                </div>
-                            </CForm>
-                        </CCardBody>
-                    </CCard>
-                </CCol>
-            </div>
-        </CContainer>
+                            {/* 수정 제출 버튼 */}
+                            <div className="d-flex justify-content-end">
+                                <ModifySubmitButton
+                                    url={url}
+                                    path={path}
+                                    data={inputObject}
+                                    changeModifyState={onClickGetBackBtn}
+                                    callBackFunction={callBackFunction}
+                                    validation={validation} />
+                            </div>
+                        </CForm>
+                    </CCardBody>
+                </CCard>
+            </CCol>
+        </div>
     )
 }
 
