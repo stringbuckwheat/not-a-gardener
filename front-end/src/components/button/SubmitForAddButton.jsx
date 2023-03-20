@@ -8,6 +8,8 @@ const SubmitForAddButton = (props) => {
     const data = props.data;
     const validation = props.validation;
 
+    console.log("버튼 validation", validation);
+
     const navigate = useNavigate();
 
     const onClick = async () => {

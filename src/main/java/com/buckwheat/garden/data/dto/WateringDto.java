@@ -1,6 +1,6 @@
 package com.buckwheat.garden.data.dto;
 
-import com.buckwheat.garden.data.entity.Fertilizer;
+import com.buckwheat.garden.data.entity.Chemical;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Watering;
 import lombok.*;
@@ -8,24 +8,19 @@ import lombok.*;
 import java.time.LocalDate;
 
 public class WateringDto {
-//    private int wateringNo;
-//    private int plantNo;
-//    private int fertilizerNo;
-//    private String fertilizerName;
-//    private LocalDate wateringDate;
 
     @NoArgsConstructor
     @Getter
     @ToString
     public static class WateringRequest{
         private int plantNo;
-        private int fertilizerNo;
+        private int chemicalNo;
         private LocalDate wateringDate;
 
-        public Watering toEntityWithPlantAndFertilizer(Plant plant, Fertilizer fertilizer){
+        public Watering toEntityWithPlantAndChemical(Plant plant, Chemical chemical){
             return Watering.builder()
                     .plant(plant)
-                    .fertilizer(fertilizer)
+                    .chemical(chemical)
                     .wateringDate(wateringDate)
                     .build();
         }
@@ -44,13 +39,13 @@ public class WateringDto {
     public static class WateringResponse{
         private int wateringNo;
         private String plantName;
-        private String fertilizerName;
+        private String chemicalName;
         private LocalDate wateringDate;
         private WateringMsg wateringMsg;
 
-        public static String getFertilizerName(Fertilizer fertilizer){
-            if(fertilizer != null){
-                return fertilizer.getFertilizerName();
+        public static String getChemicalName(Chemical chemical){
+            if(chemical != null){
+                return chemical.getChemicalName();
             }
 
             return "맹물";
@@ -62,7 +57,7 @@ public class WateringDto {
             return WateringResponse.builder()
                     .wateringNo(watering.getWateringNo())
                     .plantName(watering.getPlant().getPlantName())
-                    .fertilizerName(getFertilizerName(watering.getFertilizer()))
+                    .chemicalName(getChemicalName(watering.getChemical()))
                     .wateringDate(watering.getWateringDate())
                     .build();
         }
@@ -71,7 +66,7 @@ public class WateringDto {
             return WateringResponse.builder()
                     .wateringNo(watering.getWateringNo())
                     .plantName(watering.getPlant().getPlantName())
-                    .fertilizerName(getFertilizerName(watering.getFertilizer()))
+                    .chemicalName(getChemicalName(watering.getChemical()))
                     .wateringDate(watering.getWateringDate())
                     .wateringMsg(wateringMsg)
                     .build();
@@ -91,18 +86,18 @@ public class WateringDto {
     @ToString
     public static class WateringForOnePlant{
         private int wateringNo;
-        private String fertilizerName;
+        private String chemicalName;
         private LocalDate wateringDate;
         private int wateringPeriod;
 
-        private static String getFertilizerName(Fertilizer fertilizer){
-            return fertilizer == null ? "맹물" : fertilizer.getFertilizerName();
+        private static String getChemicalName(Chemical chemical){
+            return chemical == null ? "맹물" : chemical.getChemicalName();
         }
 
         public static WateringForOnePlant from(Watering watering){
             return WateringForOnePlant.builder()
                     .wateringNo(watering.getWateringNo())
-                    .fertilizerName(getFertilizerName(watering.getFertilizer()))
+                    .chemicalName(getChemicalName(watering.getChemical()))
                     .wateringDate(watering.getWateringDate())
                     .build();
         }
@@ -110,7 +105,7 @@ public class WateringDto {
         public static WateringForOnePlant withWateringPeriodFrom(Watering watering, int wateringPeriod){
             return WateringForOnePlant.builder()
                     .wateringNo(watering.getWateringNo())
-                    .fertilizerName(getFertilizerName(watering.getFertilizer()))
+                    .chemicalName(getChemicalName(watering.getChemical()))
                     .wateringDate(watering.getWateringDate())
                     .wateringPeriod(wateringPeriod)
                     .build();
@@ -122,14 +117,38 @@ public class WateringDto {
     public static class WateringList{
         private int wateringNo;
         private String plantName;
-        private String fertilizerName;
+        private String chemicalName;
         private LocalDate wateringDate;
 
         public static WateringList from(Watering watering){
             return WateringList.builder()
                     .wateringNo(watering.getWateringNo())
                     .plantName(watering.getPlant().getPlantName())
-                    .fertilizerName(watering.getFertilizer().getFertilizerName())
+                    .chemicalName(watering.getChemical().getChemicalName())
+                    .wateringDate(watering.getWateringDate())
+                    .build();
+        }
+    }
+
+    @AllArgsConstructor
+    @Builder
+    @Getter
+    @ToString
+    public static class WateringResponseInChemical{
+        private int wateringNo;
+        private int plantNo;
+        private String plantName;
+        private int placeNo;
+        private String placeName;
+        private LocalDate wateringDate;
+
+        public static WateringResponseInChemical from(Watering watering){
+            return WateringResponseInChemical.builder()
+                    .wateringNo(watering.getWateringNo())
+                    .plantNo(watering.getPlant().getPlantNo())
+                    .plantName(watering.getPlant().getPlantName())
+                    .placeNo(watering.getPlant().getPlace().getPlaceNo())
+                    .placeName(watering.getPlant().getPlace().getPlaceName())
                     .wateringDate(watering.getWateringDate())
                     .build();
         }

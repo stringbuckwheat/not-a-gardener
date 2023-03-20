@@ -2,8 +2,6 @@ import { CCol, CWidgetStatsF } from "@coreui/react";
 import { cilLightbulb, cilHouse, cilEco, cilWindow } from "@coreui/icons";
 import CIcon from '@coreui/icons-react';
 import { Link, useNavigate } from "react-router-dom";
-import PlaceDetail from "src/pages/place/PlaceDetail";
-import { Tag } from "antd";
 
 const PlaceCard = (props) => {
     const navigate = useNavigate();

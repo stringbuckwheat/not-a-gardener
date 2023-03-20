@@ -18,7 +18,7 @@ public class GardenController {
 
     // garden 메인 페이지의 데이터 받아오기
     @GetMapping("/garden")
-    public List<GardenDto> garden(@AuthenticationPrincipal UserPrincipal userPrincipal){
+    public List<GardenDto.GardenResponse> garden(@AuthenticationPrincipal UserPrincipal userPrincipal){
         return gardenService.getGarden(userPrincipal.getMember().getMemberNo());
     }
 }

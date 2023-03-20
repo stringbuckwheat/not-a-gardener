@@ -1,19 +1,18 @@
 import { CButton } from "@coreui/react"
-import getPlaceList from "src/utils/function/getPlaceList"
 import { useNavigate } from "react-router-dom"
+import getPlaceListForSelect from "src/api/service/getPlaceListForSelect";
 
 const AddPlantButton = (props) => {
+  const size = props.size;
     const navigate = useNavigate();
 
     const onClick = async () => {
-      const placeList = await getPlaceList()
-
+      const placeList = await getPlaceListForSelect("/place");
       navigate("/plant/add", { state: placeList });
-      console.log("navigate");
     }
 
     return (
-        <CButton onClick={onClick} color="success" size={props.size} variant="outline" shape="rounded-pill">식물 추가하기</CButton>
+        <CButton onClick={onClick} color="success" size={size} variant="outline" shape="rounded-pill">식물 추가하기</CButton>
     )
 }
 

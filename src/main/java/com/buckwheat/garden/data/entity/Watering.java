@@ -26,14 +26,14 @@ public class Watering {
     @JoinColumn(name="plant_no")
     private Plant plant;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "fertilizer_no")
-    private Fertilizer fertilizer;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chemical_no")
+    private Chemical chemical;
 
-    public Watering update(LocalDate wateringDate, Plant plant, Fertilizer fertilizer){
+    public Watering update(LocalDate wateringDate, Plant plant, Chemical Chemical){
         this.wateringDate = wateringDate;
         this.plant = plant;
-        this.fertilizer = fertilizer;
+        this.chemical = Chemical;
 
         return this;
     }

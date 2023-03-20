@@ -1,51 +1,26 @@
 import { useEffect, useState } from "react";
-import authAxios from "src/utils/interceptors";
-import PlantTable from "./PlantTable";
-import PlantListLayout from "src/data-layout/PlantListLayout";
-import PlantListTag from "./PlantListTag";
-import { useLocation } from "react-router-dom";
+import onMountWithLength from "src/api/service/onMountWithLength";
+import AddPlantButton from "src/components/button/AddPlantButton";
+import NoItem from "src/components/NoItem";
+import PlantList from "./PlantList";
 
 const Plant = () => {
-    const [plantList, setPlantList] = useState([{
-        plantNo: 0,
-        plantName: '',
-        placeNo: 0,
-        placeName: '',
-        medium: '',
-        plantSpecies: '',
-        createDate: ''
-    }]);
-
-    const { state } = useLocation();
-    console.log("plant 메인 페이지 state", state);
+    const [hasPlant, setHasPlant] = useState(false);
+    const [plantList, setPlantList] = useState([]);
 
     useEffect(() => {
-        authAxios.get("/plant")
-            .then((res) => {
-                console.log("res.data", res.data);
-                setPlantList(res.data);
-            })
-    }, []);
-
-    useEffect(() => {
-        if(state != null){
-            authAxios.get("/plant")
-            .then((res) => {
-                console.log("res.data", res.data);
-                setPlantList(res.data);
-            })
-        }
-    }, [state])
+        onMountWithLength("/garden", setPlantList, setHasPlant);
+        console.log("plantList", plantList);
+    }, [])
 
     return (
-        <PlantListLayout
-            title="나의 식물"
-            url="/plant"
-            path={"test"}
-            deleteTitle="식물"
-            tags={<PlantListTag howManyPlants={plantList.length} />}
-            bottomData={<PlantTable plantList={plantList} />}
-        />
+        <>
+            {
+                !hasPlant
+                    ? <NoItem title="등록된 식물이 없어요" button={<AddPlantButton addUrl="/plant/add" size="lg" title="식물 추가하기" />} />
+                    : <PlantList plantList={plantList} setPlantList={setPlantList} />
+            }
+        </>
     )
 }
 

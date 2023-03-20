@@ -11,11 +11,8 @@ const ModifySubmitButton = (props) => {
 
     const navigate = useNavigate();
 
-    const submit = async (e) => {
-        console.log("url, path, data", {url, path, data});
+    const submit = async () => {
         const res = await updateData(url, path, data);
-        console.log("res", res);
-
         navigate("", { replace: true, state: res });
         changeModifyState();
     }

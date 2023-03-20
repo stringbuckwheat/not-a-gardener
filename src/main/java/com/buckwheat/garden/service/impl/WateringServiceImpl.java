@@ -1,10 +1,10 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.data.dto.WateringDto;
-import com.buckwheat.garden.data.entity.Fertilizer;
+import com.buckwheat.garden.data.entity.Chemical;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Watering;
-import com.buckwheat.garden.repository.FertilizerRepository;
+import com.buckwheat.garden.repository.ChemicalRepository;
 import com.buckwheat.garden.repository.PlantRepository;
 import com.buckwheat.garden.repository.WateringRepository;
 import com.buckwheat.garden.service.WateringService;
@@ -25,7 +25,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class WateringServiceImpl implements WateringService {
     private final WateringRepository wateringRepository;
-    private final FertilizerRepository fertilizerRepository;
+    private final ChemicalRepository ChemicalRepository;
     private final PlantRepository plantRepository;
 
     @Override
@@ -51,6 +51,11 @@ public class WateringServiceImpl implements WateringService {
         return wateringDtoList;
     }
 
+    /**
+     * 이번 관수가 며칠만인지 계산
+     * @param latestWateringDate DB에 저장된 가장 최근 물주기
+     * @return 이번 관수가 며칠만인지
+     */
     public int calculateWateringPeriod(LocalDateTime latestWateringDate){
         // 최근 물주기가 변경되었는지 확인하기
         // ex. 그간 나흘마다 물을 주다가 사흘만에 흙이 마르게 되었다.
@@ -66,7 +71,6 @@ public class WateringServiceImpl implements WateringService {
         if(period != plant.getAverageWateringPeriod()){
             log.debug("average watering period 변경");
             log.debug("{}일 -> {}일", plant.getAverageWateringPeriod(), period);
-            // 여기서 메시지도 줘야함
             return plantRepository.save(plant.updateAverageWateringPeriod(period));
         }
 
@@ -76,10 +80,10 @@ public class WateringServiceImpl implements WateringService {
     }
 
     Watering getWateringEntityForAdd(WateringDto.WateringRequest wateringRequest, Plant plant){
-        // 비료를 줬으면 fertilizer를 매핑한 entity 리턴
-        if(wateringRequest.getFertilizerNo() != 0){
-            Fertilizer fertilizer = fertilizerRepository.findById(wateringRequest.getFertilizerNo()).orElseThrow(NoSuchElementException::new);
-            return wateringRequest.toEntityWithPlantAndFertilizer(plant, fertilizer);
+        // 비료를 줬으면 Chemical를 매핑한 entity 리턴
+        if(wateringRequest.getChemicalNo() != 0){
+            Chemical Chemical = ChemicalRepository.findById(wateringRequest.getChemicalNo()).orElseThrow(NoSuchElementException::new);
+            return wateringRequest.toEntityWithPlantAndChemical(plant, Chemical);
         }
 
         // 맹물을 줬으면 plant만 매핑해서 리턴
@@ -102,7 +106,7 @@ public class WateringServiceImpl implements WateringService {
     }
 
     /**
-     * 물주기 기록 추가하기
+     * 물주기 기록 추가하기(무조건 '오늘' 버전 메소드)
      * @param wateringRequest
      * @return WateringResponseDto
      */
@@ -123,7 +127,7 @@ public class WateringServiceImpl implements WateringService {
         int wateringCode = getWateringCode(period, prevPlant.getAverageWateringPeriod());
 
         // 해당 식물을 조회한 뒤, 물주기 정보를 업데이트할지 말지 결정 후 Plant를 돌려준다
-        // 비료를 줬으면 Fertilizer, Plant를 포함하는 Watering 엔티티,
+        // 비료를 줬으면 Chemical, Plant를 포함하는 Watering 엔티티,
         // 맹물을 줬으면 Plant만 포함하는 엔티티
         Plant plant = getPlantForAdd(prevPlant, period);
 
@@ -169,6 +173,7 @@ public class WateringServiceImpl implements WateringService {
         return wateringList;
     }
 
+    @Override
     public List<WateringDto.WateringForOnePlant> getWateringListForPlant(int plantNo) {
         List<Watering> list = wateringRepository.findByPlant_plantNoOrderByWateringDateDesc(plantNo);
 
@@ -192,9 +197,9 @@ public class WateringServiceImpl implements WateringService {
     @Override
     public WateringDto.WateringResponse modifyWatering(WateringDto.WateringRequest wateringRequest) {
         Plant plant = plantRepository.findById(wateringRequest.getPlantNo()).orElseThrow(NoSuchElementException::new);
-        Fertilizer fertilizer = fertilizerRepository.findById(wateringRequest.getFertilizerNo()).orElseThrow(NoSuchElementException::new);
+        Chemical Chemical = ChemicalRepository.findById(wateringRequest.getChemicalNo()).orElseThrow(NoSuchElementException::new);
 
-        Watering watering = wateringRepository.save(wateringRequest.toEntityWithPlantAndFertilizer(plant, fertilizer));
+        Watering watering = wateringRepository.save(wateringRequest.toEntityWithPlantAndChemical(plant, Chemical));
 
         return WateringDto.WateringResponse.from(watering);
     }

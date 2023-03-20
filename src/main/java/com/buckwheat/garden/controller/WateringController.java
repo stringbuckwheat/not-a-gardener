@@ -23,7 +23,7 @@ public class WateringController {
     }
 
     @PostMapping("")
-    public WateringDto.WateringResponse addWatering(@RequestBody  WateringDto.WateringRequest wateringRequest){
+    public WateringDto.WateringResponse addWatering(@RequestBody WateringDto.WateringRequest wateringRequest){
         log.debug("wateringRequest: {}", wateringRequest);
         return wateringService.addWatering(wateringRequest);
     }

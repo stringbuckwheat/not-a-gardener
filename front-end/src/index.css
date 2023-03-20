@@ -12,6 +12,31 @@ code {
   font-style: normal;
 }
 
+/* custum */
+.garden {
+  color: #023020;
+}
+
+.noTextDecoration {
+  text-decoration: none;
+}
+
+.text-black {
+  color: black;
+}
+
+.new-line {
+  white-space: pre-wrap;
+}
+
+.width-100 {
+  width: 100%
+}
+
+.minWidth-70 {
+  min-width: 70%;
+}
+
 /* 소셜 로그인 */
 
 body {

@@ -1,17 +1,22 @@
 import mediumArray from "src/utils/dataArray/mediumArray";
-import getPlaceList from "src/utils/function/getPlaceList";
-import ModifyForm from "src/components/form/ModifyForm";
+import { useState } from "react";
+import ItemForm from "src/components/form/ItemForm";
+import ModifyFormButtons from "src/components/button/ModifyFormButtons";
 
 const ModifyPlant = (props) => {
   console.log("modify plant props", props);
 
-  const title = props.title;
-  const onClickGetBackBtn = props.onClickGetBackBtn;
-  const plant = props.plant;
-  const requiredValueArray = ["plantName"];
+  const changeModifyState = props.changeModifyState;
   const placeList = props.placeList;
-  const isNumberArray = ["averageWateringPeriod"]
-  const setPlant = props.setPlant;
+
+  const [plant, setPlant] = useState(props.plant)
+  console.log("modify plant", plant);
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setPlant(setPlant => ({ ...plant, [name]: value }));
+    console.log("onchange", plant);
+  }
 
   const itemObjectArray = [
     {
@@ -50,18 +55,21 @@ const ModifyPlant = (props) => {
     }
   ];
 
+  const validation = plant.plantName != "";
+
   return (
-    <ModifyForm
-      title={title}
+    <ItemForm
+      title="식물 수정"
       inputObject={plant}
       itemObjectArray={itemObjectArray}
-      requiredValueArray={requiredValueArray}
-      isNumberArray={isNumberArray}
-      submitUrl="plant"
-      path={plant.plantNo}
-      callBackFunction={setPlant}
-      onClickGetBackBtn={onClickGetBackBtn}
-    />
+      onChange={onChange}
+      submitBtn={<ModifyFormButtons
+        data={plant}
+        url="plant"
+        path={plant.plantNo}
+        changeModifyState={changeModifyState}
+        validation={validation}
+        onClickModifyBtn={changeModifyState} />} />
   )
 }
 

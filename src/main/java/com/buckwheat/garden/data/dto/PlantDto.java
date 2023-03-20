@@ -18,21 +18,26 @@ public class PlantDto {
         private String plantName;
         private String plantSpecies;
         private int averageWateringPeriod;
+        private int earlyWateringPeriod;
         private String medium;
         private int placeNo;
         private String placeName;
         private LocalDate createDate;
+        private LocalDate birthday;
 
         public static PlantResponse from(Plant plant){
+
             return PlantResponse.builder()
                     .plantNo(plant.getPlantNo())
                     .plantName(plant.getPlantName())
                     .plantSpecies(plant.getPlantSpecies())
                     .averageWateringPeriod(plant.getAverageWateringPeriod())
+                    .earlyWateringPeriod(plant.getEarlyWateringPeriod())
+                    .medium(plant.getMedium())
                     .placeNo(plant.getPlace().getPlaceNo())
                     .placeName(plant.getPlace().getPlaceName())
-                    .medium(plant.getMedium())
                     .createDate(LocalDate.from(plant.getCreateDate()))
+                    .birthday(plant.getBirthday())
                     .build();
         }
     }

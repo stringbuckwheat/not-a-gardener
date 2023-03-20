@@ -1,20 +1,20 @@
-import { CButton, CCol, CLink, CRow, CWidgetStatsF } from "@coreui/react";
-import { cilDrop, cilSmile, cilFaceDead, cilHandPointUp, cilSwimming, cilZoom, cilArrowRight } from "@coreui/icons";
+import { CCol, CWidgetStatsF } from "@coreui/react";
+import { cilDrop, cilSmile, cilFaceDead, cilHandPointUp, cilSwimming, cilZoom } from "@coreui/icons";
 import { Link } from "react-router-dom";
 import CIcon from '@coreui/icons-react';
-import { useNavigate } from "react-router-dom";
 import GardenTag from "src/pages/garden/GardenTag";
 import WateringDropdown from "../dropdown/WateringDropdown";
+import { ArrowRightOutlined, RightOutlined } from "@ant-design/icons";
+import { Space } from "antd";
 
 const GardenCard = (props) => {
-    const plant = props.plant;
+    const garden = props.plant;
+    const plant = props.plant.plant;
+    const gardenDetail = props.plant.gardenDetail;
+
     const fertilizerList = props.fertilizerList;
     const setPlantList = props.setPlantList;
-    const openNotification= props.openNotification;
-
-    const navigate = useNavigate();
-
-    const plantUrl = `/plant/${plant.plantNo}`
+    const openNotification = props.openNotification;
 
     // 음수           0                     1          2         3              4
     // 물주기 놓침   물주기 정보 부족    물주기     체크하기     놔두세요    오늘 물 줌
@@ -23,34 +23,34 @@ const GardenCard = (props) => {
     let color = "primary";
     let wateringMsg = "";
 
-    if (plant.wateringCode < 0) {
+    if (gardenDetail.wateringCode < 0) {
         // 물주기 놓침
         color = "danger" // 빨강
-        wateringMsg = `물 주기를 ${plant.wateringDDay * -1}일 놓쳤어요!`
+        wateringMsg = `물 주기를 ${gardenDetail.wateringDDay * -1}일 놓쳤어요!`
         icon = cilFaceDead;
-    } else if (plant.wateringCode == 0) {
+    } else if (gardenDetail.wateringCode == 0) {
         // 물주기 정보 부족
         color = "primary"
         wateringMsg = "물주기 정보가 부족해요!"
         icon = cilZoom;
-    } else if (plant.wateringCode == 1) {
+    } else if (gardenDetail.wateringCode == 1) {
         color = "primary" // 파랑
         wateringMsg = "오늘은 물 주는 날이에요!"
         icon = cilDrop;
-    } else if (plant.wateringCode == 2) {
+    } else if (gardenDetail.wateringCode == 2) {
         color = "warning" // 노랑
-        wateringMsg = "물 주기가 하루 남았어요. 화분이 말랐는지 체크해보세요!"
+        wateringMsg = "물 주기가 하루 남았어요. \n화분이 말랐는지 체크해보세요!"
         icon = cilHandPointUp;
-    } else if (plant.wateringCode == 3) {
+    } else if (gardenDetail.wateringCode == 3) {
         color = "success" // 초록
         wateringMsg = "이 식물은 지금 행복해요. 가만히 두세요."
         icon = cilSmile;
-    } else if (plant.wateringCode == 4) {
+    } else if (gardenDetail.wateringCode == 4) {
         color = "success" // 초록
         wateringMsg = "이 식물은 오늘 물을 마셨어요!"
         icon = cilSwimming;
     }
-    
+
     return (
         <CCol md={4} xs={12}>
             <CWidgetStatsF
@@ -63,23 +63,30 @@ const GardenCard = (props) => {
                             <div>
                                 <small>{plant.plantSpecies}</small>
                             </div>
-                            <GardenTag plant={plant} />
-                            <div className="mt-1">
-                                <small>{wateringMsg}</small>
+                            <GardenTag plant={garden} />
+                            <div className={`mt-2 text-${color} new-line`}>
+                                {wateringMsg}
                             </div>
                         </CCol>
                     </>}
                 value={
-                    <Link to={plantUrl} style={{ textDecoration: "none", color: "black" }}>
+                    <Link
+                        className="noTextDecoration text-black"
+                        to={`/plant/${plant.plantNo}`}>
+                            <Space>
                         {plant.plantName}
+                        <ArrowRightOutlined style={{
+                            verticalAlign: 'middle',
+                        }} />
+                        </Space>
                     </Link>
                 }
                 footer={
-                        <WateringDropdown 
-                            plantNo={plant.plantNo} 
-                            fertilizerList={fertilizerList}
-                            setPlantList={setPlantList}
-                            openNotification={openNotification}/>
+                    <WateringDropdown
+                        plantNo={plant.plantNo}
+                        fertilizerList={fertilizerList}
+                        setPlantList={setPlantList}
+                        openNotification={openNotification} />
                 }
             />
         </CCol>

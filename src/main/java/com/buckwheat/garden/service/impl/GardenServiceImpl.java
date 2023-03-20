@@ -1,10 +1,12 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.data.dto.GardenDto;
-import com.buckwheat.garden.data.entity.Fertilizer;
+import com.buckwheat.garden.data.dto.PlantDto;
+import com.buckwheat.garden.data.dto.WateringDto;
+import com.buckwheat.garden.data.entity.Chemical;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Watering;
-import com.buckwheat.garden.repository.FertilizerRepository;
+import com.buckwheat.garden.repository.ChemicalRepository;
 import com.buckwheat.garden.repository.PlantRepository;
 import com.buckwheat.garden.repository.WateringRepository;
 import com.buckwheat.garden.service.GardenService;
@@ -17,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -25,13 +28,13 @@ import java.util.List;
 public class GardenServiceImpl implements GardenService {
     private final PlantRepository plantRepository;
     private final WateringRepository wateringRepository;
-    private final FertilizerRepository fertilizerRepository;
+    private final ChemicalRepository chemicalRepository;
 
     @Override
-    public List<GardenDto> getGarden(int memberNo) {
-        List<GardenDto> gardenList = new ArrayList<>();
+    public List<GardenDto.GardenResponse> getGarden(int memberNo) {
+        List<GardenDto.GardenResponse> gardenList = new ArrayList<>();
 
-        List<Fertilizer> fertilizerList = fertilizerRepository.findByMember_memberNo(memberNo);
+        List<Chemical> chemicalList = chemicalRepository.findByMember_memberNo(memberNo);
         List<Plant> plantList = plantRepository.findByMember_MemberNo(memberNo);
 
         // 필요한 것들 계산해서 gardenDto list 리턴
@@ -45,6 +48,11 @@ public class GardenServiceImpl implements GardenService {
 //                log.debug("{}: {}", plant.getPlantName(), anniversary);
             }
 
+            WateringDto.WateringResponse latestWatering = null;
+            if(plant.getWateringList().size() > 0) {
+                latestWatering = WateringDto.WateringResponse.from(plant.getWateringList().get(0));
+            }
+
             // watering code: 계산 값에 따라 화면에서 물주기, 물줄 날짜 놓침 등의 메시지를 띄울 용도
             // 물을 준 적이 한 번도 없는 경우
             int wateringDDay = getWateringDDay(plant.getAverageWateringPeriod(), getLastDrinkingDay(plant));
@@ -55,13 +63,14 @@ public class GardenServiceImpl implements GardenService {
 
             // TODO 비료 계산
             // fertilizingCode: 물을 줄 식물에 대해서 맹물을 줄지 비료를 줄지 알려주는 용도
+            int fertilizingCode = 999;
 
-            gardenList.add(
-                    GardenDto.from(plant, anniversary, wateringDDay, wateringCode)
-            );
+            PlantDto.PlantResponse plantResponse = PlantDto.PlantResponse.from(plant);
+            GardenDto.GardenDetail gardenDetail = GardenDto.GardenDetail.from(latestWatering, anniversary, wateringDDay, wateringCode, fertilizingCode);
+
+            gardenList.add(new GardenDto.GardenResponse(plantResponse, gardenDetail));
         }
 
-        // TODO 정렬
         log.debug("gardenList: {}", gardenList);
         return gardenList;
     }
@@ -127,7 +136,7 @@ public class GardenServiceImpl implements GardenService {
 
     // -1           0           1
     // 비료 사용 안함  맹물 주기
-    public int getFertilizingCode(List<Fertilizer> fertilizerList, int plantNo) {
+    public int getFertilizingCode(List<Chemical> chemicalList, int plantNo) {
         LocalDate latestFertilizedDay = wateringRepository.findLatestFertilizedDayByPlantNo(plantNo);
 
         // 비료를 준 적이 없는 경우

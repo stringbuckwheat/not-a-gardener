@@ -1,5 +1,5 @@
 import { useLocation, useParams } from 'react-router-dom'
-import DetailLayout from 'src/data/layout/DetailLayout';
+import DetailLayout from 'src/components/data/layout/DetailLayout';
 import PlaceTag from './PlaceTag';
 import { useEffect, useState } from 'react';
 import ModifyPlace from './ModifyPlace';
@@ -9,7 +9,7 @@ import plantTableColArrInPlace from "src/utils/dataArray/plantTableColArrInPlace
 import getPlantListForPlacePlantTable from 'src/utils/function/getPlantListForPlacePlantTable';
 
 const PlaceDetail = () => {
-  const path = useParams().place;
+  const path = useParams().placeNo;
   const { state } = useLocation();
 
   const [plantList, setPlantList] = useState([{

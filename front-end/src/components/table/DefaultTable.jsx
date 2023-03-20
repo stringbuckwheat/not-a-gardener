@@ -4,7 +4,6 @@ import ModifyPlantPlaceForm from '../form/ModifyPlantPlaceForm';
 import AddPlantsInPlaceForm from '../form/AddPlantsInPlaceForm';
 
 const DefaultTable = (props) => {
-  const path = props.path; // pathVariables
   const setPlantList = props.setPlantList;
 
   // select

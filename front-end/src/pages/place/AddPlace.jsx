@@ -1,24 +1,35 @@
 import getPlaceInputItemArray from "src/utils/function/getPlaceInputItemArray";
-import AddForm from "src/components/form/AddForm";
+import ItemForm from "src/components/form/ItemForm";
+import { useState } from "react";
+import SubmitForAddButton from "src/components/button/SubmitForAddButton";
 
 const AddPlace = () => {
-    const initPlace = {
+    const [ place, setPlace ] = useState({
         placeName: "",
         option: "실내",
         artificialLight: "미사용"
+    });
+
+    const onChange = (e) => {
+        const { name, value } = e.target;
+        setPlace(setPlace => ({ ...place, [name]: value }));
+        console.log("onchange", place);
     }
 
-    const itemObjectArray = getPlaceInputItemArray(initPlace);
-    const requiredValueArray = ["placeName"];
+    const itemObjectArray = getPlaceInputItemArray(place);
+
+    const validation = place.placeName !== "";
 
     return(
-        <AddForm 
-            title="장소"
-            inputObject={initPlace}
+        <ItemForm
+            title="장소 추가"
+            inputObject={place}
             itemObjectArray={itemObjectArray}
-            requiredValueArray={requiredValueArray}
-            isNumberArray={[]}
-            submitUrl="/place" />
+            onChange={onChange} 
+            submitBtn={<SubmitForAddButton 
+                            url="/place"
+                            data={place}
+                            validation={validation}/>}/>
     )
 }
 

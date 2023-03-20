@@ -1,48 +1,43 @@
 import { useLocation, useParams } from 'react-router-dom'
-import PlantTag from './PlantTag';
-import DetailLayout from 'src/components/form/DetailLayout';
-import authAxios from 'src/utils/interceptors';
+import PlantTag from '../../components/tag/PlantTag';
+import DetailLayout from 'src/components/data/layout/DetailLayout';
 import { useState, useEffect } from 'react';
 import ModifyPlant from './ModifyPlant';
 import getPlaceList from 'src/utils/function/getPlaceList';
 import WateringList from '../watering/WateringList';
+import onMount from 'src/api/service/onMount';
 
 const PlantDetail = () => {
     const plantNo = useParams().plantNo;
     console.log("plantNo", plantNo);
 
-    const { state } = useLocation();
+    const state = useLocation().state;
 
     const [ plant, setPlant ] = useState({});
     const [ wateringList, setWateringList ] = useState([{}]);
 
     useEffect(() => {
-        authAxios.get(`/plant/${plantNo}`)
-            .then((res) => {
-                console.log("plant detail response", res.data);
-                setPlant(res.data);
-            })
-
-        authAxios.get(`/plant/${plantNo}/watering`)
-            .then((res) => {
-                setWateringList(res.data);
-            })
+        onMount(`/plant/${plantNo}`, setPlant);
+        onMount(`/plant/${plantNo}/watering`, setWateringList);
     }, [])
 
     useEffect(() => {
-        if (state != null) {
+        if(state !== null){
             setPlant(state);
         }
     }, [state])
 
     const [onModify, setOnModify] = useState(false);
     const [placeList, setPlaceList] = useState({});
+
     const onClickModifyBtn = async () => {
         const places = await getPlaceList();
-        console.log("places", places);
         setPlaceList(places);
         setOnModify(!onModify);
-        console.log("onclick end");
+    }
+
+    const changeModifyState = () => {
+        setOnModify(false);
     }
 
     return (
@@ -62,10 +57,11 @@ const PlantDetail = () => {
             />
             :
             <ModifyPlant
-                title={plant.plantName}
                 plant={plant}
                 placeList={placeList}
+                setOnModify={setOnModify}
                 onClickGetBackBtn={onClickModifyBtn}
+                changeModifyState={changeModifyState}
             />
     )
 }

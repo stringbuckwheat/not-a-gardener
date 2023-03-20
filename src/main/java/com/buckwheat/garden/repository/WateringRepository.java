@@ -25,6 +25,8 @@ public interface WateringRepository extends JpaRepository<Watering, Integer> {
             + " AND w.fertilized != 'Y'", nativeQuery = true)
     LocalDate findLatestWateringDayByPlantNo(@Param("plantNo") int plantNo);
 
+    // Watering findTopByChemical_ChemicalNoIsNotNullAndPlant_PlantNoByWateringDateDesc(int plantNo);
+
 //    // 쿼리 메소드 테스트
 //    Watering findTopByPlantNoAndFertilizedOrderByWateringNoDesc(int plantNo, String y);
 //    Watering findTopByPlantNoAndFertilizedNotOrderByWateringNoDesc(int plantNo, String y);
@@ -34,6 +36,6 @@ public interface WateringRepository extends JpaRepository<Watering, Integer> {
     /* 가장 최근 물 준 날짜 두 개를 들고 옴 */
     List<Watering> findTop2ByPlant_PlantNoOrderByWateringNoDesc(int plantNo);
 
-    @EntityGraph(attributePaths = {"fertilizer"}, type= EntityGraph.EntityGraphType.FETCH)
-    List<Watering> findByPlant_plantNo(int plantNo);
+    @EntityGraph(attributePaths = {"chemical"}, type= EntityGraph.EntityGraphType.FETCH)
+    List<Watering> findByPlant_plantNoOrderByWateringDateDesc(int plantNo);
 }

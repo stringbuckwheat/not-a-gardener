@@ -26,6 +26,7 @@ const FormInputDate = (props) => {
                 onChange={(date, dateString) => { handleOnChange(dateString) }}
                 locale={locale}
             />
+            <span className="text-success"><small>{inputItem.required ? "" : "모르겠다면 비워둬도 좋아요"}</small></span>
         </CInputGroup>
     )
 }

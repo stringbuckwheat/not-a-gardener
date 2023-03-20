@@ -22,6 +22,11 @@ public class PlantServiceImpl implements PlantService {
     private final PlantRepository plantRepository;
     private final PlaceRepository placeRepository;
 
+    /**
+     * 하나의 장소 정보 반환
+     * @param plantNo
+     * @return
+     */
     @Override
     public PlantDto.PlantResponse getOnePlant(int plantNo) {
         // @EntityGraph
