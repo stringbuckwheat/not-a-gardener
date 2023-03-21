@@ -35,7 +35,10 @@ const ChemicalCard = (props) => {
 
     return (
         <CCol md={3} xs={12}>
-            <Link to={`/chemical/${chemical.chemicalNo}`} state={chemical} style={{ textDecoration: "none" }}>
+            <Link 
+                to={`/chemical/${chemical.chemicalNo}`} 
+                state={chemical} 
+                className="no-text-decoration">
                 <CWidgetStatsF
                     className="mb-3"
                     color={color}

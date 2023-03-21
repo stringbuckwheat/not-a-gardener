@@ -23,7 +23,7 @@ const SearchInput = (props) => {
         <Input
                 ref={searchInput}
                 addonBefore={<SearchOutlined />}
-                style={{ width: 200, }}
+                className="width-200"
                 onChange={(e) => {setSearchWord(e.target.value)}}
                 onBlur={onBlur}
                 allowClear />

@@ -12,12 +12,12 @@ code {
   font-style: normal;
 }
 
-/* custum */
+/* custom */
 .garden {
   color: #023020;
 }
 
-.noTextDecoration {
+.no-text-decoration {
   text-decoration: none;
 }
 
@@ -29,12 +29,56 @@ code {
   white-space: pre-wrap;
 }
 
+.width-full {
+  width: 100%;
+}
+
+.width-82p {
+  width: 82%;
+}
+
+.width-half {
+  width: 50%;
+}
+
+.width-200 {
+  width: 200px;
+}
+
+.width-130 {
+  width: 130px;
+}
+
 .width-100 {
-  width: 100%
+  width: 100px;
+}
+
+.minWidth-60 {
+  min-width: 60%;
 }
 
 .minWidth-70 {
   min-width: 70%;
+}
+
+.display-block {
+  display: block;
+}
+
+.vertical-align-middle {
+  vertical-align: middle;
+}
+
+.font-size-18 {
+  font-size: 18px;
+}
+
+.font-size-20 {
+  font-size: 20px;
+}
+
+.text-grey {
+  color: grey;
 }
 
 /* 소셜 로그인 */

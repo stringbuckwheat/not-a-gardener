@@ -15,7 +15,11 @@ const NoItem = (props) => {
                 </div>
             </CRow>
             <CRow >
-                <CImage src={forNoPlant} fluid style={{display:'block', width:'100%'}}/>
+                <CImage 
+                    className="width-100 display-block"
+                    // style={{display:'block', width:'100%'}}
+                    src={forNoPlant} 
+                    fluid/>
             </CRow>
         </CContainer>
     )

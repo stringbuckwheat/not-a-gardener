@@ -3,7 +3,6 @@ import { Space } from "antd";
 import ModifySubmitButton from "./ModifySubmitButton";
 
 const ModifyFormButtons = (props) => {
-    const onClickModifyBtn = props.onClickModifyBtn;
     const validation = props.validation;
     const data = props.data;
     const url = props.url; // 제출할 주소 ex. plant, place...
@@ -13,7 +12,7 @@ const ModifyFormButtons = (props) => {
     return (
         <div className="d-flex justify-content-end">
             <Space>
-                <CButton color="light" onClick={onClickModifyBtn}>돌아가기</CButton>
+                <CButton color="light" onClick={changeModifyState}>돌아가기</CButton>
                 <ModifySubmitButton 
                     data={data}
                     url={url}

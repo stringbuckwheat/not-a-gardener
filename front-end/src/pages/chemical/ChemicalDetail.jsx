@@ -145,8 +145,7 @@ const ChemicalDetail = () => {
                     url="chemical"
                     path={state.chemicalNo}
                     changeModifyState={changeModifyState}
-                    validation={validation}
-                    onClickModifyBtn={onClickModifyBtn} />} />
+                    validation={validation}/>} />
     )
 }
 

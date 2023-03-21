@@ -71,13 +71,12 @@ const GardenCard = (props) => {
                     </>}
                 value={
                     <Link
-                        className="noTextDecoration text-black"
+                        className="no-text-decoration text-black"
                         to={`/plant/${plant.plantNo}`}>
                             <Space>
                         {plant.plantName}
-                        <ArrowRightOutlined style={{
-                            verticalAlign: 'middle',
-                        }} />
+                        <ArrowRightOutlined
+                            className="vertical-align-middle"/>
                         </Space>
                     </Link>
                 }

@@ -1,12 +1,14 @@
 import { CButton } from "@coreui/react";
 import { Space } from "antd";
 import { useState } from "react";
-import AddWatering from "./AddWatering"
+import WateringForm from "./WateringForm";
 
-const AddWateringForm = (props) => {
+
+const WateringFormOpen = (props) => {
     const plantNo = props.plantNo;
     const setWateringList = props.setWateringList;
     const openNotification = props.openNotification;
+    const watering = props.watering;
 
     const [formOpen, setFormOpen] = useState(false);
 
@@ -19,7 +21,7 @@ const AddWateringForm = (props) => {
         <>
             {formOpen
                 ?
-                <AddWatering
+                <WateringForm
                     plantNo={plantNo}
                     closeForm={closeForm}
                     openNotification={openNotification}
@@ -35,4 +37,4 @@ const AddWateringForm = (props) => {
     )
 }
 
-export default AddWateringForm;
+export default WateringFormOpen;

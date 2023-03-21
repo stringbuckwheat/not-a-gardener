@@ -1,25 +1,38 @@
-import ModifyForm from "src/components/form/ModifyForm";
+import { useState } from "react";
+import ModifyFormButtons from "src/components/button/ModifyFormButtons";
+import ItemForm from "src/components/form/ItemForm";
 import getPlaceInputItemArray from "src/utils/function/getPlaceInputItemArray";
 
 const ModifyPlace = (props) => {
-    const title = props.title;
-    const onClickGetBackBtn = props.onClickGetBackBtn;
-    const place = props.place;
-    const itemObjectArray = getPlaceInputItemArray(place);
-    const requiredValueArray = ["placeName"];
+    const changeModifyState = props.changeModifyState;
 
-    return(
-        <ModifyForm
-            title={title}
+    const [place, setPlace] = useState(props.place);
+
+    const itemObjectArray = getPlaceInputItemArray(place);
+
+    const onChange = (e) => {
+        const { name, value } = e.target;
+        setPlace(setPlace => ({ ...place, [name]: value }));
+        console.log("onchange", place);
+    }
+
+    const validation = place.placeName !== "";
+
+    return (
+        <ItemForm
+            title="장소 수정"
             inputObject={place}
             itemObjectArray={itemObjectArray}
-            requiredValueArray={requiredValueArray}
-            isNumberArray={[]}
-            submitUrl="place"
-            path={place.placeNo}
-            onClickGetBackBtn={onClickGetBackBtn}
+            onChange={onChange}
+            submitBtn={<ModifyFormButtons
+                data={place}
+                url="place"
+                path={place.placeNo}
+                changeModifyState={changeModifyState}
+                validation={validation}
+            />
+            }
         />
-
     )
 }
 

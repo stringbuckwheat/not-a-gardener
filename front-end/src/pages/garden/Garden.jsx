@@ -4,10 +4,7 @@ import NoItem from 'src/components/NoItem';
 import AddPlantButton from 'src/components/button/AddPlantButton';
 import GardenCard from 'src/components/card/GardenCard';
 import { notification } from 'antd'
-import getWateringNotificationMsg from 'src/components/notification/getWateringNotificationMsg';
-import getGarden from 'src/api/backend-api/garden/getGarden';
-import getFertilizerListForAddWatering from 'src/api/service/getFertilizerListForAddWatering';
-import onMount from 'src/api/service/onMount';
+import getWateringNotificationMsg from 'src/utils/function/getWateringNotificationMsg';
 import onMountGarden from 'src/api/service/onMountGarden';
 
 const Garden = () => {

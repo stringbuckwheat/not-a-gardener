@@ -82,7 +82,9 @@ const DeleteModal = (props) => {
       </CModal>
 
       <Tooltip title={deleteTooltipMsg}>
-        <DeleteOutlined onClick={() => { setVisible(true) }} style={{ fontSize: '18px', color: 'grey' }} />
+        <DeleteOutlined 
+            className="font-size-18 text-grey"
+            onClick={() => { setVisible(true) }} />
       </Tooltip>
     </>
   )

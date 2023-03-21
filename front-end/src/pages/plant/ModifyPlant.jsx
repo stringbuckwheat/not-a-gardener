@@ -68,8 +68,7 @@ const ModifyPlant = (props) => {
         url="plant"
         path={plant.plantNo}
         changeModifyState={changeModifyState}
-        validation={validation}
-        onClickModifyBtn={changeModifyState} />} />
+        validation={validation}/>} />
   )
 }
 

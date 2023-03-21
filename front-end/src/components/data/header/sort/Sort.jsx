@@ -10,8 +10,8 @@ const Sort = (props) => {
 
     return (
         <Select
+            className="width-130"
             defaultValue="createDate"
-            style={{ width: 130 }}
             onChange={onChange}
             options={sortOption}
         />

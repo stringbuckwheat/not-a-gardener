@@ -66,12 +66,13 @@ const ModifyPlantPlaceForm = (props) => {
   return (
     <div className="mb-3 float-end">
       <Space>
-        <SwapRightOutlined style={{ fontSize: '20px', color: '#14A44D' }} />
+        <SwapRightOutlined 
+          className="font-size-20 text-success"/>
         {`${props.selectedPlantNo.length}개의 식물을`}
         <Select
+          className="width-100"
           onChange={handleSelect}
-          options={placeList}
-          style={{ width: 100, }} />
+          options={placeList}/>
         으로
         {
           placeNo !== 0

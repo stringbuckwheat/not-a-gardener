@@ -19,7 +19,7 @@ import {
   
     return (
         <div className="row justify-content-md-center">
-          <CCol md="auto" style={{minWidth: '70%'}}>
+          <CCol md="auto" className="minWidth-70">
             <CCard sm={6} className="mb-4">
               <CCardBody>
                 <h4 className="mt-3 mb-3">{title}</h4>

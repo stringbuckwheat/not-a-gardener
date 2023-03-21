@@ -66,7 +66,7 @@ const PlaceDetail = () => {
           option: state.option,
           artificialLight: state.artificialLight
         }}
-        onClickGetBackBtn={onClickModifyBtn}
+        changeModifyState={onClickModifyBtn}
       />
   );
 }

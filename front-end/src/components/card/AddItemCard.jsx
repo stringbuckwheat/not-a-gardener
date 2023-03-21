@@ -10,7 +10,9 @@ const AddItemCard = (props) => {
 
     return (
         <CCol md={3} xs={12}>
-            <Link to={addUrl} style={{ textDecoration: "none" }}>
+            <Link 
+                to={addUrl} 
+                className="no-text-decoration">
                 <CWidgetStatsF
                     className="mb-3"
                     color="dark"

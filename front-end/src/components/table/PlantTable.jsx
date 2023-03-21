@@ -32,7 +32,11 @@ const PlantTable = (props) => {
             render: (_, record) => {
                 const link = `/plant/${record.plantNo}`;
                 return (
-                    <Link to={link} style={{ textDecoration: "none" }}>{record.plantName}</Link>
+                    <Link 
+                        to={link} 
+                        className="no-text-decoration">
+                            {record.plantName}
+                    </Link>
                 )
             },
             sorter: (a, b) => {

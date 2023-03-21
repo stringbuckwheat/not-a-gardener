@@ -58,16 +58,14 @@ const AddChemicalUsage = (props) => {
                         <p className="text-success fw-bold mt-1"> 사용 내역 추가</p>
                         <Select
                             mode="multiple"
-                            className="mb-1"
-                            style={{ width: '100%' }}
+                            className="mb-1 width-full"
                             placeholder="식물을 선택해주세요"
                             allowClear
                             onChange={handleChange}
                             options={options}
                         />
                         <DatePicker
-                            style={{ width: '100%' }}
-                            className="mb-2"
+                            className="mb-2 width-full"
                             disabledDate={disabledDate}
                             onChange={(date, dateString) => { setUsageDate(dateString) }}
                             locale={locale}

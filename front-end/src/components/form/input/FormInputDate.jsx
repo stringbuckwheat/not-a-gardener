@@ -22,7 +22,7 @@ const FormInputDate = (props) => {
         <CInputGroup className="mb-3 mt-3">
             <CInputGroupText id="basic-addon1">{inputItem.label}</CInputGroupText>
             <DatePicker
-                style={{ width: '82%' }}
+                className="width-82p"
                 onChange={(date, dateString) => { handleOnChange(dateString) }}
                 locale={locale}
             />

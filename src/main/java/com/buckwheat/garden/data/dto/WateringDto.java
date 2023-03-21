@@ -86,26 +86,28 @@ public class WateringDto {
     @ToString
     public static class WateringForOnePlant{
         private int wateringNo;
+        private int chemicalNo;
         private String chemicalName;
         private LocalDate wateringDate;
         private int wateringPeriod;
 
-        private static String getChemicalName(Chemical chemical){
-            return chemical == null ? "맹물" : chemical.getChemicalName();
-        }
-
         public static WateringForOnePlant from(Watering watering){
+            Chemical chemical = watering.getChemical();
+
             return WateringForOnePlant.builder()
                     .wateringNo(watering.getWateringNo())
-                    .chemicalName(getChemicalName(watering.getChemical()))
+                    .chemicalNo(chemical == null ? 0 : chemical.getChemicalNo())
+                    .chemicalName(chemical == null ? "맹물" : chemical.getChemicalName())
                     .wateringDate(watering.getWateringDate())
                     .build();
         }
 
         public static WateringForOnePlant withWateringPeriodFrom(Watering watering, int wateringPeriod){
+            Chemical chemical = watering.getChemical();
+
             return WateringForOnePlant.builder()
                     .wateringNo(watering.getWateringNo())
-                    .chemicalName(getChemicalName(watering.getChemical()))
+                    .chemicalName(chemical == null ? "맹물" : chemical.getChemicalName())
                     .wateringDate(watering.getWateringDate())
                     .wateringPeriod(wateringPeriod)
                     .build();
