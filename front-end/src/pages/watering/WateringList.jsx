@@ -1,15 +1,10 @@
 import { CContainer } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
-import { cilPen, cilTrash, cilX } from "@coreui/icons";
 import getWateringNotificationMsg from "src/utils/function/getWateringNotificationMsg";
 import WateringFormOpen from "./WateringFormOpen";
 import deleteData from "src/api/backend-api/common/deleteData";
-import { useEffect, useState } from "react";
-
-import locale from 'antd/es/date-picker/locale/ko_KR';
+import { useState } from "react";
 import 'dayjs/locale/ko';
-import { Form, Table, notification, Popconfirm, Space, Button, DatePicker, Select } from "antd";
-
+import { Form, Table, notification } from "antd";
 import dayjs from "dayjs";
 import advancedFormat from 'dayjs/plugin/advancedFormat'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
@@ -17,16 +12,14 @@ import localeData from 'dayjs/plugin/localeData'
 import weekday from 'dayjs/plugin/weekday'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
 import weekYear from 'dayjs/plugin/weekYear'
-import getChemicalListForSelect from "src/api/service/getChemicalListForSelect";
 import updateData from "src/api/backend-api/common/updateData";
-import getDisabledDate from "src/utils/function/getDisabledDate";
-
-
+import WateringListAction from "./WateringListAction";
+import EditableCell from "./EditableCell";
 
 /**
  * plant detail 아래쪽에 table로 들어감
- * @param {*} props 
- * @returns 
+ * @param {*} props
+ * @returns
  */
 
 const WateringList = (props) => {
@@ -41,55 +34,11 @@ const WateringList = (props) => {
     const wateringList = props.wateringList;
     const setWateringList = props.setWateringList;
 
-    console.log("*** wateringList", wateringList);
-
-    const [chemicalList, setChemicalList] = useState([]);
-
-    useEffect(() => {
-        getChemicalListForSelect(setChemicalList);
-    }, [])
-
-    const [ editWatering, setEditWatering ] = useState({});
-
-    const EditableCell = ({
-        editing,
-        dataIndex,
-        title,
-        inputType,
-        record,
-        index,
-        children,
-        ...restProps
-    }) => {
-        const inputNode = inputType === 'date'
-            ? <DatePicker 
-                    locale={locale} 
-                    disabledDate={getDisabledDate} 
-                    onChange={(date, dateString) => { setEditWatering({...editWatering, wateringDate: dateString}) }} />
-            : <Select 
-                    options={chemicalList} 
-                    onChange={(value) => { setEditWatering({...editWatering, chemicalNo: value}) }}/>;
-        return (
-            <td {...restProps}>
-                {editing
-                    ? (
-                        <Form.Item
-                            name={dataIndex}
-                            style={{ margin: 0 }}
-                            rules={[{ required: true, message: "날짜를 입력해주세요", },]}
-                        >
-                            {inputNode}
-                        </Form.Item>
-                    ) : (
-                        children
-                    )}
-            </td>
-        );
-    };
+    const [editWatering, setEditWatering] = useState({});
 
     // editable rows
-    const [ form ] = Form.useForm();
-    const [ editingKey, setEditingKey ] = useState('');
+    const [form] = Form.useForm();
+    const [editingKey, setEditingKey] = useState('');
     const isEditing = (record) => record.wateringNo === editingKey;
 
     const edit = (record) => {
@@ -99,6 +48,7 @@ const WateringList = (props) => {
         });
 
         setEditWatering({
+            plantNo: plant.plantNo,
             wateringNo: record.wateringNo,
             wateringDate: record.wateringDate,
             chemicalNo: record.chemicalNo,
@@ -111,8 +61,10 @@ const WateringList = (props) => {
         setEditingKey('');
     };
 
-    const save = async (key) => {
+    const updateWatering = async () => {
         const data = await updateData("watering", editWatering.wateringNo, editWatering);
+        setWateringList(data);
+        setEditingKey('');
     };
 
     const wateringTableColumnArray = [
@@ -139,37 +91,14 @@ const WateringList = (props) => {
             render: (_, record) => {
                 const editable = isEditing(record);
 
-                return editable ? (
-                    <Space className="d-flex justify-content-end">
-                        <Button onClick={() => save(record.wateringNo)} size="small">
-                            <CIcon className="text-success" icon={cilPen} />
-                        </Button>
-                        <Popconfirm title="취소하시겠습니까?" onConfirm={cancel}>
-                            <Button size="small">
-                                <CIcon icon={cilX} />
-                            </Button>
-                        </Popconfirm>
-                    </Space>
-                ) : (
-                    <Space className="d-flex justify-content-end">
-                        <Button size="small" disabled={editingKey !== ''} onClick={() => edit(record)}>
-                            <CIcon className="text-success" icon={cilPen} />
-                        </Button>
-                        <Popconfirm
-                            placement="topRight"
-                            title="이 기록을 삭제하시겠습니까?"
-                            description="삭제한 물 주기 정보는 되돌릴 수 없어요"
-                            onConfirm={() => { deleteWatering(record.wateringNo) }}
-                            okText="네"
-                            cancelText="아니요"
-                        >
-                            <Button size="small" disabled={editingKey !== ''} >
-                                <CIcon icon={cilTrash} />
-                            </Button>
-                        </Popconfirm>
-                    </Space>
-
-                )
+                return <WateringListAction
+                            record={record}
+                            editable={editable}
+                            updateWatering={updateWatering}
+                            editingKey={editingKey}
+                            cancel={cancel}
+                            edit={edit}
+                            deleteWatering={deleteWatering} />
             },
         },
     ]
@@ -223,21 +152,18 @@ const WateringList = (props) => {
                 </div>
                 <Form form={form} component={false}>
                     <Table
-                        components={{
-                            body: { cell: EditableCell, },
-                        }}
-                        pagination={{ onChange: cancel, }}
+                        components={{body: { cell: (props) => <EditableCell editWatering={editWatering} setEditWatering={setEditWatering} {...props} /> }}}
+                        pagination={{ onChange: cancel }}
                         rowClassName="editable-row"
                         columns={mergedColumns}
-                        dataSource={wateringList.map((watering) => {
-                            return ({
-                                wateringNo: watering.wateringNo,
-                                wateringDate: watering.wateringDate,
-                                chemicalNo: watering.chemicalNo,
-                                chemicalName: watering.chemicalName,
-                                wateringPeriod: watering.wateringPeriod == 0 ? "" : `${watering.wateringPeriod}일만에`
-                            })
-                        })}
+                        dataSource={wateringList.map((watering) => (
+                            {
+                                ...watering,
+                                wateringPeriod: watering.wateringPeriod === 0
+                                    ? ""
+                                    : `${watering.wateringPeriod}일만에`
+                            }
+                        ))}
                     />
                 </Form>
             </CContainer>

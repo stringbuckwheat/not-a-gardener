@@ -37,4 +37,10 @@ public class WateringController {
     public void deleteWatering(@PathVariable int wateringNo){
         wateringService.deleteWatering(wateringNo);
     }
+
+    @DeleteMapping("/plant/{plantNo}")
+    public void deleteAllFromPlant(@PathVariable int plantNo) {
+        log.debug("deleteAllFromPlant");
+        wateringService.deleteAllFromPlant(plantNo);
+    }
 }

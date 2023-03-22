@@ -10,11 +10,11 @@ const Search = (props) => {
 
     return (
         search
-        ? <SearchInput 
+        ? <SearchInput
                 setSearch={setSearch}
                 setSearchWord={setSearchWord}/>
-        : 
-        <SearchOutlined onClick={() => {setSearch(true)}} />
+        :
+        <SearchOutlined className="vertical-align-middle" onClick={() => {setSearch(true)}} />
     )
 }
 

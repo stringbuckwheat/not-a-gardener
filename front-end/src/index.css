@@ -1,15 +1,23 @@
-
-
-code {
-  font-family: 'RIDIBatang',
-    monospace;
-}
-
 @font-face {
   font-family: 'GmarketSansMedium';
   src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
   font-weight: normal;
   font-style: normal;
+}
+
+/*******/
+.garden-card {
+  align-items: flex-end;
+}
+
+.parent {
+  position: relative;
+  height: 210px;
+}
+
+.child {
+  position: absolute;
+  bottom: 0px;
 }
 
 /* custom */
@@ -53,6 +61,10 @@ code {
   width: 100px;
 }
 
+.minWidth-full {
+  min-width: 100%;
+}
+
 .minWidth-60 {
   min-width: 60%;
 }
@@ -79,6 +91,10 @@ code {
 
 .text-grey {
   color: grey;
+}
+
+.height-95 {
+  height: 95%;
 }
 
 /* 소셜 로그인 */
@@ -131,7 +147,7 @@ body {
 }
 
 #kakao-connect:hover {
-  border-color: #FEE500;  
+  border-color: #FEE500;
   background: #FEE500 url('./assets/images/kakao.png')  no-repeat scroll 0px 0px / 30px 30px padding-box border-box;
   -webkit-transition: all .8s ease-out;
   -moz-transition: all .3s ease;

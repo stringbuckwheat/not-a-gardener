@@ -216,4 +216,9 @@ public class WateringServiceImpl implements WateringService {
     public void deleteWatering(int wateringNo) {
         wateringRepository.deleteById(wateringNo);
     }
+
+    @Override
+    public void deleteAllFromPlant(int plantNo) {
+        wateringRepository.deleteAllByPlant_plantNo(plantNo);
+    }
 }

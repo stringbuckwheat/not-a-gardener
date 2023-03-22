@@ -2,7 +2,6 @@ import { Space, Tag } from 'antd';
 
 const PlantListTag = (props) => {
     const howManyPlants = props.howManyPlants;
-    
 
     return(
         <Space size={[0, 8]} wrap>

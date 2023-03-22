@@ -32,8 +32,8 @@ const PlantTable = (props) => {
             render: (_, record) => {
                 const link = `/plant/${record.plantNo}`;
                 return (
-                    <Link 
-                        to={link} 
+                    <Link
+                        to={link}
                         className="no-text-decoration">
                             {record.plantName}
                     </Link>
@@ -99,7 +99,6 @@ const PlantTable = (props) => {
             dataIndex: 'tags',
             responsive: ['lg'],
             render: (tags) => {
-                console.log("tags", tags);
                 const colorArr = ["green", "orange", "volcano", "cyan", "geekblue"];
 
                 return (
@@ -179,7 +178,7 @@ const PlantTable = (props) => {
 
     const locale = {
         triggerDesc: '내림차순으로 보기',
-        triggerAsc: '오름차순으로 보기', 
+        triggerAsc: '오름차순으로 보기',
         cancelSort: '정렬 취소하기'
     }
 

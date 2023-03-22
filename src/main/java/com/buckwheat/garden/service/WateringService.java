@@ -16,4 +16,6 @@ public interface WateringService {
     List<WateringDto.WateringForOnePlant> modifyWatering(WateringDto.WateringRequest wateringRequest);
 
     void deleteWatering(int wateringNo);
+
+    void deleteAllFromPlant(int plantNo);
 }
