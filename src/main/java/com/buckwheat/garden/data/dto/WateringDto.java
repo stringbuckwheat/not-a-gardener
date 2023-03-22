@@ -13,6 +13,7 @@ public class WateringDto {
     @Getter
     @ToString
     public static class WateringRequest{
+        private int wateringNo;
         private int plantNo;
         private int chemicalNo;
         private LocalDate wateringDate;

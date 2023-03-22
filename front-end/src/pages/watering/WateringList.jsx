@@ -2,14 +2,13 @@ import { CContainer } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { cilPen, cilTrash, cilX } from "@coreui/icons";
 import getWateringNotificationMsg from "src/utils/function/getWateringNotificationMsg";
-import getData from "src/api/backend-api/common/getData";
 import WateringFormOpen from "./WateringFormOpen";
 import deleteData from "src/api/backend-api/common/deleteData";
 import { useEffect, useState } from "react";
 
 import locale from 'antd/es/date-picker/locale/ko_KR';
 import 'dayjs/locale/ko';
-import { Form, Table, notification, Popconfirm, Space, Button, Typography, DatePicker, Select, Input, } from "antd";
+import { Form, Table, notification, Popconfirm, Space, Button, DatePicker, Select } from "antd";
 
 import dayjs from "dayjs";
 import advancedFormat from 'dayjs/plugin/advancedFormat'
@@ -19,8 +18,8 @@ import weekday from 'dayjs/plugin/weekday'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
 import weekYear from 'dayjs/plugin/weekYear'
 import getChemicalListForSelect from "src/api/service/getChemicalListForSelect";
-import insertData from "src/api/backend-api/common/insertData";
 import updateData from "src/api/backend-api/common/updateData";
+import getDisabledDate from "src/utils/function/getDisabledDate";
 
 
 
@@ -50,16 +49,7 @@ const WateringList = (props) => {
         getChemicalListForSelect(setChemicalList);
     }, [])
 
-    // 미래에 물준다고 기록하기 방지
-    const disabledDate = (current) => {
-        return current && current.valueOf() > Date.now();
-    }
-
     const [ editWatering, setEditWatering ] = useState({});
-
-    const onChangeDate = (dateString) => {
-        setEditWatering({...editWatering, wateringDate: dateString})
-    }
 
     const EditableCell = ({
         editing,
@@ -74,8 +64,8 @@ const WateringList = (props) => {
         const inputNode = inputType === 'date'
             ? <DatePicker 
                     locale={locale} 
-                    disabledDate={disabledDate} 
-                    onChange={(date, dateString) => {onChangeDate(dateString)}} />
+                    disabledDate={getDisabledDate} 
+                    onChange={(date, dateString) => { setEditWatering({...editWatering, wateringDate: dateString}) }} />
             : <Select 
                     options={chemicalList} 
                     onChange={(value) => { setEditWatering({...editWatering, chemicalNo: value}) }}/>;
@@ -98,14 +88,11 @@ const WateringList = (props) => {
     };
 
     // editable rows
-    const [form] = Form.useForm();
-    // const [data, setData] = useState(wateringList);
-    const [editingKey, setEditingKey] = useState('');
+    const [ form ] = Form.useForm();
+    const [ editingKey, setEditingKey ] = useState('');
     const isEditing = (record) => record.wateringNo === editingKey;
 
     const edit = (record) => {
-        console.log("record", record);
-
         form.setFieldsValue({
             ...record,
             wateringDate: dayjs(new Date(record.wateringDate)),
@@ -127,8 +114,6 @@ const WateringList = (props) => {
     const save = async (key) => {
         const data = await updateData("watering", editWatering.wateringNo, editWatering);
     };
-
-    ///////////
 
     const wateringTableColumnArray = [
         {
@@ -152,7 +137,6 @@ const WateringList = (props) => {
             title: '',
             key: 'action',
             render: (_, record) => {
-                console.log("Render 내부 record", record)
                 const editable = isEditing(record);
 
                 return editable ? (
@@ -160,7 +144,7 @@ const WateringList = (props) => {
                         <Button onClick={() => save(record.wateringNo)} size="small">
                             <CIcon className="text-success" icon={cilPen} />
                         </Button>
-                        <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
+                        <Popconfirm title="취소하시겠습니까?" onConfirm={cancel}>
                             <Button size="small">
                                 <CIcon icon={cilX} />
                             </Button>
@@ -175,7 +159,7 @@ const WateringList = (props) => {
                             placement="topRight"
                             title="이 기록을 삭제하시겠습니까?"
                             description="삭제한 물 주기 정보는 되돌릴 수 없어요"
-                            onConfirm={() => { confirm(record.wateringNo) }}
+                            onConfirm={() => { deleteWatering(record.wateringNo) }}
                             okText="네"
                             cancelText="아니요"
                         >
@@ -207,13 +191,9 @@ const WateringList = (props) => {
         };
     });
 
-    //////////////////////////
-
-    const confirm = async (wateringNo) => {
-        await deleteData("/watering", wateringNo);
-
-        const res = await getData(`/plant/${plant.plantNo}/watering`);
-        setWateringList(res);
+    const deleteWatering = (wateringNo) => {
+        deleteData("/watering", wateringNo);
+        setWateringList(wateringList.filter(watering => watering.wateringNo !== wateringNo))
     };
 
     // 물주기 추가/수정/삭제 후 메시지
@@ -248,7 +228,6 @@ const WateringList = (props) => {
                         }}
                         pagination={{ onChange: cancel, }}
                         rowClassName="editable-row"
-                        // columns={wateringTableColumnArray}
                         columns={mergedColumns}
                         dataSource={wateringList.map((watering) => {
                             return ({

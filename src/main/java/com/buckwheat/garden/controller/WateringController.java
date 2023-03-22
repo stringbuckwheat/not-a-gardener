@@ -28,6 +28,11 @@ public class WateringController {
         return wateringService.addWatering(wateringRequest);
     }
 
+    @PutMapping("/{wateringNo}")
+    public List<WateringDto.WateringForOnePlant> updateWatering(@RequestBody WateringDto.WateringRequest wateringRequest){
+        return wateringService.modifyWatering(wateringRequest);
+    }
+
     @DeleteMapping("/{wateringNo}")
     public void deleteWatering(@PathVariable int wateringNo){
         wateringService.deleteWatering(wateringNo);

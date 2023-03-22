@@ -6,6 +6,7 @@ import 'dayjs/locale/ko';
 import getData from "src/api/backend-api/common/getData";
 import { useParams } from "react-router-dom";
 import authAxios from "src/utils/interceptors";
+import getDisabledDate from "src/utils/function/getDisabledDate";
 
 const AddChemicalUsage = (props) => {
     const chemicalNo = useParams().chemicalNo;
@@ -30,11 +31,6 @@ const AddChemicalUsage = (props) => {
     useEffect(() => {
         onMountAddChemicalUsage();
     }, [])
-
-    // 미래에 물준다고 기록하기 방지
-    const disabledDate = (current) => {
-        return current && current.valueOf() > Date.now();
-    }
 
     const handleChange = async (value) => {
         setSelectedPlantList(value);
@@ -66,7 +62,7 @@ const AddChemicalUsage = (props) => {
                         />
                         <DatePicker
                             className="mb-2 width-full"
-                            disabledDate={disabledDate}
+                            disabledDate={getDisabledDate}
                             onChange={(date, dateString) => { setUsageDate(dateString) }}
                             locale={locale}
                         />

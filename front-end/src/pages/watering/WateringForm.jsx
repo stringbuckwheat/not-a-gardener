@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import getData from 'src/api/backend-api/common/getData';
 import insertData from 'src/api/backend-api/common/insertData';
 import getChemicalListForSelect from 'src/api/service/getChemicalListForSelect';
+import getDisabledDate from 'src/utils/function/getDisabledDate';
 
 
 const WateringForm = (props) => {
@@ -44,11 +45,6 @@ const WateringForm = (props) => {
         setWateringList(wateringList);
     }
 
-    // 미래에 물준다고 기록하기 방지
-    const disabledDate = (current) => {
-        return current && current.valueOf() > Date.now();
-    }
-
     return (
         <>
             <CAlert
@@ -60,7 +56,7 @@ const WateringForm = (props) => {
                     <DatePicker
                         name="wateringDate"
                         className="width-full"
-                        disabledDate={disabledDate}
+                        disabledDate={getDisabledDate}
                         onChange={(date, dateString) => { setWateringDate(dateString) }}
                         locale={locale} />
                 </div>

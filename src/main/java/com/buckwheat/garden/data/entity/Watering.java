@@ -30,10 +30,10 @@ public class Watering {
     @JoinColumn(name = "chemical_no")
     private Chemical chemical;
 
-    public Watering update(LocalDate wateringDate, Plant plant, Chemical Chemical){
+    public Watering update(LocalDate wateringDate, Plant plant, Chemical chemical){
         this.wateringDate = wateringDate;
         this.plant = plant;
-        this.chemical = Chemical;
+        this.chemical = chemical;
 
         return this;
     }
