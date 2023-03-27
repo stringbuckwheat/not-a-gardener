@@ -17,6 +17,9 @@ const Garden = () => {
     const data = await getData("/garden");
 
     setHasPlantList(data.length > 0);
+
+    data.sort((a, b) => (a.gardenDetail.wateringCode - b.gardenDetail.wateringCode))
+
     setPlantList(data);
     setOriginPlantList(data);
   }

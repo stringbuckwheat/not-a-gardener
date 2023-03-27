@@ -1,13 +1,10 @@
-import GardenCard from "../../components/card/GardenCard";
+import GardenCard from "../../components/card/garden-card/GardenCard";
 import React, {useEffect, useState} from "react";
-import {notification} from "antd";
+import {notification, Row} from "antd";
 import getWateringNotificationMsg from "../../utils/function/getWateringNotificationMsg";
 import ListHeader from "../../components/data/header/ListHeader";
-import AddPlantButton from "../../components/button/AddPlantButton";
-import Booped from "./Booped";
-import CIcon from "@coreui/icons-react";
-import {cilHappy} from "@coreui/icons";
-import {CContainer, CRow} from "@coreui/react";
+import {useTrail, animated} from "@react-spring/web";
+import {CCol} from "@coreui/react";
 
 const GardenList = (props) => {
   const {plantList, setPlantList, originPlantList} = props;
@@ -33,7 +30,6 @@ const GardenList = (props) => {
   }
 
   useEffect(() => {
-    console.log("현재 검색어: ", searchWord);
     if (searchWord !== "") {
       search(searchWord)
     } else {
@@ -65,30 +61,37 @@ const GardenList = (props) => {
     setPlantList(sortedPlantList);
   }, [sort])
 
+  ///////
+  const trailSprings = useTrail(plantList.length, {
+    from: {opacity: 0},
+    to: {opacity: 1}
+  });
+
   return (
     <>
       {contextHolder}
       <div>
-        아이콘 애니메이션
-        <Booped rotation={20} timing={200}>
-          <CIcon icon={cilHappy} height={40}/>
-        </Booped>
-        <AddPlantButton size="sm"/>
+        {/*아이콘 애니메이션*/}
+        {/*<Booped rotation={20} timing={200}>*/}
+        {/*  <CIcon icon={cilHappy} height={40}/>*/}
+        {/*</Booped>*/}
+        {/*<AddPlantButton size="sm"/>*/}
       </div>
       <ListHeader
         setSearchWord={setSearchWord}
         sortOption={sortOption}
         setSort={setSort}/>
-        <CRow>
-          {plantList.map((plant) =>
-            <GardenCard
-              plant={plant}
-              // chemicalList={chemicalList}
-              setPlantList={setPlantList}
-              openNotification={openNotification}
-            />
-          )}
-        </CRow>
+      <Row>
+        {
+          trailSprings.map((spring, index) => (
+            <CCol md={4} xs={12} className="mb-4">
+              <animated.div style={{...spring,}} className="parent card-container-item">
+                <GardenCard garden={plantList[index]}/>
+              </animated.div>
+            </CCol>
+          ))
+        }
+      </Row>
     </>
   )
 

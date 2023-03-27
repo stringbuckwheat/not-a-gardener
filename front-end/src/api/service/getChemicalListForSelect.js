@@ -1,7 +1,9 @@
 import getData from "../backend-api/common/getData";
+import authAxios from "../../utils/interceptors";
 
 const getChemicalListForSelect = async (setChemicalList) => {
-    const data = await getData("/chemical");
+  const res = await authAxios.get("/chemical");
+  const data = res.data;
 
     // 맨 앞에 맹물 추가
     data.unshift({

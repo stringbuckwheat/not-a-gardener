@@ -10,7 +10,11 @@ const WateringListAction = (props) => {
             <Button onClick={updateWatering} size="small">
                 <CIcon className="text-success" icon={cilPen} />
             </Button>
-            <Popconfirm title="취소하시겠습니까?" onConfirm={cancel}>
+            <Popconfirm
+              title="취소하시겠습니까?"
+              okText="네"
+              cancelText="아니요"
+              onConfirm={cancel}>
                 <Button size="small">
                     <CIcon icon={cilX} />
                 </Button>

@@ -2,7 +2,6 @@ import { Space, Tag } from "antd";
 const PlantTag = (props) => {
     const plant = props.plant;
     console.log("plant tag plant", plant);
-    // const latestWateringDate = props.latestWateringDate.wateringDate;
     const wateringListSize = props.wateringListSize;
     const today = new Date();
 
@@ -79,12 +78,13 @@ const PlantTag = (props) => {
                         <Tag color="magenta">{getLatestWateringDateMsg()}</Tag>
                         {
                             calculateNextWateringDate() && wateringListSize > 1
-                            ? <Tag color="magenta">{calculateNextWateringDate()}</Tag>
+                            ? <Tag color="orange">{calculateNextWateringDate()}</Tag>
                             : <></>
                         }
-                        
+
                     </>
                     : <></>}
+          <Tag color="cyan">{wateringListSize}번 물을 줬어요</Tag>
         </Space>
     )
 }

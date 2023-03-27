@@ -32,14 +32,7 @@ const GardenTag = (props) => {
     return (
         <div className="mt-3">
             <Space size={[0, 5]} wrap>
-                <Tag>{plant.placeName}</Tag>
                 <Tag>{getAverageWateringPeriodMsg()}</Tag>
-                {
-                    gardenDetail.anniversary !== ""
-                        ?
-                        <Tag>{gardenDetail.anniversary}</Tag>
-                        : <></>
-                }
                 {
                     gardenDetail.latestWateringDate
                     ? <Tag>{getLatestWateringDateMsg()}</Tag>
