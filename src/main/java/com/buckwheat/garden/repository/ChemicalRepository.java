@@ -16,6 +16,8 @@ public interface ChemicalRepository extends JpaRepository<Chemical, Integer> {
      */
     List<Chemical> findByMember_memberNo(int memberNo);
 
+    List<Chemical> findByMember_memberNoOrderByChemicalPeriodDesc(int memberNo);
+
     @EntityGraph(attributePaths = {"wateringList", "wateringList.plant", "wateringList.plant.place"}, type = EntityGraph.EntityGraphType.FETCH)
     Chemical findByChemicalNo(int chemicalNo);
 }

@@ -3,10 +3,8 @@ package com.buckwheat.garden.repository;
 import com.buckwheat.garden.data.entity.Plant;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.JoinColumn;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +26,7 @@ public interface PlantRepository extends JpaRepository<Plant, Integer> {
      * @param memberNo
      * @return Place, WateringList가 매핑된 Plant 객체 리스트
      */
-    @EntityGraph(attributePaths = {"place", "wateringList"}, type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(attributePaths = {"place", "wateringList", "wateringList.chemical"}, type = EntityGraph.EntityGraphType.FETCH)
     List<Plant> findByMember_MemberNo(int memberNo);
 
     /**
@@ -36,6 +34,6 @@ public interface PlantRepository extends JpaRepository<Plant, Integer> {
      * @param plantNo
      * @return Place만 포함하는 plant 객체 하나
      */
-    @EntityGraph(attributePaths = {"place", "wateringList"}, type= EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(attributePaths = {"place", "wateringList", "wateringList.chemical"}, type= EntityGraph.EntityGraphType.FETCH)
     Optional<Plant> findByPlantNo(int plantNo);
 }

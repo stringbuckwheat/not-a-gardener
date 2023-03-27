@@ -1,5 +1,6 @@
 package com.buckwheat.garden.service.impl;
 
+import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.data.entity.Chemical;
 import com.buckwheat.garden.data.entity.Plant;
@@ -28,35 +29,13 @@ public class WateringServiceImpl implements WateringService {
     private final ChemicalRepository chemicalRepository;
     private final PlantRepository plantRepository;
 
-    @Override
-    public List<WateringDto.WateringList> getWateringList(int memberNo) {
-        // return용 리스트
-        List<WateringDto.WateringList> wateringDtoList = new ArrayList<>();
-
-        // member로 plantList 가져와서
-        // @EntityGraph 메소드
-        List<Plant> plantList = plantRepository.findByMember_MemberNoOrderByCreateDateDesc(memberNo);
-
-        // plant 별 watering list를 가져온 뒤
-        for(Plant plant : plantList){
-            List<Watering> wateringList = plant.getWateringList();
-
-            for(Watering watering : wateringList){
-                wateringDtoList.add(
-                    WateringDto.WateringList.from(watering)
-                );
-            }
-        }
-
-        return wateringDtoList;
-    }
-
     /**
      * 이번 관수가 며칠만인지 계산
+     *
      * @param latestWateringDate DB에 저장된 가장 최근 물주기
      * @return 이번 관수가 며칠만인지
      */
-    public int calculateWateringPeriod(LocalDateTime latestWateringDate){
+    public int calculateWateringPeriod(LocalDateTime latestWateringDate) {
         // 최근 물주기가 변경되었는지 확인하기
         // ex. 그간 나흘마다 물을 주다가 사흘만에 흙이 마르게 되었다.
 
@@ -65,32 +44,19 @@ public class WateringServiceImpl implements WateringService {
         return (int) Duration.between(latestWateringDate, today).toDays();
     }
 
-    Plant getPlantForAdd(Plant plant, int period){
-        log.debug("getPlantForAdd()");
-
-        if(period != plant.getAverageWateringPeriod()){
-            log.debug("average watering period 변경");
-            log.debug("{}일 -> {}일", plant.getAverageWateringPeriod(), period);
-            return plantRepository.save(plant.updateAverageWateringPeriod(period));
+    @Override
+    public Plant getPlantForAdd(Plant plant, int period) {
+        if (period != plant.getAverageWateringPeriod()) {
+            Plant updatedPlant = plant.updateAverageWateringPeriod(period);
+            plantRepository.save(updatedPlant);
+            return updatedPlant;
         }
-
-        log.debug("average watering period 변경 안됨");
 
         return plant;
     }
 
-    Watering getWateringEntity(WateringDto.WateringRequest wateringRequest, Plant plant){
-        // 비료를 줬으면 Chemical를 매핑한 entity 리턴
-        if(wateringRequest.getChemicalNo() != 0){
-            Chemical chemical = chemicalRepository.findById(wateringRequest.getChemicalNo()).orElseThrow(NoSuchElementException::new);
-            return wateringRequest.toEntityWithPlantAndChemical(plant, chemical);
-        }
-
-        // 맹물을 줬으면 plant만 매핑해서 리턴
-        return wateringRequest.toEntityWithPlant(plant);
-    }
-
-    int getWateringCode(int period, int prevWateringPeriod){
+    @Override
+    public int getWateringCode(int period, int prevWateringPeriod) {
         // 물주기 짧아짐: -1
         // 물주기 똑같음: 0
         // 물주기 길어짐: 1
@@ -98,58 +64,71 @@ public class WateringServiceImpl implements WateringService {
         return Integer.compare(period, prevWateringPeriod);
     }
 
-    public WateringDto.WateringResponse addFirstWatering(Plant prevPlant, WateringDto.WateringRequest wateringRequest){
-        Watering watering = wateringRepository.save(getWateringEntity(wateringRequest, prevPlant));
-        WateringDto.WateringMsg wateringMsg = new WateringDto.WateringMsg(2, prevPlant.getAverageWateringPeriod());
-
-        return WateringDto.WateringResponse.withWateringMsgFrom(watering, wateringMsg);
-    }
-
     /**
      * 물주기 기록 추가하기(무조건 '오늘' 버전 메소드)
+     *
      * @param wateringRequest
      * @return WateringResponseDto
      */
     @Override
-    public WateringDto.WateringResponse addWatering(WateringDto.WateringRequest wateringRequest) {
-        // @EntityGraph(attributePaths = {"place", "wateringList"}, type= EntityGraph.EntityGraphType.FETCH)
-        Plant prevPlant = plantRepository.findByPlantNo(wateringRequest.getPlantNo()).orElseThrow(NoSuchElementException::new);
+    public WateringDto.WateringModifyResponse addWatering(WateringDto.WateringRequest wateringRequest) {
+        log.debug("add watering");
+        log.debug("wateringRequest: {}", wateringRequest);
+
+        Plant plant = plantRepository.findByPlantNo(wateringRequest.getPlantNo())
+                .orElseThrow(NoSuchElementException::new);
+        Chemical chemical = chemicalRepository.findById(wateringRequest.getChemicalNo()).orElse(null);
 
         // 물주기 정보가 없으면
         // 즉, 첫번째 물주기면
-        if(prevPlant.getWateringList().size() == 0){
-            return addFirstWatering(prevPlant, wateringRequest);
+        if (plant.getWateringList().size() == 0) {
+            Watering watering = wateringRepository.save(wateringRequest.toEntityWithPlantAndChemical(plant, chemical));
+            WateringDto.WateringMsg wateringMsg = new WateringDto.WateringMsg(2, plant.getAverageWateringPeriod());
+
+            List<WateringDto.WateringForOnePlant> list = new ArrayList<>();
+            list.add(WateringDto.WateringForOnePlant.from(watering));
+
+            return WateringDto.WateringModifyResponse.builder()
+                    .wateringMsg(wateringMsg)
+                    .wateringList(list)
+                    .build();
         }
 
-        // 이번 물주기가 며칠만인지 계산
-        int period = calculateWateringPeriod(prevPlant.getWateringList().get(0).getWateringDate().atStartOfDay());
-        // watering code 계산
-        int wateringCode = getWateringCode(period, prevPlant.getAverageWateringPeriod());
-
-        // 해당 식물을 조회한 뒤, 물주기 정보를 업데이트할지 말지 결정 후 Plant를 돌려준다
-        // 비료를 줬으면 Chemical, Plant를 포함하는 Watering 엔티티,
-        // 맹물을 줬으면 Plant만 포함하는 엔티티
-        Plant plant = getPlantForAdd(prevPlant, period);
-
         // 저장
-        Watering watering = wateringRepository.save(getWateringEntity(wateringRequest, plant));
+        Watering watering = wateringRepository.save(wateringRequest.toEntityWithPlantAndChemical(plant, chemical));
 
-        // msg
-        WateringDto.WateringMsg wateringMsg = new WateringDto.WateringMsg(wateringCode, plant.getAverageWateringPeriod());
+        // 리턴용 DTO 만들기
+        WateringDto.WateringMsg wateringMsg = getWateringMsg(plant.getPlantNo());
+        log.debug("wateringMsg: {}", wateringMsg);
+        List<WateringDto.WateringForOnePlant> wateringList = getWateringListForPlant(wateringRequest.getPlantNo());
 
-        return WateringDto.WateringResponse.withWateringMsgFrom(watering, wateringMsg);
+        // 식물 테이블의 averageWateringDate 업데이트 필요 X
+        if(wateringMsg.getWateringCode() == 3){
+            return WateringDto.WateringModifyResponse.builder()
+                    .wateringMsg(wateringMsg)
+                    .wateringList(wateringList)
+                    .build();
+        }
+
+        // 필요시 물주기 정보 업데이트
+        Plant plantForAdd = getPlantForAdd(plant, wateringMsg.getAverageWateringDate());
+
+        return WateringDto.WateringModifyResponse.builder()
+                .plant(PlantDto.PlantResponse.from(plantForAdd))
+                .wateringMsg(wateringMsg)
+                .wateringList(wateringList)
+                .build();
     }
 
     /**
-     *
      * @param list 물 준 날짜의 DESC
      * @return
      */
-    public List<WateringDto.WateringForOnePlant> withWateringPeriodList(List<Watering> list){
+    public List<WateringDto.WateringForOnePlant> withWateringPeriodList(List<Watering> list) {
         List<WateringDto.WateringForOnePlant> wateringList = new ArrayList<>();
 
-        for(int i = 0; i < list.size(); i++){
-            if(i == list.size() - 1){
+        for (int i = 0; i < list.size(); i++) {
+            if (i == list.size() - 1) {
                 wateringList.add(
                         WateringDto.WateringForOnePlant.from(list.get(i))
                 );
@@ -159,7 +138,7 @@ public class WateringServiceImpl implements WateringService {
 
             // 두 번째 데이터 부터는
             LocalDate afterWateringDate = list.get(i).getWateringDate();
-            LocalDate prevWateringDate = list.get(i+1).getWateringDate();
+            LocalDate prevWateringDate = list.get(i + 1).getWateringDate();
 
             int wateringPeriod = Period.between(prevWateringDate, afterWateringDate).getDays();
 
@@ -178,13 +157,13 @@ public class WateringServiceImpl implements WateringService {
         List<Watering> list = wateringRepository.findByPlant_plantNoOrderByWateringDateDesc(plantNo);
 
         // 며칠만에 물 줬는지도 계산해줌
-        if(list.size() >= 2){
+        if (list.size() >= 2) {
             return withWateringPeriodList(list);
         }
 
         List<WateringDto.WateringForOnePlant> wateringList = new ArrayList<>();
 
-        for(Watering watering : list){
+        for (Watering watering : list) {
             wateringList.add(
                     WateringDto.WateringForOnePlant.from(watering)
             );
@@ -193,23 +172,89 @@ public class WateringServiceImpl implements WateringService {
         return wateringList;
     }
 
-    // 지금은 save 로직과 같지만 일단은 분리
+    public int calculateWateringPeriod(int plantNo) {
+        Plant plant = plantRepository.findByPlantNo(plantNo).orElseThrow(NoSuchElementException::new);
+
+        if (plant.getWateringList().size() > 1) {
+            LocalDateTime latestWateringDate = plant.getWateringList().get(0).getWateringDate().atStartOfDay();
+            LocalDateTime prevWateringDate = plant.getWateringList().get(1).getWateringDate().atStartOfDay();
+
+            return (int) Duration.between(prevWateringDate, latestWateringDate).toDays();
+        }
+
+        return plant.getAverageWateringPeriod();
+    }
+
+    WateringDto.WateringMsg getWateringMsg(int plantNo) {
+        log.debug("getWateringMsg()");
+        Plant plant = plantRepository.findByPlantNo(plantNo).orElseThrow(NoSuchElementException::new);
+        log.debug("plant: {}", PlantDto.PlantResponse.from(plant));
+
+        List<WateringDto.WateringForOnePlant> list = new ArrayList();
+        for(Watering w: plant.getWateringList()){
+            list.add(WateringDto.WateringForOnePlant.from(w));
+        }
+
+        log.debug("watering list : {}", list);
+        log.debug("plant.getWateringList().size(): {}", plant.getWateringList().size());
+
+        // 이 메소드가 호출되는 시점엔 물주기 기록이 두 개 이상 있음
+        LocalDateTime latestWateringDate = plant.getWateringList().get(0).getWateringDate().atStartOfDay();
+        log.debug("latestWateringDate: {}", latestWateringDate);
+        LocalDateTime prevWateringDate = plant.getWateringList().get(1).getWateringDate().atStartOfDay();
+        log.debug("prevWateringDate: {}", prevWateringDate);
+
+        int period = (int) Duration.between(prevWateringDate, latestWateringDate).toDays();
+        log.debug("period: {}", period);
+        int wateringCode = getWateringCode(period, plant.getAverageWateringPeriod());
+        log.debug("wateringCode: {}", wateringCode);
+
+        return new WateringDto.WateringMsg(wateringCode, period);
+    }
+
     @Override
-    public List<WateringDto.WateringForOnePlant> modifyWatering(WateringDto.WateringRequest wateringRequest) {
+    public WateringDto.WateringModifyResponse modifyWatering(WateringDto.WateringRequest wateringRequest) {
         log.debug("wateringRequest: {}", wateringRequest);
 
         // Mapping할 Entity 가져오기
         // chemical은 nullable이므로 orElse 사용
-        Plant plant = plantRepository.findById(wateringRequest.getPlantNo()).orElseThrow(NoSuchElementException::new);
+        Plant plant = plantRepository.findByPlantNo(wateringRequest.getPlantNo())
+                .orElseThrow(NoSuchElementException::new);
         Chemical chemical = chemicalRepository.findById(wateringRequest.getChemicalNo()).orElse(null);
 
         // 기존 watering 엔티티
         Watering watering = wateringRepository.findById(wateringRequest.getWateringNo())
                 .orElseThrow(NoSuchElementException::new);
 
+        // 수정
         wateringRepository.save(watering.update(wateringRequest.getWateringDate(), plant, chemical));
 
-        return getWateringListForPlant(wateringRequest.getPlantNo());
+        // 리턴용 DTO 만들기
+        WateringDto.WateringMsg wateringMsg = getWateringMsg(plant.getPlantNo());
+        List<WateringDto.WateringForOnePlant> wateringList = getWateringListForPlant(wateringRequest.getPlantNo());
+
+        // 식물 테이블의 averageWateringDate 업데이트 필요 X
+        if(wateringMsg.getWateringCode() == 3){
+            return WateringDto.WateringModifyResponse.builder()
+                    .wateringMsg(wateringMsg)
+                    .wateringList(wateringList)
+                    .build();
+        }
+
+        // 최근 평균 물주기 update
+        Plant plantForAdd = getPlantForAdd(plant, wateringMsg.getAverageWateringDate());
+
+        log.debug("response: {}", WateringDto.WateringModifyResponse.builder()
+                .plant(PlantDto.PlantResponse.from(plantForAdd))
+                .wateringMsg(wateringMsg)
+                .wateringList(wateringList)
+                .build());
+
+        return WateringDto.WateringModifyResponse.builder()
+                .plant(PlantDto.PlantResponse.from(plantForAdd))
+                .wateringMsg(wateringMsg)
+                .wateringList(wateringList)
+                .build();
     }
 
     @Override

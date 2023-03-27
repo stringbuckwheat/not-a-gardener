@@ -6,6 +6,7 @@ import com.buckwheat.garden.data.entity.Watering;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class WateringDto {
 
@@ -53,8 +54,6 @@ public class WateringDto {
         }
 
         public static WateringResponse from(Watering watering){
-
-
             return WateringResponse.builder()
                     .wateringNo(watering.getWateringNo())
                     .plantName(watering.getPlant().getPlantName())
@@ -75,7 +74,18 @@ public class WateringDto {
     }
 
     @AllArgsConstructor
+    @Builder
     @Getter
+    @ToString
+    public static class WateringModifyResponse {
+        private PlantDto.PlantResponse plant;
+        private List<WateringForOnePlant> wateringList;
+        private WateringMsg wateringMsg;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    @ToString
     public static class WateringMsg{
         private int wateringCode;
         private int averageWateringDate; // 며칠만에 물 줬는지

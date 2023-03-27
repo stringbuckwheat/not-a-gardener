@@ -25,7 +25,6 @@ public class ChemicalController {
      */
     @GetMapping("")
     public List<ChemicalDto.ChemicalResponse> getChemicalList(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        log.debug("chemicalList: {}", chemicalService.getChemicalList(userPrincipal.getMember().getMemberNo()));
         return chemicalService.getChemicalList(userPrincipal.getMember().getMemberNo());
     }
 

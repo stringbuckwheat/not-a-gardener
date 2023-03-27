@@ -1,5 +1,6 @@
 package com.buckwheat.garden.service.impl;
 
+import com.buckwheat.garden.data.dto.ChemicalDto;
 import com.buckwheat.garden.data.dto.GardenDto;
 import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.dto.WateringDto;
@@ -16,11 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -34,7 +31,7 @@ public class GardenServiceImpl implements GardenService {
     public List<GardenDto.GardenResponse> getGarden(int memberNo) {
         List<GardenDto.GardenResponse> gardenList = new ArrayList<>();
 
-        List<Chemical> chemicalList = chemicalRepository.findByMember_memberNo(memberNo);
+        List<Chemical> chemicalList = chemicalRepository.findByMember_memberNoOrderByChemicalPeriodDesc(memberNo);
         List<Plant> plantList = plantRepository.findByMember_MemberNo(memberNo);
 
         // 필요한 것들 계산해서 gardenDto list 리턴
@@ -61,12 +58,11 @@ public class GardenServiceImpl implements GardenService {
             int wateringCode = getWateringCode(plant.getAverageWateringPeriod(), wateringDDay);
 //            log.debug("{}의 watering code: {}", plant.getPlantName(), wateringCode);
 
-            // TODO 비료 계산
-            // fertilizingCode: 물을 줄 식물에 대해서 맹물을 줄지 비료를 줄지 알려주는 용도
-            int fertilizingCode = 999;
+            // chemicalCode: 물을 줄 식물에 대해서 맹물을 줄지 비료/약품 희석액을 줄지 알려주는 용도
+            int chemicalCode = getChemicalCode(plant.getPlantNo(), chemicalList); // FertilizerNo or -1
 
             PlantDto.PlantResponse plantResponse = PlantDto.PlantResponse.from(plant);
-            GardenDto.GardenDetail gardenDetail = GardenDto.GardenDetail.from(latestWatering, anniversary, wateringDDay, wateringCode, fertilizingCode);
+            GardenDto.GardenDetail gardenDetail = GardenDto.GardenDetail.from(latestWatering, anniversary, wateringDDay, wateringCode, chemicalCode);
 
             gardenList.add(new GardenDto.GardenResponse(plantResponse, gardenDetail));
         }
@@ -136,22 +132,51 @@ public class GardenServiceImpl implements GardenService {
 
     // -1           0           1
     // 비료 사용 안함  맹물 주기
-    public int getFertilizingCode(List<Chemical> chemicalList, int plantNo) {
-        LocalDate latestFertilizedDay = wateringRepository.findLatestFertilizedDayByPlantNo(plantNo);
-
-        // 비료를 준 적이 없는 경우
-        if (latestFertilizedDay == null) {
-            // 일단 맹물 주도록
-            // TODO 첫 비료 스케줄 잡는 로직 추가
-            return 0;
+    public int getChemicalCode(int plantNo, List<Chemical> chemicalList) {
+        // chemicalList는 시비 주기가 느린 순으로 들어있음
+        for(Chemical chemical : chemicalList){
+            log.debug(ChemicalDto.ChemicalResponse.from(chemical).toString());
         }
 
-        // 비료준지 얼마나 지났는지 계산
-        int fertilizingSchedule = Period.between(latestFertilizedDay, LocalDate.now()).getDays();
-        // log.debug("fertilizingSchedule: " + fertilizingSchedule);
 
-        // 비료준 지 5일이 지났는지 확인하고 해당하는 코드 반환
-        return 0;
+
+        // 가진 chemical 목록과 같은 크기의 arraylist 생성
+        List<LocalDate> latestFertilizedDates = new ArrayList<>(chemicalList.size());
+        List<Map<String, Object>> fertilizingCodes = new ArrayList<>(chemicalList.size());
+
+        // chemical list Example
+        // 1011     1015    1016    4055    5011
+        // 하이포     개화용   미량원소   코니도    살균제
+        // 14일      14일     60일    14일      50일
+
+        // chemicalList 인덱스에 맞춰 latestFertilizedDates 리스트 만들기
+        // 해당 식물의 가장 최근 해당 chemical을 관주한 날을 기록한다
+        for(Chemical chemical : chemicalList){
+            LocalDate fertilizingDate = wateringRepository.findLatestFertilizingDayByPlantNoAndChemicalNo(plantNo, chemical.getChemicalNo());
+            latestFertilizedDates.add(fertilizingDate);
+        }
+
+        // index 필요
+        // chemical list index에 맞춰 해당 chemical을 줘야하는지 말아야하는지 산출
+        for(int i = 0; i < latestFertilizedDates.size(); i++){
+            LocalDate date = latestFertilizedDates.get(i);
+
+            if(latestFertilizedDates.get(i) == null){
+                // 해당 비료를 준 기록이 아예 없으면
+                // TODO 제일 첫 비료 주기 알림은 어떻게 할지 고민해볼 것
+                continue;
+            }
+
+            // 해당 비료를 준지 얼마나 지났는지 계산
+            int period = (int) Duration.between(date.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays();
+
+            // 시비 날짜와 같거나 더 지났으면
+            if(period >= chemicalList.get(i).getChemicalPeriod()){
+                return chemicalList.get(i).getChemicalNo();
+            }
+        }
+
+        return -1;
     }
 
 }

@@ -1,7 +1,6 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.config.oauth2.UserPrincipal;
-import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.data.token.JwtAuthToken;
 import com.buckwheat.garden.service.JwtAuthTokenProvider;
 import io.jsonwebtoken.Claims;
@@ -13,9 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +20,10 @@ import javax.annotation.PostConstruct;
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -91,9 +91,6 @@ public class JwtAuthTokenProviderImpl implements JwtAuthTokenProvider {
         if(authToken.validate()){
             // authToken에 담긴 데이터를 받아온다
             Claims claims = authToken.getData();
-
-            // memberNo가 들어있다.
-            log.debug("claims.getSubject(): {}", claims.getSubject());
 
             UserPrincipal userPrincipal = (UserPrincipal) userDetailsService.loadUserByUsername(claims.getSubject());
 

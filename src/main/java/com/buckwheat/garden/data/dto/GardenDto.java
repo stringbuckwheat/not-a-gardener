@@ -1,10 +1,6 @@
 package com.buckwheat.garden.data.dto;
 
-import com.buckwheat.garden.data.entity.Plant;
-import com.buckwheat.garden.data.entity.Watering;
 import lombok.*;
-
-import java.time.LocalDate;
 
 
 public class GardenDto {
@@ -34,15 +30,15 @@ public class GardenDto {
         private int wateringCode;
 
         // 비료 주기 정보
-        private int fertilizingCode;
+        private int chemicalCode;
 
-        public static GardenDetail from(WateringDto.WateringResponse latestWateringDate, String anniversary, int wateringDDay, int wateringCode, int fertilizingCode){
+        public static GardenDetail from(WateringDto.WateringResponse latestWateringDate, String anniversary, int wateringDDay, int wateringCode, int chemicalCode){
             return GardenDetail.builder()
                     .latestWateringDate(latestWateringDate)
                     .anniversary(anniversary)
                     .wateringDDay(wateringDDay)
                     .wateringCode(wateringCode)
-                    .fertilizingCode(fertilizingCode)
+                    .chemicalCode(chemicalCode)
                     .build();
         }
     }

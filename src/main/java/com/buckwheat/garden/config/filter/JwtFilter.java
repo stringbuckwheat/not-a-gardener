@@ -18,7 +18,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,7 +31,6 @@ public class JwtFilter extends OncePerRequestFilter {
         // Request의 Header에 담긴 토큰 값을 가져온다
 
         String token = request.getHeader(AUTHORIZATION_HEADER);
-        log.debug("authToken: " + token);
 
         // 공백 혹은 null이 아니고 Bearer로 시작하면
         if(StringUtils.hasText(token) && token.startsWith(BEARER_PREFIX)){
