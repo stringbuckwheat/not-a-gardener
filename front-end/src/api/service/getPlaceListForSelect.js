@@ -1,7 +1,7 @@
 import authAxios from "src/utils/interceptors";
 
-const getPlaceListForSelect = async (url) => {
-    const placeList = (await authAxios.get(url)).data;
+const getPlaceListForSelect = async () => {
+    const placeList = (await authAxios.get("/place")).data;
 
     return (
         placeList.map((place) => ({

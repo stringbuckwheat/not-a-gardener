@@ -1,14 +1,13 @@
 import mediumArray from "src/utils/dataArray/mediumArray";
-import { useState } from "react";
+import {useState} from "react";
 import ItemForm from "src/components/form/ItemForm";
 import SubmitForAddButton from "src/components/button/SubmitForAddButton";
-import { useLocation } from "react-router-dom";
+import {useLocation} from "react-router-dom";
 
 const AddPlant = () => {
   const placeList = useLocation().state;
-  console.log("add plant == placeList", placeList);
 
-  const initPlant = !placeList.length == 0
+  const initPlant = !placeList.length === 0
     ? {
       plantName: "",
       plantSpecies: "",
@@ -26,7 +25,7 @@ const AddPlant = () => {
       birthday: ""
     }
 
-  const noPlace = !placeList.length == 0
+  const noPlace = !placeList.length === 0
     ? {}
     : {
       addUrl: "/place",
@@ -37,8 +36,8 @@ const AddPlant = () => {
   const [plant, setPlant] = useState(initPlant);
 
   const onChange = (e) => {
-    const { name, value } = e.target;
-    setPlant(setPlant => ({ ...plant, [name]: value }));
+    const {name, value} = e.target;
+    setPlant(setPlant => ({...plant, [name]: value}));
     console.log("onchange", plant);
   }
 
@@ -95,7 +94,7 @@ const AddPlant = () => {
       submitBtn={<SubmitForAddButton
         url="/plant"
         data={plant}
-        validation={validation} />} />
+        validation={validation}/>}/>
   )
 }
 

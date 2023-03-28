@@ -1,34 +1,33 @@
 const getPlantListForPlantTable = (plantList) => {
-    const plantListForPlantTable = plantList.map((pl) => {
-        const plant = pl.plant;
-        const gardenDetail = pl.gardenDetail;
-        const latestWateringDate = gardenDetail.latestWateringDate;
+  const plantListForPlantTable = plantList.map((pl) => {
+    const plant = pl.plant;
+    const gardenDetail = pl.gardenDetail;
+    const latestWateringDate = gardenDetail.latestWateringDate;
 
-        return ({
-            key: plant.plantNo,
-            plantNo: plant.plantNo,
-            plantName: plant.plantName,
-            plantSpecies: plant.plantSpecies,
-            averageWateringPeriod: plant.averageWateringPeriod,
-            earlyWateringPeriod: plant.earlyWateringPeriod,
+    return ({
+      key: plant.plantNo,
+      plantNo: plant.plantNo,
+      plantName: plant.plantName,
+      plantSpecies: plant.plantSpecies,
+      averageWateringPeriod: plant.averageWateringPeriod,
+      earlyWateringPeriod: plant.earlyWateringPeriod,
+      createDate: plant.createDate,
 
-            placeName: plant.placeName,
-            placeNo: plant.placeNo,
+      placeName: plant.placeName,
+      placeNo: plant.placeNo,
 
-            fertilizingCode: gardenDetail.fertilizingCode,
-            wateringCode: gardenDetail.wateringCode,
-            wateringDDay: gardenDetail.wateringDDay,
-            latestWateringDate: latestWateringDate ? `${latestWateringDate.wateringDate} (${latestWateringDate.chemicalName})` : "",
-
-            tags: {
-                    medium: plant.medium,
-                    createDate: `${plant.createDate}부터 기록 중`,
-                    anniversary: plant.birthday ? `${gardenDetail.anniversary} (${plant.birthday}~)` : null,
-                }
-        })
+      fertilizingCode: gardenDetail.fertilizingCode,
+      wateringCode: gardenDetail.wateringCode,
+      wateringDDay: gardenDetail.wateringDDay,
+      latestWateringDate: latestWateringDate ? `${latestWateringDate.wateringDate}\n(${latestWateringDate.chemicalName})` : "",
+      tags: {
+        medium: plant.medium,
+        anniversary: plant.birthday ? `${gardenDetail.anniversary} (${plant.birthday}~)` : null,
+      }
     })
+  })
 
-    return plantListForPlantTable
+  return plantListForPlantTable
 }
 
 export default getPlantListForPlantTable;

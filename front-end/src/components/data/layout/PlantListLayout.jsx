@@ -8,10 +8,7 @@ import Search from "../header/search/Search";
 import {Space} from "antd";
 
 const PlantListLayout = (props) => {
-  const title = props.title;
-  const tags = props.tags;
-  const bottomData = props.bottomData;
-  const setSearchWord = props.setSearchWord;
+  const {title, tags, bottomData, setSearchWord} = props;
 
   return (
     <div className="row justify-content-md-center">

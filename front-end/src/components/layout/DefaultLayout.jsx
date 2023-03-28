@@ -1,26 +1,26 @@
 import React from 'react'
-import { Navigate } from 'react-router-dom';
-import { AppContent, AppSidebar, AppFooter, AppHeader } from '../index'
+import {Navigate} from 'react-router-dom';
+import {AppContent, AppSidebar, AppFooter, AppHeader} from '../index'
 
 const DefaultLayout = () => {
-  console.log("default layout")
   const isLogin = localStorage.getItem("login");
   console.log("login", isLogin !== undefined)
 
+  if (!isLogin) {
+    return <Navigate to="/login" replace={true}/>
+  }
+
   return (
-    isLogin
-    ? 
     <div>
-      <AppSidebar />
+      <AppSidebar/>
       <div className="wrapper d-flex flex-column min-vh-100 bg-light">
-        <AppHeader />
+        <AppHeader/>
         <div className="body flex-grow-1 px-3">
-          <AppContent />
+          <AppContent/>
         </div>
-        <AppFooter />
+        <AppFooter/>
       </div>
     </div>
-    : <Navigate to="/login" replace={true}/>
   )
 }
 

@@ -1,33 +1,35 @@
-import { SearchOutlined } from "@ant-design/icons";
-import { Input } from "antd";
-import { useEffect, useRef } from "react";
+import {SearchOutlined} from "@ant-design/icons";
+import {Input} from "antd";
+import {useEffect, useRef} from "react";
 
 const SearchInput = (props) => {
-    const setSearch = props.setSearch;
-    const setSearchWord = props.setSearchWord;
+  const setSearch = props.setSearch;
+  const setSearchWord = props.setSearchWord;
 
-    // 오토 포커스
-    const searchInput = useRef(); // DOM 요소를 searchElement에 할당
-    useEffect(() => {
-        if (searchInput.current) {
-            searchInput.current.focus();
-        }
-    }, [searchInput])
+  // 오토 포커스
+  const searchInput = useRef(); // DOM 요소를 searchElement에 할당
 
-    const onBlur = () => {
-        setSearchWord("");
-        setSearch(false);
+  useEffect(() => {
+    if (searchInput.current) {
+      searchInput.current.focus();
     }
+  }, [searchInput])
 
-    return (
-        <Input
-                ref={searchInput}
-                addonBefore={<SearchOutlined />}
-                className="width-200"
-                onChange={(e) => {setSearchWord(e.target.value)}}
-                onBlur={onBlur}
-                allowClear />
-    )
+  const onBlur = () => {
+    setSearch(false);
+  }
+
+  return (
+    <Input
+      ref={searchInput}
+      addonBefore={<SearchOutlined/>}
+      className="width-200"
+      onChange={(e) => {
+        setSearchWord(e.target.value)
+      }}
+      onBlur={onBlur}
+      allowClear/>
+  )
 }
 
 export default SearchInput

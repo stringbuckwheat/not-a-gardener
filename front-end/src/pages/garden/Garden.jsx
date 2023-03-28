@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react'
-import {CRow} from '@coreui/react';
 import NoItem from 'src/components/NoItem';
 import AddPlantButton from 'src/components/button/AddPlantButton';
 import GardenList from "./GardenList";
 import getData from "../../api/backend-api/common/getData";
+import Loading from "../../components/data/Loading";
 
 const Garden = () => {
+  const [isLoading, setLoading] = useState(true);
   const [hasPlantList, setHasPlantList] = useState(false);
 
   // 식물 리스트
@@ -15,7 +16,7 @@ const Garden = () => {
 
   const onMountGarden = async () => {
     const data = await getData("/garden");
-
+    setLoading(false);
     setHasPlantList(data.length > 0);
 
     data.sort((a, b) => (a.gardenDetail.wateringCode - b.gardenDetail.wateringCode))
@@ -28,17 +29,18 @@ const Garden = () => {
     onMountGarden();
   }, [])
 
-
-  return hasPlantList ? (
-    <GardenList
+  if (isLoading) {
+    return <Loading/>
+  } else if (!hasPlantList) {
+    return <NoItem
+      title="아직 정원에 아무도 없네요"
+      button={<AddPlantButton size="lg"/>}/>
+  } else {
+    return <GardenList
       originPlantList={originPlantList}
       plantList={plantList}
       setPlantList={setPlantList}/>
-  ) : (
-    <NoItem
-      title="아직 정원에 아무도 없네요"
-      button={<AddPlantButton size="lg"/>}/>
-  )
+  }
 }
 
 export default Garden

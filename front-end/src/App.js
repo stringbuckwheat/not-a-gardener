@@ -16,8 +16,6 @@ const DefaultLayout = React.lazy(() => import('./components/layout/DefaultLayout
 const GetToken = React.lazy(() => import('./pages/login/GetToken'))
 
 function App() {
-    console.log("render()!");
-
     return (
         <BrowserRouter>
           <Suspense fallback={loading}>
