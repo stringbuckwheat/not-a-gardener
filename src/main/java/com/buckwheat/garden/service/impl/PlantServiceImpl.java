@@ -50,14 +50,17 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public void addPlant(PlantDto.PlantRequest plantRequestDto, Member member) {
-        Place place = placeRepository.findById(plantRequestDto.getPlaceNo()).orElseThrow(NoSuchElementException::new);
-        plantRepository.save(plantRequestDto.toEntityWithMemberAndPlace(member, place));
+    public PlantDto.PlantInPlace addPlant(PlantDto.PlantRequest plantRequestDto, Member member) {
+        log.debug("plantRequestDto: {}", plantRequestDto);
+        Place place = placeRepository.findByPlaceNo(plantRequestDto.getPlaceNo()).orElseThrow(NoSuchElementException::new);
+        Plant plant = plantRepository.save(plantRequestDto.toEntityWithMemberAndPlace(member, place));
+
+        return PlantDto.PlantInPlace.from(plant);
     }
 
     @Override
     public PlantDto.PlantResponse modifyPlant(PlantDto.PlantRequest plantRequest, Member member) {
-        Place place = placeRepository.findById(plantRequest.getPlaceNo()).orElseThrow(NoSuchElementException::new);
+        Place place = placeRepository.findByPlaceNo(plantRequest.getPlaceNo()).orElseThrow(NoSuchElementException::new);
         Plant updatedPlant = plantRequest.toEntityWithMemberAndPlace(member, place);
 
         plantRepository.save(updatedPlant);
@@ -77,16 +80,17 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public void modifyPlantPlace(ModifyPlantPlaceDto modifyPlantPlaceDto) {
-        Place place = placeRepository.findById(modifyPlantPlaceDto.getPlaceNo()).orElseThrow(NoSuchElementException::new);
+    public PlaceDto.PlaceResponseDto modifyPlantPlace(PlaceDto.ModifyPlantPlaceDto modifyPlantPlaceDto) {
+        Place place = placeRepository.findByPlaceNo(modifyPlantPlaceDto.getPlaceNo()).orElseThrow(NoSuchElementException::new);
 
         for(int plantNo : modifyPlantPlaceDto.getPlantList()){
             Plant plant = plantRepository.findById(plantNo).orElseThrow(NoSuchElementException::new);
 
             plant.updatePlace(place);
-            log.debug("place update: {}", plant);
             plantRepository.save(plant);
         }
+
+        return PlaceDto.PlaceResponseDto.from(place);
     }
 
     @Override

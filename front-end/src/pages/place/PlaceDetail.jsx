@@ -1,16 +1,14 @@
-import { useLocation, useParams } from 'react-router-dom'
+import {useLocation} from 'react-router-dom'
 import DetailLayout from 'src/components/data/layout/DetailLayout';
 import PlaceTag from './PlaceTag';
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import ModifyPlace from './ModifyPlace';
 import onMount from 'src/api/service/onMount';
-import DefaultTable from 'src/components/table/DefaultTable';
-import plantTableColArrInPlace from "src/utils/dataArray/plantTableColArrInPlace";
-import getPlantListForPlacePlantTable from 'src/utils/function/getPlantListForPlacePlantTable';
+import PlaceTableForPlant from 'src/components/table/PlaceTableForPlant';
+import DeletePlaceModal from "../../components/modal/DeletePlaceModal";
 
 const PlaceDetail = () => {
-  const path = useParams().placeNo;
-  const { state } = useLocation();
+  const {state} = useLocation();
 
   const [plantList, setPlantList] = useState([{
     placeNo: 0,
@@ -35,6 +33,7 @@ const PlaceDetail = () => {
   }
 
   useEffect(() => {
+    // plant list에 쓸 정보를 받아옴
     onMount(`/place/${state.placeNo}/plant-list`, setPlantList)
   }, [state]);
 
@@ -46,14 +45,15 @@ const PlaceDetail = () => {
         url="/place"
         path={state.placeNo}
         deleteTitle="장소"
-        tags={<PlaceTag place={state} howManyPlant={plantList.length} />}
+        tags={<PlaceTag place={state} howManyPlant={plantList.length}/>}
         onClickModifyBtn={onClickModifyBtn}
-        deleteTooltipMsg="이 장소에 포함된 식물이 함께 삭제됩니다."
+        deleteModal={
+          <DeletePlaceModal
+            placeNo={state.placeNo}
+            plantListSize={plantList.length}/>}
         bottomData={
-          <DefaultTable
-            path={path}
-            columns={plantTableColArrInPlace}
-            list={getPlantListForPlacePlantTable(plantList)}
+          <PlaceTableForPlant
+            plantList={plantList}
             setPlantList={setPlantList}
           />}
       />

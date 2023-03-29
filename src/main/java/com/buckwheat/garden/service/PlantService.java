@@ -1,8 +1,7 @@
 package com.buckwheat.garden.service;
 
-import com.buckwheat.garden.data.dto.ModifyPlantPlaceDto;
+import com.buckwheat.garden.data.dto.PlaceDto;
 import com.buckwheat.garden.data.dto.PlantDto;
-import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.data.entity.Member;
 
 import java.util.List;
@@ -15,7 +14,7 @@ public interface PlantService {
     List<PlantDto.PlantResponse> getPlantList(int memberNo);
 
     /* 식물 추가 */
-    void addPlant(PlantDto.PlantRequest plantRequestDto, Member member);
+    PlantDto.PlantInPlace addPlant(PlantDto.PlantRequest plantRequestDto, Member member);
 
     /* 식물 수정 */
     PlantDto.PlantResponse modifyPlant(PlantDto.PlantRequest plantRequestDto, Member member);
@@ -26,5 +25,5 @@ public interface PlantService {
     void deletePlantByPlantNo(int plantNo);
 
     /* 식물들의 장소 정보 수정 */
-    void modifyPlantPlace(ModifyPlantPlaceDto modifyPlantPlaceDto);
+    PlaceDto.PlaceResponseDto modifyPlantPlace(PlaceDto.ModifyPlantPlaceDto modifyPlantPlaceDto);
 }

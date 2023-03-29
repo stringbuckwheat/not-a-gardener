@@ -8,9 +8,15 @@ const SubmitForAddButton = (props) => {
 
   const navigate = useNavigate();
 
+  const defaultCallBack = () => {
+    navigate(url, {replace: true});
+  }
+
+  const callBackFunction = props.callBackFunction ? props.callBackFunction : defaultCallBack;
+
   const onClick = async () => {
     const res = await insertData(url, data);
-    navigate(url, {replace: true});
+    callBackFunction(res);
   }
 
   return (

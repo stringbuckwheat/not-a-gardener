@@ -13,7 +13,6 @@ const Place = () => {
   const [placeList, setPlaceList] = useState([]);
   const [originPlaceList, setOriginPlaceList] = useState([]);
 
-
   const onMount = async () => {
     const data = await getData("/place");
     setLoading(false);

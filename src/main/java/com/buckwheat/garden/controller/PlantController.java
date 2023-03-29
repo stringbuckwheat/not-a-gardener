@@ -19,14 +19,16 @@ public class PlantController {
     private final PlantService plantService;
     private final WateringService wateringService;
 
-    @GetMapping("/{plantNo}")
-    public PlantDto.PlantResponse getOnePlant(@PathVariable("plantNo") int plantNo){
-        return plantService.getOnePlant(plantNo);
-    }
 
     @GetMapping("")
     public List<PlantDto.PlantResponse> getPlantList(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        log.debug("plantList: {}", plantService.getPlantList(userPrincipal.getMember().getMemberNo()));
         return plantService.getPlantList(userPrincipal.getMember().getMemberNo());
+    }
+
+    @GetMapping("/{plantNo}")
+    public PlantDto.PlantResponse getOnePlant(@PathVariable("plantNo") int plantNo){
+        return plantService.getOnePlant(plantNo);
     }
 
     @GetMapping("/{plantNo}/watering")
@@ -35,13 +37,12 @@ public class PlantController {
     }
 
     @PostMapping("")
-    public void addPlant(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody PlantDto.PlantRequest plantRequestDto){
-        plantService.addPlant(plantRequestDto, userPrincipal.getMember());
+    public PlantDto.PlantInPlace addPlant(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody PlantDto.PlantRequest plantRequestDto){
+        return plantService.addPlant(plantRequestDto, userPrincipal.getMember());
     }
 
     @PutMapping("/{plantNo}")
     public PlantDto.PlantResponse modifyPlant(@PathVariable("plantNo") int plantNo, @RequestBody PlantDto.PlantRequest plantRequestDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        log.debug("modify plant dto: {}", plantRequestDto);
         return plantService.modifyPlant(plantRequestDto, userPrincipal.getMember());
     }
 
@@ -51,14 +52,12 @@ public class PlantController {
     }
 
     @PutMapping("/modify-place")
-    public void modifyPlantPlace(@RequestBody ModifyPlantPlaceDto modifyPlantPlaceDto){
-        plantService.modifyPlantPlace(modifyPlantPlaceDto);
+    public PlaceDto.PlaceResponseDto modifyPlantPlace(@RequestBody PlaceDto.ModifyPlantPlaceDto modifyPlantPlaceDto){
+        return plantService.modifyPlantPlace(modifyPlantPlaceDto);
     }
 
     @DeleteMapping("/{plantNo}")
     public void deletePlant(@PathVariable("plantNo") int plantNo){
-        log.debug("delete plant -> plantNo: " + plantNo);
-
         plantService.deletePlantByPlantNo(plantNo);
     }
 }

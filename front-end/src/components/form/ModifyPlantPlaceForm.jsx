@@ -1,21 +1,24 @@
-import { Space, Select } from 'antd';
+import {Space, Select} from 'antd';
 import getPlaceList from 'src/utils/function/getPlaceList';
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import {useEffect, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 import modifyPlantPlace from 'src/api/backend-api/place/modifyPlantPlace';
 import getPlaceListForOptionExceptHere from 'src/api/service/getPlaceListForOptionExceptHere';
-import { SwapRightOutlined } from '@ant-design/icons';
-import { CButton } from '@coreui/react';
+import {SwapRightOutlined} from '@ant-design/icons';
+import {CButton} from '@coreui/react';
 import getData from 'src/api/backend-api/common/getData'
 
 const ModifyPlantPlaceForm = (props) => {
-  // 장소 번호
+  const {setSelectedRowKeys, selectedPlantNo} = props;
+
+  // 이 장소의 번호
   const thisPlaceNo = useParams().placeNo;
 
-  const setSelectedRowKeys = props.setSelectedRowKeys
+  // 장소 수정 함수
+  const navigate = useNavigate();
 
-  // 체크한 식물 목록
-  const selectedPlantNo = props.selectedPlantNo;
+  // 변경할 장소의 placeNo
+  const [placeNo, setPlaceNo] = useState(0);
 
   // select로 쓸 유저의 장소 리스트
   const [placeList, setPlaceList] = useState([{
@@ -35,38 +38,29 @@ const ModifyPlantPlaceForm = (props) => {
 
   // 최초 렌더링 시 장소 리스트 받아오기
   useEffect(() => {
-    console.log("THIS PLACE NO -- USE EFFECT")
     getPlaceListForOption();
-  }, [thisPlaceNo])
-
-  // 장소 수정 함수
-  const navigate = useNavigate();
-
-  // 변경할 장소의 placeNo 받아오기
-  const [placeNo, setPlaceNo] = useState(0);
+  }, [])
 
   const handleSelect = (value) => {
     setPlaceNo(value);
   }
 
-  const onClick = async () => {
+  const modifyPlaceOfPlant = async () => {
     const data = {
       placeNo: placeNo,
       plantList: selectedPlantNo
     }
 
-    modifyPlantPlace(data);
+    const res = await modifyPlantPlace(data);
 
-    const res = await getData(`/place/${placeNo}`)
     setSelectedRowKeys([]);
-    navigate(`/place/${placeNo}`, { replace: true, state: res });
+    navigate(`/place/${placeNo}`, {replace: true, state: res});
   }
-
 
   return (
     <div className="mb-3 float-end">
       <Space>
-        <SwapRightOutlined 
+        <SwapRightOutlined
           className="font-size-20 text-success"/>
         {`${props.selectedPlantNo.length}개의 식물을`}
         <Select
@@ -76,7 +70,7 @@ const ModifyPlantPlaceForm = (props) => {
         으로
         {
           placeNo !== 0
-            ? <CButton onClick={onClick} color="success" variant="outline" size="sm">이동</CButton>
+            ? <CButton onClick={modifyPlaceOfPlant} color="success" variant="outline" size="sm">이동</CButton>
             : <CButton disabled color="dark" variant="outline" size="sm">이동</CButton>
         }
       </Space>

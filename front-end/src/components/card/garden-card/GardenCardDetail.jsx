@@ -4,8 +4,8 @@ import {Link} from "react-router-dom";
 import {CButton, CWidgetStatsF} from "@coreui/react";
 import {cilDrop, cilFaceDead, cilHandPointUp, cilSmile, cilSwimming, cilZoom} from "@coreui/icons";
 import {useState} from "react";
-import GardenCardAnimatedButton from "../../../pages/garden/GardenCardAnimatedButton";
 import {Button} from "antd";
+import GardenCardAnimatedButton from "../../../pages/garden/GardenCardAnimatedButton";
 
 const GardenCardDetail = (props) => {
   const garden = props.garden;
@@ -80,29 +80,28 @@ const GardenCardDetail = (props) => {
       {
         !isWaterFormOpen
           ?
-          <CWidgetStatsF
-            style={{minHeight: "22vh"}}
-            className="mb-2 width-full center"
+          <Link
+            className="no-text-decoration"
+            to={`/plant/${plant.plantNo}`}>
+            <CWidgetStatsF
+              style={{minHeight: "22vh"}}
+              className="mb-2 width-full center"
+              color={color}
+              icon={<CIcon icon={icon} height={40}/>}
+              title={
+                <>
+                  <small>{`${plant.plantSpecies} / ${plant.placeName}`}</small>
+                  <GardenTag plant={garden}/>
+                  <div className={`mt-2 text-${color} new-line`}>
+                    {wateringMsg}
+                  </div>
+                </>
+              }
+              value={
+                <span className="text-black">{plant.plantName}</span>
+              }/>
+          </Link>
 
-            color={color}
-            icon={<CIcon icon={icon} height={40}/>}
-            title={
-              <>
-                <small>{`${plant.plantSpecies} / ${plant.placeName}`}</small>
-                <GardenTag plant={garden}/>
-                <div className={`mt-2 text-${color} new-line`}>
-                  {wateringMsg}
-                </div>
-              </>
-            }
-            value={
-              <Link
-                className="no-text-decoration text-black"
-                to={`/plant/${plant.plantNo}`}>
-                <span>{plant.plantName}</span>
-                <span>{gardenDetail.chemicalCode}</span>
-              </Link>
-            }/>
           :
           <div
             style={{minHeight: "22vh", backgroundColor: "white", borderRadius: "5%"}}

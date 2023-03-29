@@ -5,6 +5,7 @@ import com.buckwheat.garden.data.entity.Place;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class PlaceDto {
 
@@ -89,5 +90,13 @@ public class PlaceDto {
                     .option(place.getOption())
                     .build();
         }
+    }
+
+    @Getter
+    @Setter
+    @ToString
+    public static class ModifyPlantPlaceDto {
+        int placeNo;
+        List<Integer> plantList;
     }
 }

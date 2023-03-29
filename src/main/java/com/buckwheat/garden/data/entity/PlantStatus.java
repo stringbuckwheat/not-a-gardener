@@ -20,7 +20,7 @@ public class PlantStatus {
     @JoinColumn(name = "status_no")
     private PlantStatusInfo plantStatusInfo;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "plant_no")
     private Plant plant;
 }

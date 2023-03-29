@@ -5,19 +5,26 @@
   font-style: normal;
 }
 
-/*******/
-.garden-card {
-  align-items: flex-end;
+/* garden card */
+
+.center {
+  margin: 0 auto;
 }
 
 .parent {
   position: relative;
-  height: 210px;
+  height: 27vh;
 }
 
 .child {
   position: absolute;
   bottom: 0px;
+  width: 100%;
+}
+
+/* garden card animated button */
+.animated-btn {
+  border: none;
 }
 
 /* custom */
@@ -148,7 +155,7 @@ body {
 
 #kakao-connect:hover {
   border-color: #FEE500;
-  background: #FEE500 url('./assets/images/kakao.png')  no-repeat scroll 0px 0px / 30px 30px padding-box border-box;
+  background: #FEE500 url('./assets/images/kakao.png') no-repeat scroll 0px 0px / 30px 30px padding-box border-box;
   -webkit-transition: all .8s ease-out;
   -moz-transition: all .3s ease;
   -ms-transition: all .3s ease;

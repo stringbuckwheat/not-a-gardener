@@ -5,18 +5,20 @@ import {
   CRow
 } from '@coreui/react'
 import DeleteModal from '../../modal/DeleteModal';
-import { EditOutlined } from '@ant-design/icons';
-import { Space } from 'antd';
+import {EditOutlined} from '@ant-design/icons';
+import {Space} from 'antd';
 
 const DetailLayout = (props) => {
-  const url = props.url;
-  const path = props.path;
-  const title = props.title;
-  const deleteTitle = props.deleteTitle;
-  const tags = props.tags;
-  const onClickModifyBtn = props.onClickModifyBtn;
-  const bottomData = props.bottomData;
-  const deleteTooltipMsg = props.deleteTooltipMsg;
+  const {url, path, title, deleteTitle, tags, onClickModifyBtn, bottomData, deleteTooltipMsg} = props;
+
+  const deleteModal = props.deleteModal
+    ? props.deleteModal
+    : <DeleteModal
+      url={url}
+      path={path}
+      title={deleteTitle}
+      deleteTooltipMsg={deleteTooltipMsg}
+    />
 
   return (
     <div className="row justify-content-md-center">
@@ -30,15 +32,10 @@ const DetailLayout = (props) => {
               <CCol>
                 <div className="d-flex justify-content-end mt-3 mb-3">
                   <Space>
-                      <EditOutlined 
-                        className="font-size-18 text-success"
-                        onClick={onClickModifyBtn}/>
-                    <DeleteModal
-                      url={url}
-                      path={path}
-                      title={deleteTitle}
-                      deleteTooltipMsg={deleteTooltipMsg}
-                    />
+                    <EditOutlined
+                      className="font-size-18 text-success"
+                      onClick={onClickModifyBtn}/>
+                    {deleteModal}
                   </Space>
                 </div>
               </CCol>
