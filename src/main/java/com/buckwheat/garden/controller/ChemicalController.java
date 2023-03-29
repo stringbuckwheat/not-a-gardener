@@ -40,21 +40,30 @@ public class ChemicalController {
 
     /**
      * 비료 추가
-     * @param userPrincipal SecurityContext에서 memberNo를 가져오기 위해
-     * @param chemicalRequest 입력받은 비료 정보
-     * @return 저장한 ChemicalDTO
+     * @param userPrincipal SecurityContext에서 member를 가져오기 위해
+     * @param chemicalRequest 입력받은 약품 정보
+     * @return 수정한 ChemicalDTO
      */
     @PostMapping("")
     public ChemicalDto.ChemicalResponse addChemical(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ChemicalDto.ChemicalRequest chemicalRequest){
         return chemicalService.addChemical(chemicalRequest, userPrincipal.getMember());
     }
 
+    /**
+     * 약품 수정
+     * @param userPrincipal
+     * @param chemicalRequest 입력받은 약품 정보
+     * @return 수정한 Chemical
+     */
     @PutMapping("/{chemicalNo}")
     public ChemicalDto.ChemicalResponse updateChemical(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ChemicalDto.ChemicalRequest chemicalRequest){
-        log.debug("chemicalRequest: {}", chemicalRequest);
         return chemicalService.updateChemical(chemicalRequest, userPrincipal.getMember());
     }
 
+    /**
+     * 약품 삭제
+     * @param chemicalNo
+     */
     @DeleteMapping("/{chemicalNo}")
     public void deleteChemical(@PathVariable int chemicalNo){
         chemicalService.deleteChemical(chemicalNo);

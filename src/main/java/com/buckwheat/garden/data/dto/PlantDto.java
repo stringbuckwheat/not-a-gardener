@@ -55,11 +55,10 @@ public class PlantDto {
         private int averageWateringPeriod;
         private LocalDate birthday;
 
-        public Plant toEntityWithMemberAndPlace(Member member, Place place){
+        public Plant toEntityWith(Member member, Place place){
             return Plant.builder()
                     .member(member)
                     .place(place)
-                    .plantNo(plantNo)
                     .plantName(plantName)
                     .medium(medium)
                     .plantSpecies(plantSpecies)

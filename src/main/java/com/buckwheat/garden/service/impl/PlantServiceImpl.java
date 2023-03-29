@@ -1,12 +1,15 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.data.dto.*;
+import com.buckwheat.garden.data.dto.GardenDto;
+import com.buckwheat.garden.data.dto.PlaceDto;
+import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.data.entity.Place;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.repository.PlaceRepository;
 import com.buckwheat.garden.repository.PlantRepository;
 import com.buckwheat.garden.service.PlantService;
+import com.buckwheat.garden.util.GardenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,7 @@ import java.util.NoSuchElementException;
 public class PlantServiceImpl implements PlantService {
     private final PlantRepository plantRepository;
     private final PlaceRepository placeRepository;
+    private final GardenUtil  gardenUtil;
 
     /**
      * 하나의 장소 정보 반환
@@ -53,20 +57,23 @@ public class PlantServiceImpl implements PlantService {
     public PlantDto.PlantInPlace addPlant(PlantDto.PlantRequest plantRequestDto, Member member) {
         log.debug("plantRequestDto: {}", plantRequestDto);
         Place place = placeRepository.findByPlaceNo(plantRequestDto.getPlaceNo()).orElseThrow(NoSuchElementException::new);
-        Plant plant = plantRepository.save(plantRequestDto.toEntityWithMemberAndPlace(member, place));
+        Plant plant = plantRepository.save(plantRequestDto.toEntityWith(member, place));
 
         return PlantDto.PlantInPlace.from(plant);
     }
 
     @Override
-    public PlantDto.PlantResponse modifyPlant(PlantDto.PlantRequest plantRequest, Member member) {
+    public GardenDto.GardenResponse modifyPlant(PlantDto.PlantRequest plantRequest, Member member) {
         Place place = placeRepository.findByPlaceNo(plantRequest.getPlaceNo()).orElseThrow(NoSuchElementException::new);
-        Plant updatedPlant = plantRequest.toEntityWithMemberAndPlace(member, place);
+        Plant plant = plantRepository.findByPlantNo(plantRequest.getPlantNo()).orElseThrow(NoSuchElementException::new);
 
+        Plant updatedPlant = plant.update(plantRequest, place);
         plantRepository.save(updatedPlant);
-        log.debug("PlantDto.PlantResponse.from(updatedPlace): {}", PlantDto.PlantResponse.from(updatedPlant));
 
-        return PlantDto.PlantResponse.from(updatedPlant);
+        PlantDto.PlantResponse plantResponse = PlantDto.PlantResponse.from(updatedPlant);
+        GardenDto.GardenDetail gardenDetail = gardenUtil.getGardenDetail(member.getMemberNo(), updatedPlant);
+
+        return new GardenDto.GardenResponse(plantResponse, gardenDetail);
     }
 
     @Override

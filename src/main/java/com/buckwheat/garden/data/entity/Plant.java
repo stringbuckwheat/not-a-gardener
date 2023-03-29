@@ -1,5 +1,6 @@
 package com.buckwheat.garden.data.entity;
 
+import com.buckwheat.garden.data.dto.PlantDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -52,10 +53,13 @@ public class Plant {
     @OrderBy("watering_date desc")
     private List<Watering> wateringList = new ArrayList<>();
 
-    public Plant update(String plantName, String plantSpecies, String medium){
-        this.plantName = plantName;
-        this.plantSpecies = plantSpecies;
-        this.medium = medium;
+    public Plant update(PlantDto.PlantRequest plantRequest, Place place){
+        this.plantName = plantRequest.getPlantName();
+        this.medium = plantRequest.getMedium();
+        this.plantSpecies = plantRequest.getPlantSpecies();
+        this.averageWateringPeriod = plantRequest.getAverageWateringPeriod();
+        this.birthday = plantRequest.getBirthday();
+        this.place = place;
 
         return this;
     }

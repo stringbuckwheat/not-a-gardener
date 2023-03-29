@@ -22,7 +22,6 @@ public class PlantController {
 
     @GetMapping("")
     public List<PlantDto.PlantResponse> getPlantList(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        log.debug("plantList: {}", plantService.getPlantList(userPrincipal.getMember().getMemberNo()));
         return plantService.getPlantList(userPrincipal.getMember().getMemberNo());
     }
 
@@ -42,7 +41,7 @@ public class PlantController {
     }
 
     @PutMapping("/{plantNo}")
-    public PlantDto.PlantResponse modifyPlant(@PathVariable("plantNo") int plantNo, @RequestBody PlantDto.PlantRequest plantRequestDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
+    public GardenDto.GardenResponse modifyPlant(@PathVariable("plantNo") int plantNo, @RequestBody PlantDto.PlantRequest plantRequestDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
         return plantService.modifyPlant(plantRequestDto, userPrincipal.getMember());
     }
 

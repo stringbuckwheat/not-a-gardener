@@ -4,27 +4,7 @@ import com.buckwheat.garden.data.entity.Chemical;
 import com.buckwheat.garden.data.entity.Member;
 import lombok.*;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@Builder
-@AllArgsConstructor
 public class ChemicalDto {
-    private int chemicalNo;
-    private String chemicalName;
-    private String chemicalType;
-    private int chemicalPeriod;
-    private int memberNo;
-
-    public Chemical toEntityWithMember(Member member){
-        return Chemical.builder()
-                .chemicalName(chemicalName)
-                .chemicalPeriod(chemicalPeriod)
-                .chemicalType(chemicalType)
-                .member(member)
-                .build();
-    }
-
     @Getter
     @AllArgsConstructor
     @Builder
@@ -55,9 +35,9 @@ public class ChemicalDto {
         private int chemicalPeriod;
 
         /**
-         * chemical update 시에 엔티티 생성
+         * chemical update 시에 엔티티 생성(chemicalNo를 포함)
          * @param member
-         * @return
+         * @return chemicalNo를 포함하는 chemical entity
          */
         public Chemical toEntityWithMemberForUpdate(Member member){
             return Chemical.builder()
@@ -69,6 +49,11 @@ public class ChemicalDto {
                     .build();
         }
 
+        /**
+         * chemical insert 시의 엔티티 생성(chemicalNo 포함 X)
+         * @param member
+         * @return chemicalNo가 없는 chemical entity
+         */
         public Chemical toEntityWithMember(Member member){
             return Chemical.builder()
                     .chemicalName(chemicalName)

@@ -1,5 +1,6 @@
 package com.buckwheat.garden.service;
 
+import com.buckwheat.garden.data.dto.GardenDto;
 import com.buckwheat.garden.data.dto.PlaceDto;
 import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.entity.Member;
@@ -17,7 +18,7 @@ public interface PlantService {
     PlantDto.PlantInPlace addPlant(PlantDto.PlantRequest plantRequestDto, Member member);
 
     /* 식물 수정 */
-    PlantDto.PlantResponse modifyPlant(PlantDto.PlantRequest plantRequestDto, Member member);
+    GardenDto.GardenResponse modifyPlant(PlantDto.PlantRequest plantRequestDto, Member member);
 
     PlantDto.PlantResponse postponeAverageWateringPeriod(int plantNo);
 
