@@ -5,14 +5,13 @@ import {useLocation} from "react-router-dom";
 import getPlantFormArray from "../../utils/function/getPlantFormArray";
 
 const AddPlant = (props) => {
-  const state = useLocation().state;
-  const placeList = props.placeList ? props.placeList : state;
-  const {callBackFunction} = props;
+  const placeList = useLocation().state;
+  const {callBackFunction, itemObjectArray, placeNo} = props;
 
   const initPlant = {
     plantName: "",
     plantSpecies: "",
-    placeNo: !placeList.length == 0 ? placeList[0].key : 0,
+    placeNo: placeList.length == 0 ? 0 : placeNo ? placeNo : placeList[0].key,
     medium: "흙과 화분",
     earlyWateringPeriod: 0,
     birthday: ""
@@ -32,7 +31,7 @@ const AddPlant = (props) => {
     <ItemForm
       title="식물 추가"
       inputObject={plant}
-      itemObjectArray={getPlantFormArray(placeList)}
+      itemObjectArray={itemObjectArray ? itemObjectArray : getPlantFormArray(placeList)}
       onChange={onChange}
       submitBtn={<SubmitForAddButton
         url="/plant"

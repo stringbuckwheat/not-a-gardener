@@ -4,8 +4,6 @@ import AddItemButton from "src/components/button/AddItemButton";
 import PlaceList from "./PlaceList";
 import getData from "src/api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";
-import AddPlantButton from "../../components/button/AddPlantButton";
-import GardenList from "../garden/GardenList";
 
 const Place = () => {
   const [isLoading, setLoading] = useState(true);

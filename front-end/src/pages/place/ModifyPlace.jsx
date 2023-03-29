@@ -8,12 +8,9 @@ const ModifyPlace = (props) => {
 
     const [place, setPlace] = useState(props.place);
 
-    const itemObjectArray = getPlaceInputItemArray(place);
-
     const onChange = (e) => {
         const { name, value } = e.target;
         setPlace(setPlace => ({ ...place, [name]: value }));
-        console.log("onchange", place);
     }
 
     const validation = place.placeName !== "";
@@ -22,7 +19,7 @@ const ModifyPlace = (props) => {
         <ItemForm
             title="장소 수정"
             inputObject={place}
-            itemObjectArray={itemObjectArray}
+            itemObjectArray={getPlaceInputItemArray(place)}
             onChange={onChange}
             submitBtn={<ModifyFormButtons
                 data={place}
