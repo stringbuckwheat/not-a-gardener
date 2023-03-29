@@ -9,13 +9,7 @@ import FormInputHandler from './FormInputHandler'
 const ItemForm = (props) => {
   //// props
   // title: 식물, 비료, 살충제...
-  const title = props.title;
-
-  // input 만들 정보가 담긴 배열
-  const itemObjectArray = props.itemObjectArray;
-  const submitBtn = props.submitBtn;
-  const inputObject = props.inputObject;
-  const onChange = props.onChange;
+  const {title, itemObjectArray, submitBtn, inputObject, onChange} = props;
 
   return (
     <div className="row justify-content-md-center">

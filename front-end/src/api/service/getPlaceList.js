@@ -1,9 +1,7 @@
-import authAxios from "../interceptors";
+import authAxios from "../../utils/interceptors";
 
 const getPlaceList = async () => {
-
     const res = await authAxios.get("/place");
-    console.log("res", res);
 
     const placeList = res.data.map((item) => {
        return {

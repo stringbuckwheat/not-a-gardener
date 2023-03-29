@@ -5,9 +5,7 @@ import PlaceCard from "src/components/card/PlaceCard";
 import ListHeader from "src/components/data/header/ListHeader";
 
 const PlaceList = (props) => {
-  const placeList = props.placeList;
-  const setPlaceList = props.setPlaceList;
-  const originPlaceList = props.originPlaceList;
+  const {placeList, setPlaceList, originPlaceList} = props;
 
   // 검색
   const [searchWord, setSearchWord] = useState("");
@@ -18,7 +16,6 @@ const PlaceList = (props) => {
   }
 
   useEffect(() => {
-    console.log("현재 검색어: ", searchWord);
     if (searchWord !== "") {
       search(searchWord)
     } else {

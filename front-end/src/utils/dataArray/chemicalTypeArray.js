@@ -20,10 +20,6 @@ const chemicalTypeArray = [
         value: '살균제/농약'
     },
     {
-        key: '천적 방제',
-        value: '천적 방제'
-    },
-    {
         key: '그 외',
         value: '그 외'
     }

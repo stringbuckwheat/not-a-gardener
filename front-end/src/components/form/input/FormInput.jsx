@@ -7,6 +7,7 @@ const FormInput = (props) => {
         <CInputGroup className="mb-3 mt-3">
             <CInputGroupText id="basic-addon1">{inputItem.label}</CInputGroupText>
             <CFormInput
+                disabled={inputItem.disabled}
                 defaultValue={inputItem.defaultValue}
                 type={inputItem.inputType}
                 aria-describedby="basic-addon1"

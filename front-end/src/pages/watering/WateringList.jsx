@@ -70,16 +70,15 @@ const WateringList = (props) => {
   };
 
   const updateWatering = async () => {
-    const data = await updateData("watering", editWatering.wateringNo, editWatering);
-    console.log("update response", data);
-    setWateringList(data.wateringList);
+    const res = await updateData("watering", editWatering.wateringNo, editWatering);
+    setWateringList(res.wateringList);
 
-    if (data.plant) {
-      setPlant(data.plant);
+    if (res.plant) {
+      setPlant(res.plant);
     }
 
-    if (data.wateringMsg) {
-      const msg = getWateringNotificationMsg(data.wateringMsg.wateringCode)
+    if (res.wateringMsg) {
+      const msg = getWateringNotificationMsg(res.wateringMsg.wateringCode)
       openNotification(msg);
     }
 

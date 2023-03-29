@@ -1,12 +1,11 @@
 import {Space, Select} from 'antd';
-import getPlaceList from 'src/utils/function/getPlaceList';
+import getPlaceList from 'src/api/service/getPlaceList';
 import {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import modifyPlantPlace from 'src/api/backend-api/place/modifyPlantPlace';
 import getPlaceListForOptionExceptHere from 'src/api/service/getPlaceListForOptionExceptHere';
 import {SwapRightOutlined} from '@ant-design/icons';
 import {CButton} from '@coreui/react';
-import getData from 'src/api/backend-api/common/getData'
 
 const ModifyPlantPlaceForm = (props) => {
   const {setSelectedRowKeys, selectedPlantNo} = props;

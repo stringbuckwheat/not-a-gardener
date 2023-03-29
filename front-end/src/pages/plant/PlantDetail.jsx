@@ -3,13 +3,12 @@ import PlantTag from '../../components/tag/PlantTag';
 import DetailLayout from 'src/components/data/layout/DetailLayout';
 import {useState, useEffect} from 'react';
 import ModifyPlant from './ModifyPlant';
-import getPlaceList from 'src/utils/function/getPlaceList';
+import getPlaceList from 'src/api/service/getPlaceList';
 import WateringList from '../watering/WateringList';
 import onMount from 'src/api/service/onMount';
 
 const PlantDetail = () => {
   const plantNo = useParams().plantNo;
-
   const state = useLocation().state;
 
   const [plant, setPlant] = useState({});

@@ -96,12 +96,20 @@
   font-size: 20px;
 }
 
+.font-size-70 {
+  font-size: 70px;
+}
+
 .text-grey {
   color: grey;
 }
 
 .height-95 {
   height: 95%;
+}
+
+.height-70vh {
+  height: 70vh;
 }
 
 /* 소셜 로그인 */

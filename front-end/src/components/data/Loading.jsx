@@ -3,16 +3,12 @@ import React from "react";
 import {Spin} from "antd";
 
 const Loading = () => {
-  const loading = <LoadingOutlined
-    style={{
-      fontSize: 70
-    }}
-    spin
-  />;
+  const loading = <LoadingOutlined className="font-size-70" spin/>;
 
   return (
-    <div style={{height: "70vh"}} className={"d-flex justify-content-center align-items-center"}>
-      <Spin className="text-success" indicator={loading}/>
+    <div
+      className={"d-flex justify-content-center align-items-center height-70vh"}>
+      <Spin indicator={loading}/>
     </div>
   )
 }

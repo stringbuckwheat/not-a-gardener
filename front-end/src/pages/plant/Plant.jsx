@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import AddPlantButton from "src/components/button/AddPlantButton";
 import NoItem from "src/components/NoItem";
 import PlantList from "./PlantList";

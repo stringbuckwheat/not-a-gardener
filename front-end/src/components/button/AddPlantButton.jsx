@@ -12,9 +12,15 @@ const AddPlantButton = (props) => {
   }
 
   return (
-      <CButton className={className} onClick={onClickAddPlant} color="success" size={size} variant="outline" shape={shape ? "" : "rounded-pill"}>식물
-        추가하기
-      </CButton>
+    <CButton
+      className={className}
+      onClick={onClickAddPlant}
+      color="success"
+      size={size}
+      variant="outline"
+      shape={shape ? "" : "rounded-pill"}>
+      식물 추가하기
+    </CButton>
   )
 }
 
