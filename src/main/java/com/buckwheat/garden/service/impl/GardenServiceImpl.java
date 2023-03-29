@@ -1,6 +1,5 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.data.dto.ChemicalDto;
 import com.buckwheat.garden.data.dto.GardenDto;
 import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.dto.WateringDto;
@@ -17,7 +16,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -133,13 +134,6 @@ public class GardenServiceImpl implements GardenService {
     // -1           0           1
     // 비료 사용 안함  맹물 주기
     public int getChemicalCode(int plantNo, List<Chemical> chemicalList) {
-        // chemicalList는 시비 주기가 느린 순으로 들어있음
-        for(Chemical chemical : chemicalList){
-            log.debug(ChemicalDto.ChemicalResponse.from(chemical).toString());
-        }
-
-
-
         // 가진 chemical 목록과 같은 크기의 arraylist 생성
         List<LocalDate> latestFertilizedDates = new ArrayList<>(chemicalList.size());
         List<Map<String, Object>> fertilizingCodes = new ArrayList<>(chemicalList.size());

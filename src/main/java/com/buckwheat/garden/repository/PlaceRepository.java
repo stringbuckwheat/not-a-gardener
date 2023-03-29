@@ -25,7 +25,5 @@ public interface PlaceRepository extends JpaRepository<Place, Integer> {
      * @return 한 장소의 정보 + 해당 장소의 식물 리스트
      */
     @EntityGraph(attributePaths = {"plantList"}, type= EntityGraph.EntityGraphType.FETCH)
-    Optional<Place> findById(int placeNo);
-
     Optional<Place> findByPlaceNo(int placeNo);
 }

@@ -45,7 +45,7 @@ public class PlaceServiceImpl implements PlaceService {
     @Override
     public PlaceDto.PlaceResponseDto getPlace(int placeNo) {
         // @EntityGraph로 plantList를 join한 메소드
-        Place place = placeRepository.findById(placeNo).orElseThrow(NoSuchElementException::new);
+        Place place = placeRepository.findByPlaceNo(placeNo).orElseThrow(NoSuchElementException::new);
         return PlaceDto.PlaceResponseDto.from(place);
     }
 
@@ -56,7 +56,7 @@ public class PlaceServiceImpl implements PlaceService {
      */
     @Override
     public List<PlantDto.PlantInPlace> getPlantlistInPlace(int placeNo) {
-        Place place = placeRepository.findById(placeNo).orElseThrow(NoSuchElementException::new);
+        Place place = placeRepository.findByPlaceNo(placeNo).orElseThrow(NoSuchElementException::new);
 
         List<PlantDto.PlantInPlace> plantList = new ArrayList<>();
 
@@ -102,7 +102,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     /**
-     * 장소 삭제
+     * 장소 하나 삭제
      * @param placeNo
      */
     @Override
