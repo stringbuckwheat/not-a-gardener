@@ -14,7 +14,11 @@ const Plant = () => {
   const onMountPlant = async () => {
     const data = await getData("/garden");
     setLoading(false);
+
     setHasPlant(data.length > 0);
+
+    data.sort((a, b) => new Date(b.plant.createDate) - new Date(a.plant.createDate));
+
     setPlantList(data);
     setOriginPlantList(data);
   }

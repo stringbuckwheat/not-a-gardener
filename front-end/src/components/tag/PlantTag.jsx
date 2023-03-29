@@ -3,7 +3,8 @@ import {Space, Tag} from "antd";
 const PlantTag = (props) => {
   const plant = props.plant;
   const wateringListSize = props.wateringListSize;
-  const today = new Date();
+  const tmp = new Date();
+  const today = new Date(tmp.getFullYear(), tmp.getMonth(), tmp.getDate());
 
   const getLatestWateringDateMsg = () => {
     const diffDate = getLatestWateringDate();
@@ -21,16 +22,17 @@ const PlantTag = (props) => {
     }
   }
 
+  // 며칠 전에 물을 줬는지 계산
   const getLatestWateringDate = () => {
     const latestWateringDate = new Date(props.latestWateringDate.wateringDate);
+
     const diffTime = today.getTime() - latestWateringDate.getTime();
-    const diffDate = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const diffDate = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // 올림
 
     return diffDate;
   }
 
   const calculateNextWateringDate = () => {
-    const latestWateringDate = new Date(props.latestWateringDate.wateringDate);
     const averageWateringPeriod = plant.averageWateringPeriod;
 
     // 마지막 물주기 날짜에서 averageWateringPeriod 더하고
@@ -39,7 +41,7 @@ const PlantTag = (props) => {
 
     // 위 날짜에서 오늘 날짜를 뺸다
     const diffTime = nextWateringDate.getTime() - today.getTime();
-    const diffDate = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // 얘는 올림
+    const diffDate = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDate == 0 && getLatestWateringDate() !== 0) {
       return "이 식물은 오늘 목이 마를 거예요"
@@ -60,7 +62,7 @@ const PlantTag = (props) => {
     if (plant.averageWateringPeriod == 0) {
       return "물주기 정보는 알아가는 중이에요"
     } else {
-      return `평균 물주기 ${plant.averageWateringPeriod}일`
+      return `${plant.averageWateringPeriod}일 간격으로 물을 마셔요`
     }
   }
 

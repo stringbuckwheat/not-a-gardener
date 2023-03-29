@@ -5,6 +5,7 @@ import getPlantTableColumnArray from "../../utils/function/getPlantTableColumnAr
 import PlantEditableCell from "../../pages/plant/PlantEditableCell";
 import {useState} from "react";
 import updateData from "../../api/backend-api/common/updateData";
+import getMergedColumns from "../../utils/function/getMergedColumns";
 
 const PlantTable = (props) => {
   const {originPlantList, setPlantList, placeList} = props;
@@ -72,23 +73,7 @@ const PlantTable = (props) => {
   }
 
   const columns = getPlantTableColumnArray(placeList, isEditing, cancel, edit, editingKey, updatePlant, deletePlant);
-
-  const mergedColumns = columns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        inputType: col.dataIndex === 'placeName' ? 'select' : 'text',
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
-  });
+  const mergedColumns = getMergedColumns(columns, 'placeName', 'select', 'text', isEditing);
 
   return (
     <div className="mt-3">

@@ -21,7 +21,7 @@ const PlantDetail = () => {
 
   useEffect(() => {
     if (state !== null) {
-      setPlant(state);
+      setPlant(state.plant);
     }
   }, [state])
 
@@ -51,15 +51,16 @@ const PlantDetail = () => {
           latestWateringDate={wateringList[0]}
           wateringListSize={wateringList.length}/>}
         onClickModifyBtn={onClickModifyBtn}
-        bottomData={<WateringList plant={plant} setPlant={setPlant} wateringList={wateringList}
-                                  setWateringList={setWateringList}/>}
+        bottomData={<WateringList
+          plant={plant}
+          setPlant={setPlant}
+          wateringList={wateringList}
+          setWateringList={setWateringList}/>}
       />
       :
       <ModifyPlant
         plant={plant}
         placeList={placeList}
-        setOnModify={setOnModify}
-        onClickGetBackBtn={onClickModifyBtn}
         changeModifyState={changeModifyState}
       />
   )

@@ -13,10 +13,11 @@ import weekday from 'dayjs/plugin/weekday'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
 import weekYear from 'dayjs/plugin/weekYear'
 import updateData from "src/api/backend-api/common/updateData";
-import WateringListAction from "./WateringListAction";
-import EditableCell from "./EditableCell";
+import WateringEditableCell from "./WateringEditableCell";
 import getChemicalListForSelect from "../../api/service/getChemicalListForSelect";
 import getWateringListForTable from "../../utils/function/getWateringListForTable";
+import getWateringTableColumnArray from "../../utils/function/getWateringTableColumnArray";
+import getMergedColumns from "../../utils/function/getMergedColumns";
 
 /**
  * plant detail 아래쪽에 table로 들어감
@@ -69,8 +70,7 @@ const WateringList = (props) => {
     setEditingKey('');
   };
 
-  const updateWatering = async () => {
-    const res = await updateData("watering", editWatering.wateringNo, editWatering);
+  const wateringCallBack = (res) => {
     setWateringList(res.wateringList);
 
     if (res.plant) {
@@ -78,70 +78,24 @@ const WateringList = (props) => {
     }
 
     if (res.wateringMsg) {
-      const msg = getWateringNotificationMsg(res.wateringMsg.wateringCode)
+      const msg = getWateringNotificationMsg(res.wateringMsg.wateringCode);
       openNotification(msg);
     }
+  }
 
+  const updateWatering = async () => {
+    const res = await updateData("watering", editWatering.wateringNo, editWatering);
+    wateringCallBack(res);
     setEditingKey('');
   };
-
-  const wateringTableColumnArray = [
-    {
-      title: '언제',
-      dataIndex: 'wateringDate',
-      key: 'wateringDate',
-      editable: true,
-    },
-    {
-      title: '무엇을',
-      dataIndex: 'chemicalName',
-      key: 'chemicalName',
-      editable: true,
-    },
-    {
-      title: '관수 간격',
-      dataIndex: 'wateringPeriod',
-      key: 'wateringPeriod',
-    },
-    {
-      title: '',
-      key: 'action',
-      render: (_, record) => {
-        const editable = isEditing(record);
-
-        return <WateringListAction
-          record={record}
-          editable={editable}
-          updateWatering={updateWatering}
-          editingKey={editingKey}
-          cancel={cancel}
-          edit={edit}
-          deleteWatering={deleteWatering}/>
-      },
-    },
-  ]
-
-  const mergedColumns = wateringTableColumnArray.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        inputType: col.dataIndex === 'wateringDate' ? 'date' : 'select',
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
-  });
 
   const deleteWatering = (wateringNo) => {
     deleteData("/watering", wateringNo);
     setWateringList(wateringList.filter(watering => watering.wateringNo !== wateringNo))
   };
+
+  const wateringTableColumnArray = getWateringTableColumnArray(isEditing, updateWatering, editingKey, cancel, edit, deleteWatering);
+  const mergedColumns = getMergedColumns(wateringTableColumnArray, "wateringDate", 'date', 'select', isEditing);
 
   // 물주기 추가/수정/삭제 후 메시지
   const [api, contextHolder] = notification.useNotification();
@@ -156,11 +110,11 @@ const WateringList = (props) => {
 
   const tableBody = {
     body: {
-      cell: (props) => <EditableCell editWatering={editWatering}
-                                     setEditWatering={setEditWatering}
-                                     chemicalList={chemicalList}
-                                     setPlant={setPlant}
-                                     {...props} />
+      cell: (props) => <WateringEditableCell editWatering={editWatering}
+                                             setEditWatering={setEditWatering}
+                                             chemicalList={chemicalList}
+                                             setPlant={setPlant}
+                                             {...props} />
     }
   }
 
@@ -171,22 +125,19 @@ const WateringList = (props) => {
       <CContainer>
         <div className="mt-4 mb-3">
           <WateringFormOpen
-            isWateringFormOpen={isWateringFormOpen}
-            setIsWateringFormOpen={setIsWateringFormOpen}
             plantNo={plant.plantNo}
-            openNotification={openNotification}
-            wateringList={wateringList}
             setWateringList={setWateringList}
             chemicalList={chemicalList}
-            setPlant={setPlant}
+            isWateringFormOpen={isWateringFormOpen}
+            setIsWateringFormOpen={setIsWateringFormOpen}
             setEditingKey={setEditingKey}
+            wateringCallBack={wateringCallBack}
           />
         </div>
         <Form form={form} component={false}>
           <Table
             components={tableBody}
             pagination={{onChange: cancel}}
-            rowClassName="editable-row"
             columns={mergedColumns}
             dataSource={getWateringListForTable(wateringList)}
           />

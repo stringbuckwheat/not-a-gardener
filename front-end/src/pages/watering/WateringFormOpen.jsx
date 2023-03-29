@@ -1,20 +1,17 @@
 import {CButton} from "@coreui/react";
 import {Popconfirm, Space} from "antd";
-import {useState} from "react";
 import authAxios from "src/utils/interceptors";
 import WateringForm from "./WateringForm";
-
 
 const WateringFormOpen = (props) => {
   const {
     plantNo,
     setWateringList,
-    openNotification,
     chemicalList,
-    setPlant,
     isWateringFormOpen,
     setIsWateringFormOpen,
-    setEditingKey
+    setEditingKey,
+    wateringCallBack
   } = props;
 
   const deleteAllWatering = () => {
@@ -36,10 +33,8 @@ const WateringFormOpen = (props) => {
           closeForm={() => {
             setIsWateringFormOpen(!isWateringFormOpen)
           }}
-          openNotification={openNotification}
-          setWateringList={setWateringList}
           chemicalList={chemicalList}
-          setPlant={setPlant}
+          wateringCallBack={wateringCallBack}
         />
         :
         <Space size={[1, 5]} className="float-end">

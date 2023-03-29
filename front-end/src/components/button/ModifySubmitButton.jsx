@@ -17,7 +17,6 @@ const ModifySubmitButton = (props) => {
         changeModifyState();
     }
 
-
     return (
         <>
             {

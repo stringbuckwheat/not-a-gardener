@@ -1,21 +1,16 @@
 import mediumArray from "src/utils/dataArray/mediumArray";
-import { useState } from "react";
+import {useState} from "react";
 import ItemForm from "src/components/form/ItemForm";
 import ModifyFormButtons from "src/components/button/ModifyFormButtons";
 
 const ModifyPlant = (props) => {
-  console.log("modify plant props", props);
-
-  const changeModifyState = props.changeModifyState;
-  const placeList = props.placeList;
+  const {changeModifyState, placeList} = props;
 
   const [plant, setPlant] = useState(props.plant)
-  console.log("modify plant", plant);
 
   const onChange = (e) => {
-    const { name, value } = e.target;
-    setPlant(setPlant => ({ ...plant, [name]: value }));
-    console.log("onchange", plant);
+    const {name, value} = e.target;
+    setPlant(setPlant => ({...plant, [name]: value}));
   }
 
   const itemObjectArray = [
@@ -68,7 +63,7 @@ const ModifyPlant = (props) => {
         url="plant"
         path={plant.plantNo}
         changeModifyState={changeModifyState}
-        validation={validation}/>} />
+        validation={validation}/>}/>
   )
 }
 

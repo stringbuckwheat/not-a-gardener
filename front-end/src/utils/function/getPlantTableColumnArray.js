@@ -1,16 +1,6 @@
 import {Link} from "react-router-dom";
-import {Popconfirm, Space, Tag} from "antd";
-import {DeleteOutlined} from "@ant-design/icons";
-import mediumArray from "../dataArray/mediumArray";
+import {Tag} from "antd";
 import PlantEditableCellAction from "../../pages/plant/PlantEditableCellAction";
-
-const getColorIdxFromMediumArray = (medium) => {
-  for (let i = 0; i < mediumArray.length; i++) {
-    if (mediumArray[i].value === medium) {
-      return i;
-    }
-  }
-};
 
 const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey, updatePlant, deletePlant) => {
 
@@ -22,10 +12,9 @@ const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey
         key: 'plantName',
         editable: true,
         render: (_, record) => {
-          const link = `/plant/${record.plantNo}`;
           return (
             <Link
-              to={link}
+              to={`/plant/${record.plantNo}`}
               className="no-text-decoration">
               {record.plantName}
             </Link>

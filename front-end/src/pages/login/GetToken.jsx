@@ -1,36 +1,31 @@
-import React, { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
+import React, {useEffect} from 'react'
+import {useNavigate, useParams} from 'react-router-dom';
 import authAxios from '../../utils/interceptors'
+import getData from "../../api/backend-api/common/getData";
 
 
 const GetToken = () => {
-    console.log("getToken")
+  let {token} = useParams();
+  const navigate = useNavigate();
 
-    let { token } = useParams();
-    const navigate = useNavigate();
+  const setUser = async () => {
+    localStorage.setItem("login", token);
 
-    console.log("token", token);
+    const user = await getData("/member/member-info");
 
-    useEffect(function(){
-        localStorage.setItem("login", token);
+    localStorage.setItem("memberNo", user.memberNo);
+    localStorage.setItem("name", user.name);
 
-        authAxios.get("/member/member-info")
-        .then((res) => {
-            console.log("res", res);
+    navigate("/", {replace: true});
+  }
 
-            localStorage.setItem("memberNo", res.data.memberNo);
-            localStorage.setItem("name", res.data.name);
+  useEffect(() => {
+    setUser();
+  }, [])
 
-            navigate("/", true);
-        })
-        .catch((error) => {
-            console.log("error", error);
-        });
-    }, [])
-    
-    return (
-        <></>
-    )
+  return (
+    <></>
+  )
 }
 
 export default GetToken;

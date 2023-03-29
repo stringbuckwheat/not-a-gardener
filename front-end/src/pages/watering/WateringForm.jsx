@@ -1,7 +1,5 @@
 import locale from 'antd/es/date-picker/locale/ko_KR'; // '오늘' 같은 거
 import 'dayjs/locale/ko'; // 달력 연월일요일 한국어로
-import CIcon from "@coreui/icons-react";
-import {cilDrop} from "@coreui/icons";
 import {Select, Space} from "antd";
 import {CAlert} from "@coreui/react";
 import {CButton} from "@coreui/react";
@@ -9,11 +7,10 @@ import {DatePicker} from 'antd';
 import {useState} from 'react';
 import insertData from 'src/api/backend-api/common/insertData';
 import getDisabledDate from 'src/utils/function/getDisabledDate';
-import getWateringNotificationMsg from "../../utils/function/getWateringNotificationMsg";
 
 
 const WateringForm = (props) => {
-  const {plantNo, closeForm, openNotification, setWateringList, setPlant, chemicalList} = props;
+  const {plantNo, closeForm, chemicalList, wateringCallBack} = props;
   const [wateringDate, setWateringDate] = useState("");
   const [chemicalNo, setChemicalNo] = useState(0);
 
@@ -25,17 +22,9 @@ const WateringForm = (props) => {
     }
 
     const res = await insertData("/watering", data);
+    wateringCallBack(res);
+
     closeForm();
-
-    // data
-    const msg = getWateringNotificationMsg(res.wateringMsg.wateringCode)
-    openNotification(msg);
-
-    setWateringList(res.wateringList);
-
-    if (res.plant) {
-      setPlant(res.plant);
-    }
   }
 
   return (
@@ -43,7 +32,7 @@ const WateringForm = (props) => {
       <CAlert
         color="info"
         onClose={closeForm}>
-        <h5><CIcon icon={cilDrop} size='lg'/> 물 주기</h5>
+        <h5>물 주기</h5>
         <div className="mt-3 mb-1">
           <small>언제 주었나요</small>
           <DatePicker

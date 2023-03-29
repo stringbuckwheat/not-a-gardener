@@ -2,7 +2,7 @@ import {DatePicker, Form, Select} from "antd";
 import locale from 'antd/es/date-picker/locale/ko_KR';
 import getDisabledDate from "../../utils/function/getDisabledDate";
 
-const EditableCell = (props) => {
+const WateringEditableCell = (props) => {
   const {
     editWatering,
     setEditWatering,
@@ -48,4 +48,4 @@ const EditableCell = (props) => {
   );
 }
 
-export default EditableCell;
+export default WateringEditableCell;
