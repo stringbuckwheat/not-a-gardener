@@ -18,8 +18,6 @@ import LogOut from 'src/utils/function/logout'
 
 // account, setting 부분
 const AppHeaderDropdown = () => {
-  const memberUrl = "member/" + localStorage.getItem("memberNo");
-
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0" caret={false}>
@@ -27,7 +25,7 @@ const AppHeaderDropdown = () => {
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
         <CDropdownHeader className="bg-light fw-semibold py-2">Settings</CDropdownHeader>
-        <CDropdownItem href={memberUrl}>
+        <CDropdownItem href="member">
           <CIcon icon={cilUser} className="me-2" />
           개인정보 수정
         </CDropdownItem>

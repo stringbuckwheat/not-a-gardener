@@ -60,7 +60,7 @@ const ChemicalDetail = () => {
         onChange={onChange}
         submitBtn={<ModifyFormButtons
           data={chemical}
-          url="chemical"
+          url="/chemical"
           path={state.chemicalNo}
           changeModifyState={changeModifyState}
           validation={validation}/>}/>

@@ -4,7 +4,7 @@ import {AppContent, AppSidebar, AppFooter, AppHeader} from '../index'
 
 const DefaultLayout = () => {
   const isLogin = localStorage.getItem("login");
-  console.log("login", isLogin !== undefined)
+  console.log("= Default Layout: login", isLogin !== undefined);
 
   if (!isLogin) {
     return <Navigate to="/login" replace={true}/>

@@ -84,7 +84,7 @@ const WateringList = (props) => {
   }
 
   const updateWatering = async () => {
-    const res = await updateData("watering", editWatering.wateringNo, editWatering);
+    const res = await updateData("/watering", editWatering.wateringNo, editWatering);
     wateringCallBack(res);
     setEditingKey('');
   };

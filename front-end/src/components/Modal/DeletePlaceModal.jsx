@@ -24,7 +24,7 @@ const DeletePlaceModal = (props) => {
 
   return (
     <>
-      <CModal alignment="center" visible={visible} onClose={props.closeDeleteModal}>
+      <CModal alignment="center" visible={visible} onClose={closeDeleteModal}>
         <CModalHeader>
           <CModalTitle>{hasNoPlant ? "이 장소를 삭제하실건가요?" : "이 장소의 식물을 삭제/이동해주세요"}</CModalTitle>
         </CModalHeader>

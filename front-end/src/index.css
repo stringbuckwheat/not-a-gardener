@@ -5,6 +5,42 @@
   font-style: normal;
 }
 
+/* darkgreen */
+.bg-garden {
+  --cui-bg-opacity: 1;
+  background-color: #306844 !important;
+}
+
+/*teal green*/
+.bg-teal{
+  background-color: #6d9773 !important;
+}
+
+.bg-beige{
+  background-color: #bb8a52 !important;
+}
+
+.bg-york{
+  background-color: #ffba00 !important;
+}
+
+/*****/
+.text-garden {
+  color: #306844 !important;
+}
+
+.text-teal {
+  color: #6d9773 !important;
+}
+
+.text-beige {
+  color: #bb8a52 !important;
+}
+
+.text-york {
+  color: #ffba00 !important;
+}
+
 /* garden card */
 
 .center {
@@ -144,7 +180,7 @@ body {
   vertical-align: middle;
   width: 100%;
   border-radius: 3px;
-  margin: 10px auto;
+  /*margin: 0px auto;*/
   outline: rgb(255, 255, 255) none 0px;
   padding-left: 20%;
   transition: all 0.2s cubic-bezier(0.72, 0.01, 0.56, 1) 0s;

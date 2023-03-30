@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {
   CButton,
   CModal,
@@ -9,13 +9,23 @@ import {
   CModalTitle,
 } from '@coreui/react'
 import deleteData from 'src/api/backend-api/common/deleteData';
-import { useState } from 'react';
-import { DeleteOutlined } from '@ant-design/icons';
-import { Tooltip } from 'antd';
+import {useState} from 'react';
+import {DeleteOutlined} from '@ant-design/icons';
+import {Tooltip} from 'antd';
 
 const DeleteModal = (props) => {
-  const { title, url, path, deleteTooltipMsg } = props;
+  const {title, url, path, deleteTooltipMsg} = props;
   const navigate = useNavigate();
+
+  const button = props.button
+    ? props.button
+    : <Tooltip title={deleteTooltipMsg}>
+      <DeleteOutlined
+        className="font-size-18 text-grey"
+        onClick={() => {
+          setVisible(true)
+        }}/>
+    </Tooltip>
 
   // 삭제 모달 메시지 만들기
 
@@ -60,7 +70,7 @@ const DeleteModal = (props) => {
   const remove = () => {
     deleteData(url, path);
     closeDeleteModal();
-    navigate(url, { replace: true, state: "delete" });
+    navigate(url, {replace: true, state: "delete"});
   };
 
   const [visible, setVisible] = useState(false);
@@ -80,12 +90,11 @@ const DeleteModal = (props) => {
           <CButton color="success" onClick={closeDeleteModal}>돌아가기</CButton>
         </CModalFooter>
       </CModal>
-
-      <Tooltip title={deleteTooltipMsg}>
-        <DeleteOutlined 
-            className="font-size-18 text-grey"
-            onClick={() => { setVisible(true) }} />
-      </Tooltip>
+      <div onClick={() => {
+        setVisible(true)
+      }}>
+        {button}
+      </div>
     </>
   )
 }

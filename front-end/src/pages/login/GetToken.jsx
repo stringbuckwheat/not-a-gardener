@@ -15,6 +15,7 @@ const GetToken = () => {
 
     localStorage.setItem("memberNo", user.memberNo);
     localStorage.setItem("name", user.name);
+    localStorage.setItem("provider", user.provider);
 
     navigate("/", {replace: true});
   }

@@ -62,7 +62,7 @@ const PlantTable = (props) => {
   };
 
   const updatePlant = async () => {
-    const res = await updateData("plant", modifyPlant.plantNo, modifyPlant);
+    const res = await updateData("/plant", modifyPlant.plantNo, modifyPlant);
 
     const updatedPlantList = originPlantList.map((plant) => {
       return plant.plant.plantNo === modifyPlant.plantNo ? {...res} : plant;

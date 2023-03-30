@@ -60,7 +60,7 @@ const ModifyPlant = (props) => {
       onChange={onChange}
       submitBtn={<ModifyFormButtons
         data={plant}
-        url="plant"
+        url="/plant"
         path={plant.plantNo}
         changeModifyState={changeModifyState}
         validation={validation}/>}/>

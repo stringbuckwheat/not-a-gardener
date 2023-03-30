@@ -7,14 +7,13 @@ import {
   CCol,
   CContainer,
   CRow,
-  CCardHeader
 } from '@coreui/react'
-import SocialLoginButton from "./SocialLoginButton";
+import SocialLogin from "./SocialLogin";
 import LoginForm from "./LoginForm";
 import RegisterCard from "./RegisterCard";
 import getLogin from "../../api/backend-api/member/getLogin";
 
-function Login() {
+const Login = () => {
   const navigate = useNavigate();
 
   const [login, setLogin] = useState({
@@ -31,10 +30,10 @@ function Login() {
 
   const submit = async () => {
     try {
-      getLogin(login);
+      await getLogin(login);
 
       // garden 페이지로 이동
-      navigate('/');
+      navigate('/', {replace: true});
     } catch (error) {
       setMsg(error.response.data.errorDescription);
     }
@@ -53,23 +52,31 @@ function Login() {
     }
   }
 
+  const sm = {width: '100%'}
+  const lg = {width: '44%'}
+
   return (
-    <div className="bg-light min-vh-100 d-flex align-items-center">
-      <CContainer fluid>
+    <div className="min-vh-100 d-flex align-items-center bg-garden">
+      <CContainer>
         <CRow className="justify-content-center">
           <CCol md={8}>
             <CCardGroup>
               <CCard className="p-4">
-                <CCardHeader className="mb-0">
-                  <h2>로그인</h2>
-                </CCardHeader>
                 <CCardBody>
+                  <h4 className="mt-3">로그인</h4>
                   <p className="text-danger"><small>{msg}</small></p>
                   <LoginForm inputCheck={inputCheck} onChange={onChange}/>
-                  <SocialLoginButton />
+                  <SocialLogin/>
                 </CCardBody>
               </CCard>
-              <RegisterCard />
+              <CCard
+                className="text-garden py-5 d-flex align-items-center"
+                sm={sm}
+                lg={lg}>
+                <CCardBody className="text-center">
+                  <RegisterCard/>
+                </CCardBody>
+              </CCard>
             </CCardGroup>
           </CCol>
         </CRow>

@@ -1,15 +1,13 @@
-import {CButton, CCard, CCardBody, CImage} from "@coreui/react";
+import {CButton, CImage} from "@coreui/react";
 import sprout from "../../assets/images/sprout.png";
 import {Link} from "react-router-dom";
 
 const RegisterCard = () => {
+
   return (
-    <CCard
-      className="text-white bg-primary py-5"
-      sm={{width: '100%'}}
-      lg={{width: '44%'}}>
-      <CCardBody className="text-center">
-        <h2>not-a-gardener</h2>
+    <div className="height-95 d-flex align-items-center">
+      <div>
+        <h4 className="mt-3">not-a-gardener</h4>
         <CImage
           fluid
           src={sprout}
@@ -19,12 +17,12 @@ const RegisterCard = () => {
           함께 키워요!
         </p>
         <Link to="/register">
-          <CButton type="button" color="primary" className="mt-3" active tabIndex={-1}>
+          <CButton type="button" color="primary" className="mt-3">
             가입하세요
           </CButton>
         </Link>
-      </CCardBody>
-    </CCard>
+      </div>
+    </div>
   )
 }
 

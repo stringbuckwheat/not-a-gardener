@@ -23,7 +23,7 @@ const ModifyPlace = (props) => {
             onChange={onChange}
             submitBtn={<ModifyFormButtons
                 data={place}
-                url="place"
+                url="/place"
                 path={place.placeNo}
                 changeModifyState={changeModifyState}
                 validation={validation}
