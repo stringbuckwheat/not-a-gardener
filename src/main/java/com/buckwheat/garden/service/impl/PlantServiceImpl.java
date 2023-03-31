@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
 public class PlantServiceImpl implements PlantService {
     private final PlantRepository plantRepository;
     private final PlaceRepository placeRepository;
-    private final GardenUtil  gardenUtil;
+    private final GardenUtil gardenUtil;
 
     /**
      * 하나의 장소 정보 반환
@@ -42,7 +42,6 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public List<PlantDto.PlantResponse> getPlantList(int memberNo) {
-        log.debug("getPlantList");
         List<PlantDto.PlantResponse> plantList = new ArrayList<>();
 
         // @EntityGraph 메소드
@@ -55,7 +54,6 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public PlantDto.PlantInPlace addPlant(PlantDto.PlantRequest plantRequestDto, Member member) {
-        log.debug("plantRequestDto: {}", plantRequestDto);
         Place place = placeRepository.findByPlaceNo(plantRequestDto.getPlaceNo()).orElseThrow(NoSuchElementException::new);
         Plant plant = plantRepository.save(plantRequestDto.toEntityWith(member, place));
 
@@ -70,6 +68,7 @@ public class PlantServiceImpl implements PlantService {
         Plant updatedPlant = plant.update(plantRequest, place);
         plantRepository.save(updatedPlant);
 
+        // GardenDto를 돌려줘야 함
         PlantDto.PlantResponse plantResponse = PlantDto.PlantResponse.from(updatedPlant);
         GardenDto.GardenDetail gardenDetail = gardenUtil.getGardenDetail(member.getMemberNo(), updatedPlant);
 

@@ -48,7 +48,7 @@ const Register = () => {
       return;
     }
 
-    const res = await axios.post("/register/idCheck", {'username': username});
+    const res = await axios.get(`/register/username/${username}`);
     setUsernameCheck(res.data == "");
   }
 
@@ -68,6 +68,13 @@ const Register = () => {
     navigate('/', {replace: true});
 
   } // end for onSubmit
+
+  const isValid = usernameCheck
+    && idRegex.test(register.username)
+    && pwRegex.test(register.pw)
+    && emailRegex.test(register.email)
+    && register.name !== ''
+    && repeatPw;
 
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
@@ -135,7 +142,7 @@ const Register = () => {
           />
 
           <div className="d-grid">
-            {usernameCheck && idRegex.test(register.username) && pwRegex.test(register.pw) && emailRegex.test(register.email) && register.name !== '' && repeatPw
+            {isValid
               ? <CButton type="button" color="success" onClick={onSubmit}>가입하기</CButton>
               : <CButton type="button" color="secondary" disabled>가입하기</CButton>
             }

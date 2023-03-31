@@ -1,8 +1,6 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.data.dto.MemberDetailDto;
 import com.buckwheat.garden.data.dto.MemberDto;
-import com.buckwheat.garden.data.dto.RegisterDto;
 import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.repository.MemberRepository;
 import com.buckwheat.garden.service.MemberService;
@@ -10,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.*;
+
+import java.util.NoSuchElementException;
 
 @Service
 @Slf4j
@@ -20,37 +19,29 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     @Override
-    public MemberDetailDto getMember(int userNo) {
-        Member member = memberRepository.findById(userNo).orElseThrow(NoSuchElementException::new);
-
-        return MemberDetailDto.builder()
-                .username(member.getUsername())
-                .email(member.getEmail())
-                .name(member.getName())
-                .createDate(member.getCreateDate())
-                .provider(member.getProvider())
-                .build();
+    public MemberDto.MemberDetail getMember(Member member) {
+        return MemberDto.MemberDetail.from(member);
     }
 
     @Override
-    public void updatePassword(MemberDto memberDto) {
-//        Member member = memberRepository.findById(memberDto.getUsername()).orElseThrow(NoSuchElementException::new);
-//        member.changePassword(encoder.encode(memberDto.getPw()));
+    public void updatePassword(MemberDto.Login login, Member member) {
+        String encryptedPassword = encoder.encode(login.getPw());
+        memberRepository.save(member.changePassword(encryptedPassword));
     }
 
     @Override
-    public boolean identifyMember(MemberDto memberDto){
-        return memberRepository.findByUsernameAndPw(memberDto.getUsername(), memberDto.getPw()).isPresent();
+    public boolean identifyMember(MemberDto.Login loginDto, Member member){
+        return encoder.matches(loginDto.getPw(), member.getPw());
     }
 
     @Override
-    public MemberDetailDto updateMember(MemberDetailDto memberDetailDto){
+    public MemberDto.MemberDetail updateMember(MemberDto.MemberDetail memberDetailDto){
         Member member = memberRepository.findById(memberDetailDto.getMemberNo()).orElseThrow(NoSuchElementException::new);
 
         member.updateEmailAndName(memberDetailDto.getEmail(), memberDetailDto.getName());
         memberRepository.save(member);
 
-        return MemberDetailDto.builder()
+        return MemberDto.MemberDetail.builder()
                 .username(member.getUsername())
                 .email(member.getEmail())
                 .name(member.getName())

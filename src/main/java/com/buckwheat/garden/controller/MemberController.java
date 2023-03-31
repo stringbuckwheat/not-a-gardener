@@ -1,16 +1,11 @@
 package com.buckwheat.garden.controller;
 
 import com.buckwheat.garden.config.oauth2.UserPrincipal;
-import com.buckwheat.garden.data.dto.MemberDetailDto;
 import com.buckwheat.garden.data.dto.MemberDto;
-import com.buckwheat.garden.data.dto.MemberInfo;
-import com.buckwheat.garden.data.dto.RegisterDto;
-import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -22,33 +17,32 @@ public class MemberController {
 
     /* 회원정보 보기 */
     @GetMapping("/{memberNo}")
-    public MemberDetailDto getMember(@PathVariable("memberNo") int memberNo){
-        return memberService.getMember(memberNo);
+    public MemberDto.MemberDetail getMember(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        return memberService.getMember(userPrincipal.getMember());
     }
 
+    /* 간단한 회원 정보(헤더) - 소셜로그인에서 사용 */
     @GetMapping("/member-info")
-    public MemberInfo getMemberInfo(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        Member member = userPrincipal.getMember();
-        return MemberInfo.getMemberInfo(member.getMemberNo(), member.getName());
+    public MemberDto.MemberInfo getMemberInfo(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        return MemberDto.MemberInfo.from(null, userPrincipal.getMember());
     }
 
     /* 비밀번호 변경 전 한 번 입력받아서 확인 */
-    @PostMapping("")
-    public boolean reconfirmPassword(@RequestBody MemberDto memberDto, @AuthenticationPrincipal User user){
-        memberDto.setUsername(user.getUsername());
-        return memberService.identifyMember(memberDto);
+    @PostMapping("/pw-check")
+    public boolean reconfirmPassword(@RequestBody MemberDto.Login login, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        return memberService.identifyMember(login, userPrincipal.getMember());
     }
 
     /* 비밀번호 변경 */
-    @PutMapping("/updatePw")
-    public void updatePassword(@RequestBody MemberDto memberDto){
-        // @PathVariable을 쓰는 게 나은지, @AuthenticationPrincipal을 쓰는 게 나은지
-        memberService.updatePassword(memberDto);
+    @PutMapping("/pw")
+    public void updatePassword(@RequestBody MemberDto.Login login, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        memberService.updatePassword(login, userPrincipal.getMember());
     }
 
     /* 회원정보 변경 */
     @PutMapping("/{memberNo}")
-    public MemberDetailDto updateMember(@RequestBody MemberDetailDto memberDetailDto, @PathVariable int memberNo){
+    public MemberDto.MemberDetail updateMember(@RequestBody MemberDto.MemberDetail memberDetailDto, @PathVariable int memberNo){
+        log.debug("memberDetailDto: {}", memberDetailDto);
         return memberService.updateMember(memberDetailDto);
     }
 

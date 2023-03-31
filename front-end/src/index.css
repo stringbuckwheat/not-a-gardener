@@ -8,7 +8,7 @@
 /* darkgreen */
 .bg-garden {
   --cui-bg-opacity: 1;
-  background-color: #306844 !important;
+  background-color: #305738 !important;
 }
 
 /*teal green*/
@@ -17,7 +17,11 @@
 }
 
 .bg-beige{
-  background-color: #bb8a52 !important;
+  background-color: #FEEFBB !important;
+}
+
+.bg-orange{
+  background-color: #E14A1E !important;
 }
 
 .bg-york{
@@ -26,7 +30,7 @@
 
 /*****/
 .text-garden {
-  color: #306844 !important;
+  color: #305738 !important;
 }
 
 .text-teal {
@@ -34,7 +38,11 @@
 }
 
 .text-beige {
-  color: #bb8a52 !important;
+  color: #FEEFBB !important;
+}
+
+.text-orange {
+  color: #E14A1E !important;
 }
 
 .text-york {
@@ -146,6 +154,11 @@
 
 .height-70vh {
   height: 70vh;
+}
+
+.vertical-logo {
+  -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
+  transform: rotate(90deg);
 }
 
 /* 소셜 로그인 */
