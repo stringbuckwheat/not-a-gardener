@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequestMapping("/member")
@@ -25,6 +27,12 @@ public class MemberController {
     @GetMapping("/member-info")
     public MemberDto.MemberInfo getMemberInfo(@AuthenticationPrincipal UserPrincipal userPrincipal){
         return MemberDto.MemberInfo.from(null, userPrincipal.getMember());
+    }
+
+    /* 이메일로 계정 확인 - 아이디/비밀번호 찾기 */
+    @GetMapping("/email/{email}")
+    public Map<String, Object> sendAuthenticationEmail (@PathVariable String email){
+        return memberService.getIdentificationCodeAndMembers(email);
     }
 
     /* 비밀번호 변경 전 한 번 입력받아서 확인 */

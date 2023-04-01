@@ -9,7 +9,7 @@ import {cilHappy, cilLockLocked, cilUser} from '@coreui/icons'
 import axios from 'axios'
 import Booped from "../../components/animation/Booped";
 import {Space} from "antd";
-import getLogin from "../../api/backend-api/member/getLogin";
+import setMember from "../../api/service/setMember";
 import MemberFormWrapper from "../../components/form/wrapper/MemberFormWrapper";
 import FormInputFeedback from "../../components/form/input/FormInputFeedback";
 
@@ -58,12 +58,8 @@ const Register = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    await axios.post("/register", register);
-
-    await getLogin({
-      username: register.username,
-      pw: register.pw
-    });
+    const res = await axios.post("/register", register);
+    await setMember(res.data);
 
     navigate('/', {replace: true});
 

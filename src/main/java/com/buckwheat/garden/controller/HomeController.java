@@ -23,7 +23,4 @@ public class HomeController {
     public MemberDto.MemberInfo login(@RequestBody MemberDto.Login login){
         return authenticationService.login(login);
     }
-
-    /* TODO 아이디/비밀번호 찾기 */
-    // 메일 보내서 코드 확인
 }

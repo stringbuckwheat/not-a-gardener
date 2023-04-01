@@ -5,6 +5,7 @@ import Loading from "./components/data/Loading";
 
 // Pages
 const Login = React.lazy(() => import('./pages/login/Login'))
+const ForgotAccount = React.lazy(() => import('./pages/ForgotAccount/ForgotAccount'))
 const Register = React.lazy(() => import('./pages/login/Register'))
 const DefaultLayout = React.lazy(() => import('./components/layout/DefaultLayout'))
 const GetToken = React.lazy(() => import('./pages/login/GetToken'))
@@ -16,6 +17,7 @@ const App = () => {
         <Routes>
           <Route path="/login" name="Login Page" element={<Login/>}/>
           <Route path="/oauth/:token" element={<GetToken/>}/>
+          <Route path="/forgot" name="Forgot Account" element={<ForgotAccount/>}/>
           <Route path="/register" name="Register Page" element={<Register/>}/>
           <Route path="*" element={<DefaultLayout/>}/>
         </Routes>

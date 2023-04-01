@@ -5,7 +5,8 @@ import React, {useState} from "react";
 import {QuestionCircleOutlined} from "@ant-design/icons";
 import {Space} from "antd";
 import {Link, useNavigate} from "react-router-dom";
-import getLogin from "../../api/backend-api/member/getLogin";
+import setMember from "../../api/service/setMember";
+import axios from "axios";
 
 const LoginForm = (props) => {
 
@@ -37,7 +38,8 @@ const LoginForm = (props) => {
 
   const submit = async () => {
     try {
-      await getLogin(login);
+      const res = await axios.post("/", login);
+      await setMember(res.data);
 
       // garden 페이지로 이동
       navigate('/', {replace: true});
