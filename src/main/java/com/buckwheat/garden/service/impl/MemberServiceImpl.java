@@ -83,6 +83,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public void resetPassword(MemberDto.Login login) {
+        Member member = memberRepository.findByUsername(login.getUsername()).orElseThrow(NoSuchElementException::new);
+        updatePassword(login, member);
+    }
+
+    @Override
     public boolean identifyMember(MemberDto.Login loginDto, Member member){
         return encoder.matches(loginDto.getPw(), member.getPw());
     }

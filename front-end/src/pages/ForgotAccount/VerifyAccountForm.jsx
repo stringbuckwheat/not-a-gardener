@@ -1,5 +1,6 @@
 import {Button, Input, Space} from "antd";
 import React from "react";
+import InputFeedbackSpan from "./InputFeedbackSpan";
 
 const VerifyAccountForm = (props) => {
   const {label, handleInput, defaultValue, onClick, buttonTitle, feedbackMsg} = props;
@@ -16,7 +17,7 @@ const VerifyAccountForm = (props) => {
           <Button className="bg-orange text-white" onClick={onClick}>{buttonTitle}</Button>
         </Space.Compact>
       </div>
-      <span className="text-danger" style={{fontSize: "0.8em"}}>{feedbackMsg}</span>
+      <InputFeedbackSpan feedbackMsg={feedbackMsg}/>
     </div>
   )
 }

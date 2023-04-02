@@ -1,5 +1,6 @@
 import {CButton, CCard, CCardBody} from "@coreui/react";
 import CIcon from "@coreui/icons-react";
+import React from "react";
 
 const ForgotAccountCard = (props) => {
   const {icon, color, onClick, title, buttonSize} = props;

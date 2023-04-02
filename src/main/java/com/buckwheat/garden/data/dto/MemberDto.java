@@ -70,7 +70,7 @@ public class MemberDto {
     @ToString
     @NoArgsConstructor
     @AllArgsConstructor
-    public class RegisterDto {
+    public static class RegisterDto {
         private String username;
         private String email;
         private String pw;
@@ -91,5 +91,15 @@ public class MemberDto {
                     .createDate(LocalDateTime.now())
                     .build();
         }
+    }
+
+    @AllArgsConstructor
+    @Getter
+    @NoArgsConstructor
+    @ToString
+    public static class ForgotResponse{
+        private int memberNo;
+        private String username;
+        private String provider;
     }
 }

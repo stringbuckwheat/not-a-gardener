@@ -36,21 +36,27 @@ public class MemberController {
     }
 
     /* 비밀번호 변경 전 한 번 입력받아서 확인 */
+    // TODO url 수정
     @PostMapping("/pw-check")
     public boolean reconfirmPassword(@RequestBody MemberDto.Login login, @AuthenticationPrincipal UserPrincipal userPrincipal){
         return memberService.identifyMember(login, userPrincipal.getMember());
     }
 
-    /* 비밀번호 변경 */
+    /* 로그인 후 비밀번호 변경 */
+    // TODO url 수정
     @PutMapping("/pw")
     public void updatePassword(@RequestBody MemberDto.Login login, @AuthenticationPrincipal UserPrincipal userPrincipal){
         memberService.updatePassword(login, userPrincipal.getMember());
     }
 
+    @PutMapping("/{username}/pw")
+    public void resetPassword(@RequestBody MemberDto.Login login){
+        memberService.resetPassword(login);
+    }
+
     /* 회원정보 변경 */
     @PutMapping("/{memberNo}")
     public MemberDto.MemberDetail updateMember(@RequestBody MemberDto.MemberDetail memberDetailDto, @PathVariable int memberNo){
-        log.debug("memberDetailDto: {}", memberDetailDto);
         return memberService.updateMember(memberDetailDto);
     }
 

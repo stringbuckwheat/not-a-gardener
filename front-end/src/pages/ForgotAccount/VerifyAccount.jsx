@@ -1,13 +1,9 @@
-import {CCard, CCardBody} from "@coreui/react";
 import React, {useState} from "react";
 import verifyEmail from "../../utils/function/verifyEmail";
 import axios from "axios";
 import VerifyAccountForm from "./VerifyAccountForm";
-import {Button} from "antd";
-import {Link} from "react-router-dom";
-import ForgotCardWrapper from "./ForgotCardWrapper";
 
-const VerifyAccount = ({children, setEmail, setMemberList}) => {
+const VerifyAccount = ({successContent, setEmail, setMemberList}) => {
 
   const [input, setInput] = useState("");
   const [isWaiting, setIsWaiting] = useState(false);
@@ -29,6 +25,7 @@ const VerifyAccount = ({children, setEmail, setMemberList}) => {
 
     try {
       const res = await axios.get(`/member/email/${input}`);
+
       setIdentification(res.data.identificationCode);
       setEmail(res.data.email);
       setMemberList(res.data.members);
@@ -67,16 +64,14 @@ const VerifyAccount = ({children, setEmail, setMemberList}) => {
 
   // 완료
   if (identify === "fulfilled") {
-    console.log("type of children", typeof children);
     return (
       <>
-      {children}
+      {successContent}
       </>
     )
   }
 
   return (
-    <ForgotCardWrapper>
       <div>
         <VerifyAccountForm
           label="가입 시 제출한 이메일을 입력해주세요"
@@ -85,7 +80,6 @@ const VerifyAccount = ({children, setEmail, setMemberList}) => {
           onClick={submitEmail}
           buttonTitle="인증"
           feedbackMsg={getFeedbackMsg()}/>
-
         {
           identificationCode !== ""
             ?
@@ -98,7 +92,6 @@ const VerifyAccount = ({children, setEmail, setMemberList}) => {
             : <></>
         }
       </div>
-    </ForgotCardWrapper>
   )
 }
 
