@@ -3,7 +3,7 @@ import {NavLink, useLocation} from 'react-router-dom'
 import {CBadge} from '@coreui/react'
 
 export const AppSidebarNav = ({items}) => {
-  const location = useLocation()
+  const location = useLocation();
 
   const navLink = (name, icon, badge) => {
     return (

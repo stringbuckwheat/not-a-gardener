@@ -3,7 +3,7 @@ import CIcon from "@coreui/icons-react";
 import {cilLockLocked} from "@coreui/icons";
 import {CButton} from "@coreui/react";
 import React, {useState} from "react";
-import insertData from "../../../api/backend-api/common/insertData";
+import postData from "../../../api/backend-api/common/postData";
 
 const CheckPrevPassword = (props) => {
   const {current, setCurrent, closeModal, setPrevPassword} = props;
@@ -16,7 +16,7 @@ const CheckPrevPassword = (props) => {
   }
 
   const onSubmit = async () => {
-    const res = await insertData("/member/pw-check", {pw: password});
+    const res = await postData("/member/pw", {pw: password});
 
     setPwCheck(res);
 

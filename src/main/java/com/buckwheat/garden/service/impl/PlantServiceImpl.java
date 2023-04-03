@@ -28,6 +28,7 @@ public class PlantServiceImpl implements PlantService {
 
     /**
      * 하나의 장소 정보 반환
+     *
      * @param plantNo
      * @return
      */
@@ -45,19 +46,28 @@ public class PlantServiceImpl implements PlantService {
         List<PlantDto.PlantResponse> plantList = new ArrayList<>();
 
         // @EntityGraph 메소드
-        for(Plant p : plantRepository.findByMember_MemberNoOrderByCreateDateDesc(memberNo)){
+        for (Plant p : plantRepository.findByMember_MemberNoOrderByCreateDateDesc(memberNo)) {
             plantList.add(PlantDto.PlantResponse.from(p));
         }
 
         return plantList;
     }
 
+    public GardenDto.GardenResponse getGardenResponseFrom(int plantNo, int memberNo){
+        Plant plant = plantRepository.findByPlantNo(plantNo).orElseThrow(NoSuchElementException::new);
+
+        PlantDto.PlantResponse plantResponse = PlantDto.PlantResponse.from(plant);
+        GardenDto.GardenDetail gardenDetail = gardenUtil.getGardenDetail(memberNo, plant);
+
+        return new GardenDto.GardenResponse(plantResponse, gardenDetail);
+    }
+
     @Override
-    public PlantDto.PlantInPlace addPlant(PlantDto.PlantRequest plantRequestDto, Member member) {
+    public GardenDto.GardenResponse addPlant(PlantDto.PlantRequest plantRequestDto, Member member) {
         Place place = placeRepository.findByPlaceNo(plantRequestDto.getPlaceNo()).orElseThrow(NoSuchElementException::new);
         Plant plant = plantRepository.save(plantRequestDto.toEntityWith(member, place));
 
-        return PlantDto.PlantInPlace.from(plant);
+        return getGardenResponseFrom(plant.getPlantNo(), member.getMemberNo());
     }
 
     @Override
@@ -89,7 +99,7 @@ public class PlantServiceImpl implements PlantService {
     public PlaceDto.PlaceResponseDto modifyPlantPlace(PlaceDto.ModifyPlantPlaceDto modifyPlantPlaceDto) {
         Place place = placeRepository.findByPlaceNo(modifyPlantPlaceDto.getPlaceNo()).orElseThrow(NoSuchElementException::new);
 
-        for(int plantNo : modifyPlantPlaceDto.getPlantList()){
+        for (int plantNo : modifyPlantPlaceDto.getPlantList()) {
             Plant plant = plantRepository.findById(plantNo).orElseThrow(NoSuchElementException::new);
 
             plant.updatePlace(place);

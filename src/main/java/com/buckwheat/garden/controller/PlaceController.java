@@ -43,7 +43,7 @@ public class PlaceController {
      * @param placeNo PK
      * @return
      */
-    @GetMapping("/{placeNo}/plant-list")
+    @GetMapping("/{placeNo}/plants")
     public List<PlantDto.PlantInPlace> getPlantlistInPlace(@PathVariable int placeNo){
         return placeService.getPlantlistInPlace(placeNo);
     }

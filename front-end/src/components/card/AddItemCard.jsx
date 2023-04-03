@@ -4,21 +4,17 @@ import {cilPlus} from "@coreui/icons";
 import CIcon from '@coreui/icons-react';
 
 
-const AddItemCard = (props) => {
-  const {addUrl, addMsg} = props;
+const AddItemCard = ({addUrl, addMsg, onClick}) => {
 
   return (
     <CCol md={3} xs={12}>
-      <Link
-        to={addUrl}
-        className="no-text-decoration">
-        <CWidgetStatsF
-          className="mb-3"
-          color="dark"
-          icon={<CIcon icon={cilPlus} height={30}/>}
-          value={addMsg}
-        />
-      </Link>
+      <CWidgetStatsF
+        onClick={onClick}
+        className="mb-3"
+        color="dark"
+        icon={<CIcon icon={cilPlus} height={30}/>}
+        value={addMsg}
+      />
     </CCol>
   )
 }

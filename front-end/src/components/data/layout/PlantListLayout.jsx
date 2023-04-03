@@ -1,4 +1,5 @@
 import {
+  CButton,
   CCard,
   CCardBody,
   CCol,
@@ -7,9 +8,7 @@ import AddPlantButton from 'src/components/button/AddPlantButton';
 import Search from "../header/search/Search";
 import {Space} from "antd";
 
-const PlantListLayout = (props) => {
-  const {title, tags, bottomData, setSearchWord} = props;
-
+const PlantListLayout = ({title, tags, bottomData, setSearchWord, addFormOpen}) => {
   return (
     <div className="row justify-content-md-center">
       <CCol md="auto" className="minWidth-full">
@@ -22,7 +21,14 @@ const PlantListLayout = (props) => {
             <div className="float-end mb-3">
               <Space>
                 <Search setSearchWord={setSearchWord}/>
-                <AddPlantButton size="sm"/>
+                <CButton
+                  onClick={addFormOpen}
+                  color="success"
+                  size="sm"
+                  variant="outline"
+                  shape="rounded-pill">
+                  식물 추가하기
+                </CButton>
               </Space>
             </div>
             {bottomData}

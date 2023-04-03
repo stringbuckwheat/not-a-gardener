@@ -2,17 +2,13 @@ import PlantTable from "../../components/table/PlantTable";
 import PlantListLayout from "src/components/data/layout/PlantListLayout";
 import PlantListTag from "../../components/tag/PlantListTag";
 import {useEffect, useState} from "react";
-import onMount from "../../api/service/onMount";
+import AddPlant from "./AddPlant";
+import getPlaceListForSelect from "../../api/service/getPlaceListForSelect";
 
-const PlantList = (props) => {
-  const {plantList, setPlantList, originPlantList} = props;
-
+const PlantList = ({plantList, setPlantList, originPlantList, addPlant}) => {
   const [placeList, setPlaceList] = useState([])
   const [searchWord, setSearchWord] = useState("");
-
-  useEffect(() => {
-    onMount("/place", setPlaceList);
-  }, []);
+  const [isAddFormOpened, setIsAddFormOpened] = useState(false);
 
   const search = (searchWord) => {
     const searchedList = originPlantList.filter(plant => plant.plant.plantName.includes(searchWord));
@@ -27,12 +23,26 @@ const PlantList = (props) => {
     }
   }, [searchWord])
 
-  return (
+  const switchAddForm = () => setIsAddFormOpened(!isAddFormOpened);
+
+  const addFormOpen = async () => {
+    setPlaceList(await getPlaceListForSelect());
+    switchAddForm();
+  }
+
+  return isAddFormOpened ? (
+    <AddPlant
+      placeList={placeList}
+      addPlant={addPlant}
+      closeAddForm={switchAddForm}
+    />
+  ) : (
     <PlantListLayout
       title="나의 식물"
       url="/plant"
       deleteTitle="식물"
       setSearchWord={setSearchWord}
+      addFormOpen={addFormOpen}
       tags={<PlantListTag howManyPlants={plantList.length}/>}
       bottomData={<PlantTable
         originPlantList={plantList}

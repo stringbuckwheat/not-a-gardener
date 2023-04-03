@@ -36,14 +36,12 @@ public class MemberController {
     }
 
     /* 비밀번호 변경 전 한 번 입력받아서 확인 */
-    // TODO url 수정
-    @PostMapping("/pw-check")
+    @PostMapping("/pw")
     public boolean reconfirmPassword(@RequestBody MemberDto.Login login, @AuthenticationPrincipal UserPrincipal userPrincipal){
         return memberService.identifyMember(login, userPrincipal.getMember());
     }
 
     /* 로그인 후 비밀번호 변경 */
-    // TODO url 수정
     @PutMapping("/pw")
     public void updatePassword(@RequestBody MemberDto.Login login, @AuthenticationPrincipal UserPrincipal userPrincipal){
         memberService.updatePassword(login, userPrincipal.getMember());

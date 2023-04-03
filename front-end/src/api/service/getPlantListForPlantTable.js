@@ -1,5 +1,9 @@
+import getWateringMsg from "../../utils/function/getWateringMsg";
+
 const getPlantListForPlantTable = (plantList) => {
   const plantListForPlantTable = plantList.map((pl) => {
+    console.log("plant", pl);
+
     const plant = pl.plant;
     const gardenDetail = pl.gardenDetail;
     const latestWateringDate = gardenDetail.latestWateringDate;
@@ -21,6 +25,7 @@ const getPlantListForPlantTable = (plantList) => {
       wateringDDay: gardenDetail.wateringDDay,
       tags: {
         medium: plant.medium,
+        wateringMsg: getWateringMsg(gardenDetail),
         anniversary: plant.birthday ? `${gardenDetail.anniversary} (${plant.birthday}~)` : null,
         latestWateringDate: latestWateringDate ? `${latestWateringDate.wateringDate}\n(${latestWateringDate.chemicalName})` : "",
       }

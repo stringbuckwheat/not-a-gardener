@@ -1,0 +1,41 @@
+import {Button} from "antd";
+import React, {useState} from "react";
+import InputFeedbackSpan from "../etc/InputFeedbackSpan";
+
+/**
+ * submit시 form validation 값에 따라 회색버튼 / 오렌지색 버튼
+ *
+ * @param isValid boolean 유효성 검사
+ * @param onClickValid data가 유효할 시(submit 가능 시) 실행할 함수
+ * @param onClickInvalidMsg 유효하지 않은 데이터로 전송하려할 때 띄울 메시지
+ * @param title 버튼 이름
+ * @param className
+ * @returns {JSX.Element} 버튼
+ */
+const ValidationSubmitButton = ({isValid, onClickValid, onClickInvalidMsg, title, className}) => {
+  const [invalidMsg, setInvalidMsg] = useState("");
+
+  return isValid ? (
+    <Button
+      type="button"
+      className={`bg-orange text-white ${className}`}
+      onClick={onClickValid}>
+      {title}
+    </Button>
+  ) : (
+    <>
+      <div className={className}>
+        <div>
+          <InputFeedbackSpan feedbackMsg={invalidMsg}/>
+        </div>
+        <Button
+          className={`bg-light text-dark ${className}`}
+          onClick={() => setInvalidMsg(onClickInvalidMsg)}>
+          {title}
+        </Button>
+      </div>
+    </>
+  )
+}
+
+export default ValidationSubmitButton;

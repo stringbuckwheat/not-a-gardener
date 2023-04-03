@@ -1,9 +1,10 @@
 import getPlaceInputItemArray from "src/utils/function/getPlaceInputItemArray";
 import ItemForm from "src/components/form/ItemForm";
 import {useState} from "react";
-import SubmitForAddButton from "src/components/button/SubmitForAddButton";
+import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
+import postData from "../../api/backend-api/common/postData";
 
-const AddPlace = () => {
+const AddPlace = ({addPlace, closeAddForm}) => {
   const [place, setPlace] = useState({
     placeName: "",
     option: "실내",
@@ -16,8 +17,17 @@ const AddPlace = () => {
   }
 
   const itemObjectArray = getPlaceInputItemArray(place);
+  const isValid = place.placeName !== "";
 
-  const validation = place.placeName !== "";
+  const submit = async () => {
+    const res = await postData("/place", place);
+
+    // state 변경
+    addPlace(res);
+
+    // 컴포넌트 변경
+    closeAddForm();
+  }
 
   return (
     <ItemForm
@@ -25,10 +35,12 @@ const AddPlace = () => {
       inputObject={place}
       itemObjectArray={itemObjectArray}
       onChange={onChange}
-      submitBtn={<SubmitForAddButton
-        url="/place"
-        data={place}
-        validation={validation}/>}/>
+      submitBtn={<ValidationSubmitButton
+        className="float-end mt-2"
+        isValid={place.placeName !== ""}
+        onClickValid={submit}
+        onClickInvalidMsg={isValid ? "" : "입력 내용을 확인해주세요"}
+        title="장소 추가" />}/>
   )
 }
 

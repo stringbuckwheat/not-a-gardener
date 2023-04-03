@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import {
   CContainer,
   CHeader,
-  CHeaderBrand,
   CHeaderNav,
   CHeaderToggler
 } from '@coreui/react'
@@ -16,7 +15,7 @@ const AppHeader = () => {
   const sidebarShow = useSelector((state) => state.sidebarShow)
 
   return (
-    <CHeader position="sticky" className="mb-4">
+    <CHeader position="sticky" className="mb-3 bg-light">
       <CContainer fluid>
       <CHeaderToggler
           className="ps-1"
@@ -24,11 +23,7 @@ const AppHeader = () => {
         >
           <CIcon icon={cilMenu} size="lg"/>
         </CHeaderToggler>
-        <CHeaderBrand className="mx-auto d-md-none" to="/garden">
-           Not a Gardener 
-        </CHeaderBrand>
-        <CHeaderNav className="ms-3">
-          <div className="ms-3 mt-2 d-none d-sm-block">안녕하세요, {localStorage.getItem("name")}님</div>
+        <CHeaderNav>
           <AppHeaderDropdown />
         </CHeaderNav>
       </CContainer>

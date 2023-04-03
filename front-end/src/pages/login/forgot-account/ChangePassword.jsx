@@ -1,8 +1,8 @@
 import React, {useState} from "react";
-import verifyPassword from "../../utils/function/verifyPassword";
+import verifyPassword from "../../../utils/function/verifyPassword";
 import {Button, Input} from "antd";
-import InputFeedbackSpan from "./InputFeedbackSpan";
-import ValidationSubmitButton from "./ValidationSubmitButton";
+import InputFeedbackSpan from "../../../components/etc/InputFeedbackSpan";
+import ValidationSubmitButton from "../../../components/button/ValidationSubmitButton";
 import axios from "axios";
 import {Link} from "react-router-dom";
 
@@ -13,12 +13,9 @@ const ChangePassword = ({username}) => {
     repeatPassword: ""
   })
 
-  const [isValid, setIsValid] = useState(false);
-
   const onChange = (e) => {
     const {name, value} = e.target;
     setPassword(setPassword => ({...password, [name]: value}));
-    setIsValid(setIsValid);
   }
 
   const getPasswordFeedbackMsg = () => {
@@ -43,7 +40,6 @@ const ChangePassword = ({username}) => {
 
   const submit = async () => {
     const res = await axios.put(`/member/${username}/pw`, {username: username, pw: password.password});
-    console.log("res", res);
     setIsUpdated(true);
   }
 

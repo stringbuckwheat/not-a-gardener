@@ -36,9 +36,7 @@ public class GardenUtil {
         }
 
         // watering code: 계산 값에 따라 화면에서 물주기, 물줄 날짜 놓침 등의 메시지를 띄울 용도
-        // 물을 준 적이 한 번도 없는 경우
         int wateringDDay = getWateringDDay(plant.getAverageWateringPeriod(), getLastDrinkingDay(plant));
-
         int wateringCode = getWateringCode(plant.getAverageWateringPeriod(), wateringDDay);
 
         // chemicalCode: 물을 줄 식물에 대해서 맹물을 줄지 비료/약품 희석액을 줄지 알려주는 용도
@@ -116,7 +114,7 @@ public class GardenUtil {
     }
 
     // -1           0           1
-    // 비료 사용 안함  맹물 주기
+    // 비료 사용 안함  맹물 주기      chemicalNo
     public int getChemicalCode(int plantNo, List<Chemical> chemicalList) {
         // 가진 chemical 목록과 같은 크기의 arraylist 생성
         List<LocalDate> latestFertilizedDates = new ArrayList<>(chemicalList.size());

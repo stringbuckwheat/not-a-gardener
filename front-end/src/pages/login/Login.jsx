@@ -3,7 +3,7 @@ import {
   CCardBody,
 } from '@coreui/react'
 import SocialLogin from "./SocialLogin";
-import LoginForm from "./LoginForm";
+import LoginForm from "../../components/form/LoginForm";
 import RegisterCard from "./RegisterCard";
 import LoginPageWrapper from "./LoginPageWrapper";
 

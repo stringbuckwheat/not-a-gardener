@@ -57,7 +57,7 @@ public class PlantController {
      * @return
      */
     @PostMapping("")
-    public PlantDto.PlantInPlace addPlant(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody PlantDto.PlantRequest plantRequestDto){
+    public GardenDto.GardenResponse addPlant(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody PlantDto.PlantRequest plantRequestDto){
         return plantService.addPlant(plantRequestDto, userPrincipal.getMember());
     }
 
@@ -77,7 +77,7 @@ public class PlantController {
      * @param plantNo
      * @return
      */
-    @PutMapping("/{plantNo}/averageWateringPeriod")
+    @PutMapping("/{plantNo}/average-watering-period")
     public PlantDto.PlantResponse postponeAverageWateringPeriod(@PathVariable("plantNo") int plantNo){
         return plantService.postponeAverageWateringPeriod(plantNo);
     }

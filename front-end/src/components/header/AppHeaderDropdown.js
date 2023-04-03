@@ -15,27 +15,29 @@ import {
 import CIcon from '@coreui/icons-react'
 import sprout from './../../assets/images/sprout.png'
 import LogOut from 'src/utils/function/logout'
+import {Space, Tag} from "antd";
+import {CaretDownOutlined, DownOutlined} from "@ant-design/icons";
 
 // account, setting 부분
 const AppHeaderDropdown = () => {
   return (
-    <CDropdown variant="nav-item">
+    <CDropdown variant="nav-item" >
       <CDropdownToggle placement="bottom-end" className="py-0" caret={false}>
-        <CAvatar src={sprout} size="md" />
+        <div className="ms-3 d-none d-sm-block">
+          <Space>
+            <CAvatar src={sprout} size="sm"/>
+            <Tag color="#305738" size="large">{localStorage.getItem("name")}</Tag>
+          </Space>
+          <CaretDownOutlined />
+        </div>
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
-        <CDropdownHeader className="bg-light fw-semibold py-2">Settings</CDropdownHeader>
-        <CDropdownItem href="member">
-          <CIcon icon={cilUser} className="me-2" />
+        <CDropdownItem href="/member" className="py-2">
+          <CIcon icon={cilUser} className="me-2"/>
           개인정보 수정
         </CDropdownItem>
-        {/* <CDropdownItem >
-          <CIcon icon={cilSettings} className="me-2" />
-          설정
-        </CDropdownItem> */}
-        <CDropdownDivider />
         <CDropdownItem onClick={LogOut}>
-          <CIcon icon={cilLockUnlocked} className="me-2" />
+          <CIcon icon={cilLockUnlocked} className="me-2"/>
           로그아웃
         </CDropdownItem>
       </CDropdownMenu>

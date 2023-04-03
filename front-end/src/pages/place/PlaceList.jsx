@@ -3,10 +3,10 @@ import {useEffect, useState} from "react";
 import AddItemCard from "src/components/card/AddItemCard";
 import PlaceCard from "src/components/card/PlaceCard";
 import ListHeader from "src/components/data/header/ListHeader";
+import AddPlace from "./AddPlace";
 
-const PlaceList = (props) => {
-  const {placeList, setPlaceList, originPlaceList} = props;
-
+const PlaceList = ({placeList, setPlaceList, originPlaceList, addPlace}) => {
+  console.log("placelist props placeList", placeList);
   // 검색
   const [searchWord, setSearchWord] = useState("");
 
@@ -49,15 +49,25 @@ const PlaceList = (props) => {
     setPlaceList(sortedPlaceList);
   }, [sort])
 
-  return (
+  const [isAddFormOpened, setAddFormOpened] = useState(false);
+  const switchAddForm = () => setAddFormOpened(!isAddFormOpened);
+
+  return isAddFormOpened ? (
+    <AddPlace
+      addPlace={addPlace}
+      closeAddForm={switchAddForm}
+    />
+  ) : (
     <>
       <ListHeader
         setSearchWord={setSearchWord}
         sortOption={sortOption}
         setSort={setSort}/>
       <CRow>
-        <AddItemCard addUrl="/place/add" addMsg="새로운 장소 추가"/>
-
+        <AddItemCard
+          addUrl="/place/add"
+          addMsg="새로운 장소 추가"
+          onClick={switchAddForm}/>
         {/* 카드 컴포넌트 반복 */}
         {placeList.map((place) => (
           <PlaceCard place={place}/>

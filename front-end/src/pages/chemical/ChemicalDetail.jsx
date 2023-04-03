@@ -17,7 +17,7 @@ const ChemicalDetail = () => {
   const [onModify, setOnModify] = useState(false);
 
   useEffect(() => {
-    onMount(`/chemical/${state.chemicalNo}/watering-list`, setWateringList);
+    onMount(`/chemical/${state.chemicalNo}/watering`, setWateringList);
   }, []);
 
   const onChange = (e) => {

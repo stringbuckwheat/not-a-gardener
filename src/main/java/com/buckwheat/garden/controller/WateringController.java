@@ -31,7 +31,6 @@ public class WateringController {
 
     @DeleteMapping("/plant/{plantNo}")
     public void deleteAllFromPlant(@PathVariable int plantNo) {
-        log.debug("deleteAllFromPlant");
         wateringService.deleteAllFromPlant(plantNo);
     }
 }

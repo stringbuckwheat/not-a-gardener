@@ -1,12 +1,8 @@
 import React, {useEffect, useState} from "react";
-import onMount from "src/api/service/onMount";
 import AddItemButton from "src/components/button/AddItemButton";
 import NoItem from "src/components/NoItem";
 import ChemicalList from "./ChemicalList";
-import onMountWithLength from "../../api/service/onMountWithLength";
 import Loading from "../../components/data/Loading";
-import AddPlantButton from "../../components/button/AddPlantButton";
-import GardenList from "../garden/GardenList";
 import getData from "../../api/backend-api/common/getData";
 
 const Chemical = () => {
@@ -26,6 +22,11 @@ const Chemical = () => {
     onMountChemical();
   }, [])
 
+  const addChemical = (chemical) => {
+    chemicalList.unshift(chemical);
+    setChemicalList(chemicalList => chemicalList);
+  }
+
   if (isLoading) {
     return (
       <Loading/>
@@ -38,7 +39,7 @@ const Chemical = () => {
         size="lg"
         title="비료/살충제 추가하기"/>}/>
   } else {
-    return <ChemicalList chemicalList={chemicalList}/>
+    return <ChemicalList chemicalList={chemicalList} addChemical={addChemical}/>
   }
 }
 

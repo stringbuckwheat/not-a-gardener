@@ -13,8 +13,7 @@ import {useState} from 'react';
 import {DeleteOutlined} from '@ant-design/icons';
 import {Tooltip} from 'antd';
 
-const DeleteModal = (props) => {
-  const {title, url, path, deleteTooltipMsg} = props;
+const DeleteModal = ({title, url, path, deleteTooltipMsg, deleteCallBackFunction}) => {
   const navigate = useNavigate();
 
   const button = props.button
@@ -70,6 +69,11 @@ const DeleteModal = (props) => {
   const remove = () => {
     deleteData(url, path);
     closeDeleteModal();
+
+    if(deleteCallBackFunction){
+      deleteCallBackFunction();
+    }
+
     navigate(url, {replace: true, state: "delete"});
   };
 
@@ -80,7 +84,7 @@ const DeleteModal = (props) => {
 
   return (
     <>
-      <CModal alignment="center" visible={visible} onClose={props.closeDeleteModal}>
+      <CModal alignment="center" visible={visible} onClose={closeDeleteModal}>
         <CModalHeader>
           <CModalTitle>{modalTitleMsg} 삭제하실 건가요?</CModalTitle>
         </CModalHeader>

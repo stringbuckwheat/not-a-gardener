@@ -1,8 +1,8 @@
 import {Button, Input, Space} from "antd";
 import React from "react";
-import InputFeedbackSpan from "./InputFeedbackSpan";
+import InputFeedbackSpan from "../../../components/etc/InputFeedbackSpan";
 
-const VerifyAccountForm = (props) => {
+const VerifyAccountInput = (props) => {
   const {label, handleInput, defaultValue, onClick, buttonTitle, feedbackMsg} = props;
 
   return (
@@ -22,4 +22,4 @@ const VerifyAccountForm = (props) => {
   )
 }
 
-export default VerifyAccountForm;
+export default VerifyAccountInput;

@@ -4,6 +4,7 @@ import AddItemButton from "src/components/button/AddItemButton";
 import PlaceList from "./PlaceList";
 import getData from "src/api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";
+import plantList from "../plant/PlantList";
 
 const Place = () => {
   const [isLoading, setLoading] = useState(true);
@@ -13,8 +14,9 @@ const Place = () => {
 
   const onMount = async () => {
     const data = await getData("/place");
+
     setLoading(false);
-    setHasPlace(data.length > 0)
+    setHasPlace(data.length > 0);
     setPlaceList(data);
     setOriginPlaceList(data);
   }
@@ -22,6 +24,13 @@ const Place = () => {
   useEffect(() => {
     onMount();
   }, [])
+
+  const addPlace = (place) => {
+    placeList.unshift(place);
+
+    setPlaceList(placeList => placeList);
+    setOriginPlaceList(placeList => placeList);
+  }
 
   if (isLoading) {
     return (
@@ -32,8 +41,11 @@ const Place = () => {
   } else {
     return <PlaceList
       placeList={placeList}
+      setPlaceList={setPlaceList}
       originPlaceList={originPlaceList}
-      setPlaceList={setPlaceList}/>
+      setOriginPlaceList={setOriginPlaceList}
+      addPlace={addPlace}
+    />
   }
 }
 

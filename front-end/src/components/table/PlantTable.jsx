@@ -2,13 +2,12 @@ import {Table, Form} from 'antd';
 import getPlantListForPlantTable from 'src/api/service/getPlantListForPlantTable';
 import deleteData from 'src/api/backend-api/common/deleteData';
 import getPlantTableColumnArray from "../../utils/function/getPlantTableColumnArray";
-import PlantEditableCell from "../../pages/plant/PlantEditableCell";
+import PlantEditableCell from "./PlantEditableCell";
 import {useState} from "react";
 import updateData from "../../api/backend-api/common/updateData";
 import getMergedColumns from "../../utils/function/getMergedColumns";
 
-const PlantTable = (props) => {
-  const {originPlantList, setPlantList, placeList} = props;
+const PlantTable = ({originPlantList, setPlantList, placeList}) => {
   const plantList = getPlantListForPlantTable(originPlantList);
 
   const deletePlant = (plantNo) => {

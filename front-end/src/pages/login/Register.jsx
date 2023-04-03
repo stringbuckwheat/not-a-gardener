@@ -12,6 +12,7 @@ import {Space} from "antd";
 import setMember from "../../api/service/setMember";
 import MemberFormWrapper from "../../components/form/wrapper/MemberFormWrapper";
 import FormInputFeedback from "../../components/form/input/FormInputFeedback";
+import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 
 const Register = () => {
   // submit용 객체
@@ -73,16 +74,15 @@ const Register = () => {
     && repeatPw;
 
   return (
-    <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <MemberFormWrapper>
         <CForm>
-          <Space>
-            <span style={{fontSize: "2em"}} className="text-success">반갑습니다</span>
+          <Space className="mb-3">
+            <span style={{fontSize: "2em"}} className="text-success">새로운 가드너님, 반갑습니다</span>
             <Booped rotation={20} timing={200}>
-              <CIcon icon={cilHappy} height={40} className="text-success"/>
+              <CIcon icon={cilHappy} height={35} className="text-success"/>
             </Booped>
           </Space>
-          <p className="text-dark">가입하기</p>
+
           <FormInputFeedback
             label={<CIcon icon={cilUser}/>}
             placeholder="아이디"
@@ -138,14 +138,14 @@ const Register = () => {
           />
 
           <div className="d-grid">
-            {isValid
-              ? <CButton type="button" color="success" onClick={onSubmit}>가입하기</CButton>
-              : <CButton type="button" color="secondary" disabled>가입하기</CButton>
-            }
+            <ValidationSubmitButton
+              isValid={isValid}
+              onClickValid={onSubmit}
+              onClickInvalidMsg={!isValid ? "입력한 정보를 확인해주세요" : ""}
+              title="가입하기" />
           </div>
         </CForm>
       </MemberFormWrapper>
-    </div>
   )
 }
 

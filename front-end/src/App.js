@@ -5,9 +5,9 @@ import Loading from "./components/data/Loading";
 
 // Pages
 const Login = React.lazy(() => import('./pages/login/Login'))
-const ForgotAccount = React.lazy(() => import('./pages/ForgotAccount/ForgotAccount'))
+const ForgotAccount = React.lazy(() => import('./pages/login/ForgotAccount'))
 const Register = React.lazy(() => import('./pages/login/Register'))
-const DefaultLayout = React.lazy(() => import('./components/layout/DefaultLayout'))
+const DefaultLayout = React.lazy(() => import('./components/layout/GardenLayout'))
 const GetToken = React.lazy(() => import('./pages/login/GetToken'))
 
 const App = () => {

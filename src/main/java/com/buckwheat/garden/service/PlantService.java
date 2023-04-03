@@ -15,7 +15,7 @@ public interface PlantService {
     List<PlantDto.PlantResponse> getPlantList(int memberNo);
 
     /* 식물 추가 */
-    PlantDto.PlantInPlace addPlant(PlantDto.PlantRequest plantRequestDto, Member member);
+    GardenDto.GardenResponse addPlant(PlantDto.PlantRequest plantRequestDto, Member member);
 
     /* 식물 수정 */
     GardenDto.GardenResponse modifyPlant(PlantDto.PlantRequest plantRequestDto, Member member);

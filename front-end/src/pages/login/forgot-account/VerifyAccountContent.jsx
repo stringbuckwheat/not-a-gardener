@@ -1,10 +1,9 @@
 import React, {useState} from "react";
-import verifyEmail from "../../utils/function/verifyEmail";
+import verifyEmail from "../../../utils/function/verifyEmail";
 import axios from "axios";
-import VerifyAccountForm from "./VerifyAccountForm";
+import VerifyAccountInput from "./VerifyAccountInput";
 
-const VerifyAccount = ({successContent, setEmail, setMemberList}) => {
-
+const VerifyAccountContent = ({successContent, setEmail, setMemberList}) => {
   const [input, setInput] = useState("");
   const [isWaiting, setIsWaiting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -59,6 +58,7 @@ const VerifyAccount = ({successContent, setEmail, setMemberList}) => {
       setIdentify("fulfilled");
       return;
     }
+
     setIdentify("rejected");
   }
 
@@ -73,7 +73,7 @@ const VerifyAccount = ({successContent, setEmail, setMemberList}) => {
 
   return (
       <div>
-        <VerifyAccountForm
+        <VerifyAccountInput
           label="가입 시 제출한 이메일을 입력해주세요"
           handleInput={onChange}
           defaultValue={input}
@@ -83,7 +83,7 @@ const VerifyAccount = ({successContent, setEmail, setMemberList}) => {
         {
           identificationCode !== ""
             ?
-            <VerifyAccountForm
+            <VerifyAccountInput
               label="이메일로 전송된 본인확인 코드 여섯자리를 입력해주세요"
               handleInput={onChangeIdCode}
               onClick={submitIdCode}
@@ -95,4 +95,4 @@ const VerifyAccount = ({successContent, setEmail, setMemberList}) => {
   )
 }
 
-export default VerifyAccount
+export default VerifyAccountContent

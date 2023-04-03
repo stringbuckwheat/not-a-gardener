@@ -5,7 +5,7 @@ import {CAlert} from "@coreui/react";
 import {CButton} from "@coreui/react";
 import {DatePicker} from 'antd';
 import {useState} from 'react';
-import insertData from 'src/api/backend-api/common/insertData';
+import postData from 'src/api/backend-api/common/postData';
 import getDisabledDate from 'src/utils/function/getDisabledDate';
 
 
@@ -21,7 +21,7 @@ const WateringForm = (props) => {
       wateringDate: wateringDate
     }
 
-    const res = await insertData("/watering", data);
+    const res = await postData("/watering", data);
     wateringCallBack(res);
 
     closeForm();

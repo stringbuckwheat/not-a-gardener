@@ -34,7 +34,7 @@ const PlaceDetail = () => {
 
   useEffect(() => {
     // plant list에 쓸 정보를 받아옴
-    onMount(`/place/${state.placeNo}/plant-list`, setPlantList)
+    onMount(`/place/${state.placeNo}/plants`, setPlantList)
   }, [state]);
 
   return (

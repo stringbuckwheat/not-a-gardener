@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 import {Tag} from "antd";
-import PlantEditableCellAction from "../../pages/plant/PlantEditableCellAction";
+import PlantEditableCellAction from "../../components/table/PlantEditableCellAction";
 
 const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey, updatePlant, deletePlant) => {
 
@@ -73,7 +73,7 @@ const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey
           return (
             <>
                 <div><Tag className="mb-1" color="green">{tags.medium}</Tag></div>
-                <div><Tag className="mb-1" color="purple">"메시지 메시지 메시지 ㅁㄴㅇㄹㅁㄴㅇㄹ"</Tag></div>
+                <div><Tag className="mb-1" color="purple">{tags.wateringMsg}</Tag></div>
                 {
                   tags.anniversary
                     ? <div><Tag className="mb-1" color="cyan">{tags.anniversary}</Tag></div>

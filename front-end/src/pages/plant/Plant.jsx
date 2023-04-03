@@ -27,6 +27,13 @@ const Plant = () => {
     onMountPlant();
   }, [])
 
+  const addPlant = (plant) => {
+    plantList.unshift(plant);
+
+    setPlantList(plantList);
+    setOriginPlantList(plantList);
+  }
+
   if (isLoading) {
     return <Loading/>
   } else if (!hasPlant) {
@@ -37,6 +44,7 @@ const Plant = () => {
     return <PlantList
       plantList={plantList}
       setPlantList={setPlantList}
+      addPlant={addPlant}
       originPlantList={originPlantList}/>
   }
 }

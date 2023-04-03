@@ -33,7 +33,7 @@ public class ChemicalController {
      * @param chemicalNo 약품 번호
      * @return 해당 약품의 주기 리스트(WateringDto)
      */
-    @GetMapping("/{chemicalNo}/watering-list")
+    @GetMapping("/{chemicalNo}/watering")
     public List<WateringDto.WateringResponseInChemical> getWateringListByChemical(@PathVariable int chemicalNo){
         return chemicalService.getWateringListByChemical(chemicalNo);
     }

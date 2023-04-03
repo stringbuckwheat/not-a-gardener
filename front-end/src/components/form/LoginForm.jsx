@@ -2,8 +2,6 @@ import {CButton, CForm, CFormInput, CInputGroup, CInputGroupText, CLink, CRow} f
 import CIcon from "@coreui/icons-react";
 import {cilLockLocked, cilUser} from "@coreui/icons";
 import React, {useState} from "react";
-import {QuestionCircleOutlined} from "@ant-design/icons";
-import {Space} from "antd";
 import {Link, useNavigate} from "react-router-dom";
 import setMember from "../../api/service/setMember";
 import axios from "axios";
