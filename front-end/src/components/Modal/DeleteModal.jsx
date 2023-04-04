@@ -13,7 +13,8 @@ import {useState} from 'react';
 import {DeleteOutlined} from '@ant-design/icons';
 import {Tooltip} from 'antd';
 
-const DeleteModal = ({title, url, path, deleteTooltipMsg, deleteCallBackFunction}) => {
+const DeleteModal = (props) => {
+  const {title, url, path, deleteTooltipMsg, deleteCallBackFunction} = props;
   const navigate = useNavigate();
 
   const button = props.button

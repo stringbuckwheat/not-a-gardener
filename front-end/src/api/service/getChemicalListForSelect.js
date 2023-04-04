@@ -1,4 +1,3 @@
-import getData from "../backend-api/common/getData";
 import authAxios from "../../utils/interceptors";
 
 const getChemicalListForSelect = async (setChemicalList) => {

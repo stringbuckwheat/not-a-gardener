@@ -12,7 +12,7 @@ const ItemForm = (props) => {
   const {title, itemObjectArray, submitBtn, inputObject, onChange} = props;
 
   return (
-    <div className="row justify-content-md-center">
+    <div className="row justify-content-md-center align-items-center height-95">
       <CCol md="auto" className="minWidth-70">
         <CCard sm={6} className="mb-4">
           <CCardBody>

@@ -1,45 +1,55 @@
 import React, {useState, useEffect} from 'react'
 import NoItem from 'src/components/NoItem';
 import AddPlantButton from 'src/components/button/AddPlantButton';
-import GardenList from "./GardenList";
 import getData from "../../api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";
+import GardenMain from "./GardenMain";
 
 const Garden = () => {
   const [isLoading, setLoading] = useState(true);
-  const [hasPlantList, setHasPlantList] = useState(false);
+  const [nothingToDo, setNothingToDo] = useState(false);
 
-  // 식물 리스트
-  const [plantList, setPlantList] = useState([]);
-
-  const [originPlantList, setOriginPlantList] = useState([]);
+  // 할일 리스트
+  const [todoList, setTodoList] = useState([]);
+  const [waitingList, setWaitingList] = useState([])
 
   const onMountGarden = async () => {
-    const data = await getData("/garden");
+    const data = await getData("/garden"); // todoList, waitingList
+
     setLoading(false);
-    setHasPlantList(data.length > 0);
+    setNothingToDo(data.todoList.length == 0 && data.waitingList.length == 0);
 
-    data.sort((a, b) => (a.gardenDetail.wateringCode - b.gardenDetail.wateringCode))
+    data.todoList.sort((a, b) => (a.gardenDetail.wateringDDay - b.gardenDetail.wateringDDay))
 
-    setPlantList(data);
-    setOriginPlantList(data);
+    setTodoList(data.todoList);
+    setWaitingList(data.waitingList);
   }
 
   useEffect(() => {
     onMountGarden();
   }, [])
 
+  const updateGardenAfterWatering = (gardenResponse) => {
+    const updatedTodoList = todoList.filter((plant) => plant.plant.plantNo !== gardenResponse.plant.plantNo);
+    setTodoList(() => updatedTodoList);
+  }
+
   if (isLoading) {
     return <Loading/>
-  } else if (!hasPlantList) {
+  }
+  else if (nothingToDo) {
     return <NoItem
       title="아직 정원에 아무도 없네요"
       button={<AddPlantButton size="lg"/>}/>
-  } else {
-    return <GardenList
-      originPlantList={originPlantList}
-      plantList={plantList}
-      setPlantList={setPlantList}/>
+  }
+  else {
+    return (
+      <GardenMain
+        updateGardenAfterWatering={updateGardenAfterWatering}
+        todoList={todoList}
+        setTodoList={setTodoList}
+        waitingList={waitingList}/>
+    )
   }
 }
 

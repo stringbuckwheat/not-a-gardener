@@ -1,39 +1,47 @@
 import {useTrail, animated} from "@react-spring/web";
-import {CButton} from "@coreui/react";
+import {Button} from "antd";
+import React, {useState} from "react";
 
-const GardenCardAnimatedButton = (props) => {
-  const {setIsWaterFormOpen, setIsPostponeFormOpen} = props;
+const GardenCardAnimatedButton = ({plantNo, chemicalList, plantName, setSelected}) => {
 
-  const trailSprings = useTrail(2, {
+  const buttons = [
+    {
+      title: "오늘 물을 줬어요!",
+      className: "text-white bg-info",
+      onClick: () => setSelected('watered')
+    },
+    {
+      title: "화분이 안 말랐어요",
+      className: "text-white bg-teal",
+      onClick: () => setSelected('notDry'),
+    },
+    {
+      title: "귀찮아요. 내일 줄래요",
+      className: "text-white bg-dark",
+      onClick: () => setSelected('lazy'),
+    }
+  ]
+
+  const trailSprings = useTrail(buttons.length, {
     from: {transform: "translateY(-5px)"},
     to: {transform: "translateY(5px)"}
   });
 
-  const water = () => {
-    console.log("water 폼 오픈")
-    setIsWaterFormOpen(true);
-  }
-
-  const postpone = () => {
-    console.log("미루기 폼 오픈");
-    setIsPostponeFormOpen(true);
-  }
-
-  const title = ['물주기', '미루기'];
-  const onClicks = [water,];
-
   return (
     <>
       {trailSprings.map((spring, index) => (
-        <animated.button
+        <animated.div
           key={index}
           className="mb-1 animated-btn"
           style={{
             ...spring
           }}
         >
-          <CButton size="sm" onClick={onClicks[index]}>{title[index]}</CButton>
-        </animated.button>
+          <Button
+            className={buttons[index].className}
+            size="small"
+            onClick={buttons[index].onClick}>{buttons[index].title}</Button>
+        </animated.div>
       ))}
     </>
   );

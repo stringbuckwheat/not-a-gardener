@@ -2,7 +2,7 @@ import React from 'react'
 import {Navigate} from 'react-router-dom';
 import {AppContent, AppSidebar, AppFooter, AppHeader} from '../index'
 
-const DefaultLayout = () => {
+const GardenLayout = () => {
   const isLogin = localStorage.getItem("login");
   console.log("= Default Layout: login", isLogin !== undefined);
 
@@ -24,4 +24,4 @@ const DefaultLayout = () => {
   )
 }
 
-export default DefaultLayout
+export default GardenLayout

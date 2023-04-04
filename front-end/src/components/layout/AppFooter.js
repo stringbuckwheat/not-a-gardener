@@ -3,12 +3,12 @@ import { CFooter } from '@coreui/react'
 
 const AppFooter = () => {
   return (
-    <CFooter>
+    <CFooter className="bg-white">
       <div>
-        <span className="ms-1">Not A Gardener</span>
+        <span className="ms-1 small">Not A Gardener</span>
       </div>
       <div className="ms-auto">
-        <span className="me-1">by stringbuckwheat</span>
+        <span className="me-1 small">by stringbuckwheat</span>
       </div>
     </CFooter>
   )
