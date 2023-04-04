@@ -2,6 +2,8 @@ package com.buckwheat.garden.data.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 
 public class GardenDto {
     @Getter
@@ -13,6 +15,21 @@ public class GardenDto {
         private GardenDetail gardenDetail;
     }
 
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @ToString
+    public static class GardenMain {
+        private List<GardenResponse> todoList;
+        private List<GardenDto.WaitingForWatering> waitingList;
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class WaitingForWatering{
+        private int plantNo;
+        private String plantName;
+    }
 
     @AllArgsConstructor
     @Builder
@@ -41,5 +58,14 @@ public class GardenDto {
                     .chemicalCode(chemicalCode)
                     .build();
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @ToString
+    public static class WateringResponse {
+        private GardenResponse gardenResponse;
+        private WateringDto.WateringMsg wateringMsg;
     }
 }

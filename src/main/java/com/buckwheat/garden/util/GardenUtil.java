@@ -45,6 +45,24 @@ public class GardenUtil {
         return GardenDto.GardenDetail.from(latestWatering, anniversary, wateringDDay, wateringCode, chemicalCode);
     }
 
+    public GardenDto.GardenDetail getGardenDetail(Plant plant, List<Chemical> chemicalList, int wateringDDay, int wateringCode){
+        WateringDto.WateringResponse latestWatering = null;
+        String anniversary = "";
+
+        if(plant.getWateringList().size() > 0) {
+            latestWatering = WateringDto.WateringResponse.from(plant.getWateringList().get(0));
+        }
+
+        if (plant.getBirthday() != null) {
+            anniversary = getAnniversary(plant.getBirthday());
+        }
+
+        // chemicalCode: 물을 줄 식물에 대해서 맹물을 줄지 비료/약품 희석액을 줄지 알려주는 용도
+        int chemicalCode = getChemicalCode(plant.getPlantNo(), chemicalList); // FertilizerNo or -1
+
+        return GardenDto.GardenDetail.from(latestWatering, anniversary, wateringDDay, wateringCode, chemicalCode);
+    }
+
     /**
      * (오버로딩)
      * @param plant
