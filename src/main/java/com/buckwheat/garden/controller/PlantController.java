@@ -21,7 +21,7 @@ public class PlantController {
 
     /**
      * 전체 식물 리스트
-     * 실제 식물 페이지가 아닌 다른 곳(ex. 장소페이지)에서 간단한 정보를 띄울 때 사용
+     * 실제 식물 페이지가 아닌 다른 곳(ex. 장소 페이지)에서 간단한 정보를 띄울 때 사용
      * @param userPrincipal
      * @return
      */

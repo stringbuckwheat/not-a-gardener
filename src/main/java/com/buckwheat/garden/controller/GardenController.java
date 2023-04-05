@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +22,11 @@ public class GardenController {
     @GetMapping("")
     public GardenDto.GardenMain garden(@AuthenticationPrincipal UserPrincipal userPrincipal){
         return gardenService.getGarden(userPrincipal.getMember().getMemberNo());
+    }
+
+    @GetMapping("/plants")
+    public List<GardenDto.GardenResponse> getPlantList(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        return gardenService.getPlantList(userPrincipal.getMember().getMemberNo());
     }
 
     @PostMapping("/watering")
