@@ -16,6 +16,7 @@ const AddRoutine = ({plantList, onClickRoutineFormButton, addRoutine}) => {
     plantNo: 0,
     routineCycle: 0
   });
+
   const [checked, setChecked] = useState(false);
 
   const onChange = (e) => {
@@ -44,6 +45,12 @@ const AddRoutine = ({plantList, onClickRoutineFormButton, addRoutine}) => {
     onClickRoutineFormButton();
   }
 
+  const getRoutineCycleFeedbackMsg = () => {
+    if (routine.routineContent == "") return "루틴 내용은 비워둘 수 없어요"
+    else if (!Number.isInteger(routine.routineContent)) return "숫자를 입력해주세요"
+    else if (routine.routineContent * 1 <= 0) return "루틴 주기를 확인해주세요"
+  }
+
   return (
     <Card className="mb-2">
       <div className="mb-2">
@@ -60,7 +67,6 @@ const AddRoutine = ({plantList, onClickRoutineFormButton, addRoutine}) => {
           labelColor={formLabelColor}
           size="small"
           onChange={onChange}
-          // onSearch={onSearch}
           feedbackMsg={routine.routineContent == "" ? "루틴 내용은 비워둘 수 없어요" : ""}/>
       </div>
       <div className="mb-2">
@@ -72,16 +78,26 @@ const AddRoutine = ({plantList, onClickRoutineFormButton, addRoutine}) => {
           className="width-full"/>
       </div>
       <div className="mb-3">
-        <span className={`text-${formLabelColor}`} style={style}>루틴 주기</span>
         <Row>
           <Space>
             {
               checked
-                ? <Input size="small" value="매일" disabled={true}/>
+                ?
+                <>
+                  <span className={`text-${formLabelColor}`} style={style}>루틴 주기</span>
+                  <Input size="small" value="매일" disabled={true}/>
+                </>
                 :
                 <>
-                  <Input name="routineCycle" size="small" type="number" className="col" onChange={onChange}/>
-                  <span className="col" style={style} className={`text-${formLabelColor}`}>일에 한 번</span>
+                  <InputFeedback
+                    name="routineCycle"
+                    type="number"
+                    label="루틴 주기"
+                    labelColor={formLabelColor}
+                    size="small"
+                    onChange={onChange}
+                    feedbackMsg={getRoutineCycleFeedbackMsg()}/>
+                  <span style={style} className={`text-${formLabelColor}`}>일에 한 번</span>
                 </>
             }
           </Space>

@@ -3,22 +3,27 @@ import {useNavigate} from "react-router-dom";
 import {CloseOutlined} from "@ant-design/icons";
 import deleteData from "../../../api/backend-api/common/deleteData";
 import updateData from "../../../api/backend-api/common/updateData";
+import {useState} from "react";
 
 const RoutineCard = ({routine, deleteRoutine, index, completeRoutine}) => {
+  const [isCompleted, setIsCompleted] = useState(routine.isCompleted == "Y");
+
   const navigate = useNavigate();
+  const hasToDoToday = routine.hasToDoToday == "Y";
 
   const onChange = async (e) => {
-    console.log(`checked = ${e.target.checked}`);
-    console.log("e.target", e);
+    let data = {routineNo: routine.routineNo};
 
     if (e.target.checked) {
-      const data = {routineNo: routine.routineNo, lastCompleteDate: new Date().toISOString().split("T")[0]};
-      console.log("complete data", data);
-      const res = await updateData(`/routine/${routine.routineNo}/complete`, "", data);
-      console.log("complete res", res);
-      completeRoutine(index, res);
-      e.target.checked = false;
+      data = {
+        routineNo: routine.routineNo,
+        lastCompleteDate: new Date().toISOString().split("T")[0]
+      };
     }
+
+    const res = await updateData(`/routine/${routine.routineNo}/complete`, "", data);
+    completeRoutine(index, res);
+    setIsCompleted(e.target.checked);
   };
 
   const removeRoutine = (routineNo, hasToDoToday) => {
@@ -26,16 +31,13 @@ const RoutineCard = ({routine, deleteRoutine, index, completeRoutine}) => {
     deleteRoutine(routineNo, hasToDoToday);
   }
 
-  const isCompleted = routine.isCompleted == "Y" ? true : false;
-  const hasToDoToday = routine.hasToDoToday == "Y" ? true : false;
-
   return (
     <div className="mb-3">
       <div>
         <Space>
           <Checkbox
             onChange={onChange}
-            defaultChecked={routine.isCompleted == "Y" ? true : false}
+            defaultChecked={isCompleted}
             disabled={!hasToDoToday}
           />
           {
