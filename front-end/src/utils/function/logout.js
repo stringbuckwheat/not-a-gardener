@@ -7,7 +7,7 @@ const logOut = () => {
     localStorage.setItem("provider", provider);
   }
 
-  window.location.replace('/');
+  window.location.replace('/login');
 }
 
 export default logOut;

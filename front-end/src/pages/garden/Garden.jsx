@@ -11,7 +11,8 @@ const Garden = () => {
 
   // 할일 리스트
   const [todoList, setTodoList] = useState([]);
-  const [waitingList, setWaitingList] = useState([])
+  const [waitingList, setWaitingList] = useState([]);
+  const [routineList, setRoutineList] = useState([]);
 
   const onMountGarden = async () => {
     const data = await getData("/garden"); // todoList, waitingList
@@ -23,6 +24,7 @@ const Garden = () => {
 
     setTodoList(data.todoList);
     setWaitingList(data.waitingList);
+    setRoutineList(data.routineList);
   }
 
   useEffect(() => {
@@ -46,6 +48,7 @@ const Garden = () => {
     return (
       <GardenMain
         updateGardenAfterWatering={updateGardenAfterWatering}
+        routineList={routineList}
         todoList={todoList}
         setTodoList={setTodoList}
         waitingList={waitingList}/>

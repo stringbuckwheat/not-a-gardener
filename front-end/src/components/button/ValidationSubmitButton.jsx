@@ -10,9 +10,10 @@ import InputFeedbackSpan from "../etc/InputFeedbackSpan";
  * @param onClickInvalidMsg 유효하지 않은 데이터로 전송하려할 때 띄울 메시지
  * @param title 버튼 이름
  * @param className
+ * @param size 사이즈
  * @returns {JSX.Element} 버튼
  */
-const ValidationSubmitButton = ({isValid, onClickValid, onClickInvalidMsg, title, className}) => {
+const ValidationSubmitButton = ({isValid, onClickValid, onClickInvalidMsg, title, className, size}) => {
   const [invalidMsg, setInvalidMsg] = useState("");
 
   return isValid ? (
@@ -29,6 +30,7 @@ const ValidationSubmitButton = ({isValid, onClickValid, onClickInvalidMsg, title
           <InputFeedbackSpan feedbackMsg={invalidMsg}/>
         </div>
         <Button
+          size={size}
           className={`bg-light text-dark ${className}`}
           onClick={() => setInvalidMsg(onClickInvalidMsg)}>
           {title}

@@ -2,8 +2,7 @@ import {Button, Input, Space} from "antd";
 import React from "react";
 import InputFeedbackSpan from "../../../components/etc/InputFeedbackSpan";
 
-const VerifyAccountInput = (props) => {
-  const {label, handleInput, defaultValue, onClick, buttonTitle, feedbackMsg} = props;
+const VerifyAccountInput = ({label, size, handleInput, defaultValue, onClick, buttonTitle, feedbackMsg}) => {
 
   return (
     <div className="mb-2">
@@ -11,6 +10,7 @@ const VerifyAccountInput = (props) => {
       <div>
         <Space.Compact>
           <Input
+            size={size}
             onChange={handleInput}
             defaultValue={defaultValue}
           />

@@ -7,7 +7,7 @@ import Loading from "./components/data/Loading";
 const Login = React.lazy(() => import('./pages/login/Login'))
 const ForgotAccount = React.lazy(() => import('./pages/login/ForgotAccount'))
 const Register = React.lazy(() => import('./pages/login/Register'))
-const DefaultLayout = React.lazy(() => import('./components/layout/GardenLayout'))
+const GardenLayout = React.lazy(() => import('./components/layout/GardenLayout'))
 const GetToken = React.lazy(() => import('./pages/login/GetToken'))
 
 const App = () => {
@@ -19,7 +19,7 @@ const App = () => {
           <Route path="/oauth/:token" element={<GetToken/>}/>
           <Route path="/forgot" name="Forgot Account" element={<ForgotAccount/>}/>
           <Route path="/register" name="Register Page" element={<Register/>}/>
-          <Route path="*" element={<DefaultLayout/>}/>
+          <Route path="*" element={<GardenLayout/>}/>
         </Routes>
       </Suspense>
     </BrowserRouter>

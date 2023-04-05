@@ -12,7 +12,7 @@ const Plant = () => {
   const [plantList, setPlantList] = useState([]);
 
   const onMountPlant = async () => {
-    const data = await getData("/garden");
+    const data = await getData("/garden/plants");
     setLoading(false);
 
     setHasPlant(data.length > 0);

@@ -1,9 +1,8 @@
-import {CModal, CModalBody, CModalHeader} from "@coreui/react";
+import {CModal, CModalBody} from "@coreui/react";
 import AddPlant from "../../pages/plant/AddPlant";
 import getPlantFormArrayWithPlaceName from "../../utils/function/getPlantFormArrayWithPlaceName";
 
-const AddModal = (props) => {
-  const {visible, closeModal, callBackFunction, placeNo, placeName} = props;
+const AddModal = ({visible, closeModal, callBackFunction, placeNo, placeName} ) => {
 
   return (
     <CModal style={{minWidth: "700px"}} alignment="center" visible={visible} onClose={closeModal}>

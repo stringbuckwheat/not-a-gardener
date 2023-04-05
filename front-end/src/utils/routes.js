@@ -12,6 +12,8 @@ const ChemicalDetail = React.lazy(() => import('../pages/chemical/ChemicalDetail
 const Plant = React.lazy(() => import('../pages/plant/Plant'))
 const PlantDetail = React.lazy(() => import('../pages/plant/PlantDetail'))
 
+const Schedule = React.lazy(() => import('../pages/schedule/Schedule'))
+
 const routes = [
   {path: '/', exact: true, name: 'Garden', element: Garden},
 
@@ -25,6 +27,8 @@ const routes = [
 
   {path: '/plant', exact: true, name: 'plant', element: Plant},
   {path: '/plant/:plantNo', exact: true, name: 'plant', element: PlantDetail},
+
+  {path: '/schedule', exact: true, name: 'routine', element: Schedule},
 ]
 
 export default routes

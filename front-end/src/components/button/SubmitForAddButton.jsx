@@ -1,21 +1,18 @@
 import {CButton} from "@coreui/react";
 import {useNavigate} from "react-router-dom";
-import insertData from "src/api/backend-api/common/insertData";
+import postData from "src/api/backend-api/common/postData";
 
-const SubmitForAddButton = (props) => {
-  // props
-  const {url, data, validation} = props;
-
+const SubmitForAddButton = ({url, data, validation, callBack}) => {
   const navigate = useNavigate();
 
   const defaultCallBack = () => {
     navigate(url, {replace: true});
   }
 
-  const callBackFunction = props.callBackFunction ? props.callBackFunction : defaultCallBack;
+  const callBackFunction = callBack ? callBack : defaultCallBack;
 
   const onClick = async () => {
-    const res = await insertData(url, data);
+    const res = await postData(url, data);
     callBackFunction(res);
   }
 
