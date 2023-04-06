@@ -1,6 +1,6 @@
 import GButton from "../../../components/button/defaultButton/GButton";
 import AddRoutine from "./AddRoutine";
-import RoutineCard from "./RoutineCard";
+import RoutineCard from "../../../components/card/RoutineCard";
 import {Row} from "antd";
 import React from "react";
 

@@ -24,10 +24,6 @@ const AddRoutine = ({plantList, onClickRoutineFormButton, addRoutine}) => {
     setRoutine(() => ({...routine, [name]: value}));
   }
 
-  const onChangeSelect = (plantNo) => {
-    setRoutine(() => ({...routine, plantNo: plantNo}));
-  };
-
   const onChangeCheckbox = (e) => {
     setChecked(e.target.checked);
 
@@ -73,7 +69,7 @@ const AddRoutine = ({plantList, onClickRoutineFormButton, addRoutine}) => {
         <span className={`text-${formLabelColor}`} style={style}>식물</span>
         <SelectPlant
           plantList={plantList}
-          onChange={onChangeSelect}
+          onChange={ (plantNo) => {setRoutine(() => ({...routine, plantNo: plantNo}))}}
           size="small"
           className="width-full"/>
       </div>

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import AddItemButton from "src/components/button/AddItemButton";
-import NoItem from "src/components/NoItem";
+import NoItem from "src/components/empty/NoItem";
 import ChemicalList from "./ChemicalList";
 import Loading from "../../components/data/Loading";
 import getData from "../../api/backend-api/common/getData";

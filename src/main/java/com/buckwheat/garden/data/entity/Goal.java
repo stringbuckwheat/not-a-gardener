@@ -1,6 +1,5 @@
 package com.buckwheat.garden.data.entity;
 
-import com.buckwheat.garden.data.dto.GoalDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +22,7 @@ public class Goal {
     private int goalNo;
 
     @NotNull
-    private String goal;
+    private String goalContent;
 
     private String complete;
 
@@ -36,8 +35,8 @@ public class Goal {
     @JoinColumn(name="member_no")
     private Member member;
 
-    public Goal update(String goal, Plant plant){
-        this.goal = goal;
+    public Goal update(String goalContent, Plant plant){
+        this.goalContent = goalContent;
         this.plant = plant;
 
         return this;
@@ -45,6 +44,7 @@ public class Goal {
 
     public Goal completeGoal(String complete){
         this.complete = complete;
+
         return this;
     }
 }

@@ -15,25 +15,33 @@ import java.util.List;
 @RequestMapping("/goal")
 @RequiredArgsConstructor
 public class GoalController {
-    private GoalService goalService;
+    private final GoalService goalService;
 
     @GetMapping("")
-    public List<GoalDto> getGoalList(@AuthenticationPrincipal UserPrincipal userPrincipal){
+    public List<GoalDto.Response> getGoalList(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        log.debug("getGoalList()");
+        log.debug("userPrincipal.getMember().getMemberNo(): {}", userPrincipal.getMember().getMemberNo());
+
         return goalService.getGoalList(userPrincipal.getMember().getMemberNo());
     }
 
     @PostMapping("")
-    public GoalDto addGoal(@RequestBody GoalDto goalDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
+    public GoalDto.Response addGoal(@RequestBody GoalDto.Request goalDto, @AuthenticationPrincipal UserPrincipal userPrincipal) {
         return goalService.addGoal(goalDto, userPrincipal.getMember());
     }
 
     @PutMapping("/{goalNo}")
-    public GoalDto modifyGoal(@RequestBody GoalDto goalDto){
+    public GoalDto.Response modifyGoal(@RequestBody GoalDto.Request goalDto) {
         return goalService.modifyGoal(goalDto);
     }
 
+    @PutMapping("/{goalNo}/complete")
+    public GoalDto.Response completeGoal(@PathVariable int goalNo) {
+        return goalService.completeGoal(goalNo);
+    }
+
     @DeleteMapping("/{goalNo}")
-    public void deleteGoal(@PathVariable int goalNo){
+    public void deleteGoal(@PathVariable int goalNo) {
         goalService.deleteGoal(goalNo);
     }
 }

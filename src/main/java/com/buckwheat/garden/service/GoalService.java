@@ -6,13 +6,13 @@ import com.buckwheat.garden.data.entity.Member;
 import java.util.List;
 
 public interface GoalService {
-    List<GoalDto> getGoalList(int memberNo);
+    List<GoalDto.Response> getGoalList(int memberNo);
 
-    GoalDto addGoal(GoalDto goalDto, Member member);
+    GoalDto.Response addGoal(GoalDto.Request goalDto, Member member);
 
-    GoalDto modifyGoal(GoalDto goalDto);
+    GoalDto.Response modifyGoal(GoalDto.Request goalDto);
 
-    GoalDto completeGoal(int goalNo);
+    GoalDto.Response completeGoal(int goalNo);
 
     void deleteGoal(int goalNo);
 }

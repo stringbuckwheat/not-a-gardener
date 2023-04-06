@@ -1,14 +1,12 @@
 import {CCard, CCardBody} from "@coreui/react";
 import React, {useState} from "react";
-import getData from "../../../api/backend-api/common/getData";
-import NoRoutine from "./NoRoutine";
 import RoutineContent from "./RoutineContent";
+import NoSchedule from "../../../components/empty/NoSchedule";
+import AddRoutine from "./AddRoutine";
 
-const Routine = ({routines}) => {
-
+const Routine = ({routines, plantList}) => {
   const [toDoList, setToDoList] = useState(routines.todoList);
   const [notToDoList, setNotToDoList] = useState(routines.notToDoList);
-  const [plantList, setPlantList] = useState([]);
 
   const addRoutine = (routine) => {
     toDoList.unshift(routine);
@@ -35,27 +33,6 @@ const Routine = ({routines}) => {
   const onClickRoutineFormButton = () => {
     setIsRoutineFormOpened(!isRoutineFormOpened)
   }
-  const onClickShowAddForm = async () => {
-    setIsRoutineFormOpened(!isRoutineFormOpened);
-
-    const res = await getData("/plant");
-    const plantList = res.map((plant) => (
-      {
-        label: `${plant.plantName} (${plant.placeName})`,
-        value: plant.plantNo,
-      }
-    ))
-
-    setPlantList(() => plantList);
-  }
-
-  const sharedProps = {
-    isRoutineFormOpened: isRoutineFormOpened,
-    onClickRoutineFormButton: onClickRoutineFormButton,
-    addRoutine: addRoutine,
-    plantList: plantList,
-    onClickShowAddForm: onClickShowAddForm
-  }
 
   return (
     <CCard className="p-4">
@@ -63,11 +40,25 @@ const Routine = ({routines}) => {
         {
           toDoList.length == 0 && notToDoList.length == 0
             ?
-            <NoRoutine
-              {...sharedProps}/>
+            <>
+              <NoSchedule
+                isAddFormOpened={isRoutineFormOpened}
+                title="루틴"
+                onClickShowAddForm={onClickRoutineFormButton}
+              >
+                <AddRoutine
+                  onClickRoutineFormButton={onClickRoutineFormButton}
+                  addRoutine={addRoutine}
+                  plantList={plantList}/>
+              </NoSchedule>
+            </>
             :
             <RoutineContent
-              {...sharedProps}
+              isRoutineFormOpened={isRoutineFormOpened}
+              onClickRoutineFormButton={onClickRoutineFormButton}
+              addRoutine={addRoutine}
+              plantList={plantList}
+
               toDoList={toDoList}
               deleteRoutine={deleteRoutine}
               completeRoutine={completeRoutine}

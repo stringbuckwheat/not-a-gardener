@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import NoItem from 'src/components/NoItem';
+import NoItem from 'src/components/empty/NoItem';
 import AddPlantButton from 'src/components/button/AddPlantButton';
 import getData from "../../api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";

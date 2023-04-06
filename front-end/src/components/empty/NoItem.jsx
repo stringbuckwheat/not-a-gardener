@@ -1,9 +1,10 @@
 import {CContainer, CImage, CRow} from "@coreui/react";
-import React from "react";
-import forNoPlant from "../assets/images/forNoPlant.png";
+import React, {useState} from "react";
+import forNoPlant from "../../assets/images/forNoPlant.png";
 
-const NoItem = (props) => {
-  const {title, button} = props;
+const NoItem = ({title, button}) => {
+  const [add, setAdd] = useState(false);
+
 
   return (
     <CContainer fluid className="text-center">
@@ -16,7 +17,6 @@ const NoItem = (props) => {
       <CRow>
         <CImage
           className="width-100 display-block"
-          // style={{display:'block', width:'100%'}}
           src={forNoPlant}
           fluid/>
       </CRow>

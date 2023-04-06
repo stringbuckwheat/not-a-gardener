@@ -1,14 +1,13 @@
 import {Checkbox, Popconfirm, Space, Tag} from "antd";
-import {useNavigate} from "react-router-dom";
 import {CloseOutlined} from "@ant-design/icons";
-import deleteData from "../../../api/backend-api/common/deleteData";
-import updateData from "../../../api/backend-api/common/updateData";
+import deleteData from "../../api/backend-api/common/deleteData";
+import updateData from "../../api/backend-api/common/updateData";
 import {useState} from "react";
+import LinkHoverTag from "../tag/basic/LinkHoverTag";
 
 const RoutineCard = ({routine, deleteRoutine, index, completeRoutine}) => {
   const [isCompleted, setIsCompleted] = useState(routine.isCompleted == "Y");
 
-  const navigate = useNavigate();
   const hasToDoToday = routine.hasToDoToday == "Y";
 
   const onChange = async (e) => {
@@ -58,9 +57,8 @@ const RoutineCard = ({routine, deleteRoutine, index, completeRoutine}) => {
 
       </div>
       <div className="d-flex justify-content-end">
-        <Tag color={`${isCompleted || !hasToDoToday ? "" : "green"}`}
-             onClick={() => navigate(`/plant/${routine.plantNo}`)}>{routine.plantName}</Tag>
         <Tag color={`${isCompleted || !hasToDoToday ? "" : "blue"}`}>{`${routine.routineCycle}일마다 한 번`}</Tag>
+        <LinkHoverTag content={routine.plantName} color={"green"} to={`/plant/${routine.plantNo}`} />
       </div>
     </div>
   )

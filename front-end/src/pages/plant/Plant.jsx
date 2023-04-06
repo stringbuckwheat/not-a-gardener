@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import AddPlantButton from "src/components/button/AddPlantButton";
-import NoItem from "src/components/NoItem";
+import NoItem from "src/components/empty/NoItem";
 import PlantList from "./PlantList";
 import getData from "../../api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";

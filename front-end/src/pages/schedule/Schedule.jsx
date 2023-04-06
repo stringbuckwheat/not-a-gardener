@@ -3,26 +3,64 @@ import Routine from "./routine/Routine";
 import {useEffect, useState} from "react";
 import getData from "../../api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";
+import Goal from "./goal/Goal";
 
 const Schedule = () => {
   const [loading, setLoading] = useState(true);
   const [routines, setRoutines] = useState({});
+  const [goals, setGoals] = useState([]);
+  const [plantList, setPlantList] = useState([]);
 
   const onMountSchedule = async () => {
-    const res = await getData("/routine");
+    // 루틴
+    const routineList = await getData("/routine");
 
-    res.todoList.sort((a, b) => {
-      if (a.isCompleted > b.isCompleted) return 1;
-      if (a.isCompleted < b.isCompleted) return -1;
-    });
+    if(routineList.todoList){
+      routineList.todoList.sort((a, b) => {
+        if (a.isCompleted > b.isCompleted) return 1;
+        if (a.isCompleted < b.isCompleted) return -1;
+      });
+    }
 
-    setRoutines(res);
+    setRoutines(routineList);
+
+    // 목표
+    const goalList = await getData("/goal");
+    setGoals(goalList);
+
+    // 식물 리스트
+    const res = await getData("/plant");
+    const plantList = res.map((plant) => (
+      {
+        label: `${plant.plantName} (${plant.placeName})`,
+        value: plant.plantNo,
+      }
+    ))
+
+    setPlantList(() => plantList);
+
     setLoading(false);
   }
 
   useEffect(() => {
     onMountSchedule();
-  })
+  }, [])
+
+  const addGoal = (goal) => {
+    goals.unshift(goal);
+    setGoals(() => goals);
+  }
+
+  const completeGoal = (index, goal) => {
+    setGoals(() => {
+      goals.splice(index, 1, goal);
+      return goals
+    })
+  }
+
+  const deleteGoal = (goalNo) => {
+    setGoals(() => goals.filter((goal) => goal.goalNo !== goalNo));
+  }
 
   if(loading){
     return <Loading />
@@ -31,12 +69,8 @@ const Schedule = () => {
   return (
     <CContainer>
       <CCardGroup>
-        <Routine routines={routines}/>
-        <CCard className="p-4">
-          <CCardBody>
-            <div>목표</div>
-          </CCardBody>
-        </CCard>
+        <Routine routines={routines} plantList={plantList}/>
+        <Goal goals={goals} plantList={plantList} addGoal={addGoal} deleteGoal={deleteGoal} completeGoal={completeGoal}/>
       </CCardGroup>
     </CContainer>
   )

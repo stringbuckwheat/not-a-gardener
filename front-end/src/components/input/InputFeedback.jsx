@@ -2,10 +2,10 @@ import {Input} from "antd";
 import InputFeedbackSpan from "../etc/InputFeedbackSpan";
 import React from "react";
 
-const InputFeedback = ({name, label, labelColor, size, onChange, defaultValue, feedbackMsg}) => {
+const InputFeedback = ({name, label, labelColor, size, onChange, defaultValue, feedbackMsg, className}) => {
   const style = {fontSize: "0.9em"};
   return (
-    <div className="mb-2">
+    <div className={`mb-2 ${className}`}>
       <span className={`text-${labelColor}`} style={style}>{label}</span>
       <div>
         <Input

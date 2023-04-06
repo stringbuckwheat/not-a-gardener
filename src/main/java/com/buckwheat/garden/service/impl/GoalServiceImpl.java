@@ -11,7 +11,6 @@ import com.buckwheat.garden.service.GoalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,82 +20,50 @@ import java.util.NoSuchElementException;
 @Slf4j
 @RequiredArgsConstructor
 public class GoalServiceImpl implements GoalService {
-    private GoalRepository goalRepository;
-    private PlantRepository plantRepository;
-    private MemberRepository memberRepository;
+    private final GoalRepository goalRepository;
+    private final PlantRepository plantRepository;
+    private final MemberRepository memberRepository;
 
     @Override
-    // @Transactional(readOnly = true)
-    public List<GoalDto> getGoalList(int memberNo) {
-        List<GoalDto> goalList = new ArrayList<>();
+    public List<GoalDto.Response> getGoalList(int memberNo) {
+        List<GoalDto.Response> goalList = new ArrayList<>();
 
-        for(Goal g : goalRepository.findByMember_MemberNo(memberNo)){
-            GoalDto goal = GoalDto.builder()
-                    .goalNo(g.getGoalNo())
-                    .goal(g.getGoal())
-                    .complete(g.getComplete())
-                    .plantName(g.getPlant().getPlantName())
-                    .build();
-
-            goalList.add(goal);
+        for(Goal goal : goalRepository.findByMember_MemberNo(memberNo)){
+            goalList.add(GoalDto.Response.from(goal));
         }
 
         return goalList;
     }
 
     @Override
-    public GoalDto addGoal(GoalDto goalDto, Member member) {
+    public GoalDto.Response addGoal(GoalDto.Request goalDto, Member member) {
+        // null 허용
         Plant plant = plantRepository.findById(goalDto.getPlantNo()).orElse(null);
+        Goal goal = goalRepository.save(goalDto.toEntityWith(member, plant));
 
-        // dto -> entity
-        Goal goal = goalRepository.save(Goal.builder()
-                .goal(goalDto.getGoal())
-                .member(member)
-                .plant(plant) // TODO null 집어넣어도 되나?
-                .build());
-
-        return GoalDto.builder()
-                .goalNo(goal.getGoalNo())
-                .goal(goal.getGoal())
-                .complete(goal.getComplete())
-                .plantName(goal.getPlant().getPlantName())
-                .build();
+        return GoalDto.Response.from(goal, plant);
     }
 
     @Override
-    public GoalDto modifyGoal(GoalDto goalDto) {
+    public GoalDto.Response modifyGoal(GoalDto.Request goalDto) {
         Plant plant = plantRepository.findById(goalDto.getPlantNo()).orElseThrow(NoSuchElementException::new);
         Goal prevGoal = goalRepository.findById(goalDto.getGoalNo()).orElseThrow(NoSuchElementException::new);
 
-        Goal goal = goalRepository.save(prevGoal.update(goalDto.getGoal(), plant));
+        Goal goal = goalRepository.save(prevGoal.update(goalDto.getGoalContent(), plant));
 
-        return GoalDto.builder()
-                .goalNo(goal.getGoalNo())
-                .goal(goal.getGoal())
-                .complete(goal.getComplete())
-                .plantName(goal.getPlant().getPlantName())
-                .build();
+        return GoalDto.Response.from(goal, plant);
     }
 
     @Override
-    public GoalDto completeGoal(int goalNo) {
-        Goal prevGoal = goalRepository.findById(goalNo).orElseThrow(NoSuchElementException::new);
+    public GoalDto.Response completeGoal(int goalNo) {
+        Goal prevGoal = goalRepository.findByGoalNo(goalNo).orElseThrow(NoSuchElementException::new);
 
         // 들어갈 값 계산
-        String complete = "Y";
-
-        if(prevGoal.getComplete().equals("Y")){
-            complete = "N";
-        }
+        String complete = prevGoal.getComplete().equals("Y") ? "N" : "Y";
 
         Goal goal = goalRepository.save(prevGoal.completeGoal(complete));
 
-        return GoalDto.builder()
-                .goalNo(goal.getGoalNo())
-                .goal(goal.getGoal())
-                .complete(goal.getComplete())
-                .plantName(goal.getPlant().getPlantName())
-                .build();
+        return GoalDto.Response.from(goal);
     }
 
     @Override

@@ -1,10 +1,10 @@
-import {Tag} from "antd";
 import GardenTodoList from "./GardenTodoList";
 import React, {useEffect, useState} from "react";
-import {CCol, CRow} from "@coreui/react";
+import {CRow} from "@coreui/react";
 import getChemicalListForSelect from "../../api/service/getChemicalListForSelect";
-import {Link} from "react-router-dom";
 import GButton from "../../components/button/defaultButton/GButton";
+import WaitingForWateringList from "./WaitingForWateringList";
+import RoutineList from "./RoutineList";
 
 const GardenMain = ({todoList, updateGardenAfterWatering, waitingList, routineList}) => {
   const onClickList = () => alert("구현중이에요");
@@ -23,29 +23,8 @@ const GardenMain = ({todoList, updateGardenAfterWatering, waitingList, routineLi
           할 일이에요!</h4>
         <div className="mt-4">
           <CRow>
-            <CCol md={6} xs={12}>
-              <div className="small fw-bold text-black">물주기 정보를 기다리고 있는 식물들</div>
-              <div>
-                {
-                  waitingList.map((plant, idx) => (
-                    <Link to={`/plant/${plant.plantNo}`} key={idx}>
-                      <Tag color="green">{plant.plantName}</Tag>
-                    </Link>
-                  ))
-                }
-              </div>
-            </CCol>
-            <CCol md={6} xs={12}>
-              <Link to="/schedule" className="no-text-decoration text-black">
-                <div className="small fw-bold">{localStorage.getItem("name")}님의 루틴</div>
-              </Link>
-              <div>
-                {
-                  routineList.map((routine) =>
-                    <Tag color={routine.isCompleted === "Y" ? "" : "geekblue"}>{routine.routineContent}</Tag>)
-                }
-              </div>
-          </CCol>
+            <WaitingForWateringList waitingList={waitingList} />
+            <RoutineList routineList={routineList} />
         </CRow>
       </div>
       <div className="d-flex justify-content-end">
