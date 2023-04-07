@@ -5,7 +5,6 @@ import getData from "../../api/backend-api/common/getData";
 
 const Member = () => {
   const memberNo = localStorage.getItem("memberNo");
-  console.log("memberNo", memberNo);
 
   const [isLoading, setLoading] = useState(true);
 

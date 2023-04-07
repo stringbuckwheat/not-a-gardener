@@ -1,8 +1,6 @@
 import {Space, Tag} from "antd";
 
-const PlantTag = (props) => {
-  const plant = props.plant;
-  const wateringListSize = props.wateringListSize;
+const PlantTag = ({plant, wateringListSize, latestWateringDate}) => {
   const tmp = new Date();
   const today = new Date(tmp.getFullYear(), tmp.getMonth(), tmp.getDate());
 
@@ -24,9 +22,9 @@ const PlantTag = (props) => {
 
   // 며칠 전에 물을 줬는지 계산
   const getLatestWateringDate = () => {
-    const latestWateringDate = new Date(props.latestWateringDate.wateringDate);
+    const latestWateringDay = new Date(latestWateringDate.wateringDate);
 
-    const diffTime = today.getTime() - latestWateringDate.getTime();
+    const diffTime = today.getTime() - latestWateringDay.getTime();
     const diffDate = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // 올림
 
     return diffDate;
@@ -36,7 +34,7 @@ const PlantTag = (props) => {
     const averageWateringPeriod = plant.averageWateringPeriod;
 
     // 마지막 물주기 날짜에서 averageWateringPeriod 더하고
-    const nextWateringDate = new Date(props.latestWateringDate.wateringDate);
+    const nextWateringDate = new Date(latestWateringDate.wateringDate);
     nextWateringDate.setDate(nextWateringDate.getDate() + averageWateringPeriod);
 
     // 위 날짜에서 오늘 날짜를 뺸다
@@ -77,8 +75,9 @@ const PlantTag = (props) => {
       <Tag color="magenta">{plant.placeName}</Tag>
       <Tag color="geekblue">{plant.createDate}일부터 함께</Tag>
       <Tag color="purple">{getAvgWateringPeriodMsg()}</Tag>
+
       { // 물주기 정보가 존재하지 않을 시 렌더링하지 않음
-        props.latestWateringDate
+        latestWateringDate
           ?
           <>
             <Tag color="magenta">{getLatestWateringDateMsg()}</Tag>

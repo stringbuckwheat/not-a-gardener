@@ -1,23 +1,17 @@
 import GardenCard from "../../components/card/GardenCard";
 import React from "react";
-import {notification, Row} from "antd";
-import getWateringNotificationMsg from "../../utils/function/getWateringNotificationMsg";
+import {Row} from "antd";
 import {useTrail, animated} from "@react-spring/web";
 import {CCol} from "@coreui/react";
 
-const GardenTodoList = ({todoList, chemicalList, updateGardenAfterWatering}) => {
-  // 식물 상태 업데이트 이후 메시지 띄우기
-  const [api, contextHolder] = notification.useNotification();
-
-  const openNotification = (msg) => {
-
-    api.open({
-      message: msg.title,
-      description: msg.content,
-      duration: 4,
-    });
-  };
-
+const GardenTodoList = ({
+                          todoList,
+                          deleteInTodoList,
+                          chemicalList,
+                          updateGardenAfterWatering,
+                          openNotification,
+                          postponeWatering
+                        }) => {
   const animation = {
     from: {opacity: 0},
     to: {opacity: 1}
@@ -26,26 +20,25 @@ const GardenTodoList = ({todoList, chemicalList, updateGardenAfterWatering}) => 
   const trailSprings = useTrail(todoList.length, animation);
 
   return (
-    <>
-      {contextHolder}
-      <Row>
-        {
-          trailSprings.map((spring, index) => (
-            <CCol md={3} sm={4} xs={12} className="mb-4" key={index}>
-              <animated.div style={{...spring,}} className="parent card-container-item">
-                <GardenCard
-                  updateGardenAfterWatering={updateGardenAfterWatering}
-                  garden={todoList[index]}
-                  chemicalList={chemicalList}
-                  openNotification={openNotification}/>
-              </animated.div>
-            </CCol>
-          ))
-        }
-      </Row>
-    </>
+    <Row>
+      {
+        trailSprings.map((spring, index) => (
+          <CCol md={3} sm={4} xs={12} className="mb-5" key={`${todoList[index].gardenDetail.wateringCode}-${index}`}>
+            <animated.div style={{...spring}} className="parent card-container-item">
+              <GardenCard
+                postponeWatering={postponeWatering}
+                updateGardenAfterWatering={updateGardenAfterWatering}
+                index={index}
+                garden={todoList[index]}
+                chemicalList={chemicalList}
+                deleteInTodoList={deleteInTodoList}
+                openNotification={openNotification}/>
+            </animated.div>
+          </CCol>
+        ))
+      }
+    </Row>
   )
-
 }
 
 export default GardenTodoList;

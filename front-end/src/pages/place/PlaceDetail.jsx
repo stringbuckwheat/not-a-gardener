@@ -1,27 +1,19 @@
-import {useLocation} from 'react-router-dom'
+import {useParams} from 'react-router-dom'
 import DetailLayout from 'src/components/data/layout/DetailLayout';
 import PlaceTag from './PlaceTag';
 import {useEffect, useState} from 'react';
 import ModifyPlace from './ModifyPlace';
-import onMount from 'src/api/service/onMount';
 import PlaceTableForPlant from 'src/components/table/PlaceTableForPlant';
 import DeletePlaceModal from "../../components/modal/DeletePlaceModal";
+import getData from "../../api/backend-api/common/getData";
+import Loading from "../../components/data/Loading";
 
 const PlaceDetail = () => {
-  const {state} = useLocation();
+  const placeNo = useParams().placeNo;
 
-  const [plantList, setPlantList] = useState([{
-    placeNo: 0,
-    placeName: "",
-    plantNo: 0,
-    plantName: "",
-    plantSpecies: "",
-    medium: "",
-    averageWateringPeriod: 0,
-    createDate: ""
-  }])
-
-  const title = state.placeName; // 장소 이름
+  const [loading, setLoading] = useState(true);
+  const [place, setPlace] = useState({});
+  const [plantList, setPlantList] = useState([]);
 
   // 수정 컴포넌트를 띄울지, 상세보기 컴포넌트를 띄울지
   const [onModify, setOnModify] = useState(false);
@@ -32,39 +24,50 @@ const PlaceDetail = () => {
     setOnModify(!onModify);
   }
 
+  const onMountPlaceDetail = async () => {
+    const res = await getData(`/place/${placeNo}`);
+    setPlace(res.place);
+    setPlantList(res.plantList);
+    setLoading(false);
+  }
+
   useEffect(() => {
-    // plant list에 쓸 정보를 받아옴
-    onMount(`/place/${state.placeNo}/plants`, setPlantList)
-  }, [state]);
+    onMountPlaceDetail();
+  }, []);
+
+  if(loading){
+    return <Loading />
+  }
 
   return (
     !onModify
       ?
       <DetailLayout
-        title={title}
+        title={place.placeName}
         url="/place"
-        path={state.placeNo}
+        path={place.placeNo}
         deleteTitle="장소"
-        tags={<PlaceTag place={state} howManyPlant={plantList.length}/>}
+        tags={<PlaceTag place={place} howManyPlant={plantList.length}/>}
         onClickModifyBtn={onClickModifyBtn}
         deleteModal={
           <DeletePlaceModal
-            placeNo={state.placeNo}
+            placeNo={placeNo}
             plantListSize={plantList.length}/>}
         bottomData={
           <PlaceTableForPlant
+            placeName={place.placeName}
             plantList={plantList}
             setPlantList={setPlantList}
           />}
       />
       :
       <ModifyPlace
-        title={title}
+        title={place.placeName}
         place={{
-          placeNo: state.placeNo,
-          placeName: state.placeName,
-          option: state.option,
-          artificialLight: state.artificialLight
+          placeNo: place.placeNo,
+          placeName: place.placeName,
+          option: place.option,
+          artificialLight: place.artificialLight
         }}
         changeModifyState={onClickModifyBtn}
       />

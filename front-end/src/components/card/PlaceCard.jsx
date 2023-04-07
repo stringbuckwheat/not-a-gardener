@@ -24,7 +24,6 @@ const PlaceCard = (props) => {
     <CCol md={3} xs={12}>
       <Link
         to={`/place/${place.placeNo}`}
-        state={place}
         className="no-text-decoration">
         <CWidgetStatsF
           className="mb-3"

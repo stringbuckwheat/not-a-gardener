@@ -1,75 +1,43 @@
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import {CCard, CCardBody, CCol, CRow} from "@coreui/react";
-import CIcon from "@coreui/icons-react";
 import GardenTag from "../../pages/garden/GardenTag";
 import getWateringMsg from "../../utils/function/getWateringMsg";
-import {cilDrop, cilFaceDead, cilHandPointUp, cilSmile, cilSwimming, cilZoom} from "@coreui/icons";
 import GardenCardAction from "../../pages/garden/GardenCardAction";
+import wateringCodeDesign from "../../utils/dataArray/wateringCodeDesign";
+import WateringCodeIcon from "../etc/WateringCodeIcon";
 
-const GardenCard = ({garden, chemicalList, openNotification, updateGardenAfterWatering}) => {
+const GardenCard = ({index, deleteInTodoList, garden, chemicalList, openNotification, updateGardenAfterWatering, postponeWatering}) => {
   const gardenDetail = garden.gardenDetail;
   const plant = garden.plant;
 
-  // 음수           0            1          2         3        4
-  // 물주기 놓침   물주기 정보 부족    물주기     체크하기     놔두세요    오늘 물 줌
-
-  const designs = [
-    {
-      color: "primary",
-      icon: cilZoom
-    },
-    {
-      color: "primary",
-      icon: cilDrop
-    },
-    {
-      color: "warning",
-      icon: cilHandPointUp
-    },
-    {
-      color: "success",
-      icon: cilSmile,
-    },
-    {
-      color: "success",
-      icon: cilSwimming
-    }
-  ]
-
   let color = "danger";
-  let icon = cilFaceDead;
 
   if (gardenDetail.wateringCode >= 0) {
-    color = designs[gardenDetail.wateringCode].color;
-    icon = designs[gardenDetail.wateringCode].icon;
+    color = wateringCodeDesign[gardenDetail.wateringCode].color;
   }
 
   const [hovered, setHovered] = useState(false);
 
   return (
     <div className="parent">
-      <div className={"child"}>
+      <div className="child">
         <div
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}>
-          {/*{hovered*/}
-          {/*  ? <GardenCardAction*/}
-          {/*    hovered={hovered}*/}
-          {/*    plantNo={plant.plantNo}*/}
-          {/*    plantName={plant.plantName}*/}
-          {/*    chemicalList={chemicalList}*/}
-          {/*  />*/}
-          {/*: <></>}*/}
 
           <GardenCardAction
               hovered={hovered}
               plantNo={plant.plantNo}
               plantName={plant.plantName}
+              wateringCode={gardenDetail.wateringCode}
               chemicalList={chemicalList}
               openNotification={openNotification}
-              updateGardenAfterWatering={updateGardenAfterWatering}/>
-
+              updateGardenAfterWatering={updateGardenAfterWatering}
+              postponeWatering={postponeWatering}
+              index={index}
+              deleteInTodoList={deleteInTodoList}
+          />
           <Link
             className="no-text-decoration"
             to={`/plant/${plant.plantNo}`}>
@@ -77,7 +45,7 @@ const GardenCard = ({garden, chemicalList, openNotification, updateGardenAfterWa
               <CCardBody>
                 <CRow className="d-flex align-items-center">
                   <CCol xs={2} className="text-center">
-                    <CIcon className={`me-3 text-${color}`} icon={icon} height={45}/>
+                    <WateringCodeIcon wateringCode={gardenDetail.wateringCode} />
                   </CCol>
                   <CCol xs={1}></CCol>
                   <CCol xs={8}>

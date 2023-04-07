@@ -10,11 +10,8 @@ import {
 import authAxios from '../../utils/interceptors';
 
 const WaterModal = (props) => {
-  console.log("water modal");
-
   // props.closeModal로 부모 컴포넌트의 state 변경 함수 넘겨줌
   const { visible, clickedPlant } = props;
-  console.log("clickedPlant", clickedPlant);
   const [fertilized, setFertilized] = useState("N");
 
   const onClick = () => {
@@ -23,11 +20,8 @@ const WaterModal = (props) => {
   }
 
   const submit = () => {
-    console.log("water submit")
-
     authAxios.post("/garden/water", {plantNo: clickedPlant, fertilized: fertilized})
     .then((res) => {
-      console.log("res", res);
       props.closeModal();
     })
     .catch(error => console.log(error));

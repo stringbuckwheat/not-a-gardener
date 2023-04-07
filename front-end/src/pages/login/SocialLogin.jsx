@@ -11,7 +11,7 @@ const SocialLogin = () => {
       <h6>간편 로그인</h6>
       <hr/>
       {
-        providers.map((provider) => <SocialLoginButton provider={provider} recentLogin={recentLogin}/>)
+        providers.map((provider, index) => <SocialLoginButton provider={provider} recentLogin={recentLogin} key={index}/>)
       }
     </CRow>
   )

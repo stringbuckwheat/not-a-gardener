@@ -78,7 +78,7 @@ const WateringList = (props) => {
     }
 
     if (res.wateringMsg) {
-      const msg = getWateringNotificationMsg(res.wateringMsg.wateringCode);
+      const msg = getWateringNotificationMsg(res.wateringMsg.afterWateringCode);
       openNotification(msg);
     }
   }

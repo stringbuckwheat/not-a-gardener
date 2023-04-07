@@ -7,8 +7,6 @@ const RoutineList = ({routineList}) => {
   const [isTitleHovered, setIsTitleHovered] = useState(false);
 
   const onClick = (routineNo, isCompleted) => {
-    console.log("onClick routineNo: ", routineNo, isCompleted);
-
     if (!isCompleted) {
       //
     }
@@ -16,7 +14,8 @@ const RoutineList = ({routineList}) => {
 
   return (
     <CCol md={6} xs={12}>
-      <Link to="/schedule" className={`no-text-decoration text-${isTitleHovered ? "orange" : "black"}`}>
+      <Link to="/schedule"
+            className={`no-text-decoration text-${isTitleHovered ? "orange" : "black"}`}>
         <div
           className={`small fw-bold`}
           onMouseEnter={() => setIsTitleHovered(!isTitleHovered)}
@@ -30,11 +29,11 @@ const RoutineList = ({routineList}) => {
             const isCompleted = routine.isCompleted === "Y";
 
             return <ClickableTag
+              key={routine.routineNo}
               color={isCompleted ? "yellow" : "geekblue"}
               onClick={() => onClick(routine.routineNo, isCompleted)}
               content={routine.routineContent}/>
           })
-
         }
       </div>
     </CCol>

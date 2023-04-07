@@ -6,7 +6,6 @@ import ListHeader from "src/components/data/header/ListHeader";
 import AddPlace from "./AddPlace";
 
 const PlaceList = ({placeList, setPlaceList, originPlaceList, addPlace}) => {
-  console.log("placelist props placeList", placeList);
   // 검색
   const [searchWord, setSearchWord] = useState("");
 
@@ -70,7 +69,7 @@ const PlaceList = ({placeList, setPlaceList, originPlaceList, addPlace}) => {
           onClick={switchAddForm}/>
         {/* 카드 컴포넌트 반복 */}
         {placeList.map((place) => (
-          <PlaceCard place={place}/>
+          <PlaceCard place={place} key={place.placeNo}/>
         ))}
       </CRow>
     </>

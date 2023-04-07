@@ -3,7 +3,6 @@ import mediumArray from 'src/utils/dataArray/mediumArray';
 
 const PlantTableTag = (props) => {
     const tags = props.tags;
-    console.log("plant table tag", tags);
 
     const getColorIdxFromMediumArray = (medium) => {
         for (let i = 0; i < mediumArray.length; i++) {
@@ -26,10 +25,3 @@ const PlantTableTag = (props) => {
 }
 
 export default PlantTableTag;
-
-// (_, { tags }) => {
-//     console.log("tags", tags);
-//     console.log("_", _);
-
-//     
-// },

@@ -1,16 +1,12 @@
-import {Popconfirm, Space, Table, Tag} from 'antd';
+import {Table} from 'antd';
 import {useState} from 'react';
 import ModifyPlantPlaceForm from '../form/ModifyPlantPlaceForm';
 import AddPlantInPlaceBtns from '../form/AddPlantInPlaceBtns';
-import {Link} from "react-router-dom";
-import {DeleteOutlined} from "@ant-design/icons";
 import getPlantListForPlacePlantTable from "../../utils/function/getPlantListForPlacePlantTable";
 import deleteData from "../../api/backend-api/common/deleteData";
 import plantTableColArrInPlace from "../../utils/dataArray/plantTableColArrInPlace";
 
-const PlaceTableForPlant = (props) => {
-  const {plantList, setPlantList} = props;
-
+const PlaceTableForPlant = ({plantList, setPlantList, placeName}) => {
   // select
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
@@ -40,6 +36,7 @@ const PlaceTableForPlant = (props) => {
             setSelectedRowKeys={setSelectedRowKeys}
           />
           : <AddPlantInPlaceBtns
+            placeName={placeName}
             plantList={plantList}
             setPlantList={setPlantList}/>
       }

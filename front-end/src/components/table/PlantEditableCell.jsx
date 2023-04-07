@@ -18,7 +18,6 @@ const PlantEditableCell = (props) => {
   const onChange = (e) => {
     const {name, value} = e.target;
     setModifyPlant({...modifyPlant, [name]: value});
-    console.log("modifyPlant", modifyPlant);
   }
 
 

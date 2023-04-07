@@ -2,7 +2,6 @@ import getWateringMsg from "../../utils/function/getWateringMsg";
 
 const getPlantListForPlantTable = (plantList) => {
   const plantListForPlantTable = plantList.map((pl) => {
-    console.log("plant", pl);
 
     const plant = pl.plant;
     const gardenDetail = pl.gardenDetail;
@@ -20,7 +19,7 @@ const getPlantListForPlantTable = (plantList) => {
       placeName: plant.placeName,
       placeNo: plant.placeNo,
 
-      fertilizingCode: gardenDetail.fertilizingCode,
+      chemicalCode: gardenDetail.chemicalCode,
       wateringCode: gardenDetail.wateringCode,
       wateringDDay: gardenDetail.wateringDDay,
       tags: {

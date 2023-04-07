@@ -20,7 +20,7 @@ const Garden = () => {
     setLoading(false);
     setNothingToDo(data.todoList.length == 0 && data.waitingList.length == 0);
 
-    data.todoList.sort((a, b) => (a.gardenDetail.wateringDDay - b.gardenDetail.wateringDDay))
+    data.todoList.sort((a, b) => (a.gardenDetail.wateringCode - b.gardenDetail.wateringCode));
 
     setTodoList(data.todoList);
     setWaitingList(data.waitingList);
@@ -36,8 +36,32 @@ const Garden = () => {
     setTodoList(() => updatedTodoList);
   }
 
+  // waiting리스트에서 삭제
+  const updateWaitingListAfterWatering = (index) => {
+    waitingList.splice(index, 1);
+    setWaitingList(() => waitingList);
+  }
+
+  // todolist에서 삭제
+  const deleteInTodoList = (index) => {
+    todoList.splice(index, 1);
+    setTodoList(() => todoList);
+  }
+
+  // postpone
+  const postponeWatering = (index, res) => {
+    const handleTodoList = () => {
+      const prevGarden = todoList.splice(index, 1)[0];
+      const prevGardenDetail = prevGarden.gardenDetail;
+      const newGardenDetail = {...prevGardenDetail, wateringCode: res};
+      return [...todoList, {...prevGarden, gardenDetail: newGardenDetail}];
+    }
+
+    setTodoList(handleTodoList());
+  }
+
   if (isLoading) {
-    return <Loading/>
+    return <Loading />
   }
   else if (nothingToDo) {
     return <NoItem
@@ -48,6 +72,9 @@ const Garden = () => {
     return (
       <GardenMain
         updateGardenAfterWatering={updateGardenAfterWatering}
+        updateWaitingListAfterWatering={updateWaitingListAfterWatering}
+        deleteInTodoList={deleteInTodoList}
+        postponeWatering={postponeWatering}
         routineList={routineList}
         todoList={todoList}
         setTodoList={setTodoList}

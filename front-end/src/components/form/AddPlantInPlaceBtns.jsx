@@ -1,17 +1,12 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {Space} from 'antd';
 import {CButton} from "@coreui/react";
-import {useLocation, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import ModifyPlaceOfPlantForm from "./ModifyPlaceOfPlantForm";
 import AddModal from "../modal/AddModal";
-import getPlaceListForSelect from "../../api/service/getPlaceListForSelect";
 
-const AddPlantInPlaceBtns = (props) => {
-  const {plantList, setPlantList} = props;
+const AddPlantInPlaceBtns = ({placeName, setPlantList}) => {
   const placeNo = useParams().placeNo;
-
-  const placeName = useLocation().state.placeName;
-  console.log("addplantinplacebtn placeName", placeName);
 
   const [moveFormVisible, setMoveFormVisible] = useState(false);
 

@@ -4,7 +4,6 @@ import {AppContent, AppSidebar, AppFooter, AppHeader} from '../index'
 
 const GardenLayout = () => {
   const isLogin = localStorage.getItem("login");
-  console.log("= Default Layout: login", isLogin !== undefined);
 
   if (!isLogin) {
     return <Navigate to="/login" replace={true}/>

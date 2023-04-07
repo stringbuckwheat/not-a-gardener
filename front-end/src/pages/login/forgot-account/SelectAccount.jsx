@@ -9,7 +9,6 @@ const SelectAccount = (props) => {
   const [value, setValue] = useState(memberList[0]);
   const [isSelected, setIsSelected] = useState(false);
   const onChange = (e) => {
-    console.log('radio checked', e.target.value);
     setValue(e.target.value);
   };
 

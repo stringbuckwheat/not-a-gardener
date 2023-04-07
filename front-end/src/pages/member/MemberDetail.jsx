@@ -33,7 +33,6 @@ const MemberDetail = (props) => {
   }
 
   const onSubmit = async () => {
-    console.log("modifyMember: ", modifyMember);
     const updatedMember = await updateData("/member", member.memberNo, modifyMember);
     setMember(updatedMember);
     setIsDisabled(true);
