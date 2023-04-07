@@ -65,7 +65,7 @@ public class WateringServiceImpl implements WateringService {
         List<WateringDto.WateringForOnePlant> wateringList = getWateringListForPlant(wateringRequest.getPlantNo());
 
         // 식물 테이블의 averageWateringDate 업데이트 필요 X
-        if(wateringMsg.getWateringCode() == 3){
+        if(wateringMsg.getAfterWateringCode() == 3){
             return WateringDto.WateringModifyResponse.builder()
                     .wateringMsg(wateringMsg)
                     .wateringList(wateringList)
@@ -167,7 +167,7 @@ public class WateringServiceImpl implements WateringService {
         List<WateringDto.WateringForOnePlant> wateringList = getWateringListForPlant(wateringRequest.getPlantNo());
 
         // 식물 테이블의 averageWateringDate 업데이트 필요 X
-        if(wateringMsg.getWateringCode() == 3){
+        if(wateringMsg.getAfterWateringCode() == 3){
             return WateringDto.WateringModifyResponse.builder()
                     .wateringMsg(wateringMsg)
                     .wateringList(wateringList)

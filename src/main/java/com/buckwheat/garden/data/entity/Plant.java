@@ -40,6 +40,9 @@ public class Plant {
 
     private LocalDate birthday;
 
+    private LocalDate conditionDate;
+    private LocalDate postponeDate;
+
     // FK
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="member_no")
@@ -71,6 +74,16 @@ public class Plant {
 
     public Plant updateAverageWateringPeriod(int averageWateringPeriod){
         this.averageWateringPeriod = averageWateringPeriod;
+        return this;
+    }
+
+    public Plant updateConditionDate(){
+        this.conditionDate = LocalDate.now();
+        return this;
+    }
+
+    public Plant updatePostponeDate(){
+        this.postponeDate = LocalDate.now();
         return this;
     }
 }

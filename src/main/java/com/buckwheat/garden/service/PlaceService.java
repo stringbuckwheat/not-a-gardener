@@ -9,7 +9,7 @@ import java.util.List;
 public interface PlaceService {
     List<PlaceDto.PlaceCard> getPlaceList(int memberNo);
 
-    PlaceDto.PlaceResponseDto getPlace(int placeNo);
+    PlaceDto.WithPlantList getPlace(int placeNo);
 
     List<PlantDto.PlantInPlace> getPlantlistInPlace(int placeNo);
 

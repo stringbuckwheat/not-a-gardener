@@ -77,11 +77,6 @@ public class PlaceDto {
         private String artificialLight;
         private String option;
 
-        /**
-         * 도메인 객체에 dto 의존을 추가하지 않고 dto 반환 목적
-         * @param place dto의 내용을 채워넣을 place 엔티티
-         * @return 클라이언트 응답으로 쓸 DTO
-         */
         public static PlaceResponseDto from(Place place){
             return PlaceResponseDto.builder()
                     .placeNo(place.getPlaceNo())
@@ -90,6 +85,14 @@ public class PlaceDto {
                     .option(place.getOption())
                     .build();
         }
+    }
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    public static class WithPlantList{
+        private PlaceResponseDto place;
+        private List<PlantDto.PlantInPlace> plantList;
     }
 
     @Getter

@@ -57,7 +57,7 @@ public class PlantServiceImpl implements PlantService {
         Plant plant = plantRepository.findByPlantNo(plantNo).orElseThrow(NoSuchElementException::new);
 
         PlantDto.PlantResponse plantResponse = PlantDto.PlantResponse.from(plant);
-        GardenDto.GardenDetail gardenDetail = gardenUtil.getGardenDetail(memberNo, plant);
+        GardenDto.GardenDetail gardenDetail = gardenUtil.getGardenDetail(plant, memberNo);
 
         return new GardenDto.GardenResponse(plantResponse, gardenDetail);
     }
@@ -80,7 +80,7 @@ public class PlantServiceImpl implements PlantService {
 
         // GardenDto를 돌려줘야 함
         PlantDto.PlantResponse plantResponse = PlantDto.PlantResponse.from(updatedPlant);
-        GardenDto.GardenDetail gardenDetail = gardenUtil.getGardenDetail(member.getMemberNo(), updatedPlant);
+        GardenDto.GardenDetail gardenDetail = gardenUtil.getGardenDetail(updatedPlant, member.getMemberNo());
 
         return new GardenDto.GardenResponse(plantResponse, gardenDetail);
     }

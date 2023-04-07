@@ -1,7 +1,9 @@
 package com.buckwheat.garden.data.dto;
 
+import com.buckwheat.garden.data.entity.Plant;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -26,10 +28,29 @@ public class GardenDto {
     }
 
     @AllArgsConstructor
+    @Builder
+    @NoArgsConstructor
     @Getter
     public static class WaitingForWatering{
         private int plantNo;
         private String plantName;
+        private String plantSpecies;
+        private String medium;
+        private int placeNo;
+        private String placeName;
+        private LocalDate createDate;
+
+        public static WaitingForWatering from(Plant plant){
+            return WaitingForWatering.builder()
+                    .plantNo(plant.getPlantNo())
+                    .plantName(plant.getPlantName())
+                    .plantSpecies(plant.getPlantSpecies())
+                    .medium(plant.getMedium())
+                    .placeNo(plant.getPlace().getPlaceNo())
+                    .placeName(plant.getPlace().getPlaceName())
+                    .createDate(LocalDate.from(plant.getCreateDate()))
+                    .build();
+        }
     }
 
     @AllArgsConstructor
@@ -48,9 +69,9 @@ public class GardenDto {
         private int wateringCode;
 
         // 비료 주기 정보
-        private int chemicalCode;
+        ChemicalCode chemicalCode;
 
-        public static GardenDetail from(WateringDto.WateringResponse latestWateringDate, String anniversary, int wateringDDay, int wateringCode, int chemicalCode){
+        public static GardenDetail from(WateringDto.WateringResponse latestWateringDate, String anniversary, int wateringDDay, int wateringCode, ChemicalCode chemicalCode){
             return GardenDetail.builder()
                     .latestWateringDate(latestWateringDate)
                     .anniversary(anniversary)
@@ -59,6 +80,13 @@ public class GardenDto {
                     .chemicalCode(chemicalCode)
                     .build();
         }
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class ChemicalCode{
+        private int chemicalNo;
+        private String chemicalName;
     }
 
     @Getter

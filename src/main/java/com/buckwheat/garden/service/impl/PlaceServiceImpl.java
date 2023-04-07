@@ -43,10 +43,19 @@ public class PlaceServiceImpl implements PlaceService {
      * @return 해당 장소의 식물 개수를 포함하는 장소 정보
      */
     @Override
-    public PlaceDto.PlaceResponseDto getPlace(int placeNo) {
+    public PlaceDto.WithPlantList getPlace(int placeNo) {
         // @EntityGraph로 plantList를 join한 메소드
         Place place = placeRepository.findByPlaceNo(placeNo).orElseThrow(NoSuchElementException::new);
-        return PlaceDto.PlaceResponseDto.from(place);
+
+        List<PlantDto.PlantInPlace> plantList = new ArrayList<>();
+
+        for(Plant plant : place.getPlantList()){
+            plantList.add(PlantDto.PlantInPlace.from(plant));
+        }
+
+        PlaceDto.PlaceResponseDto placeResponseDto = PlaceDto.PlaceResponseDto.from(place);
+
+        return new PlaceDto.WithPlantList(placeResponseDto, plantList);
     }
 
     /**

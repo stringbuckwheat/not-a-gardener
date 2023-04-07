@@ -2,7 +2,6 @@ package com.buckwheat.garden.controller;
 
 import com.buckwheat.garden.config.oauth2.UserPrincipal;
 import com.buckwheat.garden.data.dto.PlaceDto;
-import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,18 +33,8 @@ public class PlaceController {
      * @return
      */
     @GetMapping("/{placeNo}")
-    public PlaceDto.PlaceResponseDto getPlace(@PathVariable int placeNo){
+    public PlaceDto.WithPlantList getPlace(@PathVariable int placeNo){
         return placeService.getPlace(placeNo);
-    }
-
-    /**
-     * 해당 장소에 있는 식물 리스트 리턴
-     * @param placeNo PK
-     * @return
-     */
-    @GetMapping("/{placeNo}/plants")
-    public List<PlantDto.PlantInPlace> getPlantlistInPlace(@PathVariable int placeNo){
-        return placeService.getPlantlistInPlace(placeNo);
     }
 
     /**

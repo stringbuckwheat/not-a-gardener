@@ -31,6 +31,10 @@ public class WateringUtil {
         Plant plant = plantRepository.findByPlantNo(plantNo).orElseThrow(NoSuchElementException::new);
         log.debug("plant: {}", PlantDto.PlantResponse.from(plant));
 
+        return getWateringMsg(plant);
+    }
+
+    public WateringDto.WateringMsg getWateringMsg(Plant plant){
         // 첫번째 물주기면
         if (plant.getWateringList().size() == 1) {
             return new WateringDto.WateringMsg(2, plant.getAverageWateringPeriod());

@@ -33,4 +33,19 @@ public class GardenController {
     public GardenDto.WateringResponse addWateringInGarden(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody WateringDto.WateringRequest wateringRequest){
         return gardenService.addWateringInGarden(userPrincipal.getMember(), wateringRequest);
     }
+
+    @PutMapping("/{plantNo}/watering/not-dry")
+    public WateringDto.WateringMsg notDry(@PathVariable int plantNo){
+        return gardenService.notDry(plantNo);
+    }
+
+    /**
+     * 물주기 (귀찮아서) 미루기
+     * @param plantNo
+     * @return 새로운 wateringCode;
+     */
+    @PutMapping("/{plantNo}/watering/postpone")
+    public int postpone(@PathVariable int plantNo){
+        return gardenService.postpone(plantNo);
+    }
 }
