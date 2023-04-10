@@ -2,10 +2,13 @@ package com.buckwheat.garden.service;
 
 import com.buckwheat.garden.data.dto.WateringDto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public interface WateringService {
+    Map<LocalDate, List<WateringDto.ByDate>> getWateringList(int memberNo, int month);
     /* 이번 관수가 며칠만인지 계산 */
     int calculateWateringPeriod(LocalDateTime latestWateringDate);
 

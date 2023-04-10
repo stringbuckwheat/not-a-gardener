@@ -77,10 +77,10 @@ public class RoutineServiceImpl implements RoutineService {
     @Override
     public RoutineDto.Response complete(RoutineDto.Complete routineDto) {
         Routine routine = routineRepository.findByRoutineNo(routineDto.getRoutineNo()).orElseThrow(NoSuchElementException::new);
-
         routineRepository.save(routine.complete(routineDto.getLastCompleteDate()));
+        String isCompleted = routineDto.getLastCompleteDate() != null ? "Y" : "N";
 
-        return RoutineDto.Response.from(routine, "Y", "Y");
+        return RoutineDto.Response.from(routine, "Y", isCompleted);
     }
 
     @Override

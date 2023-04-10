@@ -13,13 +13,13 @@ public class WateringDto {
     @NoArgsConstructor
     @Getter
     @ToString
-    public static class WateringRequest{
+    public static class WateringRequest {
         private int wateringNo;
         private int plantNo;
         private int chemicalNo;
         private LocalDate wateringDate;
 
-        public Watering toEntityWithPlantAndChemical(Plant plant, Chemical chemical){
+        public Watering toEntityWithPlantAndChemical(Plant plant, Chemical chemical) {
             return Watering.builder()
                     .plant(plant)
                     .chemical(chemical)
@@ -27,7 +27,7 @@ public class WateringDto {
                     .build();
         }
 
-        public Watering toEntityWithPlant(Plant plant){
+        public Watering toEntityWithPlant(Plant plant) {
             return Watering.builder()
                     .plant(plant)
                     .wateringDate(wateringDate)
@@ -38,22 +38,22 @@ public class WateringDto {
     @AllArgsConstructor
     @Builder
     @Getter
-    public static class WateringResponse{
+    public static class WateringResponse {
         private int wateringNo;
         private String plantName;
         private String chemicalName;
         private LocalDate wateringDate;
         private WateringMsg wateringMsg;
 
-        public static String getChemicalName(Chemical chemical){
-            if(chemical != null){
+        public static String getChemicalName(Chemical chemical) {
+            if (chemical != null) {
                 return chemical.getChemicalName();
             }
 
             return "맹물";
         }
 
-        public static WateringResponse from(Watering watering){
+        public static WateringResponse from(Watering watering) {
             return WateringResponse.builder()
                     .wateringNo(watering.getWateringNo())
                     .plantName(watering.getPlant().getPlantName())
@@ -62,7 +62,7 @@ public class WateringDto {
                     .build();
         }
 
-        public static WateringResponse withWateringMsgFrom(Watering watering, WateringMsg wateringMsg){
+        public static WateringResponse withWateringMsgFrom(Watering watering, WateringMsg wateringMsg) {
             return WateringResponse.builder()
                     .wateringNo(watering.getWateringNo())
                     .plantName(watering.getPlant().getPlantName())
@@ -86,7 +86,7 @@ public class WateringDto {
     @AllArgsConstructor
     @Getter
     @ToString
-    public static class WateringMsg{
+    public static class WateringMsg {
         // -1   물주기가 줄어들었어요!
         // 0    물주기 계산에 변동이 없습니다.
         // 1    물주기가 늘어났어요
@@ -101,14 +101,14 @@ public class WateringDto {
     @Builder
     @Getter // (InvalidDefinitionException - No serializer found for class)
     @ToString
-    public static class WateringForOnePlant{
+    public static class WateringForOnePlant {
         private int wateringNo;
         private int chemicalNo;
         private String chemicalName;
         private LocalDate wateringDate;
         private int wateringPeriod;
 
-        public static WateringForOnePlant from(Watering watering){
+        public static WateringForOnePlant from(Watering watering) {
             Chemical chemical = watering.getChemical();
 
             return WateringForOnePlant.builder()
@@ -119,7 +119,7 @@ public class WateringDto {
                     .build();
         }
 
-        public static WateringForOnePlant withWateringPeriodFrom(Watering watering, int wateringPeriod){
+        public static WateringForOnePlant withWateringPeriodFrom(Watering watering, int wateringPeriod) {
             Chemical chemical = watering.getChemical();
 
             return WateringForOnePlant.builder()
@@ -133,16 +133,33 @@ public class WateringDto {
 
     @AllArgsConstructor
     @Builder
-    public static class WateringList{
+    @NoArgsConstructor
+    @Getter
+    @ToString
+    public static class ByDate{
         private int wateringNo;
+        private int plantNo;
         private String plantName;
+        private int chemicalNo;
         private String chemicalName;
         private LocalDate wateringDate;
 
-        public static WateringList from(Watering watering){
-            return WateringList.builder()
+        public static ByDate from(Watering watering) {
+
+            if (watering.getChemical() == null) {
+                return ByDate.builder()
+                        .wateringNo(watering.getWateringNo())
+                        .plantNo(watering.getPlant().getPlantNo())
+                        .plantName(watering.getPlant().getPlantName())
+                        .wateringDate(watering.getWateringDate())
+                        .build();
+            }
+
+            return ByDate.builder()
                     .wateringNo(watering.getWateringNo())
+                    .plantNo(watering.getPlant().getPlantNo())
                     .plantName(watering.getPlant().getPlantName())
+                    .chemicalNo(watering.getChemical().getChemicalNo())
                     .chemicalName(watering.getChemical().getChemicalName())
                     .wateringDate(watering.getWateringDate())
                     .build();
@@ -150,10 +167,18 @@ public class WateringDto {
     }
 
     @AllArgsConstructor
+    @Getter
+    @ToString
+    public static class WateringList {
+        private LocalDate wateringDate;
+        List<ByDate> wateringList;
+    }
+
+    @AllArgsConstructor
     @Builder
     @Getter
     @ToString
-    public static class WateringResponseInChemical{
+    public static class WateringResponseInChemical {
         private int wateringNo;
         private int plantNo;
         private String plantName;
@@ -161,7 +186,7 @@ public class WateringDto {
         private String placeName;
         private LocalDate wateringDate;
 
-        public static WateringResponseInChemical from(Watering watering){
+        public static WateringResponseInChemical from(Watering watering) {
             return WateringResponseInChemical.builder()
                     .wateringNo(watering.getWateringNo())
                     .plantNo(watering.getPlant().getPlantNo())

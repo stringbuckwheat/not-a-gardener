@@ -9,14 +9,26 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
 public interface WateringRepository extends JpaRepository<Watering, Integer> {
+    @Query(value = "SELECT watering, chemical, plant" +
+            " FROM Watering watering" +
+            " LEFT JOIN Chemical chemical" +
+            " ON watering.chemical = chemical" +
+            " JOIN Plant plant" +
+            " ON watering.plant = plant" +
+            " WHERE plant.member.memberNo = :memberNo" +
+            " AND watering.wateringDate >= :startDate" +
+            " AND watering.wateringDate <= :endDate")
+    List<Watering> findAllWateringListByMemberNo(@Param("memberNo") int memberNo, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
     @Query(value = "select chemical_no chemicalNo, chemical_period chemicalPeriod, chemical_name chemicalName," +
             " (select MAX(watering_date) from watering w where w.plant_no = :plantNo and w.chemical_no = c.chemical_no) latestWateringDate" +
-            " from chemical c where c.member_no = :memberNo", nativeQuery = true)
+            " from chemical c where c.member_no = :memberNo" +
+            " order by chemical_period desc", nativeQuery = true)
     List<FertilizingInfo> findLatestChemicalizedDayList(@Param("plantNo") int plantNo, @Param("memberNo") int memberNo);
 
     @EntityGraph(attributePaths = {"chemical"}, type = EntityGraph.EntityGraphType.FETCH)
