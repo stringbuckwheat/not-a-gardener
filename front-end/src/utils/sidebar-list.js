@@ -9,7 +9,7 @@ import {
   cilBug,
   cilEco,
   cilFlower,
-  cilHouse,
+  cilHouse, cilDrop,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
@@ -29,6 +29,12 @@ const SidebarList = [
     name: '나의 식물',
     to: '/plant',
     icon: <CIcon icon={cilEco} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: '물주기 기록',
+    to: '/watering',
+    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
   },
   // {
   //   component: CNavItem,
