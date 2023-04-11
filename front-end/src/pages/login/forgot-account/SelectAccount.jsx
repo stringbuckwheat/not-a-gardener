@@ -3,9 +3,7 @@ import React, {useState} from "react";
 import Button from "../../../components/button/defaultButton/Button";
 import ChangePassword from "./ChangePassword";
 
-const SelectAccount = (props) => {
-  const {email, memberList} = props;
-
+const SelectAccount = ({email, memberList}) => {
   const [value, setValue] = useState(memberList[0]);
   const [isSelected, setIsSelected] = useState(false);
   const onChange = (e) => {

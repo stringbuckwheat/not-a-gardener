@@ -2,9 +2,7 @@ import {cilPen, cilTrash, cilX} from "@coreui/icons";
 import CIcon from "@coreui/icons-react";
 import {Popconfirm, Space, Button} from "antd";
 
-const WateringListAction = (props) => {
-  const {record, editable, updateWatering, editingKey, cancel, edit, deleteWatering} = props;
-
+const WateringListAction = ({record, editable, updateWatering, editingKey, cancel, edit, deleteWatering}) => {
   return editable ? (
     <Space className="d-flex justify-content-end">
       <Button onClick={updateWatering} size="small">

@@ -12,9 +12,7 @@ import FormInputFeedback from "../../components/form/input/FormInputFeedback";
 import DeleteModal from "../../components/modal/DeleteModal";
 import ChangePasswordModal from "../../components/modal/ChangePassWordModal";
 
-const MemberDetail = (props) => {
-  const {member, setMember} = props;
-
+const MemberDetail = ({member, setMember}) => {
   const isBasicLogin = member.provider == null;
 
   // 수정용 input 칸 disabled 여부

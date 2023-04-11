@@ -2,20 +2,19 @@ import {CButton} from "@coreui/react";
 import {Popconfirm, Space} from "antd";
 import authAxios from "src/utils/interceptors";
 import WateringForm from "./WateringForm";
+import deleteData from "../../../api/backend-api/common/deleteData";
 
-const WateringFormOpen = (props) => {
-  const {
-    plantNo,
-    setWateringList,
-    chemicalList,
-    isWateringFormOpen,
-    setIsWateringFormOpen,
-    setEditingKey,
-    wateringCallBack
-  } = props;
-
+const HandleWateringForm = ({
+                            plantNo,
+                            setWateringList,
+                            chemicalList,
+                            isWateringFormOpen,
+                            setIsWateringFormOpen,
+                            setEditingKey,
+                            wateringCallBack
+                          }) => {
   const deleteAllWatering = () => {
-    authAxios.delete(`/watering/plant/${plantNo}`);
+    authAxios.delete(`/plant/${plantNo}/watering`);
     setWateringList([]);
   }
 
@@ -55,4 +54,4 @@ const WateringFormOpen = (props) => {
   )
 }
 
-export default WateringFormOpen;
+export default HandleWateringForm;

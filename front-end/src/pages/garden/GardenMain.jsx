@@ -18,7 +18,8 @@ const GardenMain = ({
                       updateWaitingListAfterWatering,
                       waitingList,
                       routineList,
-                      postponeWatering
+                      postponeWatering,
+                      afterRoutine
                     }) => {
   const onClickList = () => alert("구현중이에요");
 
@@ -52,7 +53,7 @@ const GardenMain = ({
         </Booped>
       </Space>
       <CRow className="mt-4">
-        <RoutineList routineList={routineList}/>
+        <RoutineList routineList={routineList} afterRoutine={afterRoutine}/>
         {
           waitingList.length == 0
             ? <></>

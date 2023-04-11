@@ -2,14 +2,16 @@ import {Link} from "react-router-dom";
 import ClickableTag from "../../components/tag/basic/ClickableTag";
 import {CCol} from "@coreui/react";
 import React, {useState} from "react";
+import RoutineStateUpdateModal from "../../components/modal/RoutineStateUpdateModal";
 
-const RoutineList = ({routineList}) => {
+const RoutineList = ({routineList, afterRoutine}) => {
   const [isTitleHovered, setIsTitleHovered] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [routineForModal, setRoutineForModal] = useState({});
 
-  const onClick = (routineNo, isCompleted) => {
-    if (!isCompleted) {
-      //
-    }
+  const onClickTag = (routineNo, isCompleted, routineContent, index) => {
+    setRoutineForModal({routineNo, isCompleted, routineContent, index});
+    setIsModalVisible(true);
   }
 
   return (
@@ -23,15 +25,20 @@ const RoutineList = ({routineList}) => {
           {localStorage.getItem("name")}님의 루틴
         </div>
       </Link>
+      <RoutineStateUpdateModal
+        routineForModal={routineForModal}
+        visible={isModalVisible}
+        afterRoutine={afterRoutine}
+        closeModal={() => setIsModalVisible(false)}/>
       <div>
         {
-          routineList.map((routine) => {
+          routineList.map((routine, index) => {
             const isCompleted = routine.isCompleted === "Y";
 
             return <ClickableTag
               key={routine.routineNo}
               color={isCompleted ? "yellow" : "geekblue"}
-              onClick={() => onClick(routine.routineNo, isCompleted)}
+              onClick={() => onClickTag(routine.routineNo, isCompleted, routine.routineContent, index)}
               content={routine.routineContent}/>
           })
         }

@@ -1,4 +1,4 @@
-import WateringListAction from "../../pages/watering/WateringListAction";
+import WateringListAction from "../../pages/plant/watering/WateringListAction";
 
 const getWateringTableColumnArray = (isEditing, updateWatering, editingKey, cancel, edit, deleteWatering) => {
 

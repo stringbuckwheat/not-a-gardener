@@ -3,14 +3,12 @@ import {useState} from "react";
 import ItemForm from "src/components/form/ItemForm";
 import ModifyFormButtons from "src/components/button/ModifyFormButtons";
 
-const ModifyPlant = (props) => {
-  const {changeModifyState, placeList} = props;
-
-  const [plant, setPlant] = useState(props.plant)
+const ModifyPlant = ({changeModifyState, placeList, plant}) => {
+  const [updatedPlant, setUpdatedPlant] = useState(plant);
 
   const onChange = (e) => {
     const {name, value} = e.target;
-    setPlant(setPlant => ({...plant, [name]: value}));
+    setUpdatedPlant(setPlant => ({...updatedPlant, [name]: value}));
   }
 
   const itemObjectArray = [
@@ -50,20 +48,18 @@ const ModifyPlant = (props) => {
     }
   ];
 
-  const validation = plant.plantName != "";
-
   return (
     <ItemForm
       title="식물 수정"
-      inputObject={plant}
+      inputObject={updatedPlant}
       itemObjectArray={itemObjectArray}
       onChange={onChange}
       submitBtn={<ModifyFormButtons
-        data={plant}
+        data={updatedPlant}
         url="/plant"
         path={plant.plantNo}
         changeModifyState={changeModifyState}
-        validation={validation}/>}/>
+        validation={plant.plantName != ""}/>}/>
   )
 }
 

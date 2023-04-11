@@ -60,6 +60,11 @@ const Garden = () => {
     setTodoList(handleTodoList());
   }
 
+  const afterRoutine = (index, res) => {
+    routineList.splice(index, 1, res);
+    setRoutineList(() => routineList);
+  }
+
   if (isLoading) {
     return <Loading />
   }
@@ -75,6 +80,7 @@ const Garden = () => {
         updateWaitingListAfterWatering={updateWaitingListAfterWatering}
         deleteInTodoList={deleteInTodoList}
         postponeWatering={postponeWatering}
+        afterRoutine={afterRoutine}
         routineList={routineList}
         todoList={todoList}
         setTodoList={setTodoList}

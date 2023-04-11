@@ -4,7 +4,7 @@ import DetailLayout from 'src/components/data/layout/DetailLayout';
 import {useState, useEffect} from 'react';
 import ModifyPlant from './ModifyPlant';
 import getPlaceList from 'src/api/service/getPlaceList';
-import WateringList from '../watering/WateringList';
+import WateringList from './watering/WateringList';
 import onMount from 'src/api/service/onMount';
 
 const PlantDetail = () => {
