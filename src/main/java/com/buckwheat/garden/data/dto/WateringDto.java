@@ -136,7 +136,7 @@ public class WateringDto {
     @NoArgsConstructor
     @Getter
     @ToString
-    public static class ByDate{
+    public static class ByDate {
         private int wateringNo;
         private int plantNo;
         private String plantName;
@@ -145,7 +145,6 @@ public class WateringDto {
         private LocalDate wateringDate;
 
         public static ByDate from(Watering watering) {
-
             if (watering.getChemical() == null) {
                 return ByDate.builder()
                         .wateringNo(watering.getWateringNo())
@@ -161,6 +160,26 @@ public class WateringDto {
                     .plantName(watering.getPlant().getPlantName())
                     .chemicalNo(watering.getChemical().getChemicalNo())
                     .chemicalName(watering.getChemical().getChemicalName())
+                    .wateringDate(watering.getWateringDate())
+                    .build();
+        }
+
+        public static ByDate from(Watering watering, Plant plant, Chemical chemical){
+            if(chemical == null){
+                return ByDate.builder()
+                        .wateringNo(watering.getWateringNo())
+                        .plantNo(plant.getPlantNo())
+                        .plantName(plant.getPlantName())
+                        .wateringDate(watering.getWateringDate())
+                        .build();
+            }
+
+            return ByDate.builder()
+                    .wateringNo(watering.getWateringNo())
+                    .plantNo(plant.getPlantNo())
+                    .plantName(plant.getPlantName())
+                    .chemicalNo(chemical.getChemicalNo())
+                    .chemicalName(chemical.getChemicalName())
                     .wateringDate(watering.getWateringDate())
                     .build();
         }

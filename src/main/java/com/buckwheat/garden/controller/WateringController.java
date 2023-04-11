@@ -25,23 +25,7 @@ public class WateringController {
     }
 
     @PostMapping("")
-    public WateringDto.WateringModifyResponse addWatering(@RequestBody WateringDto.WateringRequest wateringRequest){
-        log.debug("wateringRequest: {}", wateringRequest);
+    public WateringDto.ByDate addWatering(@RequestBody WateringDto.WateringRequest wateringRequest){
         return wateringService.addWatering(wateringRequest);
-    }
-
-    @PutMapping("/{wateringNo}")
-    public WateringDto.WateringModifyResponse updateWatering(@RequestBody WateringDto.WateringRequest wateringRequest){
-        return wateringService.modifyWatering(wateringRequest);
-    }
-
-    @DeleteMapping("/{wateringNo}")
-    public void deleteWatering(@PathVariable int wateringNo){
-        wateringService.deleteWatering(wateringNo);
-    }
-
-    @DeleteMapping("/plant/{plantNo}")
-    public void deleteAllFromPlant(@PathVariable int plantNo) {
-        wateringService.deleteAllFromPlant(plantNo);
     }
 }

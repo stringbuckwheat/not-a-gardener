@@ -41,16 +41,6 @@ public class PlantController {
     }
 
     /**
-     * 한 식물의 물주기 기록 리스트
-     * @param plantNo
-     * @return
-     */
-    @GetMapping("/{plantNo}/watering")
-    public List<WateringDto.WateringForOnePlant> getWateringListForPlant(@PathVariable("plantNo") int plantNo){
-        return wateringService.getWateringListForPlant(plantNo);
-    }
-
-    /**
      * 식물 추가
      * @param userPrincipal
      * @param plantRequestDto

@@ -26,6 +26,16 @@ public class WateringUtil {
     private final ChemicalRepository chemicalRepository;
     private final WateringRepository wateringRepository;
 
+    public WateringDto.WateringMsg addWatering(Plant plant, WateringDto.WateringRequest wateringRequest){
+        // 맹물 줬는지 비료 타서 줬는지
+        Chemical chemical = chemicalRepository.findById(wateringRequest.getChemicalNo()).orElse(null);
+
+        // 저장
+        Watering watering = wateringRepository.save(wateringRequest.toEntityWithPlantAndChemical(plant, chemical));
+
+        return getWateringMsg(plant.getPlantNo());
+    }
+
     public WateringDto.WateringMsg getWateringMsg(int plantNo) {
         log.debug("getWateringMsg()");
         Plant plant = plantRepository.findByPlantNo(plantNo).orElseThrow(NoSuchElementException::new);
@@ -72,15 +82,5 @@ public class WateringUtil {
         }
 
         return plant;
-    }
-
-    public WateringDto.WateringMsg addWatering(Plant plant, WateringDto.WateringRequest wateringRequest){
-        // 맹물 줬는지 비료 타서 줬는지
-        Chemical chemical = chemicalRepository.findById(wateringRequest.getChemicalNo()).orElse(null);
-
-        // 저장
-        Watering watering = wateringRepository.save(wateringRequest.toEntityWithPlantAndChemical(plant, chemical));
-
-        return getWateringMsg(plant.getPlantNo());
     }
 }
