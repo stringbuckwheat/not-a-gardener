@@ -1,9 +1,6 @@
 import {Select} from "antd";
 
-const Sort = (props) => {
-  const sortOption = props.sortOption;
-  const setSort = props.setSort;
-
+const Sort = ({sortOption, setSort}) => {
   const onChange = (value) => {
     setSort(value);
   }

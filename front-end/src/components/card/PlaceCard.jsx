@@ -1,11 +1,9 @@
 import {CCol, CWidgetStatsF} from "@coreui/react";
 import {cilLightbulb, cilHouse, cilEco, cilWindow} from "@coreui/icons";
 import CIcon from '@coreui/icons-react';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
-const PlaceCard = (props) => {
-  const place = props.place;
-
+const PlaceCard = ({place}) => {
   let color = "";
   let icon = {};
 

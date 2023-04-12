@@ -2,10 +2,7 @@ import {SearchOutlined} from "@ant-design/icons";
 import {Input} from "antd";
 import {useEffect, useRef} from "react";
 
-const SearchInput = (props) => {
-  const setSearch = props.setSearch;
-  const setSearchWord = props.setSearchWord;
-
+const SearchInput = ({setSearch, setSearchWord}) => {
   // 오토 포커스
   const searchInput = useRef(); // DOM 요소를 searchElement에 할당
 

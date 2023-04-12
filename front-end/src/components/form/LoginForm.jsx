@@ -6,7 +6,7 @@ import {Link, useNavigate} from "react-router-dom";
 import setMember from "../../api/service/setMember";
 import axios from "axios";
 
-const LoginForm = (props) => {
+const LoginForm = () => {
 
   const [msg, setMsg] = useState('');
 

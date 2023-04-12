@@ -1,10 +1,4 @@
-import {
-  CButton,
-  CCard,
-  CCardBody,
-  CCol,
-} from '@coreui/react'
-import AddPlantButton from 'src/components/button/AddPlantButton';
+import {CButton, CCard, CCardBody, CCol} from '@coreui/react'
 import Search from "../header/search/Search";
 import {Space} from "antd";
 

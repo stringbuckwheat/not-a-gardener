@@ -1,26 +1,39 @@
 import {Form, Select, Space} from "antd";
 import {CButton} from "@coreui/react";
 import {useEffect, useState} from "react";
-import getData from "../../api/backend-api/common/getData";
-import modifyPlantPlace from "../../api/backend-api/place/modifyPlantPlace";
+import getData from "../../../api/backend-api/common/getData";
+import modifyPlantPlace from "../../../api/backend-api/place/modifyPlantPlace";
 import {useNavigate} from "react-router-dom";
 
-const ModifyPlaceOfPlantForm = (props) => {
-  const {placeNo, setMoveFormVisible} = props;
+/**
+ * 장소 페이지에서 다른 장소에 있는 식물을 이 장소로 이동하는 form
+ * '다른 장소의 식물 이동'을 눌렀을 시 실행됨
+ * 부모 컴포넌트: AddPlantInPlaceButtons
+ * @param placeNo
+ * @param setMoveFormVisible
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const ModifyPlaceOfPlantForm = ({placeNo, setMoveFormVisible}) => {
   const [options, setOptions] = useState([{}])
   const [selectedPlantList, setSelectedPlantList] = useState([]);
 
   const navigate = useNavigate();
 
   const onMountModifyPlaceOfPlantForm = async () => {
-    const res = await getData("/plant");
-    const exceptHere = res.filter(plant => plant.placeNo != placeNo);
-    const options = exceptHere.map((plant) => (
-      {
+    const plantList = await getData("/plant");
+    const options = [];
+
+    for (let plant of plantList) {
+      if (plant.placeNo == placeNo) {
+        continue;
+      }
+
+      options.push({
         label: `${plant.plantName} (${plant.placeName})`,
         value: plant.plantNo,
-      }
-    ))
+      })
+    }
 
     setOptions(options);
   }
@@ -35,10 +48,10 @@ const ModifyPlaceOfPlantForm = (props) => {
 
   const submit = async () => {
     // 장소 업데이트
-    const data = {placeNo: placeNo, plantList: selectedPlantList}
-    await modifyPlantPlace(data); // void
+    await modifyPlantPlace({placeNo: placeNo, plantList: selectedPlantList});
+    const res = await getData(`/place/${placeNo}`);
+    console.log("res", res);
 
-    const res = await getData(`/place/${placeNo}`)
     setMoveFormVisible(false);
     navigate("", {replace: true, state: res})
   }

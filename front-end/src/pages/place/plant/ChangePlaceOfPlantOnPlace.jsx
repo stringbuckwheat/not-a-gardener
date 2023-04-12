@@ -5,10 +5,17 @@ import {useNavigate, useParams} from 'react-router-dom';
 import modifyPlantPlace from 'src/api/backend-api/place/modifyPlantPlace';
 import getPlaceListForOptionExceptHere from 'src/api/service/getPlaceListForOptionExceptHere';
 import {SwapRightOutlined} from '@ant-design/icons';
-import {CButton} from '@coreui/react';
+import ValidationSubmitButton from "../../../components/button/ValidationSubmitButton";
 
-const ModifyPlantPlaceForm = (props) => {
-  const {setSelectedRowKeys, selectedPlantNo} = props;
+/**
+ * 장소 페이지에서 (이미 이 장소에 있는) 식물 다른 장소로 변경하기
+ * 체크박스 눌러서 선택한 식물 다른 장소로 보냄
+ * @param setSelectedRowKeys
+ * @param selectedPlantNo
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const ChangePlaceOfPlantOnPlace = ({setSelectedRowKeys, selectedPlantNo}) => {
 
   // 이 장소의 번호
   const thisPlaceNo = useParams().placeNo;
@@ -40,20 +47,11 @@ const ModifyPlantPlaceForm = (props) => {
     getPlaceListForOption();
   }, [])
 
-  const handleSelect = (value) => {
-    setPlaceNo(value);
-  }
 
   const modifyPlaceOfPlant = async () => {
-    const data = {
-      placeNo: placeNo,
-      plantList: selectedPlantNo
-    }
-
-    const res = await modifyPlantPlace(data);
-
+    await modifyPlantPlace({placeNo: placeNo, plantList: selectedPlantNo});
     setSelectedRowKeys([]);
-    navigate(`/place/${placeNo}`, {replace: true, state: res});
+    navigate(`/place/${placeNo}`);
   }
 
   return (
@@ -61,20 +59,22 @@ const ModifyPlantPlaceForm = (props) => {
       <Space>
         <SwapRightOutlined
           className="font-size-20 text-success"/>
-        {`${props.selectedPlantNo.length}개의 식물을`}
+        {`${selectedPlantNo.length}개의 식물을`}
         <Select
+          size={"small"}
           className="width-100"
-          onChange={handleSelect}
+          onChange={(value) => setPlaceNo(value)}
           options={placeList}/>
         으로
-        {
-          placeNo !== 0
-            ? <CButton onClick={modifyPlaceOfPlant} color="success" variant="outline" size="sm">이동</CButton>
-            : <CButton disabled color="dark" variant="outline" size="sm">이동</CButton>
-        }
+        <ValidationSubmitButton
+          size={"small"}
+          isValid={placeNo !== 0}
+          onClickInvalidMsg={"장소는 비워둘 수 없어요"}
+          title={"이동"}
+          onClickValid={modifyPlaceOfPlant}/>
       </Space>
     </div>
   )
 }
 
-export default ModifyPlantPlaceForm;
+export default ChangePlaceOfPlantOnPlace;

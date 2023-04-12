@@ -4,6 +4,13 @@ import {useState} from "react";
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 import postData from "../../api/backend-api/common/postData";
 
+/**
+ * 장소 추가
+ * @param addPlace
+ * @param closeAddForm
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const AddPlace = ({addPlace, closeAddForm}) => {
   const [place, setPlace] = useState({
     placeName: "",

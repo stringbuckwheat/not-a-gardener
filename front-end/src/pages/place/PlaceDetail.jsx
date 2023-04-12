@@ -1,15 +1,21 @@
-import {useParams} from 'react-router-dom'
+import {useLocation, useParams} from 'react-router-dom'
 import DetailLayout from 'src/components/data/layout/DetailLayout';
 import PlaceTag from './PlaceTag';
 import {useEffect, useState} from 'react';
 import ModifyPlace from './ModifyPlace';
-import PlaceTableForPlant from 'src/components/table/PlaceTableForPlant';
+import PlaceTableForPlant from 'src/pages/place/plant/PlantListInPlace';
 import DeletePlaceModal from "../../components/modal/DeletePlaceModal";
 import getData from "../../api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";
 
+/**
+ * 장소 상세정보
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const PlaceDetail = () => {
   const placeNo = useParams().placeNo;
+  const state = useLocation().state;
 
   const [loading, setLoading] = useState(true);
   const [place, setPlace] = useState({});
@@ -32,11 +38,27 @@ const PlaceDetail = () => {
   }
 
   useEffect(() => {
-    onMountPlaceDetail();
-  }, []);
+    if (state == null) {
+      return;
+    }
 
-  if(loading){
-    return <Loading />
+    if (!state.place && !state.plantList) {
+      // 장소 수정
+      setPlace(state);
+      return;
+    }
+
+    // 다른 장소의 식물 이동
+    setPlace(state.place);
+    setPlantList(state.plantList);
+  }, [state])
+
+  useEffect(() => {
+    onMountPlaceDetail();
+  }, [placeNo]);
+
+  if (loading) {
+    return <Loading/>
   }
 
   return (

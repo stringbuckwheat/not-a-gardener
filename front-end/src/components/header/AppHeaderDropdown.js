@@ -2,8 +2,6 @@ import React from 'react'
 import {
   CAvatar,
   CDropdown,
-  CDropdownDivider,
-  CDropdownHeader,
   CDropdownItem,
   CDropdownMenu,
   CDropdownToggle,
@@ -16,7 +14,7 @@ import CIcon from '@coreui/icons-react'
 import sprout from './../../assets/images/sprout.png'
 import LogOut from 'src/utils/function/logout'
 import {Space, Tag} from "antd";
-import {CaretDownOutlined, DownOutlined} from "@ant-design/icons";
+import {CaretDownOutlined} from "@ant-design/icons";
 
 // account, setting 부분
 const AppHeaderDropdown = () => {

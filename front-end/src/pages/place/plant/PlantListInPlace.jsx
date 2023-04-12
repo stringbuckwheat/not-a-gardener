@@ -1,11 +1,19 @@
 import {Table} from 'antd';
 import {useState} from 'react';
-import ModifyPlantPlaceForm from '../form/ModifyPlantPlaceForm';
-import AddPlantInPlaceBtns from '../form/AddPlantInPlaceBtns';
-import getPlantListForPlacePlantTable from "../../utils/function/getPlantListForPlacePlantTable";
-import deleteData from "../../api/backend-api/common/deleteData";
-import plantTableColArrInPlace from "../../utils/dataArray/plantTableColArrInPlace";
+import ChangePlaceOfPlantOnPlace from './ChangePlaceOfPlantOnPlace';
+import AddPlantInPlaceButtons from './AddPlantInPlaceButtons';
+import getPlantListForPlacePlantTable from "../../../utils/function/getPlantListForPlacePlantTable";
+import deleteData from "../../../api/backend-api/common/deleteData";
+import plantTableColArrInPlace from "../../../utils/dataArray/plantTableColArrInPlace";
 
+/**
+ * 장소 페이지 하단, 이 장소에 속한 식물들
+ * @param plantList
+ * @param setPlantList
+ * @param placeName
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const PlaceTableForPlant = ({plantList, setPlantList, placeName}) => {
   // select
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -19,6 +27,7 @@ const PlaceTableForPlant = ({plantList, setPlantList, placeName}) => {
     onChange: onSelectChange,
   };
 
+  // 체크박스 눌렀는지
   const hasSelected = selectedRowKeys.length > 0;
 
   const deletePlant = (plantNo) => {
@@ -31,11 +40,11 @@ const PlaceTableForPlant = ({plantList, setPlantList, placeName}) => {
     <div className="mt-4">
       {
         hasSelected
-          ? <ModifyPlantPlaceForm
+          ? <ChangePlaceOfPlantOnPlace
             selectedPlantNo={selectedRowKeys}
             setSelectedRowKeys={setSelectedRowKeys}
           />
-          : <AddPlantInPlaceBtns
+          : <AddPlantInPlaceButtons
             placeName={placeName}
             plantList={plantList}
             setPlantList={setPlantList}/>

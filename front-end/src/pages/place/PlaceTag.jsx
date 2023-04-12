@@ -1,9 +1,13 @@
 import {Space, Tag} from 'antd';
 
-const PlaceTag = (props) => {
-  const place = props.place;
-  const howManyPlant = props.howManyPlant;
-
+/**
+ * 장소 상세페이지 내 정보 태그
+ * @param place
+ * @param howManyPlant
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const PlaceTag = ({place, howManyPlant}) => {
   let artificialLightTag = "식물등을 사용하지 않아요";
 
   if (place.artificialLight === "사용") {

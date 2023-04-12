@@ -5,7 +5,16 @@ import PlaceCard from "src/components/card/PlaceCard";
 import ListHeader from "src/components/data/header/ListHeader";
 import AddPlace from "./AddPlace";
 
-const PlaceList = ({placeList, setPlaceList, originPlaceList, addPlace}) => {
+/**
+ * 장소 (카드) 리스트
+ * @param placeList
+ * @param setPlaceList
+ * @param originPlaceList
+ * @param setOriginPlaceList
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const PlaceList = ({placeList, setPlaceList, originPlaceList, setOriginPlaceList}) => {
   // 검색
   const [searchWord, setSearchWord] = useState("");
 
@@ -21,6 +30,13 @@ const PlaceList = ({placeList, setPlaceList, originPlaceList, addPlace}) => {
       setPlaceList(originPlaceList);
     }
   }, [searchWord])
+
+  const addPlace = (place) => {
+    placeList.unshift(place);
+
+    setPlaceList(placeList => placeList);
+    setOriginPlaceList(placeList => placeList);
+  }
 
   /// 정렬
   const [sort, setSort] = useState("");
