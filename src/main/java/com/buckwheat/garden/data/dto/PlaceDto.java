@@ -26,7 +26,7 @@ public class PlaceDto {
          * @param member FK 매핑
          * @return Place
          */
-        public Place toEntityWithMember(Member member){
+        public Place toEntityWith(Member member){
             return Place.builder()
                     .placeNo(placeNo)
                     .placeName(placeName)
@@ -59,6 +59,17 @@ public class PlaceDto {
                     .artificialLight(place.getArtificialLight())
                     .option(place.getOption())
                     .plantListSize(place.getPlantList().size())
+                    .createDate(place.getCreateDate())
+                    .build();
+        }
+
+        public static PlaceCard fromNew(Place place){
+            return PlaceCard.builder()
+                    .placeNo(place.getPlaceNo())
+                    .placeName(place.getPlaceName())
+                    .artificialLight(place.getArtificialLight())
+                    .option(place.getOption())
+                    .plantListSize(0)
                     .createDate(place.getCreateDate())
                     .build();
         }

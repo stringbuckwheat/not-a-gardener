@@ -63,16 +63,6 @@ public class PlantController {
     }
 
     /**
-     * 물주기 미루기(화분 덜 말랐을 때)
-     * @param plantNo
-     * @return
-     */
-    @PutMapping("/{plantNo}/average-watering-period")
-    public PlantDto.PlantResponse postponeAverageWateringPeriod(@PathVariable("plantNo") int plantNo){
-        return plantService.postponeAverageWateringPeriod(plantNo);
-    }
-
-    /**
      * 여러 식물의 장소를 한 번에 바꿈
      * @param modifyPlantPlaceDto
      * @return

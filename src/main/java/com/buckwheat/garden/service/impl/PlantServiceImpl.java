@@ -1,10 +1,10 @@
 package com.buckwheat.garden.service.impl;
 
+import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.data.dto.GardenDto;
 import com.buckwheat.garden.data.dto.PlaceDto;
 import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.entity.Member;
-import com.buckwheat.garden.data.entity.Place;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.repository.PlaceRepository;
 import com.buckwheat.garden.repository.PlantRepository;
@@ -13,10 +13,10 @@ import com.buckwheat.garden.util.GardenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @Slf4j
@@ -25,6 +25,7 @@ public class PlantServiceImpl implements PlantService {
     private final PlantRepository plantRepository;
     private final PlaceRepository placeRepository;
     private final GardenUtil gardenUtil;
+    private final PlantDao plantDao;
 
     /**
      * 하나의 장소 정보 반환
@@ -34,11 +35,7 @@ public class PlantServiceImpl implements PlantService {
      */
     @Override
     public PlantDto.PlantResponse getOnePlant(int plantNo) {
-        // @EntityGraph
-        Plant plant = plantRepository.findByPlantNo(plantNo).orElseThrow(NoSuchElementException::new);
-
-        // DTO로 변환
-        return PlantDto.PlantResponse.from(plant);
+        return PlantDto.PlantResponse.from(plantDao.getPlantWithPlaceAndWatering(plantNo));
     }
 
     @Override
@@ -46,7 +43,7 @@ public class PlantServiceImpl implements PlantService {
         List<PlantDto.PlantResponse> plantList = new ArrayList<>();
 
         // @EntityGraph 메소드
-        for (Plant p : plantRepository.findByMember_MemberNoOrderByCreateDateDesc(memberNo)) {
+        for (Plant p : plantDao.getPlantListByMemberNo(memberNo)) {
             plantList.add(PlantDto.PlantResponse.from(p));
         }
 
@@ -54,7 +51,7 @@ public class PlantServiceImpl implements PlantService {
     }
 
     public GardenDto.GardenResponse getGardenResponseFrom(int plantNo, int memberNo){
-        Plant plant = plantRepository.findByPlantNo(plantNo).orElseThrow(NoSuchElementException::new);
+        Plant plant = plantDao.getPlantWithPlaceAndWatering(plantNo);
 
         PlantDto.PlantResponse plantResponse = PlantDto.PlantResponse.from(plant);
         GardenDto.GardenDetail gardenDetail = gardenUtil.getGardenDetail(plant, memberNo);
@@ -64,53 +61,29 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public GardenDto.GardenResponse addPlant(PlantDto.PlantRequest plantRequestDto, Member member) {
-        Place place = placeRepository.findByPlaceNo(plantRequestDto.getPlaceNo()).orElseThrow(NoSuchElementException::new);
-        Plant plant = plantRepository.save(plantRequestDto.toEntityWith(member, place));
-
-        return getGardenResponseFrom(plant.getPlantNo(), member.getMemberNo());
+        Plant plant = plantDao.save(plantRequestDto, member.getMemberNo());
+        return getGardenResponseFrom(plant.getPlantNo(), member.getMemberNo()); // TODO
     }
 
     @Override
+    @Transactional
     public GardenDto.GardenResponse modifyPlant(PlantDto.PlantRequest plantRequest, Member member) {
-        Place place = placeRepository.findByPlaceNo(plantRequest.getPlaceNo()).orElseThrow(NoSuchElementException::new);
-        Plant plant = plantRepository.findByPlantNo(plantRequest.getPlantNo()).orElseThrow(NoSuchElementException::new);
-
-        Plant updatedPlant = plant.update(plantRequest, place);
-        plantRepository.save(updatedPlant);
+        Plant plant = plantDao.update(plantRequest);
 
         // GardenDto를 돌려줘야 함
-        PlantDto.PlantResponse plantResponse = PlantDto.PlantResponse.from(updatedPlant);
-        GardenDto.GardenDetail gardenDetail = gardenUtil.getGardenDetail(updatedPlant, member.getMemberNo());
+        PlantDto.PlantResponse plantResponse = PlantDto.PlantResponse.from(plant);
+        GardenDto.GardenDetail gardenDetail = gardenUtil.getGardenDetail(plant, member.getMemberNo());
 
         return new GardenDto.GardenResponse(plantResponse, gardenDetail);
     }
 
     @Override
-    public PlantDto.PlantResponse postponeAverageWateringPeriod(int plantNo) {
-        Plant plant = plantRepository.findByPlantNo(plantNo).orElseThrow(NoSuchElementException::new);
-
-        // 물주기 하루 미룸!
-        Plant updatedPlant = plantRepository.save(plant.updateAverageWateringPeriod(plant.getAverageWateringPeriod() + 1));
-
-        return PlantDto.PlantResponse.from(updatedPlant);
-    }
-
-    @Override
     public PlaceDto.PlaceResponseDto modifyPlantPlace(PlaceDto.ModifyPlantPlaceDto modifyPlantPlaceDto) {
-        Place place = placeRepository.findByPlaceNo(modifyPlantPlaceDto.getPlaceNo()).orElseThrow(NoSuchElementException::new);
-
-        for (int plantNo : modifyPlantPlaceDto.getPlantList()) {
-            Plant plant = plantRepository.findById(plantNo).orElseThrow(NoSuchElementException::new);
-
-            plant.updatePlace(place);
-            plantRepository.save(plant);
-        }
-
-        return PlaceDto.PlaceResponseDto.from(place);
+        return PlaceDto.PlaceResponseDto.from(plantDao.updatePlantPlace(modifyPlantPlaceDto));
     }
 
     @Override
     public void deletePlantByPlantNo(int plantNo) {
-        plantRepository.deleteById(plantNo);
+        plantDao.deletePlantByPlantNo(plantNo);
     }
 }

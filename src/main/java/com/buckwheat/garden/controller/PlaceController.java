@@ -44,7 +44,7 @@ public class PlaceController {
      * @return
      */
     @PostMapping("")
-    public PlaceDto.PlaceResponseDto addPlace(@RequestBody PlaceDto.PlaceRequestDto placeRequestDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
+    public PlaceDto.PlaceCard addPlace(@RequestBody PlaceDto.PlaceRequestDto placeRequestDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
         return placeService.addPlace(placeRequestDto, userPrincipal.getMember());
     }
 
