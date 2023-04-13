@@ -13,7 +13,7 @@ public class WateringDto {
     @NoArgsConstructor
     @Getter
     @ToString
-    public static class WateringRequest {
+    public static class Request {
         private int wateringNo;
         private int plantNo;
         private int chemicalNo;
@@ -77,10 +77,25 @@ public class WateringDto {
     @Builder
     @Getter
     @ToString
-    public static class WateringModifyResponse {
+    public static class AfterWatering {
         private PlantDto.PlantResponse plant;
         private List<WateringForOnePlant> wateringList;
         private WateringMsg wateringMsg;
+
+        public static AfterWatering from(WateringMsg wateringMsg, List<WateringForOnePlant> wateringList) {
+            return WateringDto.AfterWatering.builder()
+                    .wateringMsg(wateringMsg)
+                    .wateringList(wateringList)
+                    .build();
+        }
+
+        public static AfterWatering from(PlantDto.PlantResponse plant, WateringMsg wateringMsg, List<WateringForOnePlant> wateringList) {
+            return AfterWatering.builder()
+                    .plant(plant)
+                    .wateringMsg(wateringMsg)
+                    .wateringList(wateringList)
+                    .build();
+        }
     }
 
     @AllArgsConstructor
@@ -164,8 +179,8 @@ public class WateringDto {
                     .build();
         }
 
-        public static ByDate from(Watering watering, Plant plant, Chemical chemical){
-            if(chemical == null){
+        public static ByDate from(Watering watering, Plant plant, Chemical chemical) {
+            if (chemical == null) {
                 return ByDate.builder()
                         .wateringNo(watering.getWateringNo())
                         .plantNo(plant.getPlantNo())
