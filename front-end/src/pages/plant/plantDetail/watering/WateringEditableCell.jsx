@@ -1,6 +1,6 @@
 import {DatePicker, Form, Select} from "antd";
 import locale from 'antd/es/date-picker/locale/ko_KR';
-import getDisabledDate from "../../../utils/function/getDisabledDate";
+import getDisabledDate from "../../../../utils/function/getDisabledDate";
 
 const WateringEditableCell = ({
                                 editWatering,
@@ -14,7 +14,7 @@ const WateringEditableCell = ({
                                 children,
                                 chemicalList,
                                 ...restProps
-                              } ) => {
+                              }) => {
 
   const inputNode = inputType === 'date'
     ? <DatePicker

@@ -14,17 +14,16 @@ import weekOfYear from 'dayjs/plugin/weekOfYear'
 import weekYear from 'dayjs/plugin/weekYear'
 import updateData from "src/api/backend-api/common/updateData";
 import WateringEditableCell from "./WateringEditableCell";
-import getChemicalListForSelect from "../../../api/service/getChemicalListForSelect";
-import getWateringListForTable from "../../../utils/function/getWateringListForTable";
-import getWateringTableColumnArray from "../../../utils/function/getWateringTableColumnArray";
-import getMergedColumns from "../../../utils/function/getMergedColumns";
+import getChemicalListForSelect from "../../../../api/service/getChemicalListForSelect";
+import getWateringListForTable from "../../../../utils/function/getWateringListForTable";
+import getWateringTableColumnArray from "../../../../utils/function/getWateringTableColumnArray";
+import getMergedColumns from "../../../../utils/function/getMergedColumns";
 
 /**
- * plant detail 아래쪽에 table로 들어감
+ * 한 식물의 물주기 정보 plant detail 아래쪽 table
  * @param {*} props
  * @returns
  */
-
 const WateringList = ({plant, setPlant, wateringList, setWateringList}) => {
   dayjs.extend(customParseFormat)
   dayjs.extend(advancedFormat)

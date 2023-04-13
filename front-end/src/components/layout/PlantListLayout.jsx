@@ -1,5 +1,5 @@
 import {CButton, CCard, CCardBody, CCol} from '@coreui/react'
-import Search from "../header/search/Search";
+import Search from "../data/header/search/Search";
 import {Space} from "antd";
 
 const PlantListLayout = ({title, tags, bottomData, setSearchWord, addFormOpen}) => {

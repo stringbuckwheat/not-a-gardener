@@ -1,10 +1,19 @@
-import PlantTable from "../../components/table/PlantTable";
-import PlantListLayout from "src/components/data/layout/PlantListLayout";
-import PlantListTag from "../../components/tag/PlantListTag";
+import PlantTable from "./plantDetail/PlantTable";
+import PlantListLayout from "src/components/layout/PlantListLayout";
+import PlantListTag from "./PlantListTag";
 import {useEffect, useState} from "react";
 import AddPlant from "./AddPlant";
-import getPlaceListForSelect from "../../api/service/getPlaceListForSelect";
+import getData from "../../api/backend-api/common/getData";
 
+/**
+ * 식물 리스트 메인 페이지
+ * @param plantList
+ * @param setPlantList
+ * @param originPlantList
+ * @param addPlant
+ * @returns {JSX.Element} 식물 추가 페이지, 식물 리스트 페이지
+ * @constructor
+ */
 const PlantList = ({plantList, setPlantList, originPlantList, addPlant}) => {
   const [placeList, setPlaceList] = useState([])
   const [searchWord, setSearchWord] = useState("");
@@ -14,6 +23,21 @@ const PlantList = ({plantList, setPlantList, originPlantList, addPlant}) => {
     const searchedList = originPlantList.filter(plant => plant.plant.plantName.includes(searchWord));
     setPlantList(searchedList);
   }
+
+  const onMountPlantList = async () => {
+    const forSelect = (await getData("/place")).map((place) => (
+      {
+        label: place.placeName,
+        value: place.placeNo
+      }
+    ))
+
+    setPlaceList(forSelect);
+  }
+
+  useEffect(() => {
+    onMountPlantList();
+  }, []);
 
   useEffect(() => {
     if (searchWord !== "") {
@@ -26,13 +50,15 @@ const PlantList = ({plantList, setPlantList, originPlantList, addPlant}) => {
   const switchAddForm = () => setIsAddFormOpened(!isAddFormOpened);
 
   const addFormOpen = async () => {
-    setPlaceList(await getPlaceListForSelect());
     switchAddForm();
   }
 
   return isAddFormOpened ? (
     <AddPlant
-      placeList={placeList}
+      placeList={() => placeList.map((place) => ({
+        key: place.placeNo,
+        value: place.placeName
+      }))}
       addPlant={addPlant}
       closeAddForm={switchAddForm}
     />

@@ -4,6 +4,7 @@ import NoItem from "src/components/empty/NoItem";
 import ChemicalList from "./ChemicalList";
 import Loading from "../../components/data/Loading";
 import getData from "../../api/backend-api/common/getData";
+import {useLocation} from "react-router-dom";
 
 const Chemical = () => {
   const [isLoading, setLoading] = useState(true);

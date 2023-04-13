@@ -1,22 +1,18 @@
 import {useState} from "react";
 import ItemForm from "src/components/form/ItemForm";
-import SubmitForAddButton from "src/components/button/SubmitForAddButton";
-import {useLocation} from "react-router-dom";
 import getPlantFormArray from "../../utils/function/getPlantFormArray";
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 import postData from "../../api/backend-api/common/postData";
 
 const AddPlant = ({placeList, addPlant, closeAddForm}) => {
-  const initPlant = {
+  const [plant, setPlant] = useState({
     plantName: "",
     plantSpecies: "",
     placeNo: placeList.length == 0 ? 0 : placeList[0].key,
     medium: "흙과 화분",
     earlyWateringPeriod: 0,
     birthday: ""
-  }
-
-  const [plant, setPlant] = useState(initPlant);
+  });
 
   const onChange = (e) => {
     const {name, value} = e.target;

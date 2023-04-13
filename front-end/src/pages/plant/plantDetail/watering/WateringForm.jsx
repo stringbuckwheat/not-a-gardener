@@ -8,19 +8,20 @@ import {useState} from 'react';
 import postData from 'src/api/backend-api/common/postData';
 import getDisabledDate from 'src/utils/function/getDisabledDate';
 
-
+/**
+ * 물주기 폼
+ * @param plantNo
+ * @param closeForm
+ * @param chemicalList
+ * @param wateringCallBack
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const WateringForm = ({plantNo, closeForm, chemicalList, wateringCallBack}) => {
-  const [wateringDate, setWateringDate] = useState("");
-  const [chemicalNo, setChemicalNo] = useState(0);
+  const [watering, setWatering] = useState({plantNo, chemicalNo: chemicalList[0].value});
 
   const onSubmit = async () => {
-    const data = {
-      plantNo: plantNo,
-      chemicalNo: chemicalNo,
-      wateringDate: wateringDate
-    }
-
-    const res = await postData(`/plant/${plantNo}/watering`, data);
+    const res = await postData(`/plant/${plantNo}/watering`, watering);
     wateringCallBack(res);
 
     closeForm();
@@ -40,9 +41,7 @@ const WateringForm = ({plantNo, closeForm, chemicalList, wateringCallBack}) => {
                 name="wateringDate"
                 className="width-full"
                 disabledDate={getDisabledDate}
-                onChange={(date, dateString) => {
-                  setWateringDate(dateString)
-                }}
+                onChange={(date, dateString) => {setWatering(() => ({...watering, wateringDate: dateString}))}}
                 locale={locale}/>
             </CCol>
             <CCol md={6} xs={12}>
@@ -50,9 +49,7 @@ const WateringForm = ({plantNo, closeForm, chemicalList, wateringCallBack}) => {
               <Select
                 className="width-full"
                 defaultValue="맹물"
-                onChange={(value) => {
-                  setChemicalNo(value)
-                }}
+                onChange={(value) => {setWatering(() => ({...watering, chemicalNo: value}))}}
                 options={chemicalList}
                 name="chemicalNo"
               />
@@ -62,7 +59,7 @@ const WateringForm = ({plantNo, closeForm, chemicalList, wateringCallBack}) => {
           <div className="mt-3 d-flex justify-content-end">
             <Space>
               <CButton onClick={closeForm} type="button" size="sm" color='dark' variant="outline">뒤로 가기</CButton>
-              {wateringDate !== ''
+              {watering.wateringDate !== ''
                 ? <CButton onClick={onSubmit} color="primary" size="sm" shape="rounded-pill">제출</CButton>
                 : <CButton type="button" size="sm" color='dark' variant="outline" disabled>제출</CButton>
               }

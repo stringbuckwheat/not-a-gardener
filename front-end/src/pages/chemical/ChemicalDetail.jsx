@@ -1,4 +1,4 @@
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react"
 import ChemicalTag from "src/components/tag/ChemicalTag";
 import DetailLayout from "src/components/data/layout/DetailLayout";
@@ -8,6 +8,8 @@ import ModifyFormButtons from "src/components/button/ModifyFormButtons";
 import onMount from "src/api/service/onMount";
 import getChemicalFormArray from "../../utils/function/getChemicalFormArray";
 import wateringTableColumnArray from "../../utils/dataArray/wateringTableColumnInChemicalArray";
+import RemoveModal from "../../components/modal/RemoveModal";
+import deleteData from "../../api/backend-api/common/deleteData";
 
 const ChemicalDetail = () => {
   const state = useLocation().state;
@@ -37,6 +39,13 @@ const ChemicalDetail = () => {
     setOnModify(false);
   }
 
+  const navigate = useNavigate();
+
+  const remove = async () => {
+    await deleteData("/chemical", chemical.chemicalNo);
+    navigate("/chemical", {replace: true});
+  }
+
   return (
     !onModify
       ?
@@ -47,7 +56,12 @@ const ChemicalDetail = () => {
         deleteTitle="비료/살균/살충제"
         tags={<ChemicalTag chemical={chemical} wateringListSize={wateringList.length}/>}
         onClickModifyBtn={onClickModifyBtn}
-        deleteTooltipMsg="삭제한 약품은 되돌릴 수 없습니다"
+        deleteModal={
+          <RemoveModal
+            remove={remove}
+            modalTitle={"이 비료/살균/살충제를 삭제하실 건가요?"}
+            deleteButtonTitle={"삭제하기"}
+            modalContent={"이 비료/살균/살충제를 준 물주기 기록이 모두 삭제됩니다"} />}
         bottomData={<Table
           columns={wateringTableColumnArray}
           dataSource={wateringList}/>}
