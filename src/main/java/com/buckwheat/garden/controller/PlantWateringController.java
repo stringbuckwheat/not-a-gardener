@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/plant/{plantNo}/watering")
 public class PlantWateringController {
     private final PlantWateringService plantWateringService;
 
@@ -20,8 +21,8 @@ public class PlantWateringController {
      * @param plantNo
      * @return
      */
-    @GetMapping("/plant/{plantNo}/watering")
-    public List<WateringDto.WateringForOnePlant> getWateringListForPlant(@PathVariable("plantNo") int plantNo){
+    @GetMapping("")
+    public List<WateringDto.WateringForOnePlant> getWateringListForPlant(@PathVariable(value = "plantNo") int plantNo){
         return plantWateringService.getWateringListForPlant(plantNo);
     }
 
@@ -30,8 +31,8 @@ public class PlantWateringController {
      * @param wateringRequest
      * @return
      */
-    @PostMapping("/plant/{plantNo}/watering")
-    public WateringDto.WateringModifyResponse addWatering(@RequestBody WateringDto.WateringRequest wateringRequest){
+    @PostMapping("")
+    public WateringDto.AfterWatering addWatering(@RequestBody WateringDto.Request wateringRequest){
         return plantWateringService.addWatering(wateringRequest);
     }
 
@@ -40,8 +41,8 @@ public class PlantWateringController {
      * @param wateringRequest
      * @return
      */
-    @PutMapping("/plant/{plantNo}/watering/{wateringNo}")
-    public WateringDto.WateringModifyResponse updateWatering(@RequestBody WateringDto.WateringRequest wateringRequest){
+    @PutMapping("/{wateringNo}")
+    public WateringDto.AfterWatering updateWatering(@RequestBody WateringDto.Request wateringRequest){
         return plantWateringService.modifyWatering(wateringRequest);
     }
 
@@ -49,8 +50,8 @@ public class PlantWateringController {
      * 한 식물의 물주기 기록 '한 개' 지우기
      * @param wateringNo
      */
-    @DeleteMapping("/plant/{plantNo}/watering/{wateringNo}")
-    public void deleteWatering(@PathVariable int wateringNo){
+    @DeleteMapping("/{wateringNo}")
+    public void deleteWatering(@PathVariable("wateringNo") int wateringNo){
         plantWateringService.deleteWatering(wateringNo);
     }
 
@@ -58,8 +59,8 @@ public class PlantWateringController {
      * 해당 식물의 물주기 모두 지우기
      * @param plantNo
      */
-    @DeleteMapping("/plant/{plantNo}/watering")
-    public void deleteAllFromPlant(@PathVariable int plantNo) {
+    @DeleteMapping("")
+    public void deleteAllFromPlant(@PathVariable("plantNo") int plantNo) {
         plantWateringService.deleteAllFromPlant(plantNo);
     }
 }
