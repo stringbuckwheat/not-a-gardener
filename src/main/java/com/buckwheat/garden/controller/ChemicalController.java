@@ -24,7 +24,7 @@ public class ChemicalController {
      * @return 모든 비료 리스트 반환
      */
     @GetMapping("")
-    public List<ChemicalDto.ChemicalResponse> getChemicalList(@AuthenticationPrincipal UserPrincipal userPrincipal){
+    public List<ChemicalDto.Response> getChemicalList(@AuthenticationPrincipal UserPrincipal userPrincipal){
         return chemicalService.getChemicalList(userPrincipal.getMember().getMemberNo());
     }
 
@@ -34,7 +34,7 @@ public class ChemicalController {
      * @return 해당 약품의 주기 리스트(WateringDto)
      */
     @GetMapping("/{chemicalNo}/watering")
-    public List<WateringDto.WateringResponseInChemical> getWateringListByChemical(@PathVariable int chemicalNo){
+    public List<WateringDto.ResponseInChemical> getWateringListByChemical(@PathVariable int chemicalNo){
         return chemicalService.getWateringListByChemical(chemicalNo);
     }
 
@@ -45,7 +45,7 @@ public class ChemicalController {
      * @return 수정한 ChemicalDTO
      */
     @PostMapping("")
-    public ChemicalDto.ChemicalResponse addChemical(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ChemicalDto.ChemicalRequest chemicalRequest){
+    public ChemicalDto.Response addChemical(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ChemicalDto.Request chemicalRequest){
         return chemicalService.addChemical(chemicalRequest, userPrincipal.getMember());
     }
 
@@ -56,7 +56,7 @@ public class ChemicalController {
      * @return 수정한 Chemical
      */
     @PutMapping("/{chemicalNo}")
-    public ChemicalDto.ChemicalResponse updateChemical(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ChemicalDto.ChemicalRequest chemicalRequest){
+    public ChemicalDto.Response updateChemical(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ChemicalDto.Request chemicalRequest){
         return chemicalService.updateChemical(chemicalRequest, userPrincipal.getMember());
     }
 

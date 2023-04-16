@@ -56,7 +56,7 @@ public class Plant {
     @OrderBy("watering_date desc")
     private List<Watering> wateringList = new ArrayList<>();
 
-    public Plant update(PlantDto.PlantRequest plantRequest, Place place){
+    public Plant update(PlantDto.Request plantRequest, Place place){
         this.plantName = plantRequest.getPlantName();
         this.medium = plantRequest.getMedium();
         this.plantSpecies = plantRequest.getPlantSpecies();

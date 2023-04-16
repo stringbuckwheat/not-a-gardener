@@ -25,7 +25,7 @@ public class WateringController {
     }
 
     @PostMapping("")
-    public WateringDto.ByDate addWatering(@RequestBody WateringDto.WateringRequest wateringRequest){
+    public WateringDto.ByDate addWatering(@RequestBody WateringDto.Request wateringRequest){
         return wateringService.addWatering(wateringRequest);
     }
 }

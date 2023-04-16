@@ -23,7 +23,7 @@ public class PlaceController {
      * @return 유저의 전체 장소 리스트, 카드용 DTO에 담아 보낸다.
      */
     @GetMapping("")
-    public List<PlaceDto.PlaceCard> getPlaceList(@AuthenticationPrincipal UserPrincipal userPrincipal){
+    public List<PlaceDto.Card> getPlaceList(@AuthenticationPrincipal UserPrincipal userPrincipal){
         return placeService.getPlaceList(userPrincipal.getMember().getMemberNo());
     }
 
@@ -39,24 +39,24 @@ public class PlaceController {
 
     /**
      * 장소 추가
-     * @param placeRequestDto
+     * @param placeRequest
      * @param userPrincipal
      * @return
      */
     @PostMapping("")
-    public PlaceDto.PlaceCard addPlace(@RequestBody PlaceDto.PlaceRequestDto placeRequestDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        return placeService.addPlace(placeRequestDto, userPrincipal.getMember());
+    public PlaceDto.Card addPlace(@RequestBody PlaceDto.Request placeRequest, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        return placeService.addPlace(placeRequest, userPrincipal.getMember());
     }
 
     /**
      * 장소 수정
-     * @param placeRequestDto
+     * @param placeRequest
      * @param userPrincipal Member
      * @return 수정한 장소 정보
      */
     @PutMapping("/{placeNo}")
-    public PlaceDto.PlaceResponseDto modifyPlace(@RequestBody PlaceDto.PlaceRequestDto placeRequestDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        return placeService.modifyPlace(placeRequestDto, userPrincipal.getMember());
+    public PlaceDto.Response modifyPlace(@RequestBody PlaceDto.Request placeRequest, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        return placeService.modifyPlace(placeRequest, userPrincipal.getMember());
     }
 
     /**

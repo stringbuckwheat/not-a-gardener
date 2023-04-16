@@ -20,7 +20,7 @@ import java.util.List;
 public class GardenUtil {
     private final WateringRepository wateringRepository;
 
-    public GardenDto.GardenDetail getGardenDetail(Plant plant, int memberNo) {
+    public GardenDto.Detail getGardenDetail(Plant plant, int memberNo) {
         String anniversary = "";
 
         // 키운 지 며칠이나 지났는지 (nullable)
@@ -30,10 +30,10 @@ public class GardenUtil {
 
         // 물주기 기록이 없으면
         if (plant.getWateringList().size() == 0) {
-            return GardenDto.GardenDetail.from(null, anniversary, -1, WateringCode.NO_RECORD.getCode(), null);
+            return GardenDto.Detail.from(null, anniversary, -1, WateringCode.NO_RECORD.getCode(), null);
         }
 
-        WateringDto.WateringResponse latestWatering = WateringDto.WateringResponse.from(plant.getWateringList().get(0));
+        WateringDto.Response latestWatering = WateringDto.Response.from(plant.getWateringList().get(0));
 
         int wateringDDay = getWateringDDay(plant.getAverageWateringPeriod(), plant.getWateringList().get(0).getWateringDate());
         int wateringCode = getWateringCode(plant.getAverageWateringPeriod(), wateringDDay);
@@ -41,15 +41,15 @@ public class GardenUtil {
         // chemicalCode: 물을 줄 식물에 대해서 맹물을 줄지 비료/약품 희석액을 줄지 알려주는 용도
         GardenDto.ChemicalCode chemicalCode = getChemicalCode(plant.getPlantNo(), memberNo);
 
-        return GardenDto.GardenDetail.from(latestWatering, anniversary, wateringDDay, wateringCode, chemicalCode);
+        return GardenDto.Detail.from(latestWatering, anniversary, wateringDDay, wateringCode, chemicalCode);
     }
 
-    public GardenDto.GardenDetail getGardenDetail(Plant plant, int memberNo, int wateringDDay, int wateringCode) {
-        WateringDto.WateringResponse latestWatering = null;
+    public GardenDto.Detail getGardenDetail(Plant plant, int memberNo, int wateringDDay, int wateringCode) {
+        WateringDto.Response latestWatering = null;
         String anniversary = "";
 
         if (plant.getWateringList().size() > 0) {
-            latestWatering = WateringDto.WateringResponse.from(plant.getWateringList().get(0));
+            latestWatering = WateringDto.Response.from(plant.getWateringList().get(0));
         }
 
         if (plant.getBirthday() != null) {
@@ -59,7 +59,7 @@ public class GardenUtil {
         // chemicalCode: 물을 줄 식물에 대해서 맹물을 줄지 비료/약품 희석액을 줄지 알려주는 용도
         GardenDto.ChemicalCode chemicalCode = getChemicalCode(plant.getPlantNo(), memberNo); // FertilizerNo or -1
 
-        return GardenDto.GardenDetail.from(latestWatering, anniversary, wateringDDay, wateringCode, chemicalCode);
+        return GardenDto.Detail.from(latestWatering, anniversary, wateringDDay, wateringCode, chemicalCode);
     }
 
     public String getAnniversary(LocalDate birthday) {

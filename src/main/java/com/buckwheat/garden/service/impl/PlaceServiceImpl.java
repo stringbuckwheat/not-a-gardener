@@ -27,11 +27,11 @@ public class PlaceServiceImpl implements PlaceService {
      * @return 각 장소의 식물 개수를 포함하는 장소 정보 리스트
      */
     @Override
-    public List<PlaceDto.PlaceCard> getPlaceList(int memberNo) {
-        List<PlaceDto.PlaceCard> list = new ArrayList<>();
+    public List<PlaceDto.Card> getPlaceList(int memberNo) {
+        List<PlaceDto.Card> list = new ArrayList<>();
 
         for(Place place : placeDao.getPlaceListByMemberNo(memberNo)){
-            list.add(PlaceDto.PlaceCard.from(place));
+            list.add(PlaceDto.Card.from(place));
         }
 
         return list;
@@ -52,33 +52,33 @@ public class PlaceServiceImpl implements PlaceService {
             plantList.add(PlantDto.PlantInPlace.from(plant));
         }
 
-        PlaceDto.PlaceResponseDto placeResponseDto = PlaceDto.PlaceResponseDto.from(place);
+        PlaceDto.Response placeResponseDto = PlaceDto.Response.from(place);
 
         return new PlaceDto.WithPlantList(placeResponseDto, plantList);
     }
 
     /**
      * 장소 추가
-     * @param placeRequestDto
+     * @param placeRequest
      * @param member
      * @return
      */
     @Override
-    public PlaceDto.PlaceCard addPlace(PlaceDto.PlaceRequestDto placeRequestDto, Member member) {
+    public PlaceDto.Card addPlace(PlaceDto.Request placeRequest, Member member) {
         // FK인 Member와 createDate로 쓸 LocalDateTime.now()를 포함한 엔티티를 저장
-        Place place = placeDao.save(placeRequestDto, member.getMemberNo());
-        return PlaceDto.PlaceCard.fromNew(place);
+        Place place = placeDao.save(placeRequest, member.getMemberNo());
+        return PlaceDto.Card.fromNew(place);
     }
 
     /**
      * 장소 수정
-     * @param placeRequestDto
+     * @param placeRequest
      * @param member
      * @return 수정 후 데이터
      */
     @Override
-    public PlaceDto.PlaceResponseDto modifyPlace(PlaceDto.PlaceRequestDto placeRequestDto, Member member) {
-        return PlaceDto.PlaceResponseDto.from(placeDao.update(placeRequestDto));
+    public PlaceDto.Response modifyPlace(PlaceDto.Request placeRequest, Member member) {
+        return PlaceDto.Response.from(placeDao.update(placeRequest));
     }
 
     /**

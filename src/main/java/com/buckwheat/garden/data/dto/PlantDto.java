@@ -13,7 +13,7 @@ public class PlantDto {
     @Builder
     @Getter
     @ToString
-    public static class PlantResponse{
+    public static class Response{
         private int plantNo;
         private String plantName;
         private String plantSpecies;
@@ -25,9 +25,9 @@ public class PlantDto {
         private LocalDate createDate;
         private LocalDate birthday;
 
-        public static PlantResponse from(Plant plant){
+        public static Response from(Plant plant){
 
-            return PlantResponse.builder()
+            return Response.builder()
                     .plantNo(plant.getPlantNo())
                     .plantName(plant.getPlantName())
                     .plantSpecies(plant.getPlantSpecies())
@@ -46,7 +46,7 @@ public class PlantDto {
     @Getter
     @NoArgsConstructor
     @ToString
-    public static class PlantRequest{
+    public static class Request{
         private int plantNo;
         private int placeNo;
         private String plantName;

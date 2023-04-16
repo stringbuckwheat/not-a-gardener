@@ -19,14 +19,14 @@ public class MemberController {
 
     /* 회원정보 보기 */
     @GetMapping("/{memberNo}")
-    public MemberDto.MemberDetail getMember(@AuthenticationPrincipal UserPrincipal userPrincipal){
+    public MemberDto.Detail getMember(@AuthenticationPrincipal UserPrincipal userPrincipal){
         return memberService.getMember(userPrincipal.getMember());
     }
 
     /* 간단한 회원 정보(헤더) - 소셜로그인에서 사용 */
     @GetMapping("/member-info")
-    public MemberDto.MemberInfo getMemberInfo(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return MemberDto.MemberInfo.from(null, userPrincipal.getMember());
+    public MemberDto.Info getMemberInfo(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        return MemberDto.Info.from(null, userPrincipal.getMember());
     }
 
     /* 이메일로 계정 확인 - 아이디/비밀번호 찾기 */
@@ -54,7 +54,7 @@ public class MemberController {
 
     /* 회원정보 변경 */
     @PutMapping("/{memberNo}")
-    public MemberDto.MemberDetail updateMember(@RequestBody MemberDto.MemberDetail memberDetailDto, @PathVariable int memberNo){
+    public MemberDto.Detail updateMember(@RequestBody MemberDto.Detail memberDetailDto, @PathVariable int memberNo){
         return memberService.updateMember(memberDetailDto);
     }
 

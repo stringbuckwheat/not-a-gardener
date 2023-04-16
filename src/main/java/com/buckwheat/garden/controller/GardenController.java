@@ -25,17 +25,17 @@ public class GardenController {
     }
 
     @GetMapping("/plants")
-    public List<GardenDto.GardenResponse> getPlantList(@AuthenticationPrincipal UserPrincipal userPrincipal){
+    public List<GardenDto.Response> getPlantList(@AuthenticationPrincipal UserPrincipal userPrincipal){
         return gardenService.getPlantList(userPrincipal.getMember().getMemberNo());
     }
 
     @PostMapping("/watering")
-    public GardenDto.WateringResponse addWateringInGarden(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody WateringDto.WateringRequest wateringRequest){
+    public GardenDto.WateringResponse addWateringInGarden(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody WateringDto.Request wateringRequest){
         return gardenService.addWateringInGarden(userPrincipal.getMember(), wateringRequest);
     }
 
     @PutMapping("/{plantNo}/watering/not-dry")
-    public WateringDto.WateringMsg notDry(@PathVariable int plantNo){
+    public WateringDto.Message notDry(@PathVariable int plantNo){
         return gardenService.notDry(plantNo);
     }
 

@@ -9,20 +9,20 @@ import java.util.List;
 
 public interface PlantService {
     /* 하나의 식물 */
-    PlantDto.PlantResponse getOnePlant(int plantNo);
+    PlantDto.Response getOnePlant(int plantNo);
 
     /* 식물 리스트 */
-    List<PlantDto.PlantResponse> getPlantList(int memberNo);
+    List<PlantDto.Response> getPlantList(int memberNo);
 
     /* 식물 추가 */
-    GardenDto.GardenResponse addPlant(PlantDto.PlantRequest plantRequestDto, Member member);
+    GardenDto.Response addPlant(PlantDto.Request plantRequest, Member member);
 
     /* 식물 수정 */
-    GardenDto.GardenResponse modifyPlant(PlantDto.PlantRequest plantRequestDto, Member member);
+    GardenDto.Response modifyPlant(PlantDto.Request plantRequest, Member member);
 
     /* 식물 삭제 */
     void deletePlantByPlantNo(int plantNo);
 
     /* 식물들의 장소 정보 수정 */
-    PlaceDto.PlaceResponseDto modifyPlantPlace(PlaceDto.ModifyPlantPlaceDto modifyPlantPlaceDto);
+    PlaceDto.Response modifyPlantPlace(PlaceDto.ModifyPlantPlace modifyPlantPlace);
 }

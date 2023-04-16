@@ -20,7 +20,7 @@ public class HomeController {
      * @return JWT 토큰, memberNo, 이름이 포함된 MemberInfo
      */
     @PostMapping("")
-    public MemberDto.MemberInfo login(@RequestBody MemberDto.Login login){
+    public MemberDto.Info login(@RequestBody MemberDto.Login login){
         return authenticationService.login(login);
     }
 }

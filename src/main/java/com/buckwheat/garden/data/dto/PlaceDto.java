@@ -15,7 +15,7 @@ public class PlaceDto {
     @Getter
     @NoArgsConstructor
     @ToString
-    public static class PlaceRequestDto{
+    public static class Request{
         private int placeNo;
         private String placeName;
         private String artificialLight;
@@ -44,7 +44,7 @@ public class PlaceDto {
     @Getter
     @AllArgsConstructor
     @Builder
-    public static class PlaceCard{
+    public static class Card{
         private int placeNo;
         private String placeName;
         private String artificialLight;
@@ -52,8 +52,8 @@ public class PlaceDto {
         private int plantListSize;
         private LocalDateTime createDate;
 
-        public static PlaceCard from(Place place){
-            return PlaceDto.PlaceCard.builder()
+        public static Card from(Place place){
+            return PlaceDto.Card.builder()
                     .placeNo(place.getPlaceNo())
                     .placeName(place.getPlaceName())
                     .artificialLight(place.getArtificialLight())
@@ -63,8 +63,8 @@ public class PlaceDto {
                     .build();
         }
 
-        public static PlaceCard fromNew(Place place){
-            return PlaceCard.builder()
+        public static Card fromNew(Place place){
+            return Card.builder()
                     .placeNo(place.getPlaceNo())
                     .placeName(place.getPlaceName())
                     .artificialLight(place.getArtificialLight())
@@ -82,14 +82,14 @@ public class PlaceDto {
     @Builder
     @ToString
     @Getter
-    public static class PlaceResponseDto{
+    public static class Response{
         private int placeNo;
         private String placeName;
         private String artificialLight;
         private String option;
 
-        public static PlaceResponseDto from(Place place){
-            return PlaceResponseDto.builder()
+        public static Response from(Place place){
+            return Response.builder()
                     .placeNo(place.getPlaceNo())
                     .placeName(place.getPlaceName())
                     .artificialLight(place.getArtificialLight())
@@ -102,14 +102,14 @@ public class PlaceDto {
     @NoArgsConstructor
     @Getter
     public static class WithPlantList{
-        private PlaceResponseDto place;
+        private Response place;
         private List<PlantDto.PlantInPlace> plantList;
     }
 
     @Getter
     @Setter
     @ToString
-    public static class ModifyPlantPlaceDto {
+    public static class ModifyPlantPlace {
         int placeNo;
         List<Integer> plantList;
     }

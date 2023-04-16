@@ -8,9 +8,9 @@ import java.util.List;
 public interface PlaceDao {
     List<Place> getPlaceListByMemberNo(int memberNo);
     Place getPlaceWithPlantList(int placeNo);
-    Place save(PlaceDto.PlaceRequestDto placeRequestDto, int memberNo);
+    Place save(PlaceDto.Request placeRequest, int memberNo);
 
-    Place update(PlaceDto.PlaceRequestDto placeRequestDto);
+    Place update(PlaceDto.Request placeRequest);
 
     void delete(int placeNo);
 }

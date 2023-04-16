@@ -26,7 +26,7 @@ public class PlantController {
      * @return
      */
     @GetMapping("")
-    public List<PlantDto.PlantResponse> getPlantList(@AuthenticationPrincipal UserPrincipal userPrincipal){
+    public List<PlantDto.Response> getPlantList(@AuthenticationPrincipal UserPrincipal userPrincipal){
         return plantService.getPlantList(userPrincipal.getMember().getMemberNo());
     }
 
@@ -36,40 +36,40 @@ public class PlantController {
      * @return
      */
     @GetMapping("/{plantNo}")
-    public PlantDto.PlantResponse getOnePlant(@PathVariable("plantNo") int plantNo){
+    public PlantDto.Response getOnePlant(@PathVariable("plantNo") int plantNo){
         return plantService.getOnePlant(plantNo);
     }
 
     /**
      * 식물 추가
      * @param userPrincipal
-     * @param plantRequestDto
+     * @param plantRequest
      * @return
      */
     @PostMapping("")
-    public GardenDto.GardenResponse addPlant(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody PlantDto.PlantRequest plantRequestDto){
-        return plantService.addPlant(plantRequestDto, userPrincipal.getMember());
+    public GardenDto.Response addPlant(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody PlantDto.Request plantRequest){
+        return plantService.addPlant(plantRequest, userPrincipal.getMember());
     }
 
     /**
      * 식물 수정
-     * @param plantRequestDto
+     * @param plantRequest
      * @param userPrincipal
      * @return
      */
     @PutMapping("/{plantNo}")
-    public GardenDto.GardenResponse modifyPlant(@RequestBody PlantDto.PlantRequest plantRequestDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        return plantService.modifyPlant(plantRequestDto, userPrincipal.getMember());
+    public GardenDto.Response modifyPlant(@RequestBody PlantDto.Request plantRequest, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        return plantService.modifyPlant(plantRequest, userPrincipal.getMember());
     }
 
     /**
      * 여러 식물의 장소를 한 번에 바꿈
-     * @param modifyPlantPlaceDto
+     * @param modifyPlantPlace
      * @return
      */
     @PutMapping("/modify-place")
-    public PlaceDto.PlaceResponseDto modifyPlantPlace(@RequestBody PlaceDto.ModifyPlantPlaceDto modifyPlantPlaceDto){
-        return plantService.modifyPlantPlace(modifyPlantPlaceDto);
+    public PlaceDto.Response modifyPlantPlace(@RequestBody PlaceDto.ModifyPlantPlace modifyPlantPlace){
+        return plantService.modifyPlantPlace(modifyPlantPlace);
     }
 
     /**

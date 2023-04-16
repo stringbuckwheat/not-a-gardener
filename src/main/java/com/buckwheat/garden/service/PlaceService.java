@@ -6,13 +6,13 @@ import com.buckwheat.garden.data.entity.Member;
 import java.util.List;
 
 public interface PlaceService {
-    List<PlaceDto.PlaceCard> getPlaceList(int memberNo);
+    List<PlaceDto.Card> getPlaceList(int memberNo);
 
     PlaceDto.WithPlantList getPlace(int placeNo);
 
-    PlaceDto.PlaceCard addPlace(PlaceDto.PlaceRequestDto placeRequestDto, Member member);
+    PlaceDto.Card addPlace(PlaceDto.Request placeRequestDto, Member member);
 
-    PlaceDto.PlaceResponseDto modifyPlace(PlaceDto.PlaceRequestDto placeRequestDto, Member member);
+    PlaceDto.Response modifyPlace(PlaceDto.Request placeRequestDto, Member member);
 
     void deletePlace(int placeNo);
 }

@@ -24,14 +24,14 @@ public class MemberDto {
     @AllArgsConstructor
     @Builder
     @Getter // HttpMediaTypeNotAcceptableException
-    public static class MemberInfo {
+    public static class Info {
         private String token;
         private int memberNo;
         private String name;
         private String provider;
 
-        public static MemberInfo from(String jwtToken, Member member) {
-            return MemberInfo.builder()
+        public static Info from(String jwtToken, Member member) {
+            return Info.builder()
                     .token(jwtToken)
                     .memberNo(member.getMemberNo())
                     .name(member.getName())
@@ -45,7 +45,7 @@ public class MemberDto {
     @Getter
     @NoArgsConstructor
     @ToString
-    public static class MemberDetail {
+    public static class Detail {
         private int memberNo;
         private String username;
         private String email;
@@ -53,14 +53,23 @@ public class MemberDto {
         private LocalDateTime createDate;
         private String provider;
 
-        public static MemberDetail from (Member member) {
-            return MemberDto.MemberDetail.builder()
+        public static Detail from (Member member) {
+            return MemberDto.Detail.builder()
                     .memberNo(member.getMemberNo())
                     .username(member.getUsername())
                     .email(member.getEmail())
                     .name(member.getName())
                     .createDate(member.getCreateDate())
                     .provider(member.getProvider())
+                    .build();
+        }
+
+        public static Detail updateResponseFrom(Member member){
+            return MemberDto.Detail.builder()
+                    .username(member.getUsername())
+                    .email(member.getEmail())
+                    .name(member.getName())
+                    .createDate(member.getCreateDate())
                     .build();
         }
     }
@@ -70,15 +79,16 @@ public class MemberDto {
     @ToString
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class RegisterDto {
+    public static class Register {
         private String username;
         private String email;
         private String pw;
         private String name;
 
-        /* 암호화된 password */
-        public void encryptPassword(String BCryptpassword) {
+        /* 암호화된 password builder 패턴으로 사용중*/
+        public Register encryptPassword(String BCryptpassword) {
             this.pw = BCryptpassword;
+            return this;
         }
 
         public Member toEntity(){

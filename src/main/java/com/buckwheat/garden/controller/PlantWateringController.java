@@ -22,7 +22,7 @@ public class PlantWateringController {
      * @return
      */
     @GetMapping("")
-    public List<WateringDto.WateringForOnePlant> getWateringListForPlant(@PathVariable(value = "plantNo") int plantNo){
+    public List<WateringDto.ForOnePlant> getWateringListForPlant(@PathVariable(value = "plantNo") int plantNo){
         return plantWateringService.getWateringListForPlant(plantNo);
     }
 

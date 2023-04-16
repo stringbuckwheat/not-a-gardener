@@ -9,14 +9,14 @@ public class ChemicalDto {
     @AllArgsConstructor
     @Builder
     @ToString
-    public static class ChemicalResponse{
+    public static class Response{
         private int chemicalNo;
         private String chemicalName;
         private String chemicalType;
         private int chemicalPeriod;
 
-        public static ChemicalResponse from(Chemical chemical){
-            return ChemicalResponse.builder()
+        public static Response from(Chemical chemical){
+            return Response.builder()
                     .chemicalNo(chemical.getChemicalNo())
                     .chemicalName(chemical.getChemicalName())
                     .chemicalType(chemical.getChemicalType())
@@ -28,7 +28,7 @@ public class ChemicalDto {
     @Getter
     @NoArgsConstructor
     @ToString
-    public static class ChemicalRequest {
+    public static class Request {
         private int chemicalNo;
         private String chemicalName;
         private String chemicalType;

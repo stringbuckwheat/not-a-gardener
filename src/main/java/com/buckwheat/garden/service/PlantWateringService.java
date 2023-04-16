@@ -18,10 +18,10 @@ public interface PlantWateringService {
     WateringDto.AfterWatering getAfterWatering(Plant plant);
 
     /* 한 식물의 물주기 기록 */
-    List<WateringDto.WateringForOnePlant> getWateringListForPlant(int plantNo);
+    List<WateringDto.ForOnePlant> getWateringListForPlant(int plantNo);
 
     /* 물주기 간격을 포함한 WateringDto 리스트*/
-    List<WateringDto.WateringForOnePlant> withWateringPeriodList(List<Watering> list);
+    List<WateringDto.ForOnePlant> withWateringPeriodList(List<Watering> list);
 
     /* 물주기 수정 */
     WateringDto.AfterWatering modifyWatering(WateringDto.Request wateringRequest);

@@ -42,24 +42,24 @@ public class PlaceDaoImpl implements PlaceDao {
     /**
      * Transactinal 필요
      *
-     * @param placeRequestDto
+     * @param placeRequest
      * @return
      */
     @Override
-    public Place save(PlaceDto.PlaceRequestDto placeRequestDto, int memberNo) {
+    public Place save(PlaceDto.Request placeRequest, int memberNo) {
         Member member = memberRepository.findById(memberNo).orElseThrow(NoSuchElementException::new);
-        return placeRepository.save(placeRequestDto.toEntityWith(member));
+        return placeRepository.save(placeRequest.toEntityWith(member));
     }
 
     @Override
-    public Place update(PlaceDto.PlaceRequestDto placeRequestDto) {
-        Place place = placeRepository.findById(placeRequestDto.getPlaceNo()).orElseThrow(NoSuchElementException::new);
+    public Place update(PlaceDto.Request placeRequest) {
+        Place place = placeRepository.findById(placeRequest.getPlaceNo()).orElseThrow(NoSuchElementException::new);
 
         return placeRepository.save(
                 place.update(
-                        placeRequestDto.getPlaceName(),
-                        placeRequestDto.getOption(),
-                        placeRequestDto.getArtificialLight()
+                        placeRequest.getPlaceName(),
+                        placeRequest.getOption(),
+                        placeRequest.getArtificialLight()
                 )
         );
     }

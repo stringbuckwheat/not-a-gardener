@@ -12,9 +12,9 @@ public class GardenDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @ToString
-    public static class GardenResponse {
-        private PlantDto.PlantResponse plant;
-        private GardenDetail gardenDetail;
+    public static class Response {
+        private PlantDto.Response plant;
+        private Detail gardenDetail;
     }
 
     @Getter
@@ -22,7 +22,7 @@ public class GardenDto {
     @NoArgsConstructor
     @ToString
     public static class GardenMain {
-        private List<GardenResponse> todoList;
+        private List<Response> todoList;
         private List<GardenDto.WaitingForWatering> waitingList;
         private List<RoutineDto.Response> routineList;
     }
@@ -57,9 +57,9 @@ public class GardenDto {
     @Builder
     @Getter
     @ToString
-    public static class GardenDetail {
+    public static class Detail {
         // 마지막 관수
-        private WateringDto.WateringResponse latestWateringDate;
+        private WateringDto.Response latestWateringDate;
 
         // 이하 계산해서 넣는 정보
         private String anniversary; // 키운지 며칠 지났는지
@@ -71,8 +71,8 @@ public class GardenDto {
         // 비료 주기 정보
         ChemicalCode chemicalCode;
 
-        public static GardenDetail from(WateringDto.WateringResponse latestWateringDate, String anniversary, int wateringDDay, int wateringCode, ChemicalCode chemicalCode){
-            return GardenDetail.builder()
+        public static Detail from(WateringDto.Response latestWateringDate, String anniversary, int wateringDDay, int wateringCode, ChemicalCode chemicalCode){
+            return Detail.builder()
                     .latestWateringDate(latestWateringDate)
                     .anniversary(anniversary)
                     .wateringDDay(wateringDDay)
@@ -94,7 +94,7 @@ public class GardenDto {
     @NoArgsConstructor
     @ToString
     public static class WateringResponse {
-        private GardenResponse gardenResponse;
-        private WateringDto.WateringMsg wateringMsg;
+        private Response gardenResponse;
+        private WateringDto.Message wateringMsg;
     }
 }

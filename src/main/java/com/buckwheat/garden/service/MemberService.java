@@ -7,10 +7,10 @@ import java.util.Map;
 
 public interface MemberService {
     // 회원 정보 보기
-    MemberDto.MemberDetail getMember(Member member);
+    MemberDto.Detail getMember(Member member);
 
     // 회원 정보 변경
-    MemberDto.MemberDetail updateMember(MemberDto.MemberDetail memberDetailDto);
+    MemberDto.Detail updateMember(MemberDto.Detail memberDetailDto);
 
     // 본인 확인 코드 리턴 및 본인 확인 메일 전송(아이디 찾기)
     Map<String, Object> getIdentificationCodeAndMembers(String email);

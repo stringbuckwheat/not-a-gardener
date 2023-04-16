@@ -19,7 +19,7 @@ public class PlacePlantController {
     private final PlacePlantService placePlantService;
 
     @PostMapping("")
-    public PlantDto.PlantInPlace addPlantInPlace(@RequestBody PlantDto.PlantRequest plantRequest, @AuthenticationPrincipal UserPrincipal userPrincipal){
+    public PlantDto.PlantInPlace addPlantInPlace(@RequestBody PlantDto.Request plantRequest, @AuthenticationPrincipal UserPrincipal userPrincipal){
         return placePlantService.addPlantInPlace(plantRequest, userPrincipal.getMember().getMemberNo());
     }
 }
