@@ -8,5 +8,5 @@ import java.util.Map;
 
 public interface WateringService {
     Map<LocalDate, List<WateringDto.ByDate>> getWateringList(int memberNo, int month);
-    WateringDto.ByDate addWatering(WateringDto.WateringRequest wateringRequest);
+    WateringDto.ByDate addWatering(WateringDto.Request wateringRequest);
 }

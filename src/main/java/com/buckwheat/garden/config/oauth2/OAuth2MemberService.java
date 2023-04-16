@@ -1,7 +1,7 @@
 package com.buckwheat.garden.config.oauth2;
 
+import com.buckwheat.garden.dao.MemberDao;
 import com.buckwheat.garden.data.entity.Member;
-import com.buckwheat.garden.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -23,7 +23,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
-    private final MemberRepository memberRepository;
+    private final MemberDao memberDao;
 
     /**
      * OAuth2 로그인 성공 정보를 바탕으로 UserPrincipal을 만들어 반환한다
@@ -72,9 +72,9 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
      * @return
      */
     public Member saveOrUpdate(OAuth2Attribute oAuth2Attribute){
-        Member member = memberRepository.findByUsernameAndProvider(oAuth2Attribute.getEmail(), oAuth2Attribute.getProvider())
+        Member member = memberDao.getMemberByUsernameAndProvider(oAuth2Attribute.getEmail(), oAuth2Attribute.getProvider())
                 .orElse(oAuth2Attribute.toEntity());
 
-        return memberRepository.save(member);
+        return memberDao.save(member);
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ChemicalRepository extends JpaRepository<Chemical, Integer> {
@@ -19,5 +20,5 @@ public interface ChemicalRepository extends JpaRepository<Chemical, Integer> {
     List<Chemical> findByMember_memberNoOrderByChemicalPeriodDesc(int memberNo);
 
     @EntityGraph(attributePaths = {"wateringList", "wateringList.plant", "wateringList.plant.place"}, type = EntityGraph.EntityGraphType.FETCH)
-    Chemical findByChemicalNo(int chemicalNo);
+    Optional<Chemical> findByChemicalNo(int chemicalNo);
 }

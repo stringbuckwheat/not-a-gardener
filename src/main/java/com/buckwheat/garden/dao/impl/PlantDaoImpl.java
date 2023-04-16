@@ -12,6 +12,7 @@ import com.buckwheat.garden.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -33,7 +34,17 @@ public class PlantDaoImpl implements PlantDao {
     }
 
     @Override
-    public Plant save(PlantDto.PlantRequest plantRequestDto, int memberNo) {
+    public List<Plant> getPlantListForGarden(int memberNo, LocalDate today){
+        return plantRepository.findByMember_MemberNoAndConditionDateIsBeforeOrConditionDateIsNull(memberNo, today);
+    }
+
+    @Override
+    public List<Plant> getPlantListForGarden(int memberNo){
+        return plantRepository.findByMember_MemberNo(memberNo);
+    }
+
+    @Override
+    public Plant save(PlantDto.Request plantRequestDto, int memberNo) {
         Place place = placeRepository.findByPlaceNo(plantRequestDto.getPlaceNo()).orElseThrow(NoSuchElementException::new);
         Member member = memberRepository.findById(memberNo).orElseThrow(NoSuchElementException::new);
 
@@ -41,7 +52,7 @@ public class PlantDaoImpl implements PlantDao {
     }
 
     @Override
-    public Plant update(PlantDto.PlantRequest plantRequest){
+    public Plant update(PlantDto.Request plantRequest){
         Place place = placeRepository.findByPlaceNo(plantRequest.getPlaceNo()).orElseThrow(NoSuchElementException::new);
         Plant plant = plantRepository.findByPlantNo(plantRequest.getPlantNo()).orElseThrow(NoSuchElementException::new);
 
@@ -49,10 +60,15 @@ public class PlantDaoImpl implements PlantDao {
     }
 
     @Override
-    public Place updatePlantPlace(PlaceDto.ModifyPlantPlaceDto modifyPlantPlaceDto){
-        Place place = placeRepository.findByPlaceNo(modifyPlantPlaceDto.getPlaceNo()).orElseThrow(NoSuchElementException::new);
+    public Plant update(Plant plant){
+        return plantRepository.save(plant);
+    }
 
-        for (int plantNo : modifyPlantPlaceDto.getPlantList()) {
+    @Override
+    public Place updatePlantPlace(PlaceDto.ModifyPlantPlace modifyPlantPlace){
+        Place place = placeRepository.findByPlaceNo(modifyPlantPlace.getPlaceNo()).orElseThrow(NoSuchElementException::new);
+
+        for (int plantNo : modifyPlantPlace.getPlantList()) {
             Plant plant = plantRepository.findById(plantNo).orElseThrow(NoSuchElementException::new);
 
             plant.updatePlace(place);
@@ -60,6 +76,11 @@ public class PlantDaoImpl implements PlantDao {
         }
 
         return place;
+    }
+
+    public Plant updateConditionDate(Plant plant){
+        plantRepository.save(plant.updateConditionDate());
+        return plant;
     }
 
     @Override

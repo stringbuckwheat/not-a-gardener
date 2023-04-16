@@ -1,7 +1,7 @@
 package com.buckwheat.garden.config.oauth2;
 
+import com.buckwheat.garden.dao.MemberDao;
 import com.buckwheat.garden.data.entity.Member;
-import com.buckwheat.garden.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-    private final MemberRepository memberRepository;
+    private final MemberDao memberDao;
 
     /**
      *
@@ -23,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberRepository.findById(Integer.parseInt(username))
+        Member member = memberDao.getMemberByMemberNo(Integer.parseInt(username))
                 .orElseThrow(() -> new UsernameNotFoundException("해당 유저를 찾을 수 없습니다."));
 
         return new UserPrincipal(member);

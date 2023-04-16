@@ -15,13 +15,13 @@ public class RegisterController {
 
     /* 아이디 중복 검사 */
     @GetMapping("/username/{username}")
-    public String checkUsername(@PathVariable String username){
-        return authenticationService.getIdByInputId(username);
+    public String hasSameUsername(@PathVariable String username){
+        return authenticationService.hasSameUsername(username);
     }
 
     /* 회원 가입 */
     @PostMapping("")
-    public MemberDto.MemberInfo addMember(@RequestBody MemberDto.RegisterDto registerDto){
+    public MemberDto.Info addMember(@RequestBody MemberDto.Register registerDto){
         return authenticationService.addMember(registerDto);
     }
 }

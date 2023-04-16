@@ -1,5 +1,10 @@
 package com.buckwheat.garden.service.impl;
 
+import com.buckwheat.garden.code.AfterWateringCode;
+import com.buckwheat.garden.code.WateringCode;
+import com.buckwheat.garden.dao.PlantDao;
+import com.buckwheat.garden.dao.RoutineDao;
+import com.buckwheat.garden.dao.WateringDao;
 import com.buckwheat.garden.data.dto.GardenDto;
 import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.dto.RoutineDto;
@@ -7,8 +12,7 @@ import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Routine;
-import com.buckwheat.garden.repository.PlantRepository;
-import com.buckwheat.garden.repository.RoutineRepository;
+import com.buckwheat.garden.data.entity.Watering;
 import com.buckwheat.garden.service.GardenService;
 import com.buckwheat.garden.util.GardenUtil;
 import com.buckwheat.garden.util.RoutineUtil;
@@ -22,52 +26,49 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class GardenServiceImpl implements GardenService {
-    private final PlantRepository plantRepository;
-    private final RoutineRepository routineRepository;
-
+    private final WateringDao wateringDao;
+    private final PlantDao plantDao;
+    private final RoutineDao routineDao;
     private final GardenUtil gardenUtil;
     private final WateringUtil wateringUtil;
     private final RoutineUtil routineUtil;
 
     @Override
     public GardenDto.GardenMain getGarden(int memberNo) {
-        List<GardenDto.GardenResponse> todoList = new ArrayList<>();
+        List<GardenDto.Response> todoList = new ArrayList<>();
         List<GardenDto.WaitingForWatering> waitingList = new ArrayList<>();
         LocalDate today = LocalDate.now();
 
-        List<Plant> plantList = plantRepository.findByMember_MemberNoAndConditionDateIsBeforeOrConditionDateIsNull(memberNo, today);
-
         // 필요한 것들 계산해서 gardenDto list 리턴
-        for (Plant plant : plantList) {
+        for (Plant plant : plantDao.getPlantListForGarden(memberNo, today)) {
             int wateringDDay = gardenUtil.getWateringDDay(plant.getAverageWateringPeriod(), gardenUtil.getLastDrinkingDay(plant));
 
             // 미룬 날짜가 오늘이면
-            if(plant.getPostponeDate() != null && today.compareTo(plant.getPostponeDate()) == 0){
-                PlantDto.PlantResponse plantResponse = PlantDto.PlantResponse.from(plant);
-                GardenDto.GardenDetail gardenDetail = gardenUtil.getGardenDetail(plant, memberNo, wateringDDay, 6);
+            if (plant.getPostponeDate() != null && today.compareTo(plant.getPostponeDate()) == 0) {
+                PlantDto.Response plantResponse = PlantDto.Response.from(plant);
+                GardenDto.Detail detail = gardenUtil.getGardenDetail(plant, memberNo, wateringDDay, WateringCode.YOU_ARE_LAZY.getCode());
 
-                todoList.add(new GardenDto.GardenResponse(plantResponse, gardenDetail));
+                todoList.add(new GardenDto.Response(plantResponse, detail));
                 continue;
             }
 
             int wateringCode = gardenUtil.getWateringCode(plant.getAverageWateringPeriod(), wateringDDay);
 
-            boolean hasToDo = wateringCode < 0 || wateringCode == 1 || wateringCode == 2;
+            boolean hasToDo = wateringCode < 0 || wateringCode == WateringCode.THIRSTY.getCode() || wateringCode == WateringCode.CHECK.getCode();
 
-            if (wateringCode == 0) {
+            if (wateringCode == WateringCode.NO_RECORD.getCode()) {
                 waitingList.add(GardenDto.WaitingForWatering.from(plant));
                 continue;
             } else if (hasToDo) {
-                PlantDto.PlantResponse plantResponse = PlantDto.PlantResponse.from(plant);
-                GardenDto.GardenDetail gardenDetail = gardenUtil.getGardenDetail(plant, memberNo, wateringDDay, wateringCode);
+                PlantDto.Response plantResponse = PlantDto.Response.from(plant);
+                GardenDto.Detail gardenDetail = gardenUtil.getGardenDetail(plant, memberNo, wateringDDay, wateringCode);
 
-                todoList.add(new GardenDto.GardenResponse(plantResponse, gardenDetail));
+                todoList.add(new GardenDto.Response(plantResponse, gardenDetail));
             }
         }
 
@@ -82,7 +83,7 @@ public class GardenServiceImpl implements GardenService {
         LocalDateTime today = LocalDate.now().atStartOfDay();
 
         // 루틴 띄우기
-        for (Routine routine : routineRepository.findByMember_MemberNo(memberNo)) {
+        for (Routine routine : routineDao.getRoutineListByMemberNo(memberNo)) {
             // 오늘 해야 하는 루틴인지 계산
             String hasTodoToday = routineUtil.hasToDoToday(routine, today);
 
@@ -98,59 +99,58 @@ public class GardenServiceImpl implements GardenService {
     }
 
     @Override
-    public List<GardenDto.GardenResponse> getPlantList(int memberNo) {
-        List<GardenDto.GardenResponse> gardenList = new ArrayList<>();
-
-        List<Plant> plantList = plantRepository.findByMember_MemberNo(memberNo);
+    public List<GardenDto.Response> getPlantList(int memberNo) {
+        List<GardenDto.Response> gardenList = new ArrayList<>();
 
         // 필요한 것들 계산해서 gardenDto list 리턴
-        for (Plant plant : plantList) {
+        for (Plant plant : plantDao.getPlantListForGarden(memberNo)) {
 
-            PlantDto.PlantResponse plantResponse = PlantDto.PlantResponse.from(plant);
-            GardenDto.GardenDetail gardenDetail = gardenUtil.getGardenDetail(plant, memberNo);
+            PlantDto.Response plantResponse = PlantDto.Response.from(plant);
+            GardenDto.Detail gardenDetail = gardenUtil.getGardenDetail(plant, memberNo);
 
-            gardenList.add(new GardenDto.GardenResponse(plantResponse, gardenDetail));
+            gardenList.add(new GardenDto.Response(plantResponse, gardenDetail));
         }
 
         return gardenList;
     }
 
-    public GardenDto.GardenResponse getGardenResponse(int plantNo, int memberNo) {
-        Plant plant = plantRepository.findByPlantNo(plantNo).orElseThrow(NoSuchElementException::new);
+    public GardenDto.Response getGardenResponse(int plantNo, int memberNo) {
+        Plant plant = plantDao.getPlantWithPlaceAndWatering(plantNo);
 
-        PlantDto.PlantResponse plantResponse = PlantDto.PlantResponse.from(plant);
-        GardenDto.GardenDetail gardenDetail = gardenUtil.getGardenDetail(plant, memberNo);
+        PlantDto.Response plantResponse = PlantDto.Response.from(plant);
+        GardenDto.Detail gardenDetail = gardenUtil.getGardenDetail(plant, memberNo);
 
-        return new GardenDto.GardenResponse(plantResponse, gardenDetail);
+        return new GardenDto.Response(plantResponse, gardenDetail);
     }
 
     @Override
-    public GardenDto.WateringResponse addWateringInGarden(Member member, WateringDto.WateringRequest wateringRequest) {
-        Plant plant = plantRepository.findByPlantNo(wateringRequest.getPlantNo())
-                .orElseThrow(NoSuchElementException::new);
-        log.debug("plant: {}", PlantDto.PlantResponse.from(plant));
+    public GardenDto.WateringResponse addWateringInGarden(Member member, WateringDto.Request wateringRequest) {
+        Watering watering = wateringDao.addWatering(wateringRequest);
 
         // 물주기 저장 후 메시지 받아옴
-        WateringDto.WateringMsg wateringMsg = wateringUtil.addWatering(plant, wateringRequest);
+        WateringDto.Message wateringMsg = wateringUtil.getWateringMsg(watering.getPlant().getPlantNo());
 
         // 필요시 물주기 정보 업데이트
-        wateringUtil.getPlantForAdd(plant, wateringMsg.getAverageWateringDate());
+        if (wateringMsg.getAfterWateringCode() != AfterWateringCode.NO_CHANGE.getCode()
+                || wateringMsg.getAfterWateringCode() != AfterWateringCode.FIRST_WATERING.getCode()) {
+            wateringUtil.updateWateringPeriod(watering.getPlant(), wateringMsg.getAverageWateringDate());
+        }
 
-        GardenDto.GardenResponse gardenResponse = getGardenResponse(plant.getPlantNo(), member.getMemberNo());
+        GardenDto.Response gardenResponse = getGardenResponse(watering.getPlant().getPlantNo(), member.getMemberNo());
 
         return new GardenDto.WateringResponse(gardenResponse, wateringMsg);
     }
 
     @Override
-    public WateringDto.WateringMsg notDry(int plantNo) {
+    public WateringDto.Message notDry(int plantNo) {
         // 리턴용
-        WateringDto.WateringMsg wateringMsg = null;
+        WateringDto.Message wateringMsg = null;
 
-        Plant plant = plantRepository.findByPlantNo(plantNo).orElseThrow(NoSuchElementException::new);
+        Plant plant = plantDao.getPlantWithPlaceAndWatering(plantNo);
 
         // 한 번도 물 준 적 없는 경우
-        if(plant.getWateringList().size() == 0){
-            plantRepository.save(plant.updateConditionDate());
+        if (plant.getWateringList().size() == 0) {
+            plantDao.updateConditionDate(plant);
             return null;
         }
 
@@ -162,33 +162,29 @@ public class GardenServiceImpl implements GardenService {
         if (period + 1 == plant.getAverageWateringPeriod()) {
             // 하루 전에 체크하라고 카드 띄웠는데 not Dry를 누른 경우 -> averageWateringPeriod 변경할 필요 없음
             // 오늘 한정 garden에 안 뜨게 해야함 => conditionDate 오늘 날짜 추가
-            plantRepository.save(plant.updateConditionDate());
+            plantDao.updateConditionDate(plant);
 
             // wateringMsg: 물주기 계산에 변동 없음
-            wateringMsg = new WateringDto.WateringMsg(0, period);
+            wateringMsg = new WateringDto.Message(0, period);
         } else if (period >= plant.getAverageWateringPeriod()) {
             // averageWateringPeriod 업데이트
             // 오늘 한정 garden에 안 뜨게 해야함 => updateDate에 오늘 날짜 추가
-            plantRepository.save(plant.updateAverageWateringPeriod(period + 1).updateConditionDate());
+            plantDao.update(plant.updateAverageWateringPeriod(period + 1).updateConditionDate());
 
             // 물주기 늘어나는 중이라는 wateringMsg 만들기
-            wateringMsg = new WateringDto.WateringMsg(1, period + 1);
+            wateringMsg = new WateringDto.Message(1, period + 1);
         }
         return wateringMsg;
     }
 
     @Override
     public int postpone(int plantNo) {
-        Plant plant = plantRepository.findByPlantNo(plantNo).orElseThrow(NoSuchElementException::new);
+        Plant plant = plantDao.getPlantWithPlaceAndWatering(plantNo);
         // 미룰래요(그냥 귀찮아서 물주기 미룬 경우) == averageWateringPeriod 업데이트 안함!!
         // postponeDate를 업데이트함
-        plantRepository.save(plant.updatePostponeDate());
-
-        // 미뤘어요 메시지 X
-        // 새로운 watering code를 보내서 맨 뒤로 보냄
-        PlantDto.PlantResponse plantResponse = PlantDto.PlantResponse.from(plant);
+        plantDao.update(plant.updatePostponeDate());
 
         // waitingList에서는 오늘 하루만 없애줌
-        return 6;
+        return WateringCode.YOU_ARE_LAZY.getCode();
     }
 }

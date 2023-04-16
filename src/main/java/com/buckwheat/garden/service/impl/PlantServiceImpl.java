@@ -6,8 +6,6 @@ import com.buckwheat.garden.data.dto.PlaceDto;
 import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.data.entity.Plant;
-import com.buckwheat.garden.repository.PlaceRepository;
-import com.buckwheat.garden.repository.PlantRepository;
 import com.buckwheat.garden.service.PlantService;
 import com.buckwheat.garden.util.GardenUtil;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +20,6 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class PlantServiceImpl implements PlantService {
-    private final PlantRepository plantRepository;
-    private final PlaceRepository placeRepository;
     private final GardenUtil gardenUtil;
     private final PlantDao plantDao;
 
@@ -34,52 +30,52 @@ public class PlantServiceImpl implements PlantService {
      * @return
      */
     @Override
-    public PlantDto.PlantResponse getOnePlant(int plantNo) {
-        return PlantDto.PlantResponse.from(plantDao.getPlantWithPlaceAndWatering(plantNo));
+    public PlantDto.Response getOnePlant(int plantNo) {
+        return PlantDto.Response.from(plantDao.getPlantWithPlaceAndWatering(plantNo));
     }
 
     @Override
-    public List<PlantDto.PlantResponse> getPlantList(int memberNo) {
-        List<PlantDto.PlantResponse> plantList = new ArrayList<>();
+    public List<PlantDto.Response> getPlantList(int memberNo) {
+        List<PlantDto.Response> plantList = new ArrayList<>();
 
         // @EntityGraph 메소드
         for (Plant p : plantDao.getPlantListByMemberNo(memberNo)) {
-            plantList.add(PlantDto.PlantResponse.from(p));
+            plantList.add(PlantDto.Response.from(p));
         }
 
         return plantList;
     }
 
-    public GardenDto.GardenResponse getGardenResponseFrom(int plantNo, int memberNo){
+    public GardenDto.Response getGardenResponseFrom(int plantNo, int memberNo){
         Plant plant = plantDao.getPlantWithPlaceAndWatering(plantNo);
 
-        PlantDto.PlantResponse plantResponse = PlantDto.PlantResponse.from(plant);
-        GardenDto.GardenDetail gardenDetail = gardenUtil.getGardenDetail(plant, memberNo);
+        PlantDto.Response plantResponse = PlantDto.Response.from(plant);
+        GardenDto.Detail gardenDetail = gardenUtil.getGardenDetail(plant, memberNo);
 
-        return new GardenDto.GardenResponse(plantResponse, gardenDetail);
+        return new GardenDto.Response(plantResponse, gardenDetail);
     }
 
     @Override
-    public GardenDto.GardenResponse addPlant(PlantDto.PlantRequest plantRequestDto, Member member) {
-        Plant plant = plantDao.save(plantRequestDto, member.getMemberNo());
+    public GardenDto.Response addPlant(PlantDto.Request plantRequest, Member member) {
+        Plant plant = plantDao.save(plantRequest, member.getMemberNo());
         return getGardenResponseFrom(plant.getPlantNo(), member.getMemberNo()); // TODO
     }
 
     @Override
     @Transactional
-    public GardenDto.GardenResponse modifyPlant(PlantDto.PlantRequest plantRequest, Member member) {
+    public GardenDto.Response modifyPlant(PlantDto.Request plantRequest, Member member) {
         Plant plant = plantDao.update(plantRequest);
 
         // GardenDto를 돌려줘야 함
-        PlantDto.PlantResponse plantResponse = PlantDto.PlantResponse.from(plant);
-        GardenDto.GardenDetail gardenDetail = gardenUtil.getGardenDetail(plant, member.getMemberNo());
+        PlantDto.Response plantResponse = PlantDto.Response.from(plant);
+        GardenDto.Detail gardenDetail = gardenUtil.getGardenDetail(plant, member.getMemberNo());
 
-        return new GardenDto.GardenResponse(plantResponse, gardenDetail);
+        return new GardenDto.Response(plantResponse, gardenDetail);
     }
 
     @Override
-    public PlaceDto.PlaceResponseDto modifyPlantPlace(PlaceDto.ModifyPlantPlaceDto modifyPlantPlaceDto) {
-        return PlaceDto.PlaceResponseDto.from(plantDao.updatePlantPlace(modifyPlantPlaceDto));
+    public PlaceDto.Response modifyPlantPlace(PlaceDto.ModifyPlantPlace modifyPlantPlaceDto) {
+        return PlaceDto.Response.from(plantDao.updatePlantPlace(modifyPlantPlaceDto));
     }
 
     @Override

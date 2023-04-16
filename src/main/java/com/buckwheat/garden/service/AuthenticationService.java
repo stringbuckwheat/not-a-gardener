@@ -4,11 +4,11 @@ import com.buckwheat.garden.data.dto.MemberDto;
 
 public interface AuthenticationService {
     /* 아이디 중복 검사 */
-    String getIdByInputId(String id);
+    String hasSameUsername(String username);
 
     /* 회원 가입 */
-    MemberDto.MemberInfo addMember(MemberDto.RegisterDto paramRegisterDto);
+    MemberDto.Info addMember(MemberDto.Register paramRegisterDto);
 
     /* 로그인 */
-    MemberDto.MemberInfo login(MemberDto.Login login);
+    MemberDto.Info login(MemberDto.Login login);
 }

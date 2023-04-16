@@ -1,12 +1,9 @@
 package com.buckwheat.garden.service.impl;
 
+import com.buckwheat.garden.dao.WateringDao;
 import com.buckwheat.garden.data.dto.WateringDto;
-import com.buckwheat.garden.data.entity.Chemical;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Watering;
-import com.buckwheat.garden.repository.ChemicalRepository;
-import com.buckwheat.garden.repository.PlantRepository;
-import com.buckwheat.garden.repository.WateringRepository;
 import com.buckwheat.garden.service.WateringService;
 import com.buckwheat.garden.util.WateringUtil;
 import lombok.RequiredArgsConstructor;
@@ -14,15 +11,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class WateringServiceImpl implements WateringService {
-    private final WateringRepository wateringRepository;
-    private final ChemicalRepository chemicalRepository;
-    private final PlantRepository plantRepository;
+    private final WateringDao wateringDao;
     private final WateringUtil wateringUtil;
 
     @Override
@@ -46,7 +44,7 @@ public class WateringServiceImpl implements WateringService {
 
         Map<LocalDate, List<WateringDto.ByDate>> map = new HashMap<>(); // 날짜: 리스트
 
-        for (Watering watering : wateringRepository.findAllWateringListByMemberNo(memberNo, startDate, endDate)) {
+        for (Watering watering : wateringDao.getAllWateringListByMemberNo(memberNo, startDate, endDate)) {
             List<WateringDto.ByDate> tmpList = map.get(watering.getWateringDate());
 
             if(tmpList == null){
@@ -64,26 +62,22 @@ public class WateringServiceImpl implements WateringService {
         return map;
     }
 
-    public WateringDto.ByDate addWatering(WateringDto.WateringRequest wateringRequest){
-        Plant plant = plantRepository.findByPlantNo(wateringRequest.getPlantNo())
-                .orElseThrow(NoSuchElementException::new);
-        Chemical chemical = chemicalRepository.findById(wateringRequest.getChemicalNo()).orElse(null);
-
+    public WateringDto.ByDate addWatering(WateringDto.Request wateringRequest){
         // 물주기 저장
-        Watering watering = wateringRepository.save(wateringRequest.toEntityWithPlantAndChemical(plant, chemical));
+        Watering watering = wateringDao.addWatering(wateringRequest);
 
         // 물주기 계산 로직
-        WateringDto.WateringMsg wateringMsg = wateringUtil.getWateringMsg(plant.getPlantNo());
+        WateringDto.Message wateringMsg = wateringUtil.getWateringMsg(watering.getPlant().getPlantNo());
 
         // 식물 테이블의 averageWateringDate 업데이트 필요 X
         if (wateringMsg.getAfterWateringCode() == 3) {
             // 바로 리턴
-            return WateringDto.ByDate.from(watering, plant, chemical);
+            return WateringDto.ByDate.from(watering, watering.getPlant(), watering.getChemical());
         }
 
         // 필요시 물주기 정보 업데이트
-        Plant plantForAdd = wateringUtil.getPlantForAdd(plant, wateringMsg.getAverageWateringDate());
+        Plant newPlant = wateringUtil.updateWateringPeriod(watering.getPlant(), wateringMsg.getAverageWateringDate());
 
-        return WateringDto.ByDate.from(watering, plantForAdd, chemical);
+        return WateringDto.ByDate.from(watering, newPlant, watering.getChemical());
     }
 }

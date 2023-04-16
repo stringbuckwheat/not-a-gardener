@@ -11,6 +11,7 @@ import com.buckwheat.garden.repository.WateringRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -35,6 +36,11 @@ public class WateringDaoImpl implements WateringDao {
     @Override
     public List<Watering> getWateringListByPlantNo(int plantNo){
         return wateringRepository.findByPlant_plantNoOrderByWateringDateDesc(plantNo);
+    }
+
+    @Override
+    public List<Watering> getAllWateringListByMemberNo(int memberNo, LocalDate startDate, LocalDate endDate){
+        return wateringRepository.findAllWateringListByMemberNo(memberNo, startDate, endDate);
     }
 
     @Override

@@ -11,13 +11,11 @@ public interface GardenService {
     GardenDto.GardenMain getGarden(int memberNo);
 
     /* 해당 유저의 전체 식물과 각종 계산값 반환 */
-    List<GardenDto.GardenResponse> getPlantList(int memberNo);
+    List<GardenDto.Response> getPlantList(int memberNo);
 
-    // GardenDto.GardenResponse getGardenResponse(Plant plant, List<Chemical> chemicalList);
+    GardenDto.WateringResponse addWateringInGarden(Member member, WateringDto.Request wateringRequest);
 
-    GardenDto.WateringResponse addWateringInGarden(Member member, WateringDto.WateringRequest wateringRequest);
-
-    WateringDto.WateringMsg notDry(int plantNo);
+    WateringDto.Message notDry(int plantNo);
 
     int postpone(int plantNo);
 }

@@ -1,8 +1,8 @@
 package com.buckwheat.garden.service.impl;
 
+import com.buckwheat.garden.dao.MemberDao;
 import com.buckwheat.garden.data.dto.MemberDto;
 import com.buckwheat.garden.data.entity.Member;
-import com.buckwheat.garden.repository.MemberRepository;
 import com.buckwheat.garden.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     private final BCryptPasswordEncoder encoder;
-    private final MemberRepository memberRepository;
+    private final MemberDao memberDao;
 
     private final JavaMailSender mailSender;
 
@@ -29,22 +29,26 @@ public class MemberServiceImpl implements MemberService {
     private String sendFrom;
 
     @Override
-    public MemberDto.MemberDetail getMember(Member member) {
-        return MemberDto.MemberDetail.from(member);
+    public MemberDto.Detail getMember(Member member) {
+        return MemberDto.Detail.from(member);
     }
 
+    /**
+     * 계정 찾기
+     *
+     * @param email
+     * @return
+     */
     @Override
     public Map<String, Object> getIdentificationCodeAndMembers(String email) {
-        log.debug("email: {}", email);
-        List<Member> memberList = memberRepository.findByEmailAndProviderIsNull(email);
+        List<Member> memberList = memberDao.getMemberByEmail(email);
 
-        if(memberList.size() == 0){
+        if (memberList.size() == 0) {
             throw new UsernameNotFoundException("해당 이메일로 가입한 회원이 없어요.");
         }
 
         // 본인확인 코드 만들기
         String identificationCode = RandomStringUtils.randomAlphanumeric(6);
-        log.debug("identificationCode: {}", identificationCode);
 
         // 메일 내용 만들기
         StringBuilder stringBuilder = new StringBuilder();
@@ -67,7 +71,7 @@ public class MemberServiceImpl implements MemberService {
 
         List<String> members = new ArrayList<>();
 
-        for(Member member : memberList){
+        for (Member member : memberList) {
             members.add(member.getUsername());
         }
 
@@ -79,37 +83,30 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void updatePassword(MemberDto.Login login, Member member) {
         String encryptedPassword = encoder.encode(login.getPw());
-        memberRepository.save(member.changePassword(encryptedPassword));
+        memberDao.save(member.changePassword(encryptedPassword));
     }
 
     @Override
     public void resetPassword(MemberDto.Login login) {
-        Member member = memberRepository.findByUsername(login.getUsername()).orElseThrow(NoSuchElementException::new);
+        Member member = memberDao.getMemberByUsername(login.getUsername()).orElseThrow(NoSuchElementException::new);
         updatePassword(login, member);
     }
 
     @Override
-    public boolean identifyMember(MemberDto.Login loginDto, Member member){
+    public boolean identifyMember(MemberDto.Login loginDto, Member member) {
         return encoder.matches(loginDto.getPw(), member.getPw());
     }
 
     @Override
-    public MemberDto.MemberDetail updateMember(MemberDto.MemberDetail memberDetailDto){
-        Member member = memberRepository.findById(memberDetailDto.getMemberNo()).orElseThrow(NoSuchElementException::new);
+    public MemberDto.Detail updateMember(MemberDto.Detail memberDetailDto) {
+        Member member = memberDao.getMemberByMemberNo(memberDetailDto.getMemberNo()).orElseThrow(NoSuchElementException::new);
+        memberDao.save(member.updateEmailAndName(memberDetailDto.getEmail(), memberDetailDto.getName()));
 
-        member.updateEmailAndName(memberDetailDto.getEmail(), memberDetailDto.getName());
-        memberRepository.save(member);
-
-        return MemberDto.MemberDetail.builder()
-                .username(member.getUsername())
-                .email(member.getEmail())
-                .name(member.getName())
-                .createDate(member.getCreateDate())
-                .build();
+        return MemberDto.Detail.updateResponseFrom(member);
     }
 
     @Override
     public void removeMember(int memberNo) {
-        memberRepository.deleteById(memberNo);
+        memberDao.removeMember(memberNo);
     }
 }

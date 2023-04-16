@@ -21,8 +21,8 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class PlantWateringServiceImpl implements PlantWateringService {
-    private final WateringUtil wateringUtil;
     private final WateringDao wateringDao;
+    private final WateringUtil wateringUtil;
 
     /**
      * 이번 관수가 며칠만인지 계산
@@ -53,10 +53,10 @@ public class PlantWateringServiceImpl implements PlantWateringService {
 
     @Override
     public WateringDto.AfterWatering getAfterWatering(Plant plant){
-        WateringDto.WateringMsg wateringMsg = wateringUtil.getWateringMsg(plant.getPlantNo());
+        WateringDto.Message wateringMsg = wateringUtil.getWateringMsg(plant.getPlantNo());
 
         // 리턴용 DTO 만들기
-        List<WateringDto.WateringForOnePlant> wateringList = getWateringListForPlant(plant.getPlantNo());
+        List<WateringDto.ForOnePlant> wateringList = getWateringListForPlant(plant.getPlantNo());
 
         // 식물 테이블의 averageWateringDate 업데이트 필요 X
         if (wateringMsg.getAfterWateringCode() == 3) {
@@ -64,13 +64,13 @@ public class PlantWateringServiceImpl implements PlantWateringService {
         }
 
         // 필요시 물주기 정보 업데이트
-        Plant plantForAdd = wateringUtil.getPlantForAdd(plant, wateringMsg.getAverageWateringDate());
+        Plant newPlant = wateringUtil.updateWateringPeriod(plant, wateringMsg.getAverageWateringDate());
 
-        return WateringDto.AfterWatering.from(PlantDto.PlantResponse.from(plantForAdd), wateringMsg, wateringList);
+        return WateringDto.AfterWatering.from(PlantDto.Response.from(newPlant), wateringMsg, wateringList);
     }
 
     @Override
-    public List<WateringDto.WateringForOnePlant> getWateringListForPlant(int plantNo) {
+    public List<WateringDto.ForOnePlant> getWateringListForPlant(int plantNo) {
         List<Watering> list = wateringDao.getWateringListByPlantNo(plantNo); // orderByWateringDateDesc
 
         // 며칠만에 물 줬는지도 계산해줌
@@ -78,11 +78,11 @@ public class PlantWateringServiceImpl implements PlantWateringService {
             return withWateringPeriodList(list);
         }
 
-        List<WateringDto.WateringForOnePlant> wateringList = new ArrayList<>();
+        List<WateringDto.ForOnePlant> wateringList = new ArrayList<>();
 
         for (Watering watering : list) {
             wateringList.add(
-                    WateringDto.WateringForOnePlant.from(watering)
+                    WateringDto.ForOnePlant.from(watering)
             );
         }
 
@@ -95,17 +95,14 @@ public class PlantWateringServiceImpl implements PlantWateringService {
      * @return 며칠만에 물줬는지를 포함하는 DTO 리스트
      */
     @Override
-    public List<WateringDto.WateringForOnePlant> withWateringPeriodList(List<Watering> list) {
-        List<WateringDto.WateringForOnePlant> wateringList = new ArrayList<>();
+    public List<WateringDto.ForOnePlant> withWateringPeriodList(List<Watering> list) {
+        List<WateringDto.ForOnePlant> wateringList = new ArrayList<>();
 
         for (int i = 0; i < list.size(); i++) {
             // 마지막 요소이자 가장 옛날 물주기
             // => 전 요소가 없으므로 며칠만에 물 줬는지 계산 X
             if (i == list.size() - 1) {
-                wateringList.add(
-                        WateringDto.WateringForOnePlant.from(list.get(i))
-                );
-
+                wateringList.add(WateringDto.ForOnePlant.from(list.get(i)));
                 break;
             }
 
@@ -115,9 +112,7 @@ public class PlantWateringServiceImpl implements PlantWateringService {
 
             int wateringPeriod = (int) Duration.between(prevWateringDate, afterWateringDate).toDays();
 
-            wateringList.add(
-                    WateringDto.WateringForOnePlant.withWateringPeriodFrom(list.get(i), wateringPeriod)
-            );
+            wateringList.add(WateringDto.ForOnePlant.withWateringPeriodFrom(list.get(i), wateringPeriod));
         }
 
         return wateringList;

@@ -1,27 +1,26 @@
 package com.buckwheat.garden.service.impl;
 
+import com.buckwheat.garden.dao.RoutineDao;
 import com.buckwheat.garden.data.dto.RoutineDto;
 import com.buckwheat.garden.data.entity.Member;
-import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Routine;
-import com.buckwheat.garden.repository.PlantRepository;
-import com.buckwheat.garden.repository.RoutineRepository;
 import com.buckwheat.garden.service.RoutineService;
 import com.buckwheat.garden.util.RoutineUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class RoutineServiceImpl implements RoutineService {
-    private final PlantRepository plantRepository;
-    private final RoutineRepository routineRepository;
+    private final RoutineDao routineDao;
     private final RoutineUtil routineUtil;
 
     @Override
@@ -32,7 +31,7 @@ public class RoutineServiceImpl implements RoutineService {
         LocalDateTime today = LocalDate.now().atStartOfDay();
 
         // dto로 변환
-        for (Routine routine : routineRepository.findByMember_MemberNo(memberNo)) {
+        for (Routine routine : routineDao.getRoutineListByMemberNo(memberNo)) {
             // 오늘 해야 하는 루틴인지 계산
             String hasTodoToday = routineUtil.hasToDoToday(routine, today);
 
@@ -53,38 +52,31 @@ public class RoutineServiceImpl implements RoutineService {
 
     @Override
     public RoutineDto.Response addRoutine(Member member, RoutineDto.Request routineDto) {
-        Plant plant = plantRepository.findById(routineDto.getPlantNo()).orElseThrow(NoSuchElementException::new);
-        Routine routine = routineRepository.save(routineDto.toEntityWith(plant, member));
-
-        return RoutineDto.Response.from(routine, plant, "Y", "N");
+        Routine routine = routineDao.save(routineDto, member);
+        return RoutineDto.Response.from(routine, routine.getPlant(), "Y", "N");
     }
 
     @Override
     public RoutineDto.Response modifyRoutine(RoutineDto.Request routineDto) {
-        // content, plant
-        Plant plant = plantRepository.findById(routineDto.getRoutineNo()).orElseThrow(NoSuchElementException::new);
-        Routine prevRoutine = routineRepository.findByRoutineNo(routineDto.getRoutineNo()).orElseThrow(NoSuchElementException::new);
-
-        Routine routine = routineRepository.save(prevRoutine.update(routineDto.getRoutineContent(), routineDto.getRoutineCycle(), plant));
+        Routine routine = routineDao.update(routineDto);
 
         LocalDateTime today = LocalDate.now().atStartOfDay();
         String hasTodoToday = routineUtil.hasToDoToday(routine, today);
         String isCompleted = routineUtil.isCompleted(routine.getLastCompleteDate(), today);
 
-        return RoutineDto.Response.from(routine, plant, hasTodoToday, isCompleted);
+        return RoutineDto.Response.from(routine, routine.getPlant(), hasTodoToday, isCompleted);
     }
 
     @Override
+    @Transactional
     public RoutineDto.Response complete(RoutineDto.Complete routineDto) {
-        Routine routine = routineRepository.findByRoutineNo(routineDto.getRoutineNo()).orElseThrow(NoSuchElementException::new);
-        routineRepository.save(routine.complete(routineDto.getLastCompleteDate()));
+        Routine routine = routineDao.complete(routineDto);
         String isCompleted = routineDto.getLastCompleteDate() != null ? "Y" : "N";
-
-        return RoutineDto.Response.from(routine, "Y", isCompleted);
+        return RoutineDto.Response.from(routine, routine.getPlant(),"Y", isCompleted);
     }
 
     @Override
     public void deleteRoutine(int routineNo) {
-        routineRepository.deleteById(routineNo);
+        routineDao.delete(routineNo);
     }
 }

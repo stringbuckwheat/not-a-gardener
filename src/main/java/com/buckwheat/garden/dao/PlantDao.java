@@ -5,18 +5,18 @@ import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.entity.Place;
 import com.buckwheat.garden.data.entity.Plant;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface PlantDao {
     List<Plant> getPlantListByMemberNo(int memberNo);
-
     Plant getPlantWithPlaceAndWatering(int plantNo);
-
-    Plant save(PlantDto.PlantRequest plantRequestDto, int memberNo);
-
-    Plant update(PlantDto.PlantRequest plantRequest);
-
-    Place updatePlantPlace(PlaceDto.ModifyPlantPlaceDto modifyPlantPlaceDto);
-
+    List<Plant> getPlantListForGarden(int memberNo, LocalDate today);
+    List<Plant> getPlantListForGarden(int memberNo);
+    Plant save(PlantDto.Request plantRequest, int memberNo);
+    Plant update(PlantDto.Request plantRequest);
+    Plant update(Plant plant);
+    Place updatePlantPlace(PlaceDto.ModifyPlantPlace modifyPlantPlaceDto);
+    Plant updateConditionDate(Plant plant);
     void deletePlantByPlantNo(int plantNo);
 }
