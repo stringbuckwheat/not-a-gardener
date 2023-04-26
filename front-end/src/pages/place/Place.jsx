@@ -4,6 +4,7 @@ import AddItemButton from "src/components/button/AddItemButton";
 import PlaceList from "./PlaceList";
 import getData from "src/api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";
+import AddPlace from "./AddPlace";
 
 /**
  * 장소 메인 페이지
@@ -29,16 +30,29 @@ const Place = () => {
     onMount();
   }, [])
 
+  const addPlace = (place) => {
+    placeList.unshift(place);
+
+    setPlaceList(placeList => placeList);
+    setOriginPlaceList(placeList => placeList);
+  }
+
   if (isLoading) {
     return <Loading/>
   } else if (!hasPlace) {
-    return <NoItem title="등록된 장소가 없어요" button={<AddItemButton addUrl="/place/add" size="lg" title="장소 추가하기"/>}/>
+    return <NoItem
+      title="등록된 장소가 없어요"
+      buttonSize="lg"
+      buttonTitle={"장소 추가하기"}
+      addForm={<AddPlace addPlace={addPlace} afterAdd={() => setHasPlace(true)}/>}
+    />
   } else {
     return <PlaceList
       placeList={placeList}
       setPlaceList={setPlaceList}
       originPlaceList={originPlaceList}
       setOriginPlaceList={setOriginPlaceList}
+      addPlace={addPlace}
     />
   }
 }

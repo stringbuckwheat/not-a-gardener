@@ -1,8 +1,7 @@
-import {Link, Navigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {Tag} from "antd";
-import PlantEditableCellAction from "../../components/table/PlantEditableCellAction";
+import PlantEditableCellAction from "../../pages/plant/plantDetail/PlantEditableCellAction";
 import WateringCodeIcon from "../../components/etc/WateringCodeIcon";
-import ClickableTag from "../../components/tag/basic/ClickableTag";
 
 const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey, updatePlant, deletePlant) => {
 
@@ -12,7 +11,6 @@ const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey
         title: '상태',
         dataIndex: 'plantName',
         key: 'plantName',
-        editable: true,
         render: (_, record) => {
           return (
             <WateringCodeIcon wateringCode={record.wateringCode} height={20} wateringMsg={record.tags.wateringMsg}/>

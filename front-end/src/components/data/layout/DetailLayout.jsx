@@ -9,7 +9,7 @@ import {EditOutlined} from '@ant-design/icons';
 import {Space} from 'antd';
 
 const DetailLayout = (props) => {
-  const {url, path, title, deleteTitle, tags, onClickModifyBtn, bottomData, deleteTooltipMsg} = props;
+  const {url, path, title, deleteTitle, tags, onClickModifyBtn, bottomData, deleteTooltipMsg, deleteCallBackFunction} = props;
 
   const deleteModal = props.deleteModal
     ? props.deleteModal
@@ -17,6 +17,7 @@ const DetailLayout = (props) => {
       url={url}
       path={path}
       title={deleteTitle}
+      deleteCallBackFunction={deleteCallBackFunction}
       deleteTooltipMsg={deleteTooltipMsg}
     />
 

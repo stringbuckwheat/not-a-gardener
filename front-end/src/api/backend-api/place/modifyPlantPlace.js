@@ -1,8 +1,8 @@
-import authAxios from "src/utils/interceptors";
+import authAxios from "src/api/interceptors";
 
 /**
  * 한 장소의 식물들 위치를 바꾼다
- * @param { placeNo: placeNo, plantList: props.selectedPlantNo } data 
+ * @param { placeNo: placeNo, plantList: props.selectedPlantNo } data
  * return void
  */
 

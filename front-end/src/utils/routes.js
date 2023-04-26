@@ -10,7 +10,7 @@ const Chemical = React.lazy(() => import('../pages/chemical/Chemical'))
 const ChemicalDetail = React.lazy(() => import('../pages/chemical/ChemicalDetail'))
 
 const Plant = React.lazy(() => import('../pages/plant/Plant'))
-const PlantDetail = React.lazy(() => import('../pages/plant/PlantDetail'))
+const PlantDetail = React.lazy(() => import('../pages/plant/plantDetail/PlantDetail'))
 
 const Schedule = React.lazy(() => import('../pages/schedule/Schedule'))
 

@@ -1,12 +1,12 @@
-import authAxios from "src/utils/interceptors";
+import authAxios from "src/api/interceptors";
 
 /**
- * 
- * @param {} url 
- * @param {} path 
+ *
+ * @param {} url
+ * @param {} path
  */
 const deleteData = (url, path) => {
-    authAxios.delete(`${url}/${path}`)
+    return authAxios.delete(`${url}/${path}`);
 }
 
 export default deleteData;

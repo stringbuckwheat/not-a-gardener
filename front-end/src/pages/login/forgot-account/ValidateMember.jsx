@@ -2,7 +2,7 @@ import {CCol} from "@coreui/react";
 import ForgotAccountCard from "../../../components/card/ForgotAccountCard";
 import ForgotCardWrapper from "../../../components/card/wrapper/ForgotCardWrapper";
 import VerifyAccountContent from "./VerifyAccountContent";
-import React, {useState} from "react";
+import React from "react";
 
 const ValidateMember = ({icon, title, setEmail, setMemberList, successContent}) => {
   return (

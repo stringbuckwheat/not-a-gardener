@@ -15,8 +15,6 @@ import {Tooltip} from 'antd';
 import isEndWithVowel from "../../utils/function/isEndWithVowel";
 
 const DeleteModal = (props) => {
-  const navigate = useNavigate();
-
   const {title, url, path, deleteTooltipMsg, deleteCallBackFunction} = props;
 
   const button = props.button
@@ -28,6 +26,8 @@ const DeleteModal = (props) => {
           setVisible(true)
         }}/>
     </Tooltip>
+
+  const navigate = useNavigate();
 
   // 삭제 모달 메시지 만들기
   const modalTitleMsg = title + (isEndWithVowel(title) ? '를' : '을');

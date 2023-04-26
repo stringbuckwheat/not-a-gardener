@@ -5,12 +5,11 @@ import locale from 'antd/es/date-picker/locale/ko_KR';
 import 'dayjs/locale/ko';
 import getData from "src/api/backend-api/common/getData";
 import { useParams } from "react-router-dom";
-import authAxios from "src/utils/interceptors";
+import authAxios from "src/api/interceptors";
 import getDisabledDate from "src/utils/function/getDisabledDate";
 
-const AddChemicalUsage = (props) => {
+const AddChemicalUsage = ({setOnAdd, }) => {
     const chemicalNo = useParams().chemicalNo;
-    const setOnAdd = props.setOnAdd;
 
     const [options, setOptions] = useState([]);
     const [selectedPlantList, setSelectedPlantList] = useState([]);

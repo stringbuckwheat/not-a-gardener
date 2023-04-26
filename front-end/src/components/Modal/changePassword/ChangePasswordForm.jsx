@@ -5,8 +5,7 @@ import {cilLockLocked} from "@coreui/icons";
 import {CButton} from "@coreui/react";
 import updateData from "../../../api/backend-api/common/updateData";
 
-const ChangePasswordForm = (props) => {
-  const {current, setCurrent, closeModal, prevPassword} = props;
+const ChangePasswordForm = ({current, setCurrent, closeModal, prevPassword}) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirm, setConfirm] = useState(false);
   const pwRegex = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,50}$/;
@@ -33,7 +32,6 @@ const ChangePasswordForm = (props) => {
   }
 
   const onSubmit = async () => {
-    console.log("onsubmit");
     await updateData("/member", "pw", {pw: newPassword});
     setCurrent(current + 1);
   }

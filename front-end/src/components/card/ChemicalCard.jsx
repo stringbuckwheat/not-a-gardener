@@ -4,9 +4,7 @@ import CIcon from '@coreui/icons-react';
 import {Link} from "react-router-dom";
 
 
-const ChemicalCard = (props) => {
-  const chemical = props.chemical;
-
+const ChemicalCard = ({chemical}) => {
   let color = "";
   let icon = {};
 

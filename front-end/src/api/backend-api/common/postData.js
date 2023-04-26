@@ -1,4 +1,4 @@
-import authAxios from "src/utils/interceptors";
+import authAxios from "src/api/interceptors";
 
 /**
  * post 이후 response로 받은 데이터를 돌려준다

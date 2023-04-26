@@ -1,4 +1,4 @@
-import authAxios from "src/utils/interceptors";
+import authAxios from "src/api/interceptors";
 
 const onMount = async (url, setter) => {
     const data = (await authAxios.get(url)).data;

@@ -11,7 +11,7 @@ import postData from "../../api/backend-api/common/postData";
  * @returns {JSX.Element}
  * @constructor
  */
-const AddPlace = ({addPlace, closeAddForm}) => {
+const AddPlace = ({addPlace, afterAdd}) => {
   const [place, setPlace] = useState({
     placeName: "",
     option: "실내",
@@ -33,7 +33,7 @@ const AddPlace = ({addPlace, closeAddForm}) => {
     addPlace(res);
 
     // 컴포넌트 변경
-    closeAddForm();
+    afterAdd();
   }
 
   return (

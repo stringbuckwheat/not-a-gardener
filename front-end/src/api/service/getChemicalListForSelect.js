@@ -1,4 +1,4 @@
-import authAxios from "../../utils/interceptors";
+import authAxios from "../interceptors";
 
 const getChemicalListForSelect = async (setChemicalList) => {
   const res = await authAxios.get("/chemical");

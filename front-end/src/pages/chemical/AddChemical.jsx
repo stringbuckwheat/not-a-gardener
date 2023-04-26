@@ -4,7 +4,7 @@ import chemicalTypeArray from "src/utils/dataArray/chemicalTypeArray"
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 import postData from "../../api/backend-api/common/postData";
 
-const AddChemical = ({addChemical, closeAddForm}) => {
+const AddChemical = ({addChemical, afterAdd}) => {
   const [chemical, setChemical] = useState({
     chemicalName: "",
     chemicalType: chemicalTypeArray[0].value,
@@ -46,8 +46,12 @@ const AddChemical = ({addChemical, closeAddForm}) => {
 
   const submit = async () => {
     const res = await postData("/chemical", chemical);
+    console.log("add chemical res", res);
     addChemical(res);
-    closeAddForm(); // 컴포넌트 변경
+
+    if(afterAdd){
+      afterAdd(); // 컴포넌트 변경
+    }
   }
 
   return (

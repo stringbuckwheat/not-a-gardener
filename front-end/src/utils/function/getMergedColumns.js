@@ -6,13 +6,14 @@ const getMergedColumns = (columnArray, conditionCol, trueInput, falseInput, isEd
 
     return {
       ...col,
-      onCell: (record) => ({
+      onCell: (record) => {
+        return {
         record,
         inputType: col.dataIndex === conditionCol ? trueInput : falseInput,
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
-      }),
+      }},
     };
   });
 

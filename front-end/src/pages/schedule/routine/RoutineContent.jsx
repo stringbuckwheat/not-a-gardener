@@ -6,7 +6,6 @@ import React from "react";
 
 const RoutineContent = ({
                               isRoutineFormOpened,
-                              onClickShowAddForm,
                               onClickRoutineFormButton,
                               addRoutine,
                               plantList,
@@ -22,7 +21,7 @@ const RoutineContent = ({
       <div className="mb-4">
         <span className="fs-5 text-garden">나의 루틴</span>
         {!isRoutineFormOpened
-          ? <GButton color="garden" className="float-end" onClick={onClickShowAddForm}>추가</GButton> : <></>}
+          ? <GButton color="garden" className="float-end" onClick={onClickRoutineFormButton}>추가</GButton> : <></>}
       </div>
       {/* 루틴 추가 */}
       <div className="mb-4">

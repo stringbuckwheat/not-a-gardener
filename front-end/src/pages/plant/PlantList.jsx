@@ -60,7 +60,7 @@ const PlantList = ({plantList, setPlantList, originPlantList, addPlant}) => {
         value: place.placeName
       }))}
       addPlant={addPlant}
-      closeAddForm={switchAddForm}
+      afterAdd={switchAddForm}
     />
   ) : (
     <PlantListLayout

@@ -1,4 +1,4 @@
-import authAxios from "src/utils/interceptors";
+import authAxios from "src/api/interceptors";
 
 const updateData = async (url, path, data) => {
     return (await authAxios.put(`${url}/${path}`, data)).data;

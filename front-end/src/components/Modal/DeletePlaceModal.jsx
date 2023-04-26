@@ -14,9 +14,9 @@ const DeletePlaceModal = ({plantListSize, placeNo}) => {
     setVisible(false);
   }
 
-  const remove = () => {
-    deleteData("/place", placeNo);
-    navigate("/place", {replace: true, state: {deletedPlaceNo: placeNo}});
+  const remove = async () => {
+    await deleteData("/place", placeNo);
+    navigate("/place", {replace: true});
   }
 
   const [deleteWithAllPlant, setDeleteWithAllPlant] = useState(false);

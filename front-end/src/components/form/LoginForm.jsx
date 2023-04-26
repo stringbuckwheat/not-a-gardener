@@ -1,4 +1,4 @@
-import {CButton, CForm, CFormInput, CInputGroup, CInputGroupText, CLink, CRow} from "@coreui/react";
+import {CButton, CForm, CFormInput, CInputGroup, CInputGroupText, CRow} from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import {cilLockLocked, cilUser} from "@coreui/icons";
 import React, {useState} from "react";
@@ -7,13 +7,13 @@ import setMember from "../../api/service/setMember";
 import axios from "axios";
 
 const LoginForm = () => {
-
   const [msg, setMsg] = useState('');
 
   const [login, setLogin] = useState({
     username: "",
     pw: ""
   })
+
   // 입력 값 확인 및 submit
   const inputCheck = (e) => {
     e.preventDefault(); // reload 막기
@@ -45,7 +45,6 @@ const LoginForm = () => {
       setMsg(error.response.data.errorDescription);
     }
   }
-
 
   return (
     <CRow>

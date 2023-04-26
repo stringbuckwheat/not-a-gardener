@@ -1,26 +1,33 @@
 import {CButton, CContainer, CImage, CRow} from "@coreui/react";
 import React, {useState} from "react";
 import forNoPlant from "../../assets/images/forNoPlant.png";
+import getPlaceListForSelect from "../../api/service/getPlaceListForSelect";
+import AddPlant from "../../pages/plant/AddPlant";
 
-const NoItem = ({title, buttonSize, buttonTitle, addForm}) => {
+const NoItemForPlant = ({addPlant, afterAdd}) => {
   const [isAddFormOpened, setIsAddFormOpened] = useState(false);
 
+  const [placeList, setPlaceList] = useState([]);
+  const onClick = async () => {
+    const placeList = await getPlaceListForSelect();
+    setPlaceList(() => placeList);
+    setIsAddFormOpened(true);
+  }
+
   return isAddFormOpened ? (
-    <>
-      {addForm}
-    </>
+    <AddPlant placeList={placeList} addPlant={addPlant} afterAdd={afterAdd}/>
   ) : (
     <CContainer fluid className="text-center">
       <CRow className="text-center mt-5">
-        <h2>{title}</h2>
+        <h2>등록된 식물이 없어요</h2>
         <div className="d-grid gap-2 col-6 mx-auto mt-2">
           <CButton
-            onClick={() => setIsAddFormOpened(true)}
+            onClick={onClick}
             color="success"
-            size={buttonSize}
+            size={"lg"}
             variant="outline"
             shape="rounded-pill">
-            {buttonTitle}
+            식물 등록하기
           </CButton>
         </div>
       </CRow>
@@ -34,4 +41,4 @@ const NoItem = ({title, buttonSize, buttonTitle, addForm}) => {
   )
 }
 
-export default NoItem;
+export default NoItemForPlant;

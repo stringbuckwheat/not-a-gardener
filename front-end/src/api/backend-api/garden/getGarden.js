@@ -1,4 +1,4 @@
-import authAxios from "src/utils/interceptors";
+import authAxios from "src/api/interceptors";
 
 const getGarden = async () => {
     const gardenList = (await authAxios.get("/garden")).data;

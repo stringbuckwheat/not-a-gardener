@@ -4,7 +4,7 @@ import getPlantFormArray from "../../utils/function/getPlantFormArray";
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 import postData from "../../api/backend-api/common/postData";
 
-const AddPlant = ({placeList, addPlant, closeAddForm}) => {
+const AddPlant = ({placeList, addPlant, afterAdd}) => {
   const [plant, setPlant] = useState({
     plantName: "",
     plantSpecies: "",
@@ -17,14 +17,15 @@ const AddPlant = ({placeList, addPlant, closeAddForm}) => {
   const onChange = (e) => {
     const {name, value} = e.target;
     setPlant(setPlant => ({...plant, [name]: value}));
+    console.log("plant", plant);
   }
 
-  const isValid = plant.plantName != '' && placeList.length !== 0;
+  const isValid = plant.plantName != '' && plant.placeNo !== 0;
 
   const submit = async () => {
     const res = await postData("/plant", plant);
     addPlant(res);
-    closeAddForm();
+    afterAdd();
   }
 
   return (

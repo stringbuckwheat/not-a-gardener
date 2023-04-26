@@ -1,22 +1,20 @@
 import {CFormInput, CInputGroup, CInputGroupText} from "@coreui/react";
 import React from "react";
 
-const FormInputFeedback = (props) => {
-  const {
-    label,
-    type,
-    placeholder,
-    name,
-    required,
-    valid,
-    invalid,
-    feedbackInvalid,
-    feedbackValid,
-    onChange,
-    defaultValue,
-    disabled
-  } = props;
-
+const FormInputFeedback = ({
+                             label,
+                             type,
+                             placeholder,
+                             name,
+                             required,
+                             valid,
+                             invalid,
+                             feedbackInvalid,
+                             feedbackValid,
+                             onChange,
+                             defaultValue,
+                             disabled
+                           }) => {
   return (
     <CInputGroup className="mb-3">
       <CInputGroupText>{label}</CInputGroupText>

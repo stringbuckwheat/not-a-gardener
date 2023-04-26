@@ -1,9 +1,9 @@
 import {CCol} from "@coreui/react";
 import {useSpring, animated} from "@react-spring/web";
 
-const SocialLoginButton = (props) => {
-  const authorizationUrl = "http://localhost:8080/oauth2/authorization";
-  const {provider, recentLogin} = props;
+const SocialLoginButton = ({provider, recentLogin} ) => {
+  const authorizationUrl = `${process.env.REACT_APP_API_URL}/oauth2/authorization`;
+  console.log("authorizationUrl", authorizationUrl);
 
   const springProps = useSpring({
     display: 'inline',

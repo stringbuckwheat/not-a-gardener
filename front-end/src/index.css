@@ -49,8 +49,6 @@
   color: #ffba00 !important;
 }
 
-/* custom */
-
 /* garden card */
 
 .center {
@@ -71,6 +69,7 @@
 /* garden card animated button */
 .animated-btn {
   border: none;
+  background: none;
 }
 
 /* custom */

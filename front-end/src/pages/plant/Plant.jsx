@@ -4,6 +4,8 @@ import NoItem from "src/components/empty/NoItem";
 import PlantList from "./PlantList";
 import getData from "../../api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";
+import getPlaceListForSelect from "../../api/service/getPlaceListForSelect";
+import NoItemForPlant from "../../components/empty/NoItemForPlant";
 
 const Plant = () => {
   const [isLoading, setLoading] = useState(true);
@@ -34,12 +36,14 @@ const Plant = () => {
     setOriginPlantList(plantList);
   }
 
+
   if (isLoading) {
     return <Loading/>
   } else if (!hasPlant) {
-    return <NoItem
-      title="등록된 식물이 없어요"
-      button={<AddPlantButton addUrl="/plant/add" size="lg"/>}/>
+    return <NoItemForPlant
+      addPlant={addPlant}
+      afterAdd={() => setHasPlant(true)}
+    />
   } else {
     return <PlantList
       plantList={plantList}

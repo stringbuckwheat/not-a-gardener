@@ -2,10 +2,7 @@ import {CButton, CCard, CCardBody} from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import React from "react";
 
-const ForgotAccountCard = (props) => {
-  const {icon, color, onClick, title, buttonSize} = props;
-  const iconSize = props.iconSize ? props.iconSize : "8xl";
-
+const ForgotAccountCard = ({icon, color, onClick, title, buttonSize, iconSize = "8xl"}) => {
   return (
     <CCard
       style={{minHeight: "50vh", height: "100%"}}

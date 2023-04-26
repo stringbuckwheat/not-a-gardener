@@ -1,9 +1,9 @@
 import axios from "axios";
-import LogOut from "./function/logout";
+import LogOut from "../utils/function/logout";
 
 // axios 인스턴스 생성
 const authAxios = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: process.env.REACT_APP_API_URL,
   timeout: 1000
 })
 

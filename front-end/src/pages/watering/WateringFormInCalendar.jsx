@@ -24,7 +24,6 @@ const WateringFormInCalendar = ({plantList, chemicalList, isWateringFormOpened, 
 
   const submit = async () => {
     const res = await postData("/watering", watering);
-    console.log("res", res);
     onAdd(res);
     setIsWateringFormOpened(false);
   }

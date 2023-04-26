@@ -3,14 +3,11 @@ import { DatePicker } from "antd";
 import locale from 'antd/es/date-picker/locale/ko_KR';
 import 'dayjs/locale/ko';
 
-const FormInputDate = (props) => {
-    const inputItem = props.inputItem;
-    const onChange = props.onChange;
-
+const FormInputDate = ({inputItem, onChange}) => {
     const handleOnChange = (dateString) => {
         const data = {
             target: {
-                name: props.inputItem.name,
+                name: inputItem.name,
                 value: dateString
             }
         }

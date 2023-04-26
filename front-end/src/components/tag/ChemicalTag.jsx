@@ -1,7 +1,6 @@
 import {Space, Tag} from 'antd';
 
-const ChemicalTag = (props) => {
-  const {chemical, wateringListSize} = props;
+const ChemicalTag = ({chemical, wateringListSize}) => {
 
   return (
     <Space size={[0, 8]} wrap>

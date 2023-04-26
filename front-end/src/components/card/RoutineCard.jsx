@@ -1,9 +1,9 @@
 import {Checkbox, Popconfirm, Space, Tag} from "antd";
 import {CloseOutlined} from "@ant-design/icons";
 import deleteData from "../../api/backend-api/common/deleteData";
-import updateData from "../../api/backend-api/common/updateData";
 import {useState} from "react";
 import LinkHoverTag from "../tag/basic/LinkHoverTag";
+import updateRoutineState from "../../api/backend-api/updateRoutineState";
 
 const RoutineCard = ({routine, deleteRoutine, index, completeRoutine}) => {
   const [isCompleted, setIsCompleted] = useState(routine.isCompleted == "Y");
@@ -11,16 +11,7 @@ const RoutineCard = ({routine, deleteRoutine, index, completeRoutine}) => {
   const hasToDoToday = routine.hasToDoToday == "Y";
 
   const onChange = async (e) => {
-    let data = {routineNo: routine.routineNo};
-
-    if (e.target.checked) {
-      data = {
-        routineNo: routine.routineNo,
-        lastCompleteDate: new Date().toISOString().split("T")[0]
-      };
-    }
-
-    const res = await updateData(`/routine/${routine.routineNo}/complete`, "", data);
+    const res = await updateRoutineState(routine.routineNo, e.target.checked);
     completeRoutine(index, res);
     setIsCompleted(e.target.checked);
   };

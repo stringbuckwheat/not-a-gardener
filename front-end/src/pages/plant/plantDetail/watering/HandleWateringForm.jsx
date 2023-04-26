@@ -1,8 +1,7 @@
 import {CButton} from "@coreui/react";
 import {Popconfirm, Space} from "antd";
-import authAxios from "src/utils/interceptors";
 import WateringForm from "./WateringForm";
-import deleteData from "../../../api/backend-api/common/deleteData";
+import deleteData from "../../../../api/backend-api/common/deleteData";
 
 const HandleWateringForm = ({
                             plantNo,
@@ -13,8 +12,8 @@ const HandleWateringForm = ({
                             setEditingKey,
                             wateringCallBack
                           }) => {
-  const deleteAllWatering = () => {
-    authAxios.delete(`/plant/${plantNo}/watering`);
+  const deleteAllWatering = async () => {
+    await deleteData(`/plant/${plantNo}/`, "watering");
     setWateringList([]);
   }
 

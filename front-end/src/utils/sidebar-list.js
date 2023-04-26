@@ -2,16 +2,12 @@ import React from 'react'
 import CIcon from '@coreui/icons-react'
 import {
   cilBell,
-  cilCart,
-  cilListNumbered,
   cilDrink,
   cilCalendarCheck,
-  cilBug,
   cilEco,
-  cilFlower,
   cilHouse, cilDrop,
 } from '@coreui/icons'
-import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
+import { CNavItem, CNavTitle } from '@coreui/react'
 
 const SidebarList = [
   {

@@ -1,9 +1,7 @@
 import { Tag } from "antd";
 import mediumArray from 'src/utils/dataArray/mediumArray';
 
-const PlantTableTag = (props) => {
-    const tags = props.tags;
-
+const PlantTableTag = ({tags}) => {
     const getColorIdxFromMediumArray = (medium) => {
         for (let i = 0; i < mediumArray.length; i++) {
             if (mediumArray[i].value === medium) {

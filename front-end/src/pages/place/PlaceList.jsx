@@ -14,7 +14,7 @@ import AddPlace from "./AddPlace";
  * @returns {JSX.Element}
  * @constructor
  */
-const PlaceList = ({placeList, setPlaceList, originPlaceList, setOriginPlaceList}) => {
+const PlaceList = ({placeList, setPlaceList, originPlaceList, addPlace}) => {
   // 검색
   const [searchWord, setSearchWord] = useState("");
 
@@ -30,13 +30,6 @@ const PlaceList = ({placeList, setPlaceList, originPlaceList, setOriginPlaceList
       setPlaceList(originPlaceList);
     }
   }, [searchWord])
-
-  const addPlace = (place) => {
-    placeList.unshift(place);
-
-    setPlaceList(placeList => placeList);
-    setOriginPlaceList(placeList => placeList);
-  }
 
   /// 정렬
   const [sort, setSort] = useState("");
@@ -70,7 +63,7 @@ const PlaceList = ({placeList, setPlaceList, originPlaceList, setOriginPlaceList
   return isAddFormOpened ? (
     <AddPlace
       addPlace={addPlace}
-      closeAddForm={switchAddForm}
+      afterAdd={switchAddForm}
     />
   ) : (
     <>

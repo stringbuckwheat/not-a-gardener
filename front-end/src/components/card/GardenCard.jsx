@@ -7,7 +7,15 @@ import GardenCardAction from "../../pages/garden/GardenCardAction";
 import wateringCodeDesign from "../../utils/dataArray/wateringCodeDesign";
 import WateringCodeIcon from "../etc/WateringCodeIcon";
 
-const GardenCard = ({index, deleteInTodoList, garden, chemicalList, openNotification, updateGardenAfterWatering, postponeWatering}) => {
+const GardenCard = ({
+                      index,
+                      deleteInTodoList,
+                      garden,
+                      chemicalList,
+                      openNotification,
+                      updateGardenAfterWatering,
+                      postponeWatering
+                    }) => {
   const gardenDetail = garden.gardenDetail;
   const plant = garden.plant;
 
@@ -27,16 +35,16 @@ const GardenCard = ({index, deleteInTodoList, garden, chemicalList, openNotifica
           onMouseLeave={() => setHovered(false)}>
 
           <GardenCardAction
-              hovered={hovered}
-              plantNo={plant.plantNo}
-              plantName={plant.plantName}
-              wateringCode={gardenDetail.wateringCode}
-              chemicalList={chemicalList}
-              openNotification={openNotification}
-              updateGardenAfterWatering={updateGardenAfterWatering}
-              postponeWatering={postponeWatering}
-              index={index}
-              deleteInTodoList={deleteInTodoList}
+            hovered={hovered}
+            plantNo={plant.plantNo}
+            plantName={plant.plantName}
+            wateringCode={gardenDetail.wateringCode}
+            chemicalList={chemicalList}
+            openNotification={openNotification}
+            updateGardenAfterWatering={updateGardenAfterWatering}
+            postponeWatering={postponeWatering}
+            index={index}
+            deleteInTodoList={deleteInTodoList}
           />
           <Link
             className="no-text-decoration"
@@ -45,7 +53,7 @@ const GardenCard = ({index, deleteInTodoList, garden, chemicalList, openNotifica
               <CCardBody>
                 <CRow className="d-flex align-items-center">
                   <CCol xs={2} className="text-center">
-                    <WateringCodeIcon wateringCode={gardenDetail.wateringCode} />
+                    <WateringCodeIcon wateringCode={gardenDetail.wateringCode}/>
                   </CCol>
                   <CCol xs={1}></CCol>
                   <CCol xs={8}>

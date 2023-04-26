@@ -10,8 +10,8 @@ const ChemicalList = ({chemicalList, addChemical}) => {
   const switchAddForm = () => setIsAddFormOpened(!isAddFormOpened);
 
   return isAddFormOpened ? (
-    <AddChemical addChemical={addChemical} closeAddForm={switchAddForm}/>
-  ) :(
+    <AddChemical addChemical={addChemical} afterAdd={switchAddForm}/>
+  ) : (
     <>
       <CRow>
         <AddItemCard onClick={switchAddForm} addUrl="/chemical/add" addMsg="비료/살충제 추가"/>

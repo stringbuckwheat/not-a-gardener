@@ -4,6 +4,7 @@ import AddPlantButton from 'src/components/button/AddPlantButton';
 import getData from "../../api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";
 import GardenMain from "./GardenMain";
+import wateringList from "../watering/WateringList";
 
 const Garden = () => {
   const [isLoading, setLoading] = useState(true);
@@ -16,6 +17,7 @@ const Garden = () => {
 
   const onMountGarden = async () => {
     const data = await getData("/garden"); // todoList, waitingList
+    console.log("garden data", data);
 
     setLoading(false);
     setNothingToDo(data.todoList.length == 0 && data.waitingList.length == 0);
@@ -33,19 +35,19 @@ const Garden = () => {
 
   const updateGardenAfterWatering = (gardenResponse) => {
     const updatedTodoList = todoList.filter((plant) => plant.plant.plantNo !== gardenResponse.plant.plantNo);
-    setTodoList(() => updatedTodoList);
+    setTodoList(() => [...updatedTodoList]);
   }
 
   // waiting리스트에서 삭제
   const updateWaitingListAfterWatering = (index) => {
     waitingList.splice(index, 1);
-    setWaitingList(() => waitingList);
+    setWaitingList(() => [...wateringList]);
   }
 
   // todolist에서 삭제
   const deleteInTodoList = (index) => {
     todoList.splice(index, 1);
-    setTodoList(() => todoList);
+    setTodoList(() => [...todoList]);
   }
 
   // postpone
@@ -57,7 +59,7 @@ const Garden = () => {
       return [...todoList, {...prevGarden, gardenDetail: newGardenDetail}];
     }
 
-    setTodoList(handleTodoList());
+    setTodoList(() => handleTodoList());
   }
 
   const afterRoutine = (index, res) => {

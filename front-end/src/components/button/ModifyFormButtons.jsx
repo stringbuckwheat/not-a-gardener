@@ -2,8 +2,7 @@ import {CButton} from "@coreui/react";
 import {Space} from "antd";
 import ModifySubmitButton from "./ModifySubmitButton";
 
-const ModifyFormButtons = (props) => {
-  const {validation, data, url, path, changeModifyState} = props;
+const ModifyFormButtons = ({validation, data, url, path, changeModifyState}) => {
 
   return (
     <div className="d-flex justify-content-end">

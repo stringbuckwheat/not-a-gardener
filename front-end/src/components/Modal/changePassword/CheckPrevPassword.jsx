@@ -5,9 +5,7 @@ import {CButton} from "@coreui/react";
 import React, {useState} from "react";
 import postData from "../../../api/backend-api/common/postData";
 
-const CheckPrevPassword = (props) => {
-  const {current, setCurrent, closeModal, setPrevPassword} = props;
-
+const CheckPrevPassword = ({current, setCurrent, closeModal, setPrevPassword}) => {
   const [password, setPassword] = useState("");
   const [pwCheck, setPwCheck] = useState(true);
 

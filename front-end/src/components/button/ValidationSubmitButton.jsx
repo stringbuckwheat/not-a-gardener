@@ -19,6 +19,7 @@ const ValidationSubmitButton = ({isValid, onClickValid, onClickInvalidMsg, title
   return isValid ? (
     <Button
       type="button"
+      size={size}
       className={`bg-orange text-white ${className}`}
       onClick={onClickValid}>
       {title}

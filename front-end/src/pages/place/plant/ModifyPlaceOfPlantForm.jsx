@@ -50,7 +50,6 @@ const ModifyPlaceOfPlantForm = ({placeNo, setMoveFormVisible}) => {
     // 장소 업데이트
     await modifyPlantPlace({placeNo: placeNo, plantList: selectedPlantList});
     const res = await getData(`/place/${placeNo}`);
-    console.log("res", res);
 
     setMoveFormVisible(false);
     navigate("", {replace: true, state: res})

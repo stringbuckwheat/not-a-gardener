@@ -1,9 +1,6 @@
 import { Space, Tag } from 'antd';
 
-const PlaceTag = (props) => {
-    const place = props.place;
-    const howManyPlant = props.howManyPlant;
-
+const PlaceTag = ({place, howManyPlant}) => {
     let artificialLightTag = "식물등을 사용하지 않아요";
 
     if(place.artificialLight === "사용"){

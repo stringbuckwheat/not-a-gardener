@@ -21,8 +21,6 @@ const GardenCardAnimatedButton = ({
   const mouseEnter = (index) => setHovered(() => index);
   const mouseLeave = () => setHovered(-1);
 
-  // #4169E1 라벤더
-  const style = {fontSize: "2vw", color: "#4169E1"}
 
   const onClickNotDry = async () => {
     // 안 말랐어요
@@ -33,6 +31,7 @@ const GardenCardAnimatedButton = ({
 
     // 현재 todoList에서 삭제
     deleteInTodoList(index);
+
     let msg = {
       title: "관찰 결과를 알려줘서 고마워요",
       content: "앞으로도 함께 키워요"
@@ -56,6 +55,9 @@ const GardenCardAnimatedButton = ({
     const res = await updateData(`/garden/${plantNo}/watering/postpone`, "", null);
     postponeWatering(index, res);
   }
+
+  // #4169E1 라벤더
+  const style = {fontSize: "2vw"}
 
   const buttons = [
     {
@@ -85,12 +87,13 @@ const GardenCardAnimatedButton = ({
       {trailSprings.map((spring, index) => (
         <CCol
           xs={4}
+          key={index}
+          className={"text-center"}
           onClick={buttons[index].onClick}
           onMouseEnter={() => mouseEnter(index)}
           onMouseLeave={mouseLeave}>
           <animated.button
-            key={index}
-            className="mb-1 animated-btn"
+            className={`mb-1 animated-btn ${hovered == index ? "text-black" : "text-dark"}`}
             style={{
               ...spring
             }}

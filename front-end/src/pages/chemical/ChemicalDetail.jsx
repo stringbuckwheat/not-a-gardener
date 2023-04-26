@@ -42,7 +42,7 @@ const ChemicalDetail = () => {
   const navigate = useNavigate();
 
   const remove = async () => {
-    await deleteData("/chemical", chemical.chemicalNo);
+    const res = await deleteData("/chemical", chemical.chemicalNo);
     navigate("/chemical", {replace: true});
   }
 

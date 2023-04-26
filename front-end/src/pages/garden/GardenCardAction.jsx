@@ -20,17 +20,14 @@ const GardenCardAction = ({
                             postponeWatering
                           }) => {
   const [selected, setSelected] = useState("");
-
   const [chemicalNo, setChemicalNo] = useState(0);
 
   const submitWatering = async () => {
-    const data = {
-      plantNo: plantNo,
-      chemicalNo: chemicalNo,
+    const res = await postData(`/garden/${plantNo}/watering`, {
+      plantNo,
+      chemicalNo,
       wateringDate: new Date().toISOString().split('T')[0]
-    }
-
-    const res = await postData("/garden/watering", data);
+    });
 
     // 메시지 띄우기
     const msg = getWateringNotificationMsg(res.wateringMsg.afterWateringCode);

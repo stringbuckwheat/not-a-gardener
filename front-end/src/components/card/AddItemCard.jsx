@@ -1,10 +1,8 @@
 import {CCol, CWidgetStatsF} from "@coreui/react";
-import {Link} from "react-router-dom";
 import {cilPlus} from "@coreui/icons";
 import CIcon from '@coreui/icons-react';
 
-
-const AddItemCard = ({addUrl, addMsg, onClick}) => {
+const AddItemCard = ({addMsg, onClick}) => {
 
   return (
     <CCol md={3} xs={12}>

@@ -32,6 +32,7 @@ const Routine = ({routines, plantList}) => {
   const [isRoutineFormOpened, setIsRoutineFormOpened] = useState(false);
   const onClickRoutineFormButton = () => {
     setIsRoutineFormOpened(!isRoutineFormOpened)
+    console.log("onClickRoutineFormButton", isRoutineFormOpened);
   }
 
   return (
@@ -40,18 +41,16 @@ const Routine = ({routines, plantList}) => {
         {
           toDoList.length == 0 && notToDoList.length == 0
             ?
-            <>
-              <NoSchedule
-                isAddFormOpened={isRoutineFormOpened}
-                title="루틴"
-                onClickShowAddForm={onClickRoutineFormButton}
-              >
-                <AddRoutine
-                  onClickRoutineFormButton={onClickRoutineFormButton}
-                  addRoutine={addRoutine}
-                  plantList={plantList}/>
-              </NoSchedule>
-            </>
+            <NoSchedule
+              isAddFormOpened={isRoutineFormOpened}
+              title="루틴"
+              onClickShowAddForm={onClickRoutineFormButton}
+            >
+              <AddRoutine
+                onClickRoutineFormButton={onClickRoutineFormButton}
+                addRoutine={addRoutine}
+                plantList={plantList}/>
+            </NoSchedule>
             :
             <RoutineContent
               isRoutineFormOpened={isRoutineFormOpened}

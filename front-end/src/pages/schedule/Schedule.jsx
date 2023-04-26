@@ -1,4 +1,4 @@
-import {CCard, CCardBody, CCardGroup, CContainer} from '@coreui/react'
+import {CCardGroup, CContainer} from '@coreui/react'
 import Routine from "./routine/Routine";
 import {useEffect, useState} from "react";
 import getData from "../../api/backend-api/common/getData";

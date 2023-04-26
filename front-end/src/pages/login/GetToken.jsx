@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 import {useNavigate, useParams} from 'react-router-dom';
-import authAxios from '../../utils/interceptors'
+import authAxios from '../../api/interceptors'
 import getData from "../../api/backend-api/common/getData";
 
 

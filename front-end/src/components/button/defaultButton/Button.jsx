@@ -1,9 +1,7 @@
 import {CButton} from "@coreui/react";
 import React from "react";
 
-const Button = (props) => {
-  const {name, size, onClick, color, className, textColor} = props
-
+const Button = ({name, size, onClick, color, className, textColor}) => {
   return (
     <CButton
       type={"button"}
