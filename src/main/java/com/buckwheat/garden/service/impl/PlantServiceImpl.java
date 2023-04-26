@@ -7,7 +7,6 @@ import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.service.PlantService;
-import com.buckwheat.garden.util.GardenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,8 +19,8 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class PlantServiceImpl implements PlantService {
-    private final GardenUtil gardenUtil;
     private final PlantDao plantDao;
+    private final GardenResponseProvider gardenResponseProvider;
 
     /**
      * 하나의 장소 정보 반환
@@ -46,31 +45,17 @@ public class PlantServiceImpl implements PlantService {
         return plantList;
     }
 
-    public GardenDto.Response getGardenResponseFrom(int plantNo, int memberNo){
-        Plant plant = plantDao.getPlantWithPlaceAndWatering(plantNo);
-
-        PlantDto.Response plantResponse = PlantDto.Response.from(plant);
-        GardenDto.Detail gardenDetail = gardenUtil.getGardenDetail(plant, memberNo);
-
-        return new GardenDto.Response(plantResponse, gardenDetail);
-    }
-
     @Override
     public GardenDto.Response addPlant(PlantDto.Request plantRequest, Member member) {
         Plant plant = plantDao.save(plantRequest, member.getMemberNo());
-        return getGardenResponseFrom(plant.getPlantNo(), member.getMemberNo()); // TODO
+        return gardenResponseProvider.getGardenResponse(plant, member.getMemberNo());
     }
 
     @Override
     @Transactional
     public GardenDto.Response modifyPlant(PlantDto.Request plantRequest, Member member) {
         Plant plant = plantDao.update(plantRequest);
-
-        // GardenDto를 돌려줘야 함
-        PlantDto.Response plantResponse = PlantDto.Response.from(plant);
-        GardenDto.Detail gardenDetail = gardenUtil.getGardenDetail(plant, member.getMemberNo());
-
-        return new GardenDto.Response(plantResponse, gardenDetail);
+        return gardenResponseProvider.getGardenResponse(plant, member.getMemberNo());
     }
 
     @Override

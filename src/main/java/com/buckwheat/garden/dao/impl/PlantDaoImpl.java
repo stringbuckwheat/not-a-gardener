@@ -10,14 +10,15 @@ import com.buckwheat.garden.repository.MemberRepository;
 import com.buckwheat.garden.repository.PlaceRepository;
 import com.buckwheat.garden.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class PlantDaoImpl implements PlantDao {
     private final PlantRepository plantRepository;
     private final PlaceRepository placeRepository;
@@ -31,11 +32,6 @@ public class PlantDaoImpl implements PlantDao {
     @Override
     public Plant getPlantWithPlaceAndWatering(int plantNo) {
         return plantRepository.findByPlantNo(plantNo).orElseThrow(NoSuchElementException::new);
-    }
-
-    @Override
-    public List<Plant> getPlantListForGarden(int memberNo, LocalDate today){
-        return plantRepository.findByMember_MemberNoAndConditionDateIsBeforeOrConditionDateIsNull(memberNo, today);
     }
 
     @Override

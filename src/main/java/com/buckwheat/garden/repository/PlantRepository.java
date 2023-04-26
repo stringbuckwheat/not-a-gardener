@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,9 +28,6 @@ public interface PlantRepository extends JpaRepository<Plant, Integer> {
      */
     @EntityGraph(attributePaths = {"place", "wateringList", "wateringList.chemical"}, type = EntityGraph.EntityGraphType.FETCH)
     List<Plant> findByMember_MemberNo(int memberNo);
-
-    @EntityGraph(attributePaths = {"place", "wateringList", "wateringList.chemical"}, type = EntityGraph.EntityGraphType.FETCH)
-    List<Plant> findByMember_MemberNoAndConditionDateIsBeforeOrConditionDateIsNull(int memberNo, LocalDate today);
 
     /**
      * Plant 페이지에서 식물 카드를 만들 데이터

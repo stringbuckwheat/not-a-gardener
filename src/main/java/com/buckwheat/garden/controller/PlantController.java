@@ -1,9 +1,10 @@
 package com.buckwheat.garden.controller;
 
 import com.buckwheat.garden.config.oauth2.UserPrincipal;
-import com.buckwheat.garden.data.dto.*;
+import com.buckwheat.garden.data.dto.GardenDto;
+import com.buckwheat.garden.data.dto.PlaceDto;
+import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.service.PlantService;
-import com.buckwheat.garden.service.WateringService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlantController {
     private final PlantService plantService;
-    private final WateringService wateringService;
 
     /**
      * 전체 식물 리스트

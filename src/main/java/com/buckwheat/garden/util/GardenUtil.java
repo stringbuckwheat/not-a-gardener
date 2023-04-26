@@ -1,11 +1,10 @@
 package com.buckwheat.garden.util;
 
 import com.buckwheat.garden.code.WateringCode;
-import com.buckwheat.garden.data.dto.FertilizingInfo;
+import com.buckwheat.garden.data.dto.ChemicalUsage;
 import com.buckwheat.garden.data.dto.GardenDto;
 import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.data.entity.Plant;
-import com.buckwheat.garden.repository.WateringRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,18 +17,24 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class GardenUtil {
-    private final WateringRepository wateringRepository;
-
-    public GardenDto.Detail getGardenDetail(Plant plant, int memberNo) {
-        String anniversary = "";
-
-        // 키운 지 며칠이나 지났는지 (nullable)
-        if (plant.getBirthday() != null) {
-            anniversary = getAnniversary(plant.getBirthday());
-        }
+    public GardenDto.Detail getGardenDetailWhenLazy(Plant plant){
+        String anniversary = getAnniversary(plant.getBirthday());
 
         // 물주기 기록이 없으면
         if (plant.getWateringList().size() == 0) {
+            return GardenDto.Detail.from(null, anniversary, -1, WateringCode.NO_RECORD.getCode(), null);
+        }
+
+        WateringDto.Response latestWatering = WateringDto.Response.from(plant.getWateringList().get(0));
+
+        return GardenDto.Detail.from(latestWatering, anniversary, 0, WateringCode.YOU_ARE_LAZY.getCode(), null);
+    }
+
+    public GardenDto.Detail getGardenDetail(Plant plant, List<ChemicalUsage> latestChemicalUsages) {
+        String anniversary = getAnniversary(plant.getBirthday());
+
+        // 물주기 기록이 없으면
+        if (plant.getWateringList() == null || plant.getWateringList().size() == 0) {
             return GardenDto.Detail.from(null, anniversary, -1, WateringCode.NO_RECORD.getCode(), null);
         }
 
@@ -39,31 +44,33 @@ public class GardenUtil {
         int wateringCode = getWateringCode(plant.getAverageWateringPeriod(), wateringDDay);
 
         // chemicalCode: 물을 줄 식물에 대해서 맹물을 줄지 비료/약품 희석액을 줄지 알려주는 용도
-        GardenDto.ChemicalCode chemicalCode = getChemicalCode(plant.getPlantNo(), memberNo);
+        GardenDto.ChemicalCode chemicalCode = getChemicalCode(latestChemicalUsages);
 
         return GardenDto.Detail.from(latestWatering, anniversary, wateringDDay, wateringCode, chemicalCode);
     }
 
-    public GardenDto.Detail getGardenDetail(Plant plant, int memberNo, int wateringDDay, int wateringCode) {
+    public GardenDto.Detail getGardenDetail(Plant plant, int wateringDDay, int wateringCode, List<ChemicalUsage> latestChemicalUsages) {
+        String anniversary = getAnniversary(plant.getBirthday());
+
         WateringDto.Response latestWatering = null;
-        String anniversary = "";
 
         if (plant.getWateringList().size() > 0) {
             latestWatering = WateringDto.Response.from(plant.getWateringList().get(0));
         }
 
-        if (plant.getBirthday() != null) {
-            anniversary = getAnniversary(plant.getBirthday());
-        }
-
         // chemicalCode: 물을 줄 식물에 대해서 맹물을 줄지 비료/약품 희석액을 줄지 알려주는 용도
-        GardenDto.ChemicalCode chemicalCode = getChemicalCode(plant.getPlantNo(), memberNo); // FertilizerNo or -1
+        GardenDto.ChemicalCode chemicalCode = getChemicalCode(latestChemicalUsages); // FertilizerNo or -1
 
         return GardenDto.Detail.from(latestWatering, anniversary, wateringDDay, wateringCode, chemicalCode);
     }
-
+    
     public String getAnniversary(LocalDate birthday) {
+        if(birthday == null){
+            return "";
+        }
+
         LocalDate today = LocalDate.now();
+
         // 생일이면
         if ((today.getMonth() == birthday.getMonth()) && (today.getDayOfMonth() == birthday.getDayOfMonth())) {
             return "생일 축하해요";
@@ -119,15 +126,12 @@ public class GardenUtil {
     }
 
     // -1           0           1
-    // 비료 사용 안함  맹물 주기      chemicalNo
-    public GardenDto.ChemicalCode getChemicalCode(int plantNo, int memberNo) {
-        // 시비 주기가 긴 순으로 정렬되어 있음
-        List<FertilizingInfo> latestFertilizedDateList = wateringRepository.findLatestChemicalizedDayList(plantNo, memberNo);
-
+    // 비료 사용 안함  맹물 주기      비료주기
+    public GardenDto.ChemicalCode getChemicalCode(List<ChemicalUsage> latestChemicalUsages) {
         // index 필요
         // chemical list index에 맞춰 해당 chemical을 줘야하는지 말아야하는지 산출
-        for (int i = 0; i < latestFertilizedDateList.size(); i++) {
-            FertilizingInfo latestFertilizingInfo = latestFertilizedDateList.get(i);
+        for (int i = 0; i < latestChemicalUsages.size(); i++) {
+            ChemicalUsage latestFertilizingInfo = latestChemicalUsages.get(i);
             LocalDate latestFertilizedDate = latestFertilizingInfo.getLatestWateringDate();
 
             // TODO 하이포넥스 14일, 개화용비료 14일, 물주기 14일이면 계속 하이포넥스만 걸림

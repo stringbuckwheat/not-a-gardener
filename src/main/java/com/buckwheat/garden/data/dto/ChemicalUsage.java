@@ -2,7 +2,7 @@ package com.buckwheat.garden.data.dto;
 
 import java.time.LocalDate;
 
-public interface FertilizingInfo {
+public interface ChemicalUsage {
     int getChemicalNo();
     int getChemicalPeriod();
     String getChemicalName();
