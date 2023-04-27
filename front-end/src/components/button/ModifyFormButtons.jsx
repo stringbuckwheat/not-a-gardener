@@ -2,7 +2,7 @@ import {CButton} from "@coreui/react";
 import {Space} from "antd";
 import ModifySubmitButton from "./ModifySubmitButton";
 
-const ModifyFormButtons = ({validation, data, url, path, changeModifyState}) => {
+const ModifyFormButtons = ({validation, data, url, changeModifyState}) => {
 
   return (
     <div className="d-flex justify-content-end">
@@ -11,7 +11,6 @@ const ModifyFormButtons = ({validation, data, url, path, changeModifyState}) => 
         <ModifySubmitButton
           data={data}
           url={url}
-          path={path}
           changeModifyState={changeModifyState}
           validation={validation}/>
       </Space>

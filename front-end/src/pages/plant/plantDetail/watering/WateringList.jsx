@@ -81,13 +81,13 @@ const WateringList = ({plant, setPlant, wateringList, setWateringList}) => {
   }
 
   const updateWatering = async () => {
-    const res = await updateData(`/plant/${plant.plantNo}/watering/`, editWatering.wateringNo, editWatering);
+    const res = await updateData(`/plant/${plant.plantNo}/watering/${editWatering.wateringNo}`, editWatering);
     wateringCallBack(res);
     setEditingKey('');
   };
 
-  const deleteWatering = (wateringNo) => {
-    deleteData(`/plant/${plant.plantNo}/watering/`, wateringNo);
+  const deleteWatering = async (wateringNo) => {
+    await deleteData(`/plant/${plant.plantNo}/watering/${wateringNo}`);
     setWateringList(wateringList.filter(watering => watering.wateringNo !== wateringNo))
   };
 

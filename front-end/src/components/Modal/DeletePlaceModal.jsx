@@ -15,7 +15,7 @@ const DeletePlaceModal = ({plantListSize, placeNo}) => {
   }
 
   const remove = async () => {
-    await deleteData("/place", placeNo);
+    await deleteData(`/place/${placeNo}`);
     navigate("/place", {replace: true});
   }
 

@@ -16,8 +16,8 @@ const RoutineCard = ({routine, deleteRoutine, index, completeRoutine}) => {
     setIsCompleted(e.target.checked);
   };
 
-  const removeRoutine = (routineNo, hasToDoToday) => {
-    deleteData("/routine", routineNo);
+  const removeRoutine = async (routineNo, hasToDoToday) => {
+    await deleteData(`/routine/${routineNo}`);
     deleteRoutine(routineNo, hasToDoToday);
   }
 

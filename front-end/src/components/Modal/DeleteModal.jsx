@@ -14,11 +14,11 @@ import {DeleteOutlined} from '@ant-design/icons';
 import {Tooltip} from 'antd';
 import isEndWithVowel from "../../utils/function/isEndWithVowel";
 
-const DeleteModal = (props) => {
-  const {title, url, path, deleteTooltipMsg, deleteCallBackFunction} = props;
+// url, path 분리해놔야 navigate으로 쓰기 편함
+const DeleteModal = ({title, url, path, deleteTooltipMsg, deleteCallBackFunction}) => {
 
-  const button = props.button
-    ? props.button
+  const deleteVisibleButton = button
+    ? button
     : <Tooltip title={deleteTooltipMsg}>
       <DeleteOutlined
         className="font-size-18 text-grey"
@@ -33,8 +33,8 @@ const DeleteModal = (props) => {
   const modalTitleMsg = title + (isEndWithVowel(title) ? '를' : '을');
   const modalBodyMsg = title + (isEndWithVowel(title) ? '는' : '은');
 
-  const remove = () => {
-    deleteData(url, path);
+  const remove = async () => {
+    await deleteData(`${url}/${path}`);
     closeDeleteModal();
 
     if (deleteCallBackFunction) {
@@ -64,7 +64,7 @@ const DeleteModal = (props) => {
       <div onClick={() => {
         setVisible(true)
       }}>
-        {button}
+        {deleteVisibleButton}
       </div>
     </>
   )

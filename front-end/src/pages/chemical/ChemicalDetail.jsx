@@ -42,7 +42,7 @@ const ChemicalDetail = () => {
   const navigate = useNavigate();
 
   const remove = async () => {
-    const res = await deleteData("/chemical", chemical.chemicalNo);
+    await deleteData(`/chemical/${chemical.chemicalNo}`);
     navigate("/chemical", {replace: true});
   }
 
@@ -74,8 +74,7 @@ const ChemicalDetail = () => {
         onChange={onChange}
         submitBtn={<ModifyFormButtons
           data={chemical}
-          url="/chemical"
-          path={state.chemicalNo}
+          url={`/chemical/${state.chemicalNo}`}
           changeModifyState={changeModifyState}
           validation={validation}/>}/>
   )

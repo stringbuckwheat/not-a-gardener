@@ -10,7 +10,7 @@ const updateRoutineState = async (routineNo, updateState) => {
     };
   }
 
-  return await updateData(`/routine/${routineNo}`, "complete", data);
+  return await updateData(`/routine/${routineNo}/complete`, data);
 }
 
 export default updateRoutineState;

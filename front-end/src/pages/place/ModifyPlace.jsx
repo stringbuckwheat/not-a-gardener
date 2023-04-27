@@ -24,7 +24,7 @@ const ModifyPlace = (props) => {
   const isValid = place.placeName !== "";
 
   const submit = async () => {
-    const res = await updateData("/place", place.placeNo, place);
+    const res = await updateData(`/place/${place.placeNo}`, place);
     navigate("", {replace: true, state: res});
     changeModifyState();
   }

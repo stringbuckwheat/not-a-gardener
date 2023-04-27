@@ -32,7 +32,7 @@ const ChangePasswordForm = ({current, setCurrent, closeModal, prevPassword}) => 
   }
 
   const onSubmit = async () => {
-    await updateData("/member", "pw", {pw: newPassword});
+    await updateData("/member/pw", {pw: newPassword});
     setCurrent(current + 1);
   }
 

@@ -30,10 +30,10 @@ const PlaceTableForPlant = ({plantList, setPlantList, placeName}) => {
   // 체크박스 눌렀는지
   const hasSelected = selectedRowKeys.length > 0;
 
-  const deletePlant = (plantNo) => {
-    deleteData("/plant", plantNo);
+  const deletePlant = async (plantNo) => {
+    await deleteData(`/plant/${plantNo}`);
     const deletedList = plantList.filter(plant => plant.plantNo !== plantNo);
-    setPlantList(deletedList);
+    setPlantList(() => deletedList);
   }
 
   return (

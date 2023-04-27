@@ -13,7 +13,7 @@ const HandleWateringForm = ({
                             wateringCallBack
                           }) => {
   const deleteAllWatering = async () => {
-    await deleteData(`/plant/${plantNo}/`, "watering");
+    await deleteData(`/plant/${plantNo}/watering`);
     setWateringList([]);
   }
 

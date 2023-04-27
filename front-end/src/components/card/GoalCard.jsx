@@ -9,13 +9,13 @@ const GoalCard = ({goal, index, completeGoal, deleteGoal}) => {
   const [isCompleted, setIsCompleted] = useState(goal.complete === "Y");
 
   const handleCheck = async (e) => {
-    const res = await updateData(`/goal/${goal.goalNo}/complete`, "", null);
+    const res = await updateData(`/goal/${goal.goalNo}/complete`, null);
     completeGoal(index, res);
     setIsCompleted(e.target.checked);
   }
 
   const removeGoal = async () => {
-    await deleteData("/goal", goal.goalNo);
+    await deleteData(`/goal/${goal.goalNo}`);
     deleteGoal(goal.goalNo);
   }
 

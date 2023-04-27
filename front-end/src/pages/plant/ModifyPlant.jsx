@@ -56,8 +56,7 @@ const ModifyPlant = ({changeModifyState, placeList, plant}) => {
       onChange={onChange}
       submitBtn={<ModifyFormButtons
         data={updatedPlant}
-        url="/plant"
-        path={plant.plantNo}
+        url={`/plant/${plant.plantNo}`}
         changeModifyState={changeModifyState}
         validation={plant.plantName != ""}/>}/>
   )

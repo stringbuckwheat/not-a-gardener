@@ -31,7 +31,7 @@ const PlantTable = ({originPlantList, setPlantList, placeList}) => {
   const plantList = getPlantListForPlantTable(originPlantList);
 
   const deletePlant = async (plantNo) => {
-    await deleteData("/plant", plantNo);
+    await deleteData(`/plant/${plantNo}`);
     const afterDelete = originPlantList.filter(plant => plant.plant.plantNo !== plantNo);
     setPlantList(afterDelete);
   };
@@ -68,7 +68,7 @@ const PlantTable = ({originPlantList, setPlantList, placeList}) => {
   const updatePlant = async () => {
     const values = await form.validateFields();
 
-    const res = await updateData("/plant", editingKey, {...values, ...modifyPlant, plantNo: editingKey});
+    const res = await updateData(`/plant/${editingKey}`, {...values, ...modifyPlant, plantNo: editingKey});
 
     const updatedPlantList = originPlantList.map((plant) => {
       return plant.plant.plantNo === editingKey ? {...res} : plant;
