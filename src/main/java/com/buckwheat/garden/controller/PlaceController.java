@@ -23,18 +23,18 @@ public class PlaceController {
      * @return 유저의 전체 장소 리스트, 카드용 DTO에 담아 보낸다.
      */
     @GetMapping("")
-    public List<PlaceDto.Card> getPlaceList(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return placeService.getPlaceList(userPrincipal.getMember().getMemberNo());
+    public List<PlaceDto.Card> getPlacesByMemberId(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        return placeService.getPlacesByMemberId(userPrincipal.getMember().getMemberId());
     }
 
     /**
      * 하나의 장소 정보
-     * @param placeNo
+     * @param placeId
      * @return
      */
-    @GetMapping("/{placeNo}")
-    public PlaceDto.WithPlantList getPlace(@PathVariable int placeNo){
-        return placeService.getPlace(placeNo);
+    @GetMapping("/{placeId}")
+    public PlaceDto.WithPlantList getPlace(@PathVariable long placeId){
+        return placeService.getPlaceDetail(placeId);
     }
 
     /**
@@ -44,27 +44,26 @@ public class PlaceController {
      * @return
      */
     @PostMapping("")
-    public PlaceDto.Card addPlace(@RequestBody PlaceDto.Request placeRequest, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        return placeService.addPlace(placeRequest, userPrincipal.getMember());
+    public PlaceDto.Card add(@RequestBody PlaceDto.Request placeRequest, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        return placeService.add(userPrincipal.getMember().getMemberId(), placeRequest);
     }
 
     /**
      * 장소 수정
      * @param placeRequest
-     * @param userPrincipal Member
      * @return 수정한 장소 정보
      */
     @PutMapping("/{placeNo}")
-    public PlaceDto.Response modifyPlace(@RequestBody PlaceDto.Request placeRequest, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        return placeService.modifyPlace(placeRequest, userPrincipal.getMember());
+    public PlaceDto.Response modify(@RequestBody PlaceDto.Request placeRequest){
+        return placeService.modify(placeRequest);
     }
 
     /**
      * 하나의 장소 삭제
      * @param placeNo
      */
-    @DeleteMapping("/{placeNo}")
-    public void deletePlace(@PathVariable int placeNo){
-        placeService.deletePlace(placeNo);
+    @DeleteMapping("/{placeId}")
+    public void delete(@PathVariable long placeId){
+        placeService.delete(placeId);
     }
 }

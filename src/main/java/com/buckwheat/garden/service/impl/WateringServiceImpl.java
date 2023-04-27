@@ -24,7 +24,7 @@ public class WateringServiceImpl implements WateringService {
     private final WateringUtil wateringUtil;
 
     @Override
-    public Map<LocalDate, List<WateringDto.ByDate>> getWateringList(int memberNo, int month) {
+    public Map<LocalDate, List<WateringDto.ByDate>> getWateringList(Long memberId, int month) {
         // 1일이 일요일이면 뒤로 2주 더
         // 1일이 일요일이 아니면 앞으로 한 주 뒤로 한 주
         LocalDate firstDayOfMonth = LocalDate.of(2023, month, 1);
@@ -44,18 +44,18 @@ public class WateringServiceImpl implements WateringService {
 
         Map<LocalDate, List<WateringDto.ByDate>> map = new HashMap<>(); // 날짜: 리스트
 
-        for (Watering watering : wateringDao.getAllWateringListByMemberNo(memberNo, startDate, endDate)) {
-            List<WateringDto.ByDate> tmpList = map.get(watering.getWateringDate());
+        for (Watering watering : wateringDao.getAllWateringListByMemberNo(memberId, startDate, endDate)) {
+            List<WateringDto.ByDate> tmpList = map.get(watering.getDate());
 
             if(tmpList == null){
                 List<WateringDto.ByDate> list = new ArrayList<>();
                 list.add(WateringDto.ByDate.from(watering));
-                map.put(watering.getWateringDate(), list);
+                map.put(watering.getDate(), list);
                 continue;
             }
 
             tmpList.add(WateringDto.ByDate.from(watering));
-            map.put(watering.getWateringDate(), tmpList);
+            map.put(watering.getDate(), tmpList);
         }
 
         log.debug("map: {}", map);
@@ -67,7 +67,7 @@ public class WateringServiceImpl implements WateringService {
         Watering watering = wateringDao.addWatering(wateringRequest);
 
         // 물주기 계산 로직
-        WateringDto.Message wateringMsg = wateringUtil.getWateringMsg(watering.getPlant().getPlantNo());
+        WateringDto.Message wateringMsg = wateringUtil.getWateringMsg(watering.getPlant().getPlantId());
 
         // 식물 테이블의 averageWateringDate 업데이트 필요 X
         if (wateringMsg.getAfterWateringCode() == 3) {

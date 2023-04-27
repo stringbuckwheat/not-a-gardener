@@ -10,14 +10,14 @@ public class MemberDto {
     @ToString
     public static class Login {
         private String username;
-        private String pw;
+        private String password;
 
         public void encryptPassword(String BCryptpassword) {
-            this.pw = BCryptpassword;
+            this.password = BCryptpassword;
         }
 
         public Member toEntity() {
-            return Member.builder().username(username).pw(pw).build();
+            return Member.builder().username(username).password(password).build();
         }
     }
 
@@ -26,14 +26,14 @@ public class MemberDto {
     @Getter // HttpMediaTypeNotAcceptableException
     public static class Info {
         private String token;
-        private int memberNo;
+        private Long memberId;
         private String name;
         private String provider;
 
         public static Info from(String jwtToken, Member member) {
             return Info.builder()
                     .token(jwtToken)
-                    .memberNo(member.getMemberNo())
+                    .memberId(member.getMemberId())
                     .name(member.getName())
                     .provider(member.getProvider())
                     .build();
@@ -46,7 +46,7 @@ public class MemberDto {
     @NoArgsConstructor
     @ToString
     public static class Detail {
-        private int memberNo;
+        private Long id;
         private String username;
         private String email;
         private String name;
@@ -55,7 +55,7 @@ public class MemberDto {
 
         public static Detail from (Member member) {
             return MemberDto.Detail.builder()
-                    .memberNo(member.getMemberNo())
+                    .id(member.getMemberId())
                     .username(member.getUsername())
                     .email(member.getEmail())
                     .name(member.getName())
@@ -82,12 +82,12 @@ public class MemberDto {
     public static class Register {
         private String username;
         private String email;
-        private String pw;
+        private String password;
         private String name;
 
         /* 암호화된 password builder 패턴으로 사용중*/
         public Register encryptPassword(String BCryptpassword) {
-            this.pw = BCryptpassword;
+            this.password = BCryptpassword;
             return this;
         }
 
@@ -96,7 +96,7 @@ public class MemberDto {
                     .builder()
                     .username(username)
                     .email(email)
-                    .pw(pw)
+                    .password(password)
                     .name(name)
                     .createDate(LocalDateTime.now())
                     .build();
@@ -108,7 +108,7 @@ public class MemberDto {
     @NoArgsConstructor
     @ToString
     public static class ForgotResponse{
-        private int memberNo;
+        private Long id;
         private String username;
         private String provider;
     }

@@ -16,28 +16,27 @@ public class RoutineController {
     private final RoutineService routineService;
 
     @GetMapping("")
-    public RoutineDto.Main getRoutineList(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return routineService.getRoutineList(userPrincipal.getMember().getMemberNo());
+    public RoutineDto.Main getRoutines(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        return routineService.getRoutinesByMemberId(userPrincipal.getMember().getMemberId());
     }
 
     @PostMapping("")
-    public RoutineDto.Response addRoutine(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody RoutineDto.Request routineDto){
-        log.debug("routineDto: {}", routineDto);
-        return routineService.addRoutine(userPrincipal.getMember(), routineDto);
+    public RoutineDto.Response add(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody RoutineDto.Request routineRequest){
+        return routineService.add(userPrincipal.getMember().getMemberId(), routineRequest);
     }
 
-    @PutMapping("/{routineNo}/complete")
-    public RoutineDto.Response complete(@RequestBody RoutineDto.Complete routineDto){
-        return routineService.complete(routineDto);
+    @PutMapping("/{routineId}/complete")
+    public RoutineDto.Response complete(@RequestBody RoutineDto.Complete routineComplete){
+        return routineService.complete(routineComplete);
     }
 
-    @PutMapping("/{routineNo}")
-    public RoutineDto.Response modifyRoutine(@RequestBody RoutineDto.Request routineDto){
-        return routineService.modifyRoutine(routineDto);
+    @PutMapping("/{routineId}")
+    public RoutineDto.Response modify(@RequestBody RoutineDto.Request routineRequest){
+        return routineService.modify(routineRequest);
     }
 
-    @DeleteMapping("/{routineNo}")
-    public void deleteRoutine(@PathVariable int routineNo){
-        routineService.deleteRoutine(routineNo);
+    @DeleteMapping("/{routineId}")
+    public void deleteRoutine(@PathVariable long routineId){
+        routineService.delete(routineId);
     }
 }

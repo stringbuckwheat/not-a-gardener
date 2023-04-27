@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/garden/{plantNo}/watering")
+@RequestMapping("/garden/{plantId}/watering")
 @Slf4j
 public class GardenWateringController {
     private final GardenWateringService gardenWateringService;
@@ -24,26 +24,26 @@ public class GardenWateringController {
      */
     @PostMapping("")
     public GardenDto.WateringResponse addWateringInGarden(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody WateringDto.Request wateringRequest){
-        return gardenWateringService.addWateringInGarden(userPrincipal.getMember(), wateringRequest);
+        return gardenWateringService.addWateringInGarden(userPrincipal.getMember().getMemberId(), wateringRequest);
     }
 
     /**
      * 메인 페이지에서 화분이 아직 마르지 않았다고 요청
-     * @param plantNo
+     * @param plantId
      * @return
      */
     @PutMapping("/not-dry")
-    public WateringDto.Message notDry(@PathVariable int plantNo){
-        return gardenWateringService.notDry(plantNo);
+    public WateringDto.Message notDry(@PathVariable long plantId){
+        return gardenWateringService.notDry(plantId);
     }
 
     /**
      * 물주기 (귀찮아서) 미루기
-     * @param plantNo
+     * @param plantId
      * @return 새로운 wateringCode;
      */
     @PutMapping("/postpone")
-    public int postpone(@PathVariable int plantNo){
-        return gardenWateringService.postpone(plantNo);
+    public int postpone(@PathVariable long plantId){
+        return gardenWateringService.postpone(plantId);
     }
 }

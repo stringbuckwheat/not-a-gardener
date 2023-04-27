@@ -14,23 +14,23 @@ public class WateringDto {
     @Getter
     @ToString
     public static class Request {
-        private int wateringNo;
-        private int plantNo;
-        private int chemicalNo;
-        private LocalDate wateringDate;
+        private Long id;
+        private Long plantId;
+        private Long chemicalId;
+        private LocalDate date;
 
         public Watering toEntityWithPlantAndChemical(Plant plant, Chemical chemical) {
             return Watering.builder()
                     .plant(plant)
                     .chemical(chemical)
-                    .wateringDate(wateringDate)
+                    .date(date)
                     .build();
         }
 
         public Watering toEntityWithPlant(Plant plant) {
             return Watering.builder()
                     .plant(plant)
-                    .wateringDate(wateringDate)
+                    .date(date)
                     .build();
         }
     }
@@ -39,15 +39,15 @@ public class WateringDto {
     @Builder
     @Getter
     public static class Response {
-        private int wateringNo;
+        private Long id;
         private String plantName;
         private String chemicalName;
-        private LocalDate wateringDate;
-        private Message wateringMsg;
+        private LocalDate date;
+        private Message msg;
 
         public static String getChemicalName(Chemical chemical) {
             if (chemical != null) {
-                return chemical.getChemicalName();
+                return chemical.getName();
             }
 
             return "맹물";
@@ -55,20 +55,20 @@ public class WateringDto {
 
         public static Response from(Watering watering) {
             return Response.builder()
-                    .wateringNo(watering.getWateringNo())
-                    .plantName(watering.getPlant().getPlantName())
+                    .id(watering.getWateringId())
+                    .plantName(watering.getPlant().getName())
                     .chemicalName(getChemicalName(watering.getChemical()))
-                    .wateringDate(watering.getWateringDate())
+                    .date(watering.getDate())
                     .build();
         }
 
         public static Response withWateringMsgFrom(Watering watering, Message wateringMsg) {
             return Response.builder()
-                    .wateringNo(watering.getWateringNo())
-                    .plantName(watering.getPlant().getPlantName())
+                    .id(watering.getWateringId())
+                    .plantName(watering.getPlant().getName())
                     .chemicalName(getChemicalName(watering.getChemical()))
-                    .wateringDate(watering.getWateringDate())
-                    .wateringMsg(wateringMsg)
+                    .date(watering.getDate())
+                    .msg(wateringMsg)
                     .build();
         }
     }
@@ -117,20 +117,20 @@ public class WateringDto {
     @Getter // (InvalidDefinitionException - No serializer found for class)
     @ToString
     public static class ForOnePlant {
-        private int wateringNo;
-        private int chemicalNo;
+        private Long id;
+        private Long chemicalId;
         private String chemicalName;
-        private LocalDate wateringDate;
-        private int wateringPeriod;
+        private LocalDate date;
+        private int period;
 
         public static ForOnePlant from(Watering watering) {
             Chemical chemical = watering.getChemical();
 
             return ForOnePlant.builder()
-                    .wateringNo(watering.getWateringNo())
-                    .chemicalNo(chemical == null ? 0 : chemical.getChemicalNo())
-                    .chemicalName(chemical == null ? "맹물" : chemical.getChemicalName())
-                    .wateringDate(watering.getWateringDate())
+                    .id(watering.getWateringId())
+                    .chemicalId(chemical == null ? 0 : chemical.getChemicalId())
+                    .chemicalName(chemical == null ? "맹물" : chemical.getName())
+                    .date(watering.getDate())
                     .build();
         }
 
@@ -138,10 +138,10 @@ public class WateringDto {
             Chemical chemical = watering.getChemical();
 
             return ForOnePlant.builder()
-                    .wateringNo(watering.getWateringNo())
-                    .chemicalName(chemical == null ? "맹물" : chemical.getChemicalName())
-                    .wateringDate(watering.getWateringDate())
-                    .wateringPeriod(wateringPeriod)
+                    .id(watering.getWateringId())
+                    .chemicalName(chemical == null ? "맹물" : chemical.getName())
+                    .date(watering.getDate())
+                    .period(wateringPeriod)
                     .build();
         }
     }
@@ -152,10 +152,10 @@ public class WateringDto {
     @Getter
     @ToString
     public static class ByDate {
-        private int wateringNo;
-        private int plantNo;
+        private Long id;
+        private Long plantId;
         private String plantName;
-        private int chemicalNo;
+        private Long chemicalId;
         private String chemicalName;
         private LocalDate wateringDate;
 
@@ -166,20 +166,20 @@ public class WateringDto {
         public static ByDate from(Watering watering, Plant plant, Chemical chemical) {
             if (chemical == null) {
                 return ByDate.builder()
-                        .wateringNo(watering.getWateringNo())
-                        .plantNo(plant.getPlantNo())
-                        .plantName(plant.getPlantName())
-                        .wateringDate(watering.getWateringDate())
+                        .id(watering.getWateringId())
+                        .plantId(plant.getPlantId())
+                        .plantName(plant.getName())
+                        .wateringDate(watering.getDate())
                         .build();
             }
 
             return ByDate.builder()
-                    .wateringNo(watering.getWateringNo())
-                    .plantNo(plant.getPlantNo())
-                    .plantName(plant.getPlantName())
-                    .chemicalNo(chemical.getChemicalNo())
-                    .chemicalName(chemical.getChemicalName())
-                    .wateringDate(watering.getWateringDate())
+                    .id(watering.getWateringId())
+                    .plantId(plant.getPlantId())
+                    .plantName(plant.getName())
+                    .chemicalId(chemical.getChemicalId())
+                    .chemicalName(chemical.getName())
+                    .wateringDate(watering.getDate())
                     .build();
         }
     }
@@ -197,21 +197,21 @@ public class WateringDto {
     @Getter
     @ToString
     public static class ResponseInChemical {
-        private int wateringNo;
-        private int plantNo;
+        private Long id;
+        private Long plantId;
         private String plantName;
-        private int placeNo;
+        private Long placeId;
         private String placeName;
         private LocalDate wateringDate;
 
         public static ResponseInChemical from(Watering watering) {
             return ResponseInChemical.builder()
-                    .wateringNo(watering.getWateringNo())
-                    .plantNo(watering.getPlant().getPlantNo())
-                    .plantName(watering.getPlant().getPlantName())
-                    .placeNo(watering.getPlant().getPlace().getPlaceNo())
-                    .placeName(watering.getPlant().getPlace().getPlaceName())
-                    .wateringDate(watering.getWateringDate())
+                    .id(watering.getWateringId())
+                    .plantId(watering.getPlant().getPlantId())
+                    .plantName(watering.getPlant().getName())
+                    .placeId(watering.getPlant().getPlace().getPlaceId())
+                    .placeName(watering.getPlant().getPlace().getName())
+                    .wateringDate(watering.getDate())
                     .build();
         }
     }

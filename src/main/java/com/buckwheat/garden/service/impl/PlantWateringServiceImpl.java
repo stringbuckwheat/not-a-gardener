@@ -53,10 +53,10 @@ public class PlantWateringServiceImpl implements PlantWateringService {
 
     @Override
     public WateringDto.AfterWatering getAfterWatering(Plant plant){
-        WateringDto.Message wateringMsg = wateringUtil.getWateringMsg(plant.getPlantNo());
+        WateringDto.Message wateringMsg = wateringUtil.getWateringMsg(plant.getPlantId());
 
         // 리턴용 DTO 만들기
-        List<WateringDto.ForOnePlant> wateringList = getWateringListForPlant(plant.getPlantNo());
+        List<WateringDto.ForOnePlant> wateringList = getWateringListForPlant(plant.getPlantId());
 
         // 식물 테이블의 averageWateringDate 업데이트 필요 X
         if (wateringMsg.getAfterWateringCode() == 3) {
@@ -70,8 +70,8 @@ public class PlantWateringServiceImpl implements PlantWateringService {
     }
 
     @Override
-    public List<WateringDto.ForOnePlant> getWateringListForPlant(int plantNo) {
-        List<Watering> list = wateringDao.getWateringListByPlantNo(plantNo); // orderByWateringDateDesc
+    public List<WateringDto.ForOnePlant> getWateringListForPlant(Long plantId) {
+        List<Watering> list = wateringDao.getWateringListByPlantNo(plantId); // orderByWateringDateDesc
 
         // 며칠만에 물 줬는지도 계산해줌
         if (list.size() >= 2) {
@@ -107,8 +107,8 @@ public class PlantWateringServiceImpl implements PlantWateringService {
             }
 
             // 며칠만에 물줬는지 계산
-            LocalDateTime afterWateringDate = list.get(i).getWateringDate().atStartOfDay();
-            LocalDateTime prevWateringDate = list.get(i + 1).getWateringDate().atStartOfDay();
+            LocalDateTime afterWateringDate = list.get(i).getDate().atStartOfDay();
+            LocalDateTime prevWateringDate = list.get(i + 1).getDate().atStartOfDay();
 
             int wateringPeriod = (int) Duration.between(prevWateringDate, afterWateringDate).toDays();
 
@@ -125,12 +125,13 @@ public class PlantWateringServiceImpl implements PlantWateringService {
     }
 
     @Override
-    public void deleteWatering(int wateringNo) {
-        wateringDao.removeWatering(wateringNo);
+    public void deleteWatering(Long id) {
+        wateringDao.deleteById(id);
     }
 
+
     @Override
-    public void deleteAllFromPlant(int plantNo) {
-        wateringDao.removeAllWateringByPlantNo(plantNo);
+    public void deleteAllFromPlant(Long plantId) {
+        wateringDao.deleteByPlantId(plantId);
     }
 }

@@ -29,8 +29,7 @@ public class GardenController {
      */
     @GetMapping("")
     public GardenDto.GardenMain garden(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        log.debug("memberNo: {}", userPrincipal.getMember().getMemberNo());
-        return gardenService.getGarden(userPrincipal.getMember().getMemberNo());
+        return gardenService.getGarden(userPrincipal.getMember().getMemberId());
     }
 
     /**
@@ -41,7 +40,7 @@ public class GardenController {
      *     Detail 최근 관수일, 남은 관수 주기 계산, 관수 코드, 비료 코드 등을 계산한 정보
      */
     @GetMapping("/plants")
-    public List<GardenDto.Response> getPlantList(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return gardenService.getPlantList(userPrincipal.getMember().getMemberNo());
+    public List<GardenDto.Response> getPlantsByMemberId(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        return gardenService.getPlantsByMemberId(userPrincipal.getMember().getMemberId());
     }
 }

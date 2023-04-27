@@ -9,16 +9,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ChemicalRepository extends JpaRepository<Chemical, Integer> {
-    /**
-     * 모든 FK lazy 로딩
-     * @param memberNo
-     * @return
-     */
-    List<Chemical> findByMember_memberNo(int memberNo);
+public interface ChemicalRepository extends JpaRepository<Chemical, Long> {
+    List<Chemical> findByMember_MemberId(Long memberId);
 
-    List<Chemical> findByMember_memberNoOrderByChemicalPeriodDesc(int memberNo);
+    List<Chemical> findByMember_MemberIdOrderByChemicalPeriodDesc(Long memberId);
 
     @EntityGraph(attributePaths = {"wateringList", "wateringList.plant", "wateringList.plant.place"}, type = EntityGraph.EntityGraphType.FETCH)
-    Optional<Chemical> findByChemicalNo(int chemicalNo);
+    Optional<Chemical> findByChemicalId(Long chemicalId);
 }

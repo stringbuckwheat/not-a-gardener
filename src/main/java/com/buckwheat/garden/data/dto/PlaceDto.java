@@ -16,8 +16,8 @@ public class PlaceDto {
     @NoArgsConstructor
     @ToString
     public static class Request{
-        private int placeNo;
-        private String placeName;
+        private Long id;
+        private String name;
         private String artificialLight;
         private String option;
 
@@ -28,8 +28,8 @@ public class PlaceDto {
          */
         public Place toEntityWith(Member member){
             return Place.builder()
-                    .placeNo(placeNo)
-                    .placeName(placeName)
+                    .placeId(id)
+                    .name(name)
                     .artificialLight(artificialLight)
                     .option(option)
                     .createDate(LocalDateTime.now())
@@ -45,28 +45,28 @@ public class PlaceDto {
     @AllArgsConstructor
     @Builder
     public static class Card{
-        private int placeNo;
-        private String placeName;
+        private Long id;
+        private String name;
         private String artificialLight;
         private String option;
         private int plantListSize;
         private LocalDateTime createDate;
 
         public static Card from(Place place){
-            return PlaceDto.Card.builder()
-                    .placeNo(place.getPlaceNo())
-                    .placeName(place.getPlaceName())
+            return Card.builder()
+                    .id(place.getPlaceId())
+                    .name(place.getName())
                     .artificialLight(place.getArtificialLight())
                     .option(place.getOption())
-                    .plantListSize(place.getPlantList().size())
+                    .plantListSize(place.getPlants().size())
                     .createDate(place.getCreateDate())
                     .build();
         }
 
         public static Card fromNew(Place place){
             return Card.builder()
-                    .placeNo(place.getPlaceNo())
-                    .placeName(place.getPlaceName())
+                    .id(place.getPlaceId())
+                    .name(place.getName())
                     .artificialLight(place.getArtificialLight())
                     .option(place.getOption())
                     .plantListSize(0)
@@ -83,15 +83,15 @@ public class PlaceDto {
     @ToString
     @Getter
     public static class Response{
-        private int placeNo;
-        private String placeName;
+        private Long id;
+        private String name;
         private String artificialLight;
         private String option;
 
         public static Response from(Place place){
             return Response.builder()
-                    .placeNo(place.getPlaceNo())
-                    .placeName(place.getPlaceName())
+                    .id(place.getPlaceId())
+                    .name(place.getName())
                     .artificialLight(place.getArtificialLight())
                     .option(place.getOption())
                     .build();
@@ -110,7 +110,7 @@ public class PlaceDto {
     @Setter
     @ToString
     public static class ModifyPlantPlace {
-        int placeNo;
-        List<Integer> plantList;
+        Long placeId;
+        List<Long> plantList;
     }
 }

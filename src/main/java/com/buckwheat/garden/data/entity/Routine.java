@@ -18,30 +18,33 @@ import java.time.LocalDate;
 public class Routine {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int routineNo;
+    private Long routineId;
 
+    // 루틴 내용
     @NotNull
-    private String routineContent;
+    private String content;
 
+    // 반복 주기
     @NotNull
-    private int routineCycle;
+    private int cycle;
 
+    // 가장 최근 완료한 날짜
     private LocalDate lastCompleteDate;
 
     @NotNull
     private LocalDate createDate;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="member_no")
+    @JoinColumn(name="member_id")
     private Member member;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="plant_no")
+    @JoinColumn(name="plant_id")
     private Plant plant;
 
-    public Routine update(String routineContent, int routineCycle, Plant plant){
-        this.routineContent = routineContent;
-        this.routineCycle = routineCycle;
+    public Routine update(String content, int cycle, Plant plant){
+        this.content = content;
+        this.cycle = cycle;
         this.plant = plant;
 
         return this;

@@ -18,30 +18,27 @@ public class GoalController {
     private final GoalService goalService;
 
     @GetMapping("")
-    public List<GoalDto.Response> getGoalList(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        log.debug("getGoalList()");
-        log.debug("userPrincipal.getMember().getMemberNo(): {}", userPrincipal.getMember().getMemberNo());
-
-        return goalService.getGoalList(userPrincipal.getMember().getMemberNo());
+    public List<GoalDto.Response> getGoalsByMemberId(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return goalService.getGoalsByMemberId(userPrincipal.getMember().getMemberId());
     }
 
     @PostMapping("")
-    public GoalDto.Response addGoal(@RequestBody GoalDto.Request goalDto, @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        return goalService.addGoal(goalDto, userPrincipal.getMember());
+    public GoalDto.Response add(@RequestBody GoalDto.Request goalRequest, @AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return goalService.add(userPrincipal.getMember().getMemberId(), goalRequest);
     }
 
-    @PutMapping("/{goalNo}")
-    public GoalDto.Response modifyGoal(@RequestBody GoalDto.Request goalDto) {
-        return goalService.modifyGoal(goalDto);
+    @PutMapping("/{goalId}")
+    public GoalDto.Response modify(@RequestBody GoalDto.Request goalRequest) {
+        return goalService.modify(goalRequest);
     }
 
-    @PutMapping("/{goalNo}/complete")
-    public GoalDto.Response completeGoal(@PathVariable int goalNo) {
-        return goalService.completeGoal(goalNo);
+    @PutMapping("/{goalId}/complete")
+    public GoalDto.Response complete(@PathVariable long goalId) {
+        return goalService.complete(goalId);
     }
 
-    @DeleteMapping("/{goalNo}")
-    public void deleteGoal(@PathVariable int goalNo) {
-        goalService.deleteGoal(goalNo);
+    @DeleteMapping("/{goalId}")
+    public void delete(@PathVariable long goalId) {
+        goalService.delete(goalId);
     }
 }

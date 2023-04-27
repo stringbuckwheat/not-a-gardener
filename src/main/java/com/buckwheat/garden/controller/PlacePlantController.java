@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/place/{placeNo}/plant")
+@RequestMapping("/place/{placeId}/plant")
 public class PlacePlantController {
     private final PlacePlantService placePlantService;
 
     @PostMapping("")
     public PlantDto.PlantInPlace addPlantInPlace(@RequestBody PlantDto.Request plantRequest, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        return placePlantService.addPlantInPlace(plantRequest, userPrincipal.getMember().getMemberNo());
+        return placePlantService.addPlantInPlace(userPrincipal.getMember().getMemberId(), plantRequest);
     }
 }

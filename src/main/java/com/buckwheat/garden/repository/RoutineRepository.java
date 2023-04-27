@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface RoutineRepository extends JpaRepository<Routine, Integer> {
+public interface RoutineRepository extends JpaRepository<Routine, Long> {
     @EntityGraph(attributePaths = {"plant"}, type = EntityGraph.EntityGraphType.FETCH)
-    List<Routine> findByMember_MemberNo(int memberNo);
+    List<Routine> findByMember_MemberId(Long memberId);
 
     @EntityGraph(attributePaths = {"plant"}, type = EntityGraph.EntityGraphType.FETCH)
-    Optional<Routine> findByRoutineNo(int routineNo);
+    Optional<Routine> findByRoutineId(Long routineId);
 }

@@ -10,17 +10,17 @@ public class ChemicalDto {
     @Builder
     @ToString
     public static class Response{
-        private int chemicalNo;
-        private String chemicalName;
-        private String chemicalType;
-        private int chemicalPeriod;
+        private Long id;
+        private String name;
+        private String type;
+        private int period;
 
         public static Response from(Chemical chemical){
             return Response.builder()
-                    .chemicalNo(chemical.getChemicalNo())
-                    .chemicalName(chemical.getChemicalName())
-                    .chemicalType(chemical.getChemicalType())
-                    .chemicalPeriod(chemical.getChemicalPeriod())
+                    .id(chemical.getChemicalId())
+                    .name(chemical.getName())
+                    .type(chemical.getType())
+                    .period(chemical.getPeriod())
                     .build();
         }
     }
@@ -29,10 +29,10 @@ public class ChemicalDto {
     @NoArgsConstructor
     @ToString
     public static class Request {
-        private int chemicalNo;
-        private String chemicalName;
-        private String chemicalType;
-        private int chemicalPeriod;
+        private Long id;
+        private String name;
+        private String type;
+        private int period;
 
         /**
          * chemical update 시에 엔티티 생성(chemicalNo를 포함)
@@ -41,10 +41,10 @@ public class ChemicalDto {
          */
         public Chemical toEntityWithMemberForUpdate(Member member){
             return Chemical.builder()
-                    .chemicalNo(chemicalNo)
-                    .chemicalName(chemicalName)
-                    .chemicalPeriod(chemicalPeriod)
-                    .chemicalType(chemicalType)
+                    .chemicalId(id)
+                    .name(name)
+                    .period(period)
+                    .type(type)
                     .member(member)
                     .build();
         }
@@ -56,9 +56,9 @@ public class ChemicalDto {
          */
         public Chemical toEntityWithMember(Member member){
             return Chemical.builder()
-                    .chemicalName(chemicalName)
-                    .chemicalPeriod(chemicalPeriod)
-                    .chemicalType(chemicalType)
+                    .name(name)
+                    .period(period)
+                    .type(type)
                     .member(member)
                     .build();
         }

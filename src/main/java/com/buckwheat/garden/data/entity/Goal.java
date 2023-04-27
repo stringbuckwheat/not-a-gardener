@@ -15,28 +15,30 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Builder
 public class Goal {
-    /* 올해 식물 키우기 목표 */
+    /* 식물 키우기 목표 */
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int goalNo;
+    private Long goalId;
 
+    // 목표 내용
     @NotNull
-    private String goalContent;
+    private String content;
 
+    // 달성 여부
     private String complete;
 
     // FK
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="plant_no")
+    @JoinColumn(name="plant_id")
     private Plant plant;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_no")
+    @JoinColumn(name="member_id")
     private Member member;
 
-    public Goal update(String goalContent, Plant plant){
-        this.goalContent = goalContent;
+    public Goal update(String content, Plant plant){
+        this.content = content;
         this.plant = plant;
 
         return this;

@@ -34,7 +34,7 @@ public class GardenServiceImpl implements GardenService {
 
     @Override
     @Transactional
-    public GardenDto.GardenMain getGarden(int memberNo) {
+    public GardenDto.GardenMain getGarden(Long memberId) {
         List<GardenDto.Response> todoList = new ArrayList<>();
         List<GardenDto.WaitingForWatering> waitingList = new ArrayList<>();
         LocalDate today = LocalDate.now();
@@ -42,21 +42,21 @@ public class GardenServiceImpl implements GardenService {
         // 필요한 것들 계산해서 gardenDto list 리턴
         // getPlantListForGarden: postponeDate이 과거거나 아예 미룬 적 없는 식물들
         // 오늘 미룬 식물도 띄워줘야함
-        for (Plant plant : plantDao.getPlantListForGarden(memberNo)) {
+        for (Plant plant : plantDao.getPlantsForGarden(memberId)) {
             if(plant.getConditionDate() != null && today.compareTo(plant.getConditionDate()) == 0){
                 continue;
             }
 
-            int wateringDDay = gardenUtil.getWateringDDay(plant.getAverageWateringPeriod(), gardenUtil.getLastDrinkingDay(plant));
+            int wateringDDay = gardenUtil.getWateringDDay(plant.getRecentWateringPeriod(), gardenUtil.getLastDrinkingDay(plant));
 
-            int wateringCode = gardenUtil.getWateringCode(plant.getAverageWateringPeriod(), wateringDDay);
+            int wateringCode = gardenUtil.getWateringCode(plant.getRecentWateringPeriod(), wateringDDay);
             boolean hasToDo = wateringCode < 0 || wateringCode == WateringCode.THIRSTY.getCode() || wateringCode == WateringCode.CHECK.getCode();
 
             if (wateringCode == WateringCode.NO_RECORD.getCode()) {
                 waitingList.add(GardenDto.WaitingForWatering.from(plant));
-                todoList.add(gardenResponseProvider.getGardenResponse(plant, memberNo));
+                todoList.add(gardenResponseProvider.getGardenResponse(plant, memberId));
             } else if (hasToDo) {
-                todoList.add(gardenResponseProvider.getGardenResponse(plant, memberNo));
+                todoList.add(gardenResponseProvider.getGardenResponse(plant, memberId));
             }
         }
 
@@ -64,17 +64,17 @@ public class GardenServiceImpl implements GardenService {
         log.debug("waitingList: {}", waitingList);
 
         // 오늘 루틴 리스트
-        List<RoutineDto.Response> routineList = getRoutineListForToday(memberNo);
+        List<RoutineDto.Response> routineList = getRoutinesForToday(memberId);
 
         return new GardenDto.GardenMain(todoList, waitingList, routineList);
     }
 
-    public List<RoutineDto.Response> getRoutineListForToday(int memberNo) {
+    public List<RoutineDto.Response> getRoutinesForToday(Long memberId) {
         List<RoutineDto.Response> routineList = new ArrayList<>();
         LocalDateTime today = LocalDate.now().atStartOfDay();
 
         // 루틴 띄우기
-        for (Routine routine : routineDao.getRoutineListByMemberNo(memberNo)) {
+        for (Routine routine : routineDao.getRoutinesByMemberId(memberId)) {
             // 오늘 해야 하는 루틴인지 계산
             String hasTodoToday = routineUtil.hasToDoToday(routine, today);
 
@@ -90,12 +90,12 @@ public class GardenServiceImpl implements GardenService {
     }
 
     @Override
-    public List<GardenDto.Response> getPlantList(int memberNo) {
+    public List<GardenDto.Response> getPlantsByMemberId(Long memberId) {
         List<GardenDto.Response> gardenList = new ArrayList<>();
 
         // 필요한 것들 계산해서 gardenDto list 리턴
-        for (Plant plant : plantDao.getPlantListForGarden(memberNo)) {
-            gardenList.add(gardenResponseProvider.getGardenResponse(plant, memberNo));
+        for (Plant plant : plantDao.getPlantsForGarden(memberId)) {
+            gardenList.add(gardenResponseProvider.getGardenResponse(plant, memberId));
         }
 
         return gardenList;

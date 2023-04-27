@@ -21,7 +21,7 @@ public class RegisterController {
 
     /* 회원 가입 */
     @PostMapping("")
-    public MemberDto.Info addMember(@RequestBody MemberDto.Register registerDto){
-        return authenticationService.addMember(registerDto);
+    public MemberDto.Info addMember(@RequestBody MemberDto.Register register){
+        return authenticationService.add(register);
     }
 }

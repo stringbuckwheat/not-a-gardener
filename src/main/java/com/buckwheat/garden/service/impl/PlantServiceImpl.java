@@ -4,7 +4,6 @@ import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.data.dto.GardenDto;
 import com.buckwheat.garden.data.dto.PlaceDto;
 import com.buckwheat.garden.data.dto.PlantDto;
-import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.service.PlantService;
 import lombok.RequiredArgsConstructor;
@@ -25,20 +24,20 @@ public class PlantServiceImpl implements PlantService {
     /**
      * 하나의 장소 정보 반환
      *
-     * @param plantNo
+     * @param id
      * @return
      */
     @Override
-    public PlantDto.Response getOnePlant(int plantNo) {
-        return PlantDto.Response.from(plantDao.getPlantWithPlaceAndWatering(plantNo));
+    public PlantDto.Response getPlantDetail(Long id) {
+        return PlantDto.Response.from(plantDao.getPlantWithPlaceAndWatering(id));
     }
 
     @Override
-    public List<PlantDto.Response> getPlantList(int memberNo) {
+    public List<PlantDto.Response> getPlantsByMemberId(Long memberId) {
         List<PlantDto.Response> plantList = new ArrayList<>();
 
         // @EntityGraph 메소드
-        for (Plant p : plantDao.getPlantListByMemberNo(memberNo)) {
+        for (Plant p : plantDao.getPlantListByMemberId(memberId)) {
             plantList.add(PlantDto.Response.from(p));
         }
 
@@ -46,25 +45,25 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public GardenDto.Response addPlant(PlantDto.Request plantRequest, Member member) {
-        Plant plant = plantDao.save(plantRequest, member.getMemberNo());
-        return gardenResponseProvider.getGardenResponse(plant, member.getMemberNo());
+    public GardenDto.Response add(Long memberId, PlantDto.Request plantRequest) {
+        Plant plant = plantDao.save(memberId, plantRequest);
+        return gardenResponseProvider.getGardenResponse(plant, memberId);
     }
 
     @Override
     @Transactional
-    public GardenDto.Response modifyPlant(PlantDto.Request plantRequest, Member member) {
+    public GardenDto.Response modify(Long memberId, PlantDto.Request plantRequest) {
         Plant plant = plantDao.update(plantRequest);
-        return gardenResponseProvider.getGardenResponse(plant, member.getMemberNo());
+        return gardenResponseProvider.getGardenResponse(plant, memberId);
     }
 
     @Override
-    public PlaceDto.Response modifyPlantPlace(PlaceDto.ModifyPlantPlace modifyPlantPlaceDto) {
-        return PlaceDto.Response.from(plantDao.updatePlantPlace(modifyPlantPlaceDto));
+    public PlaceDto.Response modifyPlantPlace(PlaceDto.ModifyPlantPlace modifyPlantPlace) {
+        return PlaceDto.Response.from(plantDao.updatePlantPlace(modifyPlantPlace));
     }
 
     @Override
-    public void deletePlantByPlantNo(int plantNo) {
-        plantDao.deletePlantByPlantNo(plantNo);
+    public void delete(Long id) {
+        plantDao.deleteBy(id);
     }
 }

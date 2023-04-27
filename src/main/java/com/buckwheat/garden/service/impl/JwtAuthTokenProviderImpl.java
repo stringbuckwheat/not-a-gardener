@@ -54,19 +54,19 @@ public class JwtAuthTokenProviderImpl implements JwtAuthTokenProvider {
     @Override
     public JwtAuthToken createAuthToken(UserPrincipal userPrincipal){
         // PK
-        int memberNo = userPrincipal.getMember().getMemberNo();
+        Long memberId = userPrincipal.getMember().getMemberId();
 
         // claims 만들기
         Map<String, String> claims = new HashMap<>();
 
-        claims.put("memberNo", String.valueOf(memberNo));
+        claims.put("memberNo", String.valueOf(memberId));
         claims.put("email", userPrincipal.getMember().getEmail());
         claims.put("name", userPrincipal.getMember().getName());
 
         // 기한
         Date expiredDate = Date.from(LocalDateTime.now().plusMinutes(180).atZone(ZoneId.systemDefault()).toInstant());
 
-        return new JwtAuthToken(String.valueOf(memberNo), key, claims, expiredDate);
+        return new JwtAuthToken(String.valueOf(memberId), key, claims, expiredDate);
     }
 
     /**

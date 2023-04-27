@@ -3,7 +3,6 @@ package com.buckwheat.garden.service.impl;
 import com.buckwheat.garden.dao.GoalDao;
 import com.buckwheat.garden.data.dto.GoalDto;
 import com.buckwheat.garden.data.entity.Goal;
-import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.service.GoalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +18,10 @@ public class GoalServiceImpl implements GoalService {
     private final GoalDao goalDao;
 
     @Override
-    public List<GoalDto.Response> getGoalList(int memberNo) {
+    public List<GoalDto.Response> getGoalsByMemberId(Long memberId) {
         List<GoalDto.Response> goalList = new ArrayList<>();
 
-        for(Goal goal : goalDao.getGoalListBy(memberNo)){
+        for(Goal goal : goalDao.getGoalListBy(memberId)){
             goalList.add(GoalDto.Response.from(goal));
         }
 
@@ -30,24 +29,24 @@ public class GoalServiceImpl implements GoalService {
     }
 
     @Override
-    public GoalDto.Response addGoal(GoalDto.Request goalDto, Member member) {
-        Goal goal = goalDao.save(goalDto, member);
+    public GoalDto.Response add(Long memberId, GoalDto.Request goalRequest) {
+        Goal goal = goalDao.save(memberId, goalRequest);
         return GoalDto.Response.from(goal, goal.getPlant());
     }
 
     @Override
-    public GoalDto.Response modifyGoal(GoalDto.Request goalDto) {
-        Goal goal = goalDao.update(goalDto);
+    public GoalDto.Response modify(GoalDto.Request goalRequest) {
+        Goal goal = goalDao.update(goalRequest);
         return GoalDto.Response.from(goal, goal.getPlant());
     }
 
     @Override
-    public GoalDto.Response completeGoal(int goalNo) {
-        return GoalDto.Response.from(goalDao.complete(goalNo));
+    public GoalDto.Response complete(Long id) {
+        return GoalDto.Response.from(goalDao.complete(id));
     }
 
     @Override
-    public void deleteGoal(int goalNo) {
-        goalDao.delete(goalNo);
+    public void delete(Long id) {
+        goalDao.deleteBy(id);
     }
 }

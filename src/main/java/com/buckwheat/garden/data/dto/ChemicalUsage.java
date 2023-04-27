@@ -2,8 +2,9 @@ package com.buckwheat.garden.data.dto;
 
 import java.time.LocalDate;
 
+// TODO
 public interface ChemicalUsage {
-    int getChemicalNo();
+    Long getChemicalId();
     int getChemicalPeriod();
     String getChemicalName();
     LocalDate getLatestWateringDate();

@@ -24,18 +24,18 @@ public class ChemicalController {
      * @return 모든 비료 리스트 반환
      */
     @GetMapping("")
-    public List<ChemicalDto.Response> getChemicalList(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return chemicalService.getChemicalList(userPrincipal.getMember().getMemberNo());
+    public List<ChemicalDto.Response> getChemicalsByMemberId(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        return chemicalService.getChemicalsByMemberId(userPrincipal.getMember().getMemberId());
     }
 
     /**
      * 해당 약품의 사용 내역
-     * @param chemicalNo 약품 번호
+     * @param chemicalId 약품 번호
      * @return 해당 약품의 주기 리스트(WateringDto)
      */
-    @GetMapping("/{chemicalNo}/watering")
-    public List<WateringDto.ResponseInChemical> getWateringListByChemical(@PathVariable int chemicalNo){
-        return chemicalService.getWateringListByChemical(chemicalNo);
+    @GetMapping("/{chemicalId}/watering")
+    public List<WateringDto.ResponseInChemical> getWateringsByChemicalId(@PathVariable long chemicalId){
+        return chemicalService.getWateringsByChemicalId(chemicalId);
     }
 
     /**
@@ -45,8 +45,8 @@ public class ChemicalController {
      * @return 수정한 ChemicalDTO
      */
     @PostMapping("")
-    public ChemicalDto.Response addChemical(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ChemicalDto.Request chemicalRequest){
-        return chemicalService.addChemical(chemicalRequest, userPrincipal.getMember());
+    public ChemicalDto.Response add(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ChemicalDto.Request chemicalRequest){
+        return chemicalService.add(userPrincipal.getMember().getMemberId(), chemicalRequest);
     }
 
     /**
@@ -55,17 +55,17 @@ public class ChemicalController {
      * @param chemicalRequest 입력받은 약품 정보
      * @return 수정한 Chemical
      */
-    @PutMapping("/{chemicalNo}")
-    public ChemicalDto.Response updateChemical(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ChemicalDto.Request chemicalRequest){
-        return chemicalService.updateChemical(chemicalRequest, userPrincipal.getMember());
+    @PutMapping("/{chemicalId}")
+    public ChemicalDto.Response modify(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ChemicalDto.Request chemicalRequest){
+        return chemicalService.modify(userPrincipal.getMember().getMemberId(), chemicalRequest);
     }
 
     /**
      * 약품 삭제
-     * @param chemicalNo
+     * @param chemicalId
      */
-    @DeleteMapping("/{chemicalNo}")
-    public void deleteChemical(@PathVariable int chemicalNo){
-        chemicalService.deleteChemical(chemicalNo);
+    @DeleteMapping("/{chemicalId}")
+    public void delete(@PathVariable long chemicalId){
+        chemicalService.delete(chemicalId);
     }
 }

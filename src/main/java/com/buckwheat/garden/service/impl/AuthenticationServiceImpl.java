@@ -44,11 +44,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public MemberDto.Info addMember(MemberDto.Register paramRegisterDto) {
+    public MemberDto.Info add(MemberDto.Register register) {
         // DTO에 암호화된 비밀번호 저장한 뒤 엔티티로 변환
         Member member = memberDao.save(
-                paramRegisterDto
-                        .encryptPassword(encoder.encode(paramRegisterDto.getPw()))
+                register
+                        .encryptPassword(encoder.encode(register.getPassword()))
                         .toEntity()
         );
 
@@ -69,7 +69,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Member member = memberDao.getMemberForLogin(login.getUsername());
 
         // 비밀번호 일치 여부 검사
-        if (!encoder.matches(login.getPw(), member.getPw())) {
+        if (!encoder.matches(login.getPassword(), member.getPassword())) {
             throw new BadCredentialsException("비밀번호 오류");
         }
 

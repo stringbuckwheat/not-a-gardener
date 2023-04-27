@@ -24,10 +24,10 @@ public class RoutineDto {
     @NoArgsConstructor
     @ToString
     public static class Response {
-        private int routineNo;
-        private String routineContent;
-        private int routineCycle;
-        private int plantNo;
+        private Long id;
+        private String content;
+        private int cycle;
+        private Long plantId;
         private String plantName;
         private LocalDate lastCompleteDate;
 
@@ -37,11 +37,11 @@ public class RoutineDto {
 
         public static Response from(Routine routine, String hasToDoToday, String isCompleted){
             return Response.builder()
-                    .routineNo(routine.getRoutineNo())
-                    .routineContent(routine.getRoutineContent())
-                    .routineCycle(routine.getRoutineCycle())
-                    .plantNo(routine.getPlant().getPlantNo())
-                    .plantName(routine.getPlant().getPlantName())
+                    .id(routine.getRoutineId())
+                    .content(routine.getContent())
+                    .cycle(routine.getCycle())
+                    .plantId(routine.getPlant().getPlantId())
+                    .plantName(routine.getPlant().getName())
                     .lastCompleteDate(routine.getLastCompleteDate())
                     .hasToDoToday(hasToDoToday)
                     .isCompleted(isCompleted)
@@ -50,11 +50,11 @@ public class RoutineDto {
 
         public static Response from(Routine routine, Plant plant, String hasToDoToday, String isCompleted){
             return Response.builder()
-                    .routineNo(routine.getRoutineNo())
-                    .routineContent(routine.getRoutineContent())
-                    .routineCycle(routine.getRoutineCycle())
-                    .plantNo(plant.getPlantNo())
-                    .plantName(plant.getPlantName())
+                    .id(routine.getRoutineId())
+                    .content(routine.getContent())
+                    .cycle(routine.getCycle())
+                    .plantId(plant.getPlantId())
+                    .plantName(plant.getName())
                     .lastCompleteDate(routine.getLastCompleteDate())
                     .hasToDoToday(hasToDoToday)
                     .isCompleted(isCompleted)
@@ -65,16 +65,16 @@ public class RoutineDto {
     @Getter
     @ToString
     public static class Request{
-        private int routineNo;
-        private String routineContent;
-        private int routineCycle;
-        private int plantNo;
+        private Long id;
+        private String content;
+        private int cycle;
+        private Long plantId;
 
         public Routine toEntityWith(Plant plant, Member member){
             return Routine.builder()
-                    .routineNo(routineNo)
-                    .routineContent(routineContent)
-                    .routineCycle(routineCycle)
+                    .routineId(id)
+                    .content(content)
+                    .cycle(cycle)
                     .plant(plant)
                     .member(member)
                     .createDate(LocalDate.now())
@@ -85,7 +85,7 @@ public class RoutineDto {
     @Getter
     @ToString
     public static class Complete{
-        private int routineNo;
+        private Long id;
         private LocalDate lastCompleteDate;
     }
 }

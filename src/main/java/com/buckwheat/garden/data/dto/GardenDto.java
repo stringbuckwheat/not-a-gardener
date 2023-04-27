@@ -32,22 +32,22 @@ public class GardenDto {
     @NoArgsConstructor
     @Getter
     public static class WaitingForWatering{
-        private int plantNo;
-        private String plantName;
-        private String plantSpecies;
+        private Long id;
+        private String name;
+        private String species;
         private String medium;
-        private int placeNo;
+        private Long placeId;
         private String placeName;
         private LocalDate createDate;
 
         public static WaitingForWatering from(Plant plant){
             return WaitingForWatering.builder()
-                    .plantNo(plant.getPlantNo())
-                    .plantName(plant.getPlantName())
-                    .plantSpecies(plant.getPlantSpecies())
+                    .id(plant.getPlantId())
+                    .name(plant.getName())
+                    .species(plant.getSpecies())
                     .medium(plant.getMedium())
-                    .placeNo(plant.getPlace().getPlaceNo())
-                    .placeName(plant.getPlace().getPlaceName())
+                    .placeId(plant.getPlace().getPlaceId())
+                    .placeName(plant.getPlace().getName())
                     .createDate(LocalDate.from(plant.getCreateDate()))
                     .build();
         }
@@ -71,6 +71,7 @@ public class GardenDto {
         // 비료 주기 정보
         ChemicalCode chemicalCode;
 
+        // TODO 너무 많은 파라미터
         public static Detail from(WateringDto.Response latestWateringDate, String anniversary, int wateringDDay, int wateringCode, ChemicalCode chemicalCode){
             return Detail.builder()
                     .latestWateringDate(latestWateringDate)
@@ -85,7 +86,7 @@ public class GardenDto {
     @AllArgsConstructor
     @Getter
     public static class ChemicalCode{
-        private int chemicalNo;
+        private Long chemicalId;
         private String chemicalName;
     }
 

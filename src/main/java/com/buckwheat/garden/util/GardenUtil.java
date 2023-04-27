@@ -21,27 +21,42 @@ public class GardenUtil {
         String anniversary = getAnniversary(plant.getBirthday());
 
         // 물주기 기록이 없으면
-        if (plant.getWateringList().size() == 0) {
-            return GardenDto.Detail.from(null, anniversary, -1, WateringCode.NO_RECORD.getCode(), null);
+        if (plant.getWaterings().size() == 0) {
+            return GardenDto.Detail.builder()
+                    .latestWateringDate(null)
+                    .anniversary(anniversary)
+                    .wateringDDay(-1)
+                    .wateringCode(WateringCode.NO_RECORD.getCode())
+                    .chemicalCode(null)
+                    .build();
+            // return GardenDto.Detail.from(null, anniversary, -1, WateringCode.NO_RECORD.getCode(), null);
         }
 
-        WateringDto.Response latestWatering = WateringDto.Response.from(plant.getWateringList().get(0));
+        WateringDto.Response latestWatering = WateringDto.Response.from(plant.getWaterings().get(0));
 
-        return GardenDto.Detail.from(latestWatering, anniversary, 0, WateringCode.YOU_ARE_LAZY.getCode(), null);
+        return GardenDto.Detail.builder()
+                .latestWateringDate(latestWatering)
+                .anniversary(anniversary)
+                .wateringDDay(0)
+                .wateringCode(WateringCode.YOU_ARE_LAZY.getCode())
+                .chemicalCode(null)
+                .build();
+
+        // return GardenDto.Detail.from(latestWatering, anniversary, 0, WateringCode.YOU_ARE_LAZY.getCode(), null);
     }
 
     public GardenDto.Detail getGardenDetail(Plant plant, List<ChemicalUsage> latestChemicalUsages) {
         String anniversary = getAnniversary(plant.getBirthday());
 
         // 물주기 기록이 없으면
-        if (plant.getWateringList() == null || plant.getWateringList().size() == 0) {
+        if (plant.getWaterings() == null || plant.getWaterings().size() == 0) {
             return GardenDto.Detail.from(null, anniversary, -1, WateringCode.NO_RECORD.getCode(), null);
         }
 
-        WateringDto.Response latestWatering = WateringDto.Response.from(plant.getWateringList().get(0));
+        WateringDto.Response latestWatering = WateringDto.Response.from(plant.getWaterings().get(0));
 
-        int wateringDDay = getWateringDDay(plant.getAverageWateringPeriod(), plant.getWateringList().get(0).getWateringDate());
-        int wateringCode = getWateringCode(plant.getAverageWateringPeriod(), wateringDDay);
+        int wateringDDay = getWateringDDay(plant.getRecentWateringPeriod(), plant.getWaterings().get(0).getDate());
+        int wateringCode = getWateringCode(plant.getRecentWateringPeriod(), wateringDDay);
 
         // chemicalCode: 물을 줄 식물에 대해서 맹물을 줄지 비료/약품 희석액을 줄지 알려주는 용도
         GardenDto.ChemicalCode chemicalCode = getChemicalCode(latestChemicalUsages);
@@ -54,8 +69,8 @@ public class GardenUtil {
 
         WateringDto.Response latestWatering = null;
 
-        if (plant.getWateringList().size() > 0) {
-            latestWatering = WateringDto.Response.from(plant.getWateringList().get(0));
+        if (plant.getWaterings().size() > 0) {
+            latestWatering = WateringDto.Response.from(plant.getWaterings().get(0));
         }
 
         // chemicalCode: 물을 줄 식물에 대해서 맹물을 줄지 비료/약품 희석액을 줄지 알려주는 용도
@@ -87,8 +102,8 @@ public class GardenUtil {
      */
     public LocalDate getLastDrinkingDay(Plant plant) {
         // 물주기 정보가 있으면 진짜 제일 최근 물 준 날짜를 리턴
-        if (plant.getWateringList().size() != 0) {
-            return plant.getWateringList().get(0).getWateringDate();
+        if (plant.getWaterings().size() != 0) {
+            return plant.getWaterings().get(0).getDate();
         }
 
         return plant.getCreateDate().toLocalDate();
@@ -147,7 +162,7 @@ public class GardenUtil {
 
             // 시비 날짜와 같거나 더 지났으면
             if (period >= (int) latestFertilizingInfo.getChemicalPeriod()) {
-                return new GardenDto.ChemicalCode(latestFertilizingInfo.getChemicalNo(), latestFertilizingInfo.getChemicalName());
+                return new GardenDto.ChemicalCode(latestFertilizingInfo.getChemicalId(), latestFertilizingInfo.getChemicalName());
             }
         }
 

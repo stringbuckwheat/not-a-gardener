@@ -31,8 +31,8 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public Optional<Member> getMemberByMemberNo(int memberNo) {
-        return memberRepository.findById(memberNo);
+    public Optional<Member> getMemberByMemberId(Long id) {
+        return memberRepository.findById(id);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public void removeMember(int memberNo) {
-        memberRepository.deleteById(memberNo);
+    public void deleteBy(Long id) {
+        memberRepository.deleteById(id);
     }
 }

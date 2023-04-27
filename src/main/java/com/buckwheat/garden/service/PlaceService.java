@@ -1,18 +1,17 @@
 package com.buckwheat.garden.service;
 
 import com.buckwheat.garden.data.dto.PlaceDto;
-import com.buckwheat.garden.data.entity.Member;
 
 import java.util.List;
 
 public interface PlaceService {
-    List<PlaceDto.Card> getPlaceList(int memberNo);
+    List<PlaceDto.Card> getPlacesByMemberId(Long memberId);
 
-    PlaceDto.WithPlantList getPlace(int placeNo);
+    PlaceDto.WithPlantList getPlaceDetail(Long id);
 
-    PlaceDto.Card addPlace(PlaceDto.Request placeRequestDto, Member member);
+    PlaceDto.Card add(Long memberId, PlaceDto.Request placeRequest);
 
-    PlaceDto.Response modifyPlace(PlaceDto.Request placeRequestDto, Member member);
+    PlaceDto.Response modify(PlaceDto.Request placeRequest);
 
-    void deletePlace(int placeNo);
+    void delete(Long id);
 }

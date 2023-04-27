@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/plant/{plantNo}/watering")
+@RequestMapping("/plant/{plantId}/watering")
 public class PlantWateringController {
     private final PlantWateringService plantWateringService;
 
@@ -22,8 +22,8 @@ public class PlantWateringController {
      * @return
      */
     @GetMapping("")
-    public List<WateringDto.ForOnePlant> getWateringListForPlant(@PathVariable(value = "plantNo") int plantNo){
-        return plantWateringService.getWateringListForPlant(plantNo);
+    public List<WateringDto.ForOnePlant> getWateringListForPlant(@PathVariable long plantId){
+        return plantWateringService.getWateringListForPlant(plantId);
     }
 
     /**
@@ -48,19 +48,19 @@ public class PlantWateringController {
 
     /**
      * 한 식물의 물주기 기록 '한 개' 지우기
-     * @param wateringNo
+     * @param wateringId
      */
-    @DeleteMapping("/{wateringNo}")
-    public void deleteWatering(@PathVariable("wateringNo") int wateringNo){
-        plantWateringService.deleteWatering(wateringNo);
+    @DeleteMapping("/{wateringId}")
+    public void deleteWatering(@PathVariable long wateringId){
+        plantWateringService.deleteWatering(wateringId);
     }
 
     /**
      * 해당 식물의 물주기 모두 지우기
-     * @param plantNo
+     * @param plantId
      */
     @DeleteMapping("")
-    public void deleteAllFromPlant(@PathVariable("plantNo") int plantNo) {
-        plantWateringService.deleteAllFromPlant(plantNo);
+    public void deleteAllFromPlant(@PathVariable long plantId) {
+        plantWateringService.deleteAllFromPlant(plantId);
     }
 }

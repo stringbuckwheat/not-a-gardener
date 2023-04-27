@@ -6,8 +6,8 @@ import com.buckwheat.garden.data.entity.Watering;
 import java.util.List;
 
 public interface ChemicalDao {
-    List<Chemical> getChemicalListByMemberNo(int memberNo);
-    List<Watering> getWateringListByChemicalNo(int chemicalNo);
+    List<Chemical> getChemicalsByMemberId(Long memberId);
+    List<Watering> getWateringsByChemicalId(Long chemicalId);
     Chemical save(Chemical chemical);
-    void deleteByChemicalNo(int chemicalNo);
+    void deleteByChemicalId(Long chemicalId);
 }

@@ -60,7 +60,7 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
         // Member 테이블의 PK를 (username이 아니라) member_no로 잡고 있으므로
         // PK 값을 함께 Security Context에 저장하기 위해 평범한 map으로 변환
         Map<String, Object> attributes = oAuth2Attribute.toMap();
-        attributes.put("memberNo", member.getMemberNo());
+        attributes.put("memberId", member.getMemberId());
 
         // UserPrincipal: Authentication에 담을 OAuth2User와 (일반 로그인 용)UserDetails를 implements한 커스텀 클래스
         return UserPrincipal.create(member, oAuth2Attribute.getAttributes());

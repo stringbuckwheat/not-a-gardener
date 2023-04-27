@@ -18,9 +18,9 @@ public class MemberController {
     private final MemberService memberService;
 
     /* 회원정보 보기 */
-    @GetMapping("/{memberNo}")
+    @GetMapping("/{memberId}")
     public MemberDto.Detail getMember(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return memberService.getMember(userPrincipal.getMember());
+        return memberService.getMemberDetail(userPrincipal.getMember());
     }
 
     /* 간단한 회원 정보(헤더) - 소셜로그인에서 사용 */
@@ -31,20 +31,20 @@ public class MemberController {
 
     /* 이메일로 계정 확인 - 아이디/비밀번호 찾기 */
     @GetMapping("/email/{email}")
-    public Map<String, Object> sendAuthenticationEmail (@PathVariable String email){
-        return memberService.getIdentificationCodeAndMembers(email);
+    public Map<String, Object> forgotAccount (@PathVariable String email){
+        return memberService.forgotAccount(email);
     }
 
     /* 비밀번호 변경 전 한 번 입력받아서 확인 */
     @PostMapping("/pw")
-    public boolean reconfirmPassword(@RequestBody MemberDto.Login login, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        return memberService.identifyMember(login, userPrincipal.getMember());
+    public boolean identify(@RequestBody MemberDto.Login login, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        return memberService.identify(userPrincipal.getMember(), login);
     }
 
     /* 로그인 후 비밀번호 변경 */
     @PutMapping("/pw")
     public void updatePassword(@RequestBody MemberDto.Login login, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        memberService.updatePassword(login, userPrincipal.getMember());
+        memberService.updatePassword(userPrincipal.getMember(), login);
     }
 
     @PutMapping("/{username}/pw")
@@ -53,14 +53,14 @@ public class MemberController {
     }
 
     /* 회원정보 변경 */
-    @PutMapping("/{memberNo}")
-    public MemberDto.Detail updateMember(@RequestBody MemberDto.Detail memberDetailDto, @PathVariable int memberNo){
-        return memberService.updateMember(memberDetailDto);
+    @PutMapping("/{memberId}")
+    public MemberDto.Detail modify(@RequestBody MemberDto.Detail memberDetail, @PathVariable long memberId){
+        return memberService.modify(memberDetail);
     }
 
     /* 탈퇴 */
-    @DeleteMapping("/{memberNo}")
-    public void deleteMember(@PathVariable("memberNo") int memberNo){
-        memberService.removeMember(memberNo);
+    @DeleteMapping("/{memberId}")
+    public void deleteMember(@PathVariable("memberId") long memberId){
+        memberService.delete(memberId);
     }
 }

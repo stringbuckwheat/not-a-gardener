@@ -20,47 +20,50 @@ import java.util.List;
 public class Plant {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) // auto-increment
-    @Column(name="plant_no")
-    private int plantNo;
+    private Long plantId;
 
     @NotNull
-    private String plantName;
+    private String name;
 
-    private String plantSpecies; // 식물 종은 null 허용
+    private String species; // 식물 종은 null 허용
 
     @NotNull
-    private int averageWateringPeriod; // 평균 관수 주기
+    private int recentWateringPeriod; // 평균 관수 주기
 
     private int earlyWateringPeriod;
 
+    @NotNull
     private String medium;
+
+    private LocalDate birthday;
+
+    // TODO 얘 뭐지
+    private LocalDate conditionDate;
+
+    // 물주기를 미룬 날짜
+    private LocalDate postponeDate;
 
     @NotNull
     private LocalDateTime createDate;
 
-    private LocalDate birthday;
-
-    private LocalDate conditionDate;
-    private LocalDate postponeDate;
-
     // FK
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="member_no")
+    @JoinColumn(name="member_id")
     private Member member;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="place_no")
+    @JoinColumn(name="place_id")
     private Place place;
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy="plant")
     @OrderBy("watering_date desc")
-    private List<Watering> wateringList = new ArrayList<>();
+    private List<Watering> waterings = new ArrayList<>();
 
     public Plant update(PlantDto.Request plantRequest, Place place){
-        this.plantName = plantRequest.getPlantName();
+        this.name = plantRequest.getName();
         this.medium = plantRequest.getMedium();
-        this.plantSpecies = plantRequest.getPlantSpecies();
-        this.averageWateringPeriod = plantRequest.getAverageWateringPeriod();
+        this.species = plantRequest.getSpecies();
+        this.recentWateringPeriod = plantRequest.getRecentWateringPeriod();
         this.birthday = plantRequest.getBirthday();
         this.place = place;
 
@@ -73,7 +76,7 @@ public class Plant {
     }
 
     public Plant updateAverageWateringPeriod(int averageWateringPeriod){
-        this.averageWateringPeriod = averageWateringPeriod;
+        this.recentWateringPeriod = averageWateringPeriod;
         return this;
     }
 

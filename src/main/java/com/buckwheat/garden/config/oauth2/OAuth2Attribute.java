@@ -93,7 +93,7 @@ public class OAuth2Attribute {
                 .builder()
                 .username(this.getEmail())
                 .email(this.getEmail())
-                .pw(null)
+                .password(null)
                 .name(this.getName())
                 .provider(this.provider)
                 .createDate(LocalDateTime.now())

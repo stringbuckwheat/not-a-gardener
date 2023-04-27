@@ -7,7 +7,7 @@ public interface AuthenticationService {
     String hasSameUsername(String username);
 
     /* 회원 가입 */
-    MemberDto.Info addMember(MemberDto.Register paramRegisterDto);
+    MemberDto.Info add(MemberDto.Register register);
 
     /* 로그인 */
     MemberDto.Info login(MemberDto.Login login);

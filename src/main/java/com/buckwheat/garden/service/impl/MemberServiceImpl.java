@@ -29,7 +29,7 @@ public class MemberServiceImpl implements MemberService {
     private String sendFrom;
 
     @Override
-    public MemberDto.Detail getMember(Member member) {
+    public MemberDto.Detail getMemberDetail(Member member) {
         return MemberDto.Detail.from(member);
     }
 
@@ -40,7 +40,7 @@ public class MemberServiceImpl implements MemberService {
      * @return
      */
     @Override
-    public Map<String, Object> getIdentificationCodeAndMembers(String email) {
+    public Map<String, Object> forgotAccount(String email) {
         List<Member> memberList = memberDao.getMemberByEmail(email);
 
         if (memberList.size() == 0) {
@@ -81,32 +81,32 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void updatePassword(MemberDto.Login login, Member member) {
-        String encryptedPassword = encoder.encode(login.getPw());
+    public void updatePassword(Member member, MemberDto.Login login) {
+        String encryptedPassword = encoder.encode(login.getPassword());
         memberDao.save(member.changePassword(encryptedPassword));
     }
 
     @Override
     public void resetPassword(MemberDto.Login login) {
         Member member = memberDao.getMemberByUsername(login.getUsername()).orElseThrow(NoSuchElementException::new);
-        updatePassword(login, member);
+        updatePassword(member, login);
     }
 
     @Override
-    public boolean identifyMember(MemberDto.Login loginDto, Member member) {
-        return encoder.matches(loginDto.getPw(), member.getPw());
+    public boolean identify(Member member, MemberDto.Login login) {
+        return encoder.matches(login.getPassword(), member.getPassword());
     }
 
     @Override
-    public MemberDto.Detail updateMember(MemberDto.Detail memberDetailDto) {
-        Member member = memberDao.getMemberByMemberNo(memberDetailDto.getMemberNo()).orElseThrow(NoSuchElementException::new);
-        memberDao.save(member.updateEmailAndName(memberDetailDto.getEmail(), memberDetailDto.getName()));
+    public MemberDto.Detail modify(MemberDto.Detail memberDetail) {
+        Member member = memberDao.getMemberByMemberId(memberDetail.getId()).orElseThrow(NoSuchElementException::new);
+        memberDao.save(member.updateEmailAndName(memberDetail.getEmail(), memberDetail.getName()));
 
         return MemberDto.Detail.updateResponseFrom(member);
     }
 
     @Override
-    public void removeMember(int memberNo) {
-        memberDao.removeMember(memberNo);
+    public void delete(Long memberId) {
+        memberDao.deleteBy(memberId);
     }
 }

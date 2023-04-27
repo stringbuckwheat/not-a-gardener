@@ -2,7 +2,6 @@ package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.dao.RoutineDao;
 import com.buckwheat.garden.data.dto.RoutineDto;
-import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.data.entity.Routine;
 import com.buckwheat.garden.service.RoutineService;
 import com.buckwheat.garden.util.RoutineUtil;
@@ -24,14 +23,14 @@ public class RoutineServiceImpl implements RoutineService {
     private final RoutineUtil routineUtil;
 
     @Override
-    public RoutineDto.Main getRoutineList(int memberNo) {
+    public RoutineDto.Main getRoutinesByMemberId(Long memberId) {
         List<RoutineDto.Response> toDoList = new ArrayList<>();
         List<RoutineDto.Response> notToDoList = new ArrayList<>();
 
         LocalDateTime today = LocalDate.now().atStartOfDay();
 
         // dto로 변환
-        for (Routine routine : routineDao.getRoutineListByMemberNo(memberNo)) {
+        for (Routine routine : routineDao.getRoutinesByMemberId(memberId)) {
             // 오늘 해야 하는 루틴인지 계산
             String hasTodoToday = routineUtil.hasToDoToday(routine, today);
 
@@ -51,13 +50,13 @@ public class RoutineServiceImpl implements RoutineService {
     }
 
     @Override
-    public RoutineDto.Response addRoutine(Member member, RoutineDto.Request routineDto) {
-        Routine routine = routineDao.save(routineDto, member);
+    public RoutineDto.Response add(Long memberId, RoutineDto.Request routineRequest) {
+        Routine routine = routineDao.save(memberId, routineRequest);
         return RoutineDto.Response.from(routine, routine.getPlant(), "Y", "N");
     }
 
     @Override
-    public RoutineDto.Response modifyRoutine(RoutineDto.Request routineDto) {
+    public RoutineDto.Response modify(RoutineDto.Request routineDto) {
         Routine routine = routineDao.update(routineDto);
 
         LocalDateTime today = LocalDate.now().atStartOfDay();
@@ -76,7 +75,7 @@ public class RoutineServiceImpl implements RoutineService {
     }
 
     @Override
-    public void deleteRoutine(int routineNo) {
-        routineDao.delete(routineNo);
+    public void delete(Long id) {
+        routineDao.deleteBy(id);
     }
 }

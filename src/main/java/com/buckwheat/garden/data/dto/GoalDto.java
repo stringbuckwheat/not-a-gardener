@@ -9,15 +9,15 @@ public class GoalDto {
     @Getter
     @ToString
     public static class Request {
-        private int goalNo;
-        private String goalContent;
+        private Long id;
+        private String content;
         private String complete;
-        private int plantNo;
+        private Long plantId;
 
         public Goal toEntityWith(Member member, Plant plant) {
             return Goal.builder()
-                    .goalNo(goalNo)
-                    .goalContent(goalContent)
+                    .goalId(id)
+                    .content(content)
                     .complete(complete)
                     .member(member)
                     .plant(plant)
@@ -31,27 +31,27 @@ public class GoalDto {
     @NoArgsConstructor
     @ToString
     public static class Response {
-        private int goalNo;
-        private String goalContent;
+        private Long id;
+        private String content;
         private String complete;
-        private int plantNo;
+        private Long plantId;
         private String plantName;
 
         public static Response from(Goal goal) {
             // plant == nullable
             if (goal.getPlant() != null) {
                 return Response.builder()
-                        .goalNo(goal.getGoalNo())
-                        .goalContent(goal.getGoalContent())
+                        .id(goal.getGoalId())
+                        .content(goal.getContent())
                         .complete(goal.getComplete())
-                        .plantNo(goal.getPlant().getPlantNo())
-                        .plantName(goal.getPlant().getPlantName())
+                        .plantId(goal.getPlant().getPlantId())
+                        .plantName(goal.getPlant().getName())
                         .build();
             }
 
             return Response.builder()
-                    .goalNo(goal.getGoalNo())
-                    .goalContent(goal.getGoalContent())
+                    .id(goal.getGoalId())
+                    .content(goal.getContent())
                     .complete(goal.getComplete())
                     .build();
         }
@@ -60,17 +60,17 @@ public class GoalDto {
             // plant == nullable
             if (plant != null) {
                 return Response.builder()
-                        .goalNo(goal.getGoalNo())
-                        .goalContent(goal.getGoalContent())
+                        .id(goal.getGoalId())
+                        .content(goal.getContent())
                         .complete(goal.getComplete())
-                        .plantNo(plant.getPlantNo())
-                        .plantName(plant.getPlantName())
+                        .plantId(plant.getPlantId())
+                        .plantName(plant.getName())
                         .build();
             }
 
             return Response.builder()
-                    .goalNo(goal.getGoalNo())
-                    .goalContent(goal.getGoalContent())
+                    .id(goal.getGoalId())
+                    .content(goal.getContent())
                     .complete(goal.getComplete())
                     .build();
         }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PlantRepository extends JpaRepository<Plant, Integer> {
+public interface PlantRepository extends JpaRepository<Plant, Long> {
     // FK로 조회하는 method 명명 규칙
     // findBy + [fk를 관리하는 entity의 필드명] + _ + [fk entity의 식별자 필드명]
     // List<Plant> findByMember_Username(String username);
@@ -19,21 +19,21 @@ public interface PlantRepository extends JpaRepository<Plant, Integer> {
     // 나머지 attribute는 entity에 명시한 fetchType이나 디폴트 fetchType
     // ex. @OneToMany는 LAZY, @ManyToOne은 EAGER가 디폴트
     @EntityGraph(attributePaths = {"place"}, type = EntityGraph.EntityGraphType.FETCH)
-    List<Plant> findByMember_MemberNoOrderByCreateDateDesc(int memberNo);
+    List<Plant> findByMember_MemberIdOrderByCreateDateDesc(Long memberId);
 
     /**
      * GardenController에서 식물 카드를 만들 데이터
-     * @param memberNo
+     * @param memberId
      * @return Place, WateringList가 매핑된 Plant 객체 리스트
      */
     @EntityGraph(attributePaths = {"place", "wateringList", "wateringList.chemical"}, type = EntityGraph.EntityGraphType.FETCH)
-    List<Plant> findByMember_MemberNo(int memberNo);
+    List<Plant> findByMember_MemberId(Long memberId);
 
     /**
      * Plant 페이지에서 식물 카드를 만들 데이터
-     * @param plantNo
+     * @param plantId
      * @return Place만 포함하는 plant 객체 하나
      */
     @EntityGraph(attributePaths = {"place", "wateringList", "wateringList.chemical"}, type= EntityGraph.EntityGraphType.FETCH)
-    Optional<Plant> findByPlantNo(int plantNo);
+    Optional<Plant> findByPlantId(Long plantId);
 }

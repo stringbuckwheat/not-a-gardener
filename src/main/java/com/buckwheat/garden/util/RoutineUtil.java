@@ -19,7 +19,7 @@ public class RoutineUtil {
         int period = (int) Duration.between(routine.getLastCompleteDate().atStartOfDay(), today).toDays();
 
         // 오늘 했거나 할 주기가 돌아왔으면 Y
-        return (period == 0 || period >= routine.getRoutineCycle()) ? "Y" : "N";
+        return (period == 0 || period >= routine.getCycle()) ? "Y" : "N";
     }
 
     public String isCompleted(LocalDate lastCompleteDate, LocalDateTime today){

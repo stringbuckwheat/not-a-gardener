@@ -6,11 +6,11 @@ import com.buckwheat.garden.data.entity.Place;
 import java.util.List;
 
 public interface PlaceDao {
-    List<Place> getPlaceListByMemberNo(int memberNo);
-    Place getPlaceWithPlantList(int placeNo);
-    Place save(PlaceDto.Request placeRequest, int memberNo);
+    List<Place> getPlacesByMemberId(Long memberId);
+    Place getPlaceWithPlantList(Long placeId);
+    Place save(Long memberId, PlaceDto.Request placeRequest);
 
     Place update(PlaceDto.Request placeRequest);
 
-    void delete(int placeNo);
+    void deleteBy(Long id);
 }

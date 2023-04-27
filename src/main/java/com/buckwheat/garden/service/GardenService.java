@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface GardenService {
     /* 할 일이 있는 식물 리스트 반환 */
-    GardenDto.GardenMain getGarden(int memberNo);
+    GardenDto.GardenMain getGarden(Long memberId);
 
     /* 해당 유저의 전체 식물과 각종 계산값 반환 */
-    List<GardenDto.Response> getPlantList(int memberNo);
+    List<GardenDto.Response> getPlantsByMemberId(Long memberId);
 }

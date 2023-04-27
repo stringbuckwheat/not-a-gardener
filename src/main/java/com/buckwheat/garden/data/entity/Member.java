@@ -15,11 +15,12 @@ import java.time.LocalDateTime;
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int memberNo;
+    private Long memberId;
 
+    @NotNull
     private String username;
 
-    private String pw;
+    private String password;
 
     @NotNull
     private String email;
@@ -33,7 +34,7 @@ public class Member {
     private String provider;
 
     public Member changePassword(String encryptPassword){
-        this.pw = encryptPassword;
+        this.password = encryptPassword;
         return this;
     }
 

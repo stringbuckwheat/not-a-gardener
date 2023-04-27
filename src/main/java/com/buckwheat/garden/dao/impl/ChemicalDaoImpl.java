@@ -16,14 +16,14 @@ public class ChemicalDaoImpl implements ChemicalDao {
     private final ChemicalRepository chemicalRepository;
 
     @Override
-    public List<Chemical> getChemicalListByMemberNo(int memberNo){
-        return chemicalRepository.findByMember_memberNo(memberNo);
+    public List<Chemical> getChemicalsByMemberId(Long memberId){
+        return chemicalRepository.findByMember_MemberId(memberId);
     }
 
     @Override
-    public List<Watering> getWateringListByChemicalNo(int chemicalNo){
-        Chemical chemical = chemicalRepository.findByChemicalNo(chemicalNo).orElseThrow(NoSuchElementException::new);
-        return chemical.getWateringList();
+    public List<Watering> getWateringsByChemicalId(Long chemicalId){
+        Chemical chemical = chemicalRepository.findByChemicalId(chemicalId).orElseThrow(NoSuchElementException::new);
+        return chemical.getWaterings();
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ChemicalDaoImpl implements ChemicalDao {
     }
 
     @Override
-    public void deleteByChemicalNo(int chemicalNo) {
-        chemicalRepository.deleteById(chemicalNo);
+    public void deleteByChemicalId(Long chemicalId) {
+        chemicalRepository.deleteById(chemicalId);
     }
 }

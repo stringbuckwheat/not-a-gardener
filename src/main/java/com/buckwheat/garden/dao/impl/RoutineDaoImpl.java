@@ -5,6 +5,7 @@ import com.buckwheat.garden.data.dto.RoutineDto;
 import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Routine;
+import com.buckwheat.garden.repository.MemberRepository;
 import com.buckwheat.garden.repository.PlantRepository;
 import com.buckwheat.garden.repository.RoutineRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,34 +19,36 @@ import java.util.NoSuchElementException;
 public class RoutineDaoImpl implements RoutineDao {
     private final RoutineRepository routineRepository;
     private final PlantRepository plantRepository;
+    private final MemberRepository memberRepository;
 
     @Override
-    public List<Routine> getRoutineListByMemberNo(int memberNo){
-        return routineRepository.findByMember_MemberNo(memberNo);
+    public List<Routine> getRoutinesByMemberId(Long memberId){
+        return routineRepository.findByMember_MemberId(memberId);
     }
 
     @Override
-    public Routine save(RoutineDto.Request routineDto, Member member){
-        Plant plant = plantRepository.findById(routineDto.getPlantNo()).orElseThrow(NoSuchElementException::new);
-        return routineRepository.save(routineDto.toEntityWith(plant, member));
+    public Routine save(Long memberId, RoutineDto.Request routineRequest){
+        Member member = memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new);
+        Plant plant = plantRepository.findById(routineRequest.getPlantId()).orElseThrow(NoSuchElementException::new);
+        return routineRepository.save(routineRequest.toEntityWith(plant, member));
     }
 
     @Override
-    public Routine update(RoutineDto.Request routineDto){
-        Plant plant = plantRepository.findById(routineDto.getPlantNo()).orElseThrow(NoSuchElementException::new);
-        Routine prevRoutine = routineRepository.findByRoutineNo(routineDto.getRoutineNo()).orElseThrow(NoSuchElementException::new);
+    public Routine update(RoutineDto.Request routineRequest){
+        Plant plant = plantRepository.findById(routineRequest.getPlantId()).orElseThrow(NoSuchElementException::new);
+        Routine prevRoutine = routineRepository.findByRoutineId(routineRequest.getId()).orElseThrow(NoSuchElementException::new);
 
-        return routineRepository.save(prevRoutine.update(routineDto.getRoutineContent(), routineDto.getRoutineCycle(), plant));
+        return routineRepository.save(prevRoutine.update(routineRequest.getContent(), routineRequest.getCycle(), plant));
     }
 
     @Override
-    public Routine complete(RoutineDto.Complete routineDto){
-        Routine routine = routineRepository.findByRoutineNo(routineDto.getRoutineNo()).orElseThrow(NoSuchElementException::new);
-        return routineRepository.save(routine.complete(routineDto.getLastCompleteDate()));
+    public Routine complete(RoutineDto.Complete routineComplete){
+        Routine routine = routineRepository.findByRoutineId(routineComplete.getId()).orElseThrow(NoSuchElementException::new);
+        return routineRepository.save(routine.complete(routineComplete.getLastCompleteDate()));
     }
 
     @Override
-    public void delete(int routineNo){
-        routineRepository.deleteById(routineNo);
+    public void deleteBy(Long id){
+        routineRepository.deleteById(id);
     }
 }

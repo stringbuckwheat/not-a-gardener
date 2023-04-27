@@ -21,28 +21,28 @@ import java.util.NoSuchElementException;
 public class WateringUtil {
     private final PlantRepository plantRepository;
 
-    public WateringDto.Message getWateringMsg(int plantNo) {
-        Plant plant = plantRepository.findByPlantNo(plantNo).orElseThrow(NoSuchElementException::new);
+    public WateringDto.Message getWateringMsg(Long plantId) {
+        Plant plant = plantRepository.findByPlantId(plantId).orElseThrow(NoSuchElementException::new);
         return getWateringMsg(plant);
     }
 
     public WateringDto.Message getWateringMsg(Plant plant){
         // 첫번째 물주기면
-        if (plant.getWateringList().size() == 1) {
-            return new WateringDto.Message(AfterWateringCode.FIRST_WATERING.getCode(), plant.getAverageWateringPeriod());
+        if (plant.getWaterings().size() == 1) {
+            return new WateringDto.Message(AfterWateringCode.FIRST_WATERING.getCode(), plant.getRecentWateringPeriod());
         }
 
         List<WateringDto.ForOnePlant> list = new ArrayList();
-        for(Watering w: plant.getWateringList()){
+        for(Watering w: plant.getWaterings()){
             list.add(WateringDto.ForOnePlant.from(w));
         }
 
         // 이 메소드가 호출되는 시점엔 물주기 기록이 두 개 이상 있음
-        LocalDateTime latestWateringDate = plant.getWateringList().get(0).getWateringDate().atStartOfDay();
-        LocalDateTime prevWateringDate = plant.getWateringList().get(1).getWateringDate().atStartOfDay();
+        LocalDateTime latestWateringDate = plant.getWaterings().get(0).getDate().atStartOfDay();
+        LocalDateTime prevWateringDate = plant.getWaterings().get(1).getDate().atStartOfDay();
 
         int period = (int) Duration.between(prevWateringDate, latestWateringDate).toDays();
-        int wateringCode = getAfterWateringCode(period, plant.getAverageWateringPeriod());
+        int wateringCode = getAfterWateringCode(period, plant.getRecentWateringPeriod());
 
         return new WateringDto.Message(wateringCode, period);
     }
@@ -56,8 +56,8 @@ public class WateringUtil {
     }
 
     public Plant updateWateringPeriod(Plant plant, int period) {
-        if (period != plant.getAverageWateringPeriod()) {
-            log.debug("average watering period 달라짐");
+        if (period != plant.getRecentWateringPeriod()) {
+            log.debug("average watering period 변동");
             Plant updatedPlant = plant.updateAverageWateringPeriod(period);
             plantRepository.save(updatedPlant);
             return updatedPlant;

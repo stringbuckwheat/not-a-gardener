@@ -16,22 +16,22 @@ import java.time.LocalDate;
 public class Watering {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) // auto-increment
-    private int wateringNo;
+    private Long wateringId;
 
     @NotNull
-    private LocalDate wateringDate; // 물 준 날짜
+    private LocalDate date; // 물 준 날짜
 
     // FK
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="plant_no")
+    @JoinColumn(name="plant_id")
     private Plant plant;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "chemical_no")
+    @JoinColumn(name = "chemical_id")
     private Chemical chemical;
 
-    public Watering update(LocalDate wateringDate, Plant plant, Chemical chemical){
-        this.wateringDate = wateringDate;
+    public Watering update(LocalDate date, Plant plant, Chemical chemical){
+        this.date = date;
         this.plant = plant;
         this.chemical = chemical;
 

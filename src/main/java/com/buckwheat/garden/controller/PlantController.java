@@ -26,18 +26,18 @@ public class PlantController {
      * @return
      */
     @GetMapping("")
-    public List<PlantDto.Response> getPlantList(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return plantService.getPlantList(userPrincipal.getMember().getMemberNo());
+    public List<PlantDto.Response> getPlantsByMemberId(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        return plantService.getPlantsByMemberId(userPrincipal.getMember().getMemberId());
     }
 
     /**
      * 한 식물의 정보
-     * @param plantNo
+     * @param plantId
      * @return
      */
-    @GetMapping("/{plantNo}")
-    public PlantDto.Response getOnePlant(@PathVariable("plantNo") int plantNo){
-        return plantService.getOnePlant(plantNo);
+    @GetMapping("/{plantId}")
+    public PlantDto.Response getOnePlant(@PathVariable long plantId){
+        return plantService.getPlantDetail(plantId);
     }
 
     /**
@@ -47,8 +47,8 @@ public class PlantController {
      * @return
      */
     @PostMapping("")
-    public GardenDto.Response addPlant(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody PlantDto.Request plantRequest){
-        return plantService.addPlant(plantRequest, userPrincipal.getMember());
+    public GardenDto.Response add(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody PlantDto.Request plantRequest){
+        return plantService.add(userPrincipal.getMember().getMemberId(), plantRequest);
     }
 
     /**
@@ -57,9 +57,9 @@ public class PlantController {
      * @param userPrincipal
      * @return
      */
-    @PutMapping("/{plantNo}")
-    public GardenDto.Response modifyPlant(@RequestBody PlantDto.Request plantRequest, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        return plantService.modifyPlant(plantRequest, userPrincipal.getMember());
+    @PutMapping("/{plantId}")
+    public GardenDto.Response modify(@RequestBody PlantDto.Request plantRequest, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        return plantService.modify(userPrincipal.getMember().getMemberId(), plantRequest);
     }
 
     /**
@@ -74,10 +74,10 @@ public class PlantController {
 
     /**
      * 식물 삭제
-     * @param plantNo
+     * @param plantId
      */
-    @DeleteMapping("/{plantNo}")
-    public void deletePlant(@PathVariable("plantNo") int plantNo){
-        plantService.deletePlantByPlantNo(plantNo);
+    @DeleteMapping("/{plantId}")
+    public void deletePlant(@PathVariable long plantId){
+        plantService.delete(plantId);
     }
 }

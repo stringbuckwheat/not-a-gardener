@@ -7,23 +7,23 @@ import java.util.Map;
 
 public interface MemberService {
     // 회원 정보 보기
-    MemberDto.Detail getMember(Member member);
+    MemberDto.Detail getMemberDetail(Member member);
 
     // 회원 정보 변경
-    MemberDto.Detail updateMember(MemberDto.Detail memberDetailDto);
+    MemberDto.Detail modify(MemberDto.Detail memberDetail);
 
     // 본인 확인 코드 리턴 및 본인 확인 메일 전송(아이디 찾기)
-    Map<String, Object> getIdentificationCodeAndMembers(String email);
+    Map<String, Object> forgotAccount(String email);
 
     // id, pw으로 본인 확인
-    boolean identifyMember(MemberDto.Login login, Member member);
+    boolean identify(Member member, MemberDto.Login login);
 
     // 회원 정보에서 비밀번호 변경
-    void updatePassword(MemberDto.Login login, Member member);
+    void updatePassword(Member member, MemberDto.Login login);
 
     // 비밀번호 찾기에서 비밀번호 변경
     void resetPassword(MemberDto.Login login);
 
     // 회원 탈퇴
-    void removeMember(int memberNo);
+    void delete(Long memberId);
 }

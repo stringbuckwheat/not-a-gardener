@@ -49,14 +49,14 @@ public class UserPrincipal implements UserDetails, OAuth2User {
 
     @Override
     public String getPassword() {
-        return this.member.getPw();
+        return this.member.getPassword();
     }
 
     @Override
     public String getUsername() {
-        // username이 아니라 PK 값인 memberNo를 넘겨준다
+        // username이 아니라 PK 값인 id를 넘겨준다
         // email은 중복 가능
-        return String.valueOf(this.member.getMemberNo());
+        return String.valueOf(this.member.getMemberId());
     }
 
     @Override

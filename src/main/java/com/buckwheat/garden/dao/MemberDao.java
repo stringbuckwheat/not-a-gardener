@@ -8,9 +8,9 @@ import java.util.Optional;
 public interface MemberDao {
     Optional<Member> getMemberByUsername(String username);
     Member getMemberForLogin(String username);
-    Optional<Member> getMemberByMemberNo(int memberNo);
+    Optional<Member> getMemberByMemberId(Long id);
     List<Member> getMemberByEmail(String email);
     Optional<Member> getMemberByUsernameAndProvider(String email, String provider);
     Member save(Member member);
-    void removeMember(int memberNo);
+    void deleteBy(Long id);
 }

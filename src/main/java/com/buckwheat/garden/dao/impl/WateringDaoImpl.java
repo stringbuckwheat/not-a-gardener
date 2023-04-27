@@ -25,54 +25,55 @@ public class WateringDaoImpl implements WateringDao {
 
     @Override
     public Watering addWatering(WateringDto.Request wateringRequest){
-        Plant plant = plantRepository.findByPlantNo(wateringRequest.getPlantNo())
+        Plant plant = plantRepository.findByPlantId(wateringRequest.getPlantId())
                 .orElseThrow(NoSuchElementException::new);
         // 맹물 줬는지 비료 타서 줬는지
-        Chemical chemical = chemicalRepository.findById(wateringRequest.getChemicalNo()).orElse(null);
+        Chemical chemical = chemicalRepository.findById(wateringRequest.getChemicalId()).orElse(null);
 
         // 저장
         return wateringRepository.save(wateringRequest.toEntityWithPlantAndChemical(plant, chemical));
     }
 
     @Override
-    public List<Watering> getWateringListByPlantNo(int plantNo){
-        return wateringRepository.findByPlant_plantNoOrderByWateringDateDesc(plantNo);
+    public List<Watering> getWateringListByPlantNo(Long plantId) {
+        return wateringRepository.findByPlant_PlantIdOrderByWateringDateDesc(plantId);
     }
 
     @Override
-    public List<Watering> getAllWateringListByMemberNo(int memberNo, LocalDate startDate, LocalDate endDate){
-        return wateringRepository.findAllWateringListByMemberNo(memberNo, startDate, endDate);
+    public List<Watering> getAllWateringListByMemberNo(Long memberId, LocalDate startDate, LocalDate endDate){
+        return wateringRepository.findAllWateringListByMemberNo(memberId, startDate, endDate);
     }
 
+
     @Override
-    public List<ChemicalUsage> getLatestChemicalUsages(int plantNo, int memberNo) {
-        return wateringRepository.findLatestChemicalizedDayList(plantNo, memberNo);
+    public List<ChemicalUsage> getLatestChemicalUsages(Long memberId, Long plantId) {
+        return wateringRepository.findLatestChemicalizedDayList(memberId, plantId);
     }
 
     @Override
     public Watering modifyWatering(WateringDto.Request wateringRequest){
         // Mapping할 Entity 가져오기
         // chemical은 nullable이므로 orElse 사용
-        Plant plant = plantRepository.findByPlantNo(wateringRequest.getPlantNo())
+        Plant plant = plantRepository.findByPlantId(wateringRequest.getPlantId())
                 .orElseThrow(NoSuchElementException::new);
-        Chemical chemical = chemicalRepository.findById(wateringRequest.getChemicalNo()).orElse(null);
+        Chemical chemical = chemicalRepository.findById(wateringRequest.getChemicalId()).orElse(null);
 
         // 기존 watering 엔티티
-        Watering watering = wateringRepository.findById(wateringRequest.getWateringNo())
+        Watering watering = wateringRepository.findById(wateringRequest.getId())
                 .orElseThrow(NoSuchElementException::new);
 
         // 수정
-        wateringRepository.save(watering.update(wateringRequest.getWateringDate(), plant, chemical));
-        return watering.update(wateringRequest.getWateringDate(), plant, chemical);
+        wateringRepository.save(watering.update(wateringRequest.getDate(), plant, chemical));
+        return watering.update(wateringRequest.getDate(), plant, chemical);
     }
 
     @Override
-    public void removeWatering(int wateringNo){
-        wateringRepository.deleteById(wateringNo);
+    public void deleteById(Long id){
+        wateringRepository.deleteById(id);
     }
 
     @Override
-    public void removeAllWateringByPlantNo(int plantNo){
-        wateringRepository.deleteAllByPlant_plantNo(plantNo);
+    public void deleteByPlantId(Long plantId){
+        wateringRepository.deleteAllByPlant_PlantId(plantId);
     }
 }

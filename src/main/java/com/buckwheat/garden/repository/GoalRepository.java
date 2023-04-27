@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface GoalRepository extends JpaRepository<Goal, Integer> {
+public interface GoalRepository extends JpaRepository<Goal, Long> {
     @EntityGraph(attributePaths = {"plant"}, type = EntityGraph.EntityGraphType.FETCH)
-    List<Goal> findByMember_MemberNo(int memberNo);
+    List<Goal> findByMember_MemberId(Long memberId);
 
     @EntityGraph(attributePaths = {"plant"}, type = EntityGraph.EntityGraphType.FETCH)
-    Optional<Goal> findByGoalNo(int goalNo);
+    Optional<Goal> findByGoalId(Long goalId);
 }

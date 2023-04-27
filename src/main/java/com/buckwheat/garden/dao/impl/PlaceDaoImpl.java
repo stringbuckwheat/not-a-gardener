@@ -19,24 +19,18 @@ public class PlaceDaoImpl implements PlaceDao {
     private final MemberRepository memberRepository;
 
     /**
-     * @param memberNo
+     * @param memberId
      * @return
      * @Transactional X, EntityGraph로 한 번에 조회
      */
     @Override
-    public List<Place> getPlaceListByMemberNo(int memberNo) {
-        return placeRepository.findByMember_memberNoOrderByCreateDate(memberNo);
+    public List<Place> getPlacesByMemberId(Long memberId) {
+        return placeRepository.findByMember_MemberIdOrderByCreateDate(memberId);
     }
 
-    /**
-     * EntityGraph
-     *
-     * @param placeNo
-     * @return
-     */
     @Override
-    public Place getPlaceWithPlantList(int placeNo) {
-        return placeRepository.findByPlaceNo(placeNo).orElseThrow(NoSuchElementException::new);
+    public Place getPlaceWithPlantList(Long placeId) {
+        return placeRepository.findByPlaceId(placeId).orElseThrow(NoSuchElementException::new);
     }
 
     /**
@@ -46,18 +40,18 @@ public class PlaceDaoImpl implements PlaceDao {
      * @return
      */
     @Override
-    public Place save(PlaceDto.Request placeRequest, int memberNo) {
-        Member member = memberRepository.findById(memberNo).orElseThrow(NoSuchElementException::new);
+    public Place save(Long memberId, PlaceDto.Request placeRequest) {
+        Member member = memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new);
         return placeRepository.save(placeRequest.toEntityWith(member));
     }
 
     @Override
     public Place update(PlaceDto.Request placeRequest) {
-        Place place = placeRepository.findById(placeRequest.getPlaceNo()).orElseThrow(NoSuchElementException::new);
+        Place place = placeRepository.findById(placeRequest.getId()).orElseThrow(NoSuchElementException::new);
 
         return placeRepository.save(
                 place.update(
-                        placeRequest.getPlaceName(),
+                        placeRequest.getName(),
                         placeRequest.getOption(),
                         placeRequest.getArtificialLight()
                 )
@@ -65,7 +59,7 @@ public class PlaceDaoImpl implements PlaceDao {
     }
 
     @Override
-    public void delete(int placeNo) {
-        placeRepository.deleteById(placeNo);
+    public void deleteBy(Long id) {
+        placeRepository.deleteById(id);
     }
 }
