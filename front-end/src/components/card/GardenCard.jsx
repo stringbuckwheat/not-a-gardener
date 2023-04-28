@@ -7,6 +7,18 @@ import GardenCardAction from "../../pages/garden/GardenCardAction";
 import wateringCodeDesign from "../../utils/dataArray/wateringCodeDesign";
 import WateringCodeIcon from "../etc/WateringCodeIcon";
 
+/**
+ * 메인페이지 할 일 카드
+ * @param index
+ * @param deleteInTodoList
+ * @param garden
+ * @param chemicalList
+ * @param openNotification
+ * @param updateGardenAfterWatering
+ * @param postponeWatering
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const GardenCard = ({
                       index,
                       deleteInTodoList,
@@ -36,8 +48,8 @@ const GardenCard = ({
 
           <GardenCardAction
             hovered={hovered}
-            plantNo={plant.plantNo}
-            plantName={plant.plantName}
+            plantNo={plant.plantId}
+            plantName={plant.name}
             wateringCode={gardenDetail.wateringCode}
             chemicalList={chemicalList}
             openNotification={openNotification}
@@ -58,9 +70,9 @@ const GardenCard = ({
                   <CCol xs={1}></CCol>
                   <CCol xs={8}>
                     <div>
-                      <div className={`fs-6 fw-semibold text-black`}>{plant.plantName}</div>
+                      <div className={`fs-6 fw-semibold text-black`}>{plant.name}</div>
                       <div className="small text-black new-line">
-                        <small>{`${plant.plantSpecies} / ${plant.placeName}`}</small></div>
+                        <small>{`${plant.species} / ${plant.name}`}</small></div>
                       <GardenTag className="small" plant={garden}/>
                       <p
                         className={`text-${color} fw-semibold small new-line mt-2 `}>

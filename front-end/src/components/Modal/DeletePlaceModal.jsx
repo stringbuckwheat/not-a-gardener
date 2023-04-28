@@ -4,18 +4,17 @@ import React, {useState} from "react";
 import deleteData from "../../api/backend-api/common/deleteData";
 import {useNavigate} from "react-router-dom";
 
-const DeletePlaceModal = ({plantListSize, placeNo}) => {
+const DeletePlaceModal = ({plantListSize, placeId}) => {
   const hasNoPlant = plantListSize == 0;
 
   const navigate = useNavigate();
 
   const [visible, setVisible] = useState(false);
-  const closeDeleteModal = () => {
-    setVisible(false);
-  }
+  const closeDeleteModal = () => setVisible(false);
+
 
   const remove = async () => {
-    await deleteData(`/place/${placeNo}`);
+    await deleteData(`/place/${placeId}`);
     navigate("/place", {replace: true});
   }
 
@@ -48,9 +47,8 @@ const DeletePlaceModal = ({plantListSize, placeNo}) => {
 
       <DeleteOutlined
         className="font-size-18 text-grey"
-        onClick={() => {
-          setVisible(true)
-        }}/>
+        onClick={() => setVisible(true)}
+      />
     </>
   )
 }

@@ -1,16 +1,19 @@
 import updateData from "./common/updateData";
 
-const updateRoutineState = async (routineNo, updateState) => {
-  let data = {routineNo: routineNo};
+/**
+ * 루틴 완료/완료 취소 요청 API
+ * @param routineId 필수
+ * @param updateState 완료 요청 시 true, 완료 취소 요청 시 null
+ * @returns {Promise<response.data>} update 후 response의 data
+ */
+const updateRoutineState = async (routineId, updateState) => {
+  let data = {routineId};
 
   if (updateState) {
-    data = {
-      routineNo: routineNo,
-      lastCompleteDate: new Date().toISOString().split("T")[0]
-    };
+    data["lastCompleteDate"] = new Date().toISOString().split("T")[0];
   }
 
-  return await updateData(`/routine/${routineNo}/complete`, data);
+  return updateData(`/routine/${routineId}/complete`, data);
 }
 
 export default updateRoutineState;

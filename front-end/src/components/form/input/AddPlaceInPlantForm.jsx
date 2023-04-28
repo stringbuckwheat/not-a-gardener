@@ -4,11 +4,15 @@ import React, {useState} from "react";
 import InputFeedbackSpan from "../../etc/InputFeedbackSpan";
 import postData from "../../../api/backend-api/common/postData";
 
+/**
+ * 식물 추가 폼에서 장소 간단하게 추가하기
+ * @param addPlace 장소 추가 요청 후 콜백 함수
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const AddPlaceInPlantForm = ({addPlace}) => {
   const [isAddFormOpened, setIsAddFormOpened] = useState(false);
-
   const [placeName, setPlaceName] = useState("");
-
   const [msg, setMsg] = useState("");
 
   const submit = async () => {
@@ -17,13 +21,13 @@ const AddPlaceInPlantForm = ({addPlace}) => {
     }
 
     const data = {
-      placeName: placeName,
+      name: placeName,
       option: "실내",
       artificialLight: "미사용"
     }
 
-    const res = await postData("/place", data);
-    addPlace({key: res.placeNo, value: res.placeName});
+    const place = await postData("/place", data);
+    addPlace({key: place.id, value: place.name});
   }
 
   return (
@@ -42,8 +46,8 @@ const AddPlaceInPlantForm = ({addPlace}) => {
               {isAddFormOpened
                 ? <>
                   <InputFeedbackSpan feedbackMsg={msg}/>
-                  <Input onChange={(e) => setPlaceName(e.target.value)} size={"small"} placeHolder={"장소 이름"}
-                         style={{width: "100%"}}/>
+                  <Input onChange={(e) => setPlaceName(e.target.value)} size={"small"}
+                         placeHolder={"장소 이름"} style={{width: "100%"}}/>
                 </>
                 : <></>}
               <CButton

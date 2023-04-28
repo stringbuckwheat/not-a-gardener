@@ -4,7 +4,7 @@ import {cilFaceDead} from "@coreui/icons";
 import wateringCodeDesign from "../../utils/dataArray/wateringCodeDesign";
 import {Tooltip} from "antd";
 
-const WateringCodeIcon = ({wateringCode, height=45, wateringMsg}) => {
+const WateringCodeIcon = ({wateringCode, height = 45, wateringMsg}) => {
   let color = "danger";
   let icon = cilFaceDead;
 
@@ -13,10 +13,10 @@ const WateringCodeIcon = ({wateringCode, height=45, wateringMsg}) => {
     icon = wateringCodeDesign[wateringCode].icon;
   }
 
-
-  if(wateringMsg){
-    return(
-      <Tooltip placement="topLeft" title={wateringMsg} className="new-line" overlayStyle={{ whiteSpace: 'pre-line' }}>
+  if (wateringMsg) {
+    return (
+      <Tooltip placement="topLeft" title={wateringMsg}
+               className="new-line" overlayStyle={{whiteSpace: 'pre-line'}}>
         <CIcon className={`me-3 text-${color}`} icon={icon} height={height}/>
       </Tooltip>
     )

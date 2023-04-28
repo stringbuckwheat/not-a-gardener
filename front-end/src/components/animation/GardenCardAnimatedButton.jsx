@@ -6,6 +6,19 @@ import {CCol,} from "@coreui/react";
 import updateData from "../../api/backend-api/common/updateData";
 import getWateringNotificationMsg from "../../utils/function/getWateringNotificationMsg";
 
+/**
+ * 메인 페이지 할일 카드에 마우스를 올릴 시 나타날 버튼 세가지
+ * @param setSelected
+ * @param y
+ * @param plantNo
+ * @param openNotification
+ * @param index
+ * @param deleteInTodoList
+ * @param postponeWatering
+ * @param wateringCode
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const GardenCardAnimatedButton = ({
                                     setSelected,
                                     y,
@@ -20,7 +33,6 @@ const GardenCardAnimatedButton = ({
 
   const mouseEnter = (index) => setHovered(() => index);
   const mouseLeave = () => setHovered(-1);
-
 
   const onClickNotDry = async () => {
     // 안 말랐어요

@@ -5,18 +5,27 @@ import updateData from "../../api/backend-api/common/updateData";
 import {useState} from "react";
 import deleteData from "../../api/backend-api/common/deleteData";
 
+/**
+ * 목표 카드
+ * @param goal
+ * @param index
+ * @param completeGoal
+ * @param deleteGoal
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const GoalCard = ({goal, index, completeGoal, deleteGoal}) => {
   const [isCompleted, setIsCompleted] = useState(goal.complete === "Y");
 
   const handleCheck = async (e) => {
-    const res = await updateData(`/goal/${goal.goalNo}/complete`, null);
+    const res = await updateData(`/goal/${goal.id}/complete`, null);
     completeGoal(index, res);
     setIsCompleted(e.target.checked);
   }
 
   const removeGoal = async () => {
-    await deleteData(`/goal/${goal.goalNo}`);
-    deleteGoal(goal.goalNo);
+    await deleteData(`/goal/${goal.id}`);
+    deleteGoal(goal.id);
   }
 
   return (
@@ -29,8 +38,8 @@ const GoalCard = ({goal, index, completeGoal, deleteGoal}) => {
           />
           {
             isCompleted
-              ? <span><del className="text-dark">{goal.goalContent}</del></span>
-              : <span>{goal.goalContent}</span>
+              ? <span><del className="text-dark">{goal.content}</del></span>
+              : <span>{goal.content}</span>
           }
         </Space>
         <Popconfirm

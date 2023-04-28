@@ -1,19 +1,25 @@
-import { SearchOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import {SearchOutlined} from "@ant-design/icons";
+import {useState} from "react";
 import SearchInput from "./SearchInput";
 
-// 검색버튼을 보여주거나 검색창을 보여줌
+/**
+ * 검색버튼 -> 클릭 -> 검색창
+ * @param setSearchWord
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const Search = ({setSearchWord}) => {
-    const [search, setSearch] = useState(false);
+  const [isSearchFormOpened, setIsSearchFormOpened] = useState(false);
 
-    return (
-        search
-        ? <SearchInput
-                setSearch={setSearch}
-                setSearchWord={setSearchWord}/>
-        :
-        <SearchOutlined className="vertical-align-middle" onClick={() => {setSearch(true)}} />
-    )
+  return isSearchFormOpened ? (
+    <SearchInput
+      setIsSearchFormOpened={setIsSearchFormOpened}
+      setSearchWord={setSearchWord}/>
+  ) : (
+    <SearchOutlined
+      className="vertical-align-middle"
+      onClick={() => setIsSearchFormOpened(true)}/>
+  )
 }
 
 export default Search;

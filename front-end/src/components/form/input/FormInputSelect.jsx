@@ -1,6 +1,4 @@
 import {CInputGroup, CInputGroupText, CFormSelect} from "@coreui/react";
-import {Alert} from "antd";
-import AddItemButton from "src/components/button/AddItemButton";
 import AddPlaceInPlantForm from "./AddPlaceInPlantForm";
 import {useState} from "react";
 

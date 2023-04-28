@@ -11,7 +11,7 @@ const LoginForm = () => {
 
   const [login, setLogin] = useState({
     username: "",
-    pw: ""
+    password: ""
   })
 
   // 입력 값 확인 및 submit
@@ -61,12 +61,7 @@ const LoginForm = () => {
           <CInputGroupText>
             <CIcon icon={cilLockLocked}/>
           </CInputGroupText>
-          <CFormInput
-            name="pw"
-            type="password"
-            placeholder="PW"
-            onChange={onChange}
-          />
+          <CFormInput name="pw" type="password" placeholder="PW" onChange={onChange}/>
         </CInputGroup>
         <Link to="/forgot" className="text-decoration-none text-garden">
           <span style={{fontSize: 13}}><CIcon icon={cilLockLocked}/> 아이디/비밀번호 찾기</span>

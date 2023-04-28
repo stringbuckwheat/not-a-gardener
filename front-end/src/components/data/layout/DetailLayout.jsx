@@ -8,18 +8,42 @@ import DeleteModal from '../../modal/DeleteModal';
 import {EditOutlined} from '@ant-design/icons';
 import {Space} from 'antd';
 
-const DetailLayout = (props) => {
-  const {url, path, title, deleteTitle, tags, onClickModifyBtn, bottomData, deleteTooltipMsg, deleteCallBackFunction} = props;
+/**
+ * 상세 페이지 레이아웃
+ * @param url
+ * @param path
+ * @param title
+ * @param deleteTitle
+ * @param tags
+ * @param onClickModifyBtn
+ * @param bottomData
+ * @param deleteTooltipMsg
+ * @param deleteCallBackFunction
+ * @param deleteModal
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const DetailLayout = ({
+                        url,
+                        path,
+                        title,
+                        deleteTitle,
+                        tags,
+                        onClickModifyBtn,
+                        bottomData,
+                        deleteTooltipMsg,
+                        deleteCallBackFunction,
+                        deleteModal
+                      }) => {
 
-  const deleteModal = props.deleteModal
-    ? props.deleteModal
-    : <DeleteModal
-      url={url}
-      path={path}
-      title={deleteTitle}
-      deleteCallBackFunction={deleteCallBackFunction}
-      deleteTooltipMsg={deleteTooltipMsg}
-    />
+  // default 삭제 모달
+  deleteModal ??= <DeleteModal
+    url={url}
+    path={path}
+    title={deleteTitle}
+    deleteCallBackFunction={deleteCallBackFunction}
+    deleteTooltipMsg={deleteTooltipMsg}
+  />
 
   return (
     <div className="row justify-content-md-center">

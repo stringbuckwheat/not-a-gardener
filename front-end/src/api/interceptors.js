@@ -7,6 +7,10 @@ const authAxios = axios.create({
   timeout: 1000
 })
 
+/**
+ * Request Interceptor
+ * : local storage에 accessToken 값이 있다면 헤더에 넣어준다.
+ */
 authAxios.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("login");
@@ -22,6 +26,10 @@ authAxios.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+/**
+ * Response Interceptor
+ * : 에러 처리 및 token 만료 로직
+ */
 authAxios.interceptors.response.use(
   (response) => response,
   (error) => {

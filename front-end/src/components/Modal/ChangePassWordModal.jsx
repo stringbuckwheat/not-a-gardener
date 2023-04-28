@@ -20,17 +20,7 @@ const ChangePasswordModal = () => {
     setVisible(false);
   }
 
-  const steps = [
-    {
-      title: '기존 비밀번호 확인',
-    },
-    {
-      title: '비밀번호 변경',
-    },
-    {
-      title: '완료',
-    },
-  ]
+  const steps = [{title: '기존 비밀번호 확인'}, {title: '비밀번호 변경'}, {title: '완료'}]
 
   return (
     <>
@@ -69,9 +59,7 @@ const ChangePasswordModal = () => {
 
       <CButton
         size="sm"
-        onClick={() => {
-          setVisible(true)
-        }}
+        onClick={() => setVisible(true)}
         color="success"
         variant="outline">
         비밀번호 변경

@@ -1,7 +1,18 @@
 import {CButton, CCard, CCardBody, CCol} from '@coreui/react'
-import Search from "../data/header/search/Search";
+import Search from "../header/search/Search";
 import {Space} from "antd";
 
+/**
+ * 식물 리스트 페이지의 레이아웃
+ * 너무 길어서 분리
+ * @param title
+ * @param tags
+ * @param bottomData
+ * @param setSearchWord
+ * @param addFormOpen
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const PlantListLayout = ({title, tags, bottomData, setSearchWord, addFormOpen}) => {
   return (
     <div className="row justify-content-md-center">

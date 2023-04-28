@@ -15,7 +15,7 @@ import {Tooltip} from 'antd';
 import isEndWithVowel from "../../utils/function/isEndWithVowel";
 
 // url, path 분리해놔야 navigate으로 쓰기 편함
-const DeleteModal = ({title, url, path, deleteTooltipMsg, deleteCallBackFunction}) => {
+const DeleteModal = ({title, url, path, deleteTooltipMsg, deleteCallBackFunction, button}) => {
 
   const deleteVisibleButton = button
     ? button
@@ -41,13 +41,12 @@ const DeleteModal = ({title, url, path, deleteTooltipMsg, deleteCallBackFunction
       deleteCallBackFunction();
     }
 
+    // TODO state delete?
     navigate(url, {replace: true, state: "delete"});
   };
 
   const [visible, setVisible] = useState(false);
-  const closeDeleteModal = () => {
-    setVisible(false);
-  }
+  const closeDeleteModal = () => setVisible(false);
 
   return (
     <>
@@ -61,9 +60,7 @@ const DeleteModal = ({title, url, path, deleteTooltipMsg, deleteCallBackFunction
           <CButton color="success" onClick={closeDeleteModal}>돌아가기</CButton>
         </CModalFooter>
       </CModal>
-      <div onClick={() => {
-        setVisible(true)
-      }}>
+      <div onClick={() => setVisible(true)}>
         {deleteVisibleButton}
       </div>
     </>

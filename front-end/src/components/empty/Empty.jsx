@@ -2,6 +2,7 @@ import {CContainer, CImage, CRow} from "@coreui/react";
 import forNoPlant from "../../assets/images/forNoPlant.png";
 import React from "react";
 
+// TODO ?? garden 리팩토링하고 없앨 수 있나?
 const Empty = ({title, button}) => {
   return(
     <CContainer fluid className="text-center">

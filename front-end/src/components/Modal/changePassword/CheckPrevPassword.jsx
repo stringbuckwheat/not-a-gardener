@@ -14,8 +14,8 @@ const CheckPrevPassword = ({current, setCurrent, closeModal, setPrevPassword}) =
   }
 
   const onSubmit = async () => {
-    const res = await postData("/member/pw", {pw: password});
-
+    // 비밀번호 일치 여부 boolean
+    const res = await postData("/member/password", {password});
     setPwCheck(res);
 
     if (res) {

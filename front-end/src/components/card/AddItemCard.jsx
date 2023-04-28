@@ -2,6 +2,13 @@ import {CCol, CWidgetStatsF} from "@coreui/react";
 import {cilPlus} from "@coreui/icons";
 import CIcon from '@coreui/icons-react';
 
+/**
+ * 추가하기 카드
+ * @param addMsg ex. 식물 추가하기
+ * @param onClick
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const AddItemCard = ({addMsg, onClick}) => {
 
   return (

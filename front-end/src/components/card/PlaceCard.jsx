@@ -1,8 +1,14 @@
 import {CCol, CWidgetStatsF} from "@coreui/react";
 import {cilLightbulb, cilHouse, cilEco, cilWindow} from "@coreui/icons";
 import CIcon from '@coreui/icons-react';
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 
+/**
+ * 장소 카드
+ * @param place
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const PlaceCard = ({place}) => {
   let color = "";
   let icon = {};
@@ -21,7 +27,7 @@ const PlaceCard = ({place}) => {
   return (
     <CCol md={3} xs={12}>
       <Link
-        to={`/place/${place.placeNo}`}
+        to={`/place/${place.placeId}`}
         className="no-text-decoration">
         <CWidgetStatsF
           className="mb-3"
@@ -36,7 +42,7 @@ const PlaceCard = ({place}) => {
           value={
             <>
               <div className="d-flex justify-content-between">
-                <div>{place.placeName}</div>
+                <div>{place.name}</div>
                 {place.artificialLight === "사용"
                   ? <div className="float-end"><CIcon icon={cilLightbulb}/></div>
                   : <></>}

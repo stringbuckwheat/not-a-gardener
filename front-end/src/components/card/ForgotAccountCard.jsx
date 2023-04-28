@@ -2,6 +2,17 @@ import {CButton, CCard, CCardBody} from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import React from "react";
 
+/**
+ * 계정 찾기 카드
+ * @param icon
+ * @param color
+ * @param onClick
+ * @param title
+ * @param buttonSize
+ * @param iconSize
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const ForgotAccountCard = ({icon, color, onClick, title, buttonSize, iconSize = "8xl"}) => {
   return (
     <CCard

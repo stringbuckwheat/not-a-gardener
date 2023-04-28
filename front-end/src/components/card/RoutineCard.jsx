@@ -5,20 +5,29 @@ import {useState} from "react";
 import LinkHoverTag from "../tag/basic/LinkHoverTag";
 import updateRoutineState from "../../api/backend-api/updateRoutineState";
 
+/**
+ * 루틴 카드
+ * @param routine
+ * @param deleteRoutine
+ * @param index
+ * @param completeRoutine
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const RoutineCard = ({routine, deleteRoutine, index, completeRoutine}) => {
   const [isCompleted, setIsCompleted] = useState(routine.isCompleted == "Y");
 
   const hasToDoToday = routine.hasToDoToday == "Y";
 
   const onChange = async (e) => {
-    const res = await updateRoutineState(routine.routineNo, e.target.checked);
+    const res = await updateRoutineState(routine.id, e.target.checked);
     completeRoutine(index, res);
     setIsCompleted(e.target.checked);
   };
 
-  const removeRoutine = async (routineNo, hasToDoToday) => {
-    await deleteData(`/routine/${routineNo}`);
-    deleteRoutine(routineNo, hasToDoToday);
+  const removeRoutine = async (routineId, hasToDoToday) => {
+    await deleteData(`/routine/${routineId}`);
+    deleteRoutine(routineId, hasToDoToday);
   }
 
   return (
@@ -32,14 +41,14 @@ const RoutineCard = ({routine, deleteRoutine, index, completeRoutine}) => {
           />
           {
             isCompleted
-              ? <span><del className="text-dark">{routine.routineContent}</del></span>
-              : <span>{routine.routineContent}</span>
+              ? <span><del className="text-dark">{routine.content}</del></span>
+              : <span>{routine.content}</span>
           }
         </Space>
         <Popconfirm
           title="이 루틴을 삭제할까요?"
           description="루틴을 삭제하면 복구할 수 없어요"
-          onConfirm={() => removeRoutine(routine.routineNo, routine.hasToDoToday)}
+          onConfirm={() => removeRoutine(routine.id, routine.hasToDoToday)}
           okText="네"
           cancelText="아니요"
         >
@@ -48,8 +57,8 @@ const RoutineCard = ({routine, deleteRoutine, index, completeRoutine}) => {
 
       </div>
       <div className="d-flex justify-content-end">
-        <Tag color={`${isCompleted || !hasToDoToday ? "" : "blue"}`}>{`${routine.routineCycle}일마다 한 번`}</Tag>
-        <LinkHoverTag content={routine.plantName} color={"green"} to={`/plant/${routine.plantNo}`} />
+        <Tag color={`${isCompleted || !hasToDoToday ? "" : "blue"}`}>{`${routine.cycle}일마다 한 번`}</Tag>
+        <LinkHoverTag content={routine.plantName} color={"green"} to={`/plant/${routine.plantId}`} />
       </div>
     </div>
   )

@@ -1,15 +1,18 @@
 import {Select} from "antd";
 
+/**
+ * 정렬 select
+ * @param sortOption
+ * @param setSort
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const Sort = ({sortOption, setSort}) => {
-  const onChange = (value) => {
-    setSort(value);
-  }
-
   return (
     <Select
       className="width-130"
       defaultValue={sortOption[0].value}
-      onChange={onChange}
+      onChange={(value) => setSort(value)}
       options={sortOption}
     />
   )

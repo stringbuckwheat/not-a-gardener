@@ -1,9 +1,15 @@
 import {CCol} from "@coreui/react";
 import {useSpring, animated} from "@react-spring/web";
 
+/**
+ * 소셜 로그인 버튼들(카카오, 구글, 네이버)
+ * @param provider kakao, google, naver
+ * @param recentLogin 최근 해당 소셜로그인 기록이 있으면 알려줌
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const SocialLoginButton = ({provider, recentLogin} ) => {
   const authorizationUrl = `${process.env.REACT_APP_API_URL}/oauth2/authorization`;
-  console.log("authorizationUrl", authorizationUrl);
 
   const springProps = useSpring({
     display: 'inline',

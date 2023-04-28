@@ -1,23 +1,23 @@
 import getWateringMsg from "../../utils/function/getWateringMsg";
 
-const getPlantListForPlantTable = (plantList) => {
-  const plantListForPlantTable = plantList.map((pl) => {
+const getPlantListForPlantTable = (plants) => {
+  const plantListForPlantTable = plants.map((pl) => {
 
     const plant = pl.plant;
     const gardenDetail = pl.gardenDetail;
     const latestWateringDate = gardenDetail.latestWateringDate;
 
     return ({
-      key: plant.plantNo,
-      plantNo: plant.plantNo,
-      plantName: plant.plantName,
-      plantSpecies: plant.plantSpecies,
-      averageWateringPeriod: plant.averageWateringPeriod,
+      key: plant.plantId,
+      id: plant.plantId,
+      name: plant.name,
+      species: plant.species,
+      recentWateringPeriod: plant.recentWateringPeriod,
       earlyWateringPeriod: plant.earlyWateringPeriod,
       createDate: plant.createDate,
 
       placeName: plant.placeName,
-      placeNo: plant.placeNo,
+      placeId: plant.placeId,
 
       chemicalCode: gardenDetail.chemicalCode,
       wateringCode: gardenDetail.wateringCode,

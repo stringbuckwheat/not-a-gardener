@@ -1,5 +1,6 @@
 import {CButton} from "@coreui/react"
 
+// TODO garden noItem 로직 수정 후 삭제
 const AddPlantButton = ({size = "lg", className, shape = "rounded-pill", onClick}) => {
 
   return (

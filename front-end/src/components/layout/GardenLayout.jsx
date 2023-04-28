@@ -2,6 +2,12 @@ import React from 'react'
 import {Navigate} from 'react-router-dom';
 import {AppContent, AppSidebar, AppFooter, AppHeader} from '../index'
 
+/**
+ * 로그인 이후 모든 페이지의 레이아웃
+ * 페이지에 따라 AppContent 부분만 바꿔끼움
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const GardenLayout = () => {
   const isLogin = localStorage.getItem("login");
 
