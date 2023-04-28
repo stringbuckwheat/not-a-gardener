@@ -2,9 +2,9 @@ package com.buckwheat.garden.dao.impl;
 
 import com.buckwheat.garden.dao.PlaceDao;
 import com.buckwheat.garden.data.dto.PlaceDto;
-import com.buckwheat.garden.data.entity.Member;
+import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Place;
-import com.buckwheat.garden.repository.MemberRepository;
+import com.buckwheat.garden.repository.GardenerRepository;
 import com.buckwheat.garden.repository.PlaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -16,16 +16,16 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class PlaceDaoImpl implements PlaceDao {
     private final PlaceRepository placeRepository;
-    private final MemberRepository memberRepository;
+    private final GardenerRepository gardenerRepository;
 
     /**
-     * @param memberId
+     * @param gardenerId
      * @return
      * @Transactional X, EntityGraph로 한 번에 조회
      */
     @Override
-    public List<Place> getPlacesByMemberId(Long memberId) {
-        return placeRepository.findByMember_MemberIdOrderByCreateDate(memberId);
+    public List<Place> getPlacesByGardenerId(Long gardenerId) {
+        return placeRepository.findByGardener_GardenerIdOrderByCreateDate(gardenerId);
     }
 
     @Override
@@ -40,9 +40,9 @@ public class PlaceDaoImpl implements PlaceDao {
      * @return
      */
     @Override
-    public Place save(Long memberId, PlaceDto.Request placeRequest) {
-        Member member = memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new);
-        return placeRepository.save(placeRequest.toEntityWith(member));
+    public Place save(Long gardenerId, PlaceDto.Request placeRequest) {
+        Gardener gardener = gardenerRepository.findById(gardenerId).orElseThrow(NoSuchElementException::new);
+        return placeRepository.save(placeRequest.toEntityWith(gardener));
     }
 
     @Override

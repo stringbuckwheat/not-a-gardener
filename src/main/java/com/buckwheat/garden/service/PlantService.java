@@ -11,13 +11,13 @@ public interface PlantService {
     PlantDto.Response getPlantDetail(Long plantId);
 
     /* 식물 리스트 */
-    List<PlantDto.Response> getPlantsByMemberId(Long memberId);
+    List<PlantDto.Response> getPlantsByGardenerId(Long gardenerId);
 
     /* 식물 추가 */
-    GardenDto.Response add(Long memberId, PlantDto.Request plantRequest);
+    GardenDto.Response add(Long gardenerId, PlantDto.Request plantRequest);
 
     /* 식물 수정 */
-    GardenDto.Response modify(Long memberId, PlantDto.Request plantRequest);
+    GardenDto.Response modify(Long gardenerId, PlantDto.Request plantRequest);
 
     /* 식물들의 장소 정보 수정 */
     PlaceDto.Response modifyPlantPlace(PlaceDto.ModifyPlantPlace modifyPlantPlace);

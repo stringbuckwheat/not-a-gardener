@@ -6,9 +6,9 @@ import com.buckwheat.garden.data.entity.Place;
 import java.util.List;
 
 public interface PlaceDao {
-    List<Place> getPlacesByMemberId(Long memberId);
+    List<Place> getPlacesByGardenerId(Long gardenerId);
     Place getPlaceWithPlantList(Long placeId);
-    Place save(Long memberId, PlaceDto.Request placeRequest);
+    Place save(Long gardenerId, PlaceDto.Request placeRequest);
 
     Place update(PlaceDto.Request placeRequest);
 

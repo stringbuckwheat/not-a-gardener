@@ -2,11 +2,11 @@ package com.buckwheat.garden.dao.impl;
 
 import com.buckwheat.garden.dao.GoalDao;
 import com.buckwheat.garden.data.dto.GoalDto;
+import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Goal;
-import com.buckwheat.garden.data.entity.Member;
 import com.buckwheat.garden.data.entity.Plant;
+import com.buckwheat.garden.repository.GardenerRepository;
 import com.buckwheat.garden.repository.GoalRepository;
-import com.buckwheat.garden.repository.MemberRepository;
 import com.buckwheat.garden.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -19,19 +19,19 @@ import java.util.NoSuchElementException;
 public class GoalDaoImpl implements GoalDao {
     private final GoalRepository goalRepository;
     private final PlantRepository plantRepository;
-    private final MemberRepository memberRepository;
+    private final GardenerRepository gardenerRepository;
 
     @Override
-    public List<Goal> getGoalListBy(Long memberId){
-        return goalRepository.findByMember_MemberId(memberId);
+    public List<Goal> getGoalListBy(Long gardenerId){
+        return goalRepository.findByGardener_GardenerId(gardenerId);
     }
 
     @Override
-    public Goal save(Long memberId, GoalDto.Request goalRequest) {
-        Member member = memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new);
+    public Goal save(Long gardenerId, GoalDto.Request goalRequest) {
+        Gardener gardener = gardenerRepository.findById(gardenerId).orElseThrow(NoSuchElementException::new);
         Plant plant = plantRepository.findById(goalRequest.getPlantId()).orElse(null);
 
-        return goalRepository.save(goalRequest.toEntityWith(member, plant));
+        return goalRepository.save(goalRequest.toEntityWith(gardener, plant));
     }
 
     @Override

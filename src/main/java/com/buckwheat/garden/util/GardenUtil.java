@@ -55,7 +55,7 @@ public class GardenUtil {
 
         WateringDto.Response latestWatering = WateringDto.Response.from(plant.getWaterings().get(0));
 
-        int wateringDDay = getWateringDDay(plant.getRecentWateringPeriod(), plant.getWaterings().get(0).getDate());
+        int wateringDDay = getWateringDDay(plant.getRecentWateringPeriod(), plant.getWaterings().get(0).getWateringDate());
         int wateringCode = getWateringCode(plant.getRecentWateringPeriod(), wateringDDay);
 
         // chemicalCode: 물을 줄 식물에 대해서 맹물을 줄지 비료/약품 희석액을 줄지 알려주는 용도
@@ -103,7 +103,7 @@ public class GardenUtil {
     public LocalDate getLastDrinkingDay(Plant plant) {
         // 물주기 정보가 있으면 진짜 제일 최근 물 준 날짜를 리턴
         if (plant.getWaterings().size() != 0) {
-            return plant.getWaterings().get(0).getDate();
+            return plant.getWaterings().get(0).getWateringDate();
         }
 
         return plant.getCreateDate().toLocalDate();
@@ -161,8 +161,8 @@ public class GardenUtil {
             int period = (int) Duration.between(latestFertilizedDate.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays();
 
             // 시비 날짜와 같거나 더 지났으면
-            if (period >= (int) latestFertilizingInfo.getChemicalPeriod()) {
-                return new GardenDto.ChemicalCode(latestFertilizingInfo.getChemicalId(), latestFertilizingInfo.getChemicalName());
+            if (period >= (int) latestFertilizingInfo.getPeriod()) {
+                return new GardenDto.ChemicalCode(latestFertilizingInfo.getChemicalId(), latestFertilizingInfo.getName());
             }
         }
 

@@ -20,16 +20,16 @@ public interface WateringRepository extends JpaRepository<Watering, Long> {
             " ON watering.chemical = chemical" +
             " JOIN Plant plant" +
             " ON watering.plant = plant" +
-            " WHERE plant.member.memberId = :memberId" +
+            " WHERE plant.gardener.gardenerId = :gardenerId" +
             " AND watering.wateringDate >= :startDate" +
             " AND watering.wateringDate <= :endDate")
-    List<Watering> findAllWateringListByMemberNo(@Param("memberId") Long memberId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+    List<Watering> findAllWateringListByGardenerNo(@Param("gardenerId") Long gardenerId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
-    @Query(value = "select chemical_no chemicalNo, chemical_period chemicalPeriod, chemical_name chemicalName," +
-            " (select MAX(watering_date) from watering w where w.plant_no = :plantId and w.chemical_no = c.chemical_no) latestWateringDate" +
-            " from chemical c where c.member_no = :memberId" +
-            " order by chemical_period desc", nativeQuery = true)
-    List<ChemicalUsage> findLatestChemicalizedDayList(@Param("memberId") Long memberId, @Param("plantId") Long plantId);
+    @Query(value = "select chemical_id chemicalId, period, name," +
+            " (select MAX(watering_date) from watering w where w.plant_id = :plantId and w.chemical_id = c.chemical_id) latestWateringDate" +
+            " from chemical c where c.gardener_id = :gardenerId" +
+            " order by period desc", nativeQuery = true)
+    List<ChemicalUsage> findLatestChemicalizedDayList(@Param("gardenerId") Long gardenerId, @Param("plantId") Long plantId);
 
     @EntityGraph(attributePaths = {"chemical"}, type = EntityGraph.EntityGraphType.FETCH)
     List<Watering> findByPlant_PlantIdOrderByWateringDateDesc(Long plantId);

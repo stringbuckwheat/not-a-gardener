@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface RoutineRepository extends JpaRepository<Routine, Long> {
     @EntityGraph(attributePaths = {"plant"}, type = EntityGraph.EntityGraphType.FETCH)
-    List<Routine> findByMember_MemberId(Long memberId);
+    List<Routine> findByGardener_GardenerId(Long gardenerId);
 
     @EntityGraph(attributePaths = {"plant"}, type = EntityGraph.EntityGraphType.FETCH)
     Optional<Routine> findByRoutineId(Long routineId);

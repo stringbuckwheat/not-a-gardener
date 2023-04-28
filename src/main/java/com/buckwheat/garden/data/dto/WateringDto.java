@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class WateringDto {
-
     @NoArgsConstructor
     @Getter
     @ToString
@@ -17,20 +16,20 @@ public class WateringDto {
         private Long id;
         private Long plantId;
         private Long chemicalId;
-        private LocalDate date;
+        private LocalDate wateringDate;
 
         public Watering toEntityWithPlantAndChemical(Plant plant, Chemical chemical) {
             return Watering.builder()
                     .plant(plant)
                     .chemical(chemical)
-                    .date(date)
+                    .wateringDate(wateringDate)
                     .build();
         }
 
         public Watering toEntityWithPlant(Plant plant) {
             return Watering.builder()
                     .plant(plant)
-                    .date(date)
+                    .wateringDate(wateringDate)
                     .build();
         }
     }
@@ -42,7 +41,7 @@ public class WateringDto {
         private Long id;
         private String plantName;
         private String chemicalName;
-        private LocalDate date;
+        private LocalDate wateringDate;
         private Message msg;
 
         public static String getChemicalName(Chemical chemical) {
@@ -58,7 +57,7 @@ public class WateringDto {
                     .id(watering.getWateringId())
                     .plantName(watering.getPlant().getName())
                     .chemicalName(getChemicalName(watering.getChemical()))
-                    .date(watering.getDate())
+                    .wateringDate(watering.getWateringDate())
                     .build();
         }
 
@@ -67,7 +66,7 @@ public class WateringDto {
                     .id(watering.getWateringId())
                     .plantName(watering.getPlant().getName())
                     .chemicalName(getChemicalName(watering.getChemical()))
-                    .date(watering.getDate())
+                    .wateringDate(watering.getWateringDate())
                     .msg(wateringMsg)
                     .build();
         }
@@ -120,7 +119,7 @@ public class WateringDto {
         private Long id;
         private Long chemicalId;
         private String chemicalName;
-        private LocalDate date;
+        private LocalDate wateringDate;
         private int period;
 
         public static ForOnePlant from(Watering watering) {
@@ -130,7 +129,7 @@ public class WateringDto {
                     .id(watering.getWateringId())
                     .chemicalId(chemical == null ? 0 : chemical.getChemicalId())
                     .chemicalName(chemical == null ? "맹물" : chemical.getName())
-                    .date(watering.getDate())
+                    .wateringDate(watering.getWateringDate())
                     .build();
         }
 
@@ -140,7 +139,7 @@ public class WateringDto {
             return ForOnePlant.builder()
                     .id(watering.getWateringId())
                     .chemicalName(chemical == null ? "맹물" : chemical.getName())
-                    .date(watering.getDate())
+                    .wateringDate(watering.getWateringDate())
                     .period(wateringPeriod)
                     .build();
         }
@@ -169,7 +168,7 @@ public class WateringDto {
                         .id(watering.getWateringId())
                         .plantId(plant.getPlantId())
                         .plantName(plant.getName())
-                        .wateringDate(watering.getDate())
+                        .wateringDate(watering.getWateringDate())
                         .build();
             }
 
@@ -179,7 +178,7 @@ public class WateringDto {
                     .plantName(plant.getName())
                     .chemicalId(chemical.getChemicalId())
                     .chemicalName(chemical.getName())
-                    .wateringDate(watering.getDate())
+                    .wateringDate(watering.getWateringDate())
                     .build();
         }
     }
@@ -211,7 +210,7 @@ public class WateringDto {
                     .plantName(watering.getPlant().getName())
                     .placeId(watering.getPlant().getPlace().getPlaceId())
                     .placeName(watering.getPlant().getPlace().getName())
-                    .wateringDate(watering.getDate())
+                    .wateringDate(watering.getWateringDate())
                     .build();
         }
     }

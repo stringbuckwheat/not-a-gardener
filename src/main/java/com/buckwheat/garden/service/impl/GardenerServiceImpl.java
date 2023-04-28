@@ -1,9 +1,9 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.dao.MemberDao;
-import com.buckwheat.garden.data.dto.MemberDto;
-import com.buckwheat.garden.data.entity.Member;
-import com.buckwheat.garden.service.MemberService;
+import com.buckwheat.garden.dao.GardenerDao;
+import com.buckwheat.garden.data.dto.GardenerDto;
+import com.buckwheat.garden.data.entity.Gardener;
+import com.buckwheat.garden.service.GardenerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -19,9 +19,9 @@ import java.util.*;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberService {
+public class GardenerServiceImpl implements GardenerService {
     private final BCryptPasswordEncoder encoder;
-    private final MemberDao memberDao;
+    private final GardenerDao gardenerDao;
 
     private final JavaMailSender mailSender;
 
@@ -29,8 +29,8 @@ public class MemberServiceImpl implements MemberService {
     private String sendFrom;
 
     @Override
-    public MemberDto.Detail getMemberDetail(Member member) {
-        return MemberDto.Detail.from(member);
+    public GardenerDto.Detail getGardenerDetail(Gardener gardener) {
+        return GardenerDto.Detail.from(gardener);
     }
 
     /**
@@ -41,9 +41,9 @@ public class MemberServiceImpl implements MemberService {
      */
     @Override
     public Map<String, Object> forgotAccount(String email) {
-        List<Member> memberList = memberDao.getMemberByEmail(email);
+        List<Gardener> gardeners = gardenerDao.getGardenerByEmail(email);
 
-        if (memberList.size() == 0) {
+        if (gardeners.size() == 0) {
             throw new UsernameNotFoundException("해당 이메일로 가입한 회원이 없어요.");
         }
 
@@ -69,44 +69,45 @@ public class MemberServiceImpl implements MemberService {
         map.put("identificationCode", identificationCode);
         map.put("email", email);
 
-        List<String> members = new ArrayList<>();
+        List<String> gardenerDtos = new ArrayList<>();
 
-        for (Member member : memberList) {
-            members.add(member.getUsername());
+        for (Gardener gardener : gardeners) {
+            gardenerDtos.add(gardener.getUsername());
         }
 
-        map.put("members", members);
+        map.put("gardeners", gardenerDtos);
 
         return map;
     }
 
     @Override
-    public void updatePassword(Member member, MemberDto.Login login) {
+    public void updatePassword(Gardener gardener, GardenerDto.Login login) {
         String encryptedPassword = encoder.encode(login.getPassword());
-        memberDao.save(member.changePassword(encryptedPassword));
+        gardenerDao.save(gardener.changePassword(encryptedPassword));
     }
 
     @Override
-    public void resetPassword(MemberDto.Login login) {
-        Member member = memberDao.getMemberByUsername(login.getUsername()).orElseThrow(NoSuchElementException::new);
-        updatePassword(member, login);
+    public void resetPassword(GardenerDto.Login login) {
+        Gardener gardener = gardenerDao.getGardenerByUsername(login.getUsername()).orElseThrow(NoSuchElementException::new);
+        updatePassword(gardener, login);
     }
 
     @Override
-    public boolean identify(Member member, MemberDto.Login login) {
-        return encoder.matches(login.getPassword(), member.getPassword());
+    public boolean identify(Gardener gardener, GardenerDto.Login login) {
+        return encoder.matches(login.getPassword(), gardener.getPassword());
     }
 
     @Override
-    public MemberDto.Detail modify(MemberDto.Detail memberDetail) {
-        Member member = memberDao.getMemberByMemberId(memberDetail.getId()).orElseThrow(NoSuchElementException::new);
-        memberDao.save(member.updateEmailAndName(memberDetail.getEmail(), memberDetail.getName()));
+    public GardenerDto.Detail modify(GardenerDto.Detail gardenerDetail) {
+        Gardener gardener = gardenerDao.getGardenerByGardenerId(gardenerDetail.getId())
+                .orElseThrow(NoSuchElementException::new);
+        gardenerDao.save(gardener.updateEmailAndName(gardenerDetail.getEmail(), gardenerDetail.getName()));
 
-        return MemberDto.Detail.updateResponseFrom(member);
+        return GardenerDto.Detail.updateResponseFrom(gardener);
     }
 
     @Override
-    public void delete(Long memberId) {
-        memberDao.deleteBy(memberId);
+    public void delete(Long gardenerId) {
+        gardenerDao.deleteBy(gardenerId);
     }
 }

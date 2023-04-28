@@ -24,7 +24,7 @@ public class GardenWateringController {
      */
     @PostMapping("")
     public GardenDto.WateringResponse addWateringInGarden(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody WateringDto.Request wateringRequest){
-        return gardenWateringService.addWateringInGarden(userPrincipal.getMember().getMemberId(), wateringRequest);
+        return gardenWateringService.addWateringInGarden(userPrincipal.getGardener().getGardenerId(), wateringRequest);
     }
 
     /**

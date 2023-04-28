@@ -1,6 +1,6 @@
 package com.buckwheat.garden.data.dto;
 
-import com.buckwheat.garden.data.entity.Member;
+import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Place;
 import lombok.*;
 
@@ -23,17 +23,17 @@ public class PlaceDto {
 
         /**
          * createDate로 쓸 LocalDateTime.now()를 포함한 엔티티를 반환
-         * @param member FK 매핑
+         * @param gardener FK 매핑
          * @return Place
          */
-        public Place toEntityWith(Member member){
+        public Place toEntityWith(Gardener gardener){
             return Place.builder()
                     .placeId(id)
                     .name(name)
                     .artificialLight(artificialLight)
                     .option(option)
                     .createDate(LocalDateTime.now())
-                    .member(member)
+                    .gardener(gardener)
                     .build();
         }
     }

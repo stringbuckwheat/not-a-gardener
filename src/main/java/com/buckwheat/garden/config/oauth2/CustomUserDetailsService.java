@@ -1,7 +1,7 @@
 package com.buckwheat.garden.config.oauth2;
 
-import com.buckwheat.garden.dao.MemberDao;
-import com.buckwheat.garden.data.entity.Member;
+import com.buckwheat.garden.dao.GardenerDao;
+import com.buckwheat.garden.data.entity.Gardener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,19 +13,19 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-    private final MemberDao memberDao;
+    private final GardenerDao gardenerDao;
 
     /**
      *
-     * @param username memberNo가 저장되어 있다
-     * @return member 객체를 포함한 UserPrincipal -> UsernamePasswordAuthenticationToken에 넣는다
+     * @param username gardenerNo가 저장되어 있다
+     * @return Gardener 객체를 포함한 UserPrincipal -> UsernamePasswordAuthenticationToken에 넣는다
      * @throws UsernameNotFoundException
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberDao.getMemberByMemberId(Long.parseLong(username))
+        Gardener gardener = gardenerDao.getGardenerByGardenerId(Long.parseLong(username))
                 .orElseThrow(() -> new UsernameNotFoundException("해당 유저를 찾을 수 없습니다."));
 
-        return new UserPrincipal(member);
+        return new UserPrincipal(gardener);
     }
 }

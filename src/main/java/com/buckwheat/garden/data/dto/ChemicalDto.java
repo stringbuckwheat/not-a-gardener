@@ -1,7 +1,7 @@
 package com.buckwheat.garden.data.dto;
 
 import com.buckwheat.garden.data.entity.Chemical;
-import com.buckwheat.garden.data.entity.Member;
+import com.buckwheat.garden.data.entity.Gardener;
 import lombok.*;
 
 public class ChemicalDto {
@@ -36,30 +36,30 @@ public class ChemicalDto {
 
         /**
          * chemical update 시에 엔티티 생성(chemicalNo를 포함)
-         * @param member
+         * @param gardener
          * @return chemicalNo를 포함하는 chemical entity
          */
-        public Chemical toEntityWithMemberForUpdate(Member member){
+        public Chemical toEntityWithGardenerForUpdate(Gardener gardener){
             return Chemical.builder()
                     .chemicalId(id)
                     .name(name)
                     .period(period)
                     .type(type)
-                    .member(member)
+                    .gardener(gardener)
                     .build();
         }
 
         /**
          * chemical insert 시의 엔티티 생성(chemicalNo 포함 X)
-         * @param member
+         * @param gardener
          * @return chemicalNo가 없는 chemical entity
          */
-        public Chemical toEntityWithMember(Member member){
+        public Chemical toEntityWithGardener(Gardener gardener){
             return Chemical.builder()
                     .name(name)
                     .period(period)
                     .type(type)
-                    .member(member)
+                    .gardener(gardener)
                     .build();
         }
     }

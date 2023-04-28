@@ -18,10 +18,10 @@ public class GoalServiceImpl implements GoalService {
     private final GoalDao goalDao;
 
     @Override
-    public List<GoalDto.Response> getGoalsByMemberId(Long memberId) {
+    public List<GoalDto.Response> getGoalsByGardenerId(Long gardenerId) {
         List<GoalDto.Response> goalList = new ArrayList<>();
 
-        for(Goal goal : goalDao.getGoalListBy(memberId)){
+        for(Goal goal : goalDao.getGoalListBy(gardenerId)){
             goalList.add(GoalDto.Response.from(goal));
         }
 
@@ -29,8 +29,8 @@ public class GoalServiceImpl implements GoalService {
     }
 
     @Override
-    public GoalDto.Response add(Long memberId, GoalDto.Request goalRequest) {
-        Goal goal = goalDao.save(memberId, goalRequest);
+    public GoalDto.Response add(Long gardenerId, GoalDto.Request goalRequest) {
+        Goal goal = goalDao.save(gardenerId, goalRequest);
         return GoalDto.Response.from(goal, goal.getPlant());
     }
 

@@ -3,10 +3,10 @@ package com.buckwheat.garden.dao.impl;
 import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.data.dto.PlaceDto;
 import com.buckwheat.garden.data.dto.PlantDto;
-import com.buckwheat.garden.data.entity.Member;
+import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Place;
 import com.buckwheat.garden.data.entity.Plant;
-import com.buckwheat.garden.repository.MemberRepository;
+import com.buckwheat.garden.repository.GardenerRepository;
 import com.buckwheat.garden.repository.PlaceRepository;
 import com.buckwheat.garden.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +22,11 @@ import java.util.NoSuchElementException;
 public class PlantDaoImpl implements PlantDao {
     private final PlantRepository plantRepository;
     private final PlaceRepository placeRepository;
-    private final MemberRepository memberRepository;
+    private final GardenerRepository gardenerRepository;
 
     @Override
-    public List<Plant> getPlantListByMemberId(Long memberId){
-        return plantRepository.findByMember_MemberIdOrderByCreateDateDesc(memberId);
+    public List<Plant> getPlantListByGardenerId(Long gardenerId){
+        return plantRepository.findByGardener_GardenerIdOrderByCreateDateDesc(gardenerId);
     }
 
     @Override
@@ -35,16 +35,16 @@ public class PlantDaoImpl implements PlantDao {
     }
 
     @Override
-    public List<Plant> getPlantsForGarden(Long memberId){
-        return plantRepository.findByMember_MemberId(memberId);
+    public List<Plant> getPlantsForGarden(Long gardenerId){
+        return plantRepository.findByGardener_GardenerId(gardenerId);
     }
 
     @Override
-    public Plant save(Long memberId, PlantDto.Request plantRequest) {
+    public Plant save(Long gardenerId, PlantDto.Request plantRequest) {
         Place place = placeRepository.findByPlaceId(plantRequest.getPlaceId()).orElseThrow(NoSuchElementException::new);
-        Member member = memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new);
+        Gardener gardener = gardenerRepository.findById(gardenerId).orElseThrow(NoSuchElementException::new);
 
-        return plantRepository.save(plantRequest.toEntityWith(member, place));
+        return plantRepository.save(plantRequest.toEntityWith(gardener, place));
     }
 
     @Override

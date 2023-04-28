@@ -1,7 +1,7 @@
 package com.buckwheat.garden.data.dto;
 
 import com.buckwheat.garden.data.entity.Goal;
-import com.buckwheat.garden.data.entity.Member;
+import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Plant;
 import lombok.*;
 
@@ -14,12 +14,12 @@ public class GoalDto {
         private String complete;
         private Long plantId;
 
-        public Goal toEntityWith(Member member, Plant plant) {
+        public Goal toEntityWith(Gardener gardener, Plant plant) {
             return Goal.builder()
                     .goalId(id)
                     .content(content)
                     .complete(complete)
-                    .member(member)
+                    .gardener(gardener)
                     .plant(plant)
                     .build();
         }

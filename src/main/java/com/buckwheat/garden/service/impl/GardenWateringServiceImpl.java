@@ -27,7 +27,7 @@ public class GardenWateringServiceImpl implements GardenWateringService {
     private final GardenResponseProvider gardenResponseProvider;
 
     @Override
-    public GardenDto.WateringResponse addWateringInGarden(Long memberId, WateringDto.Request wateringRequest) {
+    public GardenDto.WateringResponse addWateringInGarden(Long gardenerId, WateringDto.Request wateringRequest) {
         Watering watering = wateringDao.addWatering(wateringRequest);
         Plant plant = watering.getPlant();
 
@@ -40,7 +40,7 @@ public class GardenWateringServiceImpl implements GardenWateringService {
             plant = wateringUtil.updateWateringPeriod(watering.getPlant(), wateringMsg.getAverageWateringDate());
         }
 
-        GardenDto.Response gardenResponse = gardenResponseProvider.getGardenResponse(plant, memberId);
+        GardenDto.Response gardenResponse = gardenResponseProvider.getGardenResponse(plant, gardenerId);
 
         return new GardenDto.WateringResponse(gardenResponse, wateringMsg);
     }
@@ -60,7 +60,7 @@ public class GardenWateringServiceImpl implements GardenWateringService {
 
         // averageWateringPeriod 안 마른 날짜만큼 업데이트
         // 마지막으로 물 준 날짜와 오늘과의 날짜 사이를 계산함
-        LocalDate lastDrinkingDate = plant.getWaterings().get(0).getDate();
+        LocalDate lastDrinkingDate = plant.getWaterings().get(0).getWateringDate();
         int period = (int) Duration.between(lastDrinkingDate.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays();
 
         if (period + 1 == plant.getRecentWateringPeriod()) {

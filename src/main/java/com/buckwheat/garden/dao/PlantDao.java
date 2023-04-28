@@ -8,10 +8,10 @@ import com.buckwheat.garden.data.entity.Plant;
 import java.util.List;
 
 public interface PlantDao {
-    List<Plant> getPlantListByMemberId(Long memberId);
+    List<Plant> getPlantListByGardenerId(Long gardenerId);
     Plant getPlantWithPlaceAndWatering(Long plantId);
-    List<Plant> getPlantsForGarden(Long memberId);
-    Plant save(Long memberId, PlantDto.Request plantRequest);
+    List<Plant> getPlantsForGarden(Long gardenerId);
+    Plant save(Long gardenerId, PlantDto.Request plantRequest);
     Plant update(PlantDto.Request plantRequest);
     Plant update(Plant plant);
     Place updatePlantPlace(PlaceDto.ModifyPlantPlace modifyPlantPlaceDto);

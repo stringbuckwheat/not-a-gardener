@@ -21,7 +21,7 @@ public class WateringController {
 
     @GetMapping("/month/{month}")
     public Map<LocalDate, List<WateringDto.ByDate>> getWateringListByMonth(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable int month){
-        return wateringService.getWateringList(userPrincipal.getMember().getMemberId(), month);
+        return wateringService.getWateringList(userPrincipal.getGardener().getGardenerId(), month);
     }
 
     @PostMapping("")

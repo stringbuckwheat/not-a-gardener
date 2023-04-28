@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface GoalRepository extends JpaRepository<Goal, Long> {
     @EntityGraph(attributePaths = {"plant"}, type = EntityGraph.EntityGraphType.FETCH)
-    List<Goal> findByMember_MemberId(Long memberId);
+    List<Goal> findByGardener_GardenerId(Long gardenerId);
 
     @EntityGraph(attributePaths = {"plant"}, type = EntityGraph.EntityGraphType.FETCH)
     Optional<Goal> findByGoalId(Long goalId);

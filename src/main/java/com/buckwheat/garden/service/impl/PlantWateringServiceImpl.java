@@ -107,8 +107,8 @@ public class PlantWateringServiceImpl implements PlantWateringService {
             }
 
             // 며칠만에 물줬는지 계산
-            LocalDateTime afterWateringDate = list.get(i).getDate().atStartOfDay();
-            LocalDateTime prevWateringDate = list.get(i + 1).getDate().atStartOfDay();
+            LocalDateTime afterWateringDate = list.get(i).getWateringDate().atStartOfDay();
+            LocalDateTime prevWateringDate = list.get(i + 1).getWateringDate().atStartOfDay();
 
             int wateringPeriod = (int) Duration.between(prevWateringDate, afterWateringDate).toDays();
 

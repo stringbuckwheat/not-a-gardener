@@ -1,7 +1,7 @@
 package com.buckwheat.garden.config.oauth2;
 
-import com.buckwheat.garden.dao.MemberDao;
-import com.buckwheat.garden.data.entity.Member;
+import com.buckwheat.garden.dao.GardenerDao;
+import com.buckwheat.garden.data.entity.Gardener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -15,7 +15,7 @@ import java.util.Map;
 
 /**
  * access token을 사용하여 OAuth2 서버에서 유저 정보를 가져온다.
- * 데이터베이스에 Member를 저장/수정한다.
+ * 데이터베이스에 Gardener를 저장/수정한다.
  * 가져온 유저 정보로 UserPrincipal을 만들어 반환한다.
  * UserPrincipal: UserDetails, OAuth2User를 implements한 커스텀 클래스
  */
@@ -23,7 +23,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
-    private final MemberDao memberDao;
+    private final GardenerDao gardenerDao;
 
     /**
      * OAuth2 로그인 성공 정보를 바탕으로 UserPrincipal을 만들어 반환한다
@@ -54,16 +54,16 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
         OAuth2Attribute oAuth2Attribute = OAuth2Attribute.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
         // 기존 회원이면 update, 신규 회원이면 save
-        Member member = saveOrUpdate(oAuth2Attribute);
+        Gardener gardener = saveOrUpdate(oAuth2Attribute);
 
         // oAuth2User.getAttributes()로 가져오는 map은 수정 불가능한 맵
-        // Member 테이블의 PK를 (username이 아니라) member_no로 잡고 있으므로
+        // Gardener 테이블의 PK를 (username이 아니라) gardener_id로 잡고 있으므로
         // PK 값을 함께 Security Context에 저장하기 위해 평범한 map으로 변환
         Map<String, Object> attributes = oAuth2Attribute.toMap();
-        attributes.put("memberId", member.getMemberId());
+        attributes.put("gardenerId", gardener.getGardenerId());
 
         // UserPrincipal: Authentication에 담을 OAuth2User와 (일반 로그인 용)UserDetails를 implements한 커스텀 클래스
-        return UserPrincipal.create(member, oAuth2Attribute.getAttributes());
+        return UserPrincipal.create(gardener, oAuth2Attribute.getAttributes());
     }
 
     /**
@@ -71,10 +71,10 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
      * @param oAuth2Attribute 엔티티를 만들 정보들
      * @return
      */
-    public Member saveOrUpdate(OAuth2Attribute oAuth2Attribute){
-        Member member = memberDao.getMemberByUsernameAndProvider(oAuth2Attribute.getEmail(), oAuth2Attribute.getProvider())
+    public Gardener saveOrUpdate(OAuth2Attribute oAuth2Attribute){
+        Gardener gardener = gardenerDao.getGardenerByUsernameAndProvider(oAuth2Attribute.getEmail(), oAuth2Attribute.getProvider())
                 .orElse(oAuth2Attribute.toEntity());
 
-        return memberDao.save(member);
+        return gardenerDao.save(gardener);
     }
 }

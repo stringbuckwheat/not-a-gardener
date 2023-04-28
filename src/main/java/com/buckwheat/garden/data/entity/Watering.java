@@ -1,6 +1,8 @@
 package com.buckwheat.garden.data.entity;
 
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -19,19 +21,20 @@ public class Watering {
     private Long wateringId;
 
     @NotNull
-    private LocalDate date; // 물 준 날짜
+    private LocalDate wateringDate; // 물 준 날짜
 
     // FK
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="plant_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
     private Plant plant;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chemical_id")
     private Chemical chemical;
 
-    public Watering update(LocalDate date, Plant plant, Chemical chemical){
-        this.date = date;
+    public Watering update(LocalDate wateringDate, Plant plant, Chemical chemical){
+        this.wateringDate = wateringDate;
         this.plant = plant;
         this.chemical = chemical;
 

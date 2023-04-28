@@ -1,6 +1,6 @@
 package com.buckwheat.garden.config.oauth2;
 
-import com.buckwheat.garden.data.entity.Member;
+import com.buckwheat.garden.data.entity.Gardener;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -16,25 +16,25 @@ import java.util.*;
 @ToString
 @Getter
 public class UserPrincipal implements UserDetails, OAuth2User {
-    private Member member;
+    private Gardener gardener;
     private Map<String, Object> oauth2UserAttributes;
 
-    public UserPrincipal(Member member){
-        this.member = member;
+    public UserPrincipal(Gardener gardener){
+        this.gardener = gardener;
     }
 
     /* OAuth2 로그인 사용 */
-    public static UserPrincipal create(Member member, Map<String, Object> oauth2UserAttributes){
-        return new UserPrincipal(member, oauth2UserAttributes);
+    public static UserPrincipal create(Gardener gardener, Map<String, Object> oauth2UserAttributes){
+        return new UserPrincipal(gardener, oauth2UserAttributes);
     }
 
     /* 일반 로그인 사용 */
-    public static UserPrincipal create(Member member){
-        return new UserPrincipal(member, new HashMap<>());
+    public static UserPrincipal create(Gardener gardener){
+        return new UserPrincipal(gardener, new HashMap<>());
     }
 
-    public Member getMember(){
-        return this.member;
+    public Gardener getGardener(){
+        return this.gardener;
     }
 
     @Override
@@ -49,14 +49,14 @@ public class UserPrincipal implements UserDetails, OAuth2User {
 
     @Override
     public String getPassword() {
-        return this.member.getPassword();
+        return this.gardener.getPassword();
     }
 
     @Override
     public String getUsername() {
         // username이 아니라 PK 값인 id를 넘겨준다
         // email은 중복 가능
-        return String.valueOf(this.member.getMemberId());
+        return String.valueOf(this.gardener.getGardenerId());
     }
 
     @Override
@@ -96,6 +96,6 @@ public class UserPrincipal implements UserDetails, OAuth2User {
 
     @Override
     public String getName() {
-        return member.getName();
+        return gardener.getName();
     }
 }

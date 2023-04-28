@@ -23,14 +23,14 @@ public class RoutineServiceImpl implements RoutineService {
     private final RoutineUtil routineUtil;
 
     @Override
-    public RoutineDto.Main getRoutinesByMemberId(Long memberId) {
+    public RoutineDto.Main getRoutinesByGardenerId(Long gardenerId) {
         List<RoutineDto.Response> toDoList = new ArrayList<>();
         List<RoutineDto.Response> notToDoList = new ArrayList<>();
 
         LocalDateTime today = LocalDate.now().atStartOfDay();
 
         // dto로 변환
-        for (Routine routine : routineDao.getRoutinesByMemberId(memberId)) {
+        for (Routine routine : routineDao.getRoutinesByGardenerId(gardenerId)) {
             // 오늘 해야 하는 루틴인지 계산
             String hasTodoToday = routineUtil.hasToDoToday(routine, today);
 
@@ -50,8 +50,8 @@ public class RoutineServiceImpl implements RoutineService {
     }
 
     @Override
-    public RoutineDto.Response add(Long memberId, RoutineDto.Request routineRequest) {
-        Routine routine = routineDao.save(memberId, routineRequest);
+    public RoutineDto.Response add(Long gardenerId, RoutineDto.Request routineRequest) {
+        Routine routine = routineDao.save(gardenerId, routineRequest);
         return RoutineDto.Response.from(routine, routine.getPlant(), "Y", "N");
     }
 

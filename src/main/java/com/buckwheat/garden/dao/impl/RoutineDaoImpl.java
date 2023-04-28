@@ -2,10 +2,10 @@ package com.buckwheat.garden.dao.impl;
 
 import com.buckwheat.garden.dao.RoutineDao;
 import com.buckwheat.garden.data.dto.RoutineDto;
-import com.buckwheat.garden.data.entity.Member;
+import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Routine;
-import com.buckwheat.garden.repository.MemberRepository;
+import com.buckwheat.garden.repository.GardenerRepository;
 import com.buckwheat.garden.repository.PlantRepository;
 import com.buckwheat.garden.repository.RoutineRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,18 +19,18 @@ import java.util.NoSuchElementException;
 public class RoutineDaoImpl implements RoutineDao {
     private final RoutineRepository routineRepository;
     private final PlantRepository plantRepository;
-    private final MemberRepository memberRepository;
+    private final GardenerRepository gardenerRepository;
 
     @Override
-    public List<Routine> getRoutinesByMemberId(Long memberId){
-        return routineRepository.findByMember_MemberId(memberId);
+    public List<Routine> getRoutinesByGardenerId(Long gardenerId){
+        return routineRepository.findByGardener_GardenerId(gardenerId);
     }
 
     @Override
-    public Routine save(Long memberId, RoutineDto.Request routineRequest){
-        Member member = memberRepository.findById(memberId).orElseThrow(NoSuchElementException::new);
+    public Routine save(Long gardenerId, RoutineDto.Request routineRequest){
+        Gardener gardener = gardenerRepository.findById(gardenerId).orElseThrow(NoSuchElementException::new);
         Plant plant = plantRepository.findById(routineRequest.getPlantId()).orElseThrow(NoSuchElementException::new);
-        return routineRepository.save(routineRequest.toEntityWith(plant, member));
+        return routineRepository.save(routineRequest.toEntityWith(plant, gardener));
     }
 
     @Override

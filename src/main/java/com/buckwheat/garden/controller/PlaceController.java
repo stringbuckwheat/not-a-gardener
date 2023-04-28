@@ -23,8 +23,8 @@ public class PlaceController {
      * @return 유저의 전체 장소 리스트, 카드용 DTO에 담아 보낸다.
      */
     @GetMapping("")
-    public List<PlaceDto.Card> getPlacesByMemberId(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return placeService.getPlacesByMemberId(userPrincipal.getMember().getMemberId());
+    public List<PlaceDto.Card> getPlacesByGardenerId(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        return placeService.getPlacesByGardenerId(userPrincipal.getGardener().getGardenerId());
     }
 
     /**
@@ -45,7 +45,7 @@ public class PlaceController {
      */
     @PostMapping("")
     public PlaceDto.Card add(@RequestBody PlaceDto.Request placeRequest, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        return placeService.add(userPrincipal.getMember().getMemberId(), placeRequest);
+        return placeService.add(userPrincipal.getGardener().getGardenerId(), placeRequest);
     }
 
     /**
@@ -60,7 +60,7 @@ public class PlaceController {
 
     /**
      * 하나의 장소 삭제
-     * @param placeNo
+     * @param placeId
      */
     @DeleteMapping("/{placeId}")
     public void delete(@PathVariable long placeId){

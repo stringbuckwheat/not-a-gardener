@@ -1,11 +1,11 @@
 package com.buckwheat.garden.data.dto;
 
-import com.buckwheat.garden.data.entity.Member;
+import com.buckwheat.garden.data.entity.Gardener;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
-public class MemberDto {
+public class GardenerDto {
     @Getter
     @ToString
     public static class Login {
@@ -16,8 +16,8 @@ public class MemberDto {
             this.password = BCryptpassword;
         }
 
-        public Member toEntity() {
-            return Member.builder().username(username).password(password).build();
+        public Gardener toEntity() {
+            return Gardener.builder().username(username).password(password).build();
         }
     }
 
@@ -26,16 +26,16 @@ public class MemberDto {
     @Getter // HttpMediaTypeNotAcceptableException
     public static class Info {
         private String token;
-        private Long memberId;
+        private Long gardenerId;
         private String name;
         private String provider;
 
-        public static Info from(String jwtToken, Member member) {
+        public static Info from(String jwtToken, Gardener gardener) {
             return Info.builder()
                     .token(jwtToken)
-                    .memberId(member.getMemberId())
-                    .name(member.getName())
-                    .provider(member.getProvider())
+                    .gardenerId(gardener.getGardenerId())
+                    .name(gardener.getName())
+                    .provider(gardener.getProvider())
                     .build();
         }
     }
@@ -53,23 +53,23 @@ public class MemberDto {
         private LocalDateTime createDate;
         private String provider;
 
-        public static Detail from (Member member) {
-            return MemberDto.Detail.builder()
-                    .id(member.getMemberId())
-                    .username(member.getUsername())
-                    .email(member.getEmail())
-                    .name(member.getName())
-                    .createDate(member.getCreateDate())
-                    .provider(member.getProvider())
+        public static Detail from (Gardener gardener) {
+            return GardenerDto.Detail.builder()
+                    .id(gardener.getGardenerId())
+                    .username(gardener.getUsername())
+                    .email(gardener.getEmail())
+                    .name(gardener.getName())
+                    .createDate(gardener.getCreateDate())
+                    .provider(gardener.getProvider())
                     .build();
         }
 
-        public static Detail updateResponseFrom(Member member){
-            return MemberDto.Detail.builder()
-                    .username(member.getUsername())
-                    .email(member.getEmail())
-                    .name(member.getName())
-                    .createDate(member.getCreateDate())
+        public static Detail updateResponseFrom(Gardener gardener){
+            return GardenerDto.Detail.builder()
+                    .username(gardener.getUsername())
+                    .email(gardener.getEmail())
+                    .name(gardener.getName())
+                    .createDate(gardener.getCreateDate())
                     .build();
         }
     }
@@ -91,8 +91,8 @@ public class MemberDto {
             return this;
         }
 
-        public Member toEntity(){
-            return Member
+        public Gardener toEntity(){
+            return Gardener
                     .builder()
                     .username(username)
                     .email(email)

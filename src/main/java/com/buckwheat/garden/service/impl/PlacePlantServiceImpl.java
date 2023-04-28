@@ -14,7 +14,7 @@ public class PlacePlantServiceImpl implements PlacePlantService {
     private final PlantDao plantDao;
 
     @Override
-    public PlantDto.PlantInPlace addPlantInPlace(Long memberId, PlantDto.Request plantRequest){
-        return PlantDto.PlantInPlace.from(plantDao.save(memberId, plantRequest));
+    public PlantDto.PlantInPlace addPlantInPlace(Long gardenerId, PlantDto.Request plantRequest){
+        return PlantDto.PlantInPlace.from(plantDao.save(gardenerId, plantRequest));
     }
 }

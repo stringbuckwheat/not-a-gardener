@@ -16,8 +16,8 @@ public class ChemicalDaoImpl implements ChemicalDao {
     private final ChemicalRepository chemicalRepository;
 
     @Override
-    public List<Chemical> getChemicalsByMemberId(Long memberId){
-        return chemicalRepository.findByMember_MemberId(memberId);
+    public List<Chemical> getChemicalsByGardenerId(Long gardenerId){
+        return chemicalRepository.findByGardener_GardenerId(gardenerId);
     }
 
     @Override

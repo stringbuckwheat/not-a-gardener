@@ -6,8 +6,8 @@ import com.buckwheat.garden.data.entity.Routine;
 import java.util.List;
 
 public interface RoutineDao {
-    List<Routine> getRoutinesByMemberId(Long memberId);
-    Routine save(Long memberId, RoutineDto.Request routineRequest);
+    List<Routine> getRoutinesByGardenerId(Long gardenerId);
+    Routine save(Long gardenerId, RoutineDto.Request routineRequest);
     Routine update(RoutineDto.Request routineRequest);
     Routine complete(RoutineDto.Complete routineComplete);
     void deleteBy(Long id);

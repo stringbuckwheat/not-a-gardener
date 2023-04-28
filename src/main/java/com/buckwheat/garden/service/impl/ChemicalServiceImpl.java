@@ -1,11 +1,11 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.dao.ChemicalDao;
-import com.buckwheat.garden.dao.MemberDao;
+import com.buckwheat.garden.dao.GardenerDao;
 import com.buckwheat.garden.data.dto.ChemicalDto;
 import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.data.entity.Chemical;
-import com.buckwheat.garden.data.entity.Member;
+import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Watering;
 import com.buckwheat.garden.service.ChemicalService;
 import lombok.RequiredArgsConstructor;
@@ -21,20 +21,20 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class ChemicalServiceImpl implements ChemicalService {
     private final ChemicalDao chemicalDao;
-    private final MemberDao memberDao;
+    private final GardenerDao gardenerDao;
 
     /**
      * 전체 chemical 리스트
      *
-     * @param memberId int FK로 조회
+     * @param GardenerId int FK로 조회
      * @return dto로 변환한 chemical list
      */
     @Override
-    public List<ChemicalDto.Response> getChemicalsByMemberId(Long memberId) {
+    public List<ChemicalDto.Response> getChemicalsByGardenerId(Long gardenerId) {
         List<ChemicalDto.Response> chemicalList = new ArrayList<>();
 
         // entity -> dto
-        for (Chemical chemical : chemicalDao.getChemicalsByMemberId(memberId)) {
+        for (Chemical chemical : chemicalDao.getChemicalsByGardenerId(gardenerId)) {
             chemicalList.add(
                     ChemicalDto.Response.from(chemical)
             );
@@ -61,16 +61,16 @@ public class ChemicalServiceImpl implements ChemicalService {
     }
 
     @Override
-    public ChemicalDto.Response add(Long memberId, ChemicalDto.Request chemicalRequest) {
-        Member member = memberDao.getMemberByMemberId(memberId).orElseThrow(NoSuchElementException::new);
-        Chemical chemical = chemicalDao.save(chemicalRequest.toEntityWithMember(member));
+    public ChemicalDto.Response add(Long gardenerId, ChemicalDto.Request chemicalRequest) {
+        Gardener gardener = gardenerDao.getGardenerByGardenerId(gardenerId).orElseThrow(NoSuchElementException::new);
+        Chemical chemical = chemicalDao.save(chemicalRequest.toEntityWithGardener(gardener));
         return ChemicalDto.Response.from(chemical);
     }
 
     @Override
-    public ChemicalDto.Response modify(Long memberId, ChemicalDto.Request chemicalRequest) {
-        Member member = memberDao.getMemberByMemberId(memberId).orElseThrow(NoSuchElementException::new);
-        Chemical chemical = chemicalRequest.toEntityWithMemberForUpdate(member);
+    public ChemicalDto.Response modify(Long gardenerId, ChemicalDto.Request chemicalRequest) {
+        Gardener gardener = gardenerDao.getGardenerByGardenerId(gardenerId).orElseThrow(NoSuchElementException::new);
+        Chemical chemical = chemicalRequest.toEntityWithGardenerForUpdate(gardener);
         chemicalDao.save(chemical);
         return ChemicalDto.Response.from(chemical);
     }

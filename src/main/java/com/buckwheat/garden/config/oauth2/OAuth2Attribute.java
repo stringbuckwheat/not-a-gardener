@@ -1,6 +1,6 @@
 package com.buckwheat.garden.config.oauth2;
 
-import com.buckwheat.garden.data.entity.Member;
+import com.buckwheat.garden.data.entity.Gardener;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -87,9 +87,9 @@ public class OAuth2Attribute {
         return map;
     }
 
-    public Member toEntity(){
-        // 신규 생성에만 쓰기 때문에 MemberNo는 없음
-        return Member
+    public Gardener toEntity(){
+        // 신규 생성에만 쓰기 때문에 gardenerId는 없음
+        return Gardener
                 .builder()
                 .username(this.getEmail())
                 .email(this.getEmail())

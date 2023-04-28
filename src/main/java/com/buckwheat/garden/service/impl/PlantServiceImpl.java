@@ -33,11 +33,11 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public List<PlantDto.Response> getPlantsByMemberId(Long memberId) {
+    public List<PlantDto.Response> getPlantsByGardenerId(Long gardenerId) {
         List<PlantDto.Response> plantList = new ArrayList<>();
 
         // @EntityGraph 메소드
-        for (Plant p : plantDao.getPlantListByMemberId(memberId)) {
+        for (Plant p : plantDao.getPlantListByGardenerId(gardenerId)) {
             plantList.add(PlantDto.Response.from(p));
         }
 
@@ -45,16 +45,16 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public GardenDto.Response add(Long memberId, PlantDto.Request plantRequest) {
-        Plant plant = plantDao.save(memberId, plantRequest);
-        return gardenResponseProvider.getGardenResponse(plant, memberId);
+    public GardenDto.Response add(Long gardenerId, PlantDto.Request plantRequest) {
+        Plant plant = plantDao.save(gardenerId, plantRequest);
+        return gardenResponseProvider.getGardenResponse(plant, gardenerId);
     }
 
     @Override
     @Transactional
-    public GardenDto.Response modify(Long memberId, PlantDto.Request plantRequest) {
+    public GardenDto.Response modify(Long gardenerId, PlantDto.Request plantRequest) {
         Plant plant = plantDao.update(plantRequest);
-        return gardenResponseProvider.getGardenResponse(plant, memberId);
+        return gardenResponseProvider.getGardenResponse(plant, gardenerId);
     }
 
     @Override

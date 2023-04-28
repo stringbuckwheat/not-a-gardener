@@ -25,7 +25,7 @@ public class ChemicalController {
      */
     @GetMapping("")
     public List<ChemicalDto.Response> getChemicalsByMemberId(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return chemicalService.getChemicalsByMemberId(userPrincipal.getMember().getMemberId());
+        return chemicalService.getChemicalsByGardenerId(userPrincipal.getGardener().getGardenerId());
     }
 
     /**
@@ -40,13 +40,13 @@ public class ChemicalController {
 
     /**
      * 비료 추가
-     * @param userPrincipal SecurityContext에서 member를 가져오기 위해
+     * @param userPrincipal SecurityContext에서 Gardener를 가져오기 위해
      * @param chemicalRequest 입력받은 약품 정보
      * @return 수정한 ChemicalDTO
      */
     @PostMapping("")
     public ChemicalDto.Response add(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ChemicalDto.Request chemicalRequest){
-        return chemicalService.add(userPrincipal.getMember().getMemberId(), chemicalRequest);
+        return chemicalService.add(userPrincipal.getGardener().getGardenerId(), chemicalRequest);
     }
 
     /**
@@ -57,7 +57,7 @@ public class ChemicalController {
      */
     @PutMapping("/{chemicalId}")
     public ChemicalDto.Response modify(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ChemicalDto.Request chemicalRequest){
-        return chemicalService.modify(userPrincipal.getMember().getMemberId(), chemicalRequest);
+        return chemicalService.modify(userPrincipal.getGardener().getGardenerId(), chemicalRequest);
     }
 
     /**

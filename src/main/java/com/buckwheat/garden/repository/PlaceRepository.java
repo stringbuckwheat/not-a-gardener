@@ -13,11 +13,11 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
     /**
      * plantList를 포함(EntityGraph)
      * 장소는 추가 순서대로 반환한다
-     * @param memberId int (member 테이블의 pk이자 place 테이블의 fk)
+     * @param gardenerId int (gardener 테이블의 pk이자 place 테이블의 fk)
      * @return 해당 멤버의 전체 장소 엔티티 리스트
      */
     @EntityGraph(attributePaths = {"plantList"}, type= EntityGraph.EntityGraphType.FETCH)
-    List<Place> findByMember_MemberIdOrderByCreateDate(Long memberId);
+    List<Place> findByGardener_GardenerIdOrderByCreateDate(Long gardenerId);
 
     /**
      * plantList를 포함

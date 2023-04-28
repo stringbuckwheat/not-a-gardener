@@ -1,6 +1,6 @@
 package com.buckwheat.garden.data.dto;
 
-import com.buckwheat.garden.data.entity.Member;
+import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Place;
 import com.buckwheat.garden.data.entity.Plant;
 import lombok.*;
@@ -55,9 +55,9 @@ public class PlantDto {
         private LocalDate birthday;
         private Long placeId;
 
-        public Plant toEntityWith(Member member, Place place){
+        public Plant toEntityWith(Gardener gardener, Place place){
             return Plant.builder()
-                    .member(member)
+                    .gardener(gardener)
                     .place(place)
                     .name(name)
                     .medium(medium)

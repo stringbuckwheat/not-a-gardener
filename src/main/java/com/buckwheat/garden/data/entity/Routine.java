@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -35,8 +37,9 @@ public class Routine {
     private LocalDate createDate;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="member_id")
-    private Member member;
+    @JoinColumn(name="gardener_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private Gardener gardener;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="plant_id")

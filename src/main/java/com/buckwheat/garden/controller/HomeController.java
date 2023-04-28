@@ -1,6 +1,6 @@
 package com.buckwheat.garden.controller;
 
-import com.buckwheat.garden.data.dto.MemberDto;
+import com.buckwheat.garden.data.dto.GardenerDto;
 import com.buckwheat.garden.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +17,10 @@ public class HomeController {
     /**
      * 로그인
      * @param login id, pw
-     * @return JWT 토큰, memberNo, 이름이 포함된 MemberInfo
+     * @return JWT 토큰, GardenerNo, 이름이 포함된 GardenerInfo
      */
     @PostMapping("")
-    public MemberDto.Info login(@RequestBody MemberDto.Login login){
+    public GardenerDto.Info login(@RequestBody GardenerDto.Login login){
         return authenticationService.login(login);
     }
 }

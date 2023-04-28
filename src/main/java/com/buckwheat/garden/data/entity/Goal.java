@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -34,8 +36,9 @@ public class Goal {
     private Plant plant;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
-    private Member member;
+    @JoinColumn(name="gardener_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private Gardener gardener;
 
     public Goal update(String content, Plant plant){
         this.content = content;

@@ -22,14 +22,14 @@ public class PlaceServiceImpl implements PlaceService {
 
     /**
      * 전체 장소 리스트
-     * @param memberId int
+     * @param gardenerId int
      * @return 각 장소의 식물 개수를 포함하는 장소 정보 리스트
      */
     @Override
-    public List<PlaceDto.Card> getPlacesByMemberId(Long memberId) {
+    public List<PlaceDto.Card> getPlacesByGardenerId(Long gardenerId) {
         List<PlaceDto.Card> list = new ArrayList<>();
 
-        for(Place place : placeDao.getPlacesByMemberId(memberId)){
+        for(Place place : placeDao.getPlacesByGardenerId(gardenerId)){
             list.add(PlaceDto.Card.from(place));
         }
 
@@ -57,9 +57,9 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public PlaceDto.Card add(Long memberId, PlaceDto.Request placeRequest) {
-        // FK인 Member와 createDate로 쓸 LocalDateTime.now()를 포함한 엔티티를 저장
-        Place place = placeDao.save(memberId, placeRequest);
+    public PlaceDto.Card add(Long gardenerId, PlaceDto.Request placeRequest) {
+        // FK인 Gardener와 createDate로 쓸 LocalDateTime.now()를 포함한 엔티티를 저장
+        Place place = placeDao.save(gardenerId, placeRequest);
         return PlaceDto.Card.fromNew(place);
     }
 

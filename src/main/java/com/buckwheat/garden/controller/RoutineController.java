@@ -17,12 +17,12 @@ public class RoutineController {
 
     @GetMapping("")
     public RoutineDto.Main getRoutines(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return routineService.getRoutinesByMemberId(userPrincipal.getMember().getMemberId());
+        return routineService.getRoutinesByGardenerId(userPrincipal.getGardener().getGardenerId());
     }
 
     @PostMapping("")
     public RoutineDto.Response add(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody RoutineDto.Request routineRequest){
-        return routineService.add(userPrincipal.getMember().getMemberId(), routineRequest);
+        return routineService.add(userPrincipal.getGardener().getGardenerId(), routineRequest);
     }
 
     @PutMapping("/{routineId}/complete")

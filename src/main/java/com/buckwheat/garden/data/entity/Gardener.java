@@ -8,14 +8,14 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name = "member")
+@Table(name = "gardener")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-public class Member {
+public class Gardener {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long memberId;
+    private Long gardenerId;
 
     @NotNull
     private String username;
@@ -33,12 +33,12 @@ public class Member {
 
     private String provider;
 
-    public Member changePassword(String encryptPassword){
+    public Gardener changePassword(String encryptPassword){
         this.password = encryptPassword;
         return this;
     }
 
-    public Member updateEmailAndName(String email, String name){
+    public Gardener updateEmailAndName(String email, String name){
         this.email = email;
         this.name = name;
 

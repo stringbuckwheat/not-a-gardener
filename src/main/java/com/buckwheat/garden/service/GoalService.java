@@ -5,9 +5,9 @@ import com.buckwheat.garden.data.dto.GoalDto;
 import java.util.List;
 
 public interface GoalService {
-    List<GoalDto.Response> getGoalsByMemberId(Long memberId);
+    List<GoalDto.Response> getGoalsByGardenerId(Long gardenerId);
 
-    GoalDto.Response add(Long memberId, GoalDto.Request goalRequest);
+    GoalDto.Response add(Long gardenerId, GoalDto.Request goalRequest);
 
     GoalDto.Response modify(GoalDto.Request goalRequest);
 

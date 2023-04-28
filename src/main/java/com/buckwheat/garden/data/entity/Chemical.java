@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Chemical")
+@Table(name = "chemical")
 @Getter
 @Builder
 @NoArgsConstructor
@@ -36,10 +38,11 @@ public class Chemical {
 
     // 외래키가 있는 곳이 연관관계의 주인
     // 양방향 매핑 시 반대편에 mappedBy
-    // 그러나 Member는 Chemical를 몰라도 상관없으므로 단방향 매핑
+    // 그러나 Gardener는 Chemical를 몰라도 상관없으므로 단방향 매핑
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memberId")
-    private Member member;
+    @JoinColumn(name = "gardener_id")
+    @OnDelete(action= OnDeleteAction.CASCADE) // ddl: on delete cascade
+    private Gardener gardener;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "chemical")
     @OrderBy("watering_date desc")

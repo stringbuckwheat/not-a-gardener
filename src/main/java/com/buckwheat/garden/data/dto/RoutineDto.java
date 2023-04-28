@@ -1,6 +1,6 @@
 package com.buckwheat.garden.data.dto;
 
-import com.buckwheat.garden.data.entity.Member;
+import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Routine;
 import lombok.*;
@@ -70,13 +70,13 @@ public class RoutineDto {
         private int cycle;
         private Long plantId;
 
-        public Routine toEntityWith(Plant plant, Member member){
+        public Routine toEntityWith(Plant plant, Gardener gardener){
             return Routine.builder()
                     .routineId(id)
                     .content(content)
                     .cycle(cycle)
                     .plant(plant)
-                    .member(member)
+                    .gardener(gardener)
                     .createDate(LocalDate.now())
                     .build();
         }

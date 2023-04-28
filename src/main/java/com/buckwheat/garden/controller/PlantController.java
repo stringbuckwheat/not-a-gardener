@@ -26,8 +26,8 @@ public class PlantController {
      * @return
      */
     @GetMapping("")
-    public List<PlantDto.Response> getPlantsByMemberId(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return plantService.getPlantsByMemberId(userPrincipal.getMember().getMemberId());
+    public List<PlantDto.Response> getPlantsByGardenerId(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        return plantService.getPlantsByGardenerId(userPrincipal.getGardener().getGardenerId());
     }
 
     /**
@@ -48,7 +48,7 @@ public class PlantController {
      */
     @PostMapping("")
     public GardenDto.Response add(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody PlantDto.Request plantRequest){
-        return plantService.add(userPrincipal.getMember().getMemberId(), plantRequest);
+        return plantService.add(userPrincipal.getGardener().getGardenerId(), plantRequest);
     }
 
     /**
@@ -59,7 +59,7 @@ public class PlantController {
      */
     @PutMapping("/{plantId}")
     public GardenDto.Response modify(@RequestBody PlantDto.Request plantRequest, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        return plantService.modify(userPrincipal.getMember().getMemberId(), plantRequest);
+        return plantService.modify(userPrincipal.getGardener().getGardenerId(), plantRequest);
     }
 
     /**

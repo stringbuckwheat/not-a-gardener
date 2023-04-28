@@ -18,14 +18,14 @@ public class GardenResponseProvider {
     private final WateringDao wateringDao;
     private final GardenUtil gardenUtil;
 
-    public GardenDto.Response getGardenResponse(Plant plant, Long memberId) {
+    public GardenDto.Response getGardenResponse(Plant plant, Long gardenerId) {
         if (plant.getPostponeDate() != null && LocalDate.now().compareTo(plant.getPostponeDate()) == 0) {
             return getGardenResponseWhenLazy(plant);
         }
 
         PlantDto.Response plantResponse = PlantDto.Response.from(plant);
 
-        List<ChemicalUsage> chemicalUsages = wateringDao.getLatestChemicalUsages(plant.getPlantId(), memberId);
+        List<ChemicalUsage> chemicalUsages = wateringDao.getLatestChemicalUsages(plant.getPlantId(), gardenerId);
         GardenDto.Detail gardenDetail = gardenUtil.getGardenDetail(plant, chemicalUsages);
 
         return new GardenDto.Response(plantResponse, gardenDetail);

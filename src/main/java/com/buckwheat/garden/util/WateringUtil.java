@@ -38,8 +38,8 @@ public class WateringUtil {
         }
 
         // 이 메소드가 호출되는 시점엔 물주기 기록이 두 개 이상 있음
-        LocalDateTime latestWateringDate = plant.getWaterings().get(0).getDate().atStartOfDay();
-        LocalDateTime prevWateringDate = plant.getWaterings().get(1).getDate().atStartOfDay();
+        LocalDateTime latestWateringDate = plant.getWaterings().get(0).getWateringDate().atStartOfDay();
+        LocalDateTime prevWateringDate = plant.getWaterings().get(1).getWateringDate().atStartOfDay();
 
         int period = (int) Duration.between(prevWateringDate, latestWateringDate).toDays();
         int wateringCode = getAfterWateringCode(period, plant.getRecentWateringPeriod());

@@ -40,14 +40,14 @@ public class WateringDaoImpl implements WateringDao {
     }
 
     @Override
-    public List<Watering> getAllWateringListByMemberNo(Long memberId, LocalDate startDate, LocalDate endDate){
-        return wateringRepository.findAllWateringListByMemberNo(memberId, startDate, endDate);
+    public List<Watering> getAllWateringListByGardenerNo(Long gardenerId, LocalDate startDate, LocalDate endDate){
+        return wateringRepository.findAllWateringListByGardenerNo(gardenerId, startDate, endDate);
     }
 
 
     @Override
-    public List<ChemicalUsage> getLatestChemicalUsages(Long memberId, Long plantId) {
-        return wateringRepository.findLatestChemicalizedDayList(memberId, plantId);
+    public List<ChemicalUsage> getLatestChemicalUsages(Long gardenerId, Long plantId) {
+        return wateringRepository.findLatestChemicalizedDayList(gardenerId, plantId);
     }
 
     @Override
@@ -63,8 +63,8 @@ public class WateringDaoImpl implements WateringDao {
                 .orElseThrow(NoSuchElementException::new);
 
         // 수정
-        wateringRepository.save(watering.update(wateringRequest.getDate(), plant, chemical));
-        return watering.update(wateringRequest.getDate(), plant, chemical);
+        wateringRepository.save(watering.update(wateringRequest.getWateringDate(), plant, chemical));
+        return watering.update(wateringRequest.getWateringDate(), plant, chemical);
     }
 
     @Override

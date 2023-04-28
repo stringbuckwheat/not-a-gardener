@@ -5,7 +5,7 @@ import java.time.LocalDate;
 // TODO
 public interface ChemicalUsage {
     Long getChemicalId();
-    int getChemicalPeriod();
-    String getChemicalName();
+    int getPeriod();
+    String getName();
     LocalDate getLatestWateringDate();
 }

@@ -18,13 +18,13 @@ public class GoalController {
     private final GoalService goalService;
 
     @GetMapping("")
-    public List<GoalDto.Response> getGoalsByMemberId(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        return goalService.getGoalsByMemberId(userPrincipal.getMember().getMemberId());
+    public List<GoalDto.Response> getGoalsByGardenerId(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return goalService.getGoalsByGardenerId(userPrincipal.getGardener().getGardenerId());
     }
 
     @PostMapping("")
     public GoalDto.Response add(@RequestBody GoalDto.Request goalRequest, @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        return goalService.add(userPrincipal.getMember().getMemberId(), goalRequest);
+        return goalService.add(userPrincipal.getGardener().getGardenerId(), goalRequest);
     }
 
     @PutMapping("/{goalId}")
