@@ -1,15 +1,15 @@
-import MemberDetail from "./MemberDetail";
+import GardenerDetail from "./GardenerDetail";
 import Loading from "../../components/data/Loading";
 import {useEffect, useState} from "react";
 import getData from "../../api/backend-api/common/getData";
 
-const Member = () => {
-  const memberNo = localStorage.getItem("memberNo");
+const Gardener = () => {
+  const gardenerId = localStorage.getItem("gardenerId");
 
   const [isLoading, setLoading] = useState(true);
 
   // 백엔드에서 받아온 회원 정보
-  const [member, setMember] = useState({
+  const [gardener, setGardener] = useState({
     username: "",
     email: "",
     name: "",
@@ -17,22 +17,22 @@ const Member = () => {
     createDate: ""
   });
 
-  const onMountMember = async () => {
-    const data = await getData(`/member/${memberNo}`);
-    setMember(data);
+  const onMountGardener = async () => {
+    const data = await getData(`/gardener/${gardenerId}`);
+    setGardener(data);
     setLoading(false);
   }
 
   useEffect(() => {
-    onMountMember();
+    onMountGardener();
   }, [])
 
   return isLoading ?
     (<Loading/>)
     :
     (
-      <MemberDetail member={member} setMember={setMember}/>
+      <GardenerDetail gardener={gardener} setGardener={setGardener}/>
     )
 }
 
-export default Member;
+export default Gardener;

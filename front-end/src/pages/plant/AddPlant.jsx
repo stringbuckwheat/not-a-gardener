@@ -6,9 +6,9 @@ import postData from "../../api/backend-api/common/postData";
 
 const AddPlant = ({placeList, addPlant, afterAdd}) => {
   const [plant, setPlant] = useState({
-    plantName: "",
-    plantSpecies: "",
-    placeNo: placeList.length == 0 ? 0 : placeList[0].key,
+    name: "",
+    species: "",
+    placeId: placeList.length == 0 ? 0 : placeList[0].key,
     medium: "흙과 화분",
     earlyWateringPeriod: 0,
     birthday: ""
@@ -17,15 +17,16 @@ const AddPlant = ({placeList, addPlant, afterAdd}) => {
   const onChange = (e) => {
     const {name, value} = e.target;
     setPlant(setPlant => ({...plant, [name]: value}));
-    console.log("plant", plant);
+    // console.log("onChangePlant", plant);
   }
 
-  const isValid = plant.plantName != '' && plant.placeNo !== 0;
+  const isValid = plant.name != '' && plant.placeId !== 0;
 
   const submit = async () => {
+    // console.log("plant request", plant);
     const res = await postData("/plant", plant);
-    addPlant(res);
-    afterAdd();
+    addPlant && addPlant(res);
+    afterAdd && afterAdd();
   }
 
   return (

@@ -53,11 +53,7 @@ const GardenMain = ({
         </Booped>
       </Space>
       <CRow className="mt-4">
-        {
-          routineList.length == 0
-            ? <div>{localStorage.getItem("name")}님의 루틴</div>
-            : <RoutineList routineList={routineList} afterRoutine={afterRoutine}/>
-        }
+        <RoutineList routineList={routineList} afterRoutine={afterRoutine}/>
         {
           waitingList.length == 0
             ? <></>

@@ -16,7 +16,7 @@ const ChemicalList = ({chemicalList, addChemical}) => {
       <CRow>
         <AddItemCard onClick={switchAddForm} addUrl="/chemical/add" addMsg="비료/살충제 추가"/>
         {chemicalList.map((chemical) => (
-          <ChemicalCard chemical={chemical} key={chemical.chemicalNo}/>
+          <ChemicalCard chemical={chemical} key={chemical.chemicalId}/>
         ))}
       </CRow>
     </>

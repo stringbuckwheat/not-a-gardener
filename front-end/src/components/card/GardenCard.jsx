@@ -48,7 +48,7 @@ const GardenCard = ({
 
           <GardenCardAction
             hovered={hovered}
-            plantNo={plant.plantId}
+            plantId={plant.plantId}
             plantName={plant.name}
             wateringCode={gardenDetail.wateringCode}
             chemicalList={chemicalList}
@@ -60,7 +60,7 @@ const GardenCard = ({
           />
           <Link
             className="no-text-decoration"
-            to={`/plant/${plant.plantNo}`}>
+            to={`/plant/${plant.plantId}`}>
             <CCard>
               <CCardBody>
                 <CRow className="d-flex align-items-center">

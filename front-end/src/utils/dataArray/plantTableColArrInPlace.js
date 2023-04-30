@@ -8,28 +8,29 @@ const plantTableColArrInPlace = (deletePlant) => {
     [
       {
         title: '식물 이름',
-        dataIndex: 'plantName',
-        key: 'plantName',
-        render: (_, record) => (
-          <Link to={`/plant/${record.plantNo}`} className="text-decoration-none">
-            {record.plantName}
-          </Link>
-        )
+        dataIndex: 'name',
+        key: 'name',
+        render: (_, record) =>
+          (
+            <Link to={`/plant/${record.id}`} className="text-decoration-none">
+              {record.name}
+            </Link>
+          )
       },
       {
         title: '식물 종',
-        dataIndex: 'plantSpecies',
-        key: 'plantSpecies',
+        dataIndex: 'species',
+        key: 'species',
         responsive: ['lg']
       },
       {
-        title: '평균 물주기',
-        dataIndex: 'averageWateringPeriod',
-        key: 'averageWateringPeriod',
+        title: '최근 물주기',
+        dataIndex: 'recentWateringPeriod',
+        key: 'recentWateringPeriod',
         responsive: ['lg']
       },
       {
-        title: '태그',
+        title: '기타',
         key: 'tags',
         dataIndex: 'tags',
         responsive: ['lg'],
@@ -46,11 +47,11 @@ const plantTableColArrInPlace = (deletePlant) => {
         render: (_, record) => (
           <Space size="middle">
             <Popconfirm
-              title={`${record.plantName}을 삭제하실 건가요?`}
+              title={`${record.name}을 삭제하실 건가요?`}
               discription="삭제한 식물은 복구할 수 없어요"
               okText="네"
               cancelText="아니요"
-              onConfirm={() => deletePlant(record.plantNo)}
+              onConfirm={() => deletePlant(record.id)}
             >
               <DeleteOutlined/>
             </Popconfirm>

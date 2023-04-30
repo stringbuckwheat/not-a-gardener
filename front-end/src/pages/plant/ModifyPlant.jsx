@@ -43,8 +43,8 @@ const ModifyPlant = ({changeModifyState, placeList, plant}) => {
     {
       inputType: "number",
       label: "평균 물주기",
-      name: "averageWateringPeriod",
-      defaultValue: plant.averageWateringPeriod,
+      name: "recentWateringPeriod",
+      defaultValue: plant.recentWateringPeriod,
     }
   ];
 

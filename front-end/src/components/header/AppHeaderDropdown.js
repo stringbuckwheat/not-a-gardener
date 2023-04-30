@@ -30,7 +30,7 @@ const AppHeaderDropdown = () => {
         </div>
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
-        <CDropdownItem href="/member" className="py-2">
+        <CDropdownItem href="/gardener" className="py-2">
           <CIcon icon={cilUser} className="me-2"/>
           개인정보 수정
         </CDropdownItem>

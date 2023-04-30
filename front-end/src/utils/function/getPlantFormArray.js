@@ -13,19 +13,19 @@ const getPlantFormArray = (placeList) => {
     {
       inputType: "text",
       label: "식물 이름",
-      name: "plantName",
+      name: "name",
       required: true
     },
     {
       inputType: "text",
       label: "식물 종",
-      name: "plantSpecies",
+      name: "species",
       required: false
     },
     {
       inputType: "select",
       label: "장소",
-      name: "placeNo",
+      name: "placeId",
       optionArray: placeList,
       noPlace: noPlace
     },
@@ -38,7 +38,7 @@ const getPlantFormArray = (placeList) => {
     {
       inputType: "number",
       label: "평균 물주기",
-      name: "averageWateringPeriod",
+      name: "recentWateringPeriod",
       required: false
     },
     {

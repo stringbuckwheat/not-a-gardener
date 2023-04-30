@@ -13,7 +13,7 @@ import postData from "../../api/backend-api/common/postData";
  */
 const AddPlace = ({addPlace, afterAdd}) => {
   const [place, setPlace] = useState({
-    placeName: "",
+    name: "",
     option: "실내",
     artificialLight: "미사용"
   });
@@ -23,10 +23,10 @@ const AddPlace = ({addPlace, afterAdd}) => {
     setPlace(setPlace => ({...place, [name]: value}));
   }
 
-  const itemObjectArray = getPlaceInputItemArray(place);
-  const isValid = place.placeName !== "";
+  const isValid = place.name !== "";
 
   const submit = async () => {
+    console.log("place", place);
     const res = await postData("/place", place);
 
     // state 변경
@@ -40,14 +40,14 @@ const AddPlace = ({addPlace, afterAdd}) => {
     <ItemForm
       title="장소 추가"
       inputObject={place}
-      itemObjectArray={itemObjectArray}
+      itemObjectArray={getPlaceInputItemArray(place)}
       onChange={onChange}
       submitBtn={<ValidationSubmitButton
         className="float-end mt-2"
-        isValid={place.placeName !== ""}
+        isValid={isValid}
         onClickValid={submit}
         onClickInvalidMsg={isValid ? "" : "입력 내용을 확인해주세요"}
-        title="장소 추가" />}/>
+        title="장소 추가"/>}/>
   )
 }
 

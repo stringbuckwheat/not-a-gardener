@@ -53,7 +53,7 @@ const PlantTable = ({originPlantList, setPlantList, placeList}) => {
     });
 
     setModifyPlant({
-      averageWateringPeriod: record.averageWateringPeriod,
+      recentWateringPeriod: record.recentWateringPeriod,
       plantSpecies: record.plantSpecies,
       medium: record.tags.medium
     });

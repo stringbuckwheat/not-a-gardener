@@ -8,7 +8,7 @@ import getWateringNotificationMsg from "../../utils/function/getWateringNotifica
 
 const GardenCardAction = ({
                             hovered,
-                            plantNo,
+                            plantId,
                             plantName,
                             chemicalList,
                             openNotification,
@@ -20,12 +20,12 @@ const GardenCardAction = ({
                             postponeWatering
                           }) => {
   const [selected, setSelected] = useState("");
-  const [chemicalNo, setChemicalNo] = useState(0);
+  const [chemicalId, setChemicalId] = useState(0);
 
   const submitWatering = async () => {
-    const res = await postData(`/garden/${plantNo}/watering`, {
-      plantNo,
-      chemicalNo,
+    const res = await postData(`/garden/${plantId}/watering`, {
+      plantId,
+      chemicalId,
       wateringDate: new Date().toISOString().split('T')[0]
     });
 
@@ -44,7 +44,7 @@ const GardenCardAction = ({
       y={y}
       wateringCode={wateringCode}
       postponeWatering={postponeWatering}
-      plantNo={plantNo}
+      plantId={plantId}
       plantName={plantName}
       chemicalList={chemicalList}
       setSelected={setSelected}
@@ -58,7 +58,7 @@ const GardenCardAction = ({
         <Space className="mb-1">
           <CIcon icon={cilDrop} className="text-info"/>
           <Select options={chemicalList} defaultValue={0} style={{width: 120}}
-                  onChange={(value) => setChemicalNo(value)}/>
+                  onChange={(value) => setChemicalId(value)}/>
           <span>을 줬어요</span>
         </Space>
         <Space>

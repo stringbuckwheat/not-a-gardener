@@ -3,7 +3,7 @@ import {cilX} from "@coreui/icons";
 import {Card, Checkbox, Input, Row, Select, Space} from "antd";
 import React, {useState} from "react";
 import SelectPlant from "../../../components/select/SelectPlant";
-import InputFeedback from "../../../components/input/InputFeedback";
+import InputWithFeedback from "../../../components/input/InputWithFeedback";
 import ValidationSubmitButton from "../../../components/button/ValidationSubmitButton";
 import postData from "../../../api/backend-api/common/postData";
 
@@ -57,7 +57,7 @@ const AddRoutine = ({plantList, onClickRoutineFormButton, addRoutine}) => {
           onClick={onClickRoutineFormButton}/>
       </div>
       <div className="mb-2">
-        <InputFeedback
+        <InputWithFeedback
           name="routineContent"
           label="루틴 내용"
           labelColor={formLabelColor}
@@ -85,7 +85,7 @@ const AddRoutine = ({plantList, onClickRoutineFormButton, addRoutine}) => {
                 </>
                 :
                 <>
-                  <InputFeedback
+                  <InputWithFeedback
                     name="routineCycle"
                     type="number"
                     label="루틴 주기"

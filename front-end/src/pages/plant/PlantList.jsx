@@ -1,5 +1,5 @@
 import PlantTable from "./plantDetail/PlantTable";
-import PlantListLayout from "src/components/layout/PlantListLayout";
+import PlantListLayout from "src/components/data/layout/PlantListLayout";
 import PlantListTag from "./PlantListTag";
 import {useEffect, useState} from "react";
 import AddPlant from "./AddPlant";

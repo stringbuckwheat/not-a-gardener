@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import NoItem from "src/components/empty/NoItem";
-import AddItemButton from "src/components/button/AddItemButton";
 import PlaceList from "./PlaceList";
 import getData from "src/api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";
@@ -19,6 +18,7 @@ const Place = () => {
 
   const onMount = async () => {
     const data = await getData("/place");
+    console.log("data", data);
 
     setLoading(false);
     setHasPlace(data.length > 0);

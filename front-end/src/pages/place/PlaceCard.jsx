@@ -10,6 +10,7 @@ import {Link} from "react-router-dom";
  * @constructor
  */
 const PlaceCard = ({place}) => {
+  console.log("place", place);
   let color = "";
   let icon = {};
 
@@ -27,7 +28,7 @@ const PlaceCard = ({place}) => {
   return (
     <CCol md={3} xs={12}>
       <Link
-        to={`/place/${place.placeId}`}
+        to={`/place/${place.id}`}
         className="no-text-decoration">
         <CWidgetStatsF
           className="mb-3"

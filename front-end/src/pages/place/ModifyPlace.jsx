@@ -11,20 +11,20 @@ import {useNavigate} from "react-router-dom";
  * @returns {JSX.Element} ItemForm (자동 폼 만들기)
  * @constructor
  */
-const ModifyPlace = (props) => {
+const ModifyPlace = ({changeModifyState, place}) => {
   const navigate = useNavigate();
-  const changeModifyState = props.changeModifyState;
-  const [place, setPlace] = useState(props.place);
+  const [modifyPlace, setModifyPlace] = useState(place);
 
   const onChange = (e) => {
     const {name, value} = e.target;
-    setPlace(setPlace => ({...place, [name]: value}));
+    setModifyPlace(setPlace => ({...modifyPlace, [name]: value}));
   }
 
-  const isValid = place.placeName !== "";
+  const isValid = modifyPlace.placeName !== "";
 
   const submit = async () => {
-    const res = await updateData(`/place/${place.placeNo}`, place);
+    console.log("modifyPlace", modifyPlace);
+    const res = await updateData(`/place/${place.id}`, modifyPlace);
     navigate("", {replace: true, state: res});
     changeModifyState();
   }
@@ -32,10 +32,11 @@ const ModifyPlace = (props) => {
   return (
     <ItemForm
       title="장소 수정"
-      inputObject={place}
+      inputObject={modifyPlace}
       itemObjectArray={getPlaceInputItemArray(place)}
       onChange={onChange}
-      submitBtn={<ValidationSubmitButton className="float-end" isValid={isValid} title={"수정하기"} onClickValid={submit} onClickInvalidMsg={"입력값을 확인해주세요"} />}
+      submitBtn={<ValidationSubmitButton className="float-end" isValid={isValid} title={"수정하기"} onClickValid={submit}
+                                         onClickInvalidMsg={"입력값을 확인해주세요"}/>}
     />
   )
 }

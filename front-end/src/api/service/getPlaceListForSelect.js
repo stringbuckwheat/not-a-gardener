@@ -9,7 +9,7 @@ const getPlaceListForSelect = async () => {
 
   return (
     places.map((place) => ({
-      key: place.placeId,
+      key: place.id,
       value: place.name
     }))
   )

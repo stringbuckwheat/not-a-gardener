@@ -31,11 +31,11 @@ const PlantTag = ({plant, wateringListSize, latestWateringDate}) => {
   }
 
   const calculateNextWateringDate = () => {
-    const averageWateringPeriod = plant.averageWateringPeriod;
+    const recentWateringPeriod = plant.recentWateringPeriod;
 
-    // 마지막 물주기 날짜에서 averageWateringPeriod 더하고
+    // 마지막 물주기 날짜에서 recentWateringPeriod 더하고
     const nextWateringDate = new Date(latestWateringDate.wateringDate);
-    nextWateringDate.setDate(nextWateringDate.getDate() + averageWateringPeriod);
+    nextWateringDate.setDate(nextWateringDate.getDate() + recentWateringPeriod);
 
     // 위 날짜에서 오늘 날짜를 뺸다
     const diffTime = nextWateringDate.getTime() - today.getTime();
@@ -57,10 +57,10 @@ const PlantTag = ({plant, wateringListSize, latestWateringDate}) => {
   }
 
   const getAvgWateringPeriodMsg = () => {
-    if (plant.averageWateringPeriod == 0) {
+    if (plant.recentWateringPeriod == 0) {
       return "물주기 정보는 알아가는 중이에요"
     } else {
-      return `${plant.averageWateringPeriod}일 간격으로 물을 마셔요`
+      return `${plant.recentWateringPeriod}일 간격으로 물을 마셔요`
     }
   }
 

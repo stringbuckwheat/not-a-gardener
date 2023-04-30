@@ -1,7 +1,7 @@
 import {CRow} from "@coreui/react";
 import {useEffect, useState} from "react";
 import AddItemCard from "src/components/card/AddItemCard";
-import PlaceCard from "src/components/card/PlaceCard";
+import PlaceCard from "src/pages/place/PlaceCard";
 import ListHeader from "src/components/data/header/ListHeader";
 import AddPlace from "./AddPlace";
 
@@ -19,7 +19,7 @@ const PlaceList = ({placeList, setPlaceList, originPlaceList, addPlace}) => {
   const [searchWord, setSearchWord] = useState("");
 
   const search = (searchWord) => {
-    const searchedList = originPlaceList.filter(place => place.placeName.includes(searchWord));
+    const searchedList = originPlaceList.filter(place => place.name.includes(searchWord));
     setPlaceList(searchedList);
   }
 
@@ -45,7 +45,7 @@ const PlaceList = ({placeList, setPlaceList, originPlaceList, addPlace}) => {
     const sortedPlaceList = [...originPlaceList];
 
     if (sort === "abc") {
-      sortedPlaceList.sort((a, b) => (a.placeName < b.placeName ? -1 : a.placeName > b.placeName ? 1 : 0))
+      sortedPlaceList.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))
     } else if (sort === "manyPlant") {
       sortedPlaceList.sort((a, b) => b.plantListSize - a.plantListSize);
     } else if (sort === "createDate") {
@@ -78,7 +78,7 @@ const PlaceList = ({placeList, setPlaceList, originPlaceList, addPlace}) => {
           onClick={switchAddForm}/>
         {/* 카드 컴포넌트 반복 */}
         {placeList.map((place) => (
-          <PlaceCard place={place} key={place.placeNo}/>
+          <PlaceCard place={place} key={place.id}/>
         ))}
       </CRow>
     </>

@@ -8,10 +8,11 @@ import {Space, Tag} from 'antd';
  * @constructor
  */
 const PlaceTag = ({place, howManyPlant}) => {
+
   let artificialLightTag = "식물등을 사용하지 않아요";
 
   if (place.artificialLight === "사용") {
-    artificialLightTag = "식물등"
+    artificialLightTag = "식물등을 사용해요"
   }
 
   return (

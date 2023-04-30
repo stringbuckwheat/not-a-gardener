@@ -12,27 +12,27 @@ import FormInputFeedback from "../../components/form/input/FormInputFeedback";
 import DeleteModal from "../../components/modal/DeleteModal";
 import ChangePasswordModal from "../../components/modal/ChangePassWordModal";
 
-const MemberDetail = ({member, setMember}) => {
-  const isBasicLogin = member.provider == null;
+const GardenerDetail = ({gardener, setGardener}) => {
+  const isBasicLogin = gardener.provider == null;
 
   // 수정용 input 칸 disabled 여부
   const [isDisabled, setIsDisabled] = useState(true);
 
   // 수정용 객체
   // 이메일과 이름만 변경 가능
-  const [modifyMember, setModifyMember] = useState(member);
+  const [modifyGardener, setModifyGardener] = useState(gardener);
 
   const emailRegex = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/
 
   // 수정사항 반영
   const onChange = (e) => {
     const {name, value} = e.target;
-    setModifyMember(setModifyMember => ({...modifyMember, [name]: value}));
+    setModifyGardener(setModifyGardener => ({...modifyGardener, [name]: value}));
   }
 
   const onSubmit = async () => {
-    const updatedMember = await updateData(`/member/${member.memberNo}`, modifyMember);
-    setMember(updatedMember);
+    const updatedGardener = await updateData(`/gardener/${gardener.gardenerNo}`, modifyGardener);
+    setGardener(updatedGardener);
     setIsDisabled(true);
   }
 
@@ -57,10 +57,10 @@ const MemberDetail = ({member, setMember}) => {
               <FormInputFeedback
                 label="이름"
                 name="name"
-                defaultValue={member.name}
+                defaultValue={gardener.name}
                 required
-                valid={modifyMember.name !== ''}
-                invalid={modifyMember.name === ''}
+                valid={modifyGardener.name !== ''}
+                invalid={modifyGardener.name === ''}
                 feedbackInvalid="이름은 비워둘 수 없어요."
                 onChange={onChange}
                 disabled={isDisabled}/>
@@ -68,24 +68,24 @@ const MemberDetail = ({member, setMember}) => {
               <FormInputFeedback
                 label="아이디"
                 name="username"
-                defaultValue={isBasicLogin ? member.username : member.provider}
+                defaultValue={isBasicLogin ? gardener.username : gardener.provider}
                 disabled={true}/>
 
               <FormInputFeedback
                 label="이메일"
                 name="email"
-                defaultValue={member.email}
+                defaultValue={gardener.email}
                 onChange={onChange}
                 disabled={isDisabled}
                 required
-                valid={emailRegex.test(modifyMember.email)}
-                invalid={!emailRegex.test(modifyMember.email)}
-                feedbackInvalid={modifyMember.email == "" ? "" : "이메일 형식을 확인해주세요"}/>
+                valid={emailRegex.test(modifyGardener.email)}
+                invalid={!emailRegex.test(modifyGardener.email)}
+                feedbackInvalid={modifyGardener.email == "" ? "" : "이메일 형식을 확인해주세요"}/>
 
               <FormInputFeedback
                 label="가입일"
                 name="createDate"
-                defaultValue={member.createDate.split("T")[0]}
+                defaultValue={gardener.createDate.split("T")[0]}
                 disabled={true}/>
 
               {isBasicLogin
@@ -107,8 +107,8 @@ const MemberDetail = ({member, setMember}) => {
                       <CButton
                         size="sm"
                         type="button"
-                        color={emailRegex.test(modifyMember.email) ? "success" : "secondary"}
-                        disabled={!emailRegex.test(modifyMember.email)}
+                        color={emailRegex.test(modifyGardener.email) ? "success" : "secondary"}
+                        disabled={!emailRegex.test(modifyGardener.email)}
                         onClick={onSubmit}>
                         수정하기
                       </CButton>
@@ -122,8 +122,8 @@ const MemberDetail = ({member, setMember}) => {
             <div className="d-flex justify-content-end mt-3">
               <DeleteModal
                 title="계정"
-                url="/member"
-                path={member.memberNo}
+                url="/gardener"
+                path={gardener.gardenerNo}
                 button={deleteButton}
                 deleteCallBackFunction={deleteCallback}
               />
@@ -135,4 +135,4 @@ const MemberDetail = ({member, setMember}) => {
   );
 }
 
-export default MemberDetail;
+export default GardenerDetail;

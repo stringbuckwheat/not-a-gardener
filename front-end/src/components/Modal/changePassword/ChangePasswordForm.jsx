@@ -35,7 +35,7 @@ const ChangePasswordForm = ({current, setCurrent, closeModal, prevPassword}) => 
   }
 
   const onSubmit = async () => {
-    await updateData("/member/password", {password: newPassword});
+    await updateData("/gardener/password", {password: newPassword});
     setCurrent(current + 1);
   }
 

@@ -19,7 +19,7 @@ const ChemicalDetail = () => {
   const [onModify, setOnModify] = useState(false);
 
   useEffect(() => {
-    onMount(`/chemical/${state.chemicalNo}/watering`, setWateringList);
+    onMount(`/chemical/${state.chemicalId}/watering`, setWateringList);
   }, []);
 
   const onChange = (e) => {
@@ -42,7 +42,7 @@ const ChemicalDetail = () => {
   const navigate = useNavigate();
 
   const remove = async () => {
-    await deleteData(`/chemical/${chemical.chemicalNo}`);
+    await deleteData(`/chemical/${chemical.chemicalId}`);
     navigate("/chemical", {replace: true});
   }
 
@@ -52,7 +52,7 @@ const ChemicalDetail = () => {
       <DetailLayout
         title={chemical.chemicalName}
         url="/chemical"
-        path={state.chemicalNo}
+        path={state.chemicalId}
         deleteTitle="비료/살균/살충제"
         tags={<ChemicalTag chemical={chemical} wateringListSize={wateringList.length}/>}
         onClickModifyBtn={onClickModifyBtn}
@@ -74,7 +74,7 @@ const ChemicalDetail = () => {
         onChange={onChange}
         submitBtn={<ModifyFormButtons
           data={chemical}
-          url={`/chemical/${state.chemicalNo}`}
+          url={`/chemical/${state.chemicalId}`}
           changeModifyState={changeModifyState}
           validation={validation}/>}/>
   )

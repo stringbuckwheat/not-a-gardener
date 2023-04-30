@@ -14,7 +14,7 @@ import Loading from "../../components/data/Loading";
  * @constructor
  */
 const PlaceDetail = () => {
-  const placeNo = useParams().placeNo;
+  const placeId = useParams().placeId;
   const state = useLocation().state;
 
   const [loading, setLoading] = useState(true);
@@ -31,7 +31,8 @@ const PlaceDetail = () => {
   }
 
   const onMountPlaceDetail = async () => {
-    const res = await getData(`/place/${placeNo}`);
+    const res = await getData(`/place/${placeId}`);
+    console.log("res", res);
     setPlace(res.place);
     setPlantList(res.plantList);
     setLoading(false);
@@ -55,7 +56,7 @@ const PlaceDetail = () => {
 
   useEffect(() => {
     onMountPlaceDetail();
-  }, [placeNo]);
+  }, [placeId]);
 
   if (loading) {
     return <Loading/>
@@ -65,29 +66,29 @@ const PlaceDetail = () => {
     !onModify
       ?
       <DetailLayout
-        title={place.placeName}
+        title={place.name}
         url="/place"
-        path={place.placeNo}
+        path={place.placeId}
         deleteTitle="장소"
         tags={<PlaceTag place={place} howManyPlant={plantList.length}/>}
         onClickModifyBtn={onClickModifyBtn}
         deleteModal={
           <DeletePlaceModal
-            placeNo={placeNo}
+            placeId={placeId}
             plantListSize={plantList.length}/>}
         bottomData={
           <PlaceTableForPlant
-            placeName={place.placeName}
+            placeName={place.name}
             plantList={plantList}
             setPlantList={setPlantList}
           />}
       />
       :
       <ModifyPlace
-        title={place.placeName}
+        title={place.name}
         place={{
-          placeNo: place.placeNo,
-          placeName: place.placeName,
+          id: place.id,
+          name: place.name,
           option: place.option,
           artificialLight: place.artificialLight
         }}

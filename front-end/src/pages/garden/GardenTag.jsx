@@ -26,11 +26,11 @@ const GardenTag = (props) => {
   }
 
   const getAverageWateringPeriodMsg = () => {
-    if (plant.averageWateringPeriod == 0) {
+    if (plant.recentWateringPeriod == 0) {
       return "물주기를 함께 알아봐요";
     }
 
-    return `${plant.averageWateringPeriod}일마다 물을 마셔요`
+    return `${plant.recentWateringPeriod}일마다 물을 마셔요`
   }
 
   return (

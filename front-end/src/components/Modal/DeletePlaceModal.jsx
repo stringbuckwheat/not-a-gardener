@@ -8,12 +8,11 @@ const DeletePlaceModal = ({plantListSize, placeId}) => {
   const hasNoPlant = plantListSize == 0;
 
   const navigate = useNavigate();
-
   const [visible, setVisible] = useState(false);
   const closeDeleteModal = () => setVisible(false);
 
-
   const remove = async () => {
+    console.log("remove", placeId);
     await deleteData(`/place/${placeId}`);
     navigate("/place", {replace: true});
   }

@@ -14,7 +14,7 @@ import AddPlantInPlaceFormModal from "./AddPlantInPlaceFormModal";
  * @constructor
  */
 const AddPlantInPlaceButtons = ({placeName, setPlantList}) => {
-  const placeNo = useParams().placeNo;
+  const placeId = useParams().placeId;
 
   const [moveFormVisible, setMoveFormVisible] = useState(false);
   const [addPlantFormVisible, setAddPlantFormVisible] = useState(false);
@@ -35,11 +35,11 @@ const AddPlantInPlaceButtons = ({placeName, setPlantList}) => {
       placeName={placeName}
       visible={addPlantFormVisible}
       callBackFunction={callBackFunction}
-      placeNo={placeNo}
+      placeId={placeId}
       setAddPlantFormVisible={setAddPlantFormVisible}/>
   } else if (moveFormVisible) {
     // 다른 장소의 식물 이동을 누른 경우
-    return <ModifyPlaceOfPlantForm placeNo={placeNo} setMoveFormVisible={setMoveFormVisible}/>
+    return <ModifyPlaceOfPlantForm placeNo={placeId} setMoveFormVisible={setMoveFormVisible}/>
   }
 
   // 아무것도 선택하지 않았을 시 버튼들 렌더링

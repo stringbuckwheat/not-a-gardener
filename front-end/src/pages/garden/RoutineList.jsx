@@ -3,6 +3,7 @@ import ClickableTag from "../../components/tag/basic/ClickableTag";
 import {CCol} from "@coreui/react";
 import React, {useState} from "react";
 import RoutineStateUpdateModal from "../../components/modal/RoutineStateUpdateModal";
+import LinkHoverTag from "../../components/tag/basic/LinkHoverTag";
 
 const RoutineList = ({routineList, afterRoutine}) => {
   const [isTitleHovered, setIsTitleHovered] = useState(false);
@@ -32,15 +33,18 @@ const RoutineList = ({routineList, afterRoutine}) => {
         closeModal={() => setIsModalVisible(false)}/>
       <div>
         {
-          routineList.map((routine, index) => {
-            const isCompleted = routine.isCompleted === "Y";
+          routineList.length == 0
+            ? <LinkHoverTag content={"등록된 루틴이 없어요"} to={"/routine"} color={"gold"}/>
+            :
+            routineList.map((routine, index) => {
+              const isCompleted = routine.isCompleted === "Y";
 
-            return <ClickableTag
-              key={routine.routineNo}
-              color={isCompleted ? "yellow" : "geekblue"}
-              onClick={() => onClickTag(routine.routineNo, isCompleted, routine.routineContent, index)}
-              content={routine.routineContent}/>
-          })
+              return <ClickableTag
+                key={routine.routineNo}
+                color={isCompleted ? "gold" : "geekblue"}
+                onClick={() => onClickTag(routine.routineNo, isCompleted, routine.routineContent, index)}
+                content={routine.routineContent}/>
+            })
         }
       </div>
     </CCol>

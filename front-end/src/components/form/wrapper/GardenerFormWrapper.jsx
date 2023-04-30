@@ -7,7 +7,7 @@ import {
 } from '@coreui/react'
 import {ReactComponent as Logo} from "../../../assets/images/logo.svg";
 
-const MemberFormWrapper = ({children}) => {
+const GardenerFormWrapper = ({children}) => {
 
   return (
     <div className="bg-garden min-vh-100 d-flex flex-row align-items-center">
@@ -29,4 +29,4 @@ const MemberFormWrapper = ({children}) => {
   )
 }
 
-export default MemberFormWrapper;
+export default GardenerFormWrapper;
