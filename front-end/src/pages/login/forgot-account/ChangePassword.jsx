@@ -39,7 +39,7 @@ const ChangePassword = ({username}) => {
   const [isUpdated, setIsUpdated] = useState(false);
 
   const submit = async () => {
-    const res = await axios.put(`/member/${username}/pw`, {username: username, pw: password.password});
+    await axios.put(`/gardener/${username}/password`, {username, password: password.password});
     setIsUpdated(true);
   }
 
@@ -59,7 +59,9 @@ const ChangePassword = ({username}) => {
         <div>
           <Input name="password" type="password" onChange={onChange}/>
         </div>
-        <InputFeedbackSpan feedbackMsg={getPasswordFeedbackMsg()}/>
+        <InputFeedbackSpan
+          feedbackMsg={getPasswordFeedbackMsg()}
+          color={verifyPassword(password.password) ? "success" : "danger"}/>
       </div>
 
       <div className="mb-3">

@@ -21,7 +21,6 @@ const LoginPageWrapper = ({children}) => {
                 {children}
               </CCardGroup>
             </CCol>
-
           </CRow>
         </CContainer>
       </div>

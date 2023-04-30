@@ -3,7 +3,15 @@ import verifyEmail from "../../../utils/function/verifyEmail";
 import axios from "axios";
 import VerifyAccountInput from "./VerifyAccountInput";
 
-const VerifyAccountContent = ({successContent, setEmail, setMemberList}) => {
+/**
+ *
+ * @param successContent
+ * @param setEmail
+ * @param setGardenerList
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const VerifyAccountContent = ({successContent, setEmail, setGardenerList}) => {
   const [input, setInput] = useState("");
   const [isWaiting, setIsWaiting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -23,11 +31,12 @@ const VerifyAccountContent = ({successContent, setEmail, setMemberList}) => {
     setIsWaiting(true);
 
     try {
-      const res = await axios.get(`/member/email/${input}`);
+      const res = await axios.get(`/gardener/email/${input}`);
+      console.log("res.data", res.data);
 
       setIdentification(res.data.identificationCode);
       setEmail(res.data.email);
-      setMemberList(res.data.members);
+      setGardenerList(res.data.gardeners);
     } catch (e) {
       setErrorMsg(e.response.data.errorDescription);
     }

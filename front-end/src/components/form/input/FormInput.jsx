@@ -20,6 +20,7 @@ const FormInput = ({inputItem, onChange, feedbackInvalid}) => {
         name={inputItem.name}
         required={inputItem.required}
         onChange={onChange}
+        min={"1"}
         feedbackInvalid={feedbackInvalid}
         feedbackValid={inputItem.required ? "" : "모르겠다면 비워둬도 좋아요"}
       />

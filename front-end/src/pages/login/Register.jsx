@@ -9,8 +9,8 @@ import {cilHappy, cilLockLocked, cilUser} from '@coreui/icons'
 import axios from 'axios'
 import Booped from "../../components/animation/Booped";
 import {Space} from "antd";
-import setMember from "../../api/service/setMember";
-import MemberFormWrapper from "../../components/form/wrapper/MemberFormWrapper";
+import setGardener from "../../api/service/setGardener";
+import GardenerFormWrapper from "../../components/form/wrapper/GardenerFormWrapper";
 import FormInputFeedback from "../../components/form/input/FormInputFeedback";
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 
@@ -20,7 +20,7 @@ const Register = () => {
     username: "",
     email: "",
     name: "",
-    pw: ""
+    password: ""
   })
 
   // 상태
@@ -58,9 +58,10 @@ const Register = () => {
   // 제출
   const onSubmit = async (e) => {
     e.preventDefault();
+    console.log("register", register);
 
     const res = await axios.post("/register", register);
-    await setMember(res.data);
+    await setGardener(res.data);
 
     navigate('/', {replace: true});
 
@@ -68,13 +69,13 @@ const Register = () => {
 
   const isValid = usernameCheck
     && idRegex.test(register.username)
-    && pwRegex.test(register.pw)
+    && pwRegex.test(register.password)
     && emailRegex.test(register.email)
     && register.name !== ''
     && repeatPw;
 
   return (
-      <MemberFormWrapper>
+      <GardenerFormWrapper>
         <CForm>
           <Space className="mb-3">
             <span style={{fontSize: "2em"}} className="text-success">새로운 가드너님, 반갑습니다</span>
@@ -118,11 +119,11 @@ const Register = () => {
             label={<CIcon icon={cilLockLocked}/>}
             type="password"
             placeholder="비밀번호"
-            name="pw"
+            name="password"
             onChange={onChange}
             required
-            valid={pwRegex.test(register.pw)}
-            invalid={!pwRegex.test(register.pw)}
+            valid={pwRegex.test(register.password)}
+            invalid={!pwRegex.test(register.password)}
             feedbackValid="사용 가능한 비밀번호입니다"
             feedbackInvalid="숫자, 특수문자를 포함하여 8자리 이상이어야 해요."/>
 
@@ -130,7 +131,7 @@ const Register = () => {
             label={<CIcon icon={cilLockLocked}/>}
             type="password"
             placeholder="비밀번호 확인"
-            onChange={(e) => setRepeatPw(e.target.value === register.pw)}
+            onChange={(e) => setRepeatPw(e.target.value === register.password)}
             required
             valid={repeatPw}
             invalid={!repeatPw}
@@ -145,7 +146,7 @@ const Register = () => {
               title="가입하기" />
           </div>
         </CForm>
-      </MemberFormWrapper>
+      </GardenerFormWrapper>
   )
 }
 

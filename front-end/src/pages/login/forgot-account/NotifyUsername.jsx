@@ -2,7 +2,7 @@ import {Link} from "react-router-dom";
 import {Button, Space} from "antd";
 import React from "react";
 
-const NotifyUsername = ({email, memberList}) => {
+const NotifyUsername = ({email, gardenerList}) => {
 
   return (
     <div className="text-center">
@@ -11,8 +11,8 @@ const NotifyUsername = ({email, memberList}) => {
 
       <div className="text-center mb-4">
         {
-          memberList.map((username) => (
-            <div className="mb-1"><b>* {username}</b></div>))
+          gardenerList.map((username, index) => (
+            <div className="mb-1" key={index}><b>* {username}</b></div>))
         }
       </div>
 

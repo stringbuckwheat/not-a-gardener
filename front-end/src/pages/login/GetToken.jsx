@@ -11,9 +11,9 @@ const GetToken = () => {
   const setUser = async () => {
     localStorage.setItem("login", token);
 
-    const user = await getData("/member/member-info");
+    const user = await getData("/gardener/gardener-info");
 
-    localStorage.setItem("memberNo", user.memberNo);
+    localStorage.setItem("gardenerId", user.gardenerId);
     localStorage.setItem("name", user.name);
     localStorage.setItem("provider", user.provider);
 

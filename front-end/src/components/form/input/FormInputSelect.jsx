@@ -23,8 +23,8 @@ const FormInputSelect = ({inputItem, onChange}) => {
           onChange={onChange}
           defaultValue={optionArray[0].key}>
           {
-            optionArray.map((item) => (
-              <option value={item.key} key={item.key}>{item.value}</option>
+            optionArray.map((item, index) => (
+              <option value={item.key} key={index}>{item.value}</option>
             ))
           }
         </CFormSelect>

@@ -47,7 +47,7 @@ const AddPlaceInPlantForm = ({addPlace}) => {
                 ? <>
                   <InputFeedbackSpan feedbackMsg={msg}/>
                   <Input onChange={(e) => setPlaceName(e.target.value)} size={"small"}
-                         placeHolder={"장소 이름"} style={{width: "100%"}}/>
+                         placeholder={"장소 이름"} style={{width: "100%"}}/>
                 </>
                 : <></>}
               <CButton

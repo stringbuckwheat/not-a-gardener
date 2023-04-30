@@ -3,8 +3,8 @@ import CIcon from "@coreui/icons-react";
 import {cilLockLocked, cilUser} from "@coreui/icons";
 import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import setMember from "../../api/service/setMember";
 import axios from "axios";
+import setGardener from "../../api/service/setGardener";
 
 const LoginForm = () => {
   const [msg, setMsg] = useState('');
@@ -20,7 +20,7 @@ const LoginForm = () => {
 
     if (login.username === "") {
       setMsg("아이디를 입력해주세요")
-    } else if (login.pw === "") {
+    } else if (login.password === "") {
       setMsg("비밀번호를 입력해주세요")
     } else {
       submit();
@@ -37,7 +37,7 @@ const LoginForm = () => {
   const submit = async () => {
     try {
       const res = await axios.post("/", login);
-      await setMember(res.data);
+      await setGardener(res.data);
 
       // garden 페이지로 이동
       navigate('/', {replace: true});
@@ -61,7 +61,7 @@ const LoginForm = () => {
           <CInputGroupText>
             <CIcon icon={cilLockLocked}/>
           </CInputGroupText>
-          <CFormInput name="pw" type="password" placeholder="PW" onChange={onChange}/>
+          <CFormInput name="password" type="password" placeholder="PW" onChange={onChange}/>
         </CInputGroup>
         <Link to="/forgot" className="text-decoration-none text-garden">
           <span style={{fontSize: 13}}><CIcon icon={cilLockLocked}/> 아이디/비밀번호 찾기</span>

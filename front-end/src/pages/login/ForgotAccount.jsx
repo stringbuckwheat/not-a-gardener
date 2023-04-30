@@ -4,21 +4,22 @@ import {cilLockLocked, cilUser} from "@coreui/icons";
 import React, {useState} from "react";
 import NotifyUsername from "./forgot-account/NotifyUsername";
 import SelectAccount from "./forgot-account/SelectAccount";
-import ValidateMember from "./forgot-account/ValidateMember";
+import ValidateGardener from "./forgot-account/ValidateGardener";
 
 /**
- * ForgotAccount -> ValidateMember -> NotifyUsername
+ * ForgotAccount -> ValidateGardener -> VerifyAccountContent -> NotifyUsername
  *                                 -> SelectAccount -> ChangePassword
+ * ValidateGardener에서 유저 인증 후, successContent로 넘긴 NotifyUsername이나 SelectAccount를 실행
  * @returns {JSX.Element} 아이디/비번찾기 고르기 페이지, 아이디 찾기 페이지, 비번 찾기 페이지
  */
 const ForgotAccount = () => {
   const [forgot, setForgot] = useState("");
   const [email, setEmail] = useState("");
-  const [memberList, setMemberList] = useState([]);
+  const [gardenerList, setGardenerList] = useState([]);
 
   let props = {
-    setEmail: setEmail,
-    setMemberList: setMemberList
+    setEmail,
+    setGardenerList
   }
 
   if (forgot === "username") {
@@ -26,14 +27,14 @@ const ForgotAccount = () => {
       ...props,
       icon: cilUser,
       title: "아이디 찾기",
-      successContent: <NotifyUsername email={email} memberList={memberList} />
+      successContent: <NotifyUsername email={email} gardenerList={gardenerList}/>
     }
   } else if (forgot === "password") {
     props = {
       ...props,
       icon: cilLockLocked,
       title: "비밀번호 찾기",
-      successContent: <SelectAccount email={email} memberList={memberList}/>
+      successContent: <SelectAccount email={email} gardenerList={gardenerList}/>
     }
   }
 
@@ -41,7 +42,7 @@ const ForgotAccount = () => {
     <LoginPageWrapper>
       {
         forgot !== ""
-          ? <ValidateMember {...props}/>
+          ? <ValidateGardener {...props}/>
           : (
             <>
               <ForgotAccountCard
