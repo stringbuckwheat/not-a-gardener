@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PlaceDao {
     List<Place> getPlacesByGardenerId(Long gardenerId);
-    Place getPlaceWithPlantList(Long placeId);
+    Place getPlaceWithPlants(Long placeId);
     Place save(Long gardenerId, PlaceDto.Request placeRequest);
 
     Place update(PlaceDto.Request placeRequest);

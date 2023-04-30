@@ -56,6 +56,7 @@ public class Plant {
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="place_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Place place;
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy="plant")

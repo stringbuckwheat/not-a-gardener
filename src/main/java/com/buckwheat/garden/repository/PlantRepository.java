@@ -26,7 +26,7 @@ public interface PlantRepository extends JpaRepository<Plant, Long> {
      * @param gardenerId
      * @return Place, WateringList가 매핑된 Plant 객체 리스트
      */
-    @EntityGraph(attributePaths = {"place", "wateringList", "wateringList.chemical"}, type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(attributePaths = {"place", "waterings", "waterings.chemical"}, type = EntityGraph.EntityGraphType.FETCH)
     List<Plant> findByGardener_GardenerId(Long gardenerId);
 
     /**
@@ -34,6 +34,6 @@ public interface PlantRepository extends JpaRepository<Plant, Long> {
      * @param plantId
      * @return Place만 포함하는 plant 객체 하나
      */
-    @EntityGraph(attributePaths = {"place", "wateringList", "wateringList.chemical"}, type= EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(attributePaths = {"place", "waterings", "waterings.chemical"}, type= EntityGraph.EntityGraphType.FETCH)
     Optional<Plant> findByPlantId(Long plantId);
 }

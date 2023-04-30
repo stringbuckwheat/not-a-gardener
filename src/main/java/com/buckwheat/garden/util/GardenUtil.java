@@ -101,12 +101,12 @@ public class GardenUtil {
      * @return
      */
     public LocalDate getLastDrinkingDay(Plant plant) {
-        // 물주기 정보가 있으면 진짜 제일 최근 물 준 날짜를 리턴
-        if (plant.getWaterings().size() != 0) {
-            return plant.getWaterings().get(0).getWateringDate();
+        // 물주기 기록도 없고 직접 입력한 물주기 사이클 데이터도 없으면
+        if (plant.getWaterings().size() == 0) {
+            return plant.getCreateDate().toLocalDate();
         }
 
-        return plant.getCreateDate().toLocalDate();
+        return plant.getWaterings().get(0).getWateringDate();
     }
 
     public int getWateringDDay(int recentWateringPeriod, LocalDate lastDrinkingDay) {

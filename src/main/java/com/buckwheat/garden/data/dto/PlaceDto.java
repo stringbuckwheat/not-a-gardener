@@ -101,7 +101,7 @@ public class PlaceDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Getter
-    public static class WithPlantList{
+    public static class WithPlants{
         private Response place;
         private List<PlantDto.PlantInPlace> plantList;
     }

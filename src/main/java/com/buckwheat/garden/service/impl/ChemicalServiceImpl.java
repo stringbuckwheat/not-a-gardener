@@ -26,7 +26,7 @@ public class ChemicalServiceImpl implements ChemicalService {
     /**
      * 전체 chemical 리스트
      *
-     * @param GardenerId int FK로 조회
+     * @param gardenerId int FK로 조회
      * @return dto로 변환한 chemical list
      */
     @Override
@@ -51,13 +51,13 @@ public class ChemicalServiceImpl implements ChemicalService {
      */
     @Override
     public List<WateringDto.ResponseInChemical> getWateringsByChemicalId(Long chemicalId) {
-        List<WateringDto.ResponseInChemical> wateringList = new ArrayList<>();
+        List<WateringDto.ResponseInChemical> waterings = new ArrayList<>();
 
         for (Watering watering : chemicalDao.getWateringsByChemicalId(chemicalId)) {
-            wateringList.add(WateringDto.ResponseInChemical.from(watering));
+            waterings.add(WateringDto.ResponseInChemical.from(watering));
         }
 
-        return wateringList;
+        return waterings;
     }
 
     @Override

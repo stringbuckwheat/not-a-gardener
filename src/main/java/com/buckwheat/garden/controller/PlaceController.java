@@ -33,7 +33,7 @@ public class PlaceController {
      * @return
      */
     @GetMapping("/{placeId}")
-    public PlaceDto.WithPlantList getPlace(@PathVariable long placeId){
+    public PlaceDto.WithPlants getPlace(@PathVariable long placeId){
         return placeService.getPlaceDetail(placeId);
     }
 

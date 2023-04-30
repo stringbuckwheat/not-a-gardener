@@ -29,7 +29,7 @@ public class PlaceDaoImpl implements PlaceDao {
     }
 
     @Override
-    public Place getPlaceWithPlantList(Long placeId) {
+    public Place getPlaceWithPlants(Long placeId) {
         return placeRepository.findByPlaceId(placeId).orElseThrow(NoSuchElementException::new);
     }
 

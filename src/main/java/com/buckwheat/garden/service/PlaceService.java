@@ -7,7 +7,7 @@ import java.util.List;
 public interface PlaceService {
     List<PlaceDto.Card> getPlacesByGardenerId(Long gardenerId);
 
-    PlaceDto.WithPlantList getPlaceDetail(Long id);
+    PlaceDto.WithPlants getPlaceDetail(Long id);
 
     PlaceDto.Card add(Long gardenerId, PlaceDto.Request placeRequest);
 

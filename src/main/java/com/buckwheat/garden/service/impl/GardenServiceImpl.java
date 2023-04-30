@@ -40,10 +40,11 @@ public class GardenServiceImpl implements GardenService {
         LocalDate today = LocalDate.now();
 
         // 필요한 것들 계산해서 gardenDto list 리턴
-        // getPlantListForGarden: postponeDate이 과거거나 아예 미룬 적 없는 식물들
+        // getPlantsForGarden: postponeDate이 과거거나 아예 미룬 적 없는 식물들
         // 오늘 미룬 식물도 띄워줘야함
         for (Plant plant : plantDao.getPlantsForGarden(gardenerId)) {
-            if(plant.getConditionDate() != null && today.compareTo(plant.getConditionDate()) == 0){
+            // 오늘 스케줄 미루기를 클릭한 식물
+            if (plant.getConditionDate() != null && today.compareTo(plant.getConditionDate()) == 0) {
                 continue;
             }
 
@@ -55,7 +56,8 @@ public class GardenServiceImpl implements GardenService {
             if (wateringCode == WateringCode.NO_RECORD.getCode()) {
                 waitingList.add(GardenDto.WaitingForWatering.from(plant));
                 todoList.add(gardenResponseProvider.getGardenResponse(plant, gardenerId));
-            } else if (hasToDo) {
+            } else if (hasToDo || (plant.getWaterings().size() == 0 && plant.getRecentWateringPeriod() != 0)) {
+                // 오늘 할일이 있는 식물이거나 물주기 기록은 없고 직접 입력한 물주기 사이클은 있는 경우
                 todoList.add(gardenResponseProvider.getGardenResponse(plant, gardenerId));
             }
         }

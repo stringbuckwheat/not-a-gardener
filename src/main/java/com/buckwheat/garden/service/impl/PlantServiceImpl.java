@@ -34,14 +34,14 @@ public class PlantServiceImpl implements PlantService {
 
     @Override
     public List<PlantDto.Response> getPlantsByGardenerId(Long gardenerId) {
-        List<PlantDto.Response> plantList = new ArrayList<>();
+        List<PlantDto.Response> plants = new ArrayList<>();
 
         // @EntityGraph 메소드
-        for (Plant p : plantDao.getPlantListByGardenerId(gardenerId)) {
-            plantList.add(PlantDto.Response.from(p));
+        for (Plant p : plantDao.getPlantsByGardenerId(gardenerId)) {
+            plants.add(PlantDto.Response.from(p));
         }
 
-        return plantList;
+        return plants;
     }
 
     @Override

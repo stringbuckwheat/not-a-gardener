@@ -14,6 +14,6 @@ public interface ChemicalRepository extends JpaRepository<Chemical, Long> {
 
     List<Chemical> findByGardener_GardenerIdOrderByPeriodDesc(Long gardenerId);
 
-    @EntityGraph(attributePaths = {"wateringList", "wateringList.plant", "wateringList.plant.place"}, type = EntityGraph.EntityGraphType.FETCH)
+    @EntityGraph(attributePaths = {"waterings", "waterings.plant", "waterings.plant.place"}, type = EntityGraph.EntityGraphType.FETCH)
     Optional<Chemical> findByChemicalId(Long chemicalId);
 }

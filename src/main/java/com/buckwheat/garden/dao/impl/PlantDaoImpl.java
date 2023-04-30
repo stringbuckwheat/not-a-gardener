@@ -25,7 +25,7 @@ public class PlantDaoImpl implements PlantDao {
     private final GardenerRepository gardenerRepository;
 
     @Override
-    public List<Plant> getPlantListByGardenerId(Long gardenerId){
+    public List<Plant> getPlantsByGardenerId(Long gardenerId){
         return plantRepository.findByGardener_GardenerIdOrderByCreateDateDesc(gardenerId);
     }
 

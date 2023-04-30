@@ -42,18 +42,18 @@ public class PlaceServiceImpl implements PlaceService {
      * @return 해당 장소의 식물 개수를 포함하는 장소 정보
      */
     @Override
-    public PlaceDto.WithPlantList getPlaceDetail(Long id) {
-        Place place = placeDao.getPlaceWithPlantList(id);
+    public PlaceDto.WithPlants getPlaceDetail(Long id) {
+        Place place = placeDao.getPlaceWithPlants(id);
 
-        List<PlantDto.PlantInPlace> plantList = new ArrayList<>();
+        List<PlantDto.PlantInPlace> plants = new ArrayList<>();
 
         for(Plant plant : place.getPlants()){
-            plantList.add(PlantDto.PlantInPlace.from(plant));
+            plants.add(PlantDto.PlantInPlace.from(plant));
         }
 
         PlaceDto.Response placeResponseDto = PlaceDto.Response.from(place);
 
-        return new PlaceDto.WithPlantList(placeResponseDto, plantList);
+        return new PlaceDto.WithPlants(placeResponseDto, plants);
     }
 
     @Override

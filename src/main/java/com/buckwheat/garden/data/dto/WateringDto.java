@@ -78,21 +78,21 @@ public class WateringDto {
     @ToString
     public static class AfterWatering {
         private PlantDto.Response plant;
-        private List<ForOnePlant> wateringList;
+        private List<ForOnePlant> waterings;
         private Message wateringMsg;
 
-        public static AfterWatering from(Message wateringMsg, List<ForOnePlant> wateringList) {
+        public static AfterWatering from(Message wateringMsg, List<ForOnePlant> waterings) {
             return WateringDto.AfterWatering.builder()
                     .wateringMsg(wateringMsg)
-                    .wateringList(wateringList)
+                    .waterings(waterings)
                     .build();
         }
 
-        public static AfterWatering from(PlantDto.Response plant, Message wateringMsg, List<ForOnePlant> wateringList) {
+        public static AfterWatering from(PlantDto.Response plant, Message wateringMsg, List<ForOnePlant> waterings) {
             return AfterWatering.builder()
                     .plant(plant)
                     .wateringMsg(wateringMsg)
-                    .wateringList(wateringList)
+                    .waterings(waterings)
                     .build();
         }
     }
@@ -188,7 +188,7 @@ public class WateringDto {
     @ToString
     public static class WateringList {
         private LocalDate wateringDate;
-        List<ByDate> wateringList;
+        List<ByDate> waterings;
     }
 
     @AllArgsConstructor

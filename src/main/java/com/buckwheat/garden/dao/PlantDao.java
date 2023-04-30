@@ -8,7 +8,7 @@ import com.buckwheat.garden.data.entity.Plant;
 import java.util.List;
 
 public interface PlantDao {
-    List<Plant> getPlantListByGardenerId(Long gardenerId);
+    List<Plant> getPlantsByGardenerId(Long gardenerId);
     Plant getPlantWithPlaceAndWatering(Long plantId);
     List<Plant> getPlantsForGarden(Long gardenerId);
     Plant save(Long gardenerId, PlantDto.Request plantRequest);
