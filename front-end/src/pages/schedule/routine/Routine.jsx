@@ -13,13 +13,13 @@ const Routine = ({routines, plantList}) => {
     setToDoList(() => toDoList);
   }
 
-  const deleteRoutine = (routineNo, hasToDoToday) => {
+  const deleteRoutine = (routineId, hasToDoToday) => {
     if (hasToDoToday === "Y") {
-      setToDoList(() => toDoList.filter((routine) => routine.routineNo !== routineNo));
+      setToDoList(() => toDoList.filter((routine) => routine.id !== routineId));
       return;
     }
 
-    setNotToDoList(() => notToDoList.filter((routine) => routine.routineNo !== routineNo));
+    setNotToDoList(() => notToDoList.filter((routine) => routine.id !== routineId));
   }
 
   const completeRoutine = (index, routine) => {

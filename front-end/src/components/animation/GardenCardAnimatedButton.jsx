@@ -10,7 +10,7 @@ import getWateringNotificationMsg from "../../utils/function/getWateringNotifica
  * 메인 페이지 할일 카드에 마우스를 올릴 시 나타날 버튼 세가지
  * @param setSelected
  * @param y
- * @param plantNo
+ * @param plantId
  * @param openNotification
  * @param index
  * @param deleteInTodoList
@@ -22,7 +22,7 @@ import getWateringNotificationMsg from "../../utils/function/getWateringNotifica
 const GardenCardAnimatedButton = ({
                                     setSelected,
                                     y,
-                                    plantNo,
+                                    plantId,
                                     openNotification,
                                     index,
                                     deleteInTodoList,
@@ -37,9 +37,8 @@ const GardenCardAnimatedButton = ({
   const onClickNotDry = async () => {
     // 안 말랐어요
 
-    // 가든 카드 바꿔끼우는데 다른 코드가 필요하다! -> watering code 추가(물주기 늘어나는 중)
     // waitinglist에서는... 그냥 유지
-    const res = await updateData(`/garden/${plantNo}/watering/not-dry`, null);
+    const res = await updateData(`/garden/${plantId}/watering/not-dry`, null);
 
     // 현재 todoList에서 삭제
     deleteInTodoList(index);
@@ -64,7 +63,7 @@ const GardenCardAnimatedButton = ({
       return;
     }
 
-    const res = await updateData(`/garden/${plantNo}/watering/postpone`, null);
+    const res = await updateData(`/garden/${plantId}/watering/postpone`, null);
     postponeWatering(index, res);
   }
 

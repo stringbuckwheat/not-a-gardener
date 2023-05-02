@@ -14,7 +14,8 @@ import {useNavigate} from "react-router-dom";
  * @returns {JSX.Element}
  * @constructor
  */
-const ModifyPlaceOfPlantForm = ({placeNo, setMoveFormVisible}) => {
+const ModifyPlaceOfPlantForm = ({placeId, setMoveFormVisible}) => {
+  // 식물 select용 options 배열 저장
   const [options, setOptions] = useState([{}])
   const [selectedPlantList, setSelectedPlantList] = useState([]);
 
@@ -25,13 +26,13 @@ const ModifyPlaceOfPlantForm = ({placeNo, setMoveFormVisible}) => {
     const options = [];
 
     for (let plant of plantList) {
-      if (plant.placeNo == placeNo) {
+      if (plant.placeId == placeId) {
         continue;
       }
 
       options.push({
-        label: `${plant.plantName} (${plant.placeName})`,
-        value: plant.plantNo,
+        label: `${plant.name} (${plant.placeName})`,
+        value: plant.id,
       })
     }
 
@@ -48,8 +49,8 @@ const ModifyPlaceOfPlantForm = ({placeNo, setMoveFormVisible}) => {
 
   const submit = async () => {
     // 장소 업데이트
-    await modifyPlantPlace({placeNo: placeNo, plantList: selectedPlantList});
-    const res = await getData(`/place/${placeNo}`);
+    await modifyPlantPlace({placeId, plantList: selectedPlantList});
+    const res = await getData(`/place/${placeId}`);
 
     setMoveFormVisible(false);
     navigate("", {replace: true, state: res})

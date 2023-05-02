@@ -13,21 +13,19 @@ import onMount from 'src/api/service/onMount';
  * @constructor
  */
 const PlantDetail = () => {
-  const plantNo = useParams().plantNo;
+  const plantId = useParams().plantId;
   const state = useLocation().state;
 
   const [plant, setPlant] = useState({});
   const [wateringList, setWateringList] = useState([{}]);
 
   useEffect(() => {
-    onMount(`/plant/${plantNo}`, setPlant);
-    onMount(`/plant/${plantNo}/watering`, setWateringList);
+    onMount(`/plant/${plantId}`, setPlant);
+    onMount(`/plant/${plantId}/watering`, setWateringList);
   }, [])
 
   useEffect(() => {
-    if (state !== null) {
-      setPlant(state.plant);
-    }
+    state && setPlant(state.plant);
   }, [state])
 
   const [onModify, setOnModify] = useState(false);
@@ -47,9 +45,9 @@ const PlantDetail = () => {
     !onModify
       ?
       <DetailLayout
-        title={plant.plantName}
+        title={plant.name}
         url="/plant"
-        path={plant.plantNo}
+        path={plant.id}
         deleteTitle="식물"
         tags={<PlantTag
           plant={plant}

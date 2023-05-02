@@ -18,8 +18,8 @@ const getWateringTableColumnArray = (isEditing, updateWatering, editingKey, canc
       },
       {
         title: '관수 간격',
-        dataIndex: 'wateringPeriod',
-        key: 'wateringPeriod',
+        dataIndex: 'period',
+        key: 'period',
       },
       {
         title: '',

@@ -1,7 +1,7 @@
 import GButton from "../../../components/button/defaultButton/GButton";
 import React from "react";
 import AddGoal from "./AddGoal";
-import GoalCard from "../../../components/card/GoalCard";
+import GoalCard from "./GoalCard";
 
 const GoalContent = ({
                        isAddFormOpened,
@@ -37,7 +37,7 @@ const GoalContent = ({
             goalList.map((goal, idx) =>
               <GoalCard
                 goal={goal}
-                key={goal.goalNo}
+                key={goal.id}
                 index={idx}
                 completeGoal={completeGoal}
                 deleteGoal={deleteGoal}

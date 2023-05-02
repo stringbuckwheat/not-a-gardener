@@ -26,9 +26,7 @@ const PlaceDetail = () => {
 
   // 부모 컴포넌트(PlaceDetail)의 state를 변경할 함수
   // 자식인 DetailLayout, ModifyPlace 컴포넌트로 넘겨준다(수정하기/돌아가기 버튼)
-  const onClickModifyBtn = () => {
-    setOnModify(!onModify);
-  }
+  const onClickModifyBtn = () => setOnModify(!onModify);
 
   const onMountPlaceDetail = async () => {
     const res = await getData(`/place/${placeId}`);
@@ -68,7 +66,7 @@ const PlaceDetail = () => {
       <DetailLayout
         title={place.name}
         url="/place"
-        path={place.placeId}
+        path={placeId}
         deleteTitle="장소"
         tags={<PlaceTag place={place} howManyPlant={plantList.length}/>}
         onClickModifyBtn={onClickModifyBtn}

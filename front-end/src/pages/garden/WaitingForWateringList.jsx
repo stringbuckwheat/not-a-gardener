@@ -6,15 +6,12 @@ import WateredInGardenModal from "./WateredInGardenModal";
 const WaitingForWateringList = ({waitingList, chemicalList, openNotification, updateWaitingListAfterWatering}) => {
   const [clickedPlant, setClickedPlant] = useState({});
   const onClick = (plant, index) => {
-    setClickedPlant({...plant, index: index});
+    setClickedPlant({...plant, index});
     setVisible(true);
   }
 
   // 물주기 모달
   const [visible, setVisible] = useState(false);
-  const closeDeleteModal = () => {
-    setVisible(false);
-  }
 
   const afterFirstWatering = () => {
     updateWaitingListAfterWatering(clickedPlant.index);
@@ -22,7 +19,7 @@ const WaitingForWateringList = ({waitingList, chemicalList, openNotification, up
   }
 
   if(waitingList.length == 0){
-    return
+    return;
   }
 
   return (
@@ -30,7 +27,7 @@ const WaitingForWateringList = ({waitingList, chemicalList, openNotification, up
       <div className="small fw-bold text-black">물주기 정보를 기다리고 있는 식물들</div>
       <WateredInGardenModal
         visible={visible}
-        closeDeleteModal={closeDeleteModal}
+        closeDeleteModal={() => setVisible(false)}
         clickedPlant={clickedPlant}
         chemicalList={chemicalList}
         openNotification={openNotification}
@@ -40,7 +37,7 @@ const WaitingForWateringList = ({waitingList, chemicalList, openNotification, up
           waitingList.map((plant, index) => (
             <ClickableTag
               color="green"
-              content={plant.plantName}
+              content={plant.name}
               onClick={() => onClick(plant, index)}
               key={index}/>
           ))

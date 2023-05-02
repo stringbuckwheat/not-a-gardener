@@ -37,7 +37,7 @@ const getPlantFormArray = (placeList) => {
     },
     {
       inputType: "number",
-      label: "평균 물주기",
+      label: "최근 물주기",
       name: "recentWateringPeriod",
       required: false
     },

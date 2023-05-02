@@ -16,6 +16,7 @@ import {cilPen, cilTrash, cilX} from "@coreui/icons";
  */
 const PlantEditableCellAction = ({record, editable, cancel, edit, editingKey, updatePlant, deletePlant}) => {
   const disabled = editingKey !== 0
+  console.log("record", record);
 
   return editable ? (
     <Space className="d-flex justify-content-end">
@@ -44,9 +45,7 @@ const PlantEditableCellAction = ({record, editable, cancel, edit, editingKey, up
         placement="topRight"
         title="이 식물을 삭제하실건가요?"
         description="해당 식물의 물주기 기록 등이 모두 함께 삭제됩니다."
-        onConfirm={() => {
-          deletePlant(record.plantNo)
-        }}
+        onConfirm={() => deletePlant(record.id)}
         okText="네"
         cancelText="아니요"
       >

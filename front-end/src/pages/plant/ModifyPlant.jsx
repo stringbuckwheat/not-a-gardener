@@ -15,22 +15,22 @@ const ModifyPlant = ({changeModifyState, placeList, plant}) => {
     {
       inputType: "text",
       label: "식물 이름",
-      name: "plantName",
-      defaultValue: plant.plantName,
+      name: "name",
+      defaultValue: plant.name,
       required: true
     },
     {
       inputType: "text",
       label: "식물 종",
-      name: "plantSpecies",
-      defaultValue: plant.plantSpecies,
+      name: "species",
+      defaultValue: plant.species,
       required: false
     },
     {
       inputType: "select",
       label: "장소",
-      name: "placeNo",
-      defaultValue: plant.placeNo,
+      name: "placeId",
+      defaultValue: plant.placeId,
       optionArray: placeList
     },
     {
@@ -56,9 +56,9 @@ const ModifyPlant = ({changeModifyState, placeList, plant}) => {
       onChange={onChange}
       submitBtn={<ModifyFormButtons
         data={updatedPlant}
-        url={`/plant/${plant.plantNo}`}
+        url={`/plant/${plant.id}`}
         changeModifyState={changeModifyState}
-        validation={plant.plantName != ""}/>}/>
+        validation={plant.name != ""}/>}/>
   )
 }
 

@@ -4,16 +4,16 @@ import WateringForm from "./WateringForm";
 import deleteData from "../../../../api/backend-api/common/deleteData";
 
 const HandleWateringForm = ({
-                            plantNo,
-                            setWateringList,
-                            chemicalList,
-                            isWateringFormOpen,
-                            setIsWateringFormOpen,
-                            setEditingKey,
-                            wateringCallBack
-                          }) => {
+                              plantId,
+                              setWateringList,
+                              chemicalList,
+                              isWateringFormOpen,
+                              setIsWateringFormOpen,
+                              setEditingKey,
+                              wateringCallBack
+                            }) => {
   const deleteAllWatering = async () => {
-    await deleteData(`/plant/${plantNo}/watering`);
+    await deleteData(`/plant/${plantId}/watering`);
     setWateringList([]);
   }
 
@@ -27,10 +27,8 @@ const HandleWateringForm = ({
       {isWateringFormOpen
         ?
         <WateringForm
-          plantNo={plantNo}
-          closeForm={() => {
-            setIsWateringFormOpen(!isWateringFormOpen)
-          }}
+          plantId={plantId}
+          closeForm={() => setIsWateringFormOpen(!isWateringFormOpen)}
           chemicalList={chemicalList}
           wateringCallBack={wateringCallBack}
         />

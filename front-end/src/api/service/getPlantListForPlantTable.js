@@ -1,4 +1,6 @@
 import getWateringMsg from "../../utils/function/getWateringMsg";
+import {Space, Tooltip} from "antd";
+import {QuestionCircleTwoTone} from "@ant-design/icons";
 
 const getPlantListForPlantTable = (plants) => {
   const plantListForPlantTable = plants.map((pl) => {
@@ -8,11 +10,13 @@ const getPlantListForPlantTable = (plants) => {
     const latestWateringDate = gardenDetail.latestWateringDate;
 
     return ({
-      key: plant.plantId,
-      id: plant.plantId,
+      key: plant.id,
+      id: plant.id,
       name: plant.name,
       species: plant.species,
-      recentWateringPeriod: plant.recentWateringPeriod,
+      recentWateringPeriod: plant.recentWateringPeriod == 0
+        ? <Space align="middle"><Tooltip title={"물주기를 알아가는 중이에요"}><QuestionCircleTwoTone/></Tooltip></Space>
+        : plant.recentWateringPeriod,
       earlyWateringPeriod: plant.earlyWateringPeriod,
       createDate: plant.createDate,
 

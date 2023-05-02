@@ -20,14 +20,10 @@ const WateringEditableCell = ({
     ? <DatePicker
       locale={locale}
       disabledDate={getDisabledDate}
-      onChange={(date, dateString) => {
-        setEditWatering({...editWatering, wateringDate: dateString})
-      }}/>
+      onChange={(date, dateString) => setEditWatering({...editWatering, wateringDate: dateString})}/>
     : <Select
       options={chemicalList}
-      onChange={(value) => {
-        setEditWatering({...editWatering, chemicalNo: value})
-      }}/>;
+      onChange={(value) => setEditWatering({...editWatering, chemicalId: value})}/>;
 
   return (
     <td {...restProps}>

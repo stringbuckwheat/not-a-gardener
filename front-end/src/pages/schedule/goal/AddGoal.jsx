@@ -13,7 +13,7 @@ const AddGoal = ({onClickGoalFormButton, addGoal, plantList}) => {
   const formLabelColor = "garden"
 
   const [goal, setGoal] = useState({
-    goalContent: "",
+    content: "",
     plantId: 0,
   })
 
@@ -38,8 +38,8 @@ const AddGoal = ({onClickGoalFormButton, addGoal, plantList}) => {
           label="목표"
           labelColor={formLabelColor}
           size="small"
-          onChange={(e) => setGoal(() => ({...goal, goalContent: e.target.value}))}
-          feedbackMsg={goal.goalContent == "" ? "목표를 입력해주세요" : ""}/>
+          onChange={(e) => setGoal(() => ({...goal, content: e.target.value}))}
+          feedbackMsg={goal.content == "" ? "목표를 입력해주세요" : ""}/>
       </div>
       <div className="mb-2">
         <span className={`text-${formLabelColor}`} style={style}>식물</span>
@@ -51,7 +51,7 @@ const AddGoal = ({onClickGoalFormButton, addGoal, plantList}) => {
         <InputFeedbackSpan feedbackMsg="비워둬도 괜찮아요" color="success"/>
       </div>
       <ValidationSubmitButton
-        isValid={goal.goalContent !== ""}
+        isValid={goal.content !== ""}
         onClickValid={submit}
         onClickInvalidMsg="입력 값을 확인해주세요"
         title="추가"

@@ -12,9 +12,9 @@ const AddRoutine = ({plantList, onClickRoutineFormButton, addRoutine}) => {
   const formLabelColor = "garden"
 
   const [routine, setRoutine] = useState({
-    routineContent: "",
-    plantNo: 0,
-    routineCycle: 0
+    content: "",
+    plantId: 0,
+    cycle: 0
   });
 
   const [checked, setChecked] = useState(false);
@@ -26,13 +26,8 @@ const AddRoutine = ({plantList, onClickRoutineFormButton, addRoutine}) => {
 
   const onChangeCheckbox = (e) => {
     setChecked(e.target.checked);
-
-    if (e.target.checked) {
-      setRoutine(() => ({...routine, routineCycle: 1}));
-      return;
-    }
-
-    setRoutine(() => ({...routine, routineCycle: 0}));
+    const data = e.target.checked ? {...routine, cycle: 1} : {...routine, cycle: 0};
+    setRoutine(() => data);
   }
 
   const submit = async () => {
@@ -42,9 +37,9 @@ const AddRoutine = ({plantList, onClickRoutineFormButton, addRoutine}) => {
   }
 
   const getRoutineCycleFeedbackMsg = () => {
-    if (routine.routineContent == "") return "루틴 내용은 비워둘 수 없어요"
-    else if (!Number.isInteger(routine.routineContent)) return "숫자를 입력해주세요"
-    else if (routine.routineContent * 1 <= 0) return "루틴 주기를 확인해주세요"
+    if (routine.content == "") return "루틴 내용은 비워둘 수 없어요"
+    else if (!Number.isInteger(routine.content)) return "숫자를 입력해주세요"
+    else if (routine.content * 1 <= 0) return "루틴 주기를 확인해주세요"
   }
 
   return (
@@ -58,18 +53,18 @@ const AddRoutine = ({plantList, onClickRoutineFormButton, addRoutine}) => {
       </div>
       <div className="mb-2">
         <InputWithFeedback
-          name="routineContent"
+          name="content"
           label="루틴 내용"
           labelColor={formLabelColor}
           size="small"
           onChange={onChange}
-          feedbackMsg={routine.routineContent == "" ? "루틴 내용은 비워둘 수 없어요" : ""}/>
+          feedbackMsg={routine.content == "" ? "루틴 내용은 비워둘 수 없어요" : ""}/>
       </div>
       <div className="mb-2">
         <span className={`text-${formLabelColor}`} style={style}>식물</span>
         <SelectPlant
           plantList={plantList}
-          onChange={ (plantNo) => {setRoutine(() => ({...routine, plantNo: plantNo}))}}
+          onChange={ (plantId) => {setRoutine(() => ({...routine, plantId: plantId}))}}
           size="small"
           className="width-full"/>
       </div>
@@ -86,7 +81,7 @@ const AddRoutine = ({plantList, onClickRoutineFormButton, addRoutine}) => {
                 :
                 <>
                   <InputWithFeedback
-                    name="routineCycle"
+                    name="cycle"
                     type="number"
                     label="루틴 주기"
                     labelColor={formLabelColor}
@@ -103,7 +98,7 @@ const AddRoutine = ({plantList, onClickRoutineFormButton, addRoutine}) => {
       </div>
 
       <ValidationSubmitButton
-        isValid={routine.routineContent !== "" && routine.plantNo !== 0 && routine.routineCycle !== 0}
+        isValid={routine.content !== "" && routine.plantId !== 0 && routine.cycle !== 0}
         onClickValid={submit}
         onClickInvalidMsg="입력 값을 확인해주세요"
         title="추가"

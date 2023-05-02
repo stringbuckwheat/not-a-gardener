@@ -5,6 +5,7 @@ import ValidationSubmitButton from "../../components/button/ValidationSubmitButt
 import postData from "../../api/backend-api/common/postData";
 
 const AddPlant = ({placeList, addPlant, afterAdd}) => {
+  console.log("placeList", placeList);
   const [plant, setPlant] = useState({
     name: "",
     species: "",
@@ -17,7 +18,7 @@ const AddPlant = ({placeList, addPlant, afterAdd}) => {
   const onChange = (e) => {
     const {name, value} = e.target;
     setPlant(setPlant => ({...plant, [name]: value}));
-    // console.log("onChangePlant", plant);
+    console.log("onChangePlant", plant);
   }
 
   const isValid = plant.name != '' && plant.placeId !== 0;

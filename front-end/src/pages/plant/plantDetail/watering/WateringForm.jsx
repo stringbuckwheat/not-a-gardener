@@ -10,18 +10,18 @@ import getDisabledDate from 'src/utils/function/getDisabledDate';
 
 /**
  * 물주기 폼
- * @param plantNo
+ * @param plantId
  * @param closeForm
  * @param chemicalList
  * @param wateringCallBack
  * @returns {JSX.Element}
  * @constructor
  */
-const WateringForm = ({plantNo, closeForm, chemicalList, wateringCallBack}) => {
-  const [watering, setWatering] = useState({plantNo, chemicalNo: chemicalList[0].value});
+const WateringForm = ({plantId, closeForm, chemicalList, wateringCallBack}) => {
+  const [watering, setWatering] = useState({plantId, chemicalId: chemicalList[0].value});
 
   const onSubmit = async () => {
-    const res = await postData(`/plant/${plantNo}/watering`, watering);
+    const res = await postData(`/plant/${plantId}/watering`, watering);
     wateringCallBack(res);
 
     closeForm();
@@ -41,7 +41,7 @@ const WateringForm = ({plantNo, closeForm, chemicalList, wateringCallBack}) => {
                 name="wateringDate"
                 className="width-full"
                 disabledDate={getDisabledDate}
-                onChange={(date, dateString) => {setWatering(() => ({...watering, wateringDate: dateString}))}}
+                onChange={(date, dateString) => setWatering(() => ({...watering, wateringDate: dateString}))}
                 locale={locale}/>
             </CCol>
             <CCol md={6} xs={12}>
@@ -49,7 +49,7 @@ const WateringForm = ({plantNo, closeForm, chemicalList, wateringCallBack}) => {
               <Select
                 className="width-full"
                 defaultValue="맹물"
-                onChange={(value) => {setWatering(() => ({...watering, chemicalNo: value}))}}
+                onChange={(value) => setWatering(() => ({...watering, chemicalId: value}))}
                 options={chemicalList}
                 name="chemicalNo"
               />

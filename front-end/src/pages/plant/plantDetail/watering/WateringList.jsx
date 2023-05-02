@@ -44,7 +44,7 @@ const WateringList = ({plant, setPlant, wateringList, setWateringList}) => {
   // editable rows
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
-  const isEditing = (record) => record.wateringNo === editingKey;
+  const isEditing = (record) => record.wateringId === editingKey;
 
   const edit = (record) => {
     form.setFieldsValue({
@@ -53,26 +53,21 @@ const WateringList = ({plant, setPlant, wateringList, setWateringList}) => {
     });
 
     setEditWatering({
-      plantNo: plant.plantNo,
-      wateringNo: record.wateringNo,
+      plantId: plant.plantId,
+      wateringId: record.wateringId,
       wateringDate: record.wateringDate,
       chemicalNo: record.chemicalNo,
     });
 
-    setEditingKey(record.wateringNo);
+    setEditingKey(record.wateringId);
     setIsWateringFormOpen(false);
   };
 
-  const cancel = () => {
-    setEditingKey('');
-  };
+  const cancel = () => setEditingKey('');
 
   const wateringCallBack = (res) => {
     setWateringList(res.wateringList);
-
-    if (res.plant) {
-      setPlant(res.plant);
-    }
+    res.plant && setPlant(res.plant);
 
     if (res.wateringMsg) {
       const msg = getWateringNotificationMsg(res.wateringMsg.afterWateringCode);
@@ -81,14 +76,14 @@ const WateringList = ({plant, setPlant, wateringList, setWateringList}) => {
   }
 
   const updateWatering = async () => {
-    const res = await updateData(`/plant/${plant.plantNo}/watering/${editWatering.wateringNo}`, editWatering);
+    const res = await updateData(`/plant/${plant.id}/watering/${editWatering.wateringId}`, editWatering);
     wateringCallBack(res);
     setEditingKey('');
   };
 
-  const deleteWatering = async (wateringNo) => {
-    await deleteData(`/plant/${plant.plantNo}/watering/${wateringNo}`);
-    setWateringList(wateringList.filter(watering => watering.wateringNo !== wateringNo))
+  const deleteWatering = async (wateringId) => {
+    await deleteData(`/plant/${plant.plantId}/watering/${wateringId}`);
+    setWateringList(wateringList.filter(watering => watering.wateringId !== wateringId))
   };
 
   const wateringTableColumnArray = getWateringTableColumnArray(isEditing, updateWatering, editingKey, cancel, edit, deleteWatering);
@@ -122,7 +117,7 @@ const WateringList = ({plant, setPlant, wateringList, setWateringList}) => {
       <CContainer>
         <div className="mt-4 mb-3">
           <HandleWateringForm
-            plantNo={plant.plantNo}
+            plantId={plant.id}
             setWateringList={setWateringList}
             chemicalList={chemicalList}
             isWateringFormOpen={isWateringFormOpen}

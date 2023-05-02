@@ -4,7 +4,7 @@ import ChangePlaceOfPlantOnPlace from './ChangePlaceOfPlantOnPlace';
 import AddPlantInPlaceButtons from './AddPlantInPlaceButtons';
 import getPlantListForPlacePlantTable from "../../../utils/function/getPlantListForPlacePlantTable";
 import deleteData from "../../../api/backend-api/common/deleteData";
-import plantTableColArrInPlace from "../../../utils/dataArray/plantTableColArrInPlace";
+import getPlantTableColArrInPlace from "../../../utils/function/getPlantTableColArrInPlace";
 
 /**
  * 장소 페이지 하단, 이 장소에 속한 식물들
@@ -30,9 +30,9 @@ const PlaceTableForPlant = ({plantList, setPlantList, placeName}) => {
   // 체크박스 눌렀는지
   const hasSelected = selectedRowKeys.length > 0;
 
-  const deletePlant = async (plantNo) => {
-    await deleteData(`/plant/${plantNo}`);
-    const deletedList = plantList.filter(plant => plant.plantNo !== plantNo);
+  const deletePlant = async (plantId) => {
+    await deleteData(`/plant/${plantId}`);
+    const deletedList = plantList.filter(plant => plant.plantId !== plantId);
     setPlantList(() => deletedList);
   }
 
@@ -41,7 +41,7 @@ const PlaceTableForPlant = ({plantList, setPlantList, placeName}) => {
       {
         hasSelected
           ? <ChangePlaceOfPlantOnPlace
-            selectedPlantNo={selectedRowKeys}
+            selectedPlantId={selectedRowKeys}
             setSelectedRowKeys={setSelectedRowKeys}
           />
           : <AddPlantInPlaceButtons
@@ -50,7 +50,7 @@ const PlaceTableForPlant = ({plantList, setPlantList, placeName}) => {
             setPlantList={setPlantList}/>
       }
       <Table
-        columns={plantTableColArrInPlace(deletePlant)}
+        columns={getPlantTableColArrInPlace(deletePlant)}
         dataSource={getPlantListForPlacePlantTable(plantList)}
         rowSelection={rowSelection} // for multi-select
       />

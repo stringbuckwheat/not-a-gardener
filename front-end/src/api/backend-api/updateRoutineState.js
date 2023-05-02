@@ -7,12 +7,13 @@ import updateData from "./common/updateData";
  * @returns {Promise<response.data>} update 후 response의 data
  */
 const updateRoutineState = async (routineId, updateState) => {
-  let data = {routineId};
+  let data = {id: routineId};
 
   if (updateState) {
     data["lastCompleteDate"] = new Date().toISOString().split("T")[0];
   }
 
+  console.log("data", data);
   return updateData(`/routine/${routineId}/complete`, data);
 }
 

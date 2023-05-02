@@ -1,6 +1,6 @@
 import GButton from "../../../components/button/defaultButton/GButton";
 import AddRoutine from "./AddRoutine";
-import RoutineCard from "../../../components/card/RoutineCard";
+import RoutineCard from "./RoutineCard";
 import {Row} from "antd";
 import React from "react";
 
@@ -41,7 +41,7 @@ const RoutineContent = ({
             toDoList.map((routine, idx) =>
               <RoutineCard
                 routine={routine}
-                key={routine.routineNo}
+                key={routine.id}
                 index={idx}
                 deleteRoutine={deleteRoutine}
                 completeRoutine={completeRoutine}/>)

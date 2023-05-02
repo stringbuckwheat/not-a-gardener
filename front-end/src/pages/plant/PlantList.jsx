@@ -20,15 +20,15 @@ const PlantList = ({plantList, setPlantList, originPlantList, addPlant}) => {
   const [isAddFormOpened, setIsAddFormOpened] = useState(false);
 
   const search = (searchWord) => {
-    const searchedList = originPlantList.filter(plant => plant.plant.plantName.includes(searchWord));
+    const searchedList = originPlantList.filter(plant => plant.plant.name.includes(searchWord));
     setPlantList(searchedList);
   }
 
   const onMountPlantList = async () => {
     const forSelect = (await getData("/place")).map((place) => (
       {
-        label: place.placeName,
-        value: place.placeNo
+        label: place.name,
+        value: place.id
       }
     ))
 
@@ -49,15 +49,11 @@ const PlantList = ({plantList, setPlantList, originPlantList, addPlant}) => {
 
   const switchAddForm = () => setIsAddFormOpened(!isAddFormOpened);
 
-  const addFormOpen = async () => {
-    switchAddForm();
-  }
-
   return isAddFormOpened ? (
     <AddPlant
-      placeList={() => placeList.map((place) => ({
-        key: place.placeNo,
-        value: place.placeName
+      placeList={placeList.map((place) => ({
+        key: place.value,
+        value: place.label
       }))}
       addPlant={addPlant}
       afterAdd={switchAddForm}
@@ -68,7 +64,7 @@ const PlantList = ({plantList, setPlantList, originPlantList, addPlant}) => {
       url="/plant"
       deleteTitle="식물"
       setSearchWord={setSearchWord}
-      addFormOpen={addFormOpen}
+      addFormOpen={switchAddForm}
       tags={<PlantListTag howManyPlants={plantList.length}/>}
       bottomData={<PlantTable
         originPlantList={plantList}

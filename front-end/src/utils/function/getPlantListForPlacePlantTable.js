@@ -1,5 +1,5 @@
 import {Space, Tooltip} from "antd";
-import {QuestionCircleOutlined, QuestionCircleTwoTone} from "@ant-design/icons";
+import {QuestionCircleTwoTone} from "@ant-design/icons";
 
 const getPlantListForPlacePlantTable = (plantList) => {
   return plantList.map(

@@ -1,9 +1,9 @@
 import {Checkbox, Popconfirm, Space, Tag} from "antd";
 import {CloseOutlined} from "@ant-design/icons";
-import deleteData from "../../api/backend-api/common/deleteData";
+import deleteData from "../../../api/backend-api/common/deleteData";
 import {useState} from "react";
-import LinkHoverTag from "../tag/basic/LinkHoverTag";
-import updateRoutineState from "../../api/backend-api/updateRoutineState";
+import LinkHoverTag from "../../../components/tag/basic/LinkHoverTag";
+import updateRoutineState from "../../../api/backend-api/updateRoutineState";
 
 /**
  * 루틴 카드
@@ -15,6 +15,7 @@ import updateRoutineState from "../../api/backend-api/updateRoutineState";
  * @constructor
  */
 const RoutineCard = ({routine, deleteRoutine, index, completeRoutine}) => {
+  console.log("routine", routine);
   const [isCompleted, setIsCompleted] = useState(routine.isCompleted == "Y");
 
   const hasToDoToday = routine.hasToDoToday == "Y";

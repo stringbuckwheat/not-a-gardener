@@ -5,15 +5,15 @@ import GButton from "../../components/button/defaultButton/GButton";
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 import postData from "../../api/backend-api/common/postData";
 
-const WateringFormInCalendar = ({plantList, chemicalList, isWateringFormOpened, setIsWateringFormOpened, onAdd}) => {
+const WateringFormInCalendar = ({plantList, chemicalList, isWateringFormOpened, setIsWateringFormOpened, onAdd, selectedDate}) => {
   const [watering, setWatering] = useState({});
 
   useEffect(() => {
     if (plantList && chemicalList) {
       setWatering({
-        chemicalNo: chemicalList.at(0)?.value,
-        plantNo: plantList.at(0)?.value,
-        wateringDate: new Date().toISOString().split("T").at(0)
+        chemicalId: chemicalList.at(0)?.value,
+        plantId: plantList.at(0)?.value,
+        wateringDate: selectedDate.toISOString().split("T").at(0)
       })
     }
   }, [plantList, chemicalList]);
@@ -23,9 +23,15 @@ const WateringFormInCalendar = ({plantList, chemicalList, isWateringFormOpened, 
   }
 
   const submit = async () => {
+    console.log("watering", watering);
     const res = await postData("/watering", watering);
     onAdd(res);
     setIsWateringFormOpened(false);
+  }
+
+  const onChangeChemical = (value) => {
+    setWatering({...watering, chemicalId: value})
+    console.log("watering", watering);
   }
 
   return (
@@ -38,9 +44,7 @@ const WateringFormInCalendar = ({plantList, chemicalList, isWateringFormOpened, 
             <Select
               className="width-full"
               defaultValue={plantList[0].value}
-              onChange={(value) => {
-                setWatering({...watering, plantNo: value})
-              }}
+              onChange={(value) => setWatering({...watering, plantId: value})}
               options={plantList}
               name="chemicalNo"
             />
@@ -50,9 +54,7 @@ const WateringFormInCalendar = ({plantList, chemicalList, isWateringFormOpened, 
             <Select
               className="width-full"
               defaultValue="맹물"
-              onChange={(value) => {
-                setWatering({...watering, chemicalNo: value})
-              }}
+              onChange={onChangeChemical}
               options={chemicalList}
               name="chemicalNo"
             />
@@ -62,7 +64,7 @@ const WateringFormInCalendar = ({plantList, chemicalList, isWateringFormOpened, 
           <Space>
             <GButton color="dark" size="small" onClick={() => setIsWateringFormOpened(false)}>취소</GButton>
             <ValidationSubmitButton
-              isValid={watering.plantNo != undefined && watering.chemicalNo != undefined}
+              isValid={true}
               onClickValid={submit}
               onClickInvalidMsg={""}
               title={"제출"}

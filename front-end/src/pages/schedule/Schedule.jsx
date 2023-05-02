@@ -15,7 +15,7 @@ const Schedule = () => {
     // 루틴
     const routineList = await getData("/routine");
 
-    if(routineList.todoList){
+    if (routineList.todoList) {
       routineList.todoList.sort((a, b) => {
         if (a.isCompleted > b.isCompleted) return 1;
         if (a.isCompleted < b.isCompleted) return -1;
@@ -32,8 +32,8 @@ const Schedule = () => {
     const res = await getData("/plant");
     const plantList = res.map((plant) => (
       {
-        label: `${plant.plantName} (${plant.placeName})`,
-        value: plant.plantNo,
+        label: `${plant.name} (${plant.name})`,
+        value: plant.id,
       }
     ))
 
@@ -58,19 +58,16 @@ const Schedule = () => {
     })
   }
 
-  const deleteGoal = (goalNo) => {
-    setGoals(() => goals.filter((goal) => goal.goalNo !== goalNo));
-  }
+  const deleteGoal = (goalId) => setGoals(() => goals.filter((goal) => goal.id !== goalId));
 
-  if(loading){
-    return <Loading />
-  }
-
-  return (
+  return loading ? (
+    <Loading/>
+  ) : (
     <CContainer>
       <CCardGroup>
         <Routine routines={routines} plantList={plantList}/>
-        <Goal goals={goals} plantList={plantList} addGoal={addGoal} deleteGoal={deleteGoal} completeGoal={completeGoal}/>
+        <Goal goals={goals} plantList={plantList} addGoal={addGoal} deleteGoal={deleteGoal}
+              completeGoal={completeGoal}/>
       </CCardGroup>
     </CContainer>
   )

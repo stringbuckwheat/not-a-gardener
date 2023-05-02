@@ -67,8 +67,8 @@ const PlantTag = ({plant, wateringListSize, latestWateringDate}) => {
   return (
     <Space size={[0, 8]} wrap>
       {
-        plant.plantSpecies
-          ? <Tag color="green">{plant.plantSpecies}</Tag> : <></>
+        plant.species
+          ? <Tag color="green">{plant.species}</Tag> : <></>
       }
 
       <Tag color="gold">{plant.medium}</Tag>

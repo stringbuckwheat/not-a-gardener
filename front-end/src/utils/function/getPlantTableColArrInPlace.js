@@ -2,7 +2,7 @@ import {Link} from "react-router-dom";
 import {Popconfirm, Space, Tag} from "antd";
 import {DeleteOutlined} from "@ant-design/icons";
 
-const plantTableColArrInPlace = (deletePlant) => {
+const getPlantTableColArrInPlace = (deletePlant) => {
 
   return (
     [
@@ -62,4 +62,4 @@ const plantTableColArrInPlace = (deletePlant) => {
   )
 }
 
-export default plantTableColArrInPlace;
+export default getPlantTableColArrInPlace;

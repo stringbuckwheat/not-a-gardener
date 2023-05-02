@@ -20,7 +20,7 @@ const ModifyPlace = ({changeModifyState, place}) => {
     setModifyPlace(setPlace => ({...modifyPlace, [name]: value}));
   }
 
-  const isValid = modifyPlace.placeName !== "";
+  const isValid = modifyPlace.name !== "";
 
   const submit = async () => {
     console.log("modifyPlace", modifyPlace);

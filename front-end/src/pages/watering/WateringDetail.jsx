@@ -6,7 +6,8 @@ import getData from "../../api/backend-api/common/getData";
 import WateringFormInCalendar from "./WateringFormInCalendar";
 import WateringList from "./WateringList";
 
-const WateringDetail = ({selectedDate, wateringDetail, onAdd, isWateringFormOpened, setIsWateringFormOpened}) => {
+const WateringDetail = ({selectedDate, wateringDetail, onAdd, isWateringFormOpened, setIsWateringFormOpened, onDelete}) => {
+  // console.log("selectedDate", selectedDate.toISOString());
   const [chemicalList, setChemicalList] = useState([]);
   const [plantList, setPlantList] = useState([]);
 
@@ -17,13 +18,13 @@ const WateringDetail = ({selectedDate, wateringDetail, onAdd, isWateringFormOpen
 
     // 이미 물 준 식물 제외하기
     if (wateringDetail) {
-      const validations = wateringDetail.map((watering) => watering.plantNo);
+      const validations = wateringDetail.map((watering) => watering.plantId);
       for (let i = 0; i < validations.length; i++) {
-        plantListForSelect = plantListForSelect.filter((plant) => (plant.plantNo !== validations[i]))
+        plantListForSelect = plantListForSelect.filter((plant) => (plant.id !== validations[i]))
       }
     }
 
-    plantListForSelect = plantListForSelect.map((plant) => ({label: plant.plantName, value: plant.plantNo}));
+    plantListForSelect = plantListForSelect.map((plant) => ({label: plant.name, value: plant.id}));
     setPlantList(plantListForSelect);
 
     // chemicalList
@@ -42,11 +43,12 @@ const WateringDetail = ({selectedDate, wateringDetail, onAdd, isWateringFormOpen
         }
       </div>
       <div className="mb-2">
-        <WateringList wateringDetail={wateringDetail}/>
+        <WateringList wateringDetail={wateringDetail} onDelete={onDelete}/>
       </div>
       {/* 물주기 폼 */}
       <div className="mb-2">
         <WateringFormInCalendar
+          selectedDate={selectedDate}
           onAdd={onAdd}
           chemicalList={chemicalList}
           plantList={plantList}

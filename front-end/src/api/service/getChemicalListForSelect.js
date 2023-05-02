@@ -7,16 +7,17 @@ import authAxios from "../interceptors";
  */
 const getChemicalListForSelect = async (setChemicalList) => {
   const data = (await authAxios.get("/chemical")).data;
+  console.log("data", data);
 
     // 맨 앞에 맹물 추가
     data.unshift({
-        chemicalId: 0,
+        id: 0,
         name: '맹물'
     })
 
     // select 요구 사항에 맞게 배열 가공
     setChemicalList(data.map((chemical) => ({
-        value: chemical.chemicalId,
+        value: chemical.id,
         label: chemical.name
     })))
 }

@@ -39,7 +39,7 @@ const ChemicalCard = ({chemical}) => {
   return (
     <CCol md={3} xs={12}>
       <Link
-        to={`/chemical/${chemical.chemicalId}`}
+        to={`/chemical/${chemical.id}`}
         state={chemical}
         className="no-text-decoration">
         <CWidgetStatsF

@@ -11,23 +11,23 @@ const WateredInGardenModal = ({visible, closeDeleteModal, clickedPlant, chemical
         <CRow className="d-flex justify-content-center">
           <CCol md={10} className="">
             <h5 className="text-center text-dark">
-              <Link to={`/plant/${clickedPlant.plantNo}`}
-                    className="no-text-decoration text-teal">{clickedPlant.plantName}</Link>
+              <Link to={`/plant/${clickedPlant.id}`}
+                    className="no-text-decoration text-teal">{clickedPlant.name}</Link>
               의 물주기를 추가해주세요
             </h5>
             <div className="text-center mb-4">
               {
-                clickedPlant.plantSpecies ? <Tag>{clickedPlant.plantSpecies}</Tag> : <></>
+                clickedPlant.species ? <Tag>{clickedPlant.species}</Tag> : <></>
               }
-              <Tag>{clickedPlant.placeName}</Tag>
+              <Tag>{clickedPlant.name}</Tag>
               <Tag>{clickedPlant.createDate}부터 함께</Tag>
             </div>
             <div className="text-center mb-4">
               <GardenCardAction
                 y={20}
                 hovered={true}
-                plantNo={clickedPlant.plantNo}
-                plantName={clickedPlant.plantName}
+                plantId={clickedPlant.id}
+                plantName={clickedPlant.name}
                 chemicalList={chemicalList}
                 openNotification={openNotification}
                 updateGardenAfterWatering={afterFirstWatering}/>

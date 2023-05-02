@@ -3,15 +3,15 @@ import ClickableTag from "../../components/tag/basic/ClickableTag";
 import {CCol} from "@coreui/react";
 import React, {useState} from "react";
 import RoutineStateUpdateModal from "../../components/modal/RoutineStateUpdateModal";
-import LinkHoverTag from "../../components/tag/basic/LinkHoverTag";
+import ContentChangeWhenHoveredTag from "../../components/tag/basic/ContentChangeWhenHoveredTag";
 
 const RoutineList = ({routineList, afterRoutine}) => {
   const [isTitleHovered, setIsTitleHovered] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [routineForModal, setRoutineForModal] = useState({});
 
-  const onClickTag = (routineNo, isCompleted, routineContent, index) => {
-    setRoutineForModal({routineNo, isCompleted, routineContent, index});
+  const onClickTag = (routineId, isCompleted, routineContent, index) => {
+    setRoutineForModal({routineId, isCompleted, routineContent, index});
     setIsModalVisible(true);
   }
 
@@ -34,16 +34,16 @@ const RoutineList = ({routineList, afterRoutine}) => {
       <div>
         {
           routineList.length == 0
-            ? <LinkHoverTag content={"등록된 루틴이 없어요"} to={"/routine"} color={"gold"}/>
+            ? <ContentChangeWhenHoveredTag to={"/schedule"} color={"gold"} hoveredContent={" 첫 루틴을 등록할래요 "} defaultContent={"등록된 루틴이 없어요"} />
             :
             routineList.map((routine, index) => {
               const isCompleted = routine.isCompleted === "Y";
 
               return <ClickableTag
-                key={routine.routineNo}
+                key={routine.id}
                 color={isCompleted ? "gold" : "geekblue"}
-                onClick={() => onClickTag(routine.routineNo, isCompleted, routine.routineContent, index)}
-                content={routine.routineContent}/>
+                onClick={() => onClickTag(routine.id, isCompleted, routine.content, index)}
+                content={routine.content}/>
             })
         }
       </div>

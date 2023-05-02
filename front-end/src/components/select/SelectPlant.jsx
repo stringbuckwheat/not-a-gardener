@@ -4,7 +4,7 @@ const SelectPlant = ({onChange, onSearch, plantList, className, size}) => {
 
   return (
     <Select
-      name="plantNo"
+      name="plantId"
       showSearch
       placeholder="식물 이름을 입력해주세요"
       optionFilterProp="children"

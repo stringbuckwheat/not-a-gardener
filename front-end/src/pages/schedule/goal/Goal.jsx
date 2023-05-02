@@ -6,9 +6,7 @@ import GoalContent from "./GoalContent";
 
 const Goal = ({goals, plantList, addGoal, completeGoal, deleteGoal}) => {
   const [isAddFormOpened, setIsAddFormOpen] = useState(false);
-  const changeFormOpen = () => {
-    setIsAddFormOpen(!isAddFormOpened);
-  }
+  const changeFormOpen = () => setIsAddFormOpen(!isAddFormOpened);
 
   return (
     <CCard className="p-4">
@@ -36,7 +34,7 @@ const Goal = ({goals, plantList, addGoal, completeGoal, deleteGoal}) => {
               goalList={goals}
               completeGoal={completeGoal}
               deleteGoal={deleteGoal}
-              />
+            />
         }
       </CCardBody>
     </CCard>

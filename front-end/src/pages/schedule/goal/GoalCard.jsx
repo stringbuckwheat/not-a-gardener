@@ -1,9 +1,9 @@
 import {Checkbox, Popconfirm, Space, Tag} from "antd";
 import {CloseOutlined} from "@ant-design/icons";
-import GoalCardTag from "../tag/GoalCardTag";
-import updateData from "../../api/backend-api/common/updateData";
+import GoalCardTag from "../../../components/tag/GoalCardTag";
+import updateData from "../../../api/backend-api/common/updateData";
 import {useState} from "react";
-import deleteData from "../../api/backend-api/common/deleteData";
+import deleteData from "../../../api/backend-api/common/deleteData";
 
 /**
  * 목표 카드
@@ -15,10 +15,12 @@ import deleteData from "../../api/backend-api/common/deleteData";
  * @constructor
  */
 const GoalCard = ({goal, index, completeGoal, deleteGoal}) => {
+  console.log("goal", goal);
   const [isCompleted, setIsCompleted] = useState(goal.complete === "Y");
 
   const handleCheck = async (e) => {
     const res = await updateData(`/goal/${goal.id}/complete`, null);
+    console.log("res", res);
     completeGoal(index, res);
     setIsCompleted(e.target.checked);
   }
@@ -52,7 +54,7 @@ const GoalCard = ({goal, index, completeGoal, deleteGoal}) => {
           <CloseOutlined className="m-1 float-end text-dark" style={{fontSize: "0.9em"}}/>
         </Popconfirm>
       </div>
-      <GoalCardTag isCompleted={isCompleted} plantName={goal.plantName} plantNo={goal.plantNo}/>
+      <GoalCardTag isCompleted={isCompleted} plantName={goal.plantName} plantId={goal.plantId}/>
     </div>
   )
 }

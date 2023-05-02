@@ -31,7 +31,7 @@ const GardenerDetail = ({gardener, setGardener}) => {
   }
 
   const onSubmit = async () => {
-    const updatedGardener = await updateData(`/gardener/${gardener.gardenerNo}`, modifyGardener);
+    const updatedGardener = await updateData(`/gardener/${gardener.id}`, modifyGardener);
     setGardener(updatedGardener);
     setIsDisabled(true);
   }
@@ -123,7 +123,7 @@ const GardenerDetail = ({gardener, setGardener}) => {
               <DeleteModal
                 title="계정"
                 url="/gardener"
-                path={gardener.gardenerNo}
+                path={gardener.id}
                 button={deleteButton}
                 deleteCallBackFunction={deleteCallback}
               />

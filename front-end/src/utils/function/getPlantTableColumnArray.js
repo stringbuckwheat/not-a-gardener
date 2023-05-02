@@ -9,8 +9,8 @@ const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey
     [
       {
         title: '상태',
-        dataIndex: 'plantName',
-        key: 'plantName',
+        dataIndex: 'wateringCode',
+        key: 'wateringCode',
         render: (_, record) => {
           return (
             <WateringCodeIcon wateringCode={record.wateringCode} height={20} wateringMsg={record.tags.wateringMsg}/>
@@ -21,26 +21,26 @@ const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey
       },
       {
         title: '이름(종)',
-        dataIndex: 'plantName',
-        key: 'plantName',
+        dataIndex: 'name',
+        key: 'name',
         editable: true,
         render: (_, record) => (
           <>
             <Link
-              to={`/plant/${record.plantNo}`}
+              to={`/plant/${record.id}`}
               className="no-text-decoration">
-              {record.plantName}
+              {record.name}
             </Link>
             {
-              record.plantSpecies ? <p className="small">({record.plantSpecies})</p> : <></>
+              record.species ? <p className="small">({record.species})</p> : <></>
             }
           </>
         )
         ,
         sorter: (a, b) => {
-          if (a.plantName > b.plantName) return 1;
-          if (a.plantName === b.plantName) return 0;
-          if (a.plantName < b.plantName) return -1;
+          if (a.name > b.name) return 1;
+          if (a.name === b.name) return 0;
+          if (a.name < b.name) return -1;
         },
         sortDirection: ['descend'],
       },
@@ -61,13 +61,13 @@ const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey
       },
       {
         title: '물주기',
-        dataIndex: 'averageWateringPeriod',
-        key: 'averageWateringPeriod',
+        dataIndex: 'recentWateringPeriod',
+        key: 'recentWateringPeriod',
         responsive: ['lg'],
         sorter: (a, b) => {
-          if (a.averageWateringPeriod > b.averageWateringPeriod) return 1;
-          if (a.averageWateringPeriod === b.averageWateringPeriod) return 0;
-          if (a.averageWateringPeriod < b.averageWateringPeriod) return -1;
+          if (a.recentWateringPeriod > b.recentWateringPeriod) return 1;
+          if (a.recentWateringPeriod === b.recentWateringPeriod) return 0;
+          if (a.recentWateringPeriod < b.recentWateringPeriod) return -1;
         },
         sortDirection: ['descend']
       },

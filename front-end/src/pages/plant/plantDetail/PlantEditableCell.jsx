@@ -37,7 +37,7 @@ const PlantEditableCell = ({
   const form = useContext(editableContext);
 
   useEffect(() => {
-    record && setEditing(record.plantNo === editingKey);
+    record && setEditing(record.id === editingKey);
   }, [editingKey]);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const PlantEditableCell = ({
     </Form.Item>
     :
     <Form.Item
-      name={"placeNo"}
+      name={"placeId"}
       style={{margin: 0}}
     >
       <Select

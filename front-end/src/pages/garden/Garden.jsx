@@ -69,9 +69,7 @@ const Garden = () => {
   if (isLoading) {
     return <Loading/>
   } else if (nothingToDo) {
-    return <NoItemForPlant
-      afterAdd={onMountGarden}
-    />
+    return <NoItemForPlant afterAdd={onMountGarden} />
   } else {
     return (
       <GardenMain

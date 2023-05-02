@@ -1,4 +1,4 @@
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react"
 import ChemicalTag from "src/components/tag/ChemicalTag";
 import DetailLayout from "src/components/data/layout/DetailLayout";
@@ -10,74 +10,76 @@ import getChemicalFormArray from "../../utils/function/getChemicalFormArray";
 import wateringTableColumnArray from "../../utils/dataArray/wateringTableColumnInChemicalArray";
 import RemoveModal from "../../components/modal/RemoveModal";
 import deleteData from "../../api/backend-api/common/deleteData";
+import getData from "../../api/backend-api/common/getData";
 
 const ChemicalDetail = () => {
-  const state = useLocation().state;
+  const chemicalId = useParams().chemicalId;
+  console.log("chemicalId", chemicalId);
 
+  const [chemical, setChemical] = useState({});
   const [wateringList, setWateringList] = useState([]);
-  const [chemical, setChemical] = useState(state);
+  const [modifyChemical, setModifyChemical] = useState(chemical);
   const [onModify, setOnModify] = useState(false);
 
+  const onMountChemicalDetail = async () => {
+    const res = await getData(`/chemical/${chemicalId}`);
+    console.log("res", res);
+    setChemical(res.chemical);
+    setModifyChemical(res.chemical);
+    setWateringList(res.waterings);
+  }
+
   useEffect(() => {
-    onMount(`/chemical/${state.chemicalId}/watering`, setWateringList);
+    onMountChemicalDetail();
   }, []);
 
   const onChange = (e) => {
     const {name, value} = e.target;
-    setChemical(setChemical => ({...chemical, [name]: value}));
+    setModifyChemical(setChemical => ({...modifyChemical, [name]: value}));
   }
 
-  const validation = chemical.chemicalName != ''
-    && Number.isInteger(chemical.chemicalPeriod * 1)
-    && (chemical.chemicalPeriod * 1) > 0;
-
-  const onClickModifyBtn = () => {
-    setOnModify(!onModify);
-  }
-
-  const changeModifyState = () => {
-    setOnModify(false);
-  }
+  const validation = modifyChemical.name != ''
+    && Number.isInteger(modifyChemical.period * 1)
+    && (modifyChemical.period * 1) > 0;
 
   const navigate = useNavigate();
 
-  const remove = async () => {
-    await deleteData(`/chemical/${chemical.chemicalId}`);
+  const deactivate = async () => {
+    await deleteData(`/chemical/${chemical.id}/deactivate`);
     navigate("/chemical", {replace: true});
   }
 
-  return (
-    !onModify
-      ?
+  return !onModify
+    ? (
       <DetailLayout
-        title={chemical.chemicalName}
+        title={chemical.name}
         url="/chemical"
-        path={state.chemicalId}
+        path={chemicalId}
         deleteTitle="비료/살균/살충제"
         tags={<ChemicalTag chemical={chemical} wateringListSize={wateringList.length}/>}
-        onClickModifyBtn={onClickModifyBtn}
+        onClickModifyBtn={() => setOnModify(!onModify)}
         deleteModal={
           <RemoveModal
-            remove={remove}
+            remove={deactivate}
             modalTitle={"이 비료/살균/살충제를 삭제하실 건가요?"}
             deleteButtonTitle={"삭제하기"}
-            modalContent={"이 비료/살균/살충제를 준 물주기 기록이 모두 삭제됩니다"} />}
+            modalContent={"물주기 기록은 보존됩니다."}/>}
         bottomData={<Table
           columns={wateringTableColumnArray}
           dataSource={wateringList}/>}
-      />
-      :
-      <ItemForm
+      />)
+    :
+    (<ItemForm
         title="비료/살균/살충제 수정"
-        inputObject={chemical}
-        itemObjectArray={getChemicalFormArray(state)}
+        inputObject={modifyChemical}
+        itemObjectArray={getChemicalFormArray(chemical)}
         onChange={onChange}
         submitBtn={<ModifyFormButtons
-          data={chemical}
-          url={`/chemical/${state.chemicalId}`}
-          changeModifyState={changeModifyState}
+          data={modifyChemical}
+          url={`/chemical/${chemicalId}`}
+          changeModifyState={() => setOnModify(false)}
           validation={validation}/>}/>
-  )
+    )
 }
 
 export default ChemicalDetail;

@@ -19,6 +19,8 @@ const Watering = () => {
 
     setWateringList(res);
     setLoading(false);
+
+    console.log("wateringList", res);
   }
 
   useEffect(() => {
@@ -42,9 +44,11 @@ const Watering = () => {
 
   const dateCellRender = (value) => {
     const listData = getListData(value);
-    return (<>
-      {listData.map((item) => (<Badge key={item.content} status={item.type} text={item.content}/>))}
-    </>);
+    return (
+      <>
+        {listData.map((item) => (<Badge key={item.content} status={item.type} text={item.content}/>))}
+      </>
+    );
   };
 
   const today = dayjs();
@@ -66,27 +70,47 @@ const Watering = () => {
 
   const onAdd = (res) => {
     // 키가 wateringDate인 value를 가져와서 그 value에 res 추가
-    const prevWatering = wateringList[res.wateringDate]; // array
+    let prevWatering = wateringList[res.wateringDate]; // array or undefined
+
+    if (!prevWatering) {
+      wateringList[res.wateringDate] = [{...res}];
+
+      setWateringList(() => ({...wateringList}));
+      setIsWateringFormOpened(false);
+      return;
+    }
+
     prevWatering.push(res);
     setWateringList(() => wateringList);
     setIsWateringFormOpened(false);
   }
 
-  useEffect(() => {
-    if(!loading){
-      setWateringDetail(() => wateringList[today.format("YYYY-MM-DD")]);
-    }
-  }, [loading])
-
-  if (loading) {
-    return <Loading/>
+  const onDelete = (watering) => {
+    const afterDelete = wateringList[watering.wateringDate].filter(w => w.id !== watering.wateringId);
+    console.log("afterDelete", afterDelete);
+    wateringList[watering.wateringDate] = afterDelete;
+    console.log("wateringList", wateringList);
+    setWateringList(() => ({...wateringList}));
+    console.log("wateringDetail", wateringDetail);
+    setWateringDetail(() => wateringDetail.filter(w => w.id !== watering.wateringId));
+    console.log("wateringDetail handle 이후", wateringDetail);
   }
 
-  return (
+  useEffect(() => {
+    !loading && setWateringDetail(() => wateringList[today.format("YYYY-MM-DD")]);
+    // if (!loading) {
+    //   setWateringDetail(() => wateringList[today.format("YYYY-MM-DD")]);
+    // }
+  }, [loading])
+
+  return loading ? (
+    <Loading/>
+  ) : (
     <ConfigProvider theme={{token: {colorPrimary: '#6d9773'}}}>
       <CContainer className="bg-white">
         <h5 className="mt-2 mb-1 pt-3 text-garden">물주기 기록</h5>
         <WateringDetail
+          onDelete={onDelete}
           isWateringFormOpened={isWateringFormOpened}
           setIsWateringFormOpened={setIsWateringFormOpened}
           onAdd={onAdd}

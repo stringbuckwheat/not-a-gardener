@@ -1,6 +1,6 @@
 import {CRow} from "@coreui/react";
 import AddItemCard from "src/components/card/AddItemCard";
-import ChemicalCard from "src/components/card/ChemicalCard";
+import ChemicalCard from "src/pages/chemical/ChemicalCard";
 import {useState} from "react";
 import AddChemical from "./AddChemical";
 
@@ -14,9 +14,9 @@ const ChemicalList = ({chemicalList, addChemical}) => {
   ) : (
     <>
       <CRow>
-        <AddItemCard onClick={switchAddForm} addUrl="/chemical/add" addMsg="비료/살충제 추가"/>
+        <AddItemCard onClick={switchAddForm} addMsg="비료/살충제 추가"/>
         {chemicalList.map((chemical) => (
-          <ChemicalCard chemical={chemical} key={chemical.chemicalId}/>
+          <ChemicalCard chemical={chemical} key={chemical.id}/>
         ))}
       </CRow>
     </>

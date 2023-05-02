@@ -31,7 +31,7 @@ const WateringListAction = ({record, editable, updateWatering, editingKey, cance
         title="이 기록을 삭제하시겠습니까?"
         description="삭제한 물 주기 정보는 되돌릴 수 없어요"
         onConfirm={() => {
-          deleteWatering(record.wateringNo)
+          deleteWatering(record.wateringId)
         }}
         okText="네"
         cancelText="아니요"

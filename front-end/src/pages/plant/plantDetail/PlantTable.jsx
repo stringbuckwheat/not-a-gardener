@@ -30,9 +30,9 @@ const PlantTable = ({originPlantList, setPlantList, placeList}) => {
   const [form] = Form.useForm();
   const plantList = getPlantListForPlantTable(originPlantList);
 
-  const deletePlant = async (plantNo) => {
-    await deleteData(`/plant/${plantNo}`);
-    const afterDelete = originPlantList.filter(plant => plant.plant.plantNo !== plantNo);
+  const deletePlant = async (plantId) => {
+    await deleteData(`/plant/${plantId}`);
+    const afterDelete = originPlantList.filter(plant => plant.plant.id !== plantId);
     setPlantList(afterDelete);
   };
 
@@ -45,33 +45,33 @@ const PlantTable = ({originPlantList, setPlantList, placeList}) => {
   const [editingKey, setEditingKey] = useState(0);
   const [modifyPlant, setModifyPlant] = useState({});
 
-  const isEditing = (record) => record.plantNo === editingKey;
+  const isEditing = (record) => record.id === editingKey;
 
   const edit = async (record) => {
+    console.log("record", record);
     form.setFieldsValue({
       ...record,
     });
 
     setModifyPlant({
       recentWateringPeriod: record.recentWateringPeriod,
-      plantSpecies: record.plantSpecies,
+      species: record.species,
       medium: record.tags.medium
     });
 
-    setEditingKey(record.plantNo);
+    setEditingKey(record.id);
   };
 
-  const cancel = () => {
-    setEditingKey(0);
-  };
+  const cancel = () => setEditingKey(0);
 
   const updatePlant = async () => {
     const values = await form.validateFields();
+    console.log("data", {...values, ...modifyPlant, id: editingKey});
 
-    const res = await updateData(`/plant/${editingKey}`, {...values, ...modifyPlant, plantNo: editingKey});
+    const res = await updateData(`/plant/${editingKey}`, {...values, ...modifyPlant, id: editingKey});
 
     const updatedPlantList = originPlantList.map((plant) => {
-      return plant.plant.plantNo === editingKey ? {...res} : plant;
+      return plant.plant.id === editingKey ? {...res} : plant;
     })
 
     setPlantList(updatedPlantList);
