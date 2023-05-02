@@ -4,6 +4,8 @@ import com.buckwheat.garden.data.entity.Chemical;
 import com.buckwheat.garden.data.entity.Gardener;
 import lombok.*;
 
+import java.util.List;
+
 public class ChemicalDto {
     @Getter
     @AllArgsConstructor
@@ -26,6 +28,14 @@ public class ChemicalDto {
     }
 
     @Getter
+    @ToString
+    @AllArgsConstructor
+    public static class Detail {
+        private Response chemical;
+        private List<WateringDto.ResponseInChemical> waterings;
+    }
+
+    @Getter
     @NoArgsConstructor
     @ToString
     public static class Request {
@@ -33,21 +43,7 @@ public class ChemicalDto {
         private String name;
         private String type;
         private int period;
-
-        /**
-         * chemical update 시에 엔티티 생성(chemicalNo를 포함)
-         * @param gardener
-         * @return chemicalNo를 포함하는 chemical entity
-         */
-        public Chemical toEntityWithGardenerForUpdate(Gardener gardener){
-            return Chemical.builder()
-                    .chemicalId(id)
-                    .name(name)
-                    .period(period)
-                    .type(type)
-                    .gardener(gardener)
-                    .build();
-        }
+        private String active;
 
         /**
          * chemical insert 시의 엔티티 생성(chemicalNo 포함 X)
@@ -60,6 +56,7 @@ public class ChemicalDto {
                     .period(period)
                     .type(type)
                     .gardener(gardener)
+                    .active(active)
                     .build();
         }
     }

@@ -80,4 +80,8 @@ public class WateringServiceImpl implements WateringService {
 
         return WateringDto.ByDate.from(watering, newPlant, watering.getChemical());
     }
+
+    public void delete(long wateringId){
+        wateringDao.deleteById(wateringId);
+    }
 }

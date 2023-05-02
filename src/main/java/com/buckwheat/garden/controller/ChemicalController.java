@@ -2,7 +2,6 @@ package com.buckwheat.garden.controller;
 
 import com.buckwheat.garden.config.oauth2.UserPrincipal;
 import com.buckwheat.garden.data.dto.ChemicalDto;
-import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.service.ChemicalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,18 +23,18 @@ public class ChemicalController {
      * @return 모든 비료 리스트 반환
      */
     @GetMapping("")
-    public List<ChemicalDto.Response> getChemicalsByMemberId(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return chemicalService.getChemicalsByGardenerId(userPrincipal.getGardener().getGardenerId());
+    public List<ChemicalDto.Response> getActivatedChemicalsByGardenerId(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        return chemicalService.getActivatedChemicalsByGardenerId(userPrincipal.getGardener().getGardenerId());
     }
 
     /**
-     * 해당 약품의 사용 내역
+     * 해당 약품의 디테일 정보
      * @param chemicalId 약품 번호
      * @return 해당 약품의 주기 리스트(WateringDto)
      */
-    @GetMapping("/{chemicalId}/watering")
-    public List<WateringDto.ResponseInChemical> getWateringsByChemicalId(@PathVariable long chemicalId){
-        return chemicalService.getWateringsByChemicalId(chemicalId);
+    @GetMapping("/{chemicalId}")
+    public ChemicalDto.Detail getByChemicalId(@PathVariable long chemicalId){
+        return chemicalService.getChemicalByChemicalId(chemicalId);
     }
 
     /**
@@ -61,11 +60,12 @@ public class ChemicalController {
     }
 
     /**
-     * 약품 삭제
+     * 약품 데이터 비활성화
+     * 물주기 기록을 유지하기 위해 삭제X
      * @param chemicalId
      */
-    @DeleteMapping("/{chemicalId}")
-    public void delete(@PathVariable long chemicalId){
-        chemicalService.delete(chemicalId);
+    @DeleteMapping("/{chemicalId}/deactivate")
+    public void deactivateChemical(@PathVariable long chemicalId){
+        chemicalService.deactivateChemical(chemicalId);
     }
 }

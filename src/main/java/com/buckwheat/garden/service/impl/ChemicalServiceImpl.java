@@ -5,7 +5,6 @@ import com.buckwheat.garden.dao.GardenerDao;
 import com.buckwheat.garden.data.dto.ChemicalDto;
 import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.data.entity.Chemical;
-import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Watering;
 import com.buckwheat.garden.service.ChemicalService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
@@ -30,53 +28,48 @@ public class ChemicalServiceImpl implements ChemicalService {
      * @return dto로 변환한 chemical list
      */
     @Override
-    public List<ChemicalDto.Response> getChemicalsByGardenerId(Long gardenerId) {
+    public List<ChemicalDto.Response> getActivatedChemicalsByGardenerId(Long gardenerId) {
         List<ChemicalDto.Response> chemicalList = new ArrayList<>();
 
         // entity -> dto
-        for (Chemical chemical : chemicalDao.getChemicalsByGardenerId(gardenerId)) {
-            chemicalList.add(
-                    ChemicalDto.Response.from(chemical)
-            );
+        for (Chemical chemical : chemicalDao.getActivatedChemicalsByGardenerId(gardenerId)) {
+            chemicalList.add(ChemicalDto.Response.from(chemical));
         }
 
         return chemicalList;
     }
 
     /**
-     * 해당 chemical의 사용 내역
+     * 해당 chemical의 상세 정보
      *
      * @param chemicalId PK
-     * @return 해당 chemical의 사용내역 리스트
+     * @return 해당 chemical의 상세 정보 및 사용내역 리스트
      */
     @Override
-    public List<WateringDto.ResponseInChemical> getWateringsByChemicalId(Long chemicalId) {
+    public ChemicalDto.Detail getChemicalByChemicalId(Long chemicalId) {
+        Chemical chemical = chemicalDao.getChemicalByChemicalId(chemicalId);
+
         List<WateringDto.ResponseInChemical> waterings = new ArrayList<>();
 
-        for (Watering watering : chemicalDao.getWateringsByChemicalId(chemicalId)) {
+        for (Watering watering : chemical.getWaterings()) {
             waterings.add(WateringDto.ResponseInChemical.from(watering));
         }
 
-        return waterings;
+        return new ChemicalDto.Detail(ChemicalDto.Response.from(chemical), waterings);
     }
 
     @Override
     public ChemicalDto.Response add(Long gardenerId, ChemicalDto.Request chemicalRequest) {
-        Gardener gardener = gardenerDao.getGardenerByGardenerId(gardenerId).orElseThrow(NoSuchElementException::new);
-        Chemical chemical = chemicalDao.save(chemicalRequest.toEntityWithGardener(gardener));
-        return ChemicalDto.Response.from(chemical);
+        return ChemicalDto.Response.from(chemicalDao.save(gardenerId, chemicalRequest));
     }
 
     @Override
     public ChemicalDto.Response modify(Long gardenerId, ChemicalDto.Request chemicalRequest) {
-        Gardener gardener = gardenerDao.getGardenerByGardenerId(gardenerId).orElseThrow(NoSuchElementException::new);
-        Chemical chemical = chemicalRequest.toEntityWithGardenerForUpdate(gardener);
-        chemicalDao.save(chemical);
-        return ChemicalDto.Response.from(chemical);
+        return ChemicalDto.Response.from(chemicalDao.update(gardenerId, chemicalRequest));
     }
 
     @Override
-    public void delete(Long id) {
-        chemicalDao.deleteByChemicalId(id);
+    public void deactivateChemical(Long id) {
+        chemicalDao.deactivateChemicalByChemicalId(id);
     }
 }

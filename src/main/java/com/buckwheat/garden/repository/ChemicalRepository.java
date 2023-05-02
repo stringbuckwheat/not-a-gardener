@@ -10,9 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface ChemicalRepository extends JpaRepository<Chemical, Long> {
-    List<Chemical> findByGardener_GardenerId(Long gardenerId);
-
-    List<Chemical> findByGardener_GardenerIdOrderByPeriodDesc(Long gardenerId);
+    List<Chemical> findByActiveAndGardener_GardenerId(String active, Long gardenerId);
 
     @EntityGraph(attributePaths = {"waterings", "waterings.plant", "waterings.plant.place"}, type = EntityGraph.EntityGraphType.FETCH)
     Optional<Chemical> findByChemicalId(Long chemicalId);

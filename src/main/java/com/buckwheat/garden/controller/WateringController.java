@@ -28,4 +28,10 @@ public class WateringController {
     public WateringDto.ByDate addWatering(@RequestBody WateringDto.Request wateringRequest){
         return wateringService.addWatering(wateringRequest);
     }
+
+    @DeleteMapping("/{wateringId}")
+    public void delete(@PathVariable long wateringId){
+        wateringService.delete(wateringId);
+    }
+
 }

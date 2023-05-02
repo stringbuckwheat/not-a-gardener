@@ -36,6 +36,9 @@ public class Chemical {
     @NotNull
     private int period;
 
+    @NotNull
+    private String active;
+
     // 외래키가 있는 곳이 연관관계의 주인
     // 양방향 매핑 시 반대편에 mappedBy
     // 그러나 Gardener는 Chemical를 몰라도 상관없으므로 단방향 매핑
@@ -47,4 +50,17 @@ public class Chemical {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "chemical")
     @OrderBy("watering_date desc")
     private List<Watering> waterings = new ArrayList<>();
+
+    public Chemical update(String name, String type, int period){
+        this.name = name;
+        this.type = type;
+        this.period = period;
+
+        return this;
+    }
+
+    public Chemical deactivate(){
+        this.active = "N";
+        return this;
+    }
 }
