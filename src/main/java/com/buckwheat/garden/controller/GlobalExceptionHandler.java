@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-// 여러 컨트롤러에 대해 전역적으로 ExceptionHandler를 적용
+// 여러 컨트롤러에 대해 전역적으로 ExceptionHandler 적용
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
@@ -37,5 +37,18 @@ public class GlobalExceptionHandler {
                 .build();
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(er);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public HttpEntity<ErrorResponse> handleIllegalStateException(IllegalStateException e){
+        log.debug("e.getMessage(): {}", e.getMessage());
+
+        ErrorResponse er = ErrorResponse.builder()
+                .code(409)
+                .error("이미 오늘 물을 줬어요")
+                .errorDescription(e.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(er);
     }
 }

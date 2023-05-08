@@ -24,6 +24,8 @@ public class PlantDto {
         private String placeName;
         private LocalDate createDate;
         private LocalDate birthday;
+        private LocalDate postponeDate;
+        private LocalDate conditionDate;
 
         public static Response from(Plant plant){
 
@@ -38,6 +40,8 @@ public class PlantDto {
                     .placeName(plant.getPlace().getName())
                     .createDate(LocalDate.from(plant.getCreateDate()))
                     .birthday(plant.getBirthday())
+                    .postponeDate(plant.getPostponeDate())
+                    .conditionDate(plant.getConditionDate())
                     .build();
         }
     }

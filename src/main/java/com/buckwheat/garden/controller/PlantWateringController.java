@@ -18,7 +18,7 @@ public class PlantWateringController {
 
     /**
      * 한 식물의 물주기 기록 리스트
-     * @param plantNo
+     * @param plantId
      * @return
      */
     @GetMapping("")

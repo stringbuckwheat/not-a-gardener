@@ -11,6 +11,7 @@ import com.buckwheat.garden.repository.PlantRepository;
 import com.buckwheat.garden.repository.WateringRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,9 +25,20 @@ public class WateringDaoImpl implements WateringDao {
     private final PlantRepository plantRepository;
 
     @Override
+    @Transactional
     public Watering addWatering(WateringDto.Request wateringRequest){
+        Watering watering = wateringRepository.findByWateringDateAndPlant_PlantId(wateringRequest.getWateringDate(), wateringRequest.getPlantId());
+
+        if(watering != null){
+            throw new IllegalStateException("오늘은 이미 물을 주었어요");
+        }
+
         Plant plant = plantRepository.findByPlantId(wateringRequest.getPlantId())
                 .orElseThrow(NoSuchElementException::new);
+        // conditionDate, postponeDate 초기화
+        plant = plant.initConditionDateAndPostponeDate();
+        plantRepository.save(plant);
+
         // 맹물 줬는지 비료 타서 줬는지
         Chemical chemical = chemicalRepository.findById(wateringRequest.getChemicalId()).orElse(null);
 

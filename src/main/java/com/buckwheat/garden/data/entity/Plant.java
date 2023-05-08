@@ -93,4 +93,11 @@ public class Plant {
         this.postponeDate = LocalDate.now();
         return this;
     }
+
+    public Plant initConditionDateAndPostponeDate(){
+        this.conditionDate = null;
+        this.postponeDate = null;
+
+        return this;
+    }
 }

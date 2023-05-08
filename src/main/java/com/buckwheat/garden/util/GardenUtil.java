@@ -116,7 +116,10 @@ public class GardenUtil {
     }
 
     public int getWateringCode(int recentWateringPeriod, int wateringDDay) {
-        if (recentWateringPeriod == 0) {
+        if (recentWateringPeriod == wateringDDay) {
+            // 오늘 물 줌
+            return WateringCode.WATERED_TODAY.getCode();
+        } else if (recentWateringPeriod == 0) {
             // 물주기 정보 부족
             return WateringCode.NO_RECORD.getCode();
         } else if (wateringDDay == 0) {
@@ -126,9 +129,6 @@ public class GardenUtil {
             // 물주기 하루 전
             // 체크하세요
             return WateringCode.CHECK.getCode();
-        } else if (recentWateringPeriod == wateringDDay) {
-            // 오늘 물 줌
-            return WateringCode.WATERED_TODAY.getCode();
         } else if (wateringDDay >= 2) { // 얘가 wateringCode == 4 보다 먼저 걸린다
             // 물주기까지 이틀 이상 남음
             // 놔두세요

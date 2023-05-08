@@ -37,6 +37,8 @@ public interface WateringRepository extends JpaRepository<Watering, Long> {
     @EntityGraph(attributePaths = {"chemical, plant"}, type = EntityGraph.EntityGraphType.FETCH)
     Watering findByWateringId(Long wateringId);
 
+    Watering findByWateringDateAndPlant_PlantId(LocalDate wateringDate, long plantId);
+
     @Transactional
     void deleteAllByPlant_PlantId(Long plantId);
 }
