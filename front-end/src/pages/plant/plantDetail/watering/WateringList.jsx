@@ -66,7 +66,8 @@ const WateringList = ({plant, setPlant, wateringList, setWateringList}) => {
   const cancel = () => setEditingKey('');
 
   const wateringCallBack = (res) => {
-    setWateringList(res.wateringList);
+    console.log("wateringCallBack res", res);
+    setWateringList(res.waterings);
     res.plant && setPlant(res.plant);
 
     if (res.wateringMsg) {
@@ -82,8 +83,8 @@ const WateringList = ({plant, setPlant, wateringList, setWateringList}) => {
   };
 
   const deleteWatering = async (wateringId) => {
-    await deleteData(`/plant/${plant.plantId}/watering/${wateringId}`);
-    setWateringList(wateringList.filter(watering => watering.wateringId !== wateringId))
+    await deleteData(`/plant/${plant.id}/watering/${wateringId}`);
+    setWateringList(wateringList.filter(watering => watering.id !== wateringId))
   };
 
   const wateringTableColumnArray = getWateringTableColumnArray(isEditing, updateWatering, editingKey, cancel, edit, deleteWatering);

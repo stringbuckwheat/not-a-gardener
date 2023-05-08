@@ -48,7 +48,7 @@ const PlantTable = ({originPlantList, setPlantList, placeList}) => {
   const isEditing = (record) => record.id === editingKey;
 
   const edit = async (record) => {
-    console.log("record", record);
+    // console.log("record", record);
     form.setFieldsValue({
       ...record,
     });

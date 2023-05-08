@@ -1,11 +1,10 @@
-import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react"
 import ChemicalTag from "src/components/tag/ChemicalTag";
 import DetailLayout from "src/components/data/layout/DetailLayout";
 import {Table} from "antd";
 import ItemForm from "src/components/form/ItemForm";
 import ModifyFormButtons from "src/components/button/ModifyFormButtons";
-import onMount from "src/api/service/onMount";
 import getChemicalFormArray from "../../utils/function/getChemicalFormArray";
 import wateringTableColumnArray from "../../utils/dataArray/wateringTableColumnInChemicalArray";
 import RemoveModal from "../../components/modal/RemoveModal";

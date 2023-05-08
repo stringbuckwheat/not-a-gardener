@@ -1,9 +1,10 @@
 const isEndWithVowel = (title) => {
   const finalCharCode = title.charCodeAt(title.length - 1);
+  // console.log("finalCharCode", finalCharCode);
 
   if (finalCharCode >= 48 && finalCharCode <= 57) { // 숫자
     return isNumberEndWithVowel(finalCharCode); // 조사 구하기
-  } else if (finalCharCode >= 45032 && finalCharCode <= 55203) { // 한글
+  } else if (finalCharCode >= 44032 && finalCharCode <= 55203) { // 한글
     return isKoreanEndWithVowel(finalCharCode)
   } else if (
     (finalCharCode >= 65 && finalCharCode <= 90) // 영문 대문자

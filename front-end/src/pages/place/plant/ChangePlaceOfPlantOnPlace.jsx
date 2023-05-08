@@ -16,10 +16,8 @@ import ValidationSubmitButton from "../../../components/button/ValidationSubmitB
  * @constructor
  */
 const ChangePlaceOfPlantOnPlace = ({setSelectedRowKeys, selectedPlantId}) => {
-  console.log("selectedPlantId", selectedPlantId);
-
   // 이 장소의 번호
-  const thisPlaceId = useParams().thisPlaceId;
+  const thisPlaceId = useParams().placeId;
 
   // 장소 수정 함수
   const navigate = useNavigate();

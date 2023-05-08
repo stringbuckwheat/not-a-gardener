@@ -6,14 +6,12 @@
  */
 const getPlaceListForOptionExceptHere = (rawPlaces, placeId) => {
   return rawPlaces.filter((place) => place.key != placeId)
-    .map((place) => {
-      return (
+    .map((place) => (
         {
           label: place.value,
           value: place.key
         }
-      )
-    })
+      ))
 }
 
 export default getPlaceListForOptionExceptHere;

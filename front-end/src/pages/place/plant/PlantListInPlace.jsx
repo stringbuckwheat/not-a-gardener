@@ -8,6 +8,7 @@ import getPlantTableColArrInPlace from "../../../utils/function/getPlantTableCol
 
 /**
  * 장소 페이지 하단, 이 장소에 속한 식물들
+ * -> ChangePlaceOfPlantOnPlace || AddPlantInPlaceButtons
  * @param plantList
  * @param setPlantList
  * @param placeName
@@ -31,8 +32,11 @@ const PlaceTableForPlant = ({plantList, setPlantList, placeName}) => {
   const hasSelected = selectedRowKeys.length > 0;
 
   const deletePlant = async (plantId) => {
+    console.log("deletePlant");
+    console.log("plantId", plantId);
     await deleteData(`/plant/${plantId}`);
-    const deletedList = plantList.filter(plant => plant.plantId !== plantId);
+    const deletedList = plantList.filter(plant => plant.id !== plantId);
+    console.log("deletedList", deletedList);
     setPlantList(() => deletedList);
   }
 

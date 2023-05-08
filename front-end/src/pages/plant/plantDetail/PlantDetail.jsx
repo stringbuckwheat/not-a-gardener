@@ -37,10 +37,6 @@ const PlantDetail = () => {
     setOnModify(!onModify);
   }
 
-  const changeModifyState = () => {
-    setOnModify(false);
-  }
-
   return (
     !onModify
       ?
@@ -64,7 +60,7 @@ const PlantDetail = () => {
       <ModifyPlant
         plant={plant}
         placeList={placeList}
-        changeModifyState={changeModifyState}
+        changeModifyState={() => setOnModify(false)}
       />
   )
 }

@@ -16,7 +16,6 @@ import {cilPen, cilTrash, cilX} from "@coreui/icons";
  */
 const PlantEditableCellAction = ({record, editable, cancel, edit, editingKey, updatePlant, deletePlant}) => {
   const disabled = editingKey !== 0
-  console.log("record", record);
 
   return editable ? (
     <Space className="d-flex justify-content-end">

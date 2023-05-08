@@ -37,11 +37,8 @@ const DeleteModal = ({title, url, path, deleteTooltipMsg, deleteCallBackFunction
     await deleteData(`${url}/${path}`);
     closeDeleteModal();
 
-    if (deleteCallBackFunction) {
-      deleteCallBackFunction();
-    }
+    deleteCallBackFunction && deleteCallBackFunction();
 
-    // TODO state delete?
     navigate(url, {replace: true, state: "delete"});
   };
 

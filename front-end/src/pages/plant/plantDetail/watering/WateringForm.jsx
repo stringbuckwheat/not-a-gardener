@@ -21,10 +21,19 @@ const WateringForm = ({plantId, closeForm, chemicalList, wateringCallBack}) => {
   const [watering, setWatering] = useState({plantId, chemicalId: chemicalList[0].value});
 
   const onSubmit = async () => {
-    const res = await postData(`/plant/${plantId}/watering`, watering);
-    wateringCallBack(res);
+    console.log("submit data", watering);
+    let res;
 
-    closeForm();
+    try {
+      res = await postData(`/plant/${plantId}/watering`, watering);
+      console.log("res", res);
+    } catch (e) {
+      alert(e.response.data.errorDescription);
+    } finally {
+      closeForm();
+    }
+
+    wateringCallBack(res);
   }
 
   return (

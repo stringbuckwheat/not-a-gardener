@@ -1,6 +1,7 @@
 import {Space, Tag} from "antd";
 
 const PlantTag = ({plant, wateringListSize, latestWateringDate}) => {
+  console.log("plant tag plant", plant);
   const tmp = new Date();
   const today = new Date(tmp.getFullYear(), tmp.getMonth(), tmp.getDate());
 
@@ -64,6 +65,24 @@ const PlantTag = ({plant, wateringListSize, latestWateringDate}) => {
     }
   }
 
+  const isToday = (dateString) => {
+    const diffTime = today.getTime() - new Date(dateString).getTime();
+    const diffDate = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // 올림
+    return diffDate == 0;
+  }
+
+  const isNotDry = () => {
+    if(isToday(plant.conditionDate)){
+      return <Tag color={"orange-inverse"}>오늘은 물이 마르지 않았어요</Tag>
+    }
+  }
+
+  const isPostponed = () => {
+    if(isToday(plant.postponeDate)){
+      return <Tag color={"orange-inverse"}>오늘 물주기를 미뤘어요</Tag>
+    }
+  }
+
   return (
     <Space size={[0, 8]} wrap>
       {
@@ -87,8 +106,11 @@ const PlantTag = ({plant, wateringListSize, latestWateringDate}) => {
                 : <></>
             }
           </>
-          : <></>}
+          : <></>
+      }
       <Tag color="cyan">{wateringListSize == 0 ? "물주기 기록이 없어요" : `${wateringListSize}번 물을 줬어요`}</Tag>
+      {isNotDry()}
+      {isPostponed()}
     </Space>
   )
 }

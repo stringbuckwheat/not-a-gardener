@@ -9,7 +9,7 @@ const getPlaceList = async () => {
 
   const placeList = data.map((place) => (
     {
-      key: place.placeId,
+      key: place.id,
       value: place.name
     }
   ))

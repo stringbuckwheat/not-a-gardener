@@ -26,7 +26,7 @@ const ModifyPlaceOfPlantForm = ({placeId, setMoveFormVisible}) => {
     const options = [];
 
     for (let plant of plantList) {
-      if (plant.placeId == placeId) {
+      if (plant.id == placeId) {
         continue;
       }
 

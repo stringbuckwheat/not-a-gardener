@@ -39,7 +39,7 @@ const AddPlantInPlaceButtons = ({placeName, setPlantList}) => {
       setAddPlantFormVisible={setAddPlantFormVisible}/>
   } else if (moveFormVisible) {
     // 다른 장소의 식물 이동을 누른 경우
-    return <ModifyPlaceOfPlantForm placeNo={placeId} setMoveFormVisible={setMoveFormVisible}/>
+    return <ModifyPlaceOfPlantForm placeId={placeId} setMoveFormVisible={setMoveFormVisible}/>
   }
 
   // 아무것도 선택하지 않았을 시 버튼들 렌더링
