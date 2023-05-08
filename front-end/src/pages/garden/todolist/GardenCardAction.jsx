@@ -7,14 +7,15 @@ import postData from "../../../api/backend-api/common/postData";
 import getWateringNotificationMsg from "../../../utils/function/getWateringNotificationMsg";
 
 /**
+ * not-dry, water, postpone 버튼들 혹은 물주기 폼
  * GardenCard, WaterModalInWaitingList에서 사용
- * @param hovered
- * @param plantId
- * @param plantName
- * @param chemicalList
- * @param openNotification
+ * @param hovered 이 식물이 hovered 되었는지 (고정으로 띄울 시 true 넘김)
+ * @param plantId 해당 식물의 id
+ * @param plantName 식물 이름
+ * @param chemicalList (물주기 폼에서 쓸) chemicalList
+ * @param openNotification action 이후 백엔드에서 받아온 메시지를 띄우는 함수
  * @param updateGardenAfterWatering
- * @param y
+ * @param y 애니메이션 y축을 움직일 정도
  * @param wateringCode
  * @param index
  * @param deleteInWaitingListAndTodoList todolist action 이후 콜백함수. todolist, waitinglist에서 삭제
@@ -66,19 +67,16 @@ const GardenCardAction = ({
 
   if (hovered && selected == "") {
     return <GardenCardAnimatedButton
-      y={y}
-      wateringCode={wateringCode}
-      postponeWatering={postponeWatering}
-      plantId={plantId}
-      plantName={plantName}
-      chemicalList={chemicalList}
       setSelected={setSelected}
-      updateGardenAfterWatering={updateGardenAfterWatering}
+      y={y}
+      plantId={plantId}
       openNotification={openNotification}
       index={index}
       deleteInTodoList={deleteInTodoList}
-      deleteInWaitingListAndTodoList={deleteInWaitingListAndTodoList}
+      postponeWatering={postponeWatering}
+      wateringCode={wateringCode}
       handleWaitingList={handleWaitingList}
+      deleteInWaitingListAndTodoList={deleteInWaitingListAndTodoList}
     />
   } else if (selected === "watered") {
     return <>

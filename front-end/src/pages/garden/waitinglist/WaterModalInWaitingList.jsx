@@ -42,8 +42,8 @@ const WaterModalInWaitingList = ({
             </div>
             <div className="text-center mb-4">
               <GardenCardAction
-                y={20}
                 hovered={true}
+                y={20}
                 plantId={clickedPlant.id}
                 plantName={clickedPlant.name}
                 chemicalList={chemicalList}

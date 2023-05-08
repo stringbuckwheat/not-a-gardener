@@ -13,11 +13,9 @@ import getWateringNotificationMsg from "../../../utils/function/getWateringNotif
  * @param plantId
  * @param openNotification
  * @param index
- * @param deleteInTodoList
- * @param postponeWatering
- * @param wateringCode
- * @param updateGardenAfterWatering
- * @param handleWaitingList
+ * @param postponeWatering 물주기 미룬 후 콜백함수. 객체 내부 뜯어서 wateringCode만 교체
+ * @param wateringCode 이미 미뤘는데 또 미루겠다고 하면 return (6이면 리턴)
+ * @param handleWaitingList waitinglist action 콜백함수
  * @param deleteInWaitingListAndTodoList todolist action 콜백함수, plantId로 waitinglist/todolist에서 모두 삭제
  * @returns {JSX.Element}
  * @constructor
@@ -28,7 +26,6 @@ const GardenCardAnimatedButton = ({
                                     plantId,
                                     openNotification,
                                     index,
-                                    deleteInTodoList,
                                     postponeWatering,
                                     wateringCode,
                                     handleWaitingList,
@@ -47,7 +44,6 @@ const GardenCardAnimatedButton = ({
     console.log("not-dry res", res);
 
     // 현재 todoList에서 삭제
-    console.log("deleteInTodoList", deleteInTodoList);
     handleWaitingList && handleWaitingList();
     deleteInWaitingListAndTodoList && deleteInWaitingListAndTodoList(plantId);
 

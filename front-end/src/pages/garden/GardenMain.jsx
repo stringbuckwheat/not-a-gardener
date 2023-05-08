@@ -15,11 +15,10 @@ import {Link} from "react-router-dom";
 const GardenMain = ({
                       todoList,
                       updateGardenAfterWatering,
-                      updateWaitingListAfterWatering,
                       waitingList,
                       routineList,
-                      postponeWatering,
                       afterRoutine,
+                      postponeWatering,
                       deleteInWaitingListAndTodoList
                     }) => {
 
@@ -58,11 +57,10 @@ const GardenMain = ({
           waitingList.length == 0
             ? <></>
             : <WaitingForWateringList
-              chemicalList={chemicalList}
               waitingList={waitingList}
+              chemicalList={chemicalList}
               openNotification={openNotification}
               deleteInWaitingListAndTodoList={deleteInWaitingListAndTodoList}
-              updateWaitingListAfterWatering={updateWaitingListAfterWatering}
             />
         }
       </CRow>

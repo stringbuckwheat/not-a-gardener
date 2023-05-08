@@ -4,7 +4,7 @@ import ClickableTag from "../../../components/tag/basic/ClickableTag";
 import WaterModalInWaitingList from "./WaterModalInWaitingList";
 import {Tooltip} from "antd";
 
-const WaitingForWateringList = ({waitingList, chemicalList, openNotification, updateWaitingListAfterWatering, deleteInWaitingListAndTodoList}) => {
+const WaitingForWateringList = ({waitingList, chemicalList, openNotification, deleteInWaitingListAndTodoList}) => {
   console.log("waitingList", waitingList);
   const [clickedPlant, setClickedPlant] = useState({});
   const onClick = (plant, index) => {
@@ -14,11 +14,6 @@ const WaitingForWateringList = ({waitingList, chemicalList, openNotification, up
 
   // 물주기 모달
   const [visible, setVisible] = useState(false);
-
-  const afterFirstWatering = () => {
-    updateWaitingListAfterWatering(clickedPlant.index);
-    setVisible(false);
-  }
 
   // todolist, waitinglist에서 삭제하고 모달 닫기
   const handleWaitingList = () => {

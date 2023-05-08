@@ -32,15 +32,10 @@ const Garden = () => {
     onMountGarden();
   }, [])
 
+
   const updateGardenAfterWatering = (gardenResponse) => {
     const updatedTodoList = todoList.filter((plant) => plant.plant.id !== gardenResponse.plant.id);
     setTodoList(() => [...updatedTodoList]);
-  }
-
-  // waiting리스트에서 삭제
-  const updateWaitingListAfterWatering = (index) => {
-    waitingList.splice(index, 1);
-    setWaitingList(() => [...wateringList]);
   }
 
   // postpone
@@ -63,8 +58,6 @@ const Garden = () => {
 
   // 해당 인덱스의 식물을 waitingList와 todoList에서 삭제
   const deleteInWaitingListAndTodoList = (plantId) => {
-    console.log("waitingList", waitingList);
-    console.log("plantId", plantId);
     const updatedWaitingList = waitingList.filter((plant) => plant.id !== plantId);
     setWaitingList(() => [...updatedWaitingList]);
     const updatedTodoList = todoList.filter((plant) => plant.plant.id !== plantId);
@@ -74,19 +67,18 @@ const Garden = () => {
   if (isLoading) {
     return <Loading/>
   } else if (nothingToDo) {
-    return <NoItemForPlant afterAdd={onMountGarden} />
+    return <NoItemForPlant afterAdd={onMountGarden}/>
   } else {
     return (
       <GardenMain
-        updateGardenAfterWatering={updateGardenAfterWatering}
-        updateWaitingListAfterWatering={updateWaitingListAfterWatering}
-        postponeWatering={postponeWatering}
-        afterRoutine={afterRoutine}
-        routineList={routineList}
         todoList={todoList}
+        updateGardenAfterWatering={updateGardenAfterWatering}
+        waitingList={waitingList}
+        routineList={routineList}
+        afterRoutine={afterRoutine}
+        postponeWatering={postponeWatering}
         deleteInWaitingListAndTodoList={deleteInWaitingListAndTodoList}
-        setTodoList={setTodoList}
-        waitingList={waitingList}/>
+      />
     )
   }
 }
