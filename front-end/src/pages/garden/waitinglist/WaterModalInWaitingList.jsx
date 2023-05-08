@@ -1,10 +1,28 @@
 import {CCol, CModal, CModalBody, CRow} from "@coreui/react";
 import {Link} from "react-router-dom";
 import {Tag} from "antd";
-import GardenCardAction from "./GardenCardAction";
+import GardenCardAction from "../todolist/GardenCardAction";
 import React from "react";
 
-const WateredInGardenModal = ({visible, closeDeleteModal, clickedPlant, chemicalList, openNotification, afterFirstWatering}) => {
+/**
+ *
+ * @param visible
+ * @param closeDeleteModal
+ * @param clickedPlant
+ * @param chemicalList
+ * @param openNotification
+ * @param handleWaitingList action 후 콜백 함수. todolist, waitinglist에서 삭제한 후 모달 닫기
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const WaterModalInWaitingList = ({
+                                visible,
+                                closeDeleteModal,
+                                clickedPlant,
+                                chemicalList,
+                                openNotification,
+                                handleWaitingList
+                              }) => {
   return (
     <CModal alignment="center" visible={visible} onClose={closeDeleteModal}>
       <CModalBody>
@@ -30,7 +48,8 @@ const WateredInGardenModal = ({visible, closeDeleteModal, clickedPlant, chemical
                 plantName={clickedPlant.name}
                 chemicalList={chemicalList}
                 openNotification={openNotification}
-                updateGardenAfterWatering={afterFirstWatering}/>
+                handleWaitingList={handleWaitingList}
+              />
             </div>
           </CCol>
         </CRow>
@@ -39,4 +58,4 @@ const WateredInGardenModal = ({visible, closeDeleteModal, clickedPlant, chemical
   )
 }
 
-export default WateredInGardenModal;
+export default WaterModalInWaitingList;

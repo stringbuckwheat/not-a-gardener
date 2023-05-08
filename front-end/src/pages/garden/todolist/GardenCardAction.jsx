@@ -1,11 +1,28 @@
-import GardenCardAnimatedButton from "../../components/animation/GardenCardAnimatedButton";
+import GardenCardAnimatedButton from "./GardenCardAnimatedButton";
 import React, {useState} from "react";
 import {Button, Select, Space} from "antd";
 import CIcon from "@coreui/icons-react";
 import {cilDrop} from "@coreui/icons";
-import postData from "../../api/backend-api/common/postData";
-import getWateringNotificationMsg from "../../utils/function/getWateringNotificationMsg";
+import postData from "../../../api/backend-api/common/postData";
+import getWateringNotificationMsg from "../../../utils/function/getWateringNotificationMsg";
 
+/**
+ * GardenCard, WaterModalInWaitingList에서 사용
+ * @param hovered
+ * @param plantId
+ * @param plantName
+ * @param chemicalList
+ * @param openNotification
+ * @param updateGardenAfterWatering
+ * @param y
+ * @param wateringCode
+ * @param index
+ * @param deleteInWaitingListAndTodoList todolist action 이후 콜백함수. todolist, waitinglist에서 삭제
+ * @param postponeWatering
+ * @param handleWaitingList waitinglist에서의 action 후 콜백 함수. todolist, waitinglist에서 삭제한 후 모달 닫기
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const GardenCardAction = ({
                             hovered,
                             plantId,
@@ -17,24 +34,32 @@ const GardenCardAction = ({
                             wateringCode,
                             index,
                             deleteInTodoList,
-                            postponeWatering
+                            postponeWatering,
+                            handleWaitingList,
+                            deleteInWaitingListAndTodoList
                           }) => {
   const [selected, setSelected] = useState("");
   const [chemicalId, setChemicalId] = useState(0);
 
+  // 물을 줬어요 버튼
   const submitWatering = async () => {
     const res = await postData(`/garden/${plantId}/watering`, {
       plantId,
       chemicalId,
       wateringDate: new Date().toISOString().split('T')[0]
     });
+    console.log("submit watering", res);
+
+    // waitinglist에서의 action 후 콜백 함수. todolist, waitinglist에서 삭제한 후 모달 닫기
+    handleWaitingList && handleWaitingList();
+    deleteInWaitingListAndTodoList && deleteInWaitingListAndTodoList(plantId);
 
     // 메시지 띄우기
     const msg = getWateringNotificationMsg(res.wateringMsg.afterWateringCode);
     openNotification(msg);
 
     // garden 카드 갈아끼우기
-    updateGardenAfterWatering(res.gardenResponse);
+    updateGardenAfterWatering && updateGardenAfterWatering(res.gardenResponse);
 
     setSelected("");
   }
@@ -48,9 +73,12 @@ const GardenCardAction = ({
       plantName={plantName}
       chemicalList={chemicalList}
       setSelected={setSelected}
+      updateGardenAfterWatering={updateGardenAfterWatering}
       openNotification={openNotification}
       index={index}
       deleteInTodoList={deleteInTodoList}
+      deleteInWaitingListAndTodoList={deleteInWaitingListAndTodoList}
+      handleWaitingList={handleWaitingList}
     />
   } else if (selected === "watered") {
     return <>

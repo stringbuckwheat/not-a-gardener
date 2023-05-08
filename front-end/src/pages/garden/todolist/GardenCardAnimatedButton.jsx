@@ -3,12 +3,12 @@ import {Row} from "antd";
 import React, {useState} from "react";
 import {CaretRightOutlined, StepBackwardOutlined, StepForwardOutlined} from "@ant-design/icons";
 import {CCol,} from "@coreui/react";
-import updateData from "../../api/backend-api/common/updateData";
-import getWateringNotificationMsg from "../../utils/function/getWateringNotificationMsg";
+import updateData from "../../../api/backend-api/common/updateData";
+import getWateringNotificationMsg from "../../../utils/function/getWateringNotificationMsg";
 
 /**
  * 메인 페이지 할일 카드에 마우스를 올릴 시 나타날 버튼 세가지
- * @param setSelected
+ * @param setSelected // 어떤 버튼을 선택했는지
  * @param y
  * @param plantId
  * @param openNotification
@@ -16,6 +16,9 @@ import getWateringNotificationMsg from "../../utils/function/getWateringNotifica
  * @param deleteInTodoList
  * @param postponeWatering
  * @param wateringCode
+ * @param updateGardenAfterWatering
+ * @param handleWaitingList
+ * @param deleteInWaitingListAndTodoList todolist action 콜백함수, plantId로 waitinglist/todolist에서 모두 삭제
  * @returns {JSX.Element}
  * @constructor
  */
@@ -27,7 +30,9 @@ const GardenCardAnimatedButton = ({
                                     index,
                                     deleteInTodoList,
                                     postponeWatering,
-                                    wateringCode
+                                    wateringCode,
+                                    handleWaitingList,
+                                    deleteInWaitingListAndTodoList
                                   }) => {
   const [hovered, setHovered] = useState(-1);
 
@@ -39,10 +44,14 @@ const GardenCardAnimatedButton = ({
 
     // waitinglist에서는... 그냥 유지
     const res = await updateData(`/garden/${plantId}/watering/not-dry`, null);
+    console.log("not-dry res", res);
 
     // 현재 todoList에서 삭제
-    deleteInTodoList(index);
+    console.log("deleteInTodoList", deleteInTodoList);
+    handleWaitingList && handleWaitingList();
+    deleteInWaitingListAndTodoList && deleteInWaitingListAndTodoList(plantId);
 
+    // res가 없는 경우 -> 한 번도 물 준 적 없는 경우
     let msg = {
       title: "관찰 결과를 알려줘서 고마워요",
       content: "앞으로도 함께 키워요"
@@ -53,7 +62,6 @@ const GardenCardAnimatedButton = ({
       msg = getWateringNotificationMsg(res.afterWateringCode);
     }
 
-    // res가 없는 경우 -> 한 번도 물 준 적 없는 경우
     openNotification(msg);
   }
 
@@ -64,7 +72,8 @@ const GardenCardAnimatedButton = ({
     }
 
     const res = await updateData(`/garden/${plantId}/watering/postpone`, null);
-    postponeWatering(index, res);
+    postponeWatering && postponeWatering(index, res);
+    handleWaitingList && handleWaitingList();
   }
 
   // #4169E1 라벤더

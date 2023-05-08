@@ -1,12 +1,25 @@
-import GardenCard from "../../components/card/GardenCard";
+import GardenCard from "./GardenCard";
 import React from "react";
 import {Row} from "antd";
 import {useTrail, animated} from "@react-spring/web";
 import {CCol} from "@coreui/react";
 
+/**
+ *
+ * @param todoList
+ * @param deleteInTodoList
+ * @param deleteInWaitingListAndTodoList todolist, waitinglist에서 모두 삭제 -- action 콜백함수
+ * @param chemicalList
+ * @param updateGardenAfterWatering
+ * @param openNotification
+ * @param postponeWatering
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const GardenTodoList = ({
                           todoList,
                           deleteInTodoList,
+                          deleteInWaitingListAndTodoList,
                           chemicalList,
                           updateGardenAfterWatering,
                           openNotification,
@@ -32,6 +45,7 @@ const GardenTodoList = ({
                 garden={todoList[index]}
                 chemicalList={chemicalList}
                 deleteInTodoList={deleteInTodoList}
+                deleteInWaitingListAndTodoList={deleteInWaitingListAndTodoList}
                 openNotification={openNotification}/>
             </animated.div>
           </CCol>

@@ -1,16 +1,17 @@
 import React, {useState} from "react";
 import {Link} from "react-router-dom";
 import {CCard, CCardBody, CCol, CRow} from "@coreui/react";
-import GardenTag from "../../pages/garden/GardenTag";
-import getWateringMsg from "../../utils/function/getWateringMsg";
-import GardenCardAction from "../../pages/garden/GardenCardAction";
-import wateringCodeDesign from "../../utils/dataArray/wateringCodeDesign";
-import WateringCodeIcon from "../etc/WateringCodeIcon";
+import GardenTag from "./GardenTag";
+import getWateringMsg from "../../../utils/function/getWateringMsg";
+import GardenCardAction from "./GardenCardAction";
+import wateringCodeDesign from "../../../utils/dataArray/wateringCodeDesign";
+import WateringCodeIcon from "../../../components/etc/WateringCodeIcon";
 
 /**
  * 메인페이지 할 일 카드
  * @param index
  * @param deleteInTodoList
+ * @param deleteInWaitingListAndTodoList todolist, waitinglist에서 모두 삭제 -- action 콜백함수
  * @param garden
  * @param chemicalList
  * @param openNotification
@@ -21,13 +22,14 @@ import WateringCodeIcon from "../etc/WateringCodeIcon";
  */
 const GardenCard = ({
                       index,
-                      deleteInTodoList,
+                      deleteInWaitingListAndTodoList,
                       garden,
                       chemicalList,
                       openNotification,
                       updateGardenAfterWatering,
                       postponeWatering
                     }) => {
+  // console.log("garden", garden);
   const gardenDetail = garden.gardenDetail;
   const plant = garden.plant;
 
@@ -48,7 +50,7 @@ const GardenCard = ({
 
           <GardenCardAction
             hovered={hovered}
-            plantId={plant.plantId}
+            plantId={plant.id}
             plantName={plant.name}
             wateringCode={gardenDetail.wateringCode}
             chemicalList={chemicalList}
@@ -56,11 +58,11 @@ const GardenCard = ({
             updateGardenAfterWatering={updateGardenAfterWatering}
             postponeWatering={postponeWatering}
             index={index}
-            deleteInTodoList={deleteInTodoList}
+            deleteInWaitingListAndTodoList={deleteInWaitingListAndTodoList}
           />
           <Link
             className="no-text-decoration"
-            to={`/plant/${plant.plantId}`}>
+            to={`/plant/${plant.id}`}>
             <CCard>
               <CCardBody>
                 <CRow className="d-flex align-items-center">

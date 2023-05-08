@@ -16,8 +16,8 @@ const ClickableTag = ({color, onClick, content}) => {
     <Tag
       color={isHovered ? `${color}-inverse` : color}
       onClick={onClick}
-      onMouseEnter={() => setIsHovered(!isHovered)}
-      onMouseLeave={() => setIsHovered(!isHovered)}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       {content}
     </Tag>

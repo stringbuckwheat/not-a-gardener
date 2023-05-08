@@ -1,27 +1,27 @@
-import GardenTodoList from "./GardenTodoList";
+import GardenTodoList from "./todolist/GardenTodoList";
 import React, {useEffect, useState} from "react";
 import {CRow} from "@coreui/react";
 import getChemicalListForSelect from "../../api/service/getChemicalListForSelect";
 import GButton from "../../components/button/defaultButton/GButton";
-import WaitingForWateringList from "./WaitingForWateringList";
+import WaitingForWateringList from "./waitinglist/WaitingForWateringList";
 import RoutineList from "./RoutineList";
 import {notification, Space} from "antd";
 import Empty from "../../components/empty/Empty";
 import CIcon from "@coreui/icons-react";
 import {cilHappy} from "@coreui/icons";
 import Booped from "../../components/animation/Booped";
+import {Link} from "react-router-dom";
 
 const GardenMain = ({
                       todoList,
-                      deleteInTodoList,
                       updateGardenAfterWatering,
                       updateWaitingListAfterWatering,
                       waitingList,
                       routineList,
                       postponeWatering,
-                      afterRoutine
+                      afterRoutine,
+                      deleteInWaitingListAndTodoList
                     }) => {
-  const onClickList = () => alert("구현중이에요");
 
   // 약품 리스트(물주기 시에 사용)
   const [chemicalList, setChemicalList] = useState([]);
@@ -61,6 +61,7 @@ const GardenMain = ({
               chemicalList={chemicalList}
               waitingList={waitingList}
               openNotification={openNotification}
+              deleteInWaitingListAndTodoList={deleteInWaitingListAndTodoList}
               updateWaitingListAfterWatering={updateWaitingListAfterWatering}
             />
         }
@@ -70,15 +71,15 @@ const GardenMain = ({
           ?
           <Empty title="목마른 식물이 없어요"/>
           : <>
-            <div className="d-flex justify-content-end mb-5">
-              <GButton color="teal" className="float-end" onClick={onClickList}>리스트로 보기</GButton>
-            </div>
+            <Link to={"/plant"} className="d-flex justify-content-end mb-5">
+              <GButton color="teal" className="float-end">전체 식물 보기</GButton>
+            </Link>
             <div className="mt-2">
               <GardenTodoList
                 postponeWatering={postponeWatering}
                 updateGardenAfterWatering={updateGardenAfterWatering}
-                deleteInTodoList={deleteInTodoList}
                 openNotification={openNotification}
+                deleteInWaitingListAndTodoList={deleteInWaitingListAndTodoList}
                 chemicalList={chemicalList}
                 todoList={todoList}/>
             </div>

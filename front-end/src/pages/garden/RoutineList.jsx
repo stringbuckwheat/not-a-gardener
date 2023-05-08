@@ -10,8 +10,10 @@ const RoutineList = ({routineList, afterRoutine}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [routineForModal, setRoutineForModal] = useState({});
 
-  const onClickTag = (routineId, isCompleted, routineContent, index) => {
-    setRoutineForModal({routineId, isCompleted, routineContent, index});
+  const onClickTag = (routineForModal) => {
+    console.log("onClickTag");
+    setRoutineForModal(() => routineForModal);
+    console.log('routineForModal', routineForModal);
     setIsModalVisible(true);
   }
 
@@ -38,11 +40,13 @@ const RoutineList = ({routineList, afterRoutine}) => {
             :
             routineList.map((routine, index) => {
               const isCompleted = routine.isCompleted === "Y";
+              const routineForModal = {routineId: routine.id, isCompleted, content: routine.content, index}
+              // console.log("routineForModal", routineForModal);
 
               return <ClickableTag
                 key={routine.id}
                 color={isCompleted ? "gold" : "geekblue"}
-                onClick={() => onClickTag(routine.id, isCompleted, routine.content, index)}
+                onClick={() => onClickTag(routineForModal)}
                 content={routine.content}/>
             })
         }
