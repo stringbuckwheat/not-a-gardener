@@ -27,6 +27,7 @@ const AddPlaceInPlantForm = ({addPlace}) => {
     }
 
     const place = await postData("/place", data);
+    console.log("place", place);
     addPlace({key: place.id, value: place.name});
   }
 
@@ -38,7 +39,7 @@ const AddPlaceInPlantForm = ({addPlace}) => {
       </CInputGroup>
       <Alert
         className="mt-1 mb-3"
-        message={!isAddFormOpened ? "등록된 장소가 없습니다." : ""}
+        message={!isAddFormOpened ? "식물을 등록하려면 최소 하나의 장소가 필요해요." : ""}
         type="warning"
         action={
           <div>

@@ -9,9 +9,7 @@ import {AppContent, AppSidebar, AppFooter, AppHeader} from '../index'
  * @constructor
  */
 const GardenLayout = () => {
-  const isLogin = localStorage.getItem("login");
-
-  if (!isLogin) {
+  if (!localStorage.getItem("login")) {
     return <Navigate to="/login" replace={true}/>
   }
 

@@ -32,6 +32,10 @@ public class WateringUtil {
             return new WateringDto.Message(AfterWateringCode.FIRST_WATERING.getCode(), plant.getRecentWateringPeriod());
         }
 
+        if(plant.getWaterings().size() == 2){
+            return new WateringDto.Message(AfterWateringCode.SECOND_WATERING.getCode(), plant.getRecentWateringPeriod());
+        }
+
         List<WateringDto.ForOnePlant> list = new ArrayList();
         for(Watering w: plant.getWaterings()){
             list.add(WateringDto.ForOnePlant.from(w));

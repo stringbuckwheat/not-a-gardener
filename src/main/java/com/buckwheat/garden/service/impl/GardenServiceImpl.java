@@ -43,20 +43,31 @@ public class GardenServiceImpl implements GardenService {
         // getPlantsForGarden: postponeDate이 과거거나 아예 미룬 적 없는 식물들
         // 오늘 미룬 식물도 띄워줘야함
         for (Plant plant : plantDao.getPlantsForGarden(gardenerId)) {
+            log.debug("plantName: {}", plant.getName());
             // 오늘 스케줄 미루기를 클릭한 식물
             if (plant.getConditionDate() != null && today.compareTo(plant.getConditionDate()) == 0) {
                 continue;
             }
 
-            int wateringDDay = gardenUtil.getWateringDDay(plant.getRecentWateringPeriod(), gardenUtil.getLastDrinkingDay(plant));
-
-            int wateringCode = gardenUtil.getWateringCode(plant.getRecentWateringPeriod(), wateringDDay);
-            boolean hasToDo = wateringCode < 0 || wateringCode == WateringCode.THIRSTY.getCode() || wateringCode == WateringCode.CHECK.getCode();
-
-            if (wateringCode == WateringCode.NO_RECORD.getCode()) {
+            // 물주기 기록이 없는 경우
+            if (plant.getWaterings().size() == 0) {
                 waitingList.add(GardenDto.WaitingForWatering.from(plant));
                 todoList.add(gardenResponseProvider.getGardenResponse(plant, gardenerId));
-            } else if (hasToDo || (plant.getWaterings().size() == 0 && plant.getRecentWateringPeriod() != 0)) {
+                continue;
+            }
+
+            // 물 줄 날짜가 며칠 남았는지
+            // parameter: recentWateringPeriod, lastDrinkingDay
+            int wateringDDay = gardenUtil.getWateringDDay(plant.getRecentWateringPeriod(), plant.getWaterings().get(0).getWateringDate());
+            int wateringCode = gardenUtil.getWateringCode(plant.getRecentWateringPeriod(), wateringDDay);
+            log.debug("wateringCode: {}", wateringCode);
+            boolean hasToDo = wateringCode < 0 || wateringCode == WateringCode.THIRSTY.getCode() || wateringCode == WateringCode.CHECK.getCode();
+
+//            if (wateringCode == WateringCode.NO_RECORD.getCode()) {
+//                waitingList.add(GardenDto.WaitingForWatering.from(plant));
+//                todoList.add(gardenResponseProvider.getGardenResponse(plant, gardenerId));
+//            } else
+            if (hasToDo) {
                 // 오늘 할일이 있는 식물이거나 물주기 기록은 없고 직접 입력한 물주기 사이클은 있는 경우
                 todoList.add(gardenResponseProvider.getGardenResponse(plant, gardenerId));
             }

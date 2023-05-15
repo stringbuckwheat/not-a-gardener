@@ -33,6 +33,7 @@ public class Goal {
     // FK
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="plant_id")
+    @OnDelete(action= OnDeleteAction.CASCADE)
     private Plant plant;
 
     @ManyToOne(fetch = FetchType.LAZY)

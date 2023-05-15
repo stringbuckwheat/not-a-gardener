@@ -26,6 +26,7 @@ const AddPlant = ({placeList, addPlant, afterAdd}) => {
   const submit = async () => {
     // console.log("plant request", plant);
     const res = await postData("/plant", plant);
+    console.log("res", res);
     addPlant && addPlant(res);
     afterAdd && afterAdd();
   }

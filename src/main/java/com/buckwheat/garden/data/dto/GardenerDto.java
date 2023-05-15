@@ -66,6 +66,7 @@ public class GardenerDto {
 
         public static Detail updateResponseFrom(Gardener gardener){
             return GardenerDto.Detail.builder()
+                    .id(gardener.getGardenerId())
                     .username(gardener.getUsername())
                     .email(gardener.getEmail())
                     .name(gardener.getName())

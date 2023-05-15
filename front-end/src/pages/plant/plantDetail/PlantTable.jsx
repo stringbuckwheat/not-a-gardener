@@ -48,13 +48,16 @@ const PlantTable = ({originPlantList, setPlantList, placeList}) => {
   const isEditing = (record) => record.id === editingKey;
 
   const edit = async (record) => {
-    // console.log("record", record);
+    console.log("record", record);
+
     form.setFieldsValue({
       ...record,
     });
 
+    // 최근 물주기(recentWateringPeriod)가 계산되지 않았으면 ?가 들어있으므로
+    // isNaN 메소드를 통해 검사
     setModifyPlant({
-      recentWateringPeriod: record.recentWateringPeriod,
+      recentWateringPeriod: isNaN(record.recentWateringPeriod) ? 0 : record.recentWateringPeriod,
       species: record.species,
       medium: record.tags.medium
     });
@@ -66,7 +69,6 @@ const PlantTable = ({originPlantList, setPlantList, placeList}) => {
 
   const updatePlant = async () => {
     const values = await form.validateFields();
-    console.log("data", {...values, ...modifyPlant, id: editingKey});
 
     const res = await updateData(`/plant/${editingKey}`, {...values, ...modifyPlant, id: editingKey});
 

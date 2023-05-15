@@ -43,6 +43,7 @@ public class Routine {
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="plant_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Plant plant;
 
     public Routine update(String content, int cycle, Plant plant){

@@ -101,9 +101,10 @@ public class GardenerServiceImpl implements GardenerService {
     public GardenerDto.Detail modify(GardenerDto.Detail gardenerDetail) {
         Gardener gardener = gardenerDao.getGardenerByGardenerId(gardenerDetail.getId())
                 .orElseThrow(NoSuchElementException::new);
-        gardenerDao.save(gardener.updateEmailAndName(gardenerDetail.getEmail(), gardenerDetail.getName()));
 
-        return GardenerDto.Detail.updateResponseFrom(gardener);
+        return GardenerDto.Detail.updateResponseFrom(
+                gardenerDao.save(gardener.updateEmailAndName(gardenerDetail.getEmail(), gardenerDetail.getName()))
+        );
     }
 
     @Override

@@ -29,8 +29,8 @@ const getWateringNotificationMsg = (afterWateringCode) => {
     title = "축하합니다! 처음으로 물주기를 기록하셨네요"
     content = "관수 주기를 기록하며 함께 키워요"
   } else if (afterWateringCode == 3) {
-    title = "두 번째 물주기 기록"
-    content = "관수 주기를 기록하며 함께 키워요"
+    title = "두 번째 물주기를 기록했어요"
+    content = "한 번 더 관수하면 물주기 관찰이 완료됩니다"
   }
 
   return {

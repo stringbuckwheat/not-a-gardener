@@ -2,11 +2,11 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.5'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-	id "com.github.node-gradle.node" version "2.2.4"
+	id 'com.github.node-gradle.node' version '2.2.4'
 }
 
 group = 'com.buckwheat'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 sourceCompatibility = '11'
 
 configurations {
@@ -24,6 +24,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-tomcat'
 
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
@@ -42,31 +43,51 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-//// 통합 빌드
-//// npm install
-//task appNpmInstall(type: NpmTask) {
-//	workingDir = file("${project.projectDir}/front-end")
-//	args = ["install"]
-//}
-//
-//// npm build
-//task npmBuild(type: NpmTask) {
-//	workingDir = file("${project.projectDir}/front-end")
-//	args = ["run", "build"]
-//}
-//
-//// 빌드된 결과 이동
-//task copyWebApp(type: Copy) {
-//	from "front-end/build"
-//	into 'build/resources/main/static/'
-//}
-//
-//// appNpmInstall -> npmBuild -> copyWebApp 순으로 빌드 과정이 실행된다.
-//npmBuild.dependsOn appNpmInstall
-//copyWebApp.dependsOn npmBuild
-//compileJava.dependsOn copyWebApp
 
+def frontDir = "$projectDir/front-end"
 
-tasks.named('test') {
-	useJUnitPlatform()
+sourceSets {
+	main {
+		resources {
+			srcDirs = ["$frontDir/build", "$projectDir/src/main/resources"]
+		}
+	}
+}
+
+processResources {
+	dependsOn "copyWebApp"
+}
+
+task copyWebApp(type: Copy) {
+	dependsOn "buildReact"
+	from "$frontDir/build"
+	into "$projectDir/src/main/resources/static"
+	println("copyWebApp")
+}
+
+task buildReact(type: Exec) {
+	dependsOn "installReact"
+	workingDir "$frontDir"
+	inputs.dir "$frontDir"
+	group = BasePlugin.BUILD_GROUP
+	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+		commandLine "npm.cmd", "run-script", "build"
+	} else {
+		commandLine "npm", "run-script", "build"
+	}
+	println("buildReact")
+}
+
+task installReact(type: Exec) {
+	workingDir "$frontDir"
+	inputs.dir "$frontDir"
+	group = BasePlugin.BUILD_GROUP
+	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+		commandLine "npm.cmd", "audit", "fix"
+		commandLine 'npm.cmd', 'install'
+	} else {
+		commandLine "npm", "audit", "fix"
+		commandLine 'npm', 'install'
+	}
+	println("installReact")
 }

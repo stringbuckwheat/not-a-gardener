@@ -13,6 +13,7 @@ import DeleteModal from "../../components/modal/DeleteModal";
 import ChangePasswordModal from "../../components/modal/ChangePassWordModal";
 
 const GardenerDetail = ({gardener, setGardener}) => {
+  console.log("최초 gardener", gardener);
   const isBasicLogin = gardener.provider == null;
 
   // 수정용 input 칸 disabled 여부
@@ -32,12 +33,9 @@ const GardenerDetail = ({gardener, setGardener}) => {
 
   const onSubmit = async () => {
     const updatedGardener = await updateData(`/gardener/${gardener.id}`, modifyGardener);
-    setGardener(updatedGardener);
+    console.log("updatedGardener", updatedGardener);
+    setGardener(() => updatedGardener);
     setIsDisabled(true);
-  }
-
-  const activateModifyInput = () => {
-    setIsDisabled(!isDisabled)
   }
 
   const deleteButton = <CButton size="sm" color="link-secondary"><small>계정 삭제</small></CButton>;
@@ -45,6 +43,16 @@ const GardenerDetail = ({gardener, setGardener}) => {
   const deleteCallback = () => {
     localStorage.clear();
     window.location.replace('/');
+  }
+
+  const getSocialAccount = () => {
+    if(gardener.provider === "kakao"){
+      return "카카오"
+    } else if(gardener.provider === "naver"){
+      return "네이버"
+    } else {
+      return "구글"
+    }
   }
 
   return (
@@ -66,9 +74,9 @@ const GardenerDetail = ({gardener, setGardener}) => {
                 disabled={isDisabled}/>
 
               <FormInputFeedback
-                label="아이디"
+                label={isBasicLogin ? "아이디" : "소셜 로그인"}
                 name="username"
-                defaultValue={isBasicLogin ? gardener.username : gardener.provider}
+                defaultValue={isBasicLogin ? gardener.username : getSocialAccount()}
                 disabled={true}/>
 
               <FormInputFeedback
@@ -97,7 +105,7 @@ const GardenerDetail = ({gardener, setGardener}) => {
                       type="button"
                       color="success"
                       variant="outline"
-                      onClick={activateModifyInput}>
+                      onClick={() => setIsDisabled(!isDisabled)}>
                       {isDisabled ? "회원정보 수정" : "돌아가기"}
                     </CButton>
                     {isDisabled
@@ -117,7 +125,8 @@ const GardenerDetail = ({gardener, setGardener}) => {
                 </div>
                 : <>
                   <p><small>소셜 로그인 회원의 정보 수정은 해당 서비스를 이용해주세요</small></p>
-                </>}
+                </>
+              }
             </CForm>
             <div className="d-flex justify-content-end mt-3">
               <DeleteModal

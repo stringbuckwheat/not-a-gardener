@@ -33,7 +33,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         JwtAuthToken token = jwtAuthTokenProvider.createAuthToken(userPrincipal);
 
-        String targetUrl = "http://localhost:3000/oauth/" + token.getToken();
+        String targetUrl = "http://not-a-gardener.xyz/oauth/" + token.getToken();
 
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }

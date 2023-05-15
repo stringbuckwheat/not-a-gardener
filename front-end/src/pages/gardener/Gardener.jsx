@@ -27,10 +27,9 @@ const Gardener = () => {
     onMountGardener();
   }, [])
 
-  return isLoading ?
-    (<Loading/>)
-    :
-    (
+  return isLoading ? (
+    <Loading/>
+    ) : (
       <GardenerDetail gardener={gardener} setGardener={setGardener}/>
     )
 }

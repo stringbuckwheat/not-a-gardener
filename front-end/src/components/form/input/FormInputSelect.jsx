@@ -7,7 +7,7 @@ const FormInputSelect = ({inputItem, onChange}) => {
 
   const addPlace = (place) => {
     setOptionArray([{...place}]);
-    onChange({target: {name: "placeNo", value: place.key}});
+    onChange({target: {name: "placeId", value: place.key}});
   }
 
   if (optionArray.length == 0) {

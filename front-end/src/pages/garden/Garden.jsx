@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react'
 import getData from "../../api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";
 import GardenMain from "./GardenMain";
-import wateringList from "../watering/WateringList";
 import NoItemForPlant from "../../components/empty/NoItemForPlant";
 
 const Garden = () => {
@@ -15,6 +14,7 @@ const Garden = () => {
   const [routineList, setRoutineList] = useState([]);
 
   const onMountGarden = async () => {
+    console.log("onMountGarden")
     const data = await getData("/garden"); // todoList, waitingList
     console.log("garden data", data);
 
@@ -64,10 +64,15 @@ const Garden = () => {
     setTodoList(() => [...updatedTodoList]);
   }
 
+  const firstAddCallback = () => {
+    onMountGarden();
+    setNothingToDo(false);
+  }
+
   if (isLoading) {
     return <Loading/>
   } else if (nothingToDo) {
-    return <NoItemForPlant afterAdd={onMountGarden}/>
+    return <NoItemForPlant afterAdd={firstAddCallback}/>
   } else {
     return (
       <GardenMain
