@@ -65,3 +65,5 @@ persistence.xml
 application.properties
 application-oauth.properties
 application-mail.properties
+
+/static/
