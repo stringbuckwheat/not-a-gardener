@@ -35,6 +35,10 @@ public class GardenServiceImpl implements GardenService {
     @Override
     @Transactional
     public GardenDto.GardenMain getGarden(Long gardenerId) {
+        if(plantDao.getPlantsByGardenerId(gardenerId).size() == 0){
+            return new GardenDto.GardenMain(false, null, null, null);
+        }
+
         List<GardenDto.Response> todoList = new ArrayList<>();
         List<GardenDto.WaitingForWatering> waitingList = new ArrayList<>();
         LocalDate today = LocalDate.now();
@@ -79,7 +83,7 @@ public class GardenServiceImpl implements GardenService {
         // 오늘 루틴 리스트
         List<RoutineDto.Response> routineList = getRoutinesForToday(gardenerId);
 
-        return new GardenDto.GardenMain(todoList, waitingList, routineList);
+        return new GardenDto.GardenMain(true, todoList, waitingList, routineList);
     }
 
     public List<RoutineDto.Response> getRoutinesForToday(Long gardenerId) {

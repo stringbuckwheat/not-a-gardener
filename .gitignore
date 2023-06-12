@@ -67,3 +67,5 @@ application-oauth.properties
 application-mail.properties
 
 /static/
+.gitsecret/keys/random_seed
+!*.secret

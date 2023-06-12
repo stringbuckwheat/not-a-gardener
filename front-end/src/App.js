@@ -12,6 +12,8 @@ const GardenLayout = React.lazy(() => import('./components/layout/GardenLayout')
 const GetToken = React.lazy(() => import('./pages/login/GetToken'))
 
 const App = () => {
+  console.log = function no_console() {};
+
   return (
     <BrowserRouter>
       <Suspense fallback={<Loading/>}>

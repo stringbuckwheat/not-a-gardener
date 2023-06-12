@@ -6,7 +6,8 @@ import NoItemForPlant from "../../components/empty/NoItemForPlant";
 
 const Garden = () => {
   const [isLoading, setLoading] = useState(true);
-  const [nothingToDo, setNothingToDo] = useState(false);
+  const [hasPlant, setHasPlant] = useState(false);
+  // const [nothingToDo, setNothingToDo] = useState(false);
 
   // 할일 리스트
   const [todoList, setTodoList] = useState([]);
@@ -14,12 +15,13 @@ const Garden = () => {
   const [routineList, setRoutineList] = useState([]);
 
   const onMountGarden = async () => {
-    console.log("onMountGarden")
+    console.log("onMountGarden");
     const data = await getData("/garden"); // todoList, waitingList
     console.log("garden data", data);
 
     setLoading(false);
-    setNothingToDo(data.todoList.length == 0 && data.waitingList.length == 0);
+    setHasPlant(data.hasPlant);
+    // setNothingToDo(data.todoList.length == 0 && data.waitingList.length == 0);
 
     data.todoList.sort((a, b) => (a.gardenDetail.wateringCode - b.gardenDetail.wateringCode));
 
@@ -66,12 +68,12 @@ const Garden = () => {
 
   const firstAddCallback = () => {
     onMountGarden();
-    setNothingToDo(false);
+    // setNothingToDo(false);
   }
 
   if (isLoading) {
     return <Loading/>
-  } else if (nothingToDo) {
+  } else if (!hasPlant) {
     return <NoItemForPlant afterAdd={firstAddCallback}/>
   } else {
     return (

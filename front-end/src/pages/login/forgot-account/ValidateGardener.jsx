@@ -4,6 +4,7 @@ import VerifyAccountContent from "./VerifyAccountContent";
 import React from "react";
 
 /**
+ * 아이디/비밀번호 찾기의 첫 단계인 이메일 인증 페이지
  * 부모 컴포넌트: ForgotAccount
  * -> VerifyAccountContent
  * @param icon

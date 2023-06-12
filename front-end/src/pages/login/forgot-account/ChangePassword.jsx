@@ -7,27 +7,33 @@ import axios from "axios";
 import {Link} from "react-router-dom";
 
 const ChangePassword = ({username}) => {
-
+  // 변경할 비밀번호와 비번 확인용 input
   const [password, setPassword] = useState({
     password: "",
     repeatPassword: ""
   })
 
+  // 비밀번호 변경 완료 여부
+  const [isUpdated, setIsUpdated] = useState(false);
+
+  // input 컨트롤
   const onChange = (e) => {
     const {name, value} = e.target;
     setPassword(setPassword => ({...password, [name]: value}));
   }
 
+  // 비밀번호 유효성 검사 피드백 메시지
   const getPasswordFeedbackMsg = () => {
     if (password.password == "") {
       return "";
     } else if (!verifyPassword(password.password)) {
-      return "숫자, 특수문자를 포함하여 8자리 이상이어야 해요."; // register와 중복
+      return "숫자, 특수문자를 포함하여 8자리 이상이어야 해요.";
     } else {
       return "사용 가능한 비밀번호입니다";
     }
   }
 
+  // 비밀번호 확인 유효성 검사 피드백 메시지
   const getRepeatPasswordFeedbackMsg = () => {
     if (password.repeatPassword == "") {
       return "";
@@ -36,13 +42,14 @@ const ChangePassword = ({username}) => {
     }
   }
 
-  const [isUpdated, setIsUpdated] = useState(false);
-
+  // 백엔드로 비밀번호 전달
   const submit = async () => {
     await axios.put(`/gardener/${username}/password`, {username, password: password.password});
     setIsUpdated(true);
   }
 
+  // 변경 완료(isUpdated) 시 완료 페이지 렌더링
+  // 변경 중일 시 비밀번호 입력 페이지 렌더링
   return isUpdated ? (
     <div className="d-flex justify-content-center align-items-center">
       <div className="text-center">

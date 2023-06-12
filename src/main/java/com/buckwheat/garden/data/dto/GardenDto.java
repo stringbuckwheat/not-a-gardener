@@ -22,6 +22,7 @@ public class GardenDto {
     @NoArgsConstructor
     @ToString
     public static class GardenMain {
+        private boolean hasPlant;
         private List<Response> todoList;
         private List<GardenDto.WaitingForWatering> waitingList;
         private List<RoutineDto.Response> routineList;
