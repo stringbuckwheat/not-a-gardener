@@ -19,6 +19,10 @@ repositories {
 	mavenCentral()
 }
 
+node {
+	download = true
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -59,35 +63,7 @@ processResources {
 }
 
 task copyWebApp(type: Copy) {
-	dependsOn "buildReact"
 	from "$frontDir/build"
 	into "$projectDir/src/main/resources/static"
 	println("copyWebApp")
-}
-
-task buildReact(type: Exec) {
-	dependsOn "installReact"
-	workingDir "$frontDir"
-	inputs.dir "$frontDir"
-	group = BasePlugin.BUILD_GROUP
-	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-		commandLine "npm.cmd", "run-script", "build"
-	} else {
-		commandLine "npm", "run-script", "build"
-	}
-	println("buildReact")
-}
-
-task installReact(type: Exec) {
-	workingDir "$frontDir"
-	inputs.dir "$frontDir"
-	group = BasePlugin.BUILD_GROUP
-	if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-		commandLine "npm.cmd", "audit", "fix"
-		commandLine 'npm.cmd', 'install'
-	} else {
-		commandLine "npm", "audit", "fix"
-		commandLine 'npm', 'install'
-	}
-	println("installReact")
 }
