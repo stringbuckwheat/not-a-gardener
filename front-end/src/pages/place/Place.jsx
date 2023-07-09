@@ -51,7 +51,6 @@ const Place = () => {
       placeList={placeList}
       setPlaceList={setPlaceList}
       originPlaceList={originPlaceList}
-      setOriginPlaceList={setOriginPlaceList}
       addPlace={addPlace}
     />
   }

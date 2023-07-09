@@ -36,5 +36,4 @@ public class GardenResponseProvider {
         GardenDto.Detail gardenDetail = gardenUtil.getGardenDetailWhenLazy(plant);
         return new GardenDto.Response(plantResponse, gardenDetail);
     }
-
 }

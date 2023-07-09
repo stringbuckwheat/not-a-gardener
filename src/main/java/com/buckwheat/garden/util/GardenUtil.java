@@ -46,19 +46,25 @@ public class GardenUtil {
     }
 
     public GardenDto.Detail getGardenDetail(Plant plant, List<ChemicalUsage> latestChemicalUsages) {
+        // nn일째 반려중
         String anniversary = getAnniversary(plant.getBirthday());
 
         // 물주기 기록이 없으면
         if (plant.getWaterings() == null || plant.getWaterings().size() == 0) {
+            // 물주기 정보가 부족해요
             return GardenDto.Detail.from(null, anniversary, -1, WateringCode.NO_RECORD.getCode(), null);
         }
 
+        // 가장 최근 물주기 불러오기
         WateringDto.Response latestWatering = WateringDto.Response.from(plant.getWaterings().get(0));
 
+        // 비료든 물이든 뭐라도 준지 며칠이나 지났는지 계산
         int wateringDDay = getWateringDDay(plant.getRecentWateringPeriod(), plant.getWaterings().get(0).getWateringDate());
+        // 이 식물은 목이 말라요, 흙이 말랐는지 확인해보세요 ... 등의 watering code를 계산
         int wateringCode = getWateringCode(plant.getRecentWateringPeriod(), wateringDDay);
 
         // chemicalCode: 물을 줄 식물에 대해서 맹물을 줄지 비료/약품 희석액을 줄지 알려주는 용도
+        // 어떤 비료를 줘야하는지 알려준다
         GardenDto.ChemicalCode chemicalCode = getChemicalCode(latestChemicalUsages);
 
         return GardenDto.Detail.from(latestWatering, anniversary, wateringDDay, wateringCode, chemicalCode);

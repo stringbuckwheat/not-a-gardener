@@ -3,7 +3,6 @@ package com.buckwheat.garden.service.impl;
 import com.buckwheat.garden.code.WateringCode;
 import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.dao.RoutineDao;
-import com.buckwheat.garden.dao.WateringDao;
 import com.buckwheat.garden.data.dto.GardenDto;
 import com.buckwheat.garden.data.dto.RoutineDto;
 import com.buckwheat.garden.data.entity.Plant;
@@ -25,7 +24,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class GardenServiceImpl implements GardenService {
-    private final WateringDao wateringDao;
     private final PlantDao plantDao;
     private final RoutineDao routineDao;
     private final GardenUtil gardenUtil;

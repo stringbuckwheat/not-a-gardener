@@ -4,7 +4,6 @@ import './scss/style.scss'
 import Loading from "./components/data/Loading";
 
 // Pages
-const Landing = React.lazy(() => import('./pages/landing/Landing'))
 const Login = React.lazy(() => import('./pages/login/Login'))
 const ForgotAccount = React.lazy(() => import('./pages/login/ForgotAccount'))
 const Register = React.lazy(() => import('./pages/login/Register'))
@@ -13,12 +12,15 @@ const GetToken = React.lazy(() => import('./pages/login/GetToken'))
 
 const App = () => {
   console.log = function no_console() {};
+  console.debug = function no_console() {};
+  console.info = function no_console() {};
+  console.warn = function no_console() {};
+  console.error = function no_console() {};
 
   return (
     <BrowserRouter>
       <Suspense fallback={<Loading/>}>
         <Routes>
-          {/*<Route path="" name="Landing" element={<Landing/>}/>*/}
           <Route path="/login" name="Login Page" element={<Login/>}/>
           <Route path="/oauth/:token" element={<GetToken/>}/>
           <Route path="/forgot" name="Forgot Account" element={<ForgotAccount/>}/>

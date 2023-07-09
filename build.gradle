@@ -9,6 +9,10 @@ group = 'com.buckwheat'
 version = '0.0.1'
 sourceCompatibility = '11'
 
+jar {
+	enabled = false
+}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor

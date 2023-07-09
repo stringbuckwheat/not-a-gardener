@@ -41,7 +41,6 @@ public class WateringUtil {
             list.add(WateringDto.ForOnePlant.from(w));
         }
 
-        // 이 메소드가 호출되는 시점엔 물주기 기록이 두 개 이상 있음
         LocalDateTime latestWateringDate = plant.getWaterings().get(0).getWateringDate().atStartOfDay();
         LocalDateTime prevWateringDate = plant.getWaterings().get(1).getWateringDate().atStartOfDay();
 

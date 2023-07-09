@@ -47,16 +47,18 @@ const WateringList = ({plant, setPlant, wateringList, setWateringList}) => {
   const isEditing = (record) => record.wateringId === editingKey;
 
   const edit = (record) => {
+    console.log("edit record === ", record);
+
     form.setFieldsValue({
       ...record,
       wateringDate: dayjs(new Date(record.wateringDate)),
     });
 
     setEditWatering({
-      plantId: plant.plantId,
-      wateringId: record.wateringId,
+      plantId: plant.id,
+      id: record.id,
       wateringDate: record.wateringDate,
-      chemicalNo: record.chemicalNo,
+      chemicalId: record.chemicalId,
     });
 
     setEditingKey(record.wateringId);
@@ -77,7 +79,8 @@ const WateringList = ({plant, setPlant, wateringList, setWateringList}) => {
   }
 
   const updateWatering = async () => {
-    const res = await updateData(`/plant/${plant.id}/watering/${editWatering.wateringId}`, editWatering);
+    console.log("update watering === editWatering", editWatering);
+    const res = await updateData(`/plant/${plant.id}/watering/${editWatering.id}`, editWatering);
     wateringCallBack(res);
     setEditingKey('');
   };

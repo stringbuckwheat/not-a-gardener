@@ -15,29 +15,41 @@ import InputFeedbackSpan from "../etc/InputFeedbackSpan";
  */
 const ValidationSubmitButton = ({isValid, onClickValid, onClickInvalidMsg, title, className, size}) => {
   const [invalidMsg, setInvalidMsg] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  return isValid ? (
+  const onSubmit = () => {
+    setIsSubmitted(true);
+    onClickValid();
+  }
+
+  if(!isValid){
+    return (
+      <>
+        <div className={className}>
+          <div>
+            <InputFeedbackSpan feedbackMsg={invalidMsg}/>
+          </div>
+          <Button
+            size={size}
+            className={`bg-light text-dark ${className}`}
+            onClick={() => setInvalidMsg(onClickInvalidMsg)}>
+            {title}
+          </Button>
+        </div>
+      </>
+    )
+  }
+
+  return (
     <Button
       type="button"
       size={size}
       className={`bg-orange text-white ${className}`}
-      onClick={onClickValid}>
+      onClick={onSubmit}
+      disabled={isSubmitted}
+    >
       {title}
     </Button>
-  ) : (
-    <>
-      <div className={className}>
-        <div>
-          <InputFeedbackSpan feedbackMsg={invalidMsg}/>
-        </div>
-        <Button
-          size={size}
-          className={`bg-light text-dark ${className}`}
-          onClick={() => setInvalidMsg(onClickInvalidMsg)}>
-          {title}
-        </Button>
-      </div>
-    </>
   )
 }
 
