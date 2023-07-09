@@ -4,7 +4,7 @@ import LogOut from "../utils/function/logout";
 // axios 인스턴스 생성
 const authAxios = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
-  timeout: 1000
+  timeout: 5000
 })
 
 /**
