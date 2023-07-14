@@ -15,7 +15,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/watering")
+@RequestMapping("/api/watering")
 public class WateringController {
     private final WateringService wateringService;
 

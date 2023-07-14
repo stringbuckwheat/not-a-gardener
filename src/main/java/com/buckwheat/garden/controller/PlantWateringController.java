@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/plant/{plantId}/watering")
+@RequestMapping("/api/plant/{plantId}/watering")
 public class PlantWateringController {
     private final PlantWateringService plantWateringService;
 

@@ -15,7 +15,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/garden")
+@RequestMapping("/api/garden")
 public class GardenController {
     private final GardenService gardenService;
 

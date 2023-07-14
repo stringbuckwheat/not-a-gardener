@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/routine")
+@RequestMapping("/api/routine")
 public class RoutineController {
     private final RoutineService routineService;
 

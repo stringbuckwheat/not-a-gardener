@@ -36,7 +36,7 @@ const LoginForm = () => {
 
   const submit = async () => {
     try {
-      const res = await axios.post(process.env.REACT_APP_API_URL, login);
+      const res = await axios.post("/api/login", login);
       await setGardener(res.data);
 
       // garden 페이지로 이동

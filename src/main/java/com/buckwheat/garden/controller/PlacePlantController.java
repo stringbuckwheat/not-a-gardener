@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/place/{placeId}/plant")
+@RequestMapping("/api/place/{placeId}/plant")
 public class PlacePlantController {
     private final PlacePlantService placePlantService;
 

@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/chemical")
+@RequestMapping("/api/chemical")
 @Slf4j
 public class ChemicalController {
     private final ChemicalService chemicalService;

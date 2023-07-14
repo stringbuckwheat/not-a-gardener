@@ -43,7 +43,7 @@ const VerifyAccountContent = ({successContent, setEmail, setGardenerList}) => {
     setIsWaiting(true);
 
     try {
-      const res = await axios.get(`/gardener/email/${input}`);
+      const res = await axios.get(`/api/gardener/email/${input}`);
       // console.log("res.data", res.data);
 
       setIdentification(res.data.identificationCode); // 인증코드

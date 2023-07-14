@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/garden/{plantId}/watering")
+@RequestMapping("/api/garden/{plantId}/watering")
 @Slf4j
 public class GardenWateringController {
     private final GardenWateringService gardenWateringService;
