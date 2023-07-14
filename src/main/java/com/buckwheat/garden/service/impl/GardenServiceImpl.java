@@ -1,14 +1,13 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.code.WateringCode;
 import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.dao.RoutineDao;
 import com.buckwheat.garden.data.dto.GardenDto;
+import com.buckwheat.garden.data.dto.RawGarden;
 import com.buckwheat.garden.data.dto.RoutineDto;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Routine;
 import com.buckwheat.garden.service.GardenService;
-import com.buckwheat.garden.util.GardenUtil;
 import com.buckwheat.garden.util.RoutineUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,14 +25,14 @@ import java.util.List;
 public class GardenServiceImpl implements GardenService {
     private final PlantDao plantDao;
     private final RoutineDao routineDao;
-    private final GardenUtil gardenUtil;
     private final RoutineUtil routineUtil;
     private final GardenResponseProvider gardenResponseProvider;
 
     @Override
     @Transactional
     public GardenDto.GardenMain getGarden(Long gardenerId) {
-        if(plantDao.getPlantsByGardenerId(gardenerId).size() == 0){
+        // 저장한 식물이 하나도 없는지
+        if (plantDao.getPlantsByGardenerId(gardenerId).size() == 0) {
             return new GardenDto.GardenMain(false, null, null, null);
         }
 
@@ -41,42 +40,16 @@ public class GardenServiceImpl implements GardenService {
         List<GardenDto.WaitingForWatering> waitingList = new ArrayList<>();
         LocalDate today = LocalDate.now();
 
-        // 필요한 것들 계산해서 gardenDto list 리턴
-        // getPlantsForGarden: postponeDate이 과거거나 아예 미룬 적 없는 식물들
-        // 오늘 미룬 식물도 띄워줘야함
-        for (Plant plant : plantDao.getPlantsForGarden(gardenerId)) {
-            log.debug("plantName: {}", plant.getName());
-            // 오늘 스케줄 미루기를 클릭한 식물
-            if (plant.getConditionDate() != null && today.compareTo(plant.getConditionDate()) == 0) {
-                continue;
-            }
-
-            // 물주기 기록이 없는 경우
-            if (plant.getWaterings().size() == 0) {
-                waitingList.add(GardenDto.WaitingForWatering.from(plant));
-                todoList.add(gardenResponseProvider.getGardenResponse(plant, gardenerId));
-                continue;
-            }
-
-            // 물 줄 날짜가 며칠 남았는지
-            // parameter: recentWateringPeriod, lastDrinkingDay
-            int wateringDDay = gardenUtil.getWateringDDay(plant.getRecentWateringPeriod(), plant.getWaterings().get(0).getWateringDate());
-            int wateringCode = gardenUtil.getWateringCode(plant.getRecentWateringPeriod(), wateringDDay);
-            log.debug("wateringCode: {}", wateringCode);
-            boolean hasToDo = wateringCode < 0 || wateringCode == WateringCode.THIRSTY.getCode() || wateringCode == WateringCode.CHECK.getCode();
-
-//            if (wateringCode == WateringCode.NO_RECORD.getCode()) {
-//                waitingList.add(GardenDto.WaitingForWatering.from(plant));
-//                todoList.add(gardenResponseProvider.getGardenResponse(plant, gardenerId));
-//            } else
-            if (hasToDo) {
-                // 오늘 할일이 있는 식물이거나 물주기 기록은 없고 직접 입력한 물주기 사이클은 있는 경우
-                todoList.add(gardenResponseProvider.getGardenResponse(plant, gardenerId));
-            }
+        // waiting for watering list
+        for (Plant plant : plantDao.getWaitingForWateringList(gardenerId)) {
+            waitingList.add(GardenDto.WaitingForWatering.from(plant));
+            todoList.add(gardenResponseProvider.getGardenResponse(plant, gardenerId));
         }
 
-        log.debug("todoList: {}", todoList);
-        log.debug("waitingList: {}", waitingList);
+        // todolist
+        for (RawGarden rawGarden : plantDao.getGarden(gardenerId)) {
+            todoList.add(gardenResponseProvider.getGardenResponse(rawGarden, gardenerId));
+        }
 
         // 오늘 루틴 리스트
         List<RoutineDto.Response> routineList = getRoutinesForToday(gardenerId);

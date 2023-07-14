@@ -21,7 +21,7 @@ public class GardenController {
 
     /**
      * 로그인 후 메인페이지(오늘 할일 및 데이터를 기다리는 식물 정보)에 쓸 데이터
-     * @param userPrincipal SecurityContext에 저장해놓은 GardenerNo
+     * @param userPrincipal SecurityContext에 저장해놓은 GardenerId
      * @return GardenDto.GardenMain
      *      List<Response> todoList: 오늘 할 일이 있는 식물 리스트
      *      List<GardenDto.WaitingForWatering> waitingList: 물주기 데이터를 기다리는 식물 리스트

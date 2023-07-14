@@ -52,6 +52,18 @@ public class GardenDto {
                     .createDate(LocalDate.from(plant.getCreateDate()))
                     .build();
         }
+
+        public static WaitingForWatering from(RawGarden rawGarden){
+            return WaitingForWatering.builder()
+                    .id(rawGarden.getPlantId())
+                    .name(rawGarden.getName())
+                    .species(rawGarden.getSpecies())
+                    .medium(rawGarden.getMedium())
+                    .placeId(rawGarden.getPlaceId())
+                    .placeName(rawGarden.getPlaceName())
+                    .createDate(LocalDate.from(rawGarden.getCreateDate()))
+                    .build();
+        }
     }
 
     @AllArgsConstructor

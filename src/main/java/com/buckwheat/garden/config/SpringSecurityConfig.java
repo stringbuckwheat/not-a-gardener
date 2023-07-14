@@ -43,6 +43,7 @@ public class SpringSecurityConfig {
         // Authorization으로 사용자 인증 시 true
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://not-a-gardener.xyz"); // 요청 권한을 줄 도메인
+        // config.addAllowedOrigin("http://localhost:3000"); // 요청 권한을 줄 도메인
         config.addAllowedHeader("*"); // 노출해도 되는 헤더
 
         // 허용할 메소드.

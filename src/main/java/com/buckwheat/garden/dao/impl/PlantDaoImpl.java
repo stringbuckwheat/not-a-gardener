@@ -3,6 +3,7 @@ package com.buckwheat.garden.dao.impl;
 import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.data.dto.PlaceDto;
 import com.buckwheat.garden.data.dto.PlantDto;
+import com.buckwheat.garden.data.dto.RawGarden;
 import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Place;
 import com.buckwheat.garden.data.entity.Plant;
@@ -23,6 +24,16 @@ public class PlantDaoImpl implements PlantDao {
     private final PlantRepository plantRepository;
     private final PlaceRepository placeRepository;
     private final GardenerRepository gardenerRepository;
+
+    @Override
+    public List<RawGarden> getGarden(Long gardenerId) {
+        return plantRepository.findGardenByGardenerId(gardenerId);
+    }
+
+    @Override
+    public List<Plant> getWaitingForWateringList(Long gardenerId) {
+        return plantRepository.findWaitingForWateringList(gardenerId);
+    }
 
     @Override
     public List<Plant> getPlantsByGardenerId(Long gardenerId){

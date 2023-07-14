@@ -61,6 +61,11 @@ public class WateringDto {
                     .build();
         }
 
+        // TODO test 메소드
+        public static Response from(LocalDate latestWateringDate){
+            return Response.builder().wateringDate(latestWateringDate).build();
+        }
+
         public static Response withWateringMsgFrom(Watering watering, Message wateringMsg) {
             return Response.builder()
                     .id(watering.getWateringId())

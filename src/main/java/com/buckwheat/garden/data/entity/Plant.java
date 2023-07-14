@@ -39,7 +39,7 @@ public class Plant {
 
     private LocalDate birthday;
 
-    // TODO 얘 뭐지
+    // not dry
     private LocalDate conditionDate;
 
     // 물주기를 미룬 날짜

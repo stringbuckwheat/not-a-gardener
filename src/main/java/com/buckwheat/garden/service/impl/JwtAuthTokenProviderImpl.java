@@ -59,7 +59,7 @@ public class JwtAuthTokenProviderImpl implements JwtAuthTokenProvider {
         // claims 만들기
         Map<String, String> claims = new HashMap<>();
 
-        claims.put("gardenerNo", String.valueOf(gardenerId));
+        claims.put("gardenerId", String.valueOf(gardenerId));
         claims.put("email", userPrincipal.getGardener().getEmail());
         claims.put("name", userPrincipal.getGardener().getName());
 

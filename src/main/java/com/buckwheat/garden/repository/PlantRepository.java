@@ -1,8 +1,11 @@
 package com.buckwheat.garden.repository;
 
+import com.buckwheat.garden.data.dto.RawGarden;
 import com.buckwheat.garden.data.entity.Plant;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -36,4 +39,30 @@ public interface PlantRepository extends JpaRepository<Plant, Long> {
      */
     @EntityGraph(attributePaths = {"place", "waterings", "waterings.chemical"}, type= EntityGraph.EntityGraphType.FETCH)
     Optional<Plant> findByPlantId(Long plantId);
+
+    // 메인페이지 todolist 용 메소드
+    @Query(value = "SELECT p.plant_id plantId, p.name name, p.species, p.recent_watering_period recentWateringPeriod, " +
+            " p.early_watering_period earlyWateringPeriod, p.medium, p.birthday, p.condition_date conditionDate, " +
+            " p.create_date createDate, max(watering_date) latestWateringDate, p.postpone_date postponeDate, " +
+            " pl.place_id placeId, pl.name placeName" +
+            " FROM plant p" +
+            " INNER JOIN place pl" +
+            " ON p.place_id = pl.place_id" +
+            " LEFT JOIN watering w" +
+            " ON p.plant_id = w.plant_id" +
+            " WHERE p.gardener_id = :gardenerId" +
+            " AND (date_format(p.condition_date, '%Y-%m-%d') != curdate() or condition_date is null)" +
+            " AND p.recent_watering_period != 0 " +
+            " group by p.plant_id" +
+            " having (max(watering_date) != curdate() or max(watering_date) is null)" +
+            " or datediff(max(watering_date), curdate()) >= 2" +
+            " order by p.recent_watering_period desc", nativeQuery = true)
+    List<RawGarden> findGardenByGardenerId(@Param("gardenerId") Long gardenerId);
+
+    // waitinglist
+    @Query(value = "SELECT * FROM plant p" +
+            " INNER JOIN place pl ON p.place_id = pl.place_id" +
+            " LEFT JOIN watering w ON p.plant_id = w.plant_id" +
+            " WHERE p.gardener_id = :gardenerId AND w.plant_id IS NULL", nativeQuery = true)
+    List<Plant> findWaitingForWateringList(@Param("gardenerId") Long gardenerId);
 }

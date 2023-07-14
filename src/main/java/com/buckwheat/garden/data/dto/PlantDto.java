@@ -28,7 +28,6 @@ public class PlantDto {
         private LocalDate conditionDate;
 
         public static Response from(Plant plant){
-
             return Response.builder()
                     .id(plant.getPlantId())
                     .name(plant.getName())
@@ -42,6 +41,23 @@ public class PlantDto {
                     .birthday(plant.getBirthday())
                     .postponeDate(plant.getPostponeDate())
                     .conditionDate(plant.getConditionDate())
+                    .build();
+        }
+
+        public static Response from(RawGarden rawGarden){
+            return Response.builder()
+                    .id(rawGarden.getPlantId())
+                    .name(rawGarden.getName())
+                    .species(rawGarden.getSpecies())
+                    .recentWateringPeriod(rawGarden.getRecentWateringPeriod())
+                    .earlyWateringPeriod(rawGarden.getEarlyWateringPeriod())
+                    .medium(rawGarden.getMedium())
+                    .placeId(rawGarden.getPlaceId())
+                    .placeName(rawGarden.getPlaceName())
+                    .createDate(LocalDate.from(rawGarden.getCreateDate()))
+                    .birthday(rawGarden.getBirthday())
+                    .postponeDate(rawGarden.getPostponeDate())
+                    .conditionDate(rawGarden.getConditionDate())
                     .build();
         }
     }

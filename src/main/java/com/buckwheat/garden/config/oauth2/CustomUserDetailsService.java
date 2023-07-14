@@ -17,7 +17,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     /**
      *
-     * @param username gardenerNo가 저장되어 있다
+     * @param username gardenerId가 저장되어 있다
      * @return Gardener 객체를 포함한 UserPrincipal -> UsernamePasswordAuthenticationToken에 넣는다
      * @throws UsernameNotFoundException
      */

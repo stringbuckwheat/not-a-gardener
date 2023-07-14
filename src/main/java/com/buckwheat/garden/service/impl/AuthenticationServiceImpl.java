@@ -90,7 +90,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // 인코딩된 값 리턴
         String jwtToken = tokenProvider.createAuthToken(userPrincipal).getToken();
 
-        // return new GardenerInfo(jwtToken, gardener.getGardenerNo(), gardener.getName());
         return GardenerDto.Info.from(jwtToken, gardener);
     }
 }

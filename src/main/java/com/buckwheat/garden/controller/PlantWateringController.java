@@ -41,7 +41,7 @@ public class PlantWateringController {
      * @param wateringRequest
      * @return
      */
-    @PutMapping("/{wateringNo}")
+    @PutMapping("/{wateringId}")
     public WateringDto.AfterWatering updateWatering(@RequestBody WateringDto.Request wateringRequest){
         return plantWateringService.modifyWatering(wateringRequest);
     }
