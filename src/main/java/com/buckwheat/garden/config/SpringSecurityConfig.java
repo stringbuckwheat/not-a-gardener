@@ -4,7 +4,7 @@ import com.buckwheat.garden.config.filter.JwtExceptionFilter;
 import com.buckwheat.garden.config.filter.JwtFilter;
 import com.buckwheat.garden.config.oauth2.OAuth2MemberService;
 import com.buckwheat.garden.config.oauth2.OAuth2SuccessHandler;
-import com.buckwheat.garden.service.JwtAuthTokenProvider;
+import com.buckwheat.garden.service.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +25,7 @@ import org.springframework.web.filter.CorsFilter;
 @RequiredArgsConstructor
 @Slf4j
 public class SpringSecurityConfig {
-    private final JwtAuthTokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
     private final OAuth2MemberService oAuth2MemberService;
     private final OAuth2SuccessHandler successHandler;
     private final JwtExceptionFilter jwtExceptionFilter;
@@ -42,8 +42,8 @@ public class SpringSecurityConfig {
         // 요청에 credential 권한이 있는지 없는지
         // Authorization으로 사용자 인증 시 true
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://not-a-gardener.xyz"); // 요청 권한을 줄 도메인
-        // config.addAllowedOrigin("http://localhost:3000"); // 요청 권한을 줄 도메인
+        // config.addAllowedOrigin("http://not-a-gardener.xyz"); // 요청 권한을 줄 도메인
+        config.addAllowedOrigin("http://localhost:3000"); // 요청 권한을 줄 도메인
         config.addAllowedHeader("*"); // 노출해도 되는 헤더
 
         // 허용할 메소드.
@@ -70,7 +70,7 @@ public class SpringSecurityConfig {
                 .and()
                 .authorizeRequests() // 리퀘스트 설정
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // Preflight 요청 허용
-                .antMatchers("/", "/oauth", "/register").permitAll() // 누구나 접근가능
+                .antMatchers("/login", "/token", "/oauth", "/register").permitAll() // 누구나 접근가능
                 .antMatchers("/garden/**").authenticated() // 인증 권한 필요
 
                 .and()

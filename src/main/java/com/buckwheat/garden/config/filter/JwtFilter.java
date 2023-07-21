@@ -1,7 +1,7 @@
 package com.buckwheat.garden.config.filter;
 
-import com.buckwheat.garden.data.token.JwtAuthToken;
-import com.buckwheat.garden.service.JwtAuthTokenProvider;
+import com.buckwheat.garden.data.token.AccessToken;
+import com.buckwheat.garden.service.TokenProvider;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -25,7 +25,7 @@ public class JwtFilter extends OncePerRequestFilter {
     // 로그인 이후 토큰 자체에 대한 검증
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
-    private final JwtAuthTokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
 
     private String resolveToken(HttpServletRequest request){
         // Request의 Header에 담긴 토큰 값을 가져온다
@@ -52,13 +52,13 @@ public class JwtFilter extends OncePerRequestFilter {
             // 디코딩할만한 토큰이 왔으면
             if(token != null){
                 // header의 token로 token, key를 포함하는 새로운 JwtAuthToken 만들기
-                JwtAuthToken jwtAuthToken = tokenProvider.convertAuthToken(token);
+                AccessToken accessToken = tokenProvider.convertAuthToken(token);
 
                 // boolean validate() -> getData(): claims or null
                 // 정상 토큰이면 해당 토큰으로 Authentication을 가져와서 SecurityContext에 저장
-                if(jwtAuthToken.validate()){
+                if(accessToken.validate()){
                     // UsernamePasswordAuthenticationToken(유저, authToken, 권한)
-                    Authentication authentication = tokenProvider.getAuthentication(jwtAuthToken);
+                    Authentication authentication = tokenProvider.getAuthentication(accessToken);
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }

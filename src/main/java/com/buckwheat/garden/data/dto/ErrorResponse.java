@@ -1,16 +1,20 @@
 package com.buckwheat.garden.data.dto;
 
+import com.buckwheat.garden.error.ExceptionCode;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+
+// @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ErrorResponse {
-    private int code;
+    private String code;
     private String error;
     private String errorDescription;
+
+    public static ErrorResponse from(ExceptionCode code){
+        return new ErrorResponse(code.getCode(), code.getMessage(), code.getDescription());
+    }
 }

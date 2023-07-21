@@ -1,6 +1,7 @@
 package com.buckwheat.garden.config.filter;
 
 import com.buckwheat.garden.data.dto.ErrorResponse;
+import com.buckwheat.garden.error.ExceptionCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
@@ -25,17 +26,14 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
         } catch (JwtException e) {
             setErrorResponse(HttpStatus.UNAUTHORIZED, response, e);
         }
-        // TODO 예외처리 추가
     }
 
     public void setErrorResponse(HttpStatus status, HttpServletResponse response, Throwable e) throws IOException {
         response.setStatus(status.value());
         response.setContentType("application/json; charset=UTF-8");
 
-        ErrorResponse jwtExceptionResponse = new ErrorResponse(401, HttpStatus.UNAUTHORIZED + "", e.getMessage());
-
         ObjectMapper mapper = new ObjectMapper();
 
-        response.getWriter().write(mapper.writeValueAsString(jwtExceptionResponse));
+        response.getWriter().write(mapper.writeValueAsString(ErrorResponse.from(ExceptionCode.ACCESS_TOKEN_EXPIRED)));
     }
 }
