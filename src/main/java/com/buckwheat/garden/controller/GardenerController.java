@@ -25,8 +25,8 @@ public class GardenerController {
 
     /* 간단한 회원 정보(헤더) - 소셜로그인에서 사용 */
     @GetMapping("/gardener-info")
-    public GardenerDto.Info getGardenerInfo(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return GardenerDto.Info.from(null, userPrincipal.getGardener());
+    public GardenerDto.SimpleInfo getGardenerInfo(@AuthenticationPrincipal UserPrincipal userPrincipal){
+        return GardenerDto.SimpleInfo.from(userPrincipal.getGardener());
     }
 
     /* 이메일로 계정 확인 - 아이디/비밀번호 찾기 */

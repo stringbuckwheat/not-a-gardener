@@ -1,11 +1,16 @@
 package com.buckwheat.garden.data.dto;
 
 import com.buckwheat.garden.data.entity.Gardener;
+import com.buckwheat.garden.data.token.AccessToken;
+import com.buckwheat.garden.data.token.RefreshToken;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 public class GardenerDto {
+    /**
+     * 로그인 요청
+     */
     @Getter
     @ToString
     public static class Login {
@@ -22,24 +27,61 @@ public class GardenerDto {
     }
 
     @AllArgsConstructor
-    @Builder
+    @Getter
+    public static class Token {
+        private String accessToken;
+        private String refreshToken;
+        private LocalDateTime expiredAt;
+
+        public static Token from(AccessToken accessToken, RefreshToken refreshToken) {
+            return new Token(
+                    accessToken.getToken(),
+                    refreshToken.getToken(),
+                    accessToken.getExpiredAt()
+            );
+        }
+
+        public static Token from(AccessToken accessToken){
+            return new Token(accessToken.getToken(), null, accessToken.getExpiredAt());
+        }
+    }
+
+    @Getter
+    @ToString
+    public static class Refresh {
+        private Long gardenerId;
+        private String refreshToken;
+    }
+
+    /**
+     * 로그인 이후 토큰과 기본 정보 응답
+     */
+    @AllArgsConstructor
     @Getter // HttpMediaTypeNotAcceptableException
     public static class Info {
-        private String token;
+        private SimpleInfo simpleInfo;
+        private Token token;
+
+        public static Info from(AccessToken accessToken, RefreshToken refreshToken, Gardener gardener) {
+            return new Info(SimpleInfo.from(gardener), Token.from(accessToken, refreshToken));
+        }
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class SimpleInfo {
         private Long gardenerId;
         private String name;
         private String provider;
 
-        public static Info from(String jwtToken, Gardener gardener) {
-            return Info.builder()
-                    .token(jwtToken)
-                    .gardenerId(gardener.getGardenerId())
-                    .name(gardener.getName())
-                    .provider(gardener.getProvider())
-                    .build();
+        public static SimpleInfo from(Gardener gardener) {
+            return new SimpleInfo(gardener.getGardenerId(), gardener.getName(), gardener.getProvider());
         }
     }
 
+    /**
+     * 회원 관리 페이지
+     */
     @AllArgsConstructor
     @Builder
     @Getter
@@ -53,7 +95,7 @@ public class GardenerDto {
         private LocalDateTime createDate;
         private String provider;
 
-        public static Detail from (Gardener gardener) {
+        public static Detail from(Gardener gardener) {
             return GardenerDto.Detail.builder()
                     .id(gardener.getGardenerId())
                     .username(gardener.getUsername())
@@ -64,7 +106,7 @@ public class GardenerDto {
                     .build();
         }
 
-        public static Detail updateResponseFrom(Gardener gardener){
+        public static Detail updateResponseFrom(Gardener gardener) {
             return GardenerDto.Detail.builder()
                     .id(gardener.getGardenerId())
                     .username(gardener.getUsername())
@@ -75,6 +117,9 @@ public class GardenerDto {
         }
     }
 
+    /**
+     * 회원가입 요청
+     */
     @Getter
     @Setter
     @ToString
@@ -92,7 +137,7 @@ public class GardenerDto {
             return this;
         }
 
-        public Gardener toEntity(){
+        public Gardener toEntity() {
             return Gardener
                     .builder()
                     .username(username)
@@ -104,11 +149,14 @@ public class GardenerDto {
         }
     }
 
+    /**
+     * 아이디/비밀번호 찾기 응답
+     */
     @AllArgsConstructor
     @Getter
     @NoArgsConstructor
     @ToString
-    public static class ForgotResponse{
+    public static class ForgotResponse {
         private Long id;
         private String username;
         private String provider;

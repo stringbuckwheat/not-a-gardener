@@ -5,11 +5,11 @@ import getData from "../../api/backend-api/common/getData";
 
 
 const GetToken = () => {
-  let {token} = useParams();
+  let {accessToken} = useParams();
   const navigate = useNavigate();
 
   const setUser = async () => {
-    localStorage.setItem("login", token);
+    localStorage.setItem("accessToken", accessToken);
 
     const user = await getData("/gardener/gardener-info");
 

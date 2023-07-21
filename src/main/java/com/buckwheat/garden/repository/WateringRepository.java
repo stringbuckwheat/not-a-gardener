@@ -25,10 +25,10 @@ public interface WateringRepository extends JpaRepository<Watering, Long> {
             " AND watering.wateringDate <= :endDate")
     List<Watering> findAllWateringListByGardenerNo(@Param("gardenerId") Long gardenerId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
-    @Query(value = "select chemical_id chemicalId, period, name," +
-            " (select MAX(watering_date) from watering w where w.plant_id = :plantId and w.chemical_id = c.chemical_id) latestWateringDate" +
-            " from chemical c where c.gardener_id = :gardenerId" +
-            " order by period desc", nativeQuery = true)
+    @Query(value = "SELECT chemical_id chemicalId, period, name," +
+            " (SELECT MAX(watering_date) FROM watering w WHERE w.plant_id = :plantId AND w.chemical_id = c.chemical_id) latestWateringDate" +
+            " FROM chemical c WHERE c.gardener_id = :gardenerId" +
+            " ORDER BY period DESC", nativeQuery = true)
     List<ChemicalUsage> findLatestChemicalizedDayList(@Param("gardenerId") Long gardenerId, @Param("plantId") Long plantId);
 
     @EntityGraph(attributePaths = {"chemical"}, type = EntityGraph.EntityGraphType.FETCH)

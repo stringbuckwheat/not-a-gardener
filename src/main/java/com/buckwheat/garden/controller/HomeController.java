@@ -23,4 +23,9 @@ public class HomeController {
     public GardenerDto.Info login(@RequestBody GardenerDto.Login login){
         return authenticationService.login(login);
     }
+
+    @PostMapping("/api/token")
+    public GardenerDto.Token refreshToken(@RequestBody GardenerDto.Refresh refreshToken){
+        return authenticationService.refreshToken(refreshToken);
+    }
 }

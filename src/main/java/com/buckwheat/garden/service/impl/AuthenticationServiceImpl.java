@@ -4,8 +4,12 @@ import com.buckwheat.garden.config.oauth2.UserPrincipal;
 import com.buckwheat.garden.dao.GardenerDao;
 import com.buckwheat.garden.data.dto.GardenerDto;
 import com.buckwheat.garden.data.entity.Gardener;
+import com.buckwheat.garden.data.token.AccessToken;
+import com.buckwheat.garden.data.token.ActiveGardener;
+import com.buckwheat.garden.data.token.RefreshToken;
+import com.buckwheat.garden.repository.RedisRepository;
 import com.buckwheat.garden.service.AuthenticationService;
-import com.buckwheat.garden.service.JwtAuthTokenProvider;
+import com.buckwheat.garden.service.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,7 +19,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Slf4j
@@ -23,8 +29,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final GardenerDao gardenerDao;
-    private final JwtAuthTokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
     private final BCryptPasswordEncoder encoder;
+    private final RedisRepository redisRepository;
 
     /**
      * 아이디 중복 검사
@@ -87,9 +94,42 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // security context에 저장
         SecurityContextHolder.getContext().setAuthentication(token);
 
-        // 인코딩된 값 리턴
-        String jwtToken = tokenProvider.createAuthToken(userPrincipal).getToken();
+        // access token, expired date
+        AccessToken accessToken = tokenProvider.createAccessToken(userPrincipal);
 
-        return GardenerDto.Info.from(jwtToken, gardener);
+        // refresh token
+        RefreshToken refreshToken = RefreshToken.getRefreshToken();
+
+        // redis에 저장
+        redisRepository.save(ActiveGardener.from(gardener, refreshToken));
+        log.debug("redis 조회 - findByGardenerId: {}", redisRepository.findById(gardener.getGardenerId()));
+
+        return GardenerDto.Info.from(accessToken, refreshToken, gardener);
+    }
+
+    @Override
+    public GardenerDto.Token refreshToken(GardenerDto.Refresh token) {
+        log.debug("request token: {}", token);
+
+        String reqRefreshToken = token.getRefreshToken();
+
+        log.debug("redis 전체 정보: {}", redisRepository.findAll());
+
+        ActiveGardener activeGardener = redisRepository.findById(token.getGardenerId()).orElseThrow(NoSuchElementException::new);
+        RefreshToken savedRefreshToken = activeGardener.getRefreshToken();
+
+        if(!reqRefreshToken.equals(savedRefreshToken.getToken())){
+            throw new BadCredentialsException("redis에 해당 사용자 없음");
+        } else if(savedRefreshToken.getExpiredAt().isBefore(LocalDateTime.now())){
+            throw new BadCredentialsException("refresh token 만료");
+        }
+
+        // 새 access token 만들기
+        Gardener gardener = gardenerDao.getGardenerByGardenerId(token.getGardenerId())
+                .orElseThrow(NoSuchElementException::new);
+
+        AccessToken accessToken = tokenProvider.createAccessToken(gardener);
+
+        return GardenerDto.Token.from(accessToken);
     }
 }

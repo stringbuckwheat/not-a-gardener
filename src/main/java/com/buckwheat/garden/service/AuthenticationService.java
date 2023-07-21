@@ -11,4 +11,7 @@ public interface AuthenticationService {
 
     /* 로그인 */
     GardenerDto.Info login(GardenerDto.Login login);
+
+    /* access token 갱신 */
+    GardenerDto.Token refreshToken(GardenerDto.Refresh token);
 }

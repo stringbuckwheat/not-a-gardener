@@ -1,7 +1,6 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.dao.ChemicalDao;
-import com.buckwheat.garden.dao.GardenerDao;
 import com.buckwheat.garden.data.dto.ChemicalDto;
 import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.data.entity.Chemical;
@@ -19,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChemicalServiceImpl implements ChemicalService {
     private final ChemicalDao chemicalDao;
-    private final GardenerDao gardenerDao;
 
     /**
      * 전체 chemical 리스트

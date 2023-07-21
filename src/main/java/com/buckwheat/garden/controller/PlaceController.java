@@ -53,7 +53,7 @@ public class PlaceController {
      * @param placeRequest
      * @return 수정한 장소 정보
      */
-    @PutMapping("/{placeNo}")
+    @PutMapping("/{placeId}")
     public PlaceDto.Response modify(@RequestBody PlaceDto.Request placeRequest){
         return placeService.modify(placeRequest);
     }

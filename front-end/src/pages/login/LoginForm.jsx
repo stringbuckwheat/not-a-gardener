@@ -36,12 +36,13 @@ const LoginForm = () => {
 
   const submit = async () => {
     try {
-      const res = await axios.post("/api/login", login);
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/login`, login);
       await setGardener(res.data);
 
       // garden 페이지로 이동
       navigate('/', {replace: true});
     } catch (error) {
+      console.log("error", error);
       setMsg(error.response.data.errorDescription);
     }
   }

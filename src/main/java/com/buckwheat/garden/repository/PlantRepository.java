@@ -51,12 +51,12 @@ public interface PlantRepository extends JpaRepository<Plant, Long> {
             " LEFT JOIN watering w" +
             " ON p.plant_id = w.plant_id" +
             " WHERE p.gardener_id = :gardenerId" +
-            " AND (date_format(p.condition_date, '%Y-%m-%d') != curdate() or condition_date is null)" +
+            " AND (DATE_FORMAT(p.condition_date, '%Y-%m-%d') != CURDATE() OR condition_date IS NULL)" +
             " AND p.recent_watering_period != 0 " +
-            " group by p.plant_id" +
-            " having (max(watering_date) != curdate() or max(watering_date) is null)" +
-            " or datediff(max(watering_date), curdate()) >= 2" +
-            " order by p.recent_watering_period desc", nativeQuery = true)
+            " GROUP BY p.plant_id" +
+            " HAVING (MAX(watering_date) != CURDATE() or MAX(watering_date) IS NULL)" +
+            " OR DATEDIFF(MAX(watering_date), CURDATE()) >= 2" +
+            " ORDER BY p.recent_watering_period DESC", nativeQuery = true)
     List<RawGarden> findGardenByGardenerId(@Param("gardenerId") Long gardenerId);
 
     // waitinglist
