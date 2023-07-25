@@ -23,12 +23,6 @@ public class GardenerController {
         return gardenerService.getGardenerDetail(userPrincipal.getGardener());
     }
 
-    /* 간단한 회원 정보(헤더) - 소셜로그인에서 사용 */
-    @GetMapping("/gardener-info")
-    public GardenerDto.SimpleInfo getGardenerInfo(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return GardenerDto.SimpleInfo.from(userPrincipal.getGardener());
-    }
-
     /* 이메일로 계정 확인 - 아이디/비밀번호 찾기 */
     @GetMapping("/email/{email}")
     public Map<String, Object> forgotAccount (@PathVariable String email){

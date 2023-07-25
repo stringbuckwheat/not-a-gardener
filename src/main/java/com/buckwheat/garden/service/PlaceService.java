@@ -7,11 +7,11 @@ import java.util.List;
 public interface PlaceService {
     List<PlaceDto.Card> getPlacesByGardenerId(Long gardenerId);
 
-    PlaceDto.WithPlants getPlaceDetail(Long id);
+    PlaceDto.WithPlants getPlaceDetail(Long placeId, Long gardenerId);
 
     PlaceDto.Card add(Long gardenerId, PlaceDto.Request placeRequest);
 
-    PlaceDto.Response modify(PlaceDto.Request placeRequest);
+    PlaceDto.Response modify(PlaceDto.Request placeRequest, Long gardenerId);
 
-    void delete(Long id);
+    void delete(Long placeId, Long gardenerId);
 }

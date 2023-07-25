@@ -1,6 +1,7 @@
 package com.buckwheat.garden.error;
 
 import com.buckwheat.garden.data.dto.ErrorResponse;
+import com.buckwheat.garden.error.code.ExceptionCode;
 import com.buckwheat.garden.error.exception.AlreadyWateredException;
 import com.buckwheat.garden.error.exception.ExpiredRefreshTokenException;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.NoSuchElementException;
 
 // 여러 컨트롤러에 대해 전역적으로 ExceptionHandler 적용
 @RestControllerAdvice
@@ -27,6 +30,14 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ErrorResponse.from(ExceptionCode.REFRESH_TOKEN_EXPIRED));
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public HttpEntity<ErrorResponse> handleNoSuchElementException(NoSuchElementException e){
+        log.debug("NoSuchElementException handler 호출");
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponse.from(ExceptionCode.NO_SUCH_ITEM));
     }
 
     /**
@@ -50,7 +61,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UsernameNotFoundException.class)
     public HttpEntity<ErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException e){
         log.debug("UsernameNotFoundException Handler 호출");
-        log.debug("e.getMessage(): {}", e.getMessage());
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ErrorResponse.from(ExceptionCode.NO_ACCOUNT));
@@ -62,7 +72,7 @@ public class GlobalExceptionHandler {
      * @return
      */
     @ExceptionHandler(AlreadyWateredException.class)
-    public HttpEntity<ErrorResponse> handleIllegalStateException(AlreadyWateredException e){
+    public HttpEntity<ErrorResponse> handleAlreadyWateredException(AlreadyWateredException e){
         log.debug("AlreadyWateredException Handler 호출");
 
         return ResponseEntity.status(HttpStatus.CONFLICT)

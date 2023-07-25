@@ -6,6 +6,7 @@ import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.data.entity.Chemical;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Watering;
+import com.buckwheat.garden.error.exception.AlreadyWateredException;
 import com.buckwheat.garden.repository.ChemicalRepository;
 import com.buckwheat.garden.repository.PlantRepository;
 import com.buckwheat.garden.repository.WateringRepository;
@@ -30,7 +31,7 @@ public class WateringDaoImpl implements WateringDao {
         Watering watering = wateringRepository.findByWateringDateAndPlant_PlantId(wateringRequest.getWateringDate(), wateringRequest.getPlantId());
 
         if(watering != null){
-            throw new IllegalStateException("오늘은 이미 물을 주었어요");
+            throw new AlreadyWateredException();
         }
 
         Plant plant = plantRepository.findByPlantId(wateringRequest.getPlantId())

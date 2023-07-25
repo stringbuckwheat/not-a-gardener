@@ -1,7 +1,7 @@
 package com.buckwheat.garden.config.filter;
 
 import com.buckwheat.garden.data.dto.ErrorResponse;
-import com.buckwheat.garden.error.ExceptionCode;
+import com.buckwheat.garden.error.code.ExceptionCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;

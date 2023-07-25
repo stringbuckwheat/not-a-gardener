@@ -64,7 +64,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 }
             }
         } catch (ExpiredJwtException e) {
-            log.debug("토큰 만료");
+            log.debug("액세스 토큰 만료");
             throw new JwtException("토큰 기한 만료");
         } catch(SecurityException e){
             log.info("Invalid JWT signature.");

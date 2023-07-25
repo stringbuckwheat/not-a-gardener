@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface ChemicalDao {
     List<Chemical> getActivatedChemicalsByGardenerId(Long gardenerId);
-    Chemical getChemicalByChemicalId(Long chemicalId);
+    Chemical getChemicalByChemicalIdAndGardenerId(Long chemicalId, Long gardenerId);
     Chemical save(Long gardenerId, ChemicalDto.Request chemicalRequest);
     Chemical update(Long gardenerId, ChemicalDto.Request chemicalRequest);
-    void deactivateChemicalByChemicalId(Long chemicalId);
+    void deactivateChemical(Long chemicalId, Long gardenerId);
 }

@@ -32,6 +32,9 @@ public interface PlantRepository extends JpaRepository<Plant, Long> {
     @EntityGraph(attributePaths = {"place", "waterings", "waterings.chemical"}, type = EntityGraph.EntityGraphType.FETCH)
     List<Plant> findByGardener_GardenerId(Long gardenerId);
 
+    @EntityGraph(attributePaths = {"place", "waterings", "waterings.chemical"}, type = EntityGraph.EntityGraphType.FETCH)
+    Optional<Plant> findByPlantIdAndGardener_GardenerId(Long plantId, Long gardenerId);
+
     /**
      * Plant 페이지에서 식물 카드를 만들 데이터
      * @param plantId

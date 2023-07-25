@@ -46,22 +46,32 @@ public class PlantDaoImpl implements PlantDao {
     }
 
     @Override
+    public Plant getPlantWithPlantIdAndGardenerId(Long plantId, Long gardenerId){
+        return plantRepository.findByPlantIdAndGardener_GardenerId(plantId, gardenerId)
+                .orElseThrow(NoSuchElementException::new);
+    }
+
+    @Override
     public List<Plant> getPlantsForGarden(Long gardenerId){
         return plantRepository.findByGardener_GardenerId(gardenerId);
     }
 
     @Override
     public Plant save(Long gardenerId, PlantDto.Request plantRequest) {
-        Place place = placeRepository.findByPlaceId(plantRequest.getPlaceId()).orElseThrow(NoSuchElementException::new);
+        Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(plantRequest.getPlaceId(), gardenerId)
+                .orElseThrow(NoSuchElementException::new);
         Gardener gardener = gardenerRepository.findById(gardenerId).orElseThrow(NoSuchElementException::new);
 
         return plantRepository.save(plantRequest.toEntityWith(gardener, place));
     }
 
     @Override
-    public Plant update(PlantDto.Request plantRequest){
-        Place place = placeRepository.findByPlaceId(plantRequest.getPlaceId()).orElseThrow(NoSuchElementException::new);
-        Plant plant = plantRepository.findByPlantId(plantRequest.getId()).orElseThrow(NoSuchElementException::new);
+    public Plant update(PlantDto.Request plantRequest, Long gardenerId){
+        Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(plantRequest.getPlaceId(), gardenerId)
+                .orElseThrow(NoSuchElementException::new);
+
+        Plant plant = plantRepository.findByPlantIdAndGardener_GardenerId(plantRequest.getId(), gardenerId)
+                .orElseThrow(NoSuchElementException::new);
 
         return plantRepository.save(plant.update(plantRequest, place));
     }
@@ -72,8 +82,9 @@ public class PlantDaoImpl implements PlantDao {
     }
 
     @Override
-    public Place updatePlantPlace(PlaceDto.ModifyPlantPlace modifyPlantPlace){
-        Place place = placeRepository.findByPlaceId(modifyPlantPlace.getPlaceId()).orElseThrow(NoSuchElementException::new);
+    public Place updatePlantPlace(PlaceDto.ModifyPlantPlace modifyPlantPlace, Long gardenerId){
+        Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(modifyPlantPlace.getPlaceId(), gardenerId)
+                .orElseThrow(NoSuchElementException::new);
 
         for (Long plantId : modifyPlantPlace.getPlantList()) {
             Plant plant = plantRepository.findById(plantId).orElseThrow(NoSuchElementException::new);
@@ -90,7 +101,7 @@ public class PlantDaoImpl implements PlantDao {
     }
 
     @Override
-    public void deleteBy(Long id){
+    public void deleteBy(Long id, Long gardenerId){
         plantRepository.deleteById(id);
     }
 }

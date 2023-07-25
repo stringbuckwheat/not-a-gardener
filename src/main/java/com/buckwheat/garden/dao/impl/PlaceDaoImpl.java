@@ -29,13 +29,12 @@ public class PlaceDaoImpl implements PlaceDao {
     }
 
     @Override
-    public Place getPlaceWithPlants(Long placeId) {
-        return placeRepository.findByPlaceId(placeId).orElseThrow(NoSuchElementException::new);
+    public Place getPlaceWithPlants(Long placeId, Long gardenerId) {
+        return placeRepository.findByPlaceIdAndGardener_GardenerId(placeId, gardenerId)
+                .orElseThrow(NoSuchElementException::new);
     }
 
     /**
-     * Transactinal 필요
-     *
      * @param placeRequest
      * @return
      */
@@ -46,8 +45,9 @@ public class PlaceDaoImpl implements PlaceDao {
     }
 
     @Override
-    public Place update(PlaceDto.Request placeRequest) {
-        Place place = placeRepository.findById(placeRequest.getId()).orElseThrow(NoSuchElementException::new);
+    public Place update(PlaceDto.Request placeRequest, Long gardenerId) {
+        Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(placeRequest.getId(), gardenerId)
+                .orElseThrow(NoSuchElementException::new);
 
         return placeRepository.save(
                 place.update(
@@ -59,7 +59,7 @@ public class PlaceDaoImpl implements PlaceDao {
     }
 
     @Override
-    public void deleteBy(Long id) {
-        placeRepository.deleteById(id);
+    public void deleteBy(Long placeId, Long gardenerId) {
+        placeRepository.deleteById(placeId);
     }
 }

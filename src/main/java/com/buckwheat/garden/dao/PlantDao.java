@@ -13,11 +13,12 @@ public interface PlantDao {
     List<Plant> getWaitingForWateringList(Long gardenerId);
     List<Plant> getPlantsByGardenerId(Long gardenerId);
     Plant getPlantWithPlaceAndWatering(Long plantId);
+    Plant getPlantWithPlantIdAndGardenerId(Long plantId, Long gardenerId);
     List<Plant> getPlantsForGarden(Long gardenerId);
     Plant save(Long gardenerId, PlantDto.Request plantRequest);
-    Plant update(PlantDto.Request plantRequest);
+    Plant update(PlantDto.Request plantRequest, Long gardenerId);
     Plant update(Plant plant);
-    Place updatePlantPlace(PlaceDto.ModifyPlantPlace modifyPlantPlaceDto);
+    Place updatePlantPlace(PlaceDto.ModifyPlantPlace modifyPlantPlaceDto, Long gardenerId);
     void updateConditionDate(Plant plant);
-    void deleteBy(Long id);
+    void deleteBy(Long id, Long gardenerId);
 }

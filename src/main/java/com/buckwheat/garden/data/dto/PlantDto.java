@@ -7,8 +7,16 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class PlantDto {
+    @AllArgsConstructor
+    @Getter
+    public static class Detail{
+        Response plant;
+        List<WateringDto.ForOnePlant> waterings;
+    }
+
     @AllArgsConstructor
     @Builder
     @Getter

@@ -42,8 +42,8 @@ public class PlaceServiceImpl implements PlaceService {
      * @return 해당 장소의 식물 개수를 포함하는 장소 정보
      */
     @Override
-    public PlaceDto.WithPlants getPlaceDetail(Long id) {
-        Place place = placeDao.getPlaceWithPlants(id);
+    public PlaceDto.WithPlants getPlaceDetail(Long placeId, Long gardenerId) {
+        Place place = placeDao.getPlaceWithPlants(placeId, gardenerId);
 
         List<PlantDto.PlantInPlace> plants = new ArrayList<>();
 
@@ -69,16 +69,16 @@ public class PlaceServiceImpl implements PlaceService {
      * @return 수정 후 데이터
      */
     @Override
-    public PlaceDto.Response modify(PlaceDto.Request placeRequest) {
-        return PlaceDto.Response.from(placeDao.update(placeRequest));
+    public PlaceDto.Response modify(PlaceDto.Request placeRequest, Long gardenerId) {
+        return PlaceDto.Response.from(placeDao.update(placeRequest, gardenerId));
     }
 
     /**
      * 장소 하나 삭제
-     * @param id
+     * @param placeId
      */
     @Override
-    public void delete(Long id) {
-        placeDao.deleteBy(id);
+    public void delete(Long placeId, Long gardenerId) {
+        placeDao.deleteBy(placeId, gardenerId);
     }
 }

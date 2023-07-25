@@ -36,8 +36,8 @@ public class PlantController {
      * @return
      */
     @GetMapping("/{plantId}")
-    public PlantDto.Response getOnePlant(@PathVariable long plantId){
-        return plantService.getPlantDetail(plantId);
+    public PlantDto.Detail getOnePlant(@PathVariable Long plantId, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        return plantService.getPlantDetail(plantId, userPrincipal.getGardener().getGardenerId());
     }
 
     /**
@@ -68,8 +68,8 @@ public class PlantController {
      * @return
      */
     @PutMapping("/modify-place")
-    public PlaceDto.Response modifyPlantPlace(@RequestBody PlaceDto.ModifyPlantPlace modifyPlantPlace){
-        return plantService.modifyPlantPlace(modifyPlantPlace);
+    public PlaceDto.Response modifyPlantPlace(@RequestBody PlaceDto.ModifyPlantPlace modifyPlantPlace, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        return plantService.modifyPlantPlace(modifyPlantPlace, userPrincipal.getGardener().getGardenerId());
     }
 
     /**
@@ -77,7 +77,7 @@ public class PlantController {
      * @param plantId
      */
     @DeleteMapping("/{plantId}")
-    public void deletePlant(@PathVariable long plantId){
-        plantService.delete(plantId);
+    public void deletePlant(@PathVariable Long plantId, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        plantService.delete(plantId, userPrincipal.getGardener().getGardenerId());
     }
 }

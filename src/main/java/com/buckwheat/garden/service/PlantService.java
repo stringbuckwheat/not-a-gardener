@@ -7,11 +7,11 @@ import com.buckwheat.garden.data.dto.PlantDto;
 import java.util.List;
 
 public interface PlantService {
-    /* 하나의 식물 */
-    PlantDto.Response getPlantDetail(Long plantId);
-
     /* 식물 리스트 */
     List<PlantDto.Response> getPlantsByGardenerId(Long gardenerId);
+
+    /* 하나의 식물 */
+    PlantDto.Detail getPlantDetail(Long plantId, Long gardenerId);
 
     /* 식물 추가 */
     GardenDto.Response add(Long gardenerId, PlantDto.Request plantRequest);
@@ -20,8 +20,8 @@ public interface PlantService {
     GardenDto.Response modify(Long gardenerId, PlantDto.Request plantRequest);
 
     /* 식물들의 장소 정보 수정 */
-    PlaceDto.Response modifyPlantPlace(PlaceDto.ModifyPlantPlace modifyPlantPlace);
+    PlaceDto.Response modifyPlantPlace(PlaceDto.ModifyPlantPlace modifyPlantPlace, Long gardenerId);
 
     /* 식물 삭제 */
-    void delete(Long plantId);
+    void delete(Long plantId, Long gardenerId);
 }

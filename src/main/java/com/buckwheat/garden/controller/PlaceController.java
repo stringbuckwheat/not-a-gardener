@@ -33,8 +33,8 @@ public class PlaceController {
      * @return
      */
     @GetMapping("/{placeId}")
-    public PlaceDto.WithPlants getPlace(@PathVariable long placeId){
-        return placeService.getPlaceDetail(placeId);
+    public PlaceDto.WithPlants getPlaceDetail(@PathVariable Long placeId, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        return placeService.getPlaceDetail(placeId, userPrincipal.getGardener().getGardenerId());
     }
 
     /**
@@ -54,8 +54,8 @@ public class PlaceController {
      * @return 수정한 장소 정보
      */
     @PutMapping("/{placeId}")
-    public PlaceDto.Response modify(@RequestBody PlaceDto.Request placeRequest){
-        return placeService.modify(placeRequest);
+    public PlaceDto.Response modify(@RequestBody PlaceDto.Request placeRequest, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        return placeService.modify(placeRequest, userPrincipal.getGardener().getGardenerId());
     }
 
     /**
@@ -63,7 +63,7 @@ public class PlaceController {
      * @param placeId
      */
     @DeleteMapping("/{placeId}")
-    public void delete(@PathVariable long placeId){
-        placeService.delete(placeId);
+    public void delete(@PathVariable long placeId, @AuthenticationPrincipal UserPrincipal userPrincipal){
+        placeService.delete(placeId, userPrincipal.getGardener().getGardenerId());
     }
 }

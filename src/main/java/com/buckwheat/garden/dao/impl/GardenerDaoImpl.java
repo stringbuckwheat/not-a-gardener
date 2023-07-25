@@ -22,7 +22,8 @@ public class GardenerDaoImpl implements GardenerDao {
 
     @Override
     public Gardener getGardenerForLogin(String username) {
-        return gardenerRepository.findByUsername(username).orElseThrow(() -> new BadCredentialsException("아이디 오류"));
+        return gardenerRepository.findByUsername(username)
+                .orElseThrow(() -> new BadCredentialsException("아이디 오류"));
     }
 
     @Override

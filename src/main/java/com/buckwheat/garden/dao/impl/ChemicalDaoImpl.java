@@ -24,13 +24,15 @@ public class ChemicalDaoImpl implements ChemicalDao {
     }
 
     @Override
-    public Chemical getChemicalByChemicalId(Long chemicalId){
-        return chemicalRepository.findByChemicalId(chemicalId).orElseThrow(NoSuchElementException::new);
+    public Chemical getChemicalByChemicalIdAndGardenerId(Long chemicalId, Long gardenerId){
+        return chemicalRepository.findByChemicalIdAndGardener_GardenerId(chemicalId, gardenerId)
+                .orElseThrow(NoSuchElementException::new);
     }
 
     @Override
     public Chemical save(Long gardenerId, ChemicalDto.Request chemicalRequest) {
-        Gardener gardener = gardenerRepository.findById(gardenerId).orElseThrow(NoSuchElementException::new);
+        Gardener gardener = gardenerRepository.findById(gardenerId)
+                .orElseThrow(NoSuchElementException::new);
         return chemicalRepository.save(chemicalRequest.toEntityWithGardener(gardener));
     }
 
@@ -42,8 +44,9 @@ public class ChemicalDaoImpl implements ChemicalDao {
     }
 
     @Override
-    public void deactivateChemicalByChemicalId(Long chemicalId) {
-        Chemical chemical = chemicalRepository.findByChemicalId(chemicalId).orElseThrow(NoSuchElementException::new);
+    public void deactivateChemical(Long chemicalId, Long gardenerId) {
+        Chemical chemical = chemicalRepository.findByChemicalIdAndGardener_GardenerId(chemicalId, gardenerId)
+                .orElseThrow(NoSuchElementException::new);
         chemicalRepository.save(chemical.deactivate());
     }
 }

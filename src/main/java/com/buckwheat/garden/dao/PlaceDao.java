@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface PlaceDao {
     List<Place> getPlacesByGardenerId(Long gardenerId);
-    Place getPlaceWithPlants(Long placeId);
+    Place getPlaceWithPlants(Long placeId, Long gardenerId);
     Place save(Long gardenerId, PlaceDto.Request placeRequest);
 
-    Place update(PlaceDto.Request placeRequest);
+    Place update(PlaceDto.Request placeRequest, Long gardenerId);
 
-    void deleteBy(Long id);
+    void deleteBy(Long placeId, Long gardenerId);
 }

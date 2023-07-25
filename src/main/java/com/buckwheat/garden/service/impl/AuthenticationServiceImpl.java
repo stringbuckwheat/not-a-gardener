@@ -83,6 +83,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return setAuthentication(gardener);
     }
 
+    @Override
+    public GardenerDto.Info getGardenerInfo(Gardener gardener) {
+        RefreshToken refreshToken = getRefreshToken(gardener);
+
+        return GardenerDto.Info.from(null, refreshToken.getToken(), gardener);
+    }
+
     // 인증 성공 후 Security Context에 유저 정보를 저장하고 토큰과 기본 정보를 리턴
     GardenerDto.Info setAuthentication(Gardener gardener) {
         // gardener 객체를 포함한 userPrincipal 생성
@@ -96,7 +103,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         // access token, expired date
         AccessToken accessToken = tokenProvider.createAccessToken(userPrincipal);
+        RefreshToken refreshToken = getRefreshToken(gardener);
 
+        return GardenerDto.Info.from(accessToken.getToken(), refreshToken.getToken(), gardener);
+    }
+
+    RefreshToken getRefreshToken(Gardener gardener){
         // refresh token
         RefreshToken refreshToken = RefreshToken.getRefreshToken();
 
@@ -104,7 +116,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         redisRepository.save(ActiveGardener.from(gardener, refreshToken));
         log.debug("redis 조회 - findByGardenerId: {}", redisRepository.findById(gardener.getGardenerId()));
 
-        return GardenerDto.Info.from(accessToken, refreshToken, gardener);
+        return refreshToken;
     }
 
     @Override
@@ -115,7 +127,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         log.debug("redis 전체 정보: {}", redisRepository.findAll());
 
-        ActiveGardener activeGardener = redisRepository.findById(token.getGardenerId()).orElseThrow(NoSuchElementException::new);
+        ActiveGardener activeGardener = redisRepository.findById(token.getGardenerId())
+                .orElseThrow(NoSuchElementException::new);
         RefreshToken savedRefreshToken = activeGardener.getRefreshToken();
 
         if(!reqRefreshToken.equals(savedRefreshToken.getToken())){
@@ -130,6 +143,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         AccessToken accessToken = tokenProvider.createAccessToken(gardener);
 
-        return GardenerDto.Token.from(accessToken);
+        return new GardenerDto.Token(accessToken.getToken(), null);
     }
 }

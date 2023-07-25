@@ -26,7 +26,7 @@ public class ChemicalServiceImpl implements ChemicalService {
      * @return dto로 변환한 chemical list
      */
     @Override
-    public List<ChemicalDto.Response> getActivatedChemicalsByGardenerId(Long gardenerId) {
+    public List<ChemicalDto.Response> getAll(Long gardenerId) {
         List<ChemicalDto.Response> chemicalList = new ArrayList<>();
 
         // entity -> dto
@@ -44,8 +44,8 @@ public class ChemicalServiceImpl implements ChemicalService {
      * @return 해당 chemical의 상세 정보 및 사용내역 리스트
      */
     @Override
-    public ChemicalDto.Detail getChemicalByChemicalId(Long chemicalId) {
-        Chemical chemical = chemicalDao.getChemicalByChemicalId(chemicalId);
+    public ChemicalDto.Detail getDetail(Long chemicalId, Long gardenerId) {
+        Chemical chemical = chemicalDao.getChemicalByChemicalIdAndGardenerId(chemicalId, gardenerId);
 
         List<WateringDto.ResponseInChemical> waterings = new ArrayList<>();
 
@@ -67,7 +67,7 @@ public class ChemicalServiceImpl implements ChemicalService {
     }
 
     @Override
-    public void deactivateChemical(Long id) {
-        chemicalDao.deactivateChemicalByChemicalId(id);
+    public void deactivate(Long chemicalId, Long gardenerId) {
+        chemicalDao.deactivateChemical(chemicalId, gardenerId);
     }
 }

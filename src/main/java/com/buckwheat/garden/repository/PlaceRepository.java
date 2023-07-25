@@ -26,4 +26,7 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
      */
     @EntityGraph(attributePaths = {"plants"}, type= EntityGraph.EntityGraphType.FETCH)
     Optional<Place> findByPlaceId(Long placeId);
+
+    @EntityGraph(attributePaths = {"plants"}, type= EntityGraph.EntityGraphType.FETCH)
+    Optional<Place> findByPlaceIdAndGardener_GardenerId(Long placeId, Long gardenerId);
 }

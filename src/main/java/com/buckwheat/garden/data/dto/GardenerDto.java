@@ -1,8 +1,6 @@
 package com.buckwheat.garden.data.dto;
 
 import com.buckwheat.garden.data.entity.Gardener;
-import com.buckwheat.garden.data.token.AccessToken;
-import com.buckwheat.garden.data.token.RefreshToken;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -31,19 +29,6 @@ public class GardenerDto {
     public static class Token {
         private String accessToken;
         private String refreshToken;
-        private LocalDateTime expiredAt;
-
-        public static Token from(AccessToken accessToken, RefreshToken refreshToken) {
-            return new Token(
-                    accessToken.getToken(),
-                    refreshToken.getToken(),
-                    accessToken.getExpiredAt()
-            );
-        }
-
-        public static Token from(AccessToken accessToken){
-            return new Token(accessToken.getToken(), null, accessToken.getExpiredAt());
-        }
     }
 
     @Getter
@@ -62,8 +47,8 @@ public class GardenerDto {
         private SimpleInfo simpleInfo;
         private Token token;
 
-        public static Info from(AccessToken accessToken, RefreshToken refreshToken, Gardener gardener) {
-            return new Info(SimpleInfo.from(gardener), Token.from(accessToken, refreshToken));
+        public static Info from(String accessToken, String refreshToken, Gardener gardener) {
+            return new Info(SimpleInfo.from(gardener), new Token(accessToken, refreshToken));
         }
     }
 
