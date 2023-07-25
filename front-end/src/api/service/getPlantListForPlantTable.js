@@ -30,7 +30,7 @@ const getPlantListForPlantTable = (plants) => {
         medium: plant.medium,
         wateringMsg: getWateringMsg(gardenDetail),
         anniversary: plant.birthday ? `${gardenDetail.anniversary} (${plant.birthday}~)` : null,
-        latestWateringDate: latestWateringDate ? `${latestWateringDate.wateringDate}\n(${latestWateringDate.chemicalName})` : "",
+        latestWateringDate: latestWateringDate ? `${latestWateringDate.wateringDate}` : "",
       }
     })
   })
