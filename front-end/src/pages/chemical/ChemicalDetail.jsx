@@ -20,12 +20,23 @@ const ChemicalDetail = () => {
   const [modifyChemical, setModifyChemical] = useState(chemical);
   const [onModify, setOnModify] = useState(false);
 
+  const navigate = useNavigate();
+
   const onMountChemicalDetail = async () => {
-    const res = await getData(`/chemical/${chemicalId}`);
-    console.log("res", res);
-    setChemical(res.chemical);
-    setModifyChemical(res.chemical);
-    setWateringList(res.waterings);
+    try {
+      const res = await getData(`/chemical/${chemicalId}`);
+
+      console.log("res", res);
+      setChemical(res.chemical);
+      setModifyChemical(res.chemical);
+      setWateringList(res.waterings);
+    } catch (e) {
+      if(e.code === "B006"){
+        alert("해당 약품/비료를 찾을 수 없어요");
+        navigate("/chemical");
+      }
+    }
+
   }
 
   useEffect(() => {
@@ -40,8 +51,6 @@ const ChemicalDetail = () => {
   const validation = modifyChemical.name != ''
     && Number.isInteger(modifyChemical.period * 1)
     && (modifyChemical.period * 1) > 0;
-
-  const navigate = useNavigate();
 
   const deactivate = async () => {
     await deleteData(`/chemical/${chemical.id}/deactivate`);

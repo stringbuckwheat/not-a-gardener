@@ -9,7 +9,7 @@ import {useSpring, animated} from "@react-spring/web";
  * @constructor
  */
 const SocialLoginButton = ({provider, recentLogin} ) => {
-  const authorizationUrl = `${process.env.REACT_APP_API_URL}/oauth2/authorization`;
+  const authorizationUrl = `/oauth2/authorization`;
 
   const springProps = useSpring({
     display: 'inline',

@@ -24,9 +24,16 @@ const WateringFormInCalendar = ({plantList, chemicalList, isWateringFormOpened, 
 
   const submit = async () => {
     console.log("watering", watering);
-    const res = await postData("/watering", watering);
-    onAdd(res);
-    setIsWateringFormOpened(false);
+
+    try{
+      const res = await postData("/watering", watering);
+      onAdd(res);
+      setIsWateringFormOpened(false);
+    } catch (e) {
+      if(e.code == "B005"){
+        alert(e.message);
+      }
+    }
   }
 
   const onChangeChemical = (value) => {

@@ -1,4 +1,4 @@
-import {useLocation, useParams} from 'react-router-dom'
+import {useLocation, useNavigate, useParams} from 'react-router-dom'
 import DetailLayout from 'src/components/data/layout/DetailLayout';
 import PlaceTag from './PlaceTag';
 import {useEffect, useState} from 'react';
@@ -24,16 +24,25 @@ const PlaceDetail = () => {
   // 수정 컴포넌트를 띄울지, 상세보기 컴포넌트를 띄울지
   const [onModify, setOnModify] = useState(false);
 
+  const navigate = useNavigate();
+
   // 부모 컴포넌트(PlaceDetail)의 state를 변경할 함수
   // 자식인 DetailLayout, ModifyPlace 컴포넌트로 넘겨준다(수정하기/돌아가기 버튼)
   const onClickModifyBtn = () => setOnModify(!onModify);
 
   const onMountPlaceDetail = async () => {
-    const res = await getData(`/place/${placeId}`);
-    console.log("res", res);
-    setPlace(res.place);
-    setPlantList(res.plantList);
-    setLoading(false);
+    try{
+      const res = await getData(`/place/${placeId}`);
+      console.log("res", res);
+      setPlace(res.place);
+      setPlantList(res.plantList);
+      setLoading(false);
+    } catch (e) {
+      if(e.code === "B006"){
+        alert("해당 장소를 찾을 수 없어요");
+        navigate("/place");
+      }
+    }
   }
 
   useEffect(() => {

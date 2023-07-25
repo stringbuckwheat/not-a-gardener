@@ -43,7 +43,7 @@ const VerifyAccountContent = ({successContent, setEmail, setGardenerList}) => {
     setIsWaiting(true);
 
     try {
-      const res = await axios.get(`/api/gardener/email/${input}`);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/gardener/email/${input}`);
       // console.log("res.data", res.data);
 
       setIdentification(res.data.identificationCode); // 인증코드
@@ -51,7 +51,8 @@ const VerifyAccountContent = ({successContent, setEmail, setGardenerList}) => {
       setGardenerList(res.data.gardeners); // 회원목록
     } catch (e) {
       // 이메일 인증 실패
-      setErrorMsg(e.response.data.errorDescription);
+      console.log("e", e);
+      setErrorMsg(e.response.data.message);
     }
 
     setIsWaiting(false);

@@ -45,6 +45,9 @@ authAxios.interceptors.request.use(
 authAxios.interceptors.response.use(
   (response) => response,
   async (error) => {
+    console.log("=== error ===");
+    console.log(error);
+
     const errorCode = error.response.data.code;
 
     if (errorCode === "B001") {
@@ -58,8 +61,6 @@ authAxios.interceptors.response.use(
       localStorage.setItem("accessToken", accessToken);
 
       // 진행 중인 요청 이어하기
-      console.log("진행 중인 요청 이어하기");
-
       return authAxios({
         ...originRequest,
         headers: {...originRequest.headers, Authorization: `Bearer ${accessToken}`},
@@ -70,7 +71,7 @@ authAxios.interceptors.response.use(
       LogOut();
     }
 
-    return Promise.reject(error);
+    return Promise.reject(error.response.data);
   }
 );
 

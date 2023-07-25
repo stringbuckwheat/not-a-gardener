@@ -49,7 +49,7 @@ const Register = () => {
       return;
     }
 
-    const res = await axios.get(`/api/register/username/${username}`);
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/register/username/${username}`);
     setUsernameCheck(res.data == "");
   }
 
@@ -57,10 +57,9 @@ const Register = () => {
 
   // 제출
   const onSubmit = async (e) => {
-    e.preventDefault();
     console.log("register", register);
 
-    const res = await axios.post("/api/register", register);
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/register`, register);
     await setGardener(res.data);
 
     navigate('/', {replace: true});

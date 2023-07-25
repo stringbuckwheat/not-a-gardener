@@ -44,7 +44,7 @@ const ChangePassword = ({username}) => {
 
   // 백엔드로 비밀번호 전달
   const submit = async () => {
-    await axios.put(`/api/gardener/${username}/password`, {username, password: password.password});
+    await axios.put(`${process.env.REACT_APP_API_URL}/api/gardener/${username}/password`, {username, password: password.password});
     setIsUpdated(true);
   }
 

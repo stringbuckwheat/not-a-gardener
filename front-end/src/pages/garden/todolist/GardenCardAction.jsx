@@ -44,25 +44,34 @@ const GardenCardAction = ({
 
   // 물을 줬어요 버튼
   const submitWatering = async () => {
-    const res = await postData(`/garden/${plantId}/watering`, {
-      plantId,
-      chemicalId,
-      wateringDate: new Date().toISOString().split('T')[0]
-    });
-    console.log("submit watering", res);
+    try{
+      const data = {
+        plantId,
+        chemicalId,
+        wateringDate: new Date().toISOString().split('T')[0]
+      }
 
-    // waitinglist에서의 action 후 콜백 함수. todolist, waitinglist에서 삭제한 후 모달 닫기
-    handleWaitingList && handleWaitingList();
-    deleteInWaitingListAndTodoList && deleteInWaitingListAndTodoList(plantId);
+      const res = await postData(`/garden/${plantId}/watering`, data);
+      console.log("submit watering", res);
 
-    // 메시지 띄우기
-    const msg = getWateringNotificationMsg(res.wateringMsg.afterWateringCode);
-    openNotification(msg);
+      // waitinglist에서의 action 후 콜백 함수. todolist, waitinglist에서 삭제한 후 모달 닫기
+      handleWaitingList && handleWaitingList();
+      deleteInWaitingListAndTodoList && deleteInWaitingListAndTodoList(plantId);
 
-    // garden 카드 갈아끼우기
-    updateGardenAfterWatering && updateGardenAfterWatering(res.gardenResponse);
+      // 메시지 띄우기
+      const msg = getWateringNotificationMsg(res.wateringMsg.afterWateringCode);
+      openNotification(msg);
 
-    setSelected("");
+      // garden 카드 갈아끼우기
+      updateGardenAfterWatering && updateGardenAfterWatering(res.gardenResponse);
+
+      setSelected("");
+    } catch (e) {
+      if(e.code == "B005"){
+        alert(e.message);
+      }
+    }
+
   }
 
   if (hovered && selected == "") {

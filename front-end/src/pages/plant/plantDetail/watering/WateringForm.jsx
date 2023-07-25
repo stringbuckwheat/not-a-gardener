@@ -28,7 +28,9 @@ const WateringForm = ({plantId, closeForm, chemicalList, wateringCallBack}) => {
       res = await postData(`/plant/${plantId}/watering`, watering);
       console.log("res", res);
     } catch (e) {
-      alert(e.response.data.errorDescription);
+      if(e.code == "B005"){
+        alert(e.message);
+      }
     } finally {
       closeForm();
     }

@@ -2,6 +2,7 @@ import React, {useEffect} from 'react'
 import {useNavigate, useParams} from 'react-router-dom';
 import authAxios from '../../api/interceptors'
 import getData from "../../api/backend-api/common/getData";
+import setGardener from "../../api/service/setGardener";
 
 
 const GetToken = () => {
@@ -10,12 +11,11 @@ const GetToken = () => {
 
   const setUser = async () => {
     localStorage.setItem("accessToken", accessToken);
+    const res = await getData(`${process.env.REACT_APP_API_URL}/gardener-info`);
 
-    const user = await getData("/gardener/gardener-info");
+    res.token.accessToken = accessToken;
 
-    localStorage.setItem("gardenerId", user.gardenerId);
-    localStorage.setItem("name", user.name);
-    localStorage.setItem("provider", user.provider);
+    setGardener(res);
 
     navigate("/", {replace: true});
   }

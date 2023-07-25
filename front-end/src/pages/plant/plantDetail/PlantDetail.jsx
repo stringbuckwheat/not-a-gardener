@@ -1,11 +1,11 @@
-import {useLocation, useParams} from 'react-router-dom'
+import {useLocation, useNavigate, useParams} from 'react-router-dom'
 import PlantTag from './PlantTag';
 import DetailLayout from 'src/components/data/layout/DetailLayout';
 import {useState, useEffect} from 'react';
 import ModifyPlant from '../ModifyPlant';
 import getPlaceList from 'src/api/service/getPlaceList';
 import WateringList from './watering/WateringList';
-import onMount from 'src/api/service/onMount';
+import getData from "../../../api/backend-api/common/getData";
 
 /**
  * 식물 상세 정보 페이지 (해당 식물의 물주기 기록 포함)
@@ -19,9 +19,23 @@ const PlantDetail = () => {
   const [plant, setPlant] = useState({});
   const [wateringList, setWateringList] = useState([{}]);
 
+  const navigate = useNavigate();
+
+  const onMount = async () => {
+    try{
+      const res = await getData(`/plant/${plantId}`);
+      setPlant(res.plant);
+      setWateringList(res.waterings);
+    } catch (e) {
+      if(e.code === "B006"){
+        alert("해당 식물을 찾을 수 없어요");
+        navigate("/plant");
+      }
+    }
+  }
+
   useEffect(() => {
-    onMount(`/plant/${plantId}`, setPlant);
-    onMount(`/plant/${plantId}/watering`, setWateringList);
+    onMount();
   }, [])
 
   useEffect(() => {

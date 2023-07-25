@@ -1,3 +1,5 @@
+import logout from "../../utils/function/logout";
+
 /**
  * local storage에 토큰과 기본 정보 저장
  * @param gardener
@@ -12,7 +14,6 @@ const setGardener = async (res) => {
   // token
   localStorage.setItem("accessToken", token.accessToken);
   localStorage.setItem("refreshToken", token.refreshToken);
-  localStorage.setItem("expiredAt", token.expiredAt);
 
   // 기본 정보
   localStorage.setItem("gardenerId", info.gardenerId);
