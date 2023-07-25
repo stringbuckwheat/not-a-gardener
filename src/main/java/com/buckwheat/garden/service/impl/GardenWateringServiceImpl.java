@@ -4,6 +4,7 @@ import com.buckwheat.garden.code.AfterWateringCode;
 import com.buckwheat.garden.code.WateringCode;
 import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.dao.WateringDao;
+import com.buckwheat.garden.data.dto.Calculate;
 import com.buckwheat.garden.data.dto.GardenDto;
 import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.data.entity.Plant;
@@ -40,7 +41,7 @@ public class GardenWateringServiceImpl implements GardenWateringService {
             plant = wateringUtil.updateWateringPeriod(watering.getPlant(), wateringMsg.getAverageWateringDate());
         }
 
-        GardenDto.Response gardenResponse = gardenResponseProvider.getGardenResponse(plant, gardenerId);
+        GardenDto.Response gardenResponse = gardenResponseProvider.getGardenResponse(Calculate.from(plant, gardenerId));
 
         return new GardenDto.WateringResponse(gardenResponse, wateringMsg);
     }

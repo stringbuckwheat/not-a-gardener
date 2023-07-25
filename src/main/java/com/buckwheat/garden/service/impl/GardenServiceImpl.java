@@ -2,6 +2,7 @@ package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.dao.RoutineDao;
+import com.buckwheat.garden.data.dto.Calculate;
 import com.buckwheat.garden.data.dto.GardenDto;
 import com.buckwheat.garden.data.dto.RawGarden;
 import com.buckwheat.garden.data.dto.RoutineDto;
@@ -43,12 +44,12 @@ public class GardenServiceImpl implements GardenService {
         // waiting for watering list
         for (Plant plant : plantDao.getWaitingForWateringList(gardenerId)) {
             waitingList.add(GardenDto.WaitingForWatering.from(plant));
-            todoList.add(gardenResponseProvider.getGardenResponse(plant, gardenerId));
+            todoList.add(gardenResponseProvider.getGardenResponse(Calculate.from(plant, gardenerId)));
         }
 
         // todolist
         for (RawGarden rawGarden : plantDao.getGarden(gardenerId)) {
-            todoList.add(gardenResponseProvider.getGardenResponse(rawGarden, gardenerId));
+            todoList.add(gardenResponseProvider.getGardenResponse(Calculate.from(rawGarden, gardenerId)));
         }
 
         // 오늘 루틴 리스트
@@ -83,7 +84,7 @@ public class GardenServiceImpl implements GardenService {
 
         // 필요한 것들 계산해서 gardenDto list 리턴
         for (Plant plant : plantDao.getPlantsForGarden(gardenerId)) {
-            gardenList.add(gardenResponseProvider.getGardenResponse(plant, gardenerId));
+            gardenList.add(gardenResponseProvider.getGardenResponse(Calculate.from(plant, gardenerId)));
         }
 
         return gardenList;

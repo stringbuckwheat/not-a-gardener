@@ -1,59 +1,86 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.dao.WateringDao;
-import com.buckwheat.garden.data.dto.ChemicalUsage;
+import com.buckwheat.garden.code.WateringCode;
+import com.buckwheat.garden.data.dto.Calculate;
 import com.buckwheat.garden.data.dto.GardenDto;
 import com.buckwheat.garden.data.dto.PlantDto;
-import com.buckwheat.garden.data.dto.RawGarden;
-import com.buckwheat.garden.data.entity.Plant;
+import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.util.GardenUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class GardenResponseProvider {
-    private final WateringDao wateringDao;
     private final GardenUtil gardenUtil;
 
-    public GardenDto.Response getGardenResponse(RawGarden rawGarden, Long gardenerId) {
-        if (rawGarden.getPostponeDate() != null && LocalDate.now().compareTo(rawGarden.getPostponeDate()) == 0) {
-            return getGardenResponseWhenLazy(rawGarden);
+    public GardenDto.Response getGardenResponse(Calculate calculate){
+        if (calculate.getPostponeDate() != null && LocalDate.now().compareTo(calculate.getPostponeDate()) == 0) {
+            return new GardenDto.Response(calculate.getPlant(), getGardenDetailWhenLazy(calculate));
         }
 
-        PlantDto.Response plantResponse = PlantDto.Response.from(rawGarden);
+        GardenDto.Detail gardenDetail = getGardenDetail(calculate);
 
-        List<ChemicalUsage> chemicalUsages = wateringDao.getLatestChemicalUsages(rawGarden.getPlantId(), gardenerId);
-        GardenDto.Detail gardenDetail = gardenUtil.getGardenDetail(rawGarden, chemicalUsages);
-
-        return new GardenDto.Response(plantResponse, gardenDetail);
+        return new GardenDto.Response(calculate.getPlant(), gardenDetail);
     }
 
-    public GardenDto.Response getGardenResponse(Plant plant, Long gardenerId) {
-        if (plant.getPostponeDate() != null && LocalDate.now().compareTo(plant.getPostponeDate()) == 0) {
-            return getGardenResponseWhenLazy(plant);
+    public GardenDto.Detail getGardenDetailWhenLazy(Calculate calculate) {
+        String anniversary = gardenUtil.getAnniversary(calculate.getBirthday());
+
+        WateringDto.Response latestWatering = null;
+        if(calculate.getLatestWateringDate() != null){
+            latestWatering = WateringDto.Response.from(calculate.getLatestWateringDate());
         }
 
-        PlantDto.Response plantResponse = PlantDto.Response.from(plant);
-
-        List<ChemicalUsage> chemicalUsages = wateringDao.getLatestChemicalUsages(plant.getPlantId(), gardenerId);
-        GardenDto.Detail gardenDetail = gardenUtil.getGardenDetail(plant, chemicalUsages);
-
-        return new GardenDto.Response(plantResponse, gardenDetail);
+        return GardenDto.Detail.builder()
+                .latestWateringDate(latestWatering)
+                .anniversary(anniversary)
+                .wateringDDay(calculate.getLatestWateringDate() == null ? -1 : 0)
+                .wateringCode(WateringCode.YOU_ARE_LAZY.getCode())
+                .chemicalCode(null)
+                .build();
     }
 
-    public GardenDto.Response getGardenResponseWhenLazy(Plant plant){
-        PlantDto.Response plantResponse = PlantDto.Response.from(plant);
-        GardenDto.Detail gardenDetail = gardenUtil.getGardenDetailWhenLazy(plant);
-        return new GardenDto.Response(plantResponse, gardenDetail);
-    }
+    public GardenDto.Detail getGardenDetail(Calculate calculate) {
+        // nn일째 반려중
+        String anniversary = gardenUtil.getAnniversary(calculate.getBirthday());
 
-    public GardenDto.Response getGardenResponseWhenLazy(RawGarden rawGarden){
-        PlantDto.Response plantResponse = PlantDto.Response.from(rawGarden);
-        GardenDto.Detail gardenDetail = gardenUtil.getGardenDetailWhenLazy(rawGarden);
-        return new GardenDto.Response(plantResponse, gardenDetail);
+        // 물주기 기록이 없으면
+        if (calculate.getLatestWateringDate() == null) {
+            // 물주기 정보가 부족해요
+            return GardenDto.Detail.builder()
+                    .latestWateringDate(null)
+                    .anniversary(anniversary)
+                    .wateringDDay(-1)
+                    .wateringCode(WateringCode.NO_RECORD.getCode())
+                    .chemicalCode(null)
+                    .build();
+        }
+
+        PlantDto.Response plant = calculate.getPlant();
+
+        // 비료든 물이든 뭐라도 준지 며칠이나 지났는지 계산
+        int wateringDDay = gardenUtil.getWateringDDay(plant.getRecentWateringPeriod(), calculate.getLatestWateringDate());
+        // 이 식물은 목이 말라요, 흙이 말랐는지 확인해보세요 ... 등의 watering code를 계산
+        int wateringCode = gardenUtil.getWateringCode(plant.getRecentWateringPeriod(), wateringDDay);
+
+        // chemicalCode: 물을 줄 식물에 대해서 맹물을 줄지 비료/약품 희석액을 줄지 알려주는 용도
+        // 어떤 비료를 줘야하는지 알려준다
+        GardenDto.ChemicalCode chemicalCode = null;
+
+        if(wateringCode == 0 || wateringCode == 1){
+            chemicalCode = gardenUtil.getChemicalCode(plant.getId(), calculate.getGardenerId());
+        }
+
+        return GardenDto.Detail.builder()
+                .latestWateringDate(WateringDto.Response.from(calculate.getLatestWateringDate()))
+                .anniversary(anniversary)
+                .wateringDDay(wateringDDay)
+                .wateringCode(wateringCode)
+                .chemicalCode(chemicalCode).build();
     }
 }

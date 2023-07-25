@@ -83,17 +83,6 @@ public class GardenDto {
 
         // 비료 주기 정보
         ChemicalCode chemicalCode;
-
-        // TODO 너무 많은 파라미터
-        public static Detail from(WateringDto.Response latestWateringDate, String anniversary, int wateringDDay, int wateringCode, ChemicalCode chemicalCode){
-            return Detail.builder()
-                    .latestWateringDate(latestWateringDate)
-                    .anniversary(anniversary)
-                    .wateringDDay(wateringDDay)
-                    .wateringCode(wateringCode)
-                    .chemicalCode(chemicalCode)
-                    .build();
-        }
     }
 
     @AllArgsConstructor
