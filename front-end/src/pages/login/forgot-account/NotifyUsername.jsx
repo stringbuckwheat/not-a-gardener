@@ -11,8 +11,8 @@ const NotifyUsername = ({email, gardenerList}) => {
 
       <div className="text-center mb-4">
         {
-          gardenerList.map((username, index) => (
-            <div className="mb-1" key={index}><b>* {username}</b></div>))
+          gardenerList.map((gardener, index) => (
+            <div className="mb-1" key={index}><b>* {gardener.username}</b></div>))
         }
       </div>
 

@@ -69,6 +69,9 @@ authAxios.interceptors.response.use(
     } else if(errorCode == "B002"){
       alert("로그인 시간이 만료되었어요.");
       LogOut();
+    } else if(errorCode == "B009"){
+      alert("로그인 정보를 찾을 수 없어요. 다시 로그인해주세요");
+      LogOut();
     }
 
     return Promise.reject(error.response.data);

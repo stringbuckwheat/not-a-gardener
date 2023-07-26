@@ -30,8 +30,8 @@ const SelectAccount = ({email, gardenerList}) => {
         <Radio.Group className="mb-3" onChange={(e) => setValue(e.target.value)} value={value}>
           <Space direction="vertical">
             {
-              gardenerList.map((username, index) =>
-                <Radio value={username} key={index}>{username.replace(/(?<=.{3})./gi, '*')}</Radio>)
+              gardenerList.map((gardener, index) =>
+                <Radio value={gardener.username} key={index}>{gardener.username.replace(/(?<=.{3})./gi, '*')}</Radio>)
             }
           </Space>
         </Radio.Group>
