@@ -1,7 +1,6 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.config.oauth2.UserPrincipal;
-import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.token.AccessToken;
 import com.buckwheat.garden.service.TokenProvider;
 import io.jsonwebtoken.Claims;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.security.Key;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,27 +43,15 @@ public class TokenProviderImpl implements TokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    /**
-     * 일반/소셜 로그인 성공 시 UserPrincipal을 만들어 전달하면 JwtAuthToken 발급
-     * LoginService, OAuth2SuccessHandler에서 사용
-     *
-     * @param userPrincipal Authenticaion에 넣어 Security Context에 저장할 유저 정보
-     * @return JwtAuthToken 객체
-     */
-    @Override
-    public AccessToken createAccessToken(UserPrincipal userPrincipal) {
-        return createAccessToken(userPrincipal.getGardener());
-    }
-
-    public AccessToken createAccessToken(Gardener gardener){
+    public AccessToken createAccessToken(String name, Long id){
         // claims 만들기
         Map<String, String> claims = new HashMap<>();
 
-        claims.put("gardenerId", String.valueOf(gardener.getGardenerId()));
-        claims.put("email", gardener.getEmail());
-        claims.put("name", gardener.getName());
+        claims.put("iss", "buckwheat");
+        claims.put("aud", name); // 토큰 대상자
+        claims.put("exp", LocalDateTime.now().toString());
 
-        return new AccessToken(gardener.getGardenerId(), key, claims);
+        return new AccessToken(id, key, claims);
     }
 
     /**
@@ -83,7 +71,7 @@ public class TokenProviderImpl implements TokenProvider {
      * JwtFilter에서 유효한 토큰인지를 확인한 후 Security Context에 저장할 Authentication 리턴
      *
      * @param authToken 헤더에 담겨 온 Jwt를 decode한 것
-     * @return UsernamePasswordAuthenticationToken(userPrincipal, null, role)
+     * @return UsernamePasswordAuthenticationToken(user, null, role)
      */
     @Override
     public Authentication getAuthentication(AccessToken authToken) {
@@ -91,12 +79,12 @@ public class TokenProviderImpl implements TokenProvider {
             // authToken에 담긴 데이터를 받아온다
             Claims claims = authToken.getData();
 
-            UserPrincipal userPrincipal = (UserPrincipal) userDetailsService.loadUserByUsername(claims.getSubject());
+            UserPrincipal user = (UserPrincipal) userDetailsService.loadUserByUsername(claims.getSubject());
 
             // 권한 없으면 authenticate false => too many redirect 오류 발생
             // principal, credential, role 다 쓰는 생성자 써야 super.setAuthenticated(true); 호출됨!
             return new UsernamePasswordAuthenticationToken(
-                    userPrincipal,
+                    user,
                     null,
                     Collections.singleton(new SimpleGrantedAuthority("USER")));
         } else {
