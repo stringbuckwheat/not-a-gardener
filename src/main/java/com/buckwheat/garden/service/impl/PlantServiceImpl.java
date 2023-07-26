@@ -4,6 +4,7 @@ import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.data.dto.*;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Watering;
+import com.buckwheat.garden.data.projection.Calculate;
 import com.buckwheat.garden.service.PlantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ public class PlantServiceImpl implements PlantService {
      * @return
      */
     @Override
-    public List<PlantDto.Response> getPlantsByGardenerId(Long gardenerId) {
+    public List<PlantDto.Response> getAll(Long gardenerId) {
         List<PlantDto.Response> plants = new ArrayList<>();
 
         // @EntityGraph 메소드
@@ -45,7 +46,7 @@ public class PlantServiceImpl implements PlantService {
      * @return
      */
     @Override
-    public PlantDto.Detail getPlantDetail(Long plantId, Long gardenerId) {
+    public PlantDto.Detail getDetail(Long plantId, Long gardenerId) {
         Plant plant = plantDao.getPlantWithPlantIdAndGardenerId(plantId, gardenerId);
 
         List<WateringDto.ForOnePlant> waterings = new ArrayList<>();
@@ -71,8 +72,8 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public PlaceDto.Response modifyPlantPlace(PlaceDto.ModifyPlantPlace modifyPlantPlace, Long gardenerId) {
-        return PlaceDto.Response.from(plantDao.updatePlantPlace(modifyPlantPlace, gardenerId));
+    public PlaceDto.Response modifyPlace(PlaceDto.ModifyPlace modifyPlace, Long gardenerId) {
+        return PlaceDto.Response.from(plantDao.updatePlantPlace(modifyPlace, gardenerId));
     }
 
     @Override

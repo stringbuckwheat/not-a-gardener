@@ -33,14 +33,11 @@ public class WateringServiceImpl implements WateringService {
         // 일요일이면 가만히 두고, 나머지 요일이면 getDayOfWeek().getValue()를 빼면
         // 7로 나눈 나머지를 뺌
         LocalDate startDate = firstDayOfMonth.minusDays(firstDayOfMonth.getDayOfWeek().getValue() % 7);
-        log.debug("startDate: {}", startDate.toString());
 
         // end date: 합쳐서 42가 되게 만드는 값
         // x = 42 - 이번달 - startDate으로 더한 값
         int tmp = 42 - firstDayOfMonth.lengthOfMonth() - firstDayOfMonth.getDayOfWeek().getValue() % 7;
-        log.debug("tmp: {}", tmp);
         LocalDate endDate = firstDayOfMonth.plusDays(firstDayOfMonth.lengthOfMonth() - 1 + tmp);
-        log.debug("endDate: {}", endDate.toString());
 
         Map<LocalDate, List<WateringDto.ByDate>> map = new HashMap<>(); // 날짜: 리스트
 
@@ -58,7 +55,6 @@ public class WateringServiceImpl implements WateringService {
             map.put(watering.getWateringDate(), tmpList);
         }
 
-        log.debug("map: {}", map);
         return map;
     }
 

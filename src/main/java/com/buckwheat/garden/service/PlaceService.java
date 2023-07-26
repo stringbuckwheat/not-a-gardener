@@ -5,9 +5,9 @@ import com.buckwheat.garden.data.dto.PlaceDto;
 import java.util.List;
 
 public interface PlaceService {
-    List<PlaceDto.Card> getPlacesByGardenerId(Long gardenerId);
+    List<PlaceDto.Card> getAll(Long gardenerId);
 
-    PlaceDto.WithPlants getPlaceDetail(Long placeId, Long gardenerId);
+    PlaceDto.WithPlants getDetail(Long placeId, Long gardenerId);
 
     PlaceDto.Card add(Long gardenerId, PlaceDto.Request placeRequest);
 

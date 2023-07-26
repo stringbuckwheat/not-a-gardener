@@ -1,5 +1,6 @@
-package com.buckwheat.garden.data.dto;
+package com.buckwheat.garden.data.projection;
 
+import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.entity.Plant;
 import lombok.*;
 

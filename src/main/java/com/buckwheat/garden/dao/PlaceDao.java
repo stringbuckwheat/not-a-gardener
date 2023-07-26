@@ -9,8 +9,6 @@ public interface PlaceDao {
     List<Place> getPlacesByGardenerId(Long gardenerId);
     Place getPlaceWithPlants(Long placeId, Long gardenerId);
     Place save(Long gardenerId, PlaceDto.Request placeRequest);
-
     Place update(PlaceDto.Request placeRequest, Long gardenerId);
-
     void deleteBy(Long placeId, Long gardenerId);
 }

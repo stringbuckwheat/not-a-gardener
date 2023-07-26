@@ -16,13 +16,13 @@ public class RoutineController {
     private final RoutineService routineService;
 
     @GetMapping("")
-    public RoutineDto.Main getRoutines(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return routineService.getRoutinesByGardenerId(userPrincipal.getGardener().getGardenerId());
+    public RoutineDto.Main getRoutines(@AuthenticationPrincipal UserPrincipal user){
+        return routineService.getRoutinesByGardenerId(user.getId());
     }
 
     @PostMapping("")
-    public RoutineDto.Response add(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody RoutineDto.Request routineRequest){
-        return routineService.add(userPrincipal.getGardener().getGardenerId(), routineRequest);
+    public RoutineDto.Response add(@AuthenticationPrincipal UserPrincipal user, @RequestBody RoutineDto.Request routineRequest){
+        return routineService.add(user.getId(), routineRequest);
     }
 
     @PutMapping("/{routineId}/complete")

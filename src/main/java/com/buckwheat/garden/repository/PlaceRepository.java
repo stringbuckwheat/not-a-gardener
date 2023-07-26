@@ -19,14 +19,6 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
     @EntityGraph(attributePaths = {"plants"}, type= EntityGraph.EntityGraphType.FETCH)
     List<Place> findByGardener_GardenerIdOrderByCreateDate(Long gardenerId);
 
-    /**
-     * plants를 포함
-     * @param placeId
-     * @return 한 장소의 정보 + 해당 장소의 식물 리스트
-     */
-    @EntityGraph(attributePaths = {"plants"}, type= EntityGraph.EntityGraphType.FETCH)
-    Optional<Place> findByPlaceId(Long placeId);
-
     @EntityGraph(attributePaths = {"plants"}, type= EntityGraph.EntityGraphType.FETCH)
     Optional<Place> findByPlaceIdAndGardener_GardenerId(Long placeId, Long gardenerId);
 }

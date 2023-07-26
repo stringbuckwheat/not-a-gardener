@@ -1,13 +1,16 @@
 package com.buckwheat.garden.dao.impl;
 
 import com.buckwheat.garden.dao.GardenerDao;
+import com.buckwheat.garden.data.projection.Username;
 import com.buckwheat.garden.data.entity.Gardener;
+import com.buckwheat.garden.error.code.ExceptionCode;
 import com.buckwheat.garden.repository.GardenerRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Repository
@@ -23,11 +26,11 @@ public class GardenerDaoImpl implements GardenerDao {
     @Override
     public Gardener getGardenerForLogin(String username) {
         return gardenerRepository.findByUsername(username)
-                .orElseThrow(() -> new BadCredentialsException("아이디 오류"));
+                .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode()));
     }
 
     @Override
-    public List<Gardener> getGardenerByEmail(String email){
+    public List<Username> getUsernameByEmail(String email){
         return gardenerRepository.findByEmailAndProviderIsNull(email);
     }
 
@@ -49,5 +52,10 @@ public class GardenerDaoImpl implements GardenerDao {
     @Override
     public void deleteBy(Long id) {
         gardenerRepository.deleteById(id);
+    }
+
+    @Override
+    public Gardener getGardenerById(Long id) {
+        return gardenerRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 }

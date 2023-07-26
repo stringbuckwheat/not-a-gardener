@@ -1,7 +1,7 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.code.WateringCode;
-import com.buckwheat.garden.data.dto.Calculate;
+import com.buckwheat.garden.data.projection.Calculate;
 import com.buckwheat.garden.data.dto.GardenDto;
 import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.dto.WateringDto;

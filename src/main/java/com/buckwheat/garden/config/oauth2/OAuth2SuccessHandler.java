@@ -20,7 +20,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private final TokenProvider tokenProvider;
     private final String TARGET_URL = "http://not-a-gardener.xyz/oauth/";
 
-
     /**
      * 로그인 성공 시 부가작업
      * JWT 발급 후 token과 함께 리다이렉트
@@ -32,10 +31,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
      */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
 
         // access 토큰 생성
-        AccessToken accessToken = tokenProvider.createAccessToken(userPrincipal);
+        AccessToken accessToken = tokenProvider.createAccessToken(user.getName(), user.getId());
         getRedirectStrategy().sendRedirect(request, response, TARGET_URL + accessToken.getToken());
     }
 }

@@ -1,4 +1,4 @@
-package com.buckwheat.garden.data.dto;
+package com.buckwheat.garden.data.projection;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

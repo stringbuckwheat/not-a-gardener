@@ -3,6 +3,7 @@ package com.buckwheat.garden.util;
 import com.buckwheat.garden.code.WateringCode;
 import com.buckwheat.garden.dao.WateringDao;
 import com.buckwheat.garden.data.dto.*;
+import com.buckwheat.garden.data.projection.ChemicalUsage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

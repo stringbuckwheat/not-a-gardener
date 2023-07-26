@@ -1,6 +1,6 @@
 package com.buckwheat.garden.repository;
 
-import com.buckwheat.garden.data.dto.RawGarden;
+import com.buckwheat.garden.data.projection.RawGarden;
 import com.buckwheat.garden.data.entity.Plant;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;

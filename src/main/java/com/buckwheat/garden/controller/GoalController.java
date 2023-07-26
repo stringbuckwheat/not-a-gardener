@@ -18,13 +18,13 @@ public class GoalController {
     private final GoalService goalService;
 
     @GetMapping("")
-    public List<GoalDto.Response> getGoalsByGardenerId(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        return goalService.getGoalsByGardenerId(userPrincipal.getGardener().getGardenerId());
+    public List<GoalDto.Response> getAll(@AuthenticationPrincipal UserPrincipal user) {
+        return goalService.getAll(user.getId());
     }
 
     @PostMapping("")
-    public GoalDto.Response add(@RequestBody GoalDto.Request goalRequest, @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        return goalService.add(userPrincipal.getGardener().getGardenerId(), goalRequest);
+    public GoalDto.Response add(@RequestBody GoalDto.Request goalRequest, @AuthenticationPrincipal UserPrincipal user) {
+        return goalService.add(user.getId(), goalRequest);
     }
 
     @PutMapping("/{goalId}")
@@ -33,12 +33,12 @@ public class GoalController {
     }
 
     @PutMapping("/{goalId}/complete")
-    public GoalDto.Response complete(@PathVariable long goalId) {
+    public GoalDto.Response complete(@PathVariable Long goalId) {
         return goalService.complete(goalId);
     }
 
     @DeleteMapping("/{goalId}")
-    public void delete(@PathVariable long goalId) {
+    public void delete(@PathVariable Long goalId) {
         goalService.delete(goalId);
     }
 }

@@ -5,7 +5,7 @@ import com.buckwheat.garden.data.dto.GoalDto;
 import java.util.List;
 
 public interface GoalService {
-    List<GoalDto.Response> getGoalsByGardenerId(Long gardenerId);
+    List<GoalDto.Response> getAll(Long gardenerId);
 
     GoalDto.Response add(Long gardenerId, GoalDto.Request goalRequest);
 

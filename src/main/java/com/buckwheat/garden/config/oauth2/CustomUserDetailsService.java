@@ -2,6 +2,7 @@ package com.buckwheat.garden.config.oauth2;
 
 import com.buckwheat.garden.dao.GardenerDao;
 import com.buckwheat.garden.data.entity.Gardener;
+import com.buckwheat.garden.error.code.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,9 +24,10 @@ public class CustomUserDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.debug("loadUserByUsername()");
         Gardener gardener = gardenerDao.getGardenerByGardenerId(Long.parseLong(username))
-                .orElseThrow(() -> new UsernameNotFoundException("해당 유저를 찾을 수 없습니다."));
+                .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode()));
 
-        return new UserPrincipal(gardener);
+        return new UserPrincipal(gardener.getGardenerId(), gardener.getName());
     }
 }

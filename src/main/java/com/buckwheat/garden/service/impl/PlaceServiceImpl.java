@@ -26,7 +26,7 @@ public class PlaceServiceImpl implements PlaceService {
      * @return 각 장소의 식물 개수를 포함하는 장소 정보 리스트
      */
     @Override
-    public List<PlaceDto.Card> getPlacesByGardenerId(Long gardenerId) {
+    public List<PlaceDto.Card> getAll(Long gardenerId) {
         List<PlaceDto.Card> list = new ArrayList<>();
 
         for(Place place : placeDao.getPlacesByGardenerId(gardenerId)){
@@ -38,11 +38,12 @@ public class PlaceServiceImpl implements PlaceService {
 
     /**
      * 한 장소의 정보
-     * @param id
+     * @param placeId
+     * @param gardenerId
      * @return 해당 장소의 식물 개수를 포함하는 장소 정보
      */
     @Override
-    public PlaceDto.WithPlants getPlaceDetail(Long placeId, Long gardenerId) {
+    public PlaceDto.WithPlants getDetail(Long placeId, Long gardenerId) {
         Place place = placeDao.getPlaceWithPlants(placeId, gardenerId);
 
         List<PlantDto.PlantInPlace> plants = new ArrayList<>();

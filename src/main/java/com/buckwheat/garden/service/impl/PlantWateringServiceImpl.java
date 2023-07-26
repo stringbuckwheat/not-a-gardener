@@ -71,7 +71,7 @@ public class PlantWateringServiceImpl implements PlantWateringService {
 
     @Override
     public List<WateringDto.ForOnePlant> getWateringListForPlant(Long plantId) {
-        List<Watering> list = wateringDao.getWateringListByPlantNo(plantId); // orderByWateringDateDesc
+        List<Watering> list = wateringDao.getWateringListByPlantId(plantId); // orderByWateringDateDesc
 
         // 며칠만에 물 줬는지도 계산해줌
         if (list.size() >= 2) {

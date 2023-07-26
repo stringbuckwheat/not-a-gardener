@@ -19,12 +19,12 @@ public class PlaceController {
 
     /**
      * 유저의 전체 장소 리스트
-     * @param userPrincipal
+     * @param user
      * @return 유저의 전체 장소 리스트, 카드용 DTO에 담아 보낸다.
      */
     @GetMapping("")
-    public List<PlaceDto.Card> getPlacesByGardenerId(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return placeService.getPlacesByGardenerId(userPrincipal.getGardener().getGardenerId());
+    public List<PlaceDto.Card> getAll(@AuthenticationPrincipal UserPrincipal user){
+        return placeService.getAll(user.getId());
     }
 
     /**
@@ -33,19 +33,19 @@ public class PlaceController {
      * @return
      */
     @GetMapping("/{placeId}")
-    public PlaceDto.WithPlants getPlaceDetail(@PathVariable Long placeId, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        return placeService.getPlaceDetail(placeId, userPrincipal.getGardener().getGardenerId());
+    public PlaceDto.WithPlants getDetail(@PathVariable Long placeId, @AuthenticationPrincipal UserPrincipal user){
+        return placeService.getDetail(placeId, user.getId());
     }
 
     /**
      * 장소 추가
      * @param placeRequest
-     * @param userPrincipal
+     * @param user
      * @return
      */
     @PostMapping("")
-    public PlaceDto.Card add(@RequestBody PlaceDto.Request placeRequest, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        return placeService.add(userPrincipal.getGardener().getGardenerId(), placeRequest);
+    public PlaceDto.Card add(@RequestBody PlaceDto.Request placeRequest, @AuthenticationPrincipal UserPrincipal user){
+        return placeService.add(user.getId(), placeRequest);
     }
 
     /**
@@ -54,8 +54,8 @@ public class PlaceController {
      * @return 수정한 장소 정보
      */
     @PutMapping("/{placeId}")
-    public PlaceDto.Response modify(@RequestBody PlaceDto.Request placeRequest, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        return placeService.modify(placeRequest, userPrincipal.getGardener().getGardenerId());
+    public PlaceDto.Response modify(@RequestBody PlaceDto.Request placeRequest, @AuthenticationPrincipal UserPrincipal user){
+        return placeService.modify(placeRequest, user.getId());
     }
 
     /**
@@ -63,7 +63,7 @@ public class PlaceController {
      * @param placeId
      */
     @DeleteMapping("/{placeId}")
-    public void delete(@PathVariable long placeId, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        placeService.delete(placeId, userPrincipal.getGardener().getGardenerId());
+    public void delete(@PathVariable long placeId, @AuthenticationPrincipal UserPrincipal user){
+        placeService.delete(placeId, user.getId());
     }
 }

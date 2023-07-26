@@ -1,9 +1,11 @@
 package com.buckwheat.garden.data.dto;
 
 import com.buckwheat.garden.data.entity.Gardener;
+import com.buckwheat.garden.data.projection.Username;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class GardenerDto {
     /**
@@ -141,9 +143,9 @@ public class GardenerDto {
     @Getter
     @NoArgsConstructor
     @ToString
-    public static class ForgotResponse {
-        private Long id;
-        private String username;
-        private String provider;
+    public static class Forgot {
+        private String identificationCode;
+        private String email;
+        List<Username> usernames;
     }
 }

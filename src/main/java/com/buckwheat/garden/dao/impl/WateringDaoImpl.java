@@ -1,7 +1,7 @@
 package com.buckwheat.garden.dao.impl;
 
 import com.buckwheat.garden.dao.WateringDao;
-import com.buckwheat.garden.data.dto.ChemicalUsage;
+import com.buckwheat.garden.data.projection.ChemicalUsage;
 import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.data.entity.Chemical;
 import com.buckwheat.garden.data.entity.Plant;
@@ -48,7 +48,7 @@ public class WateringDaoImpl implements WateringDao {
     }
 
     @Override
-    public List<Watering> getWateringListByPlantNo(Long plantId) {
+    public List<Watering> getWateringListByPlantId(Long plantId) {
         return wateringRepository.findByPlant_PlantIdOrderByWateringDateDesc(plantId);
     }
 

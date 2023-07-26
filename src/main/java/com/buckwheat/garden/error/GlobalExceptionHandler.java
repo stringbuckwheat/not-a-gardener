@@ -1,6 +1,5 @@
 package com.buckwheat.garden.error;
 
-import com.buckwheat.garden.data.dto.ErrorResponse;
 import com.buckwheat.garden.error.code.ExceptionCode;
 import com.buckwheat.garden.error.exception.AlreadyWateredException;
 import com.buckwheat.garden.error.exception.ExpiredRefreshTokenException;
@@ -19,6 +18,9 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
+    // TODO MailException 처리
+
     /**
      * 리프레쉬 토큰 만료
      * @param e ExpiredRefreshTokenException(Custom)
@@ -26,16 +28,12 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(ExpiredRefreshTokenException.class)
     public HttpEntity<ErrorResponse> handleExpiredRefreshTokenException(ExpiredRefreshTokenException e){
-        log.debug("ExpiredRefreshTokenException Handler 호출");
-
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ErrorResponse.from(ExceptionCode.REFRESH_TOKEN_EXPIRED));
     }
 
     @ExceptionHandler(NoSuchElementException.class)
     public HttpEntity<ErrorResponse> handleNoSuchElementException(NoSuchElementException e){
-        log.debug("NoSuchElementException handler 호출");
-
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.from(ExceptionCode.NO_SUCH_ITEM));
     }
@@ -47,10 +45,10 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BadCredentialsException.class)
     public HttpEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException e){
-        log.debug("BadCredentialsException Handler 호출");
+        ExceptionCode exceptionCode = ExceptionCode.of(e.getMessage());
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(ErrorResponse.from(ExceptionCode.WRONG_ACCOUNT));
+                .body(ErrorResponse.from(exceptionCode));
     }
 
     /**
@@ -60,10 +58,10 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(UsernameNotFoundException.class)
     public HttpEntity<ErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException e){
-        log.debug("UsernameNotFoundException Handler 호출");
+        ExceptionCode exceptionCode = ExceptionCode.of(e.getMessage());
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(ErrorResponse.from(ExceptionCode.NO_ACCOUNT));
+                .body(ErrorResponse.from(exceptionCode));
     }
 
     /**
@@ -73,8 +71,6 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(AlreadyWateredException.class)
     public HttpEntity<ErrorResponse> handleAlreadyWateredException(AlreadyWateredException e){
-        log.debug("AlreadyWateredException Handler 호출");
-
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ErrorResponse.from(ExceptionCode.ALREADY_WATERED));
     }

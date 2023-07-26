@@ -1,4 +1,4 @@
-package com.buckwheat.garden.data.dto;
+package com.buckwheat.garden.error;
 
 import com.buckwheat.garden.error.code.ExceptionCode;
 import lombok.AccessLevel;

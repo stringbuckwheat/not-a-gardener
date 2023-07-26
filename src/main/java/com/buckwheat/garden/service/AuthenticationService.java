@@ -1,7 +1,6 @@
 package com.buckwheat.garden.service;
 
 import com.buckwheat.garden.data.dto.GardenerDto;
-import com.buckwheat.garden.data.entity.Gardener;
 
 public interface AuthenticationService {
     /* 아이디 중복 검사 */
@@ -16,5 +15,6 @@ public interface AuthenticationService {
     /* access token 갱신 */
     GardenerDto.Token refreshToken(GardenerDto.Refresh token);
 
-    GardenerDto.Info getGardenerInfo(Gardener gardener);
+    /* 회원 정보: 헤더 및 localStorage 저장용 */
+    GardenerDto.Info getGardenerInfo(Long id);
 }

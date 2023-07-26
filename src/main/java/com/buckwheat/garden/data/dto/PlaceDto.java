@@ -109,7 +109,7 @@ public class PlaceDto {
     @Getter
     @Setter
     @ToString
-    public static class ModifyPlantPlace {
+    public static class ModifyPlace {
         Long placeId;
         List<Long> plantList;
     }

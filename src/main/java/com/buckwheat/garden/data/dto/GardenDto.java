@@ -1,6 +1,7 @@
 package com.buckwheat.garden.data.dto;
 
 import com.buckwheat.garden.data.entity.Plant;
+import com.buckwheat.garden.data.projection.RawGarden;
 import lombok.*;
 
 import java.time.LocalDate;

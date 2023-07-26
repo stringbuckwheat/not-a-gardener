@@ -46,8 +46,6 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
                 .getProviderDetails()
                 .getUserInfoEndpoint()
                 .getUserNameAttributeName();
-        log.debug("registrationId: {}", registrationId);
-        log.debug("userNameAttributeName: " + userNameAttributeName);
 
         // OAuth2UserService를 통해 가져온 데이터를 담을 클래스
         // attribute: {name, id, key, email, picture}

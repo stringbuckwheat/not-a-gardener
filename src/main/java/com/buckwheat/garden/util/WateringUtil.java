@@ -60,7 +60,6 @@ public class WateringUtil {
 
     public Plant updateWateringPeriod(Plant plant, int period) {
         if (period != plant.getRecentWateringPeriod()) {
-            log.debug("average watering period 변동");
             Plant updatedPlant = plant.updateAverageWateringPeriod(period);
             plantRepository.save(updatedPlant);
             return updatedPlant;

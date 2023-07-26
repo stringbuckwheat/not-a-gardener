@@ -43,8 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.debug("*** JWT FILTER ***");
-        log.debug("주소: {}", request.getRequestURL());
+        log.debug("*** JWT FILTER *** 주소: {}", request.getRequestURL());
 
         String token = resolveToken(request);
 

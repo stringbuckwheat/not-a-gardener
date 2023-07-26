@@ -2,6 +2,7 @@ package com.buckwheat.garden.config.oauth2;
 
 import com.buckwheat.garden.data.entity.Gardener;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.lang.Nullable;
@@ -13,50 +14,51 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import java.util.*;
 
 @AllArgsConstructor
+@Builder
 @ToString
 @Getter
 public class UserPrincipal implements UserDetails, OAuth2User {
-    private Gardener gardener;
+    private Long id;
+    private String name;
     private Map<String, Object> oauth2UserAttributes;
 
-    public UserPrincipal(Gardener gardener){
-        this.gardener = gardener;
+    public UserPrincipal(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public UserPrincipal(String id) {
+        this.id = Long.parseLong(id);
     }
 
     /* OAuth2 로그인 사용 */
-    public static UserPrincipal create(Gardener gardener, Map<String, Object> oauth2UserAttributes){
-        return new UserPrincipal(gardener, oauth2UserAttributes);
+    public static UserPrincipal create(Gardener gardener, Map<String, Object> oauth2UserAttributes) {
+        return new UserPrincipal(gardener.getGardenerId(), gardener.getName(), oauth2UserAttributes);
     }
 
     /* 일반 로그인 사용 */
-    public static UserPrincipal create(Gardener gardener){
-        return new UserPrincipal(gardener, new HashMap<>());
-    }
-
-    public Gardener getGardener(){
-        return this.gardener;
+    public static UserPrincipal create(Gardener gardener) {
+        return new UserPrincipal(gardener.getGardenerId(), gardener.getName(), new HashMap<>());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorityList = new ArrayList<>();
-
-        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
-        authorityList.add(authority);
+        authorityList.add(new SimpleGrantedAuthority("ROLE_USER"));
 
         return authorityList;
     }
 
     @Override
     public String getPassword() {
-        return this.gardener.getPassword();
+        return null;
     }
 
     @Override
     public String getUsername() {
         // username이 아니라 PK 값인 id를 넘겨준다
         // email은 중복 가능
-        return String.valueOf(this.gardener.getGardenerId());
+        return String.valueOf(this.id);
     }
 
     @Override
@@ -96,6 +98,6 @@ public class UserPrincipal implements UserDetails, OAuth2User {
 
     @Override
     public String getName() {
-        return gardener.getName();
+        return this.name;
     }
 }

@@ -19,7 +19,7 @@ public class GoalServiceImpl implements GoalService {
     private final GoalDao goalDao;
 
     @Override
-    public List<GoalDto.Response> getGoalsByGardenerId(Long gardenerId) {
+    public List<GoalDto.Response> getAll(Long gardenerId) {
         List<GoalDto.Response> goalList = new ArrayList<>();
 
         for(Goal goal : goalDao.getGoalListBy(gardenerId)){

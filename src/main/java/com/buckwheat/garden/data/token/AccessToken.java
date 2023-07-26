@@ -19,7 +19,7 @@ import java.util.Optional;
 @Getter
 public class AccessToken {
     public static final String AUTHORITIES_KEY = "USER";
-    public static final int EXPIRED_AFTER = 1;
+    public static final int EXPIRED_AFTER = 15;
     private final String token;
     private final Key key;
     private LocalDateTime expiredAt;
@@ -32,7 +32,6 @@ public class AccessToken {
     public AccessToken(Long id, Key key, Map<String, String> claims) {
         LocalDateTime expiredAt = LocalDateTime.now().plusMinutes(EXPIRED_AFTER);
         Date expiredDate = Date.from(expiredAt.atZone(ZoneId.systemDefault()).toInstant());
-        log.debug("access token expired date: {}", expiredDate);
 
         this.key = key;
         this.expiredAt = expiredAt;

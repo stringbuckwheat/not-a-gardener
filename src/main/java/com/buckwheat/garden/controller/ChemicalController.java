@@ -19,12 +19,12 @@ public class ChemicalController {
 
     /**
      * 모든 비료 리스트 반환
-     * @param userPrincipal SecurityContext에서 memberId를 가져오기 위해
+     * @param user SecurityContext에서 memberId를 가져오기 위해
      * @return 모든 비료 리스트 반환
      */
     @GetMapping("")
-    public List<ChemicalDto.Response> getAll(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return chemicalService.getAll(userPrincipal.getGardener().getGardenerId());
+    public List<ChemicalDto.Response> getAll(@AuthenticationPrincipal UserPrincipal user){
+        return chemicalService.getAll(user.getId());
     }
 
     /**
@@ -33,30 +33,30 @@ public class ChemicalController {
      * @return 해당 약품의 주기 리스트(WateringDto)
      */
     @GetMapping("/{chemicalId}")
-    public ChemicalDto.Detail getDetail(@PathVariable long chemicalId, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        return chemicalService.getDetail(chemicalId, userPrincipal.getGardener().getGardenerId());
+    public ChemicalDto.Detail getDetail(@PathVariable long chemicalId, @AuthenticationPrincipal UserPrincipal user){
+        return chemicalService.getDetail(chemicalId, user.getId());
     }
 
     /**
      * 비료 추가
-     * @param userPrincipal SecurityContext에서 Gardener를 가져오기 위해
+     * @param user SecurityContext에서 Gardener를 가져오기 위해
      * @param chemicalRequest 입력받은 약품 정보
      * @return 수정한 ChemicalDTO
      */
     @PostMapping("")
-    public ChemicalDto.Response add(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ChemicalDto.Request chemicalRequest){
-        return chemicalService.add(userPrincipal.getGardener().getGardenerId(), chemicalRequest);
+    public ChemicalDto.Response add(@AuthenticationPrincipal UserPrincipal user, @RequestBody ChemicalDto.Request chemicalRequest){
+        return chemicalService.add(user.getId(), chemicalRequest);
     }
 
     /**
      * 약품 수정
-     * @param userPrincipal
+     * @param user
      * @param chemicalRequest 입력받은 약품 정보
      * @return 수정한 Chemical
      */
     @PutMapping("/{chemicalId}")
-    public ChemicalDto.Response modify(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody ChemicalDto.Request chemicalRequest){
-        return chemicalService.modify(userPrincipal.getGardener().getGardenerId(), chemicalRequest);
+    public ChemicalDto.Response modify(@AuthenticationPrincipal UserPrincipal user, @RequestBody ChemicalDto.Request chemicalRequest){
+        return chemicalService.modify(user.getId(), chemicalRequest);
     }
 
     /**
@@ -65,7 +65,7 @@ public class ChemicalController {
      * @param chemicalId
      */
     @DeleteMapping("/{chemicalId}/deactivate")
-    public void deactivate(@PathVariable long chemicalId, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        chemicalService.deactivate(chemicalId, userPrincipal.getGardener().getGardenerId());
+    public void deactivate(@PathVariable long chemicalId, @AuthenticationPrincipal UserPrincipal user){
+        chemicalService.deactivate(chemicalId, user.getId());
     }
 }

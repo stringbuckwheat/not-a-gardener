@@ -1,6 +1,6 @@
 package com.buckwheat.garden.repository;
 
-import com.buckwheat.garden.data.dto.ChemicalUsage;
+import com.buckwheat.garden.data.projection.ChemicalUsage;
 import com.buckwheat.garden.data.entity.Watering;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,9 +33,6 @@ public interface WateringRepository extends JpaRepository<Watering, Long> {
 
     @EntityGraph(attributePaths = {"chemical"}, type = EntityGraph.EntityGraphType.FETCH)
     List<Watering> findByPlant_PlantIdOrderByWateringDateDesc(Long plantId);
-
-    @EntityGraph(attributePaths = {"chemical, plant"}, type = EntityGraph.EntityGraphType.FETCH)
-    Watering findByWateringId(Long wateringId);
 
     Watering findByWateringDateAndPlant_PlantId(LocalDate wateringDate, long plantId);
 

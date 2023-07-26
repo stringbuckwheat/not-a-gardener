@@ -4,7 +4,7 @@ import com.buckwheat.garden.code.AfterWateringCode;
 import com.buckwheat.garden.code.WateringCode;
 import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.dao.WateringDao;
-import com.buckwheat.garden.data.dto.Calculate;
+import com.buckwheat.garden.data.projection.Calculate;
 import com.buckwheat.garden.data.dto.GardenDto;
 import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.data.entity.Plant;
@@ -28,7 +28,7 @@ public class GardenWateringServiceImpl implements GardenWateringService {
     private final GardenResponseProvider gardenResponseProvider;
 
     @Override
-    public GardenDto.WateringResponse addWateringInGarden(Long gardenerId, WateringDto.Request wateringRequest) {
+    public GardenDto.WateringResponse add(Long gardenerId, WateringDto.Request wateringRequest) {
         Watering watering = wateringDao.addWatering(wateringRequest);
         Plant plant = watering.getPlant();
 

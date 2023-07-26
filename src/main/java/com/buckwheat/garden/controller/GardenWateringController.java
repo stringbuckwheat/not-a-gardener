@@ -18,13 +18,13 @@ public class GardenWateringController {
 
     /**
      * 메인 페이지에서 물주기 추가하기
-     * @param userPrincipal
+     * @param user
      * @param wateringRequest
      * @return
      */
     @PostMapping("")
-    public GardenDto.WateringResponse addWateringInGarden(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody WateringDto.Request wateringRequest){
-        return gardenWateringService.addWateringInGarden(userPrincipal.getGardener().getGardenerId(), wateringRequest);
+    public GardenDto.WateringResponse add(@AuthenticationPrincipal UserPrincipal user, @RequestBody WateringDto.Request wateringRequest){
+        return gardenWateringService.add(user.getId(), wateringRequest);
     }
 
     /**
@@ -33,7 +33,7 @@ public class GardenWateringController {
      * @return
      */
     @PutMapping("/not-dry")
-    public WateringDto.Message notDry(@PathVariable long plantId){
+    public WateringDto.Message notDry(@PathVariable Long plantId){
         return gardenWateringService.notDry(plantId);
     }
 
@@ -43,7 +43,7 @@ public class GardenWateringController {
      * @return 새로운 wateringCode;
      */
     @PutMapping("/postpone")
-    public int postpone(@PathVariable long plantId){
+    public int postpone(@PathVariable Long plantId){
         return gardenWateringService.postpone(plantId);
     }
 }

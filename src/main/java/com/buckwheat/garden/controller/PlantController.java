@@ -22,12 +22,12 @@ public class PlantController {
     /**
      * 전체 식물 리스트
      * 실제 식물 페이지가 아닌 다른 곳(ex. 장소 페이지)에서 간단한 정보를 띄울 때 사용
-     * @param userPrincipal
+     * @param user
      * @return
      */
     @GetMapping("")
-    public List<PlantDto.Response> getPlantsByGardenerId(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return plantService.getPlantsByGardenerId(userPrincipal.getGardener().getGardenerId());
+    public List<PlantDto.Response> getAll(@AuthenticationPrincipal UserPrincipal user){
+        return plantService.getAll(user.getId());
     }
 
     /**
@@ -36,40 +36,40 @@ public class PlantController {
      * @return
      */
     @GetMapping("/{plantId}")
-    public PlantDto.Detail getOnePlant(@PathVariable Long plantId, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        return plantService.getPlantDetail(plantId, userPrincipal.getGardener().getGardenerId());
+    public PlantDto.Detail getDetail(@PathVariable Long plantId, @AuthenticationPrincipal UserPrincipal user){
+        return plantService.getDetail(plantId, user.getId());
     }
 
     /**
      * 식물 추가
-     * @param userPrincipal
+     * @param user
      * @param plantRequest
      * @return
      */
     @PostMapping("")
-    public GardenDto.Response add(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody PlantDto.Request plantRequest){
-        return plantService.add(userPrincipal.getGardener().getGardenerId(), plantRequest);
+    public GardenDto.Response add(@AuthenticationPrincipal UserPrincipal user, @RequestBody PlantDto.Request plantRequest){
+        return plantService.add(user.getId(), plantRequest);
     }
 
     /**
      * 식물 수정
      * @param plantRequest
-     * @param userPrincipal
+     * @param user
      * @return
      */
     @PutMapping("/{plantId}")
-    public GardenDto.Response modify(@RequestBody PlantDto.Request plantRequest, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        return plantService.modify(userPrincipal.getGardener().getGardenerId(), plantRequest);
+    public GardenDto.Response modify(@RequestBody PlantDto.Request plantRequest, @AuthenticationPrincipal UserPrincipal user){
+        return plantService.modify(user.getId(), plantRequest);
     }
 
     /**
      * 여러 식물의 장소를 한 번에 바꿈
-     * @param modifyPlantPlace
+     * @param modifyPlace
      * @return
      */
     @PutMapping("/modify-place")
-    public PlaceDto.Response modifyPlantPlace(@RequestBody PlaceDto.ModifyPlantPlace modifyPlantPlace, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        return plantService.modifyPlantPlace(modifyPlantPlace, userPrincipal.getGardener().getGardenerId());
+    public PlaceDto.Response modifyPlace(@RequestBody PlaceDto.ModifyPlace modifyPlace, @AuthenticationPrincipal UserPrincipal user){
+        return plantService.modifyPlace(modifyPlace, user.getId());
     }
 
     /**
@@ -77,7 +77,7 @@ public class PlantController {
      * @param plantId
      */
     @DeleteMapping("/{plantId}")
-    public void deletePlant(@PathVariable Long plantId, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        plantService.delete(plantId, userPrincipal.getGardener().getGardenerId());
+    public void delete(@PathVariable Long plantId, @AuthenticationPrincipal UserPrincipal user){
+        plantService.delete(plantId, user.getId());
     }
 }

@@ -2,9 +2,9 @@ package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.dao.RoutineDao;
-import com.buckwheat.garden.data.dto.Calculate;
+import com.buckwheat.garden.data.projection.Calculate;
 import com.buckwheat.garden.data.dto.GardenDto;
-import com.buckwheat.garden.data.dto.RawGarden;
+import com.buckwheat.garden.data.projection.RawGarden;
 import com.buckwheat.garden.data.dto.RoutineDto;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Routine;
@@ -31,7 +31,7 @@ public class GardenServiceImpl implements GardenService {
 
     @Override
     @Transactional
-    public GardenDto.GardenMain getGarden(Long gardenerId) {
+    public GardenDto.GardenMain getGardenToDo(Long gardenerId) {
         // 저장한 식물이 하나도 없는지
         if (plantDao.getPlantsByGardenerId(gardenerId).size() == 0) {
             return new GardenDto.GardenMain(false, null, null, null);
@@ -79,7 +79,7 @@ public class GardenServiceImpl implements GardenService {
     }
 
     @Override
-    public List<GardenDto.Response> getPlantsByGardenerId(Long gardenerId) {
+    public List<GardenDto.Response> getAll(Long gardenerId) {
         List<GardenDto.Response> gardenList = new ArrayList<>();
 
         // 필요한 것들 계산해서 gardenDto list 리턴
