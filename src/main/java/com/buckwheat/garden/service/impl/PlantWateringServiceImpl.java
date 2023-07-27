@@ -46,7 +46,7 @@ public class PlantWateringServiceImpl implements PlantWateringService {
      * @return WateringResponseDto
      */
     @Override
-    public WateringDto.AfterWatering addWatering(WateringDto.Request wateringRequest) {
+    public WateringDto.AfterWatering add(WateringDto.Request wateringRequest) {
         Watering watering = wateringDao.addWatering(wateringRequest);
         return getAfterWatering(watering.getPlant());
     }
@@ -56,7 +56,7 @@ public class PlantWateringServiceImpl implements PlantWateringService {
         WateringDto.Message wateringMsg = wateringUtil.getWateringMsg(plant.getPlantId());
 
         // 리턴용 DTO 만들기
-        List<WateringDto.ForOnePlant> waterings = getWateringListForPlant(plant.getPlantId());
+        List<WateringDto.ForOnePlant> waterings = getAll(plant.getPlantId());
 
         // 식물 테이블의 averageWateringDate 업데이트 필요 X
         if (wateringMsg.getAfterWateringCode() == 3) {
@@ -70,7 +70,7 @@ public class PlantWateringServiceImpl implements PlantWateringService {
     }
 
     @Override
-    public List<WateringDto.ForOnePlant> getWateringListForPlant(Long plantId) {
+    public List<WateringDto.ForOnePlant> getAll(Long plantId) {
         List<Watering> list = wateringDao.getWateringListByPlantId(plantId); // orderByWateringDateDesc
 
         // 며칠만에 물 줬는지도 계산해줌
@@ -119,19 +119,19 @@ public class PlantWateringServiceImpl implements PlantWateringService {
     }
 
     @Override
-    public WateringDto.AfterWatering modifyWatering(WateringDto.Request wateringRequest) {
+    public WateringDto.AfterWatering modify(WateringDto.Request wateringRequest) {
         Watering watering = wateringDao.modifyWatering(wateringRequest);
         return getAfterWatering(watering.getPlant());
     }
 
     @Override
-    public void deleteWatering(Long id) {
+    public void delete(Long id) {
         wateringDao.deleteById(id);
     }
 
 
     @Override
-    public void deleteAllFromPlant(Long plantId) {
+    public void deleteAll(Long plantId) {
         wateringDao.deleteByPlantId(plantId);
     }
 }

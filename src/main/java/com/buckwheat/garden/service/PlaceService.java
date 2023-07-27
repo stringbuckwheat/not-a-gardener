@@ -9,9 +9,9 @@ public interface PlaceService {
 
     PlaceDto.WithPlants getDetail(Long placeId, Long gardenerId);
 
-    PlaceDto.Card add(Long gardenerId, PlaceDto.Request placeRequest);
+    PlaceDto.Card add(Long gardenerId, PlaceDto.Basic placeRequest);
 
-    PlaceDto.Response modify(PlaceDto.Request placeRequest, Long gardenerId);
+    PlaceDto.Basic modify(PlaceDto.Basic placeRequest, Long gardenerId);
 
     void delete(Long placeId, Long gardenerId);
 }

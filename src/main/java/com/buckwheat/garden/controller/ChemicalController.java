@@ -23,7 +23,7 @@ public class ChemicalController {
      * @return 모든 비료 리스트 반환
      */
     @GetMapping("")
-    public List<ChemicalDto.Response> getAll(@AuthenticationPrincipal UserPrincipal user){
+    public List<ChemicalDto.Basic> getAll(@AuthenticationPrincipal UserPrincipal user){
         return chemicalService.getAll(user.getId());
     }
 
@@ -44,7 +44,7 @@ public class ChemicalController {
      * @return 수정한 ChemicalDTO
      */
     @PostMapping("")
-    public ChemicalDto.Response add(@AuthenticationPrincipal UserPrincipal user, @RequestBody ChemicalDto.Request chemicalRequest){
+    public ChemicalDto.Basic add(@AuthenticationPrincipal UserPrincipal user, @RequestBody ChemicalDto.Basic chemicalRequest){
         return chemicalService.add(user.getId(), chemicalRequest);
     }
 
@@ -55,7 +55,7 @@ public class ChemicalController {
      * @return 수정한 Chemical
      */
     @PutMapping("/{chemicalId}")
-    public ChemicalDto.Response modify(@AuthenticationPrincipal UserPrincipal user, @RequestBody ChemicalDto.Request chemicalRequest){
+    public ChemicalDto.Basic modify(@AuthenticationPrincipal UserPrincipal user, @RequestBody ChemicalDto.Basic chemicalRequest){
         return chemicalService.modify(user.getId(), chemicalRequest);
     }
 
@@ -65,7 +65,7 @@ public class ChemicalController {
      * @param chemicalId
      */
     @DeleteMapping("/{chemicalId}/deactivate")
-    public void deactivate(@PathVariable long chemicalId, @AuthenticationPrincipal UserPrincipal user){
+    public void deactivate(@PathVariable Long chemicalId, @AuthenticationPrincipal UserPrincipal user){
         chemicalService.deactivate(chemicalId, user.getId());
     }
 }

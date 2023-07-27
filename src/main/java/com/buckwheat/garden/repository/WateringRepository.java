@@ -23,7 +23,7 @@ public interface WateringRepository extends JpaRepository<Watering, Long> {
             " WHERE plant.gardener.gardenerId = :gardenerId" +
             " AND watering.wateringDate >= :startDate" +
             " AND watering.wateringDate <= :endDate")
-    List<Watering> findAllWateringListByGardenerNo(@Param("gardenerId") Long gardenerId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+    List<Watering> findAllWateringListByGardenerId(@Param("gardenerId") Long gardenerId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
     @Query(value = "SELECT chemical_id chemicalId, period, name," +
             " (SELECT MAX(watering_date) FROM watering w WHERE w.plant_id = :plantId AND w.chemical_id = c.chemical_id) latestWateringDate" +

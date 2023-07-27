@@ -13,9 +13,15 @@ const Watering = () => {
 
   const [loading, setLoading] = useState(true);
   const [wateringList, setWateringList] = useState({});
+
+  const getDate = (date) => {
+    return date.toISOString().split("T").at(0);
+  }
   const onMountWatering = async () => {
     const month = new Date().getMonth() + 1;
-    const res = await getData(`/watering/month/${month}`);
+    const res = await getData(`/watering/date/${getDate(new Date())}`);
+
+    console.log("res", res);
 
     setWateringList(res);
     setLoading(false);
@@ -64,7 +70,7 @@ const Watering = () => {
   };
 
   const onPanelChange = async (value) => {
-    const res = await getData(`/watering/month/${value.get("M") + 1}`);
+    const res = await getData(`/watering/date/${getDate(new Date(value))}`);
     setWateringList(res);
   };
 

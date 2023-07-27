@@ -52,16 +52,16 @@ public class PlaceServiceImpl implements PlaceService {
             plants.add(PlantDto.PlantInPlace.from(plant));
         }
 
-        PlaceDto.Response placeResponseDto = PlaceDto.Response.from(place);
+        PlaceDto.Basic placeResponseDto = PlaceDto.Basic.from(place);
 
         return new PlaceDto.WithPlants(placeResponseDto, plants);
     }
 
     @Override
-    public PlaceDto.Card add(Long gardenerId, PlaceDto.Request placeRequest) {
+    public PlaceDto.Card add(Long gardenerId, PlaceDto.Basic placeRequest) {
         // FK인 Gardener와 createDate로 쓸 LocalDateTime.now()를 포함한 엔티티를 저장
         Place place = placeDao.save(gardenerId, placeRequest);
-        return PlaceDto.Card.fromNew(place);
+        return PlaceDto.Card.from(place);
     }
 
     /**
@@ -70,8 +70,8 @@ public class PlaceServiceImpl implements PlaceService {
      * @return 수정 후 데이터
      */
     @Override
-    public PlaceDto.Response modify(PlaceDto.Request placeRequest, Long gardenerId) {
-        return PlaceDto.Response.from(placeDao.update(placeRequest, gardenerId));
+    public PlaceDto.Basic modify(PlaceDto.Basic placeRequest, Long gardenerId) {
+        return PlaceDto.Basic.from(placeDao.update(placeRequest, gardenerId));
     }
 
     /**

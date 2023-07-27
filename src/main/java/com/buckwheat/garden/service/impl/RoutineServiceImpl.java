@@ -23,7 +23,7 @@ public class RoutineServiceImpl implements RoutineService {
     private final RoutineUtil routineUtil;
 
     @Override
-    public RoutineDto.Main getRoutinesByGardenerId(Long gardenerId) {
+    public RoutineDto.Main getAll(Long gardenerId) {
         List<RoutineDto.Response> toDoList = new ArrayList<>();
         List<RoutineDto.Response> notToDoList = new ArrayList<>();
 

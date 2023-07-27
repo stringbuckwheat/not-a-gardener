@@ -26,12 +26,12 @@ public class ChemicalServiceImpl implements ChemicalService {
      * @return dto로 변환한 chemical list
      */
     @Override
-    public List<ChemicalDto.Response> getAll(Long gardenerId) {
-        List<ChemicalDto.Response> chemicalList = new ArrayList<>();
+    public List<ChemicalDto.Basic> getAll(Long gardenerId) {
+        List<ChemicalDto.Basic> chemicalList = new ArrayList<>();
 
         // entity -> dto
         for (Chemical chemical : chemicalDao.getActivatedChemicalsByGardenerId(gardenerId)) {
-            chemicalList.add(ChemicalDto.Response.from(chemical));
+            chemicalList.add(ChemicalDto.Basic.from(chemical));
         }
 
         return chemicalList;
@@ -53,17 +53,17 @@ public class ChemicalServiceImpl implements ChemicalService {
             waterings.add(WateringDto.ResponseInChemical.from(watering));
         }
 
-        return new ChemicalDto.Detail(ChemicalDto.Response.from(chemical), waterings);
+        return new ChemicalDto.Detail(ChemicalDto.Basic.from(chemical), waterings);
     }
 
     @Override
-    public ChemicalDto.Response add(Long gardenerId, ChemicalDto.Request chemicalRequest) {
-        return ChemicalDto.Response.from(chemicalDao.save(gardenerId, chemicalRequest));
+    public ChemicalDto.Basic add(Long gardenerId, ChemicalDto.Basic chemicalRequest) {
+        return ChemicalDto.Basic.from(chemicalDao.save(gardenerId, chemicalRequest));
     }
 
     @Override
-    public ChemicalDto.Response modify(Long gardenerId, ChemicalDto.Request chemicalRequest) {
-        return ChemicalDto.Response.from(chemicalDao.update(gardenerId, chemicalRequest));
+    public ChemicalDto.Basic modify(Long gardenerId, ChemicalDto.Basic chemicalRequest) {
+        return ChemicalDto.Basic.from(chemicalDao.update(gardenerId, chemicalRequest));
     }
 
     @Override

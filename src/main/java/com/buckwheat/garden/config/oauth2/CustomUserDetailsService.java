@@ -1,8 +1,9 @@
 package com.buckwheat.garden.config.oauth2;
 
 import com.buckwheat.garden.dao.GardenerDao;
-import com.buckwheat.garden.data.entity.Gardener;
+import com.buckwheat.garden.data.token.ActiveGardener;
 import com.buckwheat.garden.error.code.ExceptionCode;
+import com.buckwheat.garden.repository.RedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
     private final GardenerDao gardenerDao;
+    private final RedisRepository redisRepository;
 
     /**
      *
@@ -25,8 +27,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.debug("loadUserByUsername()");
-        Gardener gardener = gardenerDao.getGardenerByGardenerId(Long.parseLong(username))
-                .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode()));
+
+        ActiveGardener gardener = redisRepository.findById(Long.parseLong(username))
+                .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_TOKEN_IN_REDIS.getCode()));
 
         return new UserPrincipal(gardener.getGardenerId(), gardener.getName());
     }

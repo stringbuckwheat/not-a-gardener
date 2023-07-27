@@ -68,7 +68,7 @@ public class PlantController {
      * @return
      */
     @PutMapping("/modify-place")
-    public PlaceDto.Response modifyPlace(@RequestBody PlaceDto.ModifyPlace modifyPlace, @AuthenticationPrincipal UserPrincipal user){
+    public PlaceDto.Basic modifyPlace(@RequestBody PlaceDto.ModifyPlace modifyPlace, @AuthenticationPrincipal UserPrincipal user){
         return plantService.modifyPlace(modifyPlace, user.getId());
     }
 

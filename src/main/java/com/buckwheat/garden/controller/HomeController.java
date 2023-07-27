@@ -18,7 +18,7 @@ public class HomeController {
     /**
      * 로그인
      * @param login id, pw
-     * @return JWT 토큰, GardenerNo, 이름이 포함된 GardenerInfo
+     * @return JWT 토큰, GardenerId, 이름이 포함된 GardenerInfo
      */
     @PostMapping("/login")
     public GardenerDto.Info login(@RequestBody GardenerDto.Login login){

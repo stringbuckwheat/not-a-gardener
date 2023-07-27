@@ -72,8 +72,8 @@ public class PlantServiceImpl implements PlantService {
     }
 
     @Override
-    public PlaceDto.Response modifyPlace(PlaceDto.ModifyPlace modifyPlace, Long gardenerId) {
-        return PlaceDto.Response.from(plantDao.updatePlantPlace(modifyPlace, gardenerId));
+    public PlaceDto.Basic modifyPlace(PlaceDto.ModifyPlace modifyPlace, Long gardenerId) {
+        return PlaceDto.Basic.from(plantDao.updatePlantPlace(modifyPlace, gardenerId));
     }
 
     @Override

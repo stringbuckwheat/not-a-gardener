@@ -19,32 +19,32 @@ public class GoalServiceImpl implements GoalService {
     private final GoalDao goalDao;
 
     @Override
-    public List<GoalDto.Response> getAll(Long gardenerId) {
-        List<GoalDto.Response> goalList = new ArrayList<>();
+    public List<GoalDto.Basic> getAll(Long gardenerId) {
+        List<GoalDto.Basic> goalList = new ArrayList<>();
 
         for(Goal goal : goalDao.getGoalListBy(gardenerId)){
-            goalList.add(GoalDto.Response.from(goal));
+            goalList.add(GoalDto.Basic.from(goal));
         }
 
         return goalList;
     }
 
     @Override
-    public GoalDto.Response add(Long gardenerId, GoalDto.Request goalRequest) {
+    public GoalDto.Basic add(Long gardenerId, GoalDto.Basic goalRequest) {
         Goal goal = goalDao.save(gardenerId, goalRequest);
-        return GoalDto.Response.from(goal, goal.getPlant());
+        return GoalDto.Basic.from(goal);
     }
 
     @Override
-    public GoalDto.Response modify(GoalDto.Request goalRequest) {
+    public GoalDto.Basic modify(GoalDto.Basic goalRequest) {
         Goal goal = goalDao.update(goalRequest);
-        return GoalDto.Response.from(goal, goal.getPlant());
+        return GoalDto.Basic.from(goal);
     }
 
     @Override
     @Transactional
-    public GoalDto.Response complete(Long id) {
-        return GoalDto.Response.from(goalDao.complete(id));
+    public GoalDto.Basic complete(Long id) {
+        return GoalDto.Basic.from(goalDao.complete(id));
     }
 
     @Override

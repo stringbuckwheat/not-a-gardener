@@ -27,7 +27,7 @@ public class GoalDaoImpl implements GoalDao {
     }
 
     @Override
-    public Goal save(Long gardenerId, GoalDto.Request goalRequest) {
+    public Goal save(Long gardenerId, GoalDto.Basic goalRequest) {
         Gardener gardener = gardenerRepository.findById(gardenerId).orElseThrow(NoSuchElementException::new);
         Plant plant = plantRepository.findById(goalRequest.getPlantId()).orElse(null);
 
@@ -35,7 +35,7 @@ public class GoalDaoImpl implements GoalDao {
     }
 
     @Override
-    public Goal update(GoalDto.Request goalRequest) {
+    public Goal update(GoalDto.Basic goalRequest) {
         Plant plant = plantRepository.findById(goalRequest.getPlantId()).orElseThrow(NoSuchElementException::new);
         Goal prevGoal = goalRepository.findById(goalRequest.getId()).orElseThrow(NoSuchElementException::new);
 

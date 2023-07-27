@@ -24,31 +24,20 @@ public class WateringServiceImpl implements WateringService {
     private final WateringUtil wateringUtil;
 
     @Override
-    public Map<LocalDate, List<WateringDto.ByDate>> getWateringList(Long gardenerId, int month) {
+    public Map<LocalDate, List<WateringDto.ByDate>> getAll(Long gardenerId, LocalDate date) {
         // 1일이 일요일이면 뒤로 2주 더
         // 1일이 일요일이 아니면 앞으로 한 주 뒤로 한 주
-        LocalDate firstDayOfMonth = LocalDate.of(2023, month, 1);
-
-        // 월 화 수 목 금 토 일 => 1, 2, 3, 4, 5, 6, 7
-        // 일요일이면 가만히 두고, 나머지 요일이면 getDayOfWeek().getValue()를 빼면
-        // 7로 나눈 나머지를 뺌
-        LocalDate startDate = firstDayOfMonth.minusDays(firstDayOfMonth.getDayOfWeek().getValue() % 7);
-
-        // end date: 합쳐서 42가 되게 만드는 값
-        // x = 42 - 이번달 - startDate으로 더한 값
-        int tmp = 42 - firstDayOfMonth.lengthOfMonth() - firstDayOfMonth.getDayOfWeek().getValue() % 7;
-        LocalDate endDate = firstDayOfMonth.plusDays(firstDayOfMonth.lengthOfMonth() - 1 + tmp);
+        LocalDate firstDayOfMonth = LocalDate.of(date.getYear(), date.getMonth(), 1);
+        LocalDate startDate = getStartDate(firstDayOfMonth);
+        LocalDate endDate = getEndDate(firstDayOfMonth);
 
         Map<LocalDate, List<WateringDto.ByDate>> map = new HashMap<>(); // 날짜: 리스트
 
-        for (Watering watering : wateringDao.getAllWateringListByGardenerNo(gardenerId, startDate, endDate)) {
+        for (Watering watering : wateringDao.getAllWateringListByGardenerId(gardenerId, startDate, endDate)) {
             List<WateringDto.ByDate> tmpList = map.get(watering.getWateringDate());
 
             if(tmpList == null){
-                List<WateringDto.ByDate> list = new ArrayList<>();
-                list.add(WateringDto.ByDate.from(watering));
-                map.put(watering.getWateringDate(), list);
-                continue;
+                tmpList = new ArrayList<>();
             }
 
             tmpList.add(WateringDto.ByDate.from(watering));
@@ -58,7 +47,24 @@ public class WateringServiceImpl implements WateringService {
         return map;
     }
 
-    public WateringDto.ByDate addWatering(WateringDto.Request wateringRequest){
+    // 달력 시작 날짜
+    public LocalDate getStartDate(LocalDate firstDayOfMonth){
+        // 월 화 수 목 금 토 일 => 1, 2, 3, 4, 5, 6, 7
+        // 일요일이면 가만히 두고, 나머지 요일이면 getDayOfWeek().getValue()를 빼면
+        // 7로 나눈 나머지를 뺌
+
+        return firstDayOfMonth.minusDays(firstDayOfMonth.getDayOfWeek().getValue() % 7);
+    }
+
+    // 달력 마지막 날짜
+    public LocalDate getEndDate(LocalDate firstDayOfMonth){
+        // end date: 합쳐서 42가 되게 만드는 값
+        // x = 42 - 이번달 - startDate으로 더한 값
+        int tmp = 42 - firstDayOfMonth.lengthOfMonth() - firstDayOfMonth.getDayOfWeek().getValue() % 7;
+        return firstDayOfMonth.plusDays(firstDayOfMonth.lengthOfMonth() - 1 + tmp);
+    }
+
+    public WateringDto.ByDate add(WateringDto.Request wateringRequest){
         // 물주기 저장
         Watering watering = wateringDao.addWatering(wateringRequest);
 

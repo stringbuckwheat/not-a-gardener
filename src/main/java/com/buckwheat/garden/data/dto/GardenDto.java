@@ -1,7 +1,6 @@
 package com.buckwheat.garden.data.dto;
 
 import com.buckwheat.garden.data.entity.Plant;
-import com.buckwheat.garden.data.projection.RawGarden;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -51,18 +50,6 @@ public class GardenDto {
                     .placeId(plant.getPlace().getPlaceId())
                     .placeName(plant.getPlace().getName())
                     .createDate(LocalDate.from(plant.getCreateDate()))
-                    .build();
-        }
-
-        public static WaitingForWatering from(RawGarden rawGarden){
-            return WaitingForWatering.builder()
-                    .id(rawGarden.getPlantId())
-                    .name(rawGarden.getName())
-                    .species(rawGarden.getSpecies())
-                    .medium(rawGarden.getMedium())
-                    .placeId(rawGarden.getPlaceId())
-                    .placeName(rawGarden.getPlaceName())
-                    .createDate(LocalDate.from(rawGarden.getCreateDate()))
                     .build();
         }
     }

@@ -18,22 +18,22 @@ public class GoalController {
     private final GoalService goalService;
 
     @GetMapping("")
-    public List<GoalDto.Response> getAll(@AuthenticationPrincipal UserPrincipal user) {
+    public List<GoalDto.Basic> getAll(@AuthenticationPrincipal UserPrincipal user) {
         return goalService.getAll(user.getId());
     }
 
     @PostMapping("")
-    public GoalDto.Response add(@RequestBody GoalDto.Request goalRequest, @AuthenticationPrincipal UserPrincipal user) {
+    public GoalDto.Basic add(@RequestBody GoalDto.Basic goalRequest, @AuthenticationPrincipal UserPrincipal user) {
         return goalService.add(user.getId(), goalRequest);
     }
 
     @PutMapping("/{goalId}")
-    public GoalDto.Response modify(@RequestBody GoalDto.Request goalRequest) {
+    public GoalDto.Basic modify(@RequestBody GoalDto.Basic goalRequest) {
         return goalService.modify(goalRequest);
     }
 
     @PutMapping("/{goalId}/complete")
-    public GoalDto.Response complete(@PathVariable Long goalId) {
+    public GoalDto.Basic complete(@PathVariable Long goalId) {
         return goalService.complete(goalId);
     }
 

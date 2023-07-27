@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface GoalDao {
     List<Goal> getGoalListBy(Long gardenerId);
-    Goal save(Long gardenerId, GoalDto.Request goalRequest);
-    Goal update(GoalDto.Request goalRequest);
+    Goal save(Long gardenerId, GoalDto.Basic goalRequest);
+    Goal update(GoalDto.Basic goalRequest);
     Goal complete(Long goalId);
     void deleteBy(Long id);
 }

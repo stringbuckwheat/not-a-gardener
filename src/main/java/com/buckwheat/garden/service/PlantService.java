@@ -20,7 +20,7 @@ public interface PlantService {
     GardenDto.Response modify(Long gardenerId, PlantDto.Request plantRequest);
 
     /* 식물들의 장소 정보 수정 */
-    PlaceDto.Response modifyPlace(PlaceDto.ModifyPlace modifyPlantPlace, Long gardenerId);
+    PlaceDto.Basic modifyPlace(PlaceDto.ModifyPlace modifyPlantPlace, Long gardenerId);
 
     /* 식물 삭제 */
     void delete(Long plantId, Long gardenerId);

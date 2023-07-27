@@ -6,13 +6,36 @@ import com.buckwheat.garden.data.entity.Plant;
 import lombok.*;
 
 public class GoalDto {
+//    @Getter
+//    @ToString
+//    public static class Request {
+//        private Long id;
+//        private String content;
+//        private String complete;
+//        private Long plantId;
+//
+//        public Goal toEntityWith(Gardener gardener, Plant plant) {
+//            return Goal.builder()
+//                    .goalId(id)
+//                    .content(content)
+//                    .complete(complete)
+//                    .gardener(gardener)
+//                    .plant(plant)
+//                    .build();
+//        }
+//    }
+
+    @AllArgsConstructor
+    @Builder
     @Getter
+    @NoArgsConstructor
     @ToString
-    public static class Request {
+    public static class Basic {
         private Long id;
         private String content;
         private String complete;
         private Long plantId;
+        private String plantName;
 
         public Goal toEntityWith(Gardener gardener, Plant plant) {
             return Goal.builder()
@@ -23,24 +46,11 @@ public class GoalDto {
                     .plant(plant)
                     .build();
         }
-    }
 
-    @AllArgsConstructor
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @ToString
-    public static class Response {
-        private Long id;
-        private String content;
-        private String complete;
-        private Long plantId;
-        private String plantName;
-
-        public static Response from(Goal goal) {
+        public static Basic from(Goal goal) {
             // plant == nullable
             if (goal.getPlant() != null) {
-                return Response.builder()
+                return Basic.builder()
                         .id(goal.getGoalId())
                         .content(goal.getContent())
                         .complete(goal.getComplete())
@@ -49,26 +59,7 @@ public class GoalDto {
                         .build();
             }
 
-            return Response.builder()
-                    .id(goal.getGoalId())
-                    .content(goal.getContent())
-                    .complete(goal.getComplete())
-                    .build();
-        }
-
-        public static Response from(Goal goal, Plant plant) {
-            // plant == nullable
-            if (plant != null) {
-                return Response.builder()
-                        .id(goal.getGoalId())
-                        .content(goal.getContent())
-                        .complete(goal.getComplete())
-                        .plantId(plant.getPlantId())
-                        .plantName(plant.getName())
-                        .build();
-            }
-
-            return Response.builder()
+            return Basic.builder()
                     .id(goal.getGoalId())
                     .content(goal.getContent())
                     .complete(goal.getComplete())

@@ -16,8 +16,8 @@ public class RoutineController {
     private final RoutineService routineService;
 
     @GetMapping("")
-    public RoutineDto.Main getRoutines(@AuthenticationPrincipal UserPrincipal user){
-        return routineService.getRoutinesByGardenerId(user.getId());
+    public RoutineDto.Main getAll(@AuthenticationPrincipal UserPrincipal user){
+        return routineService.getAll(user.getId());
     }
 
     @PostMapping("")
@@ -36,7 +36,7 @@ public class RoutineController {
     }
 
     @DeleteMapping("/{routineId}")
-    public void deleteRoutine(@PathVariable long routineId){
+    public void deleteRoutine(@PathVariable Long routineId){
         routineService.delete(routineId);
     }
 }

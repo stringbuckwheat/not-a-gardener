@@ -17,20 +17,13 @@ public class GardenerDto {
         private String username;
         private String password;
 
-        public void encryptPassword(String BCryptpassword) {
-            this.password = BCryptpassword;
+        public void encryptPassword(String bCryptpassword) {
+            this.password = bCryptpassword;
         }
 
         public Gardener toEntity() {
             return Gardener.builder().username(username).password(password).build();
         }
-    }
-
-    @AllArgsConstructor
-    @Getter
-    public static class Token {
-        private String accessToken;
-        private String refreshToken;
     }
 
     @Getter
@@ -52,6 +45,13 @@ public class GardenerDto {
         public static Info from(String accessToken, String refreshToken, Gardener gardener) {
             return new Info(SimpleInfo.from(gardener), new Token(accessToken, refreshToken));
         }
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class Token {
+        private String accessToken;
+        private String refreshToken;
     }
 
     @AllArgsConstructor
@@ -90,16 +90,6 @@ public class GardenerDto {
                     .name(gardener.getName())
                     .createDate(gardener.getCreateDate())
                     .provider(gardener.getProvider())
-                    .build();
-        }
-
-        public static Detail updateResponseFrom(Gardener gardener) {
-            return GardenerDto.Detail.builder()
-                    .id(gardener.getGardenerId())
-                    .username(gardener.getUsername())
-                    .email(gardener.getEmail())
-                    .name(gardener.getName())
-                    .createDate(gardener.getCreateDate())
                     .build();
         }
     }

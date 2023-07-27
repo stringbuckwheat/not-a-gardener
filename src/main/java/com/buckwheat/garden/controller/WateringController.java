@@ -9,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -19,14 +20,14 @@ import java.util.Map;
 public class WateringController {
     private final WateringService wateringService;
 
-    @GetMapping("/month/{month}")
-    public Map<LocalDate, List<WateringDto.ByDate>> getWateringListByMonth(@AuthenticationPrincipal UserPrincipal user, @PathVariable int month){
-        return wateringService.getWateringList(user.getId(), month);
+    @GetMapping("/date/{date}")
+    public Map<LocalDate, List<WateringDto.ByDate>> getAll(@AuthenticationPrincipal UserPrincipal user, @PathVariable String date){
+        return wateringService.getAll(user.getId(), LocalDate.parse(date, DateTimeFormatter.ISO_DATE));
     }
 
     @PostMapping("")
-    public WateringDto.ByDate addWatering(@RequestBody WateringDto.Request wateringRequest){
-        return wateringService.addWatering(wateringRequest);
+    public WateringDto.ByDate add(@RequestBody WateringDto.Request wateringRequest){
+        return wateringService.add(wateringRequest);
     }
 
     @DeleteMapping("/{wateringId}")

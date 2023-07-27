@@ -4,7 +4,7 @@ import com.buckwheat.garden.data.dto.RoutineDto;
 
 public interface RoutineService {
     // 오늘 해야할 일과 전체루틴 리스트
-    RoutineDto.Main getRoutinesByGardenerId(Long gardenerId);
+    RoutineDto.Main getAll(Long gardenerId);
 
     // 루틴 추가
     RoutineDto.Response add(Long gardenerId, RoutineDto.Request routineRequest);

@@ -44,7 +44,7 @@ public class PlaceController {
      * @return
      */
     @PostMapping("")
-    public PlaceDto.Card add(@RequestBody PlaceDto.Request placeRequest, @AuthenticationPrincipal UserPrincipal user){
+    public PlaceDto.Card add(@RequestBody PlaceDto.Basic placeRequest, @AuthenticationPrincipal UserPrincipal user){
         return placeService.add(user.getId(), placeRequest);
     }
 
@@ -54,7 +54,7 @@ public class PlaceController {
      * @return 수정한 장소 정보
      */
     @PutMapping("/{placeId}")
-    public PlaceDto.Response modify(@RequestBody PlaceDto.Request placeRequest, @AuthenticationPrincipal UserPrincipal user){
+    public PlaceDto.Basic modify(@RequestBody PlaceDto.Basic placeRequest, @AuthenticationPrincipal UserPrincipal user){
         return placeService.modify(placeRequest, user.getId());
     }
 

@@ -39,13 +39,13 @@ public class PlaceDaoImpl implements PlaceDao {
      * @return
      */
     @Override
-    public Place save(Long gardenerId, PlaceDto.Request placeRequest) {
+    public Place save(Long gardenerId, PlaceDto.Basic placeRequest) {
         Gardener gardener = gardenerRepository.findById(gardenerId).orElseThrow(NoSuchElementException::new);
         return placeRepository.save(placeRequest.toEntityWith(gardener));
     }
 
     @Override
-    public Place update(PlaceDto.Request placeRequest, Long gardenerId) {
+    public Place update(PlaceDto.Basic placeRequest, Long gardenerId) {
         Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(placeRequest.getId(), gardenerId)
                 .orElseThrow(NoSuchElementException::new);
 

@@ -36,6 +36,7 @@ public class WateringDaoImpl implements WateringDao {
 
         Plant plant = plantRepository.findByPlantId(wateringRequest.getPlantId())
                 .orElseThrow(NoSuchElementException::new);
+
         // conditionDate, postponeDate 초기화
         plant = plant.initConditionDateAndPostponeDate();
         plantRepository.save(plant);
@@ -53,8 +54,8 @@ public class WateringDaoImpl implements WateringDao {
     }
 
     @Override
-    public List<Watering> getAllWateringListByGardenerNo(Long gardenerId, LocalDate startDate, LocalDate endDate){
-        return wateringRepository.findAllWateringListByGardenerNo(gardenerId, startDate, endDate);
+    public List<Watering> getAllWateringListByGardenerId(Long gardenerId, LocalDate startDate, LocalDate endDate){
+        return wateringRepository.findAllWateringListByGardenerId(gardenerId, startDate, endDate);
     }
 
 

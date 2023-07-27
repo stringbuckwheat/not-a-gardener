@@ -15,7 +15,9 @@ public class PlaceDto {
     @Getter
     @NoArgsConstructor
     @ToString
-    public static class Request{
+    @Builder
+    @AllArgsConstructor
+    public static class Basic{
         private Long id;
         private String name;
         private String artificialLight;
@@ -36,6 +38,15 @@ public class PlaceDto {
                     .gardener(gardener)
                     .build();
         }
+
+        public static Basic from(Place place){
+            return Basic.builder()
+                    .id(place.getPlaceId())
+                    .name(place.getName())
+                    .artificialLight(place.getArtificialLight())
+                    .option(place.getOption())
+                    .build();
+        }
     }
 
     /**
@@ -53,47 +64,15 @@ public class PlaceDto {
         private LocalDateTime createDate;
 
         public static Card from(Place place){
+            int plantListSize = place.getPlants() != null ? place.getPlants().size() : 0;
+
             return Card.builder()
                     .id(place.getPlaceId())
                     .name(place.getName())
                     .artificialLight(place.getArtificialLight())
                     .option(place.getOption())
-                    .plantListSize(place.getPlants().size())
+                    .plantListSize(plantListSize)
                     .createDate(place.getCreateDate())
-                    .build();
-        }
-
-        public static Card fromNew(Place place){
-            return Card.builder()
-                    .id(place.getPlaceId())
-                    .name(place.getName())
-                    .artificialLight(place.getArtificialLight())
-                    .option(place.getOption())
-                    .plantListSize(0)
-                    .createDate(place.getCreateDate())
-                    .build();
-        }
-    }
-
-    /**
-     * 장소 CRUD의 Response로 사용할 DTO
-     */
-    @AllArgsConstructor
-    @Builder
-    @ToString
-    @Getter
-    public static class Response{
-        private Long id;
-        private String name;
-        private String artificialLight;
-        private String option;
-
-        public static Response from(Place place){
-            return Response.builder()
-                    .id(place.getPlaceId())
-                    .name(place.getName())
-                    .artificialLight(place.getArtificialLight())
-                    .option(place.getOption())
                     .build();
         }
     }
@@ -102,7 +81,7 @@ public class PlaceDto {
     @NoArgsConstructor
     @Getter
     public static class WithPlants{
-        private Response place;
+        private Basic place;
         private List<PlantDto.PlantInPlace> plantList;
     }
 

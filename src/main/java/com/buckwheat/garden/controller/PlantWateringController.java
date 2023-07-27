@@ -22,8 +22,8 @@ public class PlantWateringController {
      * @return
      */
     @GetMapping("")
-    public List<WateringDto.ForOnePlant> getWateringListForPlant(@PathVariable long plantId){
-        return plantWateringService.getWateringListForPlant(plantId);
+    public List<WateringDto.ForOnePlant> getAll(@PathVariable long plantId){
+        return plantWateringService.getAll(plantId);
     }
 
     /**
@@ -32,8 +32,8 @@ public class PlantWateringController {
      * @return
      */
     @PostMapping("")
-    public WateringDto.AfterWatering addWatering(@RequestBody WateringDto.Request wateringRequest){
-        return plantWateringService.addWatering(wateringRequest);
+    public WateringDto.AfterWatering add(@RequestBody WateringDto.Request wateringRequest){
+        return plantWateringService.add(wateringRequest);
     }
 
     /**
@@ -42,8 +42,8 @@ public class PlantWateringController {
      * @return
      */
     @PutMapping("/{wateringId}")
-    public WateringDto.AfterWatering updateWatering(@RequestBody WateringDto.Request wateringRequest){
-        return plantWateringService.modifyWatering(wateringRequest);
+    public WateringDto.AfterWatering modify(@RequestBody WateringDto.Request wateringRequest){
+        return plantWateringService.modify(wateringRequest);
     }
 
     /**
@@ -51,8 +51,8 @@ public class PlantWateringController {
      * @param wateringId
      */
     @DeleteMapping("/{wateringId}")
-    public void deleteWatering(@PathVariable long wateringId){
-        plantWateringService.deleteWatering(wateringId);
+    public void delete(@PathVariable Long wateringId){
+        plantWateringService.delete(wateringId);
     }
 
     /**
@@ -60,7 +60,7 @@ public class PlantWateringController {
      * @param plantId
      */
     @DeleteMapping("")
-    public void deleteAllFromPlant(@PathVariable long plantId) {
-        plantWateringService.deleteAllFromPlant(plantId);
+    public void deleteAll(@PathVariable long plantId) {
+        plantWateringService.deleteAll(plantId);
     }
 }

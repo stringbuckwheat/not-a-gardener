@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface WateringService {
-    Map<LocalDate, List<WateringDto.ByDate>> getWateringList(Long gardenerId, int month);
-    WateringDto.ByDate addWatering(WateringDto.Request wateringRequest);
+    Map<LocalDate, List<WateringDto.ByDate>> getAll(Long gardenerId, LocalDate date);
+    WateringDto.ByDate add(WateringDto.Request wateringRequest);
     void delete(long wateringId);
 }

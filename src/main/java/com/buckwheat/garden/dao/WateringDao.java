@@ -10,7 +10,7 @@ import java.util.List;
 public interface WateringDao {
     Watering addWatering(WateringDto.Request wateringRequest);
     List<Watering> getWateringListByPlantId(Long plantId);
-    List<Watering> getAllWateringListByGardenerNo(Long gardenerId, LocalDate startDate, LocalDate endDate);
+    List<Watering> getAllWateringListByGardenerId(Long gardenerId, LocalDate startDate, LocalDate endDate);
     List<ChemicalUsage> getLatestChemicalUsages(Long gardenerId, Long plantId);
     Watering modifyWatering(WateringDto.Request wateringRequest);
     void deleteById(Long wateringId);

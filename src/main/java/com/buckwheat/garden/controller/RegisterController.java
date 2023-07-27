@@ -21,7 +21,7 @@ public class RegisterController {
 
     /* 회원 가입 */
     @PostMapping("")
-    public GardenerDto.Info addGardener(@RequestBody GardenerDto.Register register){
+    public GardenerDto.Info add(@RequestBody GardenerDto.Register register){
         return authenticationService.add(register);
     }
 }
