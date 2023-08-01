@@ -9,6 +9,7 @@ import {useSpring, animated} from "@react-spring/web";
  * @constructor
  */
 const SocialLoginButton = ({provider, recentLogin} ) => {
+  // const authorizationUrl = `http://localhost:80/oauth2/authorization`;
   const authorizationUrl = `/oauth2/authorization`;
 
   const springProps = useSpring({
@@ -28,7 +29,7 @@ const SocialLoginButton = ({provider, recentLogin} ) => {
         href={provider !== "naver" ? `${authorizationUrl}/${provider}` : "javascript:alert('검수 승인 대기중입니다')"}
         className="social-button"
         id={`${provider}-connect`}>
-        
+
       </a>
       {
         provider === recentLogin

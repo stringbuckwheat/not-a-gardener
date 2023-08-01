@@ -1,6 +1,7 @@
 package com.buckwheat.garden.config.oauth2;
 
 import com.buckwheat.garden.data.token.AccessToken;
+import com.buckwheat.garden.data.token.RefreshToken;
 import com.buckwheat.garden.service.TokenProvider;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ import java.io.IOException;
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final TokenProvider tokenProvider;
     private final String TARGET_URL = "http://not-a-gardener.xyz/oauth/";
-
+    // private final String TARGET_URL = "http://localhost:3000/oauth/";
     /**
      * 로그인 성공 시 부가작업
      * JWT 발급 후 token과 함께 리다이렉트
@@ -32,6 +33,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        // refresh 토큰 생성 및 Redis 저장
+        RefreshToken refreshToken = tokenProvider.getRefreshToken(user.getId(), user.getName());
 
         // access 토큰 생성
         AccessToken accessToken = tokenProvider.createAccessToken(user.getName(), user.getId());

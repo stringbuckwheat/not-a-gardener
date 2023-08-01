@@ -1,4 +1,4 @@
-import {useNavigate, useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react"
 import ChemicalTag from "src/components/tag/ChemicalTag";
 import DetailLayout from "src/components/data/layout/DetailLayout";
@@ -13,7 +13,7 @@ import getData from "../../api/backend-api/common/getData";
 
 const ChemicalDetail = () => {
   const chemicalId = useParams().chemicalId;
-  console.log("chemicalId", chemicalId);
+  const state = useLocation().state;
 
   const [chemical, setChemical] = useState({});
   const [wateringList, setWateringList] = useState([]);
@@ -42,6 +42,16 @@ const ChemicalDetail = () => {
   useEffect(() => {
     onMountChemicalDetail();
   }, []);
+
+  useEffect(() => {
+    console.log("state", state);
+    if(state == null){
+      return;
+    }
+
+    setChemical(state);
+    setModifyChemical(state);
+  }, [state]);
 
   const onChange = (e) => {
     const {name, value} = e.target;

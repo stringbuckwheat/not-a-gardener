@@ -82,9 +82,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public GardenerDto.Info getGardenerInfo(Long id) {
         Gardener gardener = gardenerDao.getGardenerById(id);
+        RefreshToken refreshToken = redisRepository.findById(id).get().getRefreshToken();
 
-        RefreshToken refreshToken = getRefreshToken(gardener);
-        return GardenerDto.Info.from(null, refreshToken.getToken(), gardener);
+        return GardenerDto.Info.from("", refreshToken.getToken(), gardener);
     }
 
     // 인증 성공 후 Security Context에 유저 정보를 저장하고 토큰과 기본 정보를 리턴
@@ -100,18 +100,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         // access token, expired date
         AccessToken accessToken = tokenProvider.createAccessToken(gardener.getName(), gardener.getGardenerId());
-        RefreshToken refreshToken = getRefreshToken(gardener);
+        RefreshToken refreshToken = tokenProvider.getRefreshToken(gardener);
 
         return GardenerDto.Info.from(accessToken.getToken(), refreshToken.getToken(), gardener);
-    }
-
-    RefreshToken getRefreshToken(Gardener gardener){
-        // refresh token
-        RefreshToken refreshToken = RefreshToken.getRefreshToken();
-
-        // redis에 저장
-        redisRepository.save(ActiveGardener.from(gardener, refreshToken));
-        return refreshToken;
     }
 
     @Override

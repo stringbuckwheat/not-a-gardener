@@ -36,6 +36,17 @@ public class ChemicalDto {
                     .active("Y")
                     .build();
         }
+
+        public Chemical toEntityForUpdate(Gardener gardener){
+            return Chemical.builder()
+                    .chemicalId(id)
+                    .name(name)
+                    .period(period)
+                    .type(type)
+                    .gardener(gardener)
+                    .active("Y")
+                    .build();
+        }
     }
 
     @Getter

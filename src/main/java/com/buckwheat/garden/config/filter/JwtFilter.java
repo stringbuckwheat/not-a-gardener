@@ -2,9 +2,6 @@ package com.buckwheat.garden.config.filter;
 
 import com.buckwheat.garden.data.token.AccessToken;
 import com.buckwheat.garden.service.TokenProvider;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,15 +57,13 @@ public class JwtFilter extends OncePerRequestFilter {
                     Authentication authentication = tokenProvider.getAuthentication(accessToken);
 
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                    log.debug("인증 성공");
                 }
             }
-        } catch (ExpiredJwtException e) {
-            log.debug("액세스 토큰 만료");
-            throw new JwtException("토큰 기한 만료");
-        } catch(SecurityException e){
+        }
+
+        catch(SecurityException e){
             log.info("Invalid JWT signature.");
-        } catch(MalformedJwtException e){
-            log.info("Invalid JWT token.");
         } catch(UnsupportedJwtException e){
             log.info("Unsupported JWT token.");
         } catch(IllegalArgumentException e){

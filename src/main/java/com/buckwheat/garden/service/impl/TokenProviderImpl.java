@@ -1,7 +1,11 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.config.oauth2.UserPrincipal;
+import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.token.AccessToken;
+import com.buckwheat.garden.data.token.ActiveGardener;
+import com.buckwheat.garden.data.token.RefreshToken;
+import com.buckwheat.garden.repository.RedisRepository;
 import com.buckwheat.garden.service.TokenProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -34,6 +38,7 @@ public class TokenProviderImpl implements TokenProvider {
     private Key key;
 
     private final UserDetailsService userDetailsService;
+    private final RedisRepository redisRepository;
 
     @PostConstruct // 의존성 주입 후 초기화
     public void init() {
@@ -90,5 +95,22 @@ public class TokenProviderImpl implements TokenProvider {
         } else {
             throw new JwtException("token error!");
         }
+    }
+
+    @Override
+    public RefreshToken getRefreshToken(Gardener gardener){
+        // refresh token
+        RefreshToken refreshToken = RefreshToken.getRefreshToken();
+
+        // redis에 저장
+        redisRepository.save(ActiveGardener.from(gardener, refreshToken));
+        return refreshToken;
+    }
+
+    public RefreshToken getRefreshToken(Long gardenerId, String name){
+        RefreshToken refreshToken = RefreshToken.getRefreshToken();
+        redisRepository.save(ActiveGardener.from(gardenerId, name, refreshToken));
+
+        return refreshToken;
     }
 }

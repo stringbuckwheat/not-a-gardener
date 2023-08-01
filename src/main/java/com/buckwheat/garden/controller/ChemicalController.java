@@ -33,7 +33,7 @@ public class ChemicalController {
      * @return 해당 약품의 주기 리스트(WateringDto)
      */
     @GetMapping("/{chemicalId}")
-    public ChemicalDto.Detail getDetail(@PathVariable long chemicalId, @AuthenticationPrincipal UserPrincipal user){
+    public ChemicalDto.Detail getDetail(@PathVariable Long chemicalId, @AuthenticationPrincipal UserPrincipal user){
         return chemicalService.getDetail(chemicalId, user.getId());
     }
 

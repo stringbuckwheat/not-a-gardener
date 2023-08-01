@@ -44,7 +44,7 @@ const WateringList = ({plant, setPlant, wateringList, setWateringList}) => {
   // editable rows
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState('');
-  const isEditing = (record) => record.wateringId === editingKey;
+  const isEditing = (record) => record.id === editingKey;
 
   const edit = (record) => {
     console.log("edit record === ", record);
@@ -61,7 +61,7 @@ const WateringList = ({plant, setPlant, wateringList, setWateringList}) => {
       chemicalId: record.chemicalId,
     });
 
-    setEditingKey(record.wateringId);
+    setEditingKey(record.id);
     setIsWateringFormOpen(false);
   };
 

@@ -1,8 +1,8 @@
 import React, {useEffect} from 'react'
 import {useNavigate, useParams} from 'react-router-dom';
-import authAxios from '../../api/interceptors'
 import getData from "../../api/backend-api/common/getData";
 import setGardener from "../../api/service/setGardener";
+import authAxios from "../../api/interceptors";
 
 
 const GetToken = () => {
@@ -10,12 +10,11 @@ const GetToken = () => {
   const navigate = useNavigate();
 
   const setUser = async () => {
-    localStorage.setItem("accessToken", accessToken);
-    const res = await getData(`${process.env.REACT_APP_API_URL}/gardener-info`);
+    await localStorage.setItem("accessToken", accessToken);
+    const res = await getData(`${process.env.REACT_APP_API_URL}/info`);
 
     res.token.accessToken = accessToken;
-
-    setGardener(res);
+    await setGardener(res);
 
     navigate("/", {replace: true});
   }

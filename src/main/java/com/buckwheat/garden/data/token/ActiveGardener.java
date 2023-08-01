@@ -30,4 +30,13 @@ public class ActiveGardener {
                 .createdAt(LocalDateTime.now())
                 .build();
     }
+
+    public static ActiveGardener from(Long gardenerId, String name, RefreshToken refreshToken){
+        return ActiveGardener.builder()
+                .gardenerId(gardenerId)
+                .name(name)
+                .refreshToken(refreshToken)
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
 }

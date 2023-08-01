@@ -3,6 +3,7 @@ package com.buckwheat.garden.data.projection;
 import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.entity.Plant;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
+@Slf4j
 public class Calculate {
     private LocalDate postponeDate;
     private LocalDate birthday;
@@ -28,7 +30,13 @@ public class Calculate {
     }
 
     public static Calculate from(Plant plant, Long gardenerId){
-        LocalDate latestWateringDate = plant.getWaterings().size() > 0 ? plant.getWaterings().get(0).getWateringDate() : null;
+        log.debug("plant.getWaterings(): {}", plant.getWaterings());
+        LocalDate latestWateringDate = null;
+
+        if(plant.getWaterings() != null && plant.getWaterings().size() > 0 ){
+            // latestWateringDate = plant.getWaterings().size() > 0 ? plant.getWaterings().get(0).getWateringDate() : null;
+            latestWateringDate = plant.getWaterings().get(0).getWateringDate();
+        }
 
         return Calculate.builder()
                 .postponeDate(plant.getPostponeDate())

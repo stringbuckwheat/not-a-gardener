@@ -17,7 +17,8 @@ public enum ExceptionCode {
     NO_SUCH_ITEM("B006", "해당 아이템 없음", "해당 아이템을 찾을 수 없어요"),
     NO_ACCOUNT_FOR_EMAIL("B007", "해당 이메일의 가입 계정 없음", "해당 이메일로 가입한 회원이 없어요"),
     WRONG_PASSWORD("B008", "비밀번호 오류", "비밀번호를 확인해주세요"),
-    NO_TOKEN_IN_REDIS("B009", "레디스에 사용자 없음", "로그인 정보가 없습니다");
+    NO_TOKEN_IN_REDIS("B009", "레디스에 사용자 없음", "로그인 정보를 찾을 수 없어요. 다시 로그인해주세요"),
+    INVALID_JWT_TOKEN("B010", "유효하지 않은 JWT 토큰", "접근 권한이 없어요. 로그인해주세요");
 
     private static final Map<String, String> CODE_MAP = Collections.unmodifiableMap(
             Stream.of(values()).collect(Collectors.toMap(ExceptionCode::getCode, ExceptionCode::name))

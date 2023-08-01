@@ -22,7 +22,7 @@ public class ChemicalServiceImpl implements ChemicalService {
     /**
      * 전체 chemical 리스트
      *
-     * @param gardenerId int FK로 조회
+     * @param gardenerId long FK로 조회
      * @return dto로 변환한 chemical list
      */
     @Override

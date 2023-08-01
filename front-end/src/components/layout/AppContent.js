@@ -5,6 +5,7 @@ import { CContainer, CSpinner } from '@coreui/react'
 // routes config
 import routes from '../../utils/routes'
 import Loading from "../data/Loading";
+import NotFound from "../../pages/NotFound";
 
 const AppContent = () => {
   return (
@@ -25,6 +26,7 @@ const AppContent = () => {
             )
           })}
           <Route path="/" element={<Navigate to="garden" replace />} />
+          <Route path={"*"} element={<NotFound/>} />
         </Routes>
       </Suspense>
     </CContainer>

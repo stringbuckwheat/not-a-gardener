@@ -21,12 +21,13 @@ const ModifyPlaceOfPlantForm = ({placeId, setMoveFormVisible}) => {
 
   const navigate = useNavigate();
 
+  // TODO 바로 받아오는 메소드로
   const onMountModifyPlaceOfPlantForm = async () => {
     const plantList = await getData("/plant");
     const options = [];
 
     for (let plant of plantList) {
-      if (plant.id == placeId) {
+      if (plant.placeId == placeId) {
         continue;
       }
 

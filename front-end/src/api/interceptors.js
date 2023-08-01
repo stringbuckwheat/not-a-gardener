@@ -66,11 +66,8 @@ authAxios.interceptors.response.use(
         headers: {...originRequest.headers, Authorization: `Bearer ${accessToken}`},
         sent: true
       })
-    } else if(errorCode == "B002"){
-      alert("로그인 시간이 만료되었어요.");
-      LogOut();
-    } else if(errorCode == "B009"){
-      alert("로그인 정보를 찾을 수 없어요. 다시 로그인해주세요");
+    } else if(errorCode == "B002" || errorCode == "B009" || errorCode == "B010"){
+      alert(error.response.data.message);
       LogOut();
     }
 

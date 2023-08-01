@@ -31,7 +31,7 @@ public class HomeController {
     }
 
     /* 간단한 회원 정보(헤더) - 소셜로그인에서 사용 */
-    @GetMapping("/gardener-info")
+    @GetMapping("/info")
     public GardenerDto.Info getGardenerInfo(@AuthenticationPrincipal UserPrincipal user){
         return authenticationService.getGardenerInfo(user.getId());
     }
