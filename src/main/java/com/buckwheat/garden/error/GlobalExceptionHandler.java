@@ -18,9 +18,6 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-
-    // TODO MailException 처리
-
     /**
      * 리프레쉬 토큰 만료
      * @param e ExpiredRefreshTokenException(Custom)

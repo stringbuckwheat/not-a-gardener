@@ -4,8 +4,7 @@ import SocialLoginButton from "../../components/button/SocialLoginButton";
 
 const SocialLogin = () => {
   const recentLogin = localStorage.getItem("provider");
-  // const providers = ["kakao", "google", "naver"];
-  const providers = ["kakao", "google"];
+  const providers = ["kakao", "google", "naver"];
 
   return (
     <CRow className='mt-5'>
