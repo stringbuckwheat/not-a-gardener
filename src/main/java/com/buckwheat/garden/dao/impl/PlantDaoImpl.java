@@ -60,7 +60,7 @@ public class PlantDaoImpl implements PlantDao {
     public Plant save(Long gardenerId, PlantDto.Request plantRequest) {
         Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(plantRequest.getPlaceId(), gardenerId)
                 .orElseThrow(NoSuchElementException::new);
-        Gardener gardener = gardenerRepository.findById(gardenerId).orElseThrow(NoSuchElementException::new);
+        Gardener gardener = gardenerRepository.getReferenceById(gardenerId);
 
         return plantRepository.save(plantRequest.toEntityWith(gardener, place));
     }

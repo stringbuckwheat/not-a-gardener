@@ -31,16 +31,14 @@ public class ChemicalDaoImpl implements ChemicalDao {
 
     @Override
     public Chemical save(Long gardenerId, ChemicalDto.Basic chemicalRequest) {
-        Gardener gardener = gardenerRepository.findById(gardenerId)
-                .orElseThrow(NoSuchElementException::new);
+        Gardener gardener = gardenerRepository.getReferenceById(gardenerId);
         return chemicalRepository.save(chemicalRequest.toEntityWithGardener(gardener));
     }
 
     @Override
     public Chemical update(Long gardenerId, ChemicalDto.Basic chemicalRequest) {
-        Chemical prevChemical = chemicalRepository.findById(chemicalRequest.getId())
-                .orElseThrow(NoSuchElementException::new);
-        return chemicalRepository.save(prevChemical.update(chemicalRequest.getName(), chemicalRequest.getType(), chemicalRequest.getPeriod()));
+        Gardener gardener = gardenerRepository.getReferenceById(gardenerId);
+        return chemicalRepository.save(chemicalRequest.toEntityForUpdate(gardener));
     }
 
     @Override

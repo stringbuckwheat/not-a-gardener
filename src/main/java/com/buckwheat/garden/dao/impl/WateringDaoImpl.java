@@ -42,7 +42,7 @@ public class WateringDaoImpl implements WateringDao {
         plantRepository.save(plant);
 
         // 맹물 줬는지 비료 타서 줬는지
-        Chemical chemical = chemicalRepository.findById(wateringRequest.getChemicalId()).orElse(null);
+        Chemical chemical = chemicalRepository.getReferenceById(wateringRequest.getChemicalId());
 
         // 저장
         return wateringRepository.save(wateringRequest.toEntityWithPlantAndChemical(plant, chemical));
@@ -70,14 +70,19 @@ public class WateringDaoImpl implements WateringDao {
         // chemical은 nullable이므로 orElse 사용
         Plant plant = plantRepository.findByPlantId(wateringRequest.getPlantId())
                 .orElseThrow(NoSuchElementException::new);
-        Chemical chemical = chemicalRepository.findById(wateringRequest.getChemicalId()).orElse(null);
+
+        Chemical chemical = null;
+
+        if(wateringRequest.getChemicalId() != null) {
+            chemicalRepository.findById(wateringRequest.getChemicalId()).orElse(null);
+        }
 
         // 기존 watering 엔티티
         Watering watering = wateringRepository.findById(wateringRequest.getId())
                 .orElseThrow(NoSuchElementException::new);
 
         // 수정
-        wateringRepository.save(watering.update(wateringRequest.getWateringDate(), plant, chemical));
+        watering = wateringRepository.save(watering.update(wateringRequest.getWateringDate(), plant, chemical));
         return watering.update(wateringRequest.getWateringDate(), plant, chemical);
     }
 

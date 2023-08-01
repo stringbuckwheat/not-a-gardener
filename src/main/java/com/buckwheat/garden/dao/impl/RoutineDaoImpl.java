@@ -28,7 +28,7 @@ public class RoutineDaoImpl implements RoutineDao {
 
     @Override
     public Routine save(Long gardenerId, RoutineDto.Request routineRequest){
-        Gardener gardener = gardenerRepository.findById(gardenerId).orElseThrow(NoSuchElementException::new);
+        Gardener gardener = gardenerRepository.getReferenceById(gardenerId);
         Plant plant = plantRepository.findById(routineRequest.getPlantId()).orElseThrow(NoSuchElementException::new);
         return routineRepository.save(routineRequest.toEntityWith(plant, gardener));
     }

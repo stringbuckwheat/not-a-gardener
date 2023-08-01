@@ -40,7 +40,7 @@ public class PlaceDaoImpl implements PlaceDao {
      */
     @Override
     public Place save(Long gardenerId, PlaceDto.Basic placeRequest) {
-        Gardener gardener = gardenerRepository.findById(gardenerId).orElseThrow(NoSuchElementException::new);
+        Gardener gardener = gardenerRepository.getReferenceById(gardenerId);
         return placeRepository.save(placeRequest.toEntityWith(gardener));
     }
 
