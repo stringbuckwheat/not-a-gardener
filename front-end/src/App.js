@@ -22,7 +22,7 @@ const App = () => {
       <Suspense fallback={<Loading/>}>
         <Routes>
           <Route path="/login" name="Login Page" element={<Login/>}/>
-          <Route path="/oauth/:token" element={<GetToken/>}/>
+          <Route path="/oauth/:accessToken" element={<GetToken/>}/>
           <Route path="/forgot" name="Forgot Account" element={<ForgotAccount/>}/>
           <Route path="/register" name="Register Page" element={<Register/>}/>
           <Route path="*" element={<GardenLayout/>}/>

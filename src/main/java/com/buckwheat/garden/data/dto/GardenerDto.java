@@ -64,6 +64,10 @@ public class GardenerDto {
         public static SimpleInfo from(Gardener gardener) {
             return new SimpleInfo(gardener.getGardenerId(), gardener.getName(), gardener.getProvider());
         }
+
+        public static SimpleInfo from(Long gardenerId, String name, String provider){
+            return new SimpleInfo(gardenerId, name, provider);
+        }
     }
 
     /**

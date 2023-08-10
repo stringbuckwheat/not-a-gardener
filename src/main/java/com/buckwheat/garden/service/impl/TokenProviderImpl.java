@@ -1,7 +1,6 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.config.oauth2.UserPrincipal;
-import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.token.AccessToken;
 import com.buckwheat.garden.data.token.ActiveGardener;
 import com.buckwheat.garden.data.token.RefreshToken;
@@ -48,7 +47,8 @@ public class TokenProviderImpl implements TokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public AccessToken createAccessToken(String name, Long id){
+    @Override
+    public AccessToken createAccessToken(Long gardenerId, String name){
         // claims 만들기
         Map<String, String> claims = new HashMap<>();
 
@@ -56,7 +56,7 @@ public class TokenProviderImpl implements TokenProvider {
         claims.put("aud", name); // 토큰 대상자
         claims.put("exp", LocalDateTime.now().toString());
 
-        return new AccessToken(id, key, claims);
+        return new AccessToken(gardenerId, key, claims);
     }
 
     /**
@@ -97,18 +97,8 @@ public class TokenProviderImpl implements TokenProvider {
         }
     }
 
-    @Override
-    public RefreshToken getRefreshToken(Gardener gardener){
-        // refresh token
-        RefreshToken refreshToken = RefreshToken.getRefreshToken();
-
-        // redis에 저장
-        redisRepository.save(ActiveGardener.from(gardener, refreshToken));
-        return refreshToken;
-    }
-
-    public RefreshToken getRefreshToken(Long gardenerId, String name){
-        RefreshToken refreshToken = RefreshToken.getRefreshToken();
+    public RefreshToken createRefreshToken(Long gardenerId, String name){
+        RefreshToken refreshToken = new RefreshToken();
         redisRepository.save(ActiveGardener.from(gardenerId, name, refreshToken));
 
         return refreshToken;

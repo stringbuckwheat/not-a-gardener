@@ -79,16 +79,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return setAuthentication(gardener);
     }
 
-    @Override
-    public GardenerDto.Info getGardenerInfo(Long id) {
-        Gardener gardener = gardenerDao.getGardenerById(id);
-        RefreshToken refreshToken = redisRepository.findById(id).get().getRefreshToken();
-
-        return GardenerDto.Info.from("", refreshToken.getToken(), gardener);
-    }
-
     // 인증 성공 후 Security Context에 유저 정보를 저장하고 토큰과 기본 정보를 리턴
-    GardenerDto.Info setAuthentication(Gardener gardener) {
+    public GardenerDto.Info setAuthentication(Gardener gardener) {
         // gardener 객체를 포함한 user 생성
         UserPrincipal user = UserPrincipal.create(gardener);
 
@@ -99,33 +91,40 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         SecurityContextHolder.getContext().setAuthentication(token);
 
         // access token, expired date
-        AccessToken accessToken = tokenProvider.createAccessToken(gardener.getName(), gardener.getGardenerId());
-        RefreshToken refreshToken = tokenProvider.getRefreshToken(gardener);
+        AccessToken accessToken = tokenProvider.createAccessToken(gardener.getGardenerId(), gardener.getName());
+        RefreshToken refreshToken = tokenProvider.createRefreshToken(gardener.getGardenerId(), gardener.getName());
 
         return GardenerDto.Info.from(accessToken.getToken(), refreshToken.getToken(), gardener);
     }
 
     @Override
-    public GardenerDto.Token refreshToken(GardenerDto.Refresh token) {
+    public GardenerDto.Token refreshAccessToken(GardenerDto.Refresh token) {
         String reqRefreshToken = token.getRefreshToken();
         ActiveGardener activeGardener = redisRepository.findById(token.getGardenerId())
                 .orElseThrow(NoSuchElementException::new);
         RefreshToken savedRefreshToken = activeGardener.getRefreshToken();
 
-        if(!reqRefreshToken.equals(savedRefreshToken.getToken())){
+        if (!reqRefreshToken.equals(savedRefreshToken.getToken())) {
             // redis에 사용자 정보 없음 -- B009
             throw new BadCredentialsException(ExceptionCode.NO_TOKEN_IN_REDIS.getCode());
-        } else if(savedRefreshToken.getExpiredAt().isBefore(LocalDateTime.now())){
+        } else if (savedRefreshToken.getExpiredAt().isBefore(LocalDateTime.now())) {
             // refresh token 만료 -- B002
             throw new BadCredentialsException(ExceptionCode.REFRESH_TOKEN_EXPIRED.getCode());
         }
 
         // 새 access token 만들기
-        Gardener gardener = gardenerDao.getGardenerByGardenerId(token.getGardenerId())
-                .orElseThrow(NoSuchElementException::new);
-
-        AccessToken accessToken = tokenProvider.createAccessToken(gardener.getName(), gardener.getGardenerId());
+        AccessToken accessToken = tokenProvider.createAccessToken(activeGardener.getGardenerId(), activeGardener.getName());
 
         return new GardenerDto.Token(accessToken.getToken(), null);
+    }
+
+    @Override
+    public GardenerDto.Info getGardenerInfo(Long id) {
+        Gardener gardener = gardenerDao.getGardenerById(id);
+        ActiveGardener activeGardener = redisRepository.findById(id)
+                .orElseThrow(NoSuchElementException::new);
+        RefreshToken refreshToken = activeGardener.getRefreshToken();
+
+        return GardenerDto.Info.from("", refreshToken.getToken(), gardener);
     }
 }

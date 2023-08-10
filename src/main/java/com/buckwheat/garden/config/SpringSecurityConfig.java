@@ -42,7 +42,8 @@ public class SpringSecurityConfig {
         // 요청에 credential 권한이 있는지 없는지
         // Authorization으로 사용자 인증 시 true
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:3000"); // 요청 권한을 줄 도메인
+        config.addAllowedOrigin("http://not-a-gardener.xyz");
+        //config.addAllowedOrigin("http://localhost:3000"); // 요청 권한을 줄 도메인
         config.addAllowedHeader("*"); // 노출해도 되는 헤더
 
         // 허용할 메소드.
@@ -69,8 +70,8 @@ public class SpringSecurityConfig {
                 .and()
                 .authorizeRequests() // 리퀘스트 설정
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // Preflight 요청 허용
-                .antMatchers( "/api/login", "/api/token", "/api/oauth", "/api/register").permitAll() // 누구나 접근가능
-                .anyRequest().authenticated()
+                .antMatchers("/login", "/token", "/oauth", "/register").permitAll() // 누구나 접근가능
+                .antMatchers("/garden/**").authenticated() // 인증 권한 필요
 
                 .and()
                 .addFilter(this.corsFilter()) // CORS 필터 등록
@@ -78,6 +79,7 @@ public class SpringSecurityConfig {
                 // 기본 인증 필터인 UsernamePasswordAuthenticationFilter 대신 Custom 필터 등록
                 .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
 
+                // ⭐️⭐️⭐️⭐️⭐️
                 .addFilterBefore(jwtExceptionFilter, JwtFilter.class)
 
                 // OAuth2 로그인 설정

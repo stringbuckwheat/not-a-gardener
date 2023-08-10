@@ -1,7 +1,6 @@
 package com.buckwheat.garden.config.oauth2;
 
 import com.buckwheat.garden.data.token.AccessToken;
-import com.buckwheat.garden.data.token.RefreshToken;
 import com.buckwheat.garden.service.TokenProvider;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,10 +33,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         // refresh 토큰 생성 및 Redis 저장
-        RefreshToken refreshToken = tokenProvider.getRefreshToken(user.getId(), user.getName());
+        tokenProvider.createRefreshToken(user.getId(), user.getName());
 
         // access 토큰 생성
-        AccessToken accessToken = tokenProvider.createAccessToken(user.getName(), user.getId());
+        AccessToken accessToken = tokenProvider.createAccessToken(user.getId(), user.getName());
         getRedirectStrategy().sendRedirect(request, response, TARGET_URL + accessToken.getToken());
     }
 }

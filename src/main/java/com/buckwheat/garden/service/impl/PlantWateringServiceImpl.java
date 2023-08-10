@@ -81,9 +81,7 @@ public class PlantWateringServiceImpl implements PlantWateringService {
         List<WateringDto.ForOnePlant> waterings = new ArrayList<>();
 
         for (Watering watering : list) {
-            waterings.add(
-                    WateringDto.ForOnePlant.from(watering)
-            );
+            waterings.add(WateringDto.ForOnePlant.from(watering));
         }
 
         return waterings;

@@ -13,7 +13,7 @@ public interface AuthenticationService {
     GardenerDto.Info login(GardenerDto.Login login);
 
     /* access token 갱신 */
-    GardenerDto.Token refreshToken(GardenerDto.Refresh token);
+    GardenerDto.Token refreshAccessToken(GardenerDto.Refresh token);
 
     /* 회원 정보: 헤더 및 localStorage 저장용 */
     GardenerDto.Info getGardenerInfo(Long id);

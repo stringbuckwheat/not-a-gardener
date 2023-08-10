@@ -27,7 +27,7 @@ public class HomeController {
 
     @PostMapping("/token")
     public GardenerDto.Token refreshToken(@RequestBody GardenerDto.Refresh refreshToken){
-        return authenticationService.refreshToken(refreshToken);
+        return authenticationService.refreshAccessToken(refreshToken);
     }
 
     /* 간단한 회원 정보(헤더) - 소셜로그인에서 사용 */

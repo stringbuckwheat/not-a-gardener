@@ -1,6 +1,5 @@
 package com.buckwheat.garden.config.oauth2;
 
-import com.buckwheat.garden.dao.GardenerDao;
 import com.buckwheat.garden.data.token.ActiveGardener;
 import com.buckwheat.garden.error.code.ExceptionCode;
 import com.buckwheat.garden.repository.RedisRepository;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-    private final GardenerDao gardenerDao;
     private final RedisRepository redisRepository;
 
     /**

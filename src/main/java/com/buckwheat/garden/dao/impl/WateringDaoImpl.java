@@ -42,7 +42,7 @@ public class WateringDaoImpl implements WateringDao {
         plantRepository.save(plant);
 
         // 맹물 줬는지 비료 타서 줬는지
-        Chemical chemical = chemicalRepository.getReferenceById(wateringRequest.getChemicalId());
+        Chemical chemical = chemicalRepository.findById(wateringRequest.getChemicalId()).orElse(null);
 
         // 저장
         return wateringRepository.save(wateringRequest.toEntityWithPlantAndChemical(plant, chemical));
