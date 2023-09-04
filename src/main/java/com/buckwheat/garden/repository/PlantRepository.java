@@ -51,14 +51,14 @@ public interface PlantRepository extends JpaRepository<Plant, Long> {
             " FROM plant p" +
             " INNER JOIN place pl" +
             " ON p.place_id = pl.place_id" +
-            " LEFT JOIN watering w" +
+            " INNER JOIN watering w" +
             " ON p.plant_id = w.plant_id" +
             " WHERE p.gardener_id = :gardenerId" +
             " AND (DATE_FORMAT(p.condition_date, '%Y-%m-%d') != CURDATE() OR condition_date IS NULL)" +
             " AND p.recent_watering_period != 0 " +
             " GROUP BY p.plant_id" +
-            " HAVING (MAX(watering_date) != CURDATE() or MAX(watering_date) IS NOT NULL)" +
-            " OR DATEDIFF(MAX(watering_date), CURDATE()) >= 2" +
+            " HAVING MAX(watering_date) != CURDATE()" +
+            " AND DATEDIFF(CURDATE(), MAX(watering_date)) >= p.recent_watering_period - 1" +
             " ORDER BY p.recent_watering_period DESC", nativeQuery = true)
     List<RawGarden> findGardenByGardenerId(@Param("gardenerId") Long gardenerId);
 
