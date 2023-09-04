@@ -1,5 +1,3 @@
-import logout from "../../utils/function/logout";
-
 /**
  * local storage에 토큰과 기본 정보 저장
  * @param gardener

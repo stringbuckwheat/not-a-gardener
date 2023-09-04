@@ -32,6 +32,7 @@ public class GardenDto {
     @Builder
     @NoArgsConstructor
     @Getter
+    @ToString
     public static class WaitingForWatering{
         private Long id;
         private String name;

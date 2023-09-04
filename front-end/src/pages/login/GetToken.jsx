@@ -2,8 +2,6 @@ import React, {useEffect} from 'react'
 import {useNavigate, useParams} from 'react-router-dom';
 import getData from "../../api/backend-api/common/getData";
 import setGardener from "../../api/service/setGardener";
-import authAxios from "../../api/interceptors";
-
 
 const GetToken = () => {
   let {accessToken} = useParams();

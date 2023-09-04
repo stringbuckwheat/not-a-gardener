@@ -57,7 +57,7 @@ public interface PlantRepository extends JpaRepository<Plant, Long> {
             " AND (DATE_FORMAT(p.condition_date, '%Y-%m-%d') != CURDATE() OR condition_date IS NULL)" +
             " AND p.recent_watering_period != 0 " +
             " GROUP BY p.plant_id" +
-            " HAVING (MAX(watering_date) != CURDATE() or MAX(watering_date) IS NULL)" +
+            " HAVING (MAX(watering_date) != CURDATE() or MAX(watering_date) IS NOT NULL)" +
             " OR DATEDIFF(MAX(watering_date), CURDATE()) >= 2" +
             " ORDER BY p.recent_watering_period DESC", nativeQuery = true)
     List<RawGarden> findGardenByGardenerId(@Param("gardenerId") Long gardenerId);

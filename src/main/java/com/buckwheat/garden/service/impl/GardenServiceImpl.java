@@ -55,6 +55,9 @@ public class GardenServiceImpl implements GardenService {
         // 오늘 루틴 리스트
         List<RoutineDto.Response> routineList = getRoutinesForToday(gardenerId);
 
+        log.debug("waitingList: {}", waitingList);
+        log.debug("todolist: {}", todoList);
+
         return new GardenDto.GardenMain(true, todoList, waitingList, routineList);
     }
 
