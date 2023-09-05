@@ -5,6 +5,7 @@ import CIcon from "@coreui/icons-react";
 import {cilDrop} from "@coreui/icons";
 import postData from "../../../api/backend-api/common/postData";
 import getWateringNotificationMsg from "../../../utils/function/getWateringNotificationMsg";
+import {CFormSelect} from "@coreui/react";
 
 /**
  * not-dry, water, postpone 버튼들 혹은 물주기 폼
@@ -27,7 +28,6 @@ import getWateringNotificationMsg from "../../../utils/function/getWateringNotif
 const GardenCardAction = ({
                             hovered,
                             plantId,
-                            plantName,
                             chemicalList,
                             openNotification,
                             updateGardenAfterWatering,
@@ -88,7 +88,7 @@ const GardenCardAction = ({
       deleteInWaitingListAndTodoList={deleteInWaitingListAndTodoList}
     />
   } else if (selected === "watered") {
-    return <>
+    return (
       <div className="d-flex justify-content-between">
         <Space className="mb-1">
           <CIcon icon={cilDrop} className="text-info"/>
@@ -100,7 +100,7 @@ const GardenCardAction = ({
           <Button onClick={submitWatering} className="bg-info text-white" size="small">제출</Button>
         </Space>
       </div>
-    </>
+    )
   }
 }
 

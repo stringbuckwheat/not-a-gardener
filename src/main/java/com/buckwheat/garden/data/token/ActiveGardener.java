@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.RedisHash;
 import java.time.LocalDateTime;
 
 @Getter
-@RedisHash(value="activeGardeners", timeToLive = 960)
+@RedisHash(value="activeGardeners", timeToLive = 10800)
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -18,15 +18,6 @@ public class ActiveGardener {
     private String name;
     private RefreshToken refreshToken;
     private LocalDateTime createdAt;
-
-//    public static ActiveGardener from(Gardener gardener, RefreshToken refreshToken){
-//        return ActiveGardener.builder()
-//                .gardenerId(gardener.getGardenerId())
-//                .name(gardener.getName())
-//                .refreshToken(refreshToken)
-//                .createdAt(LocalDateTime.now())
-//                .build();
-//    }
 
     public static ActiveGardener from(Long gardenerId, String name, RefreshToken refreshToken){
         return ActiveGardener.builder()

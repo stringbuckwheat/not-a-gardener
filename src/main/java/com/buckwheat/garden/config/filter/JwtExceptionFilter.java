@@ -8,6 +8,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -33,6 +34,8 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
             setErrorResponse(response, ErrorResponse.from(ExceptionCode.INVALID_JWT_TOKEN));
         } catch (JwtException | SecurityException | IllegalArgumentException e){
             setErrorResponse(response, ErrorResponse.from(ExceptionCode.INVALID_JWT_TOKEN));
+        } catch (UsernameNotFoundException e){
+            setErrorResponse(response, ErrorResponse.from(ExceptionCode.REFRESH_TOKEN_EXPIRED));
         }
     }
 

@@ -10,7 +10,7 @@ const getWateringMsg = (gardenDetail) => {
     wateringMsg = `물 주기를 ${gardenDetail.wateringDDay * -1}일 놓쳤어요!\n비료를 주지 마세요`
   } else if (gardenDetail.wateringCode == 0) {
     // 물주기 정보 부족
-    wateringMsg = "물주기 정보가 부족해요!"
+    wateringMsg = "물주기 정보가 부족해요.\n함께 기록해보아요!"
   } else if (gardenDetail.wateringCode == 1) {
     // 물을 줘야함
     wateringMsg = "오늘은 물 주는 날이에요.\n"
@@ -18,7 +18,7 @@ const getWateringMsg = (gardenDetail) => {
 
   } else if (gardenDetail.wateringCode == 2) {
     // 물 주기 하루 전(목마를 확률 높음)
-    wateringMsg = "물 주기가 하루 남았어요.\n화분이 말랐는지 체크해보세요.\n말랐다면 "
+    wateringMsg = "물 주기가 하루 남았어요.\n화분이 말랐다면 "
     wateringMsg += getChemicalizingMsg(gardenDetail.chemicalCode);
 
   } else if (gardenDetail.wateringCode == 3) {
