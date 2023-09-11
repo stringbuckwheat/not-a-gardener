@@ -41,16 +41,12 @@ public class Goal {
     @OnDelete(action= OnDeleteAction.CASCADE)
     private Gardener gardener;
 
-    public Goal update(String content, Plant plant){
+    public void update(String content, Plant plant){
         this.content = content;
         this.plant = plant;
-
-        return this;
     }
 
-    public Goal completeGoal(String complete){
+    public void completeGoal(String complete){
         this.complete = complete;
-
-        return this;
     }
 }

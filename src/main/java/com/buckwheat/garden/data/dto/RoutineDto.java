@@ -10,7 +10,7 @@ import java.util.List;
 
 public class RoutineDto {
     @AllArgsConstructor
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     @ToString
     public static class Main{
@@ -21,7 +21,7 @@ public class RoutineDto {
     @AllArgsConstructor
     @Builder
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @ToString
     public static class Response {
         private Long id;

@@ -8,17 +8,17 @@ import java.util.List;
 
 public class ChemicalDto {
     @Getter
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @AllArgsConstructor
     @Builder
     @ToString
-    @NoArgsConstructor
-    public static class Basic{
+    public static class Basic {
         private Long id;
         private String name;
         private String type;
         private int period;
 
-        public static Basic from(Chemical chemical){
+        public static Basic from(Chemical chemical) {
             return Basic.builder()
                     .id(chemical.getChemicalId())
                     .name(chemical.getName())
@@ -27,7 +27,7 @@ public class ChemicalDto {
                     .build();
         }
 
-        public Chemical toEntityWithGardener(Gardener gardener){
+        public Chemical toEntity(Gardener gardener) {
             return Chemical.builder()
                     .name(name)
                     .period(period)
@@ -37,7 +37,7 @@ public class ChemicalDto {
                     .build();
         }
 
-        public Chemical toEntityForUpdate(Gardener gardener){
+        public Chemical toEntityForUpdate(Gardener gardener) {
             return Chemical.builder()
                     .chemicalId(id)
                     .name(name)

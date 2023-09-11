@@ -44,19 +44,21 @@ public class GoalDaoImpl implements GoalDao {
     @Override
     public Goal update(GoalDto.Basic goalRequest) {
         Plant plant = plantRepository.findById(goalRequest.getPlantId()).orElseThrow(NoSuchElementException::new);
-        Goal prevGoal = goalRepository.findById(goalRequest.getId()).orElseThrow(NoSuchElementException::new);
+        Goal goal = goalRepository.findById(goalRequest.getId()).orElseThrow(NoSuchElementException::new);
+        goal.update(goalRequest.getContent(), plant);
 
-        return goalRepository.save(prevGoal.update(goalRequest.getContent(), plant));
+        return goalRepository.save(goal);
     }
 
     @Override
     public Goal complete(Long goalId) {
-        Goal prevGoal = goalRepository.findByGoalId(goalId).orElseThrow(NoSuchElementException::new);
+        Goal goal = goalRepository.findByGoalId(goalId).orElseThrow(NoSuchElementException::new);
 
         // 들어갈 값 계산
-        String complete = prevGoal.getComplete().equals("Y") ? "N" : "Y";
+        String complete = goal.getComplete().equals("Y") ? "N" : "Y";
+        goal.completeGoal(complete);
 
-        return goalRepository.save(prevGoal.completeGoal(complete));
+        return goalRepository.save(goal);
     }
 
     @Override

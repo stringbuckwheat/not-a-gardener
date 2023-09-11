@@ -76,7 +76,7 @@ public class GardenerDto {
     @AllArgsConstructor
     @Builder
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @ToString
     public static class Detail {
         private Long id;
@@ -104,7 +104,7 @@ public class GardenerDto {
     @Getter
     @Setter
     @ToString
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @AllArgsConstructor
     public static class Register {
         private String username;
@@ -135,7 +135,7 @@ public class GardenerDto {
      */
     @AllArgsConstructor
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @ToString
     public static class Forgot {
         private String identificationCode;

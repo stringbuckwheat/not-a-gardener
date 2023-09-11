@@ -51,16 +51,7 @@ public class Chemical {
     @OrderBy("watering_date desc")
     private List<Watering> waterings = new ArrayList<>();
 
-    public Chemical update(String name, String type, int period){
-        this.name = name;
-        this.type = type;
-        this.period = period;
-
-        return this;
-    }
-
-    public Chemical deactivate(){
+    public void deactivate(){
         this.active = "N";
-        return this;
     }
 }

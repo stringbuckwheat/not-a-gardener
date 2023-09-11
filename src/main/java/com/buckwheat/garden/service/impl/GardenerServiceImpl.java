@@ -27,7 +27,9 @@ public class GardenerServiceImpl implements GardenerService {
     public void updatePassword(Long id, GardenerDto.Login login) {
         Gardener gardener = gardenerDao.getGardenerById(id);
         String encryptedPassword = encoder.encode(login.getPassword());
-        gardenerDao.save(gardener.changePassword(encryptedPassword));
+        gardener.changePassword(encryptedPassword);
+
+        gardenerDao.save(gardener);
     }
 
     @Override
@@ -40,10 +42,9 @@ public class GardenerServiceImpl implements GardenerService {
     public GardenerDto.Detail modify(GardenerDto.Detail gardenerDetail) {
         Gardener gardener = gardenerDao.getGardenerByGardenerId(gardenerDetail.getId())
                 .orElseThrow(NoSuchElementException::new);
+        gardener.updateEmailAndName(gardenerDetail.getEmail(), gardenerDetail.getName());
 
-        return GardenerDto.Detail.from(
-                gardenerDao.save(gardener.updateEmailAndName(gardenerDetail.getEmail(), gardenerDetail.getName()))
-        );
+        return GardenerDto.Detail.from(gardenerDao.save(gardener));
     }
 
     @Override

@@ -46,16 +46,13 @@ public class Routine {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Plant plant;
 
-    public Routine update(String content, int cycle, Plant plant){
+    public void update(String content, int cycle, Plant plant){
         this.content = content;
         this.cycle = cycle;
         this.plant = plant;
-
-        return this;
     }
 
-    public Routine complete(LocalDate lastCompleteDate){
+    public void complete(LocalDate lastCompleteDate){
         this.lastCompleteDate = lastCompleteDate;
-        return this;
     }
 }

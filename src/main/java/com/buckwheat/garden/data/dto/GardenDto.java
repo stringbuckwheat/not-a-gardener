@@ -10,7 +10,7 @@ import java.util.List;
 public class GardenDto {
     @Getter
     @AllArgsConstructor
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @ToString
     public static class Response {
         private PlantDto.Response plant;
@@ -19,7 +19,7 @@ public class GardenDto {
 
     @Getter
     @AllArgsConstructor
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @ToString
     public static class GardenMain {
         private boolean hasPlant;
@@ -30,7 +30,7 @@ public class GardenDto {
 
     @AllArgsConstructor
     @Builder
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     @ToString
     public static class WaitingForWatering{
@@ -83,7 +83,7 @@ public class GardenDto {
 
     @Getter
     @AllArgsConstructor
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @ToString
     public static class WateringResponse {
         private Response gardenResponse;

@@ -49,13 +49,13 @@ public class PlaceDaoImpl implements PlaceDao {
         Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(placeRequest.getId(), gardenerId)
                 .orElseThrow(NoSuchElementException::new);
 
-        return placeRepository.save(
-                place.update(
-                        placeRequest.getName(),
-                        placeRequest.getOption(),
-                        placeRequest.getArtificialLight()
-                )
+        place.update(
+                placeRequest.getName(),
+                placeRequest.getOption(),
+                placeRequest.getArtificialLight()
         );
+
+        return placeRepository.save(place);
     }
 
     @Override

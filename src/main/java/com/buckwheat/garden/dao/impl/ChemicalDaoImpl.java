@@ -32,7 +32,7 @@ public class ChemicalDaoImpl implements ChemicalDao {
     @Override
     public Chemical save(Long gardenerId, ChemicalDto.Basic chemicalRequest) {
         Gardener gardener = gardenerRepository.getReferenceById(gardenerId);
-        return chemicalRepository.save(chemicalRequest.toEntityWithGardener(gardener));
+        return chemicalRepository.save(chemicalRequest.toEntity(gardener));
     }
 
     @Override
@@ -45,6 +45,8 @@ public class ChemicalDaoImpl implements ChemicalDao {
     public void deactivateChemical(Long chemicalId, Long gardenerId) {
         Chemical chemical = chemicalRepository.findByChemicalIdAndGardener_GardenerId(chemicalId, gardenerId)
                 .orElseThrow(NoSuchElementException::new);
-        chemicalRepository.save(chemical.deactivate());
+        chemical.deactivate();
+
+        chemicalRepository.save(chemical);
     }
 }

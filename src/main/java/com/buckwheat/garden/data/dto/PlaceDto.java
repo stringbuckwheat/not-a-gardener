@@ -13,7 +13,7 @@ public class PlaceDto {
      * Place INSERT, UPDATE 요청 시에 사용할 DTO
      */
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @ToString
     @Builder
     @AllArgsConstructor
@@ -78,7 +78,7 @@ public class PlaceDto {
     }
 
     @AllArgsConstructor
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static class WithPlants{
         private Basic place;

@@ -36,15 +36,18 @@ public class RoutineDaoImpl implements RoutineDao {
     @Override
     public Routine update(RoutineDto.Request routineRequest){
         Plant plant = plantRepository.findById(routineRequest.getPlantId()).orElseThrow(NoSuchElementException::new);
-        Routine prevRoutine = routineRepository.findByRoutineId(routineRequest.getId()).orElseThrow(NoSuchElementException::new);
+        Routine routine = routineRepository.findByRoutineId(routineRequest.getId()).orElseThrow(NoSuchElementException::new);
+        routine.update(routineRequest.getContent(), routineRequest.getCycle(), plant);
 
-        return routineRepository.save(prevRoutine.update(routineRequest.getContent(), routineRequest.getCycle(), plant));
+        return routineRepository.save(routine);
     }
 
     @Override
     public Routine complete(RoutineDto.Complete routineComplete){
         Routine routine = routineRepository.findByRoutineId(routineComplete.getId()).orElseThrow(NoSuchElementException::new);
-        return routineRepository.save(routine.complete(routineComplete.getLastCompleteDate()));
+        routine.complete(routineComplete.getLastCompleteDate());
+
+        return routineRepository.save(routine);
     }
 
     @Override

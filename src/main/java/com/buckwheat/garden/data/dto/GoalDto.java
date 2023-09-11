@@ -28,7 +28,7 @@ public class GoalDto {
     @AllArgsConstructor
     @Builder
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @ToString
     public static class Basic {
         private Long id;

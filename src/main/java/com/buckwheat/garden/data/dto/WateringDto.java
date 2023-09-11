@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class WateringDto {
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     @ToString
     public static class Request {
@@ -152,7 +152,7 @@ public class WateringDto {
 
     @AllArgsConstructor
     @Builder
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     @ToString
     public static class ByDate {

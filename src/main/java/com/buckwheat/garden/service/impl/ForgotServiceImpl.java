@@ -71,6 +71,8 @@ public class ForgotServiceImpl implements ForgotService {
                 .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode()));
 
         String encryptedPassword = encoder.encode(login.getPassword());
-        gardenerDao.save(gardener.changePassword(encryptedPassword));
+        gardener.changePassword(encryptedPassword);
+
+        gardenerDao.save(gardener);
     }
 }

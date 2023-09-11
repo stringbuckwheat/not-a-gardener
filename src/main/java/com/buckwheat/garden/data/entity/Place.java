@@ -51,11 +51,9 @@ public class Place {
     @OrderBy("create_date DESC")
     private List<Plant> plants = new ArrayList<>();
 
-    public Place update(String name, String option, String artificialLight){
+    public void update(String name, String option, String artificialLight){
         this.name = name;
         this.option = option;
         this.artificialLight = artificialLight;
-
-        return this;
     }
 }

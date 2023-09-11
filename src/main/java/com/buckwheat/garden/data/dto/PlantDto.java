@@ -73,7 +73,7 @@ public class PlantDto {
 
 
     @Getter
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @ToString
     public static class Request{
         private Long id;

@@ -33,15 +33,12 @@ public class Gardener {
 
     private String provider;
 
-    public Gardener changePassword(String encryptPassword){
+    public void changePassword(String encryptPassword){
         this.password = encryptPassword;
-        return this;
     }
 
-    public Gardener updateEmailAndName(String email, String name){
+    public void updateEmailAndName(String email, String name){
         this.email = email;
         this.name = name;
-
-        return this;
     }
 }
