@@ -9,8 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -20,13 +20,9 @@ public class GoalServiceImpl implements GoalService {
 
     @Override
     public List<GoalDto.Basic> getAll(Long gardenerId) {
-        List<GoalDto.Basic> goalList = new ArrayList<>();
-
-        for(Goal goal : goalDao.getGoalListBy(gardenerId)){
-            goalList.add(GoalDto.Basic.from(goal));
-        }
-
-        return goalList;
+        return goalDao.getGoalListBy(gardenerId).stream()
+                .map(GoalDto.Basic::from)
+                .collect(Collectors.toList());
     }
 
     @Override

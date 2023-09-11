@@ -4,14 +4,13 @@ import com.buckwheat.garden.dao.ChemicalDao;
 import com.buckwheat.garden.data.dto.ChemicalDto;
 import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.data.entity.Chemical;
-import com.buckwheat.garden.data.entity.Watering;
 import com.buckwheat.garden.service.ChemicalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -27,14 +26,9 @@ public class ChemicalServiceImpl implements ChemicalService {
      */
     @Override
     public List<ChemicalDto.Basic> getAll(Long gardenerId) {
-        List<ChemicalDto.Basic> chemicalList = new ArrayList<>();
-
-        // entity -> dto
-        for (Chemical chemical : chemicalDao.getActivatedChemicalsByGardenerId(gardenerId)) {
-            chemicalList.add(ChemicalDto.Basic.from(chemical));
-        }
-
-        return chemicalList;
+        return chemicalDao.getActivatedChemicalsByGardenerId(gardenerId).stream()
+                .map(ChemicalDto.Basic::from)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -47,11 +41,9 @@ public class ChemicalServiceImpl implements ChemicalService {
     public ChemicalDto.Detail getDetail(Long chemicalId, Long gardenerId) {
         Chemical chemical = chemicalDao.getChemicalByChemicalIdAndGardenerId(chemicalId, gardenerId);
 
-        List<WateringDto.ResponseInChemical> waterings = new ArrayList<>();
-
-        for (Watering watering : chemical.getWaterings()) {
-            waterings.add(WateringDto.ResponseInChemical.from(watering));
-        }
+        List<WateringDto.ResponseInChemical> waterings = chemical.getWaterings().stream()
+                .map(WateringDto.ResponseInChemical::from)
+                .collect(Collectors.toList());
 
         return new ChemicalDto.Detail(ChemicalDto.Basic.from(chemical), waterings);
     }

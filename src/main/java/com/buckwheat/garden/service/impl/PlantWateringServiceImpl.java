@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -71,20 +72,14 @@ public class PlantWateringServiceImpl implements PlantWateringService {
 
     @Override
     public List<WateringDto.ForOnePlant> getAll(Long plantId) {
-        List<Watering> list = wateringDao.getWateringListByPlantId(plantId); // orderByWateringDateDesc
+        List<Watering> waterings = wateringDao.getWateringListByPlantId(plantId); // orderByWateringDateDesc
 
         // 며칠만에 물 줬는지도 계산해줌
-        if (list.size() >= 2) {
-            return withWateringPeriodList(list);
+        if (waterings.size() >= 2) {
+            return withWateringPeriodList(waterings);
         }
 
-        List<WateringDto.ForOnePlant> waterings = new ArrayList<>();
-
-        for (Watering watering : list) {
-            waterings.add(WateringDto.ForOnePlant.from(watering));
-        }
-
-        return waterings;
+        return waterings.stream().map(WateringDto.ForOnePlant::from).collect(Collectors.toList());
     }
 
     /**

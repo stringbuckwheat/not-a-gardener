@@ -1,9 +1,11 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.dao.PlantDao;
-import com.buckwheat.garden.data.dto.*;
+import com.buckwheat.garden.data.dto.GardenDto;
+import com.buckwheat.garden.data.dto.PlaceDto;
+import com.buckwheat.garden.data.dto.PlantDto;
+import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.data.entity.Plant;
-import com.buckwheat.garden.data.entity.Watering;
 import com.buckwheat.garden.data.projection.Calculate;
 import com.buckwheat.garden.service.PlantService;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -28,14 +30,9 @@ public class PlantServiceImpl implements PlantService {
      */
     @Override
     public List<PlantDto.Response> getAll(Long gardenerId) {
-        List<PlantDto.Response> plants = new ArrayList<>();
-
-        // @EntityGraph 메소드
-        for (Plant p : plantDao.getPlantsByGardenerId(gardenerId)) {
-            plants.add(PlantDto.Response.from(p));
-        }
-
-        return plants;
+        return plantDao.getPlantsByGardenerId(gardenerId).stream()
+                .map(PlantDto.Response::from)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -49,11 +46,9 @@ public class PlantServiceImpl implements PlantService {
     public PlantDto.Detail getDetail(Long plantId, Long gardenerId) {
         Plant plant = plantDao.getPlantWithPlantIdAndGardenerId(plantId, gardenerId);
 
-        List<WateringDto.ForOnePlant> waterings = new ArrayList<>();
-
-        for(Watering watering : plant.getWaterings()){
-            waterings.add(WateringDto.ForOnePlant.from(watering));
-        }
+        List<WateringDto.ForOnePlant> waterings = plant.getWaterings().stream()
+                .map(WateringDto.ForOnePlant::from)
+                .collect(Collectors.toList());
 
         return new PlantDto.Detail(PlantDto.Response.from(plant), waterings);
     }

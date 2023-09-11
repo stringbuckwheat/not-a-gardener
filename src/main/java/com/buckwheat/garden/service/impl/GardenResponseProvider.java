@@ -1,86 +1,123 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.code.WateringCode;
-import com.buckwheat.garden.data.projection.Calculate;
+import com.buckwheat.garden.dao.WateringDao;
 import com.buckwheat.garden.data.dto.GardenDto;
 import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.dto.WateringDto;
-import com.buckwheat.garden.util.GardenUtil;
+import com.buckwheat.garden.data.projection.Calculate;
+import com.buckwheat.garden.data.projection.ChemicalUsage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class GardenResponseProvider {
-    private final GardenUtil gardenUtil;
+    private final WateringDao wateringDao;
 
     public GardenDto.Response getGardenResponse(Calculate calculate){
-        if (calculate.getPostponeDate() != null && LocalDate.now().compareTo(calculate.getPostponeDate()) == 0) {
-            return new GardenDto.Response(calculate.getPlant(), getGardenDetailWhenLazy(calculate));
+        // 미루기를 누른 경우
+        if (calculate.getPostponeDate() != null
+                && LocalDate.now().compareTo(calculate.getPostponeDate()) == 0) {
+            GardenDto.Detail detail = GardenDto.Detail.lazy(calculate.getLatestWateringDate(), calculate.getBirthday());
+            return new GardenDto.Response(calculate.getPlant(), detail);
         }
 
-        GardenDto.Detail gardenDetail = getGardenDetail(calculate);
-
-        return new GardenDto.Response(calculate.getPlant(), gardenDetail);
-    }
-
-    public GardenDto.Detail getGardenDetailWhenLazy(Calculate calculate) {
-        String anniversary = gardenUtil.getAnniversary(calculate.getBirthday());
-
-        WateringDto.Response latestWatering = null;
-        if(calculate.getLatestWateringDate() != null){
-            latestWatering = WateringDto.Response.from(calculate.getLatestWateringDate());
-        }
-
-        return GardenDto.Detail.builder()
-                .latestWateringDate(latestWatering)
-                .anniversary(anniversary)
-                .wateringDDay(calculate.getLatestWateringDate() == null ? -1 : 0)
-                .wateringCode(WateringCode.YOU_ARE_LAZY.getCode())
-                .chemicalCode(null)
-                .build();
+        return new GardenDto.Response(calculate.getPlant(), getGardenDetail(calculate));
     }
 
     public GardenDto.Detail getGardenDetail(Calculate calculate) {
-        // nn일째 반려중
-        String anniversary = gardenUtil.getAnniversary(calculate.getBirthday());
-
         // 물주기 기록이 없으면
         if (calculate.getLatestWateringDate() == null) {
             // 물주기 정보가 부족해요
-            return GardenDto.Detail.builder()
-                    .latestWateringDate(null)
-                    .anniversary(anniversary)
-                    .wateringDDay(-1)
-                    .wateringCode(WateringCode.NO_RECORD.getCode())
-                    .chemicalCode(null)
-                    .build();
+            return GardenDto.Detail.noRecord(calculate.getBirthday());
         }
 
         PlantDto.Response plant = calculate.getPlant();
 
         // 비료든 물이든 뭐라도 준지 며칠이나 지났는지 계산
-        int wateringDDay = gardenUtil.getWateringDDay(plant.getRecentWateringPeriod(), calculate.getLatestWateringDate());
+        int wateringDDay = getWateringDDay(plant.getRecentWateringPeriod(), calculate.getLatestWateringDate());
         // 이 식물은 목이 말라요, 흙이 말랐는지 확인해보세요 ... 등의 watering code를 계산
-        int wateringCode = gardenUtil.getWateringCode(plant.getRecentWateringPeriod(), wateringDDay);
+        int wateringCode = getWateringCode(plant.getRecentWateringPeriod(), wateringDDay);
 
         // chemicalCode: 물을 줄 식물에 대해서 맹물을 줄지 비료/약품 희석액을 줄지 알려주는 용도
         // 어떤 비료를 줘야하는지 알려준다
         GardenDto.ChemicalCode chemicalCode = null;
 
         if(wateringCode == 0 || wateringCode == 1){
-            chemicalCode = gardenUtil.getChemicalCode(plant.getId(), calculate.getGardenerId());
+            chemicalCode = getChemicalCode(plant.getId(), calculate.getGardenerId());
         }
 
         return GardenDto.Detail.builder()
                 .latestWateringDate(WateringDto.Response.from(calculate.getLatestWateringDate()))
-                .anniversary(anniversary)
+                .anniversary(GardenDto.Detail.getAnniversary(calculate.getBirthday()))
                 .wateringDDay(wateringDDay)
                 .wateringCode(wateringCode)
                 .chemicalCode(chemicalCode).build();
+    }
+
+    public int getWateringDDay(int recentWateringPeriod, LocalDate lastDrinkingDay) {
+        // 비료든 물이든 뭐라도 준지 며칠이나 지났는지 계산
+        int period = (int) Duration.between(lastDrinkingDay.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays();
+        return recentWateringPeriod - period;
+    }
+
+    public int getWateringCode(int recentWateringPeriod, int wateringDDay) {
+        if (recentWateringPeriod == wateringDDay) {
+            // 오늘 물 줌
+            return WateringCode.WATERED_TODAY.getCode();
+        } else if (recentWateringPeriod == 0) {
+            // 물주기 정보 부족
+            return WateringCode.NO_RECORD.getCode(); // ***
+        } else if (wateringDDay == 0) {
+            // 물주기
+            return WateringCode.THIRSTY.getCode(); // ***
+        } else if (wateringDDay == 1) {
+            // 물주기 하루 전
+            // 체크하세요
+            return WateringCode.CHECK.getCode(); // ***
+        } else if (wateringDDay >= 2) { // 얘가 wateringCode == 4 보다 먼저 걸린다
+            // 물주기까지 이틀 이상 남음
+            // 놔두세요
+            return WateringCode.LEAVE_HER_ALONE.getCode();
+        } else {
+            // 음수가 나왔으면 물주기 놓침
+            // 며칠 늦었는지 알려줌
+            return wateringDDay; // ***
+        }
+    }
+
+    // -1           0           1
+    // 비료 사용 안함  맹물 주기      비료주기
+    public GardenDto.ChemicalCode getChemicalCode(Long plantId, Long gardenerId) {
+        List<ChemicalUsage> latestChemicalUsages = wateringDao.getLatestChemicalUsages(plantId, gardenerId);
+
+        // index 필요
+        // chemical list index에 맞춰 해당 chemical을 줘야하는지 말아야하는지 산출
+        for (int i = 0; i < latestChemicalUsages.size(); i++) {
+            ChemicalUsage latestFertilizingInfo = latestChemicalUsages.get(i);
+            LocalDate latestFertilizedDate = latestFertilizingInfo.getLatestWateringDate();
+
+            if (latestFertilizedDate == null) {
+                // 해당 비료를 준 기록이 아예 없으면
+                continue;
+            }
+
+            // 해당 비료를 준지 얼마나 지났는지 계산
+            int period = (int) Duration.between(latestFertilizedDate.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays();
+
+            // 시비 날짜와 같거나 더 지났으면
+            if (period >= (int) latestFertilizingInfo.getPeriod()) {
+                return new GardenDto.ChemicalCode(latestFertilizingInfo.getChemicalId(), latestFertilizingInfo.getName());
+            }
+        }
+
+        return null;
     }
 }

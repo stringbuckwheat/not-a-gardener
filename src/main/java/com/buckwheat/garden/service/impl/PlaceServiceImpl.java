@@ -4,14 +4,13 @@ import com.buckwheat.garden.dao.PlaceDao;
 import com.buckwheat.garden.data.dto.PlaceDto;
 import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.data.entity.Place;
-import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -27,13 +26,9 @@ public class PlaceServiceImpl implements PlaceService {
      */
     @Override
     public List<PlaceDto.Card> getAll(Long gardenerId) {
-        List<PlaceDto.Card> list = new ArrayList<>();
-
-        for(Place place : placeDao.getPlacesByGardenerId(gardenerId)){
-            list.add(PlaceDto.Card.from(place));
-        }
-
-        return list;
+        return placeDao.getPlacesByGardenerId(gardenerId).stream()
+                .map(PlaceDto.Card::from)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -46,15 +41,11 @@ public class PlaceServiceImpl implements PlaceService {
     public PlaceDto.WithPlants getDetail(Long placeId, Long gardenerId) {
         Place place = placeDao.getPlaceWithPlants(placeId, gardenerId);
 
-        List<PlantDto.PlantInPlace> plants = new ArrayList<>();
+        List<PlantDto.PlantInPlace> plants = place.getPlants().stream()
+                .map(PlantDto.PlantInPlace::from)
+                .collect(Collectors.toList());
 
-        for(Plant plant : place.getPlants()){
-            plants.add(PlantDto.PlantInPlace.from(plant));
-        }
-
-        PlaceDto.Basic placeResponseDto = PlaceDto.Basic.from(place);
-
-        return new PlaceDto.WithPlants(placeResponseDto, plants);
+        return new PlaceDto.WithPlants(PlaceDto.Basic.from(place), plants);
     }
 
     @Override

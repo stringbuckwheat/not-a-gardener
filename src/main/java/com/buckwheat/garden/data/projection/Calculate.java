@@ -30,11 +30,9 @@ public class Calculate {
     }
 
     public static Calculate from(Plant plant, Long gardenerId){
-        log.debug("plant.getWaterings(): {}", plant.getWaterings());
         LocalDate latestWateringDate = null;
 
         if(plant.getWaterings() != null && plant.getWaterings().size() > 0 ){
-            // latestWateringDate = plant.getWaterings().size() > 0 ? plant.getWaterings().get(0).getWateringDate() : null;
             latestWateringDate = plant.getWaterings().get(0).getWateringDate();
         }
 
