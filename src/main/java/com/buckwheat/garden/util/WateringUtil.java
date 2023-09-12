@@ -4,8 +4,6 @@ import com.buckwheat.garden.code.AfterWateringCode;
 import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Watering;
-import com.buckwheat.garden.repository.PlantRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -13,58 +11,57 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class WateringUtil {
-    private final PlantRepository plantRepository;
-
-    public WateringDto.Message getWateringMsg(Long plantId) {
-        Plant plant = plantRepository.findByPlantId(plantId).orElseThrow(NoSuchElementException::new);
-        return getWateringMsg(plant);
-    }
 
     public WateringDto.Message getWateringMsg(Plant plant){
         // 첫번째 물주기면
         if (plant.getWaterings().size() == 1) {
             return new WateringDto.Message(AfterWateringCode.FIRST_WATERING.getCode(), plant.getRecentWateringPeriod());
-        }
-
-        if(plant.getWaterings().size() == 2){
+        } else if(plant.getWaterings().size() == 2){
             return new WateringDto.Message(AfterWateringCode.SECOND_WATERING.getCode(), plant.getRecentWateringPeriod());
-        }
-
-        List<WateringDto.ForOnePlant> list = new ArrayList();
-        for(Watering w: plant.getWaterings()){
-            list.add(WateringDto.ForOnePlant.from(w));
         }
 
         LocalDateTime latestWateringDate = plant.getWaterings().get(0).getWateringDate().atStartOfDay();
         LocalDateTime prevWateringDate = plant.getWaterings().get(1).getWateringDate().atStartOfDay();
 
         int period = (int) Duration.between(prevWateringDate, latestWateringDate).toDays();
-        int wateringCode = getAfterWateringCode(period, plant.getRecentWateringPeriod());
+
+        if(plant.getWaterings().size() == 3){
+            // 첫 물주기 측정 완료
+            return new WateringDto.Message(AfterWateringCode.INIT_WATERING_PERIOD.getCode(), period);
+        }
+
+        // 물주기 짧아짐: -1
+        // 물주기 똑같음: 0
+        // 물주기 길어짐: 1
+        int wateringCode = Integer.compare(period, plant.getRecentWateringPeriod());
 
         return new WateringDto.Message(wateringCode, period);
     }
 
-    public int getAfterWateringCode(int period, int prevWateringPeriod) {
-        // 물주기 짧아짐: -1
-        // 물주기 똑같음: 0
-        // 물주기 길어짐: 1
-        // 인간의 게으름 혹은 환경 문제이므로 DB 반영하지 않음
-        return Integer.compare(period, prevWateringPeriod);
-    }
+    public List<WateringDto.ForOnePlant> withWateringPeriodList(List<Watering> list) {
+        List<WateringDto.ForOnePlant> waterings = new ArrayList<>();
 
-    public Plant updateWateringPeriod(Plant plant, int period) {
-        if (period != plant.getRecentWateringPeriod()) {
-            Plant updatedPlant = plant.updateAverageWateringPeriod(period);
-            plantRepository.save(updatedPlant);
-            return updatedPlant;
+        for (int i = 0; i < list.size(); i++) {
+            // 마지막 요소이자 가장 옛날 물주기
+            // => 전 요소가 없으므로 며칠만에 물 줬는지 계산 X
+            if (i == list.size() - 1) {
+                waterings.add(WateringDto.ForOnePlant.from(list.get(i)));
+                break;
+            }
+
+            // 며칠만에 물줬는지 계산
+            LocalDateTime afterWateringDate = list.get(i).getWateringDate().atStartOfDay();
+            LocalDateTime prevWateringDate = list.get(i + 1).getWateringDate().atStartOfDay();
+
+            int wateringPeriod = (int) Duration.between(prevWateringDate, afterWateringDate).toDays();
+
+            waterings.add(WateringDto.ForOnePlant.withWateringPeriodFrom(list.get(i), wateringPeriod));
         }
 
-        return plant;
+        return waterings;
     }
 }

@@ -13,6 +13,7 @@ import java.util.List;
 public class PlantDto {
     @AllArgsConstructor
     @Getter
+    @ToString
     public static class Detail{
         Response plant;
         List<WateringDto.ForOnePlant> waterings;

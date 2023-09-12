@@ -82,6 +82,17 @@ public class PlantDaoImpl implements PlantDao {
     }
 
     @Override
+    public Plant updateWateringPeriod(Plant plant, int period) {
+        if (period != plant.getRecentWateringPeriod()) {
+            Plant updatedPlant = plant.updateAverageWateringPeriod(period);
+            plantRepository.save(updatedPlant);
+
+            return updatedPlant;
+        }
+        return plant;
+    }
+
+    @Override
     public Place updatePlantPlace(PlaceDto.ModifyPlace modifyPlantPlace, Long gardenerId){
         Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(modifyPlantPlace.getPlaceId(), gardenerId)
                 .orElseThrow(NoSuchElementException::new);

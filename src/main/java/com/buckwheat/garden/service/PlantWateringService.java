@@ -1,27 +1,18 @@
 package com.buckwheat.garden.service;
 
 import com.buckwheat.garden.data.dto.WateringDto;
-import com.buckwheat.garden.data.entity.Plant;
-import com.buckwheat.garden.data.entity.Watering;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PlantWateringService {
-    /* 이번 관수가 며칠만인지 계산 */
-    int calculateWateringPeriod(LocalDateTime latestWateringDate);
-
     /* 물주기 기록 추가 */
     WateringDto.AfterWatering add(WateringDto.Request wateringRequest);
 
     /* insert, update 이후 리턴할 DTO를 만드는 메소드 */
-    WateringDto.AfterWatering getAfterWatering(Plant plant);
+    WateringDto.AfterWatering getAfterWatering(Long plantId);
 
     /* 한 식물의 물주기 기록 */
     List<WateringDto.ForOnePlant> getAll(Long plantId);
-
-    /* 물주기 간격을 포함한 WateringDto 리스트*/
-    List<WateringDto.ForOnePlant> withWateringPeriodList(List<Watering> list);
 
     /* 물주기 수정 */
     WateringDto.AfterWatering modify(WateringDto.Request wateringRequest);

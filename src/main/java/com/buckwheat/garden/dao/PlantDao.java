@@ -18,6 +18,7 @@ public interface PlantDao {
     Plant save(Long gardenerId, PlantDto.Request plantRequest);
     Plant update(PlantDto.Request plantRequest, Long gardenerId);
     Plant update(Plant plant);
+    Plant updateWateringPeriod(Plant plant, int period);
     Place updatePlantPlace(PlaceDto.ModifyPlace modifyPlantPlaceDto, Long gardenerId);
     void updateConditionDate(Plant plant);
     void deleteBy(Long id, Long gardenerId);

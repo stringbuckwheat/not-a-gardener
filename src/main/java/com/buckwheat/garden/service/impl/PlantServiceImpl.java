@@ -8,6 +8,7 @@ import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.projection.Calculate;
 import com.buckwheat.garden.service.PlantService;
+import com.buckwheat.garden.util.WateringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class PlantServiceImpl implements PlantService {
     private final PlantDao plantDao;
     private final GardenResponseProvider gardenResponseProvider;
+    private final WateringUtil wateringUtil;
 
     /**
      * 전체 식물 리스트
@@ -46,9 +48,7 @@ public class PlantServiceImpl implements PlantService {
     public PlantDto.Detail getDetail(Long plantId, Long gardenerId) {
         Plant plant = plantDao.getPlantWithPlantIdAndGardenerId(plantId, gardenerId);
 
-        List<WateringDto.ForOnePlant> waterings = plant.getWaterings().stream()
-                .map(WateringDto.ForOnePlant::from)
-                .collect(Collectors.toList());
+        List<WateringDto.ForOnePlant> waterings = wateringUtil.withWateringPeriodList(plant.getWaterings());
 
         return new PlantDto.Detail(PlantDto.Response.from(plant), waterings);
     }

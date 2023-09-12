@@ -1,5 +1,6 @@
 package com.buckwheat.garden.service.impl;
 
+import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.dao.WateringDao;
 import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.data.entity.Plant;
@@ -21,6 +22,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class WateringServiceImpl implements WateringService {
     private final WateringDao wateringDao;
+    private final PlantDao plantDao;
     private final WateringUtil wateringUtil;
 
     @Override
@@ -69,18 +71,13 @@ public class WateringServiceImpl implements WateringService {
         Watering watering = wateringDao.addWatering(wateringRequest);
 
         // 물주기 계산 로직
-        WateringDto.Message wateringMsg = wateringUtil.getWateringMsg(watering.getPlant().getPlantId());
-
-        // 식물 테이블의 averageWateringDate 업데이트 필요 X
-        if (wateringMsg.getAfterWateringCode() == 3) {
-            // 바로 리턴
-            return WateringDto.ByDate.from(watering, watering.getPlant(), watering.getChemical());
-        }
+        Plant plant = plantDao.getPlantWithPlaceAndWatering(wateringRequest.getPlantId());
+        WateringDto.Message wateringMsg = wateringUtil.getWateringMsg(plant);
 
         // 필요시 물주기 정보 업데이트
-        Plant newPlant = wateringUtil.updateWateringPeriod(watering.getPlant(), wateringMsg.getAverageWateringDate());
+        plant = plantDao.updateWateringPeriod(watering.getPlant(), wateringMsg.getAverageWateringDate());
 
-        return WateringDto.ByDate.from(watering, newPlant, watering.getChemical());
+        return WateringDto.ByDate.from(watering, plant, watering.getChemical());
     }
 
     public void delete(long wateringId){

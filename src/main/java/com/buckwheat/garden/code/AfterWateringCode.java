@@ -11,7 +11,8 @@ public enum AfterWateringCode {
     NO_CHANGE(0),
     SCHEDULE_LENGTHEN(1),
     FIRST_WATERING(2),
-    SECOND_WATERING(3);
+    SECOND_WATERING(3),
+    INIT_WATERING_PERIOD(4);
 
     private final int code;
 
