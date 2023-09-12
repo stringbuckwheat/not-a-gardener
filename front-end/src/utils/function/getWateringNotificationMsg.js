@@ -7,6 +7,7 @@ const getWateringNotificationMsg = (afterWateringCode) => {
   // 1 물주기가 늘어났어요
   // 2 처음으로 물주기를 기록
   // 3 두 번째 물주기 기록
+  // 4 첫 물주기 간격 기록 완료
 
   if (afterWateringCode == -1) {
     title = "물주기가 줄어들었어요!"
@@ -31,6 +32,9 @@ const getWateringNotificationMsg = (afterWateringCode) => {
   } else if (afterWateringCode == 3) {
     title = "두 번째 물주기를 기록했어요"
     content = "한 번 더 관수하면 물주기 관찰이 완료됩니다"
+  } else if (afterWateringCode == 4) {
+    title = "첫 물 주기 간격을 기록했어요!"
+    content = "관찰 결과에 따라 자동으로 업데이트 됩니다"
   }
 
   return {
