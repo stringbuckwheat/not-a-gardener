@@ -1,9 +1,9 @@
 package com.buckwheat.garden.config;
 
-import com.buckwheat.garden.config.filter.JwtExceptionFilter;
-import com.buckwheat.garden.config.filter.JwtFilter;
-import com.buckwheat.garden.config.oauth2.OAuth2MemberService;
-import com.buckwheat.garden.config.oauth2.OAuth2SuccessHandler;
+import com.buckwheat.garden.filter.JwtExceptionFilter;
+import com.buckwheat.garden.filter.JwtFilter;
+import com.buckwheat.garden.filter.oauth2.OAuth2MemberService;
+import com.buckwheat.garden.filter.oauth2.OAuth2SuccessHandler;
 import com.buckwheat.garden.service.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,8 +42,8 @@ public class SpringSecurityConfig {
         // 요청에 credential 권한이 있는지 없는지
         // Authorization으로 사용자 인증 시 true
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://not-a-gardener.xyz");
-        //config.addAllowedOrigin("http://localhost:3000"); // 요청 권한을 줄 도메인
+        //config.addAllowedOrigin("http://not-a-gardener.xyz");
+        config.addAllowedOrigin("http://localhost:3000"); // 요청 권한을 줄 도메인
         config.addAllowedHeader("*"); // 노출해도 되는 헤더
 
         // 허용할 메소드.

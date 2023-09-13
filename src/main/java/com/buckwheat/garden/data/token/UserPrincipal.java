@@ -1,4 +1,4 @@
-package com.buckwheat.garden.config.oauth2;
+package com.buckwheat.garden.data.token;
 
 import com.buckwheat.garden.data.entity.Gardener;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,9 @@
-package com.buckwheat.garden.config.oauth2;
+package com.buckwheat.garden.filter.oauth2;
 
 import com.buckwheat.garden.dao.GardenerDao;
 import com.buckwheat.garden.data.entity.Gardener;
+import com.buckwheat.garden.data.token.OAuth2Attribute;
+import com.buckwheat.garden.data.token.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

@@ -1,4 +1,4 @@
-package com.buckwheat.garden.config.filter;
+package com.buckwheat.garden.filter;
 
 import com.buckwheat.garden.data.token.AccessToken;
 import com.buckwheat.garden.service.TokenProvider;

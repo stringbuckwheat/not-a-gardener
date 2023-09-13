@@ -1,6 +1,6 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.config.oauth2.UserPrincipal;
+import com.buckwheat.garden.data.token.UserPrincipal;
 import com.buckwheat.garden.data.token.AccessToken;
 import com.buckwheat.garden.data.token.ActiveGardener;
 import com.buckwheat.garden.data.token.RefreshToken;

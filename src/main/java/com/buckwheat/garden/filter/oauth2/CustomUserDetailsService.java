@@ -1,6 +1,7 @@
-package com.buckwheat.garden.config.oauth2;
+package com.buckwheat.garden.filter.oauth2;
 
 import com.buckwheat.garden.data.token.ActiveGardener;
+import com.buckwheat.garden.data.token.UserPrincipal;
 import com.buckwheat.garden.error.code.ExceptionCode;
 import com.buckwheat.garden.repository.RedisRepository;
 import lombok.RequiredArgsConstructor;

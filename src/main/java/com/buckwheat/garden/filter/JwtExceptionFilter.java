@@ -1,4 +1,4 @@
-package com.buckwheat.garden.config.filter;
+package com.buckwheat.garden.filter;
 
 import com.buckwheat.garden.error.ErrorResponse;
 import com.buckwheat.garden.error.code.ExceptionCode;

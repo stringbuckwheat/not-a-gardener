@@ -1,6 +1,6 @@
 package com.buckwheat.garden.controller;
 
-import com.buckwheat.garden.config.oauth2.UserPrincipal;
+import com.buckwheat.garden.data.token.UserPrincipal;
 import com.buckwheat.garden.data.dto.GardenDto;
 import com.buckwheat.garden.service.GardenService;
 import lombok.RequiredArgsConstructor;

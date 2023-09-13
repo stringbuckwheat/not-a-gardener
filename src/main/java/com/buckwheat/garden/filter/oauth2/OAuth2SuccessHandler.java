@@ -1,6 +1,7 @@
-package com.buckwheat.garden.config.oauth2;
+package com.buckwheat.garden.filter.oauth2;
 
 import com.buckwheat.garden.data.token.AccessToken;
+import com.buckwheat.garden.data.token.UserPrincipal;
 import com.buckwheat.garden.service.TokenProvider;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

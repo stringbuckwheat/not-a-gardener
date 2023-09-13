@@ -1,4 +1,4 @@
-package com.buckwheat.garden.config.oauth2;
+package com.buckwheat.garden.data.token;
 
 import com.buckwheat.garden.data.entity.Gardener;
 import lombok.AccessLevel;
@@ -22,7 +22,7 @@ public class OAuth2Attribute {
     private String picture;
     private String provider;
 
-    static OAuth2Attribute of(String provider, String attributeKey, Map<String, Object> attributes){
+    public static OAuth2Attribute of(String provider, String attributeKey, Map<String, Object> attributes){
         switch(provider){
             case "google":
                 return ofGoogle(attributeKey, attributes);
@@ -75,7 +75,7 @@ public class OAuth2Attribute {
                 .build();
     }
 
-    Map<String, Object> toMap() {
+    public Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
 
         map.put("id", attributeKey);
