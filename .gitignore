@@ -70,4 +70,5 @@ application-mail.properties
 .gitsecret/keys/random_seed
 !*.secret
 
+/src/main/generated/
 .env
