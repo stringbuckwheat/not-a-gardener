@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface PlantRepository extends JpaRepository<Plant, Long> {
+public interface PlantRepository extends JpaRepository<Plant, Long>, PlantRepositoryCustom{
     // FK로 조회하는 method 명명 규칙
     // findBy + [fk를 관리하는 entity의 필드명] + _ + [fk entity의 식별자 필드명]
     // List<Plant> findByGardener_Username(String username);
@@ -61,11 +61,4 @@ public interface PlantRepository extends JpaRepository<Plant, Long> {
             " AND DATEDIFF(CURDATE(), MAX(watering_date)) >= p.recent_watering_period - 1" +
             " ORDER BY p.recent_watering_period DESC", nativeQuery = true)
     List<RawGarden> findGardenByGardenerId(@Param("gardenerId") Long gardenerId);
-
-    // waitinglist
-    @Query(value = "SELECT * FROM plant p" +
-            " INNER JOIN place pl ON p.place_id = pl.place_id" +
-            " LEFT JOIN watering w ON p.plant_id = w.plant_id" +
-            " WHERE p.gardener_id = :gardenerId AND w.plant_id IS NULL", nativeQuery = true)
-    List<Plant> findWaitingForWateringList(@Param("gardenerId") Long gardenerId);
 }

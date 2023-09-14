@@ -9,5 +9,7 @@ import java.util.Map;
 public interface WateringService {
     Map<LocalDate, List<WateringDto.ByDate>> getAll(Long gardenerId, LocalDate date);
     WateringDto.ByDate add(WateringDto.Request wateringRequest);
+    LocalDate getStartDate(LocalDate firstDayOfMonth);
+    LocalDate getEndDate(LocalDate firstDayOfMonth);
     void delete(long wateringId);
 }

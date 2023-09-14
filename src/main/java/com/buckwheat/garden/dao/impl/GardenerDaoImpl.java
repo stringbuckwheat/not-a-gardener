@@ -31,7 +31,7 @@ public class GardenerDaoImpl implements GardenerDao {
 
     @Override
     public List<Username> getUsernameByEmail(String email){
-        return gardenerRepository.findByEmailAndProviderIsNull(email);
+        return gardenerRepository.findByProviderIsNullAndEmail(email);
     }
 
     @Override

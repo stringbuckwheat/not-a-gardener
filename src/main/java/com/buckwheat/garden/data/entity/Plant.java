@@ -19,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
+@ToString(of = {"plantId", "name"})
 public class Plant {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO) // auto-increment
