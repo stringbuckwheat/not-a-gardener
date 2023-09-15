@@ -1,7 +1,7 @@
 package com.buckwheat.garden.dao.impl;
 
 import com.buckwheat.garden.dao.WateringDao;
-import com.buckwheat.garden.data.dto.WateringDto;
+import com.buckwheat.garden.data.dto.watering.WateringRequest;
 import com.buckwheat.garden.data.entity.Chemical;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Watering;
@@ -11,6 +11,7 @@ import com.buckwheat.garden.repository.ChemicalRepository;
 import com.buckwheat.garden.repository.PlantRepository;
 import com.buckwheat.garden.repository.WateringRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import java.util.NoSuchElementException;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class WateringDaoImpl implements WateringDao {
     private final WateringRepository wateringRepository;
     private final ChemicalRepository chemicalRepository;
@@ -27,7 +29,7 @@ public class WateringDaoImpl implements WateringDao {
 
     @Override
     @Transactional
-    public Watering addWatering(WateringDto.Request wateringRequest) {
+    public Watering addWatering(WateringRequest wateringRequest) {
         Watering watering = wateringRepository.findByWateringDateAndPlant_PlantId(wateringRequest.getWateringDate(), wateringRequest.getPlantId());
 
         if(watering != null){
@@ -65,7 +67,7 @@ public class WateringDaoImpl implements WateringDao {
     }
 
     @Override
-    public Watering modifyWatering(WateringDto.Request wateringRequest) {
+    public Watering modifyWatering(WateringRequest wateringRequest) {
         // Mapping할 Entity 가져오기
         // chemical은 nullable이므로 orElse 사용
         Plant plant = plantRepository.findByPlantId(wateringRequest.getPlantId())
@@ -74,7 +76,7 @@ public class WateringDaoImpl implements WateringDao {
         Chemical chemical = null;
 
         if (wateringRequest.getChemicalId() != null) {
-            chemicalRepository.findById(wateringRequest.getChemicalId()).orElse(null);
+            chemical = chemicalRepository.findById(wateringRequest.getChemicalId()).orElse(null);
         }
 
         // 기존 watering 엔티티

@@ -1,12 +1,12 @@
 package com.buckwheat.garden.dao.impl;
 
 import com.buckwheat.garden.dao.PlantDao;
-import com.buckwheat.garden.data.dto.PlaceDto;
-import com.buckwheat.garden.data.dto.PlantDto;
-import com.buckwheat.garden.data.projection.RawGarden;
+import com.buckwheat.garden.data.dto.place.ModifyPlace;
+import com.buckwheat.garden.data.dto.plant.PlantRequest;
 import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Place;
 import com.buckwheat.garden.data.entity.Plant;
+import com.buckwheat.garden.data.projection.RawGarden;
 import com.buckwheat.garden.repository.GardenerRepository;
 import com.buckwheat.garden.repository.PlaceRepository;
 import com.buckwheat.garden.repository.PlantRepository;
@@ -57,7 +57,7 @@ public class PlantDaoImpl implements PlantDao {
     }
 
     @Override
-    public Plant save(Long gardenerId, PlantDto.Request plantRequest) {
+    public Plant save(Long gardenerId, PlantRequest plantRequest) {
         Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(plantRequest.getPlaceId(), gardenerId)
                 .orElseThrow(NoSuchElementException::new);
         Gardener gardener = gardenerRepository.getReferenceById(gardenerId);
@@ -66,7 +66,7 @@ public class PlantDaoImpl implements PlantDao {
     }
 
     @Override
-    public Plant update(PlantDto.Request plantRequest, Long gardenerId){
+    public Plant update(PlantRequest plantRequest, Long gardenerId){
         Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(plantRequest.getPlaceId(), gardenerId)
                 .orElseThrow(NoSuchElementException::new);
 
@@ -93,11 +93,11 @@ public class PlantDaoImpl implements PlantDao {
     }
 
     @Override
-    public Place updatePlantPlace(PlaceDto.ModifyPlace modifyPlantPlace, Long gardenerId){
+    public Place updatePlantPlace(ModifyPlace modifyPlantPlace, Long gardenerId){
         Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(modifyPlantPlace.getPlaceId(), gardenerId)
                 .orElseThrow(NoSuchElementException::new);
 
-        for (Long plantId : modifyPlantPlace.getPlantList()) {
+        for (Long plantId : modifyPlantPlace.getPlants()) {
             Plant plant = plantRepository.findById(plantId).orElseThrow(NoSuchElementException::new);
 
             plant.updatePlace(place);

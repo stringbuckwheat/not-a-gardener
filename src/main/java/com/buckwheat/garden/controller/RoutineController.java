@@ -1,7 +1,10 @@
 package com.buckwheat.garden.controller;
 
+import com.buckwheat.garden.data.dto.routine.RoutineComplete;
+import com.buckwheat.garden.data.dto.routine.RoutineMain;
+import com.buckwheat.garden.data.dto.routine.RoutineRequest;
+import com.buckwheat.garden.data.dto.routine.RoutineResponse;
 import com.buckwheat.garden.data.token.UserPrincipal;
-import com.buckwheat.garden.data.dto.RoutineDto;
 import com.buckwheat.garden.service.RoutineService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,22 +19,22 @@ public class RoutineController {
     private final RoutineService routineService;
 
     @GetMapping("")
-    public RoutineDto.Main getAll(@AuthenticationPrincipal UserPrincipal user){
+    public RoutineMain getAll(@AuthenticationPrincipal UserPrincipal user){
         return routineService.getAll(user.getId());
     }
 
     @PostMapping("")
-    public RoutineDto.Response add(@AuthenticationPrincipal UserPrincipal user, @RequestBody RoutineDto.Request routineRequest){
+    public RoutineResponse add(@AuthenticationPrincipal UserPrincipal user, @RequestBody RoutineRequest routineRequest){
         return routineService.add(user.getId(), routineRequest);
     }
 
     @PutMapping("/{routineId}/complete")
-    public RoutineDto.Response complete(@RequestBody RoutineDto.Complete routineComplete){
+    public RoutineResponse complete(@RequestBody RoutineComplete routineComplete){
         return routineService.complete(routineComplete);
     }
 
     @PutMapping("/{routineId}")
-    public RoutineDto.Response modify(@RequestBody RoutineDto.Request routineRequest){
+    public RoutineResponse modify(@RequestBody RoutineRequest routineRequest){
         return routineService.modify(routineRequest);
     }
 

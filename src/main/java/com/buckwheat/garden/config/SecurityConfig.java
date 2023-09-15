@@ -24,7 +24,7 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity //(debug = true)
 @RequiredArgsConstructor
 @Slf4j
-public class SpringSecurityConfig {
+public class SecurityConfig {
     private final TokenProvider tokenProvider;
     private final OAuth2MemberService oAuth2MemberService;
     private final OAuth2SuccessHandler successHandler;
@@ -70,8 +70,9 @@ public class SpringSecurityConfig {
                 .and()
                 .authorizeRequests() // 리퀘스트 설정
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // Preflight 요청 허용
-                .antMatchers("/login", "/token", "/oauth", "/register").permitAll() // 누구나 접근가능
-                .antMatchers("/garden/**").authenticated() // 인증 권한 필요
+                .antMatchers("/login", "/token", "/oauth", "/register/**", "/forgot/**").permitAll() // 누구나 접근가능
+                .antMatchers("/chemical/**", "/garden/**", "/gardener/**", "/goal/**", "/info",
+                        "/place/**", "/plant/**", "/routine/**", "/watering/**").authenticated() // 인증 권한 필요
 
                 .and()
                 .addFilter(this.corsFilter()) // CORS 필터 등록

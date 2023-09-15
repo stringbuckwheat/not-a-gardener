@@ -1,7 +1,8 @@
 package com.buckwheat.garden.dao.impl;
 
 import com.buckwheat.garden.dao.RoutineDao;
-import com.buckwheat.garden.data.dto.RoutineDto;
+import com.buckwheat.garden.data.dto.routine.RoutineComplete;
+import com.buckwheat.garden.data.dto.routine.RoutineRequest;
 import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Routine;
@@ -27,14 +28,14 @@ public class RoutineDaoImpl implements RoutineDao {
     }
 
     @Override
-    public Routine save(Long gardenerId, RoutineDto.Request routineRequest){
+    public Routine save(Long gardenerId, RoutineRequest routineRequest){
         Gardener gardener = gardenerRepository.getReferenceById(gardenerId);
         Plant plant = plantRepository.findById(routineRequest.getPlantId()).orElseThrow(NoSuchElementException::new);
         return routineRepository.save(routineRequest.toEntityWith(plant, gardener));
     }
 
     @Override
-    public Routine update(RoutineDto.Request routineRequest){
+    public Routine update(RoutineRequest routineRequest){
         Plant plant = plantRepository.findById(routineRequest.getPlantId()).orElseThrow(NoSuchElementException::new);
         Routine routine = routineRepository.findByRoutineId(routineRequest.getId()).orElseThrow(NoSuchElementException::new);
         routine.update(routineRequest.getContent(), routineRequest.getCycle(), plant);
@@ -43,7 +44,7 @@ public class RoutineDaoImpl implements RoutineDao {
     }
 
     @Override
-    public Routine complete(RoutineDto.Complete routineComplete){
+    public Routine complete(RoutineComplete routineComplete){
         Routine routine = routineRepository.findByRoutineId(routineComplete.getId()).orElseThrow(NoSuchElementException::new);
         routine.complete(routineComplete.getLastCompleteDate());
 

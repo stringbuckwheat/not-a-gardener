@@ -1,26 +1,29 @@
 package com.buckwheat.garden.service;
 
-import com.buckwheat.garden.data.dto.GardenDto;
-import com.buckwheat.garden.data.dto.PlaceDto;
-import com.buckwheat.garden.data.dto.PlantDto;
+import com.buckwheat.garden.data.dto.garden.GardenResponse;
+import com.buckwheat.garden.data.dto.place.ModifyPlace;
+import com.buckwheat.garden.data.dto.place.PlaceDto;
+import com.buckwheat.garden.data.dto.plant.PlantDetail;
+import com.buckwheat.garden.data.dto.plant.PlantRequest;
+import com.buckwheat.garden.data.dto.plant.PlantResponse;
 
 import java.util.List;
 
 public interface PlantService {
     /* 식물 리스트 */
-    List<PlantDto.Response> getAll(Long gardenerId);
+    List<PlantResponse> getAll(Long gardenerId);
 
     /* 하나의 식물 */
-    PlantDto.Detail getDetail(Long plantId, Long gardenerId);
+    PlantDetail getDetail(Long plantId, Long gardenerId);
 
     /* 식물 추가 */
-    GardenDto.Response add(Long gardenerId, PlantDto.Request plantRequest);
+    GardenResponse add(Long gardenerId, PlantRequest plantRequest);
 
     /* 식물 수정 */
-    GardenDto.Response modify(Long gardenerId, PlantDto.Request plantRequest);
+    GardenResponse modify(Long gardenerId, PlantRequest plantRequest);
 
     /* 식물들의 장소 정보 수정 */
-    PlaceDto.Basic modifyPlace(PlaceDto.ModifyPlace modifyPlantPlace, Long gardenerId);
+    PlaceDto modifyPlace(ModifyPlace modifyPlantPlace, Long gardenerId);
 
     /* 식물 삭제 */
     void delete(Long plantId, Long gardenerId);

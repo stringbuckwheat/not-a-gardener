@@ -1,8 +1,9 @@
 package com.buckwheat.garden.controller;
 
+import com.buckwheat.garden.data.dto.garden.GardenWateringResponse;
+import com.buckwheat.garden.data.dto.watering.WateringMessage;
+import com.buckwheat.garden.data.dto.watering.WateringRequest;
 import com.buckwheat.garden.data.token.UserPrincipal;
-import com.buckwheat.garden.data.dto.GardenDto;
-import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.service.GardenWateringService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ public class GardenWateringController {
      * @return
      */
     @PostMapping("")
-    public GardenDto.WateringResponse add(@AuthenticationPrincipal UserPrincipal user, @RequestBody WateringDto.Request wateringRequest){
+    public GardenWateringResponse add(@AuthenticationPrincipal UserPrincipal user, @RequestBody WateringRequest wateringRequest){
         return gardenWateringService.add(user.getId(), wateringRequest);
     }
 
@@ -33,7 +34,7 @@ public class GardenWateringController {
      * @return
      */
     @PutMapping("/not-dry")
-    public WateringDto.Message notDry(@PathVariable Long plantId){
+    public WateringMessage notDry(@PathVariable Long plantId){
         return gardenWateringService.notDry(plantId);
     }
 

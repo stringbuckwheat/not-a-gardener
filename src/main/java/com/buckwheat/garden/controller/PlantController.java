@@ -1,9 +1,12 @@
 package com.buckwheat.garden.controller;
 
+import com.buckwheat.garden.data.dto.garden.GardenResponse;
+import com.buckwheat.garden.data.dto.place.ModifyPlace;
+import com.buckwheat.garden.data.dto.place.PlaceDto;
+import com.buckwheat.garden.data.dto.plant.PlantDetail;
+import com.buckwheat.garden.data.dto.plant.PlantRequest;
+import com.buckwheat.garden.data.dto.plant.PlantResponse;
 import com.buckwheat.garden.data.token.UserPrincipal;
-import com.buckwheat.garden.data.dto.GardenDto;
-import com.buckwheat.garden.data.dto.PlaceDto;
-import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.service.PlantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +29,7 @@ public class PlantController {
      * @return
      */
     @GetMapping("")
-    public List<PlantDto.Response> getAll(@AuthenticationPrincipal UserPrincipal user){
+    public List<PlantResponse> getAll(@AuthenticationPrincipal UserPrincipal user){
         return plantService.getAll(user.getId());
     }
 
@@ -36,7 +39,7 @@ public class PlantController {
      * @return
      */
     @GetMapping("/{plantId}")
-    public PlantDto.Detail getDetail(@PathVariable Long plantId, @AuthenticationPrincipal UserPrincipal user){
+    public PlantDetail getDetail(@PathVariable Long plantId, @AuthenticationPrincipal UserPrincipal user){
         return plantService.getDetail(plantId, user.getId());
     }
 
@@ -47,7 +50,7 @@ public class PlantController {
      * @return
      */
     @PostMapping("")
-    public GardenDto.Response add(@AuthenticationPrincipal UserPrincipal user, @RequestBody PlantDto.Request plantRequest){
+    public GardenResponse add(@AuthenticationPrincipal UserPrincipal user, @RequestBody PlantRequest plantRequest){
         return plantService.add(user.getId(), plantRequest);
     }
 
@@ -58,7 +61,7 @@ public class PlantController {
      * @return
      */
     @PutMapping("/{plantId}")
-    public GardenDto.Response modify(@RequestBody PlantDto.Request plantRequest, @AuthenticationPrincipal UserPrincipal user){
+    public GardenResponse modify(@RequestBody PlantRequest plantRequest, @AuthenticationPrincipal UserPrincipal user){
         return plantService.modify(user.getId(), plantRequest);
     }
 
@@ -67,8 +70,8 @@ public class PlantController {
      * @param modifyPlace
      * @return
      */
-    @PutMapping("/modify-place")
-    public PlaceDto.Basic modifyPlace(@RequestBody PlaceDto.ModifyPlace modifyPlace, @AuthenticationPrincipal UserPrincipal user){
+    @PutMapping("/place/{placeId}")
+    public PlaceDto modifyPlace(@RequestBody ModifyPlace modifyPlace, @AuthenticationPrincipal UserPrincipal user){
         return plantService.modifyPlace(modifyPlace, user.getId());
     }
 

@@ -1,7 +1,8 @@
 package com.buckwheat.garden.controller;
 
+import com.buckwheat.garden.data.dto.plant.PlantInPlace;
+import com.buckwheat.garden.data.dto.plant.PlantRequest;
 import com.buckwheat.garden.data.token.UserPrincipal;
-import com.buckwheat.garden.data.dto.PlantDto;
 import com.buckwheat.garden.service.PlacePlantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ public class PlacePlantController {
     private final PlacePlantService placePlantService;
 
     @PostMapping("")
-    public PlantDto.PlantInPlace addPlantInPlace(@RequestBody PlantDto.Request plantRequest, @AuthenticationPrincipal UserPrincipal user){
+    public PlantInPlace addPlantInPlace(@RequestBody PlantRequest plantRequest, @AuthenticationPrincipal UserPrincipal user){
         return placePlantService.addPlantInPlace(user.getId(), plantRequest);
     }
 }

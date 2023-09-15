@@ -1,6 +1,7 @@
 package com.buckwheat.garden.controller;
 
-import com.buckwheat.garden.data.dto.GardenerDto;
+import com.buckwheat.garden.data.dto.gardener.Info;
+import com.buckwheat.garden.data.dto.gardener.Register;
 import com.buckwheat.garden.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ public class RegisterController {
 
     /* 회원 가입 */
     @PostMapping("")
-    public GardenerDto.Info add(@RequestBody GardenerDto.Register register){
+    public Info add(@RequestBody Register register){
         return authenticationService.add(register);
     }
 }

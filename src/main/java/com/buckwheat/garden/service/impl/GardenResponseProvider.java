@@ -2,9 +2,11 @@ package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.code.WateringCode;
 import com.buckwheat.garden.dao.WateringDao;
-import com.buckwheat.garden.data.dto.GardenDto;
-import com.buckwheat.garden.data.dto.PlantDto;
-import com.buckwheat.garden.data.dto.WateringDto;
+import com.buckwheat.garden.data.dto.garden.ChemicalCode;
+import com.buckwheat.garden.data.dto.garden.GardenDetail;
+import com.buckwheat.garden.data.dto.garden.GardenResponse;
+import com.buckwheat.garden.data.dto.plant.PlantResponse;
+import com.buckwheat.garden.data.dto.watering.WateringResponse;
 import com.buckwheat.garden.data.projection.Calculate;
 import com.buckwheat.garden.data.projection.ChemicalUsage;
 import lombok.RequiredArgsConstructor;
@@ -21,25 +23,25 @@ import java.util.List;
 public class GardenResponseProvider {
     private final WateringDao wateringDao;
 
-    public GardenDto.Response getGardenResponse(Calculate calculate){
+    public GardenResponse getGardenResponse(Calculate calculate){
         // 미루기를 누른 경우
         if (calculate.getPostponeDate() != null
                 && LocalDate.now().compareTo(calculate.getPostponeDate()) == 0) {
-            GardenDto.Detail detail = GardenDto.Detail.lazy(calculate.getLatestWateringDate(), calculate.getBirthday());
-            return new GardenDto.Response(calculate.getPlant(), detail);
+            GardenDetail detail = GardenDetail.lazy(calculate.getLatestWateringDate(), calculate.getBirthday());
+            return new GardenResponse(calculate.getPlant(), detail);
         }
 
-        return new GardenDto.Response(calculate.getPlant(), getGardenDetail(calculate));
+        return new GardenResponse(calculate.getPlant(), getGardenDetail(calculate));
     }
 
-    public GardenDto.Detail getGardenDetail(Calculate calculate) {
+    public GardenDetail getGardenDetail(Calculate calculate) {
         // 물주기 기록이 없으면
         if (calculate.getLatestWateringDate() == null) {
             // 물주기 정보가 부족해요
-            return GardenDto.Detail.noRecord(calculate.getBirthday());
+            return GardenDetail.noRecord(calculate.getBirthday());
         }
 
-        PlantDto.Response plant = calculate.getPlant();
+        PlantResponse plant = calculate.getPlant();
 
         // 비료든 물이든 뭐라도 준지 며칠이나 지났는지 계산
         int wateringDDay = getWateringDDay(plant.getRecentWateringPeriod(), calculate.getLatestWateringDate());
@@ -48,15 +50,15 @@ public class GardenResponseProvider {
 
         // chemicalCode: 물을 줄 식물에 대해서 맹물을 줄지 비료/약품 희석액을 줄지 알려주는 용도
         // 어떤 비료를 줘야하는지 알려준다
-        GardenDto.ChemicalCode chemicalCode = null;
+        ChemicalCode chemicalCode = null;
 
         if(wateringCode == 0 || wateringCode == 1){
             chemicalCode = getChemicalCode(plant.getId(), calculate.getGardenerId());
         }
 
-        return GardenDto.Detail.builder()
-                .latestWateringDate(WateringDto.Response.from(calculate.getLatestWateringDate()))
-                .anniversary(GardenDto.Detail.getAnniversary(calculate.getBirthday()))
+        return GardenDetail.builder()
+                .latestWateringDate(WateringResponse.from(calculate.getLatestWateringDate()))
+                .anniversary(GardenDetail.getAnniversary(calculate.getBirthday()))
                 .wateringDDay(wateringDDay)
                 .wateringCode(wateringCode)
                 .chemicalCode(chemicalCode).build();
@@ -95,7 +97,7 @@ public class GardenResponseProvider {
 
     // -1           0           1
     // 비료 사용 안함  맹물 주기      비료주기
-    public GardenDto.ChemicalCode getChemicalCode(Long plantId, Long gardenerId) {
+    public ChemicalCode getChemicalCode(Long plantId, Long gardenerId) {
         List<ChemicalUsage> latestChemicalUsages = wateringDao.getLatestChemicalUsages(plantId, gardenerId);
 
         // index 필요
@@ -114,7 +116,7 @@ public class GardenResponseProvider {
 
             // 시비 날짜와 같거나 더 지났으면
             if (period >= (int) latestFertilizingInfo.getPeriod()) {
-                return new GardenDto.ChemicalCode(latestFertilizingInfo.getChemicalId(), latestFertilizingInfo.getName());
+                return new ChemicalCode(latestFertilizingInfo.getChemicalId(), latestFertilizingInfo.getName());
             }
         }
 

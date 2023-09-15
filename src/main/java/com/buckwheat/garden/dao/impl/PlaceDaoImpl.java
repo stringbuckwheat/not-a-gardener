@@ -1,7 +1,7 @@
 package com.buckwheat.garden.dao.impl;
 
 import com.buckwheat.garden.dao.PlaceDao;
-import com.buckwheat.garden.data.dto.PlaceDto;
+import com.buckwheat.garden.data.dto.place.PlaceDto;
 import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Place;
 import com.buckwheat.garden.repository.GardenerRepository;
@@ -39,13 +39,13 @@ public class PlaceDaoImpl implements PlaceDao {
      * @return
      */
     @Override
-    public Place save(Long gardenerId, PlaceDto.Basic placeRequest) {
+    public Place save(Long gardenerId, PlaceDto placeRequest) {
         Gardener gardener = gardenerRepository.getReferenceById(gardenerId);
         return placeRepository.save(placeRequest.toEntityWith(gardener));
     }
 
     @Override
-    public Place update(PlaceDto.Basic placeRequest, Long gardenerId) {
+    public Place update(PlaceDto placeRequest, Long gardenerId) {
         Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(placeRequest.getId(), gardenerId)
                 .orElseThrow(NoSuchElementException::new);
 

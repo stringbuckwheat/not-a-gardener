@@ -1,7 +1,8 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.dao.GardenerDao;
-import com.buckwheat.garden.data.dto.GardenerDto;
+import com.buckwheat.garden.data.dto.gardener.GardenerDetail;
+import com.buckwheat.garden.data.dto.gardener.Login;
 import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.service.GardenerService;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +20,12 @@ public class GardenerServiceImpl implements GardenerService {
     private final GardenerDao gardenerDao;
 
     @Override
-    public GardenerDto.Detail getOne(Long id) {
-        return GardenerDto.Detail.from(gardenerDao.getGardenerById(id));
+    public GardenerDetail getOne(Long id) {
+        return GardenerDetail.from(gardenerDao.getGardenerById(id));
     }
 
     @Override
-    public void updatePassword(Long id, GardenerDto.Login login) {
+    public void updatePassword(Long id, Login login) {
         Gardener gardener = gardenerDao.getGardenerById(id);
         String encryptedPassword = encoder.encode(login.getPassword());
         gardener.changePassword(encryptedPassword);
@@ -33,18 +34,18 @@ public class GardenerServiceImpl implements GardenerService {
     }
 
     @Override
-    public boolean identify(Long id, GardenerDto.Login login) {
+    public boolean identify(Long id, Login login) {
         Gardener gardener = gardenerDao.getGardenerById(id);
         return encoder.matches(login.getPassword(), gardener.getPassword());
     }
 
     @Override
-    public GardenerDto.Detail modify(GardenerDto.Detail gardenerDetail) {
+    public GardenerDetail modify(GardenerDetail gardenerDetail) {
         Gardener gardener = gardenerDao.getGardenerByGardenerId(gardenerDetail.getId())
                 .orElseThrow(NoSuchElementException::new);
         gardener.updateEmailAndName(gardenerDetail.getEmail(), gardenerDetail.getName());
 
-        return GardenerDto.Detail.from(gardenerDao.save(gardener));
+        return GardenerDetail.from(gardenerDao.save(gardener));
     }
 
     @Override

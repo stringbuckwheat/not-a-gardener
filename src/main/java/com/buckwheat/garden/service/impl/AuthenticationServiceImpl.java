@@ -1,12 +1,12 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.data.token.UserPrincipal;
 import com.buckwheat.garden.dao.GardenerDao;
-import com.buckwheat.garden.data.dto.GardenerDto;
+import com.buckwheat.garden.data.dto.gardener.*;
 import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.token.AccessToken;
 import com.buckwheat.garden.data.token.ActiveGardener;
 import com.buckwheat.garden.data.token.RefreshToken;
+import com.buckwheat.garden.data.token.UserPrincipal;
 import com.buckwheat.garden.error.code.ExceptionCode;
 import com.buckwheat.garden.repository.RedisRepository;
 import com.buckwheat.garden.service.AuthenticationService;
@@ -47,7 +47,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public GardenerDto.Info add(GardenerDto.Register register) {
+    public Info add(Register register) {
         // DTO에 암호화된 비밀번호 저장한 뒤 엔티티로 변환
         Gardener gardener = gardenerDao.save(
                 register
@@ -68,7 +68,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      * @return JwtAuthToken을 인코딩한 String 값 리턴
      */
     @Override
-    public GardenerDto.Info login(GardenerDto.Login login) {
+    public Info login(Login login) {
         Gardener gardener = gardenerDao.getGardenerForLogin(login.getUsername());
 
         // 비밀번호 일치 여부 검사
@@ -80,7 +80,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     // 인증 성공 후 Security Context에 유저 정보를 저장하고 토큰과 기본 정보를 리턴
-    public GardenerDto.Info setAuthentication(Gardener gardener) {
+    public Info setAuthentication(Gardener gardener) {
         // gardener 객체를 포함한 user 생성
         UserPrincipal user = UserPrincipal.create(gardener);
 
@@ -94,11 +94,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         AccessToken accessToken = tokenProvider.createAccessToken(gardener.getGardenerId(), gardener.getName());
         RefreshToken refreshToken = tokenProvider.createRefreshToken(gardener.getGardenerId(), gardener.getName());
 
-        return GardenerDto.Info.from(accessToken.getToken(), refreshToken.getToken(), gardener);
+        return Info.from(accessToken.getToken(), refreshToken.getToken(), gardener);
     }
 
     @Override
-    public GardenerDto.Token refreshAccessToken(GardenerDto.Refresh token) {
+    public Token refreshAccessToken(Refresh token) {
         String reqRefreshToken = token.getRefreshToken();
         ActiveGardener activeGardener = redisRepository.findById(token.getGardenerId())
                 .orElseThrow(() -> new BadCredentialsException(ExceptionCode.NO_TOKEN_IN_REDIS.getCode()));
@@ -117,16 +117,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // 새 access token 만들기
         AccessToken accessToken = tokenProvider.createAccessToken(activeGardener.getGardenerId(), activeGardener.getName());
 
-        return new GardenerDto.Token(accessToken.getToken(), null);
+        return new Token(accessToken.getToken(), null);
     }
 
     @Override
-    public GardenerDto.Info getGardenerInfo(Long id) {
+    public Info getGardenerInfo(Long id) {
         Gardener gardener = gardenerDao.getGardenerById(id);
         ActiveGardener activeGardener = redisRepository.findById(id)
                 .orElseThrow(NoSuchElementException::new);
         RefreshToken refreshToken = activeGardener.getRefreshToken();
 
-        return GardenerDto.Info.from("", refreshToken.getToken(), gardener);
+        return Info.from("", refreshToken.getToken(), gardener);
     }
 }

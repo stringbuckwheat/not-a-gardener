@@ -1,6 +1,8 @@
 package com.buckwheat.garden.controller;
 
-import com.buckwheat.garden.data.dto.WateringDto;
+import com.buckwheat.garden.data.dto.watering.AfterWatering;
+import com.buckwheat.garden.data.dto.watering.WateringForOnePlant;
+import com.buckwheat.garden.data.dto.watering.WateringRequest;
 import com.buckwheat.garden.service.PlantWateringService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +24,7 @@ public class PlantWateringController {
      * @return
      */
     @GetMapping("")
-    public List<WateringDto.ForOnePlant> getAll(@PathVariable long plantId){
+    public List<WateringForOnePlant> getAll(@PathVariable long plantId){
         return plantWateringService.getAll(plantId);
     }
 
@@ -32,7 +34,7 @@ public class PlantWateringController {
      * @return
      */
     @PostMapping("")
-    public WateringDto.AfterWatering add(@RequestBody WateringDto.Request wateringRequest){
+    public AfterWatering add(@RequestBody WateringRequest wateringRequest){
         return plantWateringService.add(wateringRequest);
     }
 
@@ -42,7 +44,8 @@ public class PlantWateringController {
      * @return
      */
     @PutMapping("/{wateringId}")
-    public WateringDto.AfterWatering modify(@RequestBody WateringDto.Request wateringRequest){
+    public AfterWatering modify(@RequestBody WateringRequest wateringRequest){
+        log.debug("request: {}", wateringRequest);
         return plantWateringService.modify(wateringRequest);
     }
 

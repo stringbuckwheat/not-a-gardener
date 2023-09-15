@@ -1,17 +1,19 @@
 package com.buckwheat.garden.service;
 
-import com.buckwheat.garden.data.dto.PlaceDto;
+import com.buckwheat.garden.data.dto.place.PlaceCard;
+import com.buckwheat.garden.data.dto.place.PlaceDto;
+import com.buckwheat.garden.data.dto.place.PlaceWithPlants;
 
 import java.util.List;
 
 public interface PlaceService {
-    List<PlaceDto.Card> getAll(Long gardenerId);
+    List<PlaceCard> getAll(Long gardenerId);
 
-    PlaceDto.WithPlants getDetail(Long placeId, Long gardenerId);
+    PlaceWithPlants getDetail(Long placeId, Long gardenerId);
 
-    PlaceDto.Card add(Long gardenerId, PlaceDto.Basic placeRequest);
+    PlaceCard add(Long gardenerId, PlaceDto placeRequest);
 
-    PlaceDto.Basic modify(PlaceDto.Basic placeRequest, Long gardenerId);
+    PlaceDto modify(PlaceDto placeRequest, Long gardenerId);
 
     void delete(Long placeId, Long gardenerId);
 }

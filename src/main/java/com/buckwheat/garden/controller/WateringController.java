@@ -1,7 +1,8 @@
 package com.buckwheat.garden.controller;
 
+import com.buckwheat.garden.data.dto.watering.WateringByDate;
+import com.buckwheat.garden.data.dto.watering.WateringRequest;
 import com.buckwheat.garden.data.token.UserPrincipal;
-import com.buckwheat.garden.data.dto.WateringDto;
 import com.buckwheat.garden.service.WateringService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +22,12 @@ public class WateringController {
     private final WateringService wateringService;
 
     @GetMapping("/date/{date}")
-    public Map<LocalDate, List<WateringDto.ByDate>> getAll(@AuthenticationPrincipal UserPrincipal user, @PathVariable String date){
+    public Map<LocalDate, List<WateringByDate>> getAll(@AuthenticationPrincipal UserPrincipal user, @PathVariable String date){
         return wateringService.getAll(user.getId(), LocalDate.parse(date, DateTimeFormatter.ISO_DATE));
     }
 
     @PostMapping("")
-    public WateringDto.ByDate add(@RequestBody WateringDto.Request wateringRequest){
+    public WateringByDate add(@RequestBody WateringRequest wateringRequest){
         return wateringService.add(wateringRequest);
     }
 

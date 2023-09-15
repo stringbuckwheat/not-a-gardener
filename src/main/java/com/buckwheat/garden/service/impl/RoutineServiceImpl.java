@@ -1,7 +1,10 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.dao.RoutineDao;
-import com.buckwheat.garden.data.dto.RoutineDto;
+import com.buckwheat.garden.data.dto.routine.RoutineComplete;
+import com.buckwheat.garden.data.dto.routine.RoutineMain;
+import com.buckwheat.garden.data.dto.routine.RoutineRequest;
+import com.buckwheat.garden.data.dto.routine.RoutineResponse;
 import com.buckwheat.garden.data.entity.Routine;
 import com.buckwheat.garden.service.RoutineService;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +22,13 @@ public class RoutineServiceImpl implements RoutineService {
     private final RoutineDao routineDao;
 
     @Override
-    public RoutineDto.Main getAll(Long gardenerId) {
-        List<RoutineDto.Response> toDoList = new ArrayList<>();
-        List<RoutineDto.Response> notToDoList = new ArrayList<>();
+    public RoutineMain getAll(Long gardenerId) {
+        List<RoutineResponse> toDoList = new ArrayList<>();
+        List<RoutineResponse> notToDoList = new ArrayList<>();
 
         // dto로 변환
         for (Routine routine : routineDao.getRoutinesByGardenerId(gardenerId)) {
-            RoutineDto.Response r = RoutineDto.Response.from(routine);
+            RoutineResponse r = RoutineResponse.from(routine);
 
             if(r.getHasToDoToday().equals("Y")){
                 toDoList.add(r);
@@ -35,23 +38,23 @@ public class RoutineServiceImpl implements RoutineService {
             notToDoList.add(r);
         }
 
-        return new RoutineDto.Main(toDoList, notToDoList);
+        return new RoutineMain(toDoList, notToDoList);
     }
 
     @Override
-    public RoutineDto.Response add(Long gardenerId, RoutineDto.Request routineRequest) {
-        return RoutineDto.Response.from(routineDao.save(gardenerId, routineRequest));
+    public RoutineResponse add(Long gardenerId, RoutineRequest routineRequest) {
+        return RoutineResponse.from(routineDao.save(gardenerId, routineRequest));
     }
 
     @Override
-    public RoutineDto.Response modify(RoutineDto.Request routineDto) {
-        return RoutineDto.Response.from(routineDao.update(routineDto));
+    public RoutineResponse modify(RoutineRequest routineDto) {
+        return RoutineResponse.from(routineDao.update(routineDto));
     }
 
     @Override
     @Transactional
-    public RoutineDto.Response complete(RoutineDto.Complete routineDto) {
-        return RoutineDto.Response.from(routineDao.complete(routineDto));
+    public RoutineResponse complete(RoutineComplete routineDto) {
+        return RoutineResponse.from(routineDao.complete(routineDto));
     }
 
     @Override

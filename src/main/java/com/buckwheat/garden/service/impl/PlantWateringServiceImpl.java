@@ -2,8 +2,11 @@ package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.dao.WateringDao;
-import com.buckwheat.garden.data.dto.PlantDto;
-import com.buckwheat.garden.data.dto.WateringDto;
+import com.buckwheat.garden.data.dto.plant.PlantResponse;
+import com.buckwheat.garden.data.dto.watering.AfterWatering;
+import com.buckwheat.garden.data.dto.watering.WateringForOnePlant;
+import com.buckwheat.garden.data.dto.watering.WateringMessage;
+import com.buckwheat.garden.data.dto.watering.WateringRequest;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Watering;
 import com.buckwheat.garden.service.PlantWateringService;
@@ -30,26 +33,26 @@ public class PlantWateringServiceImpl implements PlantWateringService {
      * @return WateringResponseDto
      */
     @Override
-    public WateringDto.AfterWatering add(WateringDto.Request wateringRequest) {
+    public AfterWatering add(WateringRequest wateringRequest) {
         wateringDao.addWatering(wateringRequest);
         return getAfterWatering(wateringRequest.getPlantId());
     }
 
     @Override
-    public WateringDto.AfterWatering getAfterWatering(Long plantId){
+    public AfterWatering getAfterWatering(Long plantId){
         // *****
         Plant plant = plantDao.getPlantWithPlaceAndWatering(plantId);
-        WateringDto.Message wateringMsg = wateringUtil.getWateringMsg(plant);
+        WateringMessage wateringMsg = wateringUtil.getWateringMsg(plant);
 
         // 리턴용 DTO 만들기
-        List<WateringDto.ForOnePlant> waterings = getAll(plant.getPlantId());
+        List<WateringForOnePlant> waterings = getAll(plant.getPlantId());
         Plant resPlant = plantDao.updateWateringPeriod(plant, wateringMsg.getAverageWateringDate());
 
-        return WateringDto.AfterWatering.from(PlantDto.Response.from(resPlant), wateringMsg, waterings);
+        return AfterWatering.from(PlantResponse.from(resPlant), wateringMsg, waterings);
     }
 
     @Override
-    public List<WateringDto.ForOnePlant> getAll(Long plantId) {
+    public List<WateringForOnePlant> getAll(Long plantId) {
         List<Watering> waterings = wateringDao.getWateringListByPlantId(plantId); // orderByWateringDateDesc
 
         // 며칠만에 물 줬는지도 계산해줌
@@ -57,12 +60,13 @@ public class PlantWateringServiceImpl implements PlantWateringService {
             return wateringUtil.withWateringPeriodList(waterings);
         }
 
-        return waterings.stream().map(WateringDto.ForOnePlant::from).collect(Collectors.toList());
+        return waterings.stream().map(WateringForOnePlant::from).collect(Collectors.toList());
     }
 
     @Override
-    public WateringDto.AfterWatering modify(WateringDto.Request wateringRequest) {
+    public AfterWatering modify(WateringRequest wateringRequest) {
         Watering watering = wateringDao.modifyWatering(wateringRequest);
+        log.debug("수정 후 watering: {}", watering);
         return getAfterWatering(wateringRequest.getPlantId());
     }
 

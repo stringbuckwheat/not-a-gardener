@@ -1,7 +1,8 @@
 package com.buckwheat.garden.controller;
 
+import com.buckwheat.garden.data.dto.gardener.GardenerDetail;
+import com.buckwheat.garden.data.dto.gardener.Login;
 import com.buckwheat.garden.data.token.UserPrincipal;
-import com.buckwheat.garden.data.dto.GardenerDto;
 import com.buckwheat.garden.service.GardenerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,25 +19,25 @@ public class GardenerController {
 
     /* 회원정보 보기 */
     @GetMapping("/{gardenerId}")
-    public GardenerDto.Detail getOne(@AuthenticationPrincipal UserPrincipal user) {
+    public GardenerDetail getOne(@AuthenticationPrincipal UserPrincipal user) {
         return gardenerService.getOne(user.getId());
     }
 
     /* 비밀번호 변경 전 한 번 입력받아서 확인 */
     @PostMapping("/password")
-    public boolean identify(@RequestBody GardenerDto.Login login, @AuthenticationPrincipal UserPrincipal user) {
+    public boolean identify(@RequestBody Login login, @AuthenticationPrincipal UserPrincipal user) {
         return gardenerService.identify(user.getId(), login);
     }
 
     /* 로그인 후 비밀번호 변경 */
     @PutMapping("/password")
-    public void updatePassword(@RequestBody GardenerDto.Login login, @AuthenticationPrincipal UserPrincipal user) {
+    public void updatePassword(@RequestBody Login login, @AuthenticationPrincipal UserPrincipal user) {
         gardenerService.updatePassword(user.getId(), login);
     }
 
     /* 회원정보 변경 */
     @PutMapping("/{gardenerId}")
-    public GardenerDto.Detail modify(@RequestBody GardenerDto.Detail gardenerDetail, @PathVariable long gardenerId) {
+    public GardenerDetail modify(@RequestBody GardenerDetail gardenerDetail, @PathVariable long gardenerId) {
         return gardenerService.modify(gardenerDetail);
     }
 

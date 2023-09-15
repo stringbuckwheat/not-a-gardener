@@ -1,8 +1,9 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.dao.ChemicalDao;
-import com.buckwheat.garden.data.dto.ChemicalDto;
-import com.buckwheat.garden.data.dto.WateringDto;
+import com.buckwheat.garden.data.dto.chemical.ChemicalDetail;
+import com.buckwheat.garden.data.dto.chemical.ChemicalDto;
+import com.buckwheat.garden.data.dto.watering.WateringResponseInChemical;
 import com.buckwheat.garden.data.entity.Chemical;
 import com.buckwheat.garden.service.ChemicalService;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +26,9 @@ public class ChemicalServiceImpl implements ChemicalService {
      * @return dto로 변환한 chemical list
      */
     @Override
-    public List<ChemicalDto.Basic> getAll(Long gardenerId) {
+    public List<ChemicalDto> getAll(Long gardenerId) {
         return chemicalDao.getActivatedChemicalsByGardenerId(gardenerId).stream()
-                .map(ChemicalDto.Basic::from)
+                .map(ChemicalDto::from)
                 .collect(Collectors.toList());
     }
 
@@ -38,24 +39,24 @@ public class ChemicalServiceImpl implements ChemicalService {
      * @return 해당 chemical의 상세 정보 및 사용내역 리스트
      */
     @Override
-    public ChemicalDto.Detail getDetail(Long chemicalId, Long gardenerId) {
+    public ChemicalDetail getDetail(Long chemicalId, Long gardenerId) {
         Chemical chemical = chemicalDao.getChemicalByChemicalIdAndGardenerId(chemicalId, gardenerId);
 
-        List<WateringDto.ResponseInChemical> waterings = chemical.getWaterings().stream()
-                .map(WateringDto.ResponseInChemical::from)
+        List<WateringResponseInChemical> waterings = chemical.getWaterings().stream()
+                .map(WateringResponseInChemical::from)
                 .collect(Collectors.toList());
 
-        return new ChemicalDto.Detail(ChemicalDto.Basic.from(chemical), waterings);
+        return new ChemicalDetail(ChemicalDto.from(chemical), waterings);
     }
 
     @Override
-    public ChemicalDto.Basic add(Long gardenerId, ChemicalDto.Basic chemicalRequest) {
-        return ChemicalDto.Basic.from(chemicalDao.save(gardenerId, chemicalRequest));
+    public ChemicalDto add(Long gardenerId, ChemicalDto chemicalRequest) {
+        return ChemicalDto.from(chemicalDao.save(gardenerId, chemicalRequest));
     }
 
     @Override
-    public ChemicalDto.Basic modify(Long gardenerId, ChemicalDto.Basic chemicalRequest) {
-        return ChemicalDto.Basic.from(chemicalDao.update(gardenerId, chemicalRequest));
+    public ChemicalDto modify(Long gardenerId, ChemicalDto chemicalRequest) {
+        return ChemicalDto.from(chemicalDao.update(gardenerId, chemicalRequest));
     }
 
     @Override

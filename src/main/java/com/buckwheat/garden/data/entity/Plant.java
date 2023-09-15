@@ -1,6 +1,6 @@
 package com.buckwheat.garden.data.entity;
 
-import com.buckwheat.garden.data.dto.PlantDto;
+import com.buckwheat.garden.data.dto.plant.PlantRequest;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -64,7 +64,7 @@ public class Plant {
     @OrderBy("watering_date desc")
     private List<Watering> waterings = new ArrayList<>();
 
-    public Plant update(PlantDto.Request plantRequest, Place place){
+    public Plant update(PlantRequest plantRequest, Place place){
         this.name = plantRequest.getName();
         this.medium = plantRequest.getMedium();
         this.species = plantRequest.getSpecies();

@@ -2,7 +2,9 @@ package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.dao.WateringDao;
-import com.buckwheat.garden.data.dto.WateringDto;
+import com.buckwheat.garden.data.dto.watering.WateringByDate;
+import com.buckwheat.garden.data.dto.watering.WateringMessage;
+import com.buckwheat.garden.data.dto.watering.WateringRequest;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Watering;
 import com.buckwheat.garden.service.WateringService;
@@ -26,7 +28,7 @@ public class WateringServiceImpl implements WateringService {
     private final WateringUtil wateringUtil;
 
     @Override
-    public Map<LocalDate, List<WateringDto.ByDate>> getAll(Long gardenerId, LocalDate date) {
+    public Map<LocalDate, List<WateringByDate>> getAll(Long gardenerId, LocalDate date) {
         // 1일이 일요일이면 뒤로 2주 더
         // 1일이 일요일이 아니면 앞으로 한 주 뒤로 한 주
         LocalDate firstDayOfMonth = LocalDate.of(date.getYear(), date.getMonth(), 1);
@@ -35,16 +37,16 @@ public class WateringServiceImpl implements WateringService {
         LocalDate endDate = getEndDate(firstDayOfMonth);
         log.debug("endDate: {}", endDate);
 
-        Map<LocalDate, List<WateringDto.ByDate>> map = new HashMap<>(); // 날짜: 리스트
+        Map<LocalDate, List<WateringByDate>> map = new HashMap<>(); // 날짜: 리스트
 
         for (Watering watering : wateringDao.getAllWateringListByGardenerId(gardenerId, startDate, endDate)) {
-            List<WateringDto.ByDate> tmpList = map.get(watering.getWateringDate());
+            List<WateringByDate> tmpList = map.get(watering.getWateringDate());
 
             if(tmpList == null){
                 tmpList = new ArrayList<>();
             }
 
-            tmpList.add(WateringDto.ByDate.from(watering));
+            tmpList.add(WateringByDate.from(watering));
             map.put(watering.getWateringDate(), tmpList);
         }
 
@@ -69,18 +71,18 @@ public class WateringServiceImpl implements WateringService {
         return firstDayOfMonth.plusDays(firstDayOfMonth.lengthOfMonth() + tmp);
     }
 
-    public WateringDto.ByDate add(WateringDto.Request wateringRequest){
+    public WateringByDate add(WateringRequest wateringRequest){
         // 물주기 저장
         Watering watering = wateringDao.addWatering(wateringRequest);
 
         // 물주기 계산 로직
         Plant plant = plantDao.getPlantWithPlaceAndWatering(wateringRequest.getPlantId());
-        WateringDto.Message wateringMsg = wateringUtil.getWateringMsg(plant);
+        WateringMessage wateringMsg = wateringUtil.getWateringMsg(plant);
 
         // 필요시 물주기 정보 업데이트
         plant = plantDao.updateWateringPeriod(watering.getPlant(), wateringMsg.getAverageWateringDate());
 
-        return WateringDto.ByDate.from(watering, plant, watering.getChemical());
+        return WateringByDate.from(watering, plant, watering.getChemical());
     }
 
     public void delete(long wateringId){

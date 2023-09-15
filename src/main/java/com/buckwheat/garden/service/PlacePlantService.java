@@ -1,7 +1,8 @@
 package com.buckwheat.garden.service;
 
-import com.buckwheat.garden.data.dto.PlantDto;
+import com.buckwheat.garden.data.dto.plant.PlantInPlace;
+import com.buckwheat.garden.data.dto.plant.PlantRequest;
 
 public interface PlacePlantService {
-    PlantDto.PlantInPlace addPlantInPlace(Long gardenerId, PlantDto.Request plantRequest);
+    PlantInPlace addPlantInPlace(Long gardenerId, PlantRequest plantRequest);
 }

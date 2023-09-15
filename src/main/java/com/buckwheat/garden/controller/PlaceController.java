@@ -1,7 +1,9 @@
 package com.buckwheat.garden.controller;
 
+import com.buckwheat.garden.data.dto.place.PlaceCard;
+import com.buckwheat.garden.data.dto.place.PlaceDto;
+import com.buckwheat.garden.data.dto.place.PlaceWithPlants;
 import com.buckwheat.garden.data.token.UserPrincipal;
-import com.buckwheat.garden.data.dto.PlaceDto;
 import com.buckwheat.garden.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +25,7 @@ public class PlaceController {
      * @return 유저의 전체 장소 리스트, 카드용 DTO에 담아 보낸다.
      */
     @GetMapping("")
-    public List<PlaceDto.Card> getAll(@AuthenticationPrincipal UserPrincipal user){
+    public List<PlaceCard> getAll(@AuthenticationPrincipal UserPrincipal user){
         return placeService.getAll(user.getId());
     }
 
@@ -33,7 +35,7 @@ public class PlaceController {
      * @return
      */
     @GetMapping("/{placeId}")
-    public PlaceDto.WithPlants getDetail(@PathVariable Long placeId, @AuthenticationPrincipal UserPrincipal user){
+    public PlaceWithPlants getDetail(@PathVariable Long placeId, @AuthenticationPrincipal UserPrincipal user){
         return placeService.getDetail(placeId, user.getId());
     }
 
@@ -44,7 +46,7 @@ public class PlaceController {
      * @return
      */
     @PostMapping("")
-    public PlaceDto.Card add(@RequestBody PlaceDto.Basic placeRequest, @AuthenticationPrincipal UserPrincipal user){
+    public PlaceCard add(@RequestBody PlaceDto placeRequest, @AuthenticationPrincipal UserPrincipal user){
         return placeService.add(user.getId(), placeRequest);
     }
 
@@ -54,7 +56,7 @@ public class PlaceController {
      * @return 수정한 장소 정보
      */
     @PutMapping("/{placeId}")
-    public PlaceDto.Basic modify(@RequestBody PlaceDto.Basic placeRequest, @AuthenticationPrincipal UserPrincipal user){
+    public PlaceDto modify(@RequestBody PlaceDto placeRequest, @AuthenticationPrincipal UserPrincipal user){
         return placeService.modify(placeRequest, user.getId());
     }
 

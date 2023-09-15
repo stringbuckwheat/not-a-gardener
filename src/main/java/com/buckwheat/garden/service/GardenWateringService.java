@@ -1,10 +1,11 @@
 package com.buckwheat.garden.service;
 
-import com.buckwheat.garden.data.dto.GardenDto;
-import com.buckwheat.garden.data.dto.WateringDto;
+import com.buckwheat.garden.data.dto.garden.GardenWateringResponse;
+import com.buckwheat.garden.data.dto.watering.WateringMessage;
+import com.buckwheat.garden.data.dto.watering.WateringRequest;
 
 public interface GardenWateringService {
-    GardenDto.WateringResponse add(Long gardenerId, WateringDto.Request wateringRequest);
-    WateringDto.Message notDry(Long plantId);
+    GardenWateringResponse add(Long gardenerId, WateringRequest wateringRequest);
+    WateringMessage notDry(Long plantId);
     int postpone(Long plantId);
 }

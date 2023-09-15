@@ -1,10 +1,13 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.dao.PlantDao;
-import com.buckwheat.garden.data.dto.GardenDto;
-import com.buckwheat.garden.data.dto.PlaceDto;
-import com.buckwheat.garden.data.dto.PlantDto;
-import com.buckwheat.garden.data.dto.WateringDto;
+import com.buckwheat.garden.data.dto.garden.GardenResponse;
+import com.buckwheat.garden.data.dto.place.ModifyPlace;
+import com.buckwheat.garden.data.dto.place.PlaceDto;
+import com.buckwheat.garden.data.dto.plant.PlantDetail;
+import com.buckwheat.garden.data.dto.plant.PlantRequest;
+import com.buckwheat.garden.data.dto.plant.PlantResponse;
+import com.buckwheat.garden.data.dto.watering.WateringForOnePlant;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.projection.Calculate;
 import com.buckwheat.garden.service.PlantService;
@@ -31,9 +34,9 @@ public class PlantServiceImpl implements PlantService {
      * @return
      */
     @Override
-    public List<PlantDto.Response> getAll(Long gardenerId) {
+    public List<PlantResponse> getAll(Long gardenerId) {
         return plantDao.getPlantsByGardenerId(gardenerId).stream()
-                .map(PlantDto.Response::from)
+                .map(PlantResponse::from)
                 .collect(Collectors.toList());
     }
 
@@ -45,30 +48,30 @@ public class PlantServiceImpl implements PlantService {
      * @return
      */
     @Override
-    public PlantDto.Detail getDetail(Long plantId, Long gardenerId) {
+    public PlantDetail getDetail(Long plantId, Long gardenerId) {
         Plant plant = plantDao.getPlantWithPlantIdAndGardenerId(plantId, gardenerId);
 
-        List<WateringDto.ForOnePlant> waterings = wateringUtil.withWateringPeriodList(plant.getWaterings());
+        List<WateringForOnePlant> waterings = wateringUtil.withWateringPeriodList(plant.getWaterings());
 
-        return new PlantDto.Detail(PlantDto.Response.from(plant), waterings);
+        return new PlantDetail(PlantResponse.from(plant), waterings);
     }
 
     @Override
-    public GardenDto.Response add(Long gardenerId, PlantDto.Request plantRequest) {
+    public GardenResponse add(Long gardenerId, PlantRequest plantRequest) {
         Plant plant = plantDao.save(gardenerId, plantRequest);
         return gardenResponseProvider.getGardenResponse(Calculate.from(plant, gardenerId));
     }
 
     @Override
     @Transactional
-    public GardenDto.Response modify(Long gardenerId, PlantDto.Request plantRequest) {
+    public GardenResponse modify(Long gardenerId, PlantRequest plantRequest) {
         Plant plant = plantDao.update(plantRequest, gardenerId);
         return gardenResponseProvider.getGardenResponse(Calculate.from(plant, gardenerId));
     }
 
     @Override
-    public PlaceDto.Basic modifyPlace(PlaceDto.ModifyPlace modifyPlace, Long gardenerId) {
-        return PlaceDto.Basic.from(plantDao.updatePlantPlace(modifyPlace, gardenerId));
+    public PlaceDto modifyPlace(ModifyPlace modifyPlace, Long gardenerId) {
+        return PlaceDto.from(plantDao.updatePlantPlace(modifyPlace, gardenerId));
     }
 
     @Override

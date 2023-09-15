@@ -1,7 +1,7 @@
 package com.buckwheat.garden.dao.impl;
 
 import com.buckwheat.garden.dao.GoalDao;
-import com.buckwheat.garden.data.dto.GoalDto;
+import com.buckwheat.garden.data.dto.goal.GoalDto;
 import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Goal;
 import com.buckwheat.garden.data.entity.Plant;
@@ -29,7 +29,7 @@ public class GoalDaoImpl implements GoalDao {
     }
 
     @Override
-    public Goal save(Long gardenerId, GoalDto.Basic goalRequest) {
+    public Goal save(Long gardenerId, GoalDto goalRequest) {
         Gardener gardener = gardenerRepository.getReferenceById(gardenerId);
 
         Plant plant = null;
@@ -42,7 +42,7 @@ public class GoalDaoImpl implements GoalDao {
     }
 
     @Override
-    public Goal update(GoalDto.Basic goalRequest) {
+    public Goal update(GoalDto goalRequest) {
         Plant plant = plantRepository.findById(goalRequest.getPlantId()).orElseThrow(NoSuchElementException::new);
         Goal goal = goalRepository.findById(goalRequest.getId()).orElseThrow(NoSuchElementException::new);
         goal.update(goalRequest.getContent(), plant);

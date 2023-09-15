@@ -1,7 +1,7 @@
 package com.buckwheat.garden.dao.impl;
 
 import com.buckwheat.garden.dao.ChemicalDao;
-import com.buckwheat.garden.data.dto.ChemicalDto;
+import com.buckwheat.garden.data.dto.chemical.ChemicalDto;
 import com.buckwheat.garden.data.entity.Chemical;
 import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.repository.ChemicalRepository;
@@ -30,13 +30,13 @@ public class ChemicalDaoImpl implements ChemicalDao {
     }
 
     @Override
-    public Chemical save(Long gardenerId, ChemicalDto.Basic chemicalRequest) {
+    public Chemical save(Long gardenerId, ChemicalDto chemicalRequest) {
         Gardener gardener = gardenerRepository.getReferenceById(gardenerId);
         return chemicalRepository.save(chemicalRequest.toEntity(gardener));
     }
 
     @Override
-    public Chemical update(Long gardenerId, ChemicalDto.Basic chemicalRequest) {
+    public Chemical update(Long gardenerId, ChemicalDto chemicalRequest) {
         Gardener gardener = gardenerRepository.getReferenceById(gardenerId);
         return chemicalRepository.save(chemicalRequest.toEntityForUpdate(gardener));
     }

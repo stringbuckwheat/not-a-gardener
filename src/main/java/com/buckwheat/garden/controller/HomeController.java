@@ -1,7 +1,10 @@
 package com.buckwheat.garden.controller;
 
+import com.buckwheat.garden.data.dto.gardener.Info;
+import com.buckwheat.garden.data.dto.gardener.Login;
+import com.buckwheat.garden.data.dto.gardener.Refresh;
+import com.buckwheat.garden.data.dto.gardener.Token;
 import com.buckwheat.garden.data.token.UserPrincipal;
-import com.buckwheat.garden.data.dto.GardenerDto;
 import com.buckwheat.garden.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,18 +24,18 @@ public class HomeController {
      * @return JWT 토큰, GardenerId, 이름이 포함된 GardenerInfo
      */
     @PostMapping("/login")
-    public GardenerDto.Info login(@RequestBody GardenerDto.Login login){
+    public Info login(@RequestBody Login login){
         return authenticationService.login(login);
     }
 
     @PostMapping("/token")
-    public GardenerDto.Token refreshToken(@RequestBody GardenerDto.Refresh refreshToken){
+    public Token refreshToken(@RequestBody Refresh refreshToken){
         return authenticationService.refreshAccessToken(refreshToken);
     }
 
     /* 간단한 회원 정보(헤더) - 소셜로그인에서 사용 */
     @GetMapping("/info")
-    public GardenerDto.Info getGardenerInfo(@AuthenticationPrincipal UserPrincipal user){
+    public Info getGardenerInfo(@AuthenticationPrincipal UserPrincipal user){
         return authenticationService.getGardenerInfo(user.getId());
     }
 }

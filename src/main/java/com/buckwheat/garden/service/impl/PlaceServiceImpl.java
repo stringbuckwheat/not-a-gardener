@@ -1,8 +1,10 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.dao.PlaceDao;
-import com.buckwheat.garden.data.dto.PlaceDto;
-import com.buckwheat.garden.data.dto.PlantDto;
+import com.buckwheat.garden.data.dto.place.PlaceCard;
+import com.buckwheat.garden.data.dto.place.PlaceDto;
+import com.buckwheat.garden.data.dto.place.PlaceWithPlants;
+import com.buckwheat.garden.data.dto.plant.PlantInPlace;
 import com.buckwheat.garden.data.entity.Place;
 import com.buckwheat.garden.service.PlaceService;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +27,9 @@ public class PlaceServiceImpl implements PlaceService {
      * @return 각 장소의 식물 개수를 포함하는 장소 정보 리스트
      */
     @Override
-    public List<PlaceDto.Card> getAll(Long gardenerId) {
+    public List<PlaceCard> getAll(Long gardenerId) {
         return placeDao.getPlacesByGardenerId(gardenerId).stream()
-                .map(PlaceDto.Card::from)
+                .map(PlaceCard::from)
                 .collect(Collectors.toList());
     }
 
@@ -38,21 +40,21 @@ public class PlaceServiceImpl implements PlaceService {
      * @return 해당 장소의 식물 개수를 포함하는 장소 정보
      */
     @Override
-    public PlaceDto.WithPlants getDetail(Long placeId, Long gardenerId) {
+    public PlaceWithPlants getDetail(Long placeId, Long gardenerId) {
         Place place = placeDao.getPlaceWithPlants(placeId, gardenerId);
 
-        List<PlantDto.PlantInPlace> plants = place.getPlants().stream()
-                .map(PlantDto.PlantInPlace::from)
+        List<PlantInPlace> plants = place.getPlants().stream()
+                .map(PlantInPlace::from)
                 .collect(Collectors.toList());
 
-        return new PlaceDto.WithPlants(PlaceDto.Basic.from(place), plants);
+        return new PlaceWithPlants(PlaceDto.from(place), plants);
     }
 
     @Override
-    public PlaceDto.Card add(Long gardenerId, PlaceDto.Basic placeRequest) {
+    public PlaceCard add(Long gardenerId, PlaceDto placeRequest) {
         // FK인 Gardener와 createDate로 쓸 LocalDateTime.now()를 포함한 엔티티를 저장
         Place place = placeDao.save(gardenerId, placeRequest);
-        return PlaceDto.Card.from(place);
+        return PlaceCard.from(place);
     }
 
     /**
@@ -61,8 +63,8 @@ public class PlaceServiceImpl implements PlaceService {
      * @return 수정 후 데이터
      */
     @Override
-    public PlaceDto.Basic modify(PlaceDto.Basic placeRequest, Long gardenerId) {
-        return PlaceDto.Basic.from(placeDao.update(placeRequest, gardenerId));
+    public PlaceDto modify(PlaceDto placeRequest, Long gardenerId) {
+        return PlaceDto.from(placeDao.update(placeRequest, gardenerId));
     }
 
     /**

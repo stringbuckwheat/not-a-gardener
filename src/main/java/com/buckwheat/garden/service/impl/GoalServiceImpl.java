@@ -1,7 +1,7 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.dao.GoalDao;
-import com.buckwheat.garden.data.dto.GoalDto;
+import com.buckwheat.garden.data.dto.goal.GoalDto;
 import com.buckwheat.garden.data.entity.Goal;
 import com.buckwheat.garden.service.GoalService;
 import lombok.RequiredArgsConstructor;
@@ -19,28 +19,28 @@ public class GoalServiceImpl implements GoalService {
     private final GoalDao goalDao;
 
     @Override
-    public List<GoalDto.Basic> getAll(Long gardenerId) {
+    public List<GoalDto> getAll(Long gardenerId) {
         return goalDao.getGoalListBy(gardenerId).stream()
-                .map(GoalDto.Basic::from)
+                .map(GoalDto::from)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public GoalDto.Basic add(Long gardenerId, GoalDto.Basic goalRequest) {
+    public GoalDto add(Long gardenerId, GoalDto goalRequest) {
         Goal goal = goalDao.save(gardenerId, goalRequest);
-        return GoalDto.Basic.from(goal);
+        return GoalDto.from(goal);
     }
 
     @Override
-    public GoalDto.Basic modify(GoalDto.Basic goalRequest) {
+    public GoalDto modify(GoalDto goalRequest) {
         Goal goal = goalDao.update(goalRequest);
-        return GoalDto.Basic.from(goal);
+        return GoalDto.from(goal);
     }
 
     @Override
     @Transactional
-    public GoalDto.Basic complete(Long id) {
-        return GoalDto.Basic.from(goalDao.complete(id));
+    public GoalDto complete(Long id) {
+        return GoalDto.from(goalDao.complete(id));
     }
 
     @Override

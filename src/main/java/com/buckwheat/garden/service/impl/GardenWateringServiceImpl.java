@@ -3,8 +3,10 @@ package com.buckwheat.garden.service.impl;
 import com.buckwheat.garden.code.WateringCode;
 import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.dao.WateringDao;
-import com.buckwheat.garden.data.dto.GardenDto;
-import com.buckwheat.garden.data.dto.WateringDto;
+import com.buckwheat.garden.data.dto.garden.GardenResponse;
+import com.buckwheat.garden.data.dto.garden.GardenWateringResponse;
+import com.buckwheat.garden.data.dto.watering.WateringMessage;
+import com.buckwheat.garden.data.dto.watering.WateringRequest;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Watering;
 import com.buckwheat.garden.data.projection.Calculate;
@@ -27,23 +29,23 @@ public class GardenWateringServiceImpl implements GardenWateringService {
     private final GardenResponseProvider gardenResponseProvider;
 
     @Override
-    public GardenDto.WateringResponse add(Long gardenerId, WateringDto.Request wateringRequest) {
+    public GardenWateringResponse add(Long gardenerId, WateringRequest wateringRequest) {
         Watering watering = wateringDao.addWatering(wateringRequest);
 
         // 관수 메시지 받아옴
         Plant plant = plantDao.getPlantWithPlaceAndWatering(wateringRequest.getPlantId());
-        WateringDto.Message wateringMsg = wateringUtil.getWateringMsg(plant);
+        WateringMessage wateringMsg = wateringUtil.getWateringMsg(plant);
         plant = plantDao.updateWateringPeriod(watering.getPlant(), wateringMsg.getAverageWateringDate());
 
-        GardenDto.Response gardenResponse = gardenResponseProvider.getGardenResponse(Calculate.from(plant, gardenerId));
+        GardenResponse gardenResponse = gardenResponseProvider.getGardenResponse(Calculate.from(plant, gardenerId));
 
-        return new GardenDto.WateringResponse(gardenResponse, wateringMsg);
+        return new GardenWateringResponse(gardenResponse, wateringMsg);
     }
 
     @Override
-    public WateringDto.Message notDry(Long plantId) {
+    public WateringMessage notDry(Long plantId) {
         // 리턴용
-        WateringDto.Message wateringMsg = null;
+        WateringMessage wateringMsg = null;
 
         Plant plant = plantDao.getPlantWithPlaceAndWatering(plantId);
 
@@ -64,14 +66,14 @@ public class GardenWateringServiceImpl implements GardenWateringService {
             plantDao.updateConditionDate(plant);
 
             // wateringMsg: 물주기 계산에 변동 없음
-            wateringMsg = new WateringDto.Message(0, period);
+            wateringMsg = new WateringMessage(0, period);
         } else if (period >= plant.getRecentWateringPeriod()) {
             // averageWateringPeriod 업데이트
             // 오늘 한정 garden에 안 뜨게 해야함 => updateDate에 오늘 날짜 추가
             plantDao.update(plant.updateAverageWateringPeriod(period + 1).updateConditionDate());
 
             // 물주기 늘어나는 중이라는 wateringMsg 만들기
-            wateringMsg = new WateringDto.Message(1, period + 1);
+            wateringMsg = new WateringMessage(1, period + 1);
         }
 
         return wateringMsg;

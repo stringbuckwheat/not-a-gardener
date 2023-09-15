@@ -1,17 +1,17 @@
 package com.buckwheat.garden.service;
 
-import com.buckwheat.garden.data.dto.GoalDto;
+import com.buckwheat.garden.data.dto.goal.GoalDto;
 
 import java.util.List;
 
 public interface GoalService {
-    List<GoalDto.Basic> getAll(Long gardenerId);
+    List<GoalDto> getAll(Long gardenerId);
 
-    GoalDto.Basic add(Long gardenerId, GoalDto.Basic goalRequest);
+    GoalDto add(Long gardenerId, GoalDto goalRequest);
 
-    GoalDto.Basic modify(GoalDto.Basic goalRequest);
+    GoalDto modify(GoalDto goalRequest);
 
-    GoalDto.Basic complete(Long id);
+    GoalDto complete(Long id);
 
     void delete(Long id);
 }

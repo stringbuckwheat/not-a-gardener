@@ -1,9 +1,10 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.dao.GardenerDao;
-import com.buckwheat.garden.data.dto.GardenerDto;
-import com.buckwheat.garden.data.projection.Username;
+import com.buckwheat.garden.data.dto.gardener.Forgot;
+import com.buckwheat.garden.data.dto.gardener.Login;
 import com.buckwheat.garden.data.entity.Gardener;
+import com.buckwheat.garden.data.projection.Username;
 import com.buckwheat.garden.error.code.ExceptionCode;
 import com.buckwheat.garden.service.ForgotService;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class ForgotServiceImpl implements ForgotService {
      * @return
      */
     @Override
-    public GardenerDto.Forgot forgotAccount(String email) {
+    public Forgot forgotAccount(String email) {
         List<Username> usernames = gardenerDao.getUsernameByEmail(email);
 
         if (usernames.size() == 0) {
@@ -46,7 +47,7 @@ public class ForgotServiceImpl implements ForgotService {
         String identificationCode = RandomStringUtils.randomAlphanumeric(6);
         sendEmail(identificationCode, email); // 이메일 보내기
 
-        return new GardenerDto.Forgot(identificationCode, email, usernames);
+        return new Forgot(identificationCode, email, usernames);
     }
 
     public void sendEmail(String identificationCode, String email){
@@ -66,7 +67,7 @@ public class ForgotServiceImpl implements ForgotService {
     }
 
     @Override
-    public void resetPassword(GardenerDto.Login login) {
+    public void resetPassword(Login login) {
         Gardener gardener = gardenerDao.getGardenerByUsername(login.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode()));
 

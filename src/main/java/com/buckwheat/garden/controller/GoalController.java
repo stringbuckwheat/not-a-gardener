@@ -1,7 +1,7 @@
 package com.buckwheat.garden.controller;
 
 import com.buckwheat.garden.data.token.UserPrincipal;
-import com.buckwheat.garden.data.dto.GoalDto;
+import com.buckwheat.garden.data.dto.goal.GoalDto;
 import com.buckwheat.garden.service.GoalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,22 +18,22 @@ public class GoalController {
     private final GoalService goalService;
 
     @GetMapping("")
-    public List<GoalDto.Basic> getAll(@AuthenticationPrincipal UserPrincipal user) {
+    public List<GoalDto> getAll(@AuthenticationPrincipal UserPrincipal user) {
         return goalService.getAll(user.getId());
     }
 
     @PostMapping("")
-    public GoalDto.Basic add(@RequestBody GoalDto.Basic goalRequest, @AuthenticationPrincipal UserPrincipal user) {
+    public GoalDto add(@RequestBody GoalDto goalRequest, @AuthenticationPrincipal UserPrincipal user) {
         return goalService.add(user.getId(), goalRequest);
     }
 
     @PutMapping("/{goalId}")
-    public GoalDto.Basic modify(@RequestBody GoalDto.Basic goalRequest) {
+    public GoalDto modify(@RequestBody GoalDto goalRequest) {
         return goalService.modify(goalRequest);
     }
 
     @PutMapping("/{goalId}/complete")
-    public GoalDto.Basic complete(@PathVariable Long goalId) {
+    public GoalDto complete(@PathVariable Long goalId) {
         return goalService.complete(goalId);
     }
 

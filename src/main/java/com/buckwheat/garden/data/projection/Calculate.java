@@ -1,6 +1,6 @@
 package com.buckwheat.garden.data.projection;
 
-import com.buckwheat.garden.data.dto.PlantDto;
+import com.buckwheat.garden.data.dto.plant.PlantResponse;
 import com.buckwheat.garden.data.entity.Plant;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ public class Calculate {
     private LocalDate postponeDate;
     private LocalDate birthday;
     private LocalDate latestWateringDate;
-    private PlantDto.Response plant;
+    private PlantResponse plant;
     private Long gardenerId;
 
     public static Calculate from(RawGarden rawGarden, Long gardenerId){
@@ -24,7 +24,7 @@ public class Calculate {
                 .postponeDate(rawGarden.getPostponeDate())
                 .birthday(rawGarden.getBirthday())
                 .latestWateringDate(rawGarden.getLatestWateringDate())
-                .plant(PlantDto.Response.from(rawGarden))
+                .plant(PlantResponse.from(rawGarden))
                 .gardenerId(gardenerId)
                 .build();
     }
@@ -40,7 +40,7 @@ public class Calculate {
                 .postponeDate(plant.getPostponeDate())
                 .birthday(plant.getBirthday())
                 .latestWateringDate(latestWateringDate)
-                .plant(PlantDto.Response.from(plant))
+                .plant(PlantResponse.from(plant))
                 .gardenerId(gardenerId)
                 .build();
     }

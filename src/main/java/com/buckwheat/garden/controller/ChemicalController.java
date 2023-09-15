@@ -1,7 +1,8 @@
 package com.buckwheat.garden.controller;
 
+import com.buckwheat.garden.data.dto.chemical.ChemicalDetail;
+import com.buckwheat.garden.data.dto.chemical.ChemicalDto;
 import com.buckwheat.garden.data.token.UserPrincipal;
-import com.buckwheat.garden.data.dto.ChemicalDto;
 import com.buckwheat.garden.service.ChemicalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ public class ChemicalController {
      * @return 모든 비료 리스트 반환
      */
     @GetMapping("")
-    public List<ChemicalDto.Basic> getAll(@AuthenticationPrincipal UserPrincipal user){
+    public List<ChemicalDto> getAll(@AuthenticationPrincipal UserPrincipal user){
         return chemicalService.getAll(user.getId());
     }
 
@@ -33,7 +34,7 @@ public class ChemicalController {
      * @return 해당 약품의 주기 리스트(WateringDto)
      */
     @GetMapping("/{chemicalId}")
-    public ChemicalDto.Detail getDetail(@PathVariable Long chemicalId, @AuthenticationPrincipal UserPrincipal user){
+    public ChemicalDetail getDetail(@PathVariable Long chemicalId, @AuthenticationPrincipal UserPrincipal user){
         return chemicalService.getDetail(chemicalId, user.getId());
     }
 
@@ -44,7 +45,7 @@ public class ChemicalController {
      * @return 수정한 ChemicalDTO
      */
     @PostMapping("")
-    public ChemicalDto.Basic add(@AuthenticationPrincipal UserPrincipal user, @RequestBody ChemicalDto.Basic chemicalRequest){
+    public ChemicalDto add(@AuthenticationPrincipal UserPrincipal user, @RequestBody ChemicalDto chemicalRequest){
         return chemicalService.add(user.getId(), chemicalRequest);
     }
 
@@ -55,7 +56,7 @@ public class ChemicalController {
      * @return 수정한 Chemical
      */
     @PutMapping("/{chemicalId}")
-    public ChemicalDto.Basic modify(@AuthenticationPrincipal UserPrincipal user, @RequestBody ChemicalDto.Basic chemicalRequest){
+    public ChemicalDto modify(@AuthenticationPrincipal UserPrincipal user, @RequestBody ChemicalDto chemicalRequest){
         return chemicalService.modify(user.getId(), chemicalRequest);
     }
 
