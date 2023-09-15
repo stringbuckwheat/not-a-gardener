@@ -8,7 +8,7 @@ import {
   CButtonGroup
 } from '@coreui/react'
 import updateData from "../../api/backend-api/common/updateData";
-import FormInputFeedback from "../../components/form/input/FormInputFeedback";
+import InputFeedback from "../../components/form/input/InputFeedback";
 import DeleteModal from "../../components/modal/DeleteModal";
 import ChangePasswordModal from "../../components/modal/ChangePassWordModal";
 
@@ -62,7 +62,7 @@ const GardenerDetail = ({gardener, setGardener}) => {
           <CCol md={7}>
             <CForm>
               <h3 className="mt-3 mb-5 text-garden">회원 정보</h3>
-              <FormInputFeedback
+              <InputFeedback
                 label="이름"
                 name="name"
                 defaultValue={gardener.name}
@@ -73,13 +73,13 @@ const GardenerDetail = ({gardener, setGardener}) => {
                 onChange={onChange}
                 disabled={isDisabled}/>
 
-              <FormInputFeedback
+              <InputFeedback
                 label={isBasicLogin ? "아이디" : "소셜 로그인"}
                 name="username"
                 defaultValue={isBasicLogin ? gardener.username : getSocialAccount()}
                 disabled={true}/>
 
-              <FormInputFeedback
+              <InputFeedback
                 label="이메일"
                 name="email"
                 defaultValue={gardener.email}
@@ -90,7 +90,7 @@ const GardenerDetail = ({gardener, setGardener}) => {
                 invalid={!emailRegex.test(modifyGardener.email)}
                 feedbackInvalid={modifyGardener.email == "" ? "" : "이메일 형식을 확인해주세요"}/>
 
-              <FormInputFeedback
+              <InputFeedback
                 label="가입일"
                 name="createDate"
                 defaultValue={gardener.createDate.split("T")[0]}

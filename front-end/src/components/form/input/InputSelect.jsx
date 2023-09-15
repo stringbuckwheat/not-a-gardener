@@ -2,7 +2,7 @@ import {CInputGroup, CInputGroupText, CFormSelect} from "@coreui/react";
 import AddPlaceInPlantForm from "./AddPlaceInPlantForm";
 import {useState} from "react";
 
-const FormInputSelect = ({inputItem, onChange}) => {
+const InputSelect = ({inputItem, onChange}) => {
   const [optionArray, setOptionArray] = useState(inputItem.optionArray);
 
   const addPlace = (place) => {
@@ -33,4 +33,4 @@ const FormInputSelect = ({inputItem, onChange}) => {
   )
 }
 
-export default FormInputSelect;
+export default InputSelect;

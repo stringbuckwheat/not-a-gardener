@@ -1,5 +1,5 @@
 import {useState} from "react";
-import ItemForm from "src/components/form/ItemForm";
+import FormProvider from "src/components/form/FormProvider";
 import getPlaceInputItemArray from "src/utils/function/getPlaceInputItemArray";
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 import updateData from "../../api/backend-api/common/updateData";
@@ -8,7 +8,7 @@ import {useNavigate} from "react-router-dom";
 /**
  * 장소 수정
  * @param props
- * @returns {JSX.Element} ItemForm (자동 폼 만들기)
+ * @returns {JSX.Element} FormProvider (자동 폼 만들기)
  * @constructor
  */
 const ModifyPlace = ({changeModifyState, place}) => {
@@ -30,7 +30,7 @@ const ModifyPlace = ({changeModifyState, place}) => {
   }
 
   return (
-    <ItemForm
+    <FormProvider
       title="장소 수정"
       inputObject={modifyPlace}
       itemObjectArray={getPlaceInputItemArray(place)}

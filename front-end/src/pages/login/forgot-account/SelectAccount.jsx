@@ -1,7 +1,7 @@
 import {Radio, Space} from "antd";
 import React, {useState} from "react";
-import Button from "../../../components/button/defaultButton/Button";
 import ChangePassword from "./ChangePassword";
+import {CButton} from "@coreui/react";
 
 /**
  * 비밀번호 찾기를 누른 유저의 신원확인 후 비밀번호를 변경할 아이디를 보여주는 페이지
@@ -36,7 +36,11 @@ const SelectAccount = ({email, gardenerList}) => {
           </Space>
         </Radio.Group>
         <p className="text-orange" style={style}>비밀번호를 변경할 계정을 골라주세요</p>
-        <Button onClick={() => setIsSelected(true)} name="제출" size="sm" color="orange" className="float-end mt-2"/>
+        <CButton
+          type={"button"}
+          size={"sm"}
+          onClick={() => setIsSelected(true)}
+          className={"bg-orange float-end mt-2 border-0 text-white"}>{"제출"}</CButton>
       </div>
     )
 }

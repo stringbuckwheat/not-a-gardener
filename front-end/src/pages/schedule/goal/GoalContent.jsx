@@ -1,4 +1,4 @@
-import GButton from "../../../components/button/defaultButton/GButton";
+import GButton from "../../../components/button/GButton";
 import React from "react";
 import AddGoal from "./AddGoal";
 import GoalCard from "./GoalCard";

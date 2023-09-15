@@ -1,5 +1,5 @@
 import getPlaceInputItemArray from "src/utils/function/getPlaceInputItemArray";
-import ItemForm from "src/components/form/ItemForm";
+import FormProvider from "src/components/form/FormProvider";
 import {useState} from "react";
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 import postData from "../../api/backend-api/common/postData";
@@ -37,7 +37,7 @@ const AddPlace = ({addPlace, afterAdd}) => {
   }
 
   return (
-    <ItemForm
+    <FormProvider
       title="장소 추가"
       inputObject={place}
       itemObjectArray={getPlaceInputItemArray(place)}

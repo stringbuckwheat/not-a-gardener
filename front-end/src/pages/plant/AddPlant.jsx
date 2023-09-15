@@ -1,5 +1,5 @@
 import {useState} from "react";
-import ItemForm from "src/components/form/ItemForm";
+import FormProvider from "src/components/form/FormProvider";
 import getPlantFormArray from "../../utils/function/getPlantFormArray";
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 import postData from "../../api/backend-api/common/postData";
@@ -32,7 +32,7 @@ const AddPlant = ({placeList, addPlant, afterAdd}) => {
   }
 
   return (
-    <ItemForm
+    <FormProvider
       title="식물 추가"
       inputObject={plant}
       itemObjectArray={getPlantFormArray(placeList)}

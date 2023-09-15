@@ -3,8 +3,8 @@ import LinkHoverTag from "../../components/tag/basic/LinkHoverTag";
 import isEndWithVowel from "../../utils/function/isEndWithVowel";
 import {useState} from "react";
 import {DeleteOutlined} from "@ant-design/icons";
-import DeleteIconButton from "../../components/button/DeleteIconButton";
 import deleteData from "../../api/backend-api/common/deleteData";
+import DeleteIconBtn from "../../components/button/DeleteIconBtn";
 
 const WateringList = ({wateringDetail, onDelete}) => {
   console.log("wateringDetail", wateringDetail);
@@ -30,28 +30,29 @@ const WateringList = ({wateringDetail, onDelete}) => {
   return (
     <>
       {wateringDetail.map((watering) => {
-        console.log("watering", watering);
-        const forDelete = {wateringId: watering.id, wateringDate: watering.wateringDate};
+          console.log("watering", watering);
+          const forDelete = {wateringId: watering.id, wateringDate: watering.wateringDate};
 
-        return (
-        <div key={watering.id}>
-          <Space>
-            <Badge status="warning"/>
-            <span>
-          <LinkHoverTag color="green" to={`/plant/${watering.plantId}`} content={watering.plantName}/>
-          <Space>
-            <span>{`에게 ${getChemicalMsg(watering.chemicalName)}`}</span>
-            <Popconfirm
-              title={"이 물주기를 삭제할까요?"}
-              okText="네"
-              cancelText="아니요"
-              onConfirm={() => deleteWatering(forDelete)}>
-              <DeleteIconButton/>
-            </Popconfirm>
-          </Space>
-        </span>
-          </Space>
-        </div>)
+          return (
+            <div key={watering.id}>
+              <Space>
+                <Badge status="warning"/>
+                <span>
+                  <LinkHoverTag color="green" to={`/plant/${watering.plantId}`} content={watering.plantName}/>
+                  <Space>
+                  <span>{`에게 ${getChemicalMsg(watering.chemicalName)}`}</span>
+                  <Popconfirm
+                    title={"이 물주기를 삭제할까요?"}
+                    okText="네"
+                    cancelText="아니요"
+                    onConfirm={() => deleteWatering(forDelete)}>
+                    <DeleteIconBtn/>
+                  </Popconfirm>
+                </Space>
+                </span>
+              </Space>
+            </div>
+          )
         }
       )}
     </>)

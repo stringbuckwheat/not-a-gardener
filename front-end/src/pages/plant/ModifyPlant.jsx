@@ -1,6 +1,6 @@
 import mediumArray from "src/utils/dataArray/mediumArray";
 import {useState} from "react";
-import ItemForm from "src/components/form/ItemForm";
+import FormProvider from "src/components/form/FormProvider";
 import ModifyFormButtons from "src/components/button/ModifyFormButtons";
 
 const ModifyPlant = ({changeModifyState, placeList, plant}) => {
@@ -49,7 +49,7 @@ const ModifyPlant = ({changeModifyState, placeList, plant}) => {
   ];
 
   return (
-    <ItemForm
+    <FormProvider
       title="식물 수정"
       inputObject={updatedPlant}
       itemObjectArray={itemObjectArray}

@@ -1,5 +1,5 @@
 import {CContainer} from "@coreui/react";
-import GButton from "../../components/button/defaultButton/GButton";
+import GButton from "../../components/button/GButton";
 import {useState} from "react";
 import getChemicalListForSelect from "../../api/service/getChemicalListForSelect";
 import getData from "../../api/backend-api/common/getData";

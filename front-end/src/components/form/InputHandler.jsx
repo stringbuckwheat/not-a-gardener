@@ -1,8 +1,8 @@
-import FormInputSelect from './input/FormInputSelect'
-import FormInput from './input/FormInput'
-import FormInputDate from './input/FormInputDate';
+import InputSelect from './input/InputSelect'
+import Input from './input/Input'
+import InputDate from './input/InputDate';
 
-const FormInputHandler = ({itemObjectArray, onChange, inputObject}) => {
+const InputHandler = ({itemObjectArray, onChange, inputObject}) => {
   // text, number
   const invalidMsg = (inputItem) => {
     return inputItem.inputType === "text" ? invalidMsgForText(inputItem) : invalidMsgForNumber(inputItem);
@@ -20,11 +20,11 @@ const FormInputHandler = ({itemObjectArray, onChange, inputObject}) => {
         const commonProps = {key: inputItem.name, inputItem, onChange};
         const type = inputItem.inputType;
 
-        return type === "select" ? <FormInputSelect {...commonProps}/>
-          : type === "date" ? <FormInputDate {...commonProps}/>
-            : <FormInput {...commonProps} feedbackInvalid={invalidMsg(inputItem)}/>
+        return type === "select" ? <InputSelect {...commonProps}/>
+          : type === "date" ? <InputDate {...commonProps}/>
+            : <Input {...commonProps} feedbackInvalid={invalidMsg(inputItem)}/>
       }
     ))
 }
 
-export default FormInputHandler
+export default InputHandler

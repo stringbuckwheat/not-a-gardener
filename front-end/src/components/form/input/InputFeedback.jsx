@@ -1,7 +1,7 @@
 import {CFormInput, CInputGroup, CInputGroupText} from "@coreui/react";
 import React from "react";
 
-const FormInputFeedback = ({
+const InputFeedback = ({
                              label,
                              type,
                              placeholder,
@@ -34,4 +34,4 @@ const FormInputFeedback = ({
   )
 }
 
-export default FormInputFeedback;
+export default InputFeedback;

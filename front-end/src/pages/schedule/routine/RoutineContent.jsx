@@ -1,4 +1,4 @@
-import GButton from "../../../components/button/defaultButton/GButton";
+import GButton from "../../../components/button/GButton";
 import AddRoutine from "./AddRoutine";
 import RoutineCard from "./RoutineCard";
 import {Row} from "antd";

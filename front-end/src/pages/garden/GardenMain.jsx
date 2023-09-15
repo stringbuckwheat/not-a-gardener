@@ -2,7 +2,7 @@ import GardenTodoList from "./todolist/GardenTodoList";
 import React, {useEffect, useState} from "react";
 import {CRow} from "@coreui/react";
 import getChemicalListForSelect from "../../api/service/getChemicalListForSelect";
-import GButton from "../../components/button/defaultButton/GButton";
+import GButton from "../../components/button/GButton";
 import WaitingForWateringList from "./waitinglist/WaitingForWateringList";
 import RoutineList from "./RoutineList";
 import {notification, Space} from "antd";

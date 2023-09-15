@@ -2,14 +2,14 @@ import {Form, Select, Space} from "antd";
 import {CButton} from "@coreui/react";
 import {useEffect, useState} from "react";
 import getData from "../../../api/backend-api/common/getData";
-import modifyPlantPlace from "../../../api/backend-api/place/modifyPlantPlace";
 import {useNavigate} from "react-router-dom";
+import updateData from "../../../api/backend-api/common/updateData";
 
 /**
  * 장소 페이지에서 다른 장소에 있는 식물을 이 장소로 이동하는 form
  * '다른 장소의 식물 이동'을 눌렀을 시 실행됨
  * 부모 컴포넌트: AddPlantInPlaceButtons
- * @param placeNo
+ * @param placeId
  * @param setMoveFormVisible
  * @returns {JSX.Element}
  * @constructor
@@ -50,7 +50,7 @@ const ModifyPlaceOfPlantForm = ({placeId, setMoveFormVisible}) => {
 
   const submit = async () => {
     // 장소 업데이트
-    await modifyPlantPlace({placeId, plantList: selectedPlantList});
+    await updateData(`/plant/place/${placeId}`, {placeId, plants: selectedPlantList})
     const res = await getData(`/place/${placeId}`);
 
     setMoveFormVisible(false);

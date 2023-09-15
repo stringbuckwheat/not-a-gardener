@@ -1,7 +1,7 @@
 import {CCol, CRow, CContainer} from "@coreui/react";
 import {Select, Space} from "antd";
 import {useEffect, useState} from "react";
-import GButton from "../../components/button/defaultButton/GButton";
+import GButton from "../../components/button/GButton";
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 import postData from "../../api/backend-api/common/postData";
 

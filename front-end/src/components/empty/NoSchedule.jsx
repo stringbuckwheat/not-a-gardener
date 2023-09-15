@@ -1,4 +1,4 @@
-import GButton from "../button/defaultButton/GButton";
+import GButton from "../button/GButton";
 import React from "react";
 
 /**

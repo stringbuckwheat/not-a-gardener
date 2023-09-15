@@ -2,7 +2,7 @@ import updateRoutineState from "../../api/backend-api/updateRoutineState";
 import {CModal, CModalBody} from "@coreui/react";
 import isEndWithVowel from "../../utils/function/isEndWithVowel";
 import React from "react";
-import GButton from "../button/defaultButton/GButton";
+import GButton from "../button/GButton";
 import {Button, Space} from "antd";
 import LinkHoverTag from "../tag/basic/LinkHoverTag";
 

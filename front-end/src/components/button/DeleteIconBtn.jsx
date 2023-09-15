@@ -1,7 +1,7 @@
 import {DeleteOutlined} from "@ant-design/icons";
 import {useState} from "react";
 
-const DeleteIconButton = ({onClick}) => {
+const DeleteIconBtn = ({onClick}) => {
   const [isHovered, setIsHovered] = useState(false);
   const handleHover = () => setIsHovered(!isHovered);
 
@@ -15,4 +15,4 @@ const DeleteIconButton = ({onClick}) => {
   )
 }
 
-export default DeleteIconButton
+export default DeleteIconBtn;

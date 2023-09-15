@@ -10,7 +10,7 @@ import 'dayjs/locale/ko';
  * @returns {JSX.Element}
  * @constructor
  */
-const FormInputDate = ({inputItem, onChange}) => {
+const InputDate = ({inputItem, onChange}) => {
   const handleOnChange = (dateString) => {
     const data = {
       target: {
@@ -37,4 +37,4 @@ const FormInputDate = ({inputItem, onChange}) => {
   )
 }
 
-export default FormInputDate;
+export default InputDate;

@@ -1,5 +1,5 @@
 import {CCard, CCardBody, CCol, CForm} from '@coreui/react'
-import FormInputHandler from './FormInputHandler'
+import InputHandler from './InputHandler'
 
 /**
  * Form 자동화 컴포넌트
@@ -11,7 +11,7 @@ import FormInputHandler from './FormInputHandler'
  * @returns {JSX.Element}
  * @constructor
  */
-const ItemForm = ({title, itemObjectArray, submitBtn, inputObject, onChange}) => {
+const FormProvider = ({title, itemObjectArray, submitBtn, inputObject, onChange}) => {
   return (
     <div className="row justify-content-md-center align-items-center height-95">
       <CCol md="auto" className="minWidth-70">
@@ -20,7 +20,7 @@ const ItemForm = ({title, itemObjectArray, submitBtn, inputObject, onChange}) =>
             <h4 className="mt-3 mb-3">{title}</h4>
             <CForm validated={true}>
               {/* input, select 등을 구해서 채움 */}
-              <FormInputHandler
+              <InputHandler
                 itemObjectArray={itemObjectArray}
                 onChange={onChange}
                 inputObject={inputObject}/>
@@ -34,4 +34,4 @@ const ItemForm = ({title, itemObjectArray, submitBtn, inputObject, onChange}) =>
   );
 }
 
-export default ItemForm;
+export default FormProvider;

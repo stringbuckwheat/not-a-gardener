@@ -3,7 +3,7 @@ import {useEffect, useState} from "react"
 import ChemicalTag from "src/components/tag/ChemicalTag";
 import DetailLayout from "src/components/data/layout/DetailLayout";
 import {Table} from "antd";
-import ItemForm from "src/components/form/ItemForm";
+import FormProvider from "src/components/form/FormProvider";
 import ModifyFormButtons from "src/components/button/ModifyFormButtons";
 import getChemicalFormArray from "../../utils/function/getChemicalFormArray";
 import wateringTableColumnArray from "../../utils/dataArray/wateringTableColumnInChemicalArray";
@@ -87,7 +87,7 @@ const ChemicalDetail = () => {
           dataSource={wateringList}/>}
       />)
     :
-    (<ItemForm
+    (<FormProvider
         title="비료/살균/살충제 수정"
         inputObject={modifyChemical}
         itemObjectArray={getChemicalFormArray(chemical)}

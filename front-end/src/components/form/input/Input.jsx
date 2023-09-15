@@ -8,7 +8,7 @@ import {CInputGroup, CInputGroupText, CFormInput} from "@coreui/react";
  * @returns {JSX.Element}
  * @constructor
  */
-const FormInput = ({inputItem, onChange, feedbackInvalid}) => {
+const Input = ({inputItem, onChange, feedbackInvalid}) => {
   return (
     <CInputGroup className="mb-3 mt-3">
       <CInputGroupText id="basic-addon1">{inputItem.label}</CInputGroupText>
@@ -28,4 +28,4 @@ const FormInput = ({inputItem, onChange, feedbackInvalid}) => {
   )
 }
 
-export default FormInput;
+export default Input;

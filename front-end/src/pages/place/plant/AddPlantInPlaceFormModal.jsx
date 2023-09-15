@@ -1,5 +1,5 @@
 import getPlantFormArrayWithPlaceName from "../../../utils/function/getPlantFormArrayWithPlaceName";
-import ItemForm from "../../../components/form/ItemForm";
+import FormProvider from "../../../components/form/FormProvider";
 import {useState} from "react";
 import postData from "../../../api/backend-api/common/postData";
 import {ConfigProvider, Modal} from "antd";
@@ -55,7 +55,7 @@ const AddPlantInPlaceFormModal = ({visible, callBackFunction, placeId, placeName
              cancelText="돌아가기"
              onCancel={() => setAddPlantFormVisible(false)}
       >
-        <ItemForm
+        <FormProvider
           inputObject={plant}
           itemObjectArray={getPlantFormArrayWithPlaceName(placeName)}
           onChange={onChange}

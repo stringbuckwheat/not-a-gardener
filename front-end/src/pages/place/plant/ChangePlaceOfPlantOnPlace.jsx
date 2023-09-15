@@ -2,10 +2,10 @@ import {Space, Select} from 'antd';
 import getPlaceList from 'src/api/service/getPlaceList';
 import {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import modifyPlantPlace from 'src/api/backend-api/place/modifyPlantPlace';
 import getPlaceListForOptionExceptHere from 'src/api/service/getPlaceListForOptionExceptHere';
 import {SwapRightOutlined} from '@ant-design/icons';
 import ValidationSubmitButton from "../../../components/button/ValidationSubmitButton";
+import updateData from "../../../api/backend-api/common/updateData";
 
 /**
  * 장소 페이지에서 (이미 이 장소에 있는) 식물 다른 장소로 변경하기
@@ -48,7 +48,7 @@ const ChangePlaceOfPlantOnPlace = ({setSelectedRowKeys, selectedPlantId}) => {
 
 
   const modifyPlaceOfPlant = async () => {
-    await modifyPlantPlace({placeId, plantList: selectedPlantId});
+    await updateData(`/plant/place/${placeId}`, {placeId, plants: selectedPlantId})
     setSelectedRowKeys([]);
     navigate(`/place/${placeId}`);
   }
