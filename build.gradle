@@ -82,14 +82,15 @@ tasks.withType(JavaCompile){
 	options.generatedSourceOutputDirectory = file(queryDslDir)
 }
 
+def profile = project.hasProperty("profile") ? project.property("profile").toString() : "local"
+
 sourceSets {
 	main {
 		resources {
-			srcDirs = ["$frontDir/build", "$projectDir/src/main/resources"]
+			srcDirs = ["$frontDir/build", "$projectDir/src/main/resources", "src/main/resources/resources-${profile}"]
 		}
 	}
 }
-
 
 processResources {
 	dependsOn "copyWebApp"

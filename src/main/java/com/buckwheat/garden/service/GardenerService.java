@@ -10,6 +10,9 @@ public interface GardenerService {
     // id, pw으로 본인 확인
     boolean identify(Long id, Login login);
 
+    // 로그아웃
+    void logOut(Long id);
+
     // 회원 정보 변경
     GardenerDetail modify(GardenerDetail gardenerDetail);
 

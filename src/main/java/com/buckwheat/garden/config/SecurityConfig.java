@@ -7,6 +7,7 @@ import com.buckwheat.garden.filter.oauth2.OAuth2SuccessHandler;
 import com.buckwheat.garden.service.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,20 +31,24 @@ public class SecurityConfig {
     private final OAuth2SuccessHandler successHandler;
     private final JwtExceptionFilter jwtExceptionFilter;
 
+    @Value("${origin}")
+    private String allowedOrigin;
+
     /**
      * 리액트 서버와 통신하기 위해 CORS 문제 해결
      * @return CorsFilter
      */
     @Bean
     public CorsFilter corsFilter() {
+        log.debug("origin: {}", allowedOrigin);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 
         // 요청에 credential 권한이 있는지 없는지
         // Authorization으로 사용자 인증 시 true
         config.setAllowCredentials(true);
-        //config.addAllowedOrigin("http://not-a-gardener.xyz");
-        config.addAllowedOrigin("http://localhost:3000"); // 요청 권한을 줄 도메인
+        config.addAllowedOrigin(allowedOrigin);
         config.addAllowedHeader("*"); // 노출해도 되는 헤더
 
         // 허용할 메소드.
@@ -75,7 +80,7 @@ public class SecurityConfig {
                         "/place/**", "/plant/**", "/routine/**", "/watering/**").authenticated() // 인증 권한 필요
 
                 .and()
-                .addFilter(this.corsFilter()) // CORS 필터 등록
+                .addFilter(this.corsFilter()) // CORS 필터 등록 // ********
 
                 // 기본 인증 필터인 UsernamePasswordAuthenticationFilter 대신 Custom 필터 등록
                 .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
