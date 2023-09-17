@@ -3,7 +3,7 @@
  * @param gardener
  * @returns {Promise<void>}
  */
-const setGardener = async (res) => {
+const setLocalStorage = async (res) => {
   console.log("login 이후 gardener response", res);
 
   const info = res.simpleInfo;
@@ -19,4 +19,4 @@ const setGardener = async (res) => {
   localStorage.setItem("provider", info.provider); // 가장 최근 소셜로그인을 띄울 용도
 }
 
-export default setGardener;
+export default setLocalStorage;

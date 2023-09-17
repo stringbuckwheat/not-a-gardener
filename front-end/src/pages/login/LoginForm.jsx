@@ -4,7 +4,7 @@ import {cilLockLocked, cilUser} from "@coreui/icons";
 import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
-import setGardener from "../../api/service/setGardener";
+import setLocalStorage from "../../api/service/setLocalStorage";
 
 const LoginForm = () => {
   const [msg, setMsg] = useState('');
@@ -37,7 +37,7 @@ const LoginForm = () => {
   const submit = async () => {
     try {
       const res = await axios.post(`${process.env.REACT_APP_API_URL}/login`, login);
-      await setGardener(res.data);
+      await setLocalStorage(res.data);
 
       // garden 페이지로 이동
       navigate('/', {replace: true});

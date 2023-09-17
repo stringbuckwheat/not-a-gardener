@@ -1,9 +1,13 @@
 import React, {useEffect} from 'react'
-import {useNavigate, useParams} from 'react-router-dom';
+import {Navigate, useNavigate, useParams} from 'react-router-dom';
 import getData from "../../api/backend-api/common/getData";
-import setGardener from "../../api/service/setGardener";
+import setLocalStorage from "../../api/service/setLocalStorage";
 
 const GetToken = () => {
+  if (localStorage.getItem("accessToken")) {
+    return <Navigate to="/" replace={true}/>
+  }
+
   let {accessToken} = useParams();
   const navigate = useNavigate();
 
@@ -12,7 +16,7 @@ const GetToken = () => {
     const res = await getData(`${process.env.REACT_APP_API_URL}/info`);
 
     res.token.accessToken = accessToken;
-    await setGardener(res);
+    await setLocalStorage(res);
 
     navigate("/", {replace: true});
   }

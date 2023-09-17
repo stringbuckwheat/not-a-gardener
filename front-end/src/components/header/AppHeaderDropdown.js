@@ -19,8 +19,8 @@ import logOut from "../../utils/function/logout";
 
 // account, setting 부분
 const AppHeaderDropdown = () => {
-  const logOutToServer = () => {
-    postData("/gardener/logout", null);
+  const logOutToServer = async () => {
+    await postData("/gardener/logout", null);
     logOut();
   }
 

@@ -1,6 +1,6 @@
 import {ReactComponent as Logo} from "../../assets/images/logo.svg"
 import React, {useState} from 'react'
-import {useNavigate} from 'react-router-dom'
+import {Navigate, useNavigate} from 'react-router-dom'
 import {
   CCard,
   CCardBody,
@@ -14,11 +14,15 @@ import {cilHappy, cilLockLocked, cilUser} from '@coreui/icons'
 import axios from 'axios'
 import Booped from "../../components/animation/Booped";
 import {Space} from "antd";
-import setGardener from "../../api/service/setGardener";
+import setLocalStorage from "../../api/service/setLocalStorage";
 import InputFeedback from "../../components/form/input/InputFeedback";
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 
 const Register = () => {
+  if (localStorage.getItem("accessToken")) {
+    return <Navigate to="/" replace={true}/>
+  }
+
   // submit용 객체
   const [register, setRegister] = useState({
     username: "",
@@ -64,7 +68,7 @@ const Register = () => {
     console.log("register", register);
 
     const res = await axios.post(`${process.env.REACT_APP_API_URL}/register`, register);
-    await setGardener(res.data);
+    await setLocalStorage(res.data);
 
     navigate('/', {replace: true});
 

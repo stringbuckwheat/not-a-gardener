@@ -5,6 +5,7 @@ import React, {useState} from "react";
 import NotifyUsername from "./forgot-account/NotifyUsername";
 import SelectAccount from "./forgot-account/SelectAccount";
 import ValidateGardener from "./forgot-account/ValidateGardener";
+import {Navigate} from "react-router-dom";
 
 /**
  * 아이디를 찾을지, 비밀번호를 찾을지 선택하는 페이지
@@ -14,6 +15,10 @@ import ValidateGardener from "./forgot-account/ValidateGardener";
  * @returns {JSX.Element} 아이디/비번찾기 고르기 페이지, 아이디 찾기 페이지, 비번 찾기 페이지
  */
 const ForgotAccount = () => {
+  if (localStorage.getItem("accessToken")) {
+    return <Navigate to="/" replace={true}/>
+  }
+
   // 찾을 회원정보 저장(username, password)
   const [forgot, setForgot] = useState("");
   // 유저가 입력한 이메일

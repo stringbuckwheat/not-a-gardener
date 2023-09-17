@@ -1,5 +1,5 @@
 import axios from "axios";
-import LogOut from "../utils/function/logout";
+import logOut from "../utils/function/logout";
 
 let refreshToken = "";
 
@@ -26,7 +26,7 @@ const reissueAccessToken = async () => {
  * : local storage에 accessToken 값이 있다면 헤더에 넣어준다.
  */
 authAxios.interceptors.request.use(
-   (config) => {
+  (config) => {
     const accessToken = localStorage.getItem("accessToken");
 
     // local storage에 accessToken 값이 있다면 헤더에 넣어준다.
@@ -54,18 +54,13 @@ authAxios.interceptors.response.use(
 
     if (errorCode === "B001") {
       const originRequest = error?.config;
-      let newAccessToken = "";
 
       // token 재발급
-      try{
-        console.log("토큰 만료 -> reissue access token");
-        newAccessToken = await reissueAccessToken(); // Token 클래스 받아와야함
-      } catch (error){
-        console.log("error", error);
-      }
+      console.log("토큰 만료 -> reissue access token");
+      const res = await reissueAccessToken(); // Token 클래스 받아와야함
 
-      const accessToken = newAccessToken.accessToken;
-      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("accessToken", res.accessToken);
+      localStorage.setItem("refreshToken", res.refreshToken); //RTR
 
       // 진행 중인 요청 이어하기
       return authAxios({
@@ -73,9 +68,12 @@ authAxios.interceptors.response.use(
         headers: {...originRequest.headers, Authorization: `Bearer ${accessToken}`},
         sent: true
       })
-    } else if(errorCode == "B002" || errorCode == "B009" || errorCode == "B010" || errorCode == "B011"){
+
+    } else if (errorCode == "B002") { // Refresh Token 만료
       alert(error.response.data.message);
-      LogOut();
+      logOut();
+    } else if (errorCode == "B009" || errorCode == "B011" || errorCode == "B010") {
+      logOut();
     }
 
     return Promise.reject(error.response.data);

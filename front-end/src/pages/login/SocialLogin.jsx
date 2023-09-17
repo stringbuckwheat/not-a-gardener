@@ -29,7 +29,6 @@ const SocialLogin = () => {
             href={provider !== "naver" ? `${authorizationUrl}/${provider}` : "javascript:alert('검수 승인 대기중입니다')"}
             className="social-button"
             id={`${provider}-connect`}>
-
           </a>
           {
             provider === recentLogin
