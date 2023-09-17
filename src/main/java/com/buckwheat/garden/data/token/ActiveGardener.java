@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.RedisHash;
 import java.time.LocalDateTime;
 
 @Getter
-@RedisHash(value="activeGardeners", timeToLive = 10800)
+@RedisHash(value="activeGardener", timeToLive = 10800)
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

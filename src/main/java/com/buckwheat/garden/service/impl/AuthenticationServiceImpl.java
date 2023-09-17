@@ -104,20 +104,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .orElseThrow(() -> new BadCredentialsException(ExceptionCode.NO_TOKEN_IN_REDIS.getCode()));
         RefreshToken savedRefreshToken = activeGardener.getRefreshToken();
 
-        /**
-         * 1. 잘못된 refresh token
-         * 2. expired된 refresh token을 사용
-         */
-
         if (!reqRefreshToken.equals(savedRefreshToken.getToken())) {
-            log.debug("redis의 refresh token과 일치하지 않음");
             // redis의 refresh token과 일치하지 않음 -- B011
-            // Redis에서 쫓아내
+            redisRepository.deleteById(token.getGardenerId());
             throw new BadCredentialsException(ExceptionCode.INVALID_REFRESH_TOKEN.getCode());
         } else if (savedRefreshToken.getExpiredAt().isBefore(LocalDateTime.now())) {
             // refresh token 만료 -- B002
-            log.debug("refresh token 만료");
-            // Redis에서 쫓아내
+            redisRepository.deleteById(token.getGardenerId());
             throw new BadCredentialsException(ExceptionCode.REFRESH_TOKEN_EXPIRED.getCode());
         }
 
