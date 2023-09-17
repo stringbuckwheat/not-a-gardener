@@ -99,7 +99,7 @@ public class TokenProviderImpl implements TokenProvider {
 
     public RefreshToken createRefreshToken(Long gardenerId, String name){
         RefreshToken refreshToken = new RefreshToken();
-        redisRepository.save(ActiveGardener.from(gardenerId, name, refreshToken));
+        redisRepository.save(new ActiveGardener(gardenerId, name, refreshToken, LocalDateTime.now()));
 
         return refreshToken;
     }

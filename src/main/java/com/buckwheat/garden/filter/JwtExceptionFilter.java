@@ -30,10 +30,10 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
         } catch (ExpiredJwtException e) {
             setErrorResponse(response, ErrorResponse.from(ExceptionCode.ACCESS_TOKEN_EXPIRED));
         } catch (MalformedJwtException e) {
-            log.info("Invalid JWT token");
+            // 토큰 값이 올바르지 않을 때
             setErrorResponse(response, ErrorResponse.from(ExceptionCode.INVALID_JWT_TOKEN));
-        } catch (JwtException | SecurityException | IllegalArgumentException e){
-            setErrorResponse(response, ErrorResponse.from(ExceptionCode.INVALID_JWT_TOKEN));
+        } catch (JwtException | SecurityException e){
+            setErrorResponse(response, ErrorResponse.from(ExceptionCode.CANNOT_LOGIN));
         } catch (UsernameNotFoundException e){
             setErrorResponse(response, ErrorResponse.from(ExceptionCode.REFRESH_TOKEN_EXPIRED));
         }

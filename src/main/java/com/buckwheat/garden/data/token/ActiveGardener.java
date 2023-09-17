@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
 public class ActiveGardener {
     @Id
     private Long gardenerId;
@@ -19,12 +18,7 @@ public class ActiveGardener {
     private RefreshToken refreshToken;
     private LocalDateTime createdAt;
 
-    public static ActiveGardener from(Long gardenerId, String name, RefreshToken refreshToken){
-        return ActiveGardener.builder()
-                .gardenerId(gardenerId)
-                .name(name)
-                .refreshToken(refreshToken)
-                .createdAt(LocalDateTime.now())
-                .build();
+    public void updateRefreshToken(RefreshToken newRefreshToken){
+        this.refreshToken = newRefreshToken;
     }
 }
