@@ -63,7 +63,7 @@ public class ForgotServiceImpl implements ForgotService {
         message.setSubject("[not-a-gardner] 본인확인 코드가 도착했어요.");
         message.setText(stringBuilder.toString());
 
-        // mailSender.send(message);
+        mailSender.send(message);
     }
 
     @Override

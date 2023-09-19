@@ -13,6 +13,7 @@ import com.buckwheat.garden.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -66,6 +67,7 @@ public class PlantDaoImpl implements PlantDao {
     }
 
     @Override
+    @Transactional
     public Plant update(PlantRequest plantRequest, Long gardenerId){
         Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(plantRequest.getPlaceId(), gardenerId)
                 .orElseThrow(NoSuchElementException::new);
@@ -73,35 +75,27 @@ public class PlantDaoImpl implements PlantDao {
         Plant plant = plantRepository.findByPlantIdAndGardener_GardenerId(plantRequest.getId(), gardenerId)
                 .orElseThrow(NoSuchElementException::new);
 
-        return plantRepository.save(plant.update(plantRequest, place));
-    }
-
-    @Override
-    public Plant update(Plant plant){
-        return plantRepository.save(plant);
+        return plant.update(plantRequest, place);
     }
 
     @Override
     public Plant updateWateringPeriod(Plant plant, int period) {
         if (period != plant.getRecentWateringPeriod()) {
-            Plant updatedPlant = plant.updateAverageWateringPeriod(period);
-            plantRepository.save(updatedPlant);
-
-            return updatedPlant;
+            return plant.updateAverageWateringPeriod(period);
         }
+
         return plant;
     }
 
     @Override
+    @Transactional
     public Place updatePlantPlace(ModifyPlace modifyPlantPlace, Long gardenerId){
         Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(modifyPlantPlace.getPlaceId(), gardenerId)
                 .orElseThrow(NoSuchElementException::new);
 
         for (Long plantId : modifyPlantPlace.getPlants()) {
             Plant plant = plantRepository.findById(plantId).orElseThrow(NoSuchElementException::new);
-
             plant.updatePlace(place);
-            plantRepository.save(plant);
         }
 
         return place;

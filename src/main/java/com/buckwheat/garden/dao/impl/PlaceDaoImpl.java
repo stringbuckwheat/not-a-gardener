@@ -8,6 +8,7 @@ import com.buckwheat.garden.repository.GardenerRepository;
 import com.buckwheat.garden.repository.PlaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -45,6 +46,7 @@ public class PlaceDaoImpl implements PlaceDao {
     }
 
     @Override
+    @Transactional
     public Place update(PlaceDto placeRequest, Long gardenerId) {
         Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(placeRequest.getId(), gardenerId)
                 .orElseThrow(NoSuchElementException::new);
@@ -55,7 +57,7 @@ public class PlaceDaoImpl implements PlaceDao {
                 placeRequest.getArtificialLight()
         );
 
-        return placeRepository.save(place);
+        return place;
     }
 
     @Override

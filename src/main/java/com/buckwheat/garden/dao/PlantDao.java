@@ -17,7 +17,6 @@ public interface PlantDao {
     List<Plant> getPlantsForGarden(Long gardenerId);
     Plant save(Long gardenerId, PlantRequest plantRequest);
     Plant update(PlantRequest plantRequest, Long gardenerId);
-    Plant update(Plant plant);
     Plant updateWateringPeriod(Plant plant, int period);
     Place updatePlantPlace(ModifyPlace modifyPlantPlaceDto, Long gardenerId);
     void updateConditionDate(Plant plant);

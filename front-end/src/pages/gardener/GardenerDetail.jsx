@@ -28,7 +28,7 @@ const GardenerDetail = ({gardener, setGardener}) => {
   // 수정사항 반영
   const onChange = (e) => {
     const {name, value} = e.target;
-    setModifyGardener(setModifyGardener => ({...modifyGardener, [name]: value}));
+    setModifyGardener(() => ({...modifyGardener, [name]: value}));
   }
 
   const onSubmit = async () => {

@@ -30,24 +30,23 @@ public class WateringDaoImpl implements WateringDao {
     @Override
     @Transactional
     public Watering addWatering(WateringRequest wateringRequest) {
-        Watering watering = wateringRepository.findByWateringDateAndPlant_PlantId(wateringRequest.getWateringDate(), wateringRequest.getPlantId());
+        Watering w = wateringRepository.findByWateringDateAndPlant_PlantId(wateringRequest.getWateringDate(), wateringRequest.getPlantId());
 
-        if(watering != null){
+        if(w != null){
             throw new AlreadyWateredException();
         }
 
-        Plant plant = plantRepository.findByPlantId(wateringRequest.getPlantId())
-                .orElseThrow(NoSuchElementException::new);
-
-        // conditionDate, postponeDate 초기화
-        plant = plant.initConditionDateAndPostponeDate();
-        plantRepository.save(plant);
-
         // 맹물 줬는지 비료 타서 줬는지
         Chemical chemical = chemicalRepository.findById(wateringRequest.getChemicalId()).orElse(null);
+        Plant plant = plantRepository.findByPlantId(wateringRequest.getPlantId())
+                .orElseThrow(NoSuchElementException::new);
+        plant.initConditionDateAndPostponeDate();
+
+        Watering watering = wateringRepository.save(wateringRequest.toEntityWithPlantAndChemical(plant, chemical));
+        plant.getWaterings().add(watering);
 
         // 저장
-        return wateringRepository.save(wateringRequest.toEntityWithPlantAndChemical(plant, chemical));
+        return watering;
     }
 
     @Override
@@ -67,6 +66,7 @@ public class WateringDaoImpl implements WateringDao {
     }
 
     @Override
+    @Transactional
     public Watering modifyWatering(WateringRequest wateringRequest) {
         // Mapping할 Entity 가져오기
         // chemical은 nullable이므로 orElse 사용
@@ -84,7 +84,6 @@ public class WateringDaoImpl implements WateringDao {
                 .orElseThrow(NoSuchElementException::new);
 
         // 수정
-        watering = wateringRepository.save(watering.update(wateringRequest.getWateringDate(), plant, chemical));
         return watering.update(wateringRequest.getWateringDate(), plant, chemical);
     }
 

@@ -60,7 +60,7 @@ public class Plant {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Place place;
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="plant")
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="plant", cascade = CascadeType.MERGE)
     @OrderBy("watering_date desc")
     private List<Watering> waterings = new ArrayList<>();
 

@@ -52,4 +52,10 @@ public class Chemical {
     public void deactivate(){
         this.active = "N";
     }
+
+    public void update(String name, String type, int period){
+        this.name = name;
+        this.type = type;
+        this.period = period;
+    }
 }

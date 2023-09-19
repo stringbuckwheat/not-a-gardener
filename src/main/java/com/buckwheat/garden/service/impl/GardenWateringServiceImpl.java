@@ -15,6 +15,7 @@ import com.buckwheat.garden.util.WateringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -43,6 +44,7 @@ public class GardenWateringServiceImpl implements GardenWateringService {
     }
 
     @Override
+    @Transactional
     public WateringMessage notDry(Long plantId) {
         // 리턴용
         WateringMessage wateringMsg = null;
@@ -70,7 +72,7 @@ public class GardenWateringServiceImpl implements GardenWateringService {
         } else if (period >= plant.getRecentWateringPeriod()) {
             // averageWateringPeriod 업데이트
             // 오늘 한정 garden에 안 뜨게 해야함 => updateDate에 오늘 날짜 추가
-            plantDao.update(plant.updateAverageWateringPeriod(period + 1).updateConditionDate());
+            plant.updateAverageWateringPeriod(period + 1).updateConditionDate();
 
             // 물주기 늘어나는 중이라는 wateringMsg 만들기
             wateringMsg = new WateringMessage(1, period + 1);
@@ -80,11 +82,12 @@ public class GardenWateringServiceImpl implements GardenWateringService {
     }
 
     @Override
+    @Transactional
     public int postpone(Long plantId) {
         Plant plant = plantDao.getPlantWithPlaceAndWatering(plantId);
         // 미룰래요(그냥 귀찮아서 물주기 미룬 경우) == averageWateringPeriod 업데이트 안함!!
         // postponeDate를 업데이트함
-        plantDao.update(plant.updatePostponeDate());
+        plant.updatePostponeDate();
 
         // waitingList에서는 오늘 하루만 없애줌
         return WateringCode.YOU_ARE_LAZY.getCode();
