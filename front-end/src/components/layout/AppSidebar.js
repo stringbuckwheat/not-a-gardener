@@ -14,8 +14,8 @@ import {useNavigate} from "react-router-dom";
 
 const AppSidebar = () => {
   const dispatch = useDispatch();
-  const unfoldable = useSelector((state) => state.sidebarUnfoldable);
-  const sidebarShow = useSelector((state) => state.sidebarShow);
+  const unfoldable = useSelector((state) => state.sidebar.sidebarUnfoldable);
+  const sidebarShow = useSelector((state) => state.sidebar.sidebarShow);
   const navigate = useNavigate();
 
   return (
@@ -25,7 +25,7 @@ const AppSidebar = () => {
       unfoldable={unfoldable}
       visible={sidebarShow}
       onVisibleChange={(visible) => {
-        dispatch({type: 'set', sidebarShow: visible})
+        dispatch({type: 'setSidebar', sidebarShow: visible})
       }}
     >
       <CSidebarBrand className="d-none d-md-flex">
