@@ -4,7 +4,7 @@ import AddGoal from "./AddGoal";
 import {useState} from "react";
 import GoalContent from "./GoalContent";
 
-const Goal = ({goals, plantList, addGoal, completeGoal, deleteGoal}) => {
+const Goal = ({goals, addGoal, completeGoal, deleteGoal}) => {
   const [isAddFormOpened, setIsAddFormOpen] = useState(false);
   const changeFormOpen = () => setIsAddFormOpen(!isAddFormOpened);
 
@@ -21,8 +21,7 @@ const Goal = ({goals, plantList, addGoal, completeGoal, deleteGoal}) => {
                 onClickShowAddForm={changeFormOpen}>
                 <AddGoal
                   onClickGoalFormButton={changeFormOpen}
-                  addGoal={addGoal}
-                  plantList={plantList}/>
+                  addGoal={addGoal}/>
               </NoSchedule>
             </>
             :
@@ -30,7 +29,6 @@ const Goal = ({goals, plantList, addGoal, completeGoal, deleteGoal}) => {
               isAddFormOpened={isAddFormOpened}
               changeFormOpen={changeFormOpen}
               addGoal={addGoal}
-              plantList={plantList}
               goalList={goals}
               completeGoal={completeGoal}
               deleteGoal={deleteGoal}

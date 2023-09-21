@@ -18,7 +18,6 @@ const Watering = () => {
     return date.toISOString().split("T").at(0);
   }
   const onMountWatering = async () => {
-    const month = new Date().getMonth() + 1;
     const res = await getData(`/watering/date/${getDate(new Date())}`);
 
     console.log("res", res);

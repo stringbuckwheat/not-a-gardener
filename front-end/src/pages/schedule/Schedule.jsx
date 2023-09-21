@@ -4,12 +4,14 @@ import {useEffect, useState} from "react";
 import getData from "../../api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";
 import Goal from "./goal/Goal";
+import {useDispatch} from "react-redux";
 
 const Schedule = () => {
+  const dispatch = useDispatch();
+
   const [loading, setLoading] = useState(true);
   const [routines, setRoutines] = useState({});
   const [goals, setGoals] = useState([]);
-  const [plantList, setPlantList] = useState([]);
 
   const onMountSchedule = async () => {
     // 루틴
@@ -29,15 +31,8 @@ const Schedule = () => {
     setGoals(goalList);
 
     // 식물 리스트
-    const res = await getData("/plant");
-    const plantList = res.map((plant) => (
-      {
-        label: `${plant.name} (${plant.name})`,
-        value: plant.id,
-      }
-    ))
-
-    setPlantList(() => plantList);
+    const data = await getData("/plant");
+    dispatch({type: 'setPlants', payload: data});
 
     setLoading(false);
   }
@@ -65,9 +60,13 @@ const Schedule = () => {
   ) : (
     <CContainer>
       <CCardGroup>
-        <Routine routines={routines} plantList={plantList}/>
-        <Goal goals={goals} plantList={plantList} addGoal={addGoal} deleteGoal={deleteGoal}
-              completeGoal={completeGoal}/>
+        <Routine routines={routines} />
+        <Goal
+          goals={goals}
+          addGoal={addGoal}
+          deleteGoal={deleteGoal}
+          completeGoal={completeGoal}
+        />
       </CCardGroup>
     </CContainer>
   )

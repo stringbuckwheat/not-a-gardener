@@ -25,7 +25,7 @@ const PlantListLayout = ({title, tags, bottomData, setSearchWord, addFormOpen}) 
             </div>
             <div className="float-end mb-3">
               <Space>
-                <Search setSearchWord={setSearchWord}/>
+                {/*<Search setSearchWord={setSearchWord}/>*/}
                 <CButton
                   onClick={addFormOpen}
                   color="success"

@@ -13,7 +13,6 @@ import WateringCodeIcon from "../../../components/etc/WateringCodeIcon";
  * @param deleteInTodoList
  * @param deleteInWaitingListAndTodoList todolist, waitinglist에서 모두 삭제 -- action 콜백함수
  * @param garden
- * @param chemicalList
  * @param openNotification
  * @param updateGardenAfterWatering
  * @param postponeWatering
@@ -24,7 +23,6 @@ const GardenCard = ({
                       index,
                       deleteInWaitingListAndTodoList,
                       garden,
-                      chemicalList,
                       openNotification,
                       updateGardenAfterWatering,
                       postponeWatering
@@ -53,7 +51,6 @@ const GardenCard = ({
             plantId={plant.id}
             plantName={plant.name}
             wateringCode={gardenDetail.wateringCode}
-            chemicalList={chemicalList}
             openNotification={openNotification}
             updateGardenAfterWatering={updateGardenAfterWatering}
             postponeWatering={postponeWatering}

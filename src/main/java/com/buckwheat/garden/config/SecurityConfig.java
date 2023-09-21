@@ -75,7 +75,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests() // 리퀘스트 설정
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // Preflight 요청 허용
-                .antMatchers("/login", "/token", "/oauth", "/register/**", "/forgot/**").permitAll() // 누구나 접근가능
+                .antMatchers("/login", "/token", "/oauth", "/register/**", "/forgot/**", "/logout").permitAll() // 누구나 접근가능
                 .antMatchers("/chemical/**", "/garden/**", "/gardener/**", "/goal/**", "/info",
                         "/place/**", "/plant/**", "/routine/**", "/watering/**").authenticated() // 인증 권한 필요
 

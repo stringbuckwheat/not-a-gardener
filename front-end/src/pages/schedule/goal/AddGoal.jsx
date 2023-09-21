@@ -8,7 +8,7 @@ import ValidationSubmitButton from "../../../components/button/ValidationSubmitB
 import InputFeedbackSpan from "../../../components/etc/InputFeedbackSpan";
 import postData from "../../../api/backend-api/common/postData";
 
-const AddGoal = ({onClickGoalFormButton, addGoal, plantList}) => {
+const AddGoal = ({onClickGoalFormButton, addGoal}) => {
   const style = {fontSize: "0.9em"}
   const formLabelColor = "garden"
 
@@ -44,7 +44,6 @@ const AddGoal = ({onClickGoalFormButton, addGoal, plantList}) => {
       <div className="mb-2">
         <span className={`text-${formLabelColor}`} style={style}>식물</span>
         <SelectPlant
-          plantList={plantList}
           onChange={(plantId) => setGoal(() => ({...goal, plantId: plantId}))}
           size="small"
           className="width-full"/>

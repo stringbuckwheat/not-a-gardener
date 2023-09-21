@@ -58,6 +58,7 @@
   },
   "devDependencies": {
     "@svgr/cli": "^6.5.1",
-    "babel-plugin-transform-remove-console": "^6.9.4"
+    "babel-plugin-transform-remove-console": "^6.9.4",
+    "redux-devtools-extension": "^2.13.9"
   }
 }

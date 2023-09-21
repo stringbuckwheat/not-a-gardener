@@ -5,7 +5,6 @@ import {useContext, useEffect, useRef, useState} from "react";
  * 식물 리스트에서 바로 수정하기위한 수정가능한 테이블 셀
  * @param editingKey
  * @param editable
- * @param updatePlant
  * @param editableContext
  * @param placeList
  * @param dataIndex
@@ -21,7 +20,6 @@ import {useContext, useEffect, useRef, useState} from "react";
 const PlantEditableCell = ({
                              editingKey,
                              editable,
-                             updatePlant,
                              editableContext,
                              placeList,
                              dataIndex,

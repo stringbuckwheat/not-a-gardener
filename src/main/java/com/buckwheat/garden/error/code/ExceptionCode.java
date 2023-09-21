@@ -17,9 +17,9 @@ public enum ExceptionCode {
     NO_SUCH_ITEM("B006", "해당 아이템 없음", "해당 아이템을 찾을 수 없어요"),
     NO_ACCOUNT_FOR_EMAIL("B007", "해당 이메일의 가입 계정 없음", "해당 이메일로 가입한 회원이 없어요"),
     WRONG_PASSWORD("B008", "비밀번호 오류", "비밀번호를 확인해주세요"),
-    NO_TOKEN_IN_REDIS("B009", "레디스에 사용자 없음", "로그인 정보를 찾을 수 없어요. 다시 로그인해주세요"),
-    INVALID_REFRESH_TOKEN("B011", "유효하지 않은 리프레쉬 토큰", "다시 로그인해주세요."),
-    INVALID_JWT_TOKEN("B010", "유효하지 않은 액세스 토큰", "접근 권한이 없어요. 로그인해주세요"),
+    NO_TOKEN_IN_REDIS("B009", "레디스에 사용자 없음", "로그인 시간이 만료되었습니다. 다시 로그인해주세요"),
+    INVALID_REFRESH_TOKEN("B011", "유효하지 않은 리프레쉬 토큰", "비정상적인 움직임이 발생했어요. 다시 로그인해주세요."),
+    INVALID_JWT_TOKEN("B010", "유효하지 않은 액세스 토큰", "접근 권한이 없어요. 다시 로그인해주세요"),
     CANNOT_LOGIN("B012", "로그인 할 수 없음", "로그인 할 수 없음");
 
     private static final Map<String, String> CODE_MAP = Collections.unmodifiableMap(

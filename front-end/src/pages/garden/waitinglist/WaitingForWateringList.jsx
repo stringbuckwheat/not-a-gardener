@@ -4,7 +4,7 @@ import ClickableTag from "../../../components/tag/basic/ClickableTag";
 import WaterModalInWaitingList from "./WaterModalInWaitingList";
 import {Tooltip} from "antd";
 
-const WaitingForWateringList = ({waitingList, chemicalList, openNotification, deleteInWaitingListAndTodoList}) => {
+const WaitingForWateringList = ({waitingList, openNotification, deleteInWaitingListAndTodoList}) => {
   console.log("waitingList", waitingList);
   const [clickedPlant, setClickedPlant] = useState({});
   const onClick = (plant, index) => {
@@ -34,7 +34,6 @@ const WaitingForWateringList = ({waitingList, chemicalList, openNotification, de
         visible={visible}
         closeDeleteModal={() => setVisible(false)}
         clickedPlant={clickedPlant}
-        chemicalList={chemicalList}
         openNotification={openNotification}
         handleWaitingList={handleWaitingList}/>
       <div>

@@ -4,6 +4,7 @@ import PlantListTag from "./PlantListTag";
 import {useEffect, useState} from "react";
 import AddPlant from "./AddPlant";
 import getData from "../../api/backend-api/common/getData";
+import {useDispatch} from "react-redux";
 
 /**
  * 식물 리스트 메인 페이지
@@ -14,48 +15,38 @@ import getData from "../../api/backend-api/common/getData";
  * @returns {JSX.Element} 식물 추가 페이지, 식물 리스트 페이지
  * @constructor
  */
-const PlantList = ({plantList, setPlantList, originPlantList, addPlant}) => {
-  const [placeList, setPlaceList] = useState([])
-  const [searchWord, setSearchWord] = useState("");
+const PlantList = () => {
+  // const [searchWord, setSearchWord] = useState("");
   const [isAddFormOpened, setIsAddFormOpened] = useState(false);
 
-  const search = (searchWord) => {
-    const searchedList = originPlantList.filter(plant => plant.plant.name.includes(searchWord));
-    setPlantList(searchedList);
-  }
+  const dispatch = useDispatch();
+
+  // const search = (searchWord) => {
+  //   const searchedList = originPlantList.filter(plant => plant.plant.name.includes(searchWord));
+  //   setPlantList(searchedList);
+  // }
 
   const onMountPlantList = async () => {
-    const forSelect = (await getData("/place")).map((place) => (
-      {
-        label: place.name,
-        value: place.id
-      }
-    ))
-
-    setPlaceList(forSelect);
+    const rawPlace = await getData("/place");
+    dispatch({type: "setPlaces", payload: rawPlace});
   }
 
   useEffect(() => {
     onMountPlantList();
   }, []);
 
-  useEffect(() => {
-    if (searchWord !== "") {
-      search(searchWord)
-    } else {
-      setPlantList(originPlantList);
-    }
-  }, [searchWord])
+  // useEffect(() => {
+  //   if (searchWord !== "") {
+  //     search(searchWord)
+  //   } else {
+  //     setPlantList(originPlantList);
+  //   }
+  // }, [searchWord])
 
   const switchAddForm = () => setIsAddFormOpened(!isAddFormOpened);
 
   return isAddFormOpened ? (
     <AddPlant
-      placeList={placeList.map((place) => ({
-        key: place.value,
-        value: place.label
-      }))}
-      addPlant={addPlant}
       afterAdd={switchAddForm}
     />
   ) : (
@@ -63,13 +54,10 @@ const PlantList = ({plantList, setPlantList, originPlantList, addPlant}) => {
       title="나의 식물"
       url="/plant"
       deleteTitle="식물"
-      setSearchWord={setSearchWord}
+      // setSearchWord={setSearchWord}
       addFormOpen={switchAddForm}
-      tags={<PlantListTag howManyPlants={plantList.length}/>}
-      bottomData={<PlantTable
-        originPlantList={plantList}
-        setPlantList={setPlantList}
-        placeList={placeList}/>}
+      tags={<PlantListTag/>}
+      bottomData={<PlantTable />}
     />
   )
 }

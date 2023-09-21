@@ -5,7 +5,7 @@ import CIcon from "@coreui/icons-react";
 import {cilDrop} from "@coreui/icons";
 import postData from "../../../api/backend-api/common/postData";
 import getWateringNotificationMsg from "../../../utils/function/getWateringNotificationMsg";
-import {CFormSelect} from "@coreui/react";
+import {useSelector} from "react-redux";
 
 /**
  * not-dry, water, postpone 버튼들 혹은 물주기 폼
@@ -28,7 +28,6 @@ import {CFormSelect} from "@coreui/react";
 const GardenCardAction = ({
                             hovered,
                             plantId,
-                            chemicalList,
                             openNotification,
                             updateGardenAfterWatering,
                             y = 5,
@@ -39,6 +38,9 @@ const GardenCardAction = ({
                             handleWaitingList,
                             deleteInWaitingListAndTodoList
                           }) => {
+  const chemicals = useSelector(state => state.chemicals.forSelect);
+  console.log("chemicals", chemicals);
+
   const [selected, setSelected] = useState("");
   const [chemicalId, setChemicalId] = useState(0);
 
@@ -92,7 +94,7 @@ const GardenCardAction = ({
       <div className="d-flex justify-content-between">
         <Space className="mb-1">
           <CIcon icon={cilDrop} className="text-info"/>
-          <Select options={chemicalList} defaultValue={0} style={{width: 120}}
+          <Select options={chemicals} defaultValue={0} style={{width: 120}}
                   onChange={(value) => setChemicalId(value)}/>
           <span>을 줬어요</span>
         </Space>

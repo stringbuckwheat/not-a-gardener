@@ -9,7 +9,6 @@ import {CCol} from "@coreui/react";
  * @param todoList
  * @param deleteInTodoList
  * @param deleteInWaitingListAndTodoList todolist, waitinglist에서 모두 삭제 -- action 콜백함수
- * @param chemicalList
  * @param updateGardenAfterWatering
  * @param openNotification
  * @param postponeWatering
@@ -20,7 +19,6 @@ const GardenTodoList = ({
                           todoList,
                           deleteInTodoList,
                           deleteInWaitingListAndTodoList,
-                          chemicalList,
                           updateGardenAfterWatering,
                           openNotification,
                           postponeWatering
@@ -43,7 +41,6 @@ const GardenTodoList = ({
                 updateGardenAfterWatering={updateGardenAfterWatering}
                 index={index}
                 garden={todoList[index]}
-                chemicalList={chemicalList}
                 deleteInTodoList={deleteInTodoList}
                 deleteInWaitingListAndTodoList={deleteInWaitingListAndTodoList}
                 openNotification={openNotification}/>

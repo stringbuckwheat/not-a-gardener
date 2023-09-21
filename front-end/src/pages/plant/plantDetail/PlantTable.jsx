@@ -6,6 +6,7 @@ import PlantEditableCell from "./PlantEditableCell";
 import React, {useState} from "react";
 import getMergedColumns from "../../../utils/function/getMergedColumns";
 import updateData from "../../../api/backend-api/common/updateData";
+import {useDispatch, useSelector} from "react-redux";
 
 const EditableContext = React.createContext(null);
 const EditableRow = ({index, form, ...props}) => {
@@ -26,14 +27,17 @@ const EditableRow = ({index, form, ...props}) => {
  * @returns {JSX.Element}
  * @constructor
  */
-const PlantTable = ({originPlantList, setPlantList, placeList}) => {
+const PlantTable = () => {
+  const plants = useSelector(state => state.plants);
+  const places = useSelector(state => state.places.forSelect);
+  const dispatch = useDispatch();
+
   const [form] = Form.useForm();
-  const plantList = getPlantListForPlantTable(originPlantList);
+  const plantList = getPlantListForPlantTable(plants);
 
   const deletePlant = async (plantId) => {
     await deleteData(`/plant/${plantId}`);
-    const afterDelete = originPlantList.filter(plant => plant.plant.id !== plantId);
-    setPlantList(afterDelete);
+    dispatch({type: 'deletePlant', payload: plantId});
   };
 
   const locale = {
@@ -71,16 +75,13 @@ const PlantTable = ({originPlantList, setPlantList, placeList}) => {
     const values = await form.validateFields();
 
     const res = await updateData(`/plant/${editingKey}`, {...values, ...modifyPlant, id: editingKey});
+    dispatch({type: 'updatePlant', payload: res})
 
-    const updatedPlantList = originPlantList.map((plant) => {
-      return plant.plant.id === editingKey ? {...res} : plant;
-    })
-
-    setPlantList(updatedPlantList);
     setEditingKey(0);
   }
 
-  const columns = getPlantTableColumnArray(placeList, isEditing, cancel, edit, editingKey, updatePlant, deletePlant);
+  const columns = getPlantTableColumnArray(places, isEditing, cancel, edit, editingKey, updatePlant, deletePlant);
+
   const mergedColumns = getMergedColumns(columns, 'placeName', 'select', 'text', isEditing);
 
   return (
@@ -91,9 +92,8 @@ const PlantTable = ({originPlantList, setPlantList, placeList}) => {
             row: (props) => <EditableRow form={form} {...props} />,
             cell: (props) => <PlantEditableCell
               editingKey={editingKey}
-              updatePlant={updatePlant}
               editableContext={EditableContext}
-              placeList={placeList}
+              placeList={places}
               {...props} />
           }
         }}

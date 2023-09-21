@@ -8,7 +8,6 @@ const RoutineContent = ({
                               isRoutineFormOpened,
                               onClickRoutineFormButton,
                               addRoutine,
-                              plantList,
                               toDoList,
                               deleteRoutine,
                               completeRoutine,
@@ -28,8 +27,7 @@ const RoutineContent = ({
         {isRoutineFormOpened
           ? <AddRoutine
             onClickRoutineFormButton={onClickRoutineFormButton}
-            addRoutine={addRoutine}
-            plantList={plantList}/>
+            addRoutine={addRoutine}/>
           : <></>}
       </div>
 

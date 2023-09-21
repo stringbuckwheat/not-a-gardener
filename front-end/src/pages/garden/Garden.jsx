@@ -7,7 +7,6 @@ import NoItemForPlant from "../../components/empty/NoItemForPlant";
 const Garden = () => {
   const [isLoading, setLoading] = useState(true);
   const [hasPlant, setHasPlant] = useState(false);
-  // const [nothingToDo, setNothingToDo] = useState(false);
 
   // 할일 리스트
   const [todoList, setTodoList] = useState([]);
@@ -21,7 +20,6 @@ const Garden = () => {
 
     setLoading(false);
     setHasPlant(data.hasPlant);
-    // setNothingToDo(data.todoList.length == 0 && data.waitingList.length == 0);
 
     data.todoList.sort((a, b) => (a.gardenDetail.wateringCode - b.gardenDetail.wateringCode));
 
@@ -68,7 +66,6 @@ const Garden = () => {
 
   const firstAddCallback = () => {
     onMountGarden();
-    // setNothingToDo(false);
   }
 
   if (isLoading) {

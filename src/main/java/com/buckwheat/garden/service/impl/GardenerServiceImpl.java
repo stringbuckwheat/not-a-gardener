@@ -4,7 +4,6 @@ import com.buckwheat.garden.dao.GardenerDao;
 import com.buckwheat.garden.data.dto.gardener.GardenerDetail;
 import com.buckwheat.garden.data.dto.gardener.Login;
 import com.buckwheat.garden.data.entity.Gardener;
-import com.buckwheat.garden.repository.RedisRepository;
 import com.buckwheat.garden.service.GardenerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +18,6 @@ import java.util.NoSuchElementException;
 public class GardenerServiceImpl implements GardenerService {
     private final BCryptPasswordEncoder encoder;
     private final GardenerDao gardenerDao;
-    private final RedisRepository redisRepository;
 
     @Override
     public GardenerDetail getOne(Long id) {
@@ -39,11 +37,6 @@ public class GardenerServiceImpl implements GardenerService {
     public boolean identify(Long id, Login login) {
         Gardener gardener = gardenerDao.getGardenerById(id);
         return encoder.matches(login.getPassword(), gardener.getPassword());
-    }
-
-    @Override
-    public void logOut(Long id) {
-        redisRepository.deleteById(id);
     }
 
     @Override

@@ -14,7 +14,7 @@ const places = (state = initialState, {type, payload}) => {
     case 'setPlaces':
       return {...state, places: payload, forSelect: getPlacesForSelect(payload)}
     case 'addPlace':
-      return state.concat(payload);
+      return {...state, places: state.places.concat(payload)};
     default:
       return state
   }

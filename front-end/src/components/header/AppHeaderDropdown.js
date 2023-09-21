@@ -14,16 +14,9 @@ import CIcon from '@coreui/icons-react'
 import sprout from './../../assets/images/sprout.png'
 import {Space, Tag} from "antd";
 import {CaretDownOutlined} from "@ant-design/icons";
-import postData from "../../api/backend-api/common/postData";
 import logOut from "../../utils/function/logout";
 
-// account, setting 부분
 const AppHeaderDropdown = () => {
-  const logOutToServer = async () => {
-    await postData("/gardener/logout", null);
-    logOut();
-  }
-
   return (
     <CDropdown variant="nav-item" >
       <CDropdownToggle placement="bottom-end" className="py-0" caret={false}>
@@ -40,7 +33,7 @@ const AppHeaderDropdown = () => {
           <CIcon icon={cilUser} className="me-2"/>
           개인정보 수정
         </CDropdownItem>
-        <CDropdownItem onClick={logOutToServer}>
+        <CDropdownItem onClick={logOut}>
           <CIcon icon={cilLockUnlocked} className="me-2"/>
           로그아웃
         </CDropdownItem>

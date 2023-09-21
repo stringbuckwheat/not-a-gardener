@@ -29,11 +29,6 @@ public class GardenerController {
         return gardenerService.identify(user.getId(), login);
     }
 
-    @PostMapping("/logout")
-    public void logOut(@AuthenticationPrincipal UserPrincipal user){
-        gardenerService.logOut(user.getId());
-    }
-
     /* 로그인 후 비밀번호 변경 */
     @PutMapping("/password")
     public void updatePassword(@RequestBody Login login, @AuthenticationPrincipal UserPrincipal user) {

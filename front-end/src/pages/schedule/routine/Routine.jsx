@@ -4,7 +4,7 @@ import RoutineContent from "./RoutineContent";
 import NoSchedule from "../../../components/empty/NoSchedule";
 import AddRoutine from "./AddRoutine";
 
-const Routine = ({routines, plantList}) => {
+const Routine = ({routines}) => {
   const [toDoList, setToDoList] = useState(routines.todoList);
   const [notToDoList, setNotToDoList] = useState(routines.notToDoList);
 
@@ -49,14 +49,13 @@ const Routine = ({routines, plantList}) => {
               <AddRoutine
                 onClickRoutineFormButton={onClickRoutineFormButton}
                 addRoutine={addRoutine}
-                plantList={plantList}/>
+              />
             </NoSchedule>
             :
             <RoutineContent
               isRoutineFormOpened={isRoutineFormOpened}
               onClickRoutineFormButton={onClickRoutineFormButton}
               addRoutine={addRoutine}
-              plantList={plantList}
 
               toDoList={toDoList}
               deleteRoutine={deleteRoutine}

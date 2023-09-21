@@ -3,8 +3,11 @@ import PlantList from "./PlantList";
 import getData from "../../api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";
 import NoItemForPlant from "../../components/empty/NoItemForPlant";
+import {useDispatch} from "react-redux";
 
 const Plant = () => {
+  const dispatch = useDispatch();
+
   const [isLoading, setLoading] = useState(true);
   const [hasPlant, setHasPlant] = useState(false);
   const [originPlantList, setOriginPlantList] = useState([])
@@ -12,6 +15,8 @@ const Plant = () => {
 
   const onMountPlant = async () => {
     const data = await getData("/garden/plants");
+    dispatch({type: 'setPlants', payload: data});
+
     setLoading(false);
 
     setHasPlant(data.length > 0);
@@ -26,27 +31,16 @@ const Plant = () => {
     onMountPlant();
   }, [])
 
-  const addPlant = (plant) => {
-    plantList.unshift(plant);
-
-    setPlantList(plantList);
-    setOriginPlantList(plantList);
-  }
 
 
   if (isLoading) {
     return <Loading/>
   } else if (!hasPlant) {
     return <NoItemForPlant
-      addPlant={addPlant}
       afterAdd={() => setHasPlant(true)}
     />
   } else {
-    return <PlantList
-      plantList={plantList}
-      setPlantList={setPlantList}
-      addPlant={addPlant}
-      originPlantList={originPlantList}/>
+    return <PlantList />
   }
 }
 

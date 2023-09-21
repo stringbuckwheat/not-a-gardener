@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import {Tag} from "antd";
 import GardenCardAction from "../todolist/GardenCardAction";
 import React from "react";
+import {useSelector} from "react-redux";
 
 /**
  *
@@ -19,7 +20,6 @@ const WaterModalInWaitingList = ({
                                 visible,
                                 closeDeleteModal,
                                 clickedPlant,
-                                chemicalList,
                                 openNotification,
                                 handleWaitingList
                               }) => {
@@ -46,7 +46,6 @@ const WaterModalInWaitingList = ({
                 y={20}
                 plantId={clickedPlant.id}
                 plantName={clickedPlant.name}
-                chemicalList={chemicalList}
                 openNotification={openNotification}
                 handleWaitingList={handleWaitingList}
               />

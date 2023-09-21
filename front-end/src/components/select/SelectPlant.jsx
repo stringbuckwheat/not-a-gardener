@@ -1,6 +1,13 @@
 import {Select} from "antd";
+import {useSelector} from "react-redux";
 
-const SelectPlant = ({onChange, onSearch, plantList, className, size}) => {
+const SelectPlant = ({onChange, onSearch, className, size}) => {
+  const plants = useSelector(state => state.plants).map((plant) => (
+    {
+      label: `${plant.name} (${plant.name})`,
+      value: plant.id,
+    }
+  ));
 
   return (
     <Select
@@ -15,7 +22,7 @@ const SelectPlant = ({onChange, onSearch, plantList, className, size}) => {
       filterOption={(input, option) =>
         (option?.label ?? '').includes(input)
       }
-      options={plantList}
+      options={plants}
     />
   )
 }

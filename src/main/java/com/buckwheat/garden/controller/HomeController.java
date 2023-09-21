@@ -33,6 +33,11 @@ public class HomeController {
         return authenticationService.refreshAccessToken(refreshToken);
     }
 
+    @PostMapping("/logout/{gardenerId}")
+    public void logOut(@PathVariable Long gardenerId){
+        authenticationService.logOut(gardenerId);
+    }
+
     /* 간단한 회원 정보(헤더) - 소셜로그인에서 사용 */
     @GetMapping("/info")
     public Info getGardenerInfo(@AuthenticationPrincipal UserPrincipal user){

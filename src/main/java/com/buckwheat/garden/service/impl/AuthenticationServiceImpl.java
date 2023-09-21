@@ -135,4 +135,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         return Info.from("", refreshToken.getToken(), gardener);
     }
+
+    @Override
+    public void logOut(Long id) {
+        redisRepository.deleteById(id);
+    }
 }

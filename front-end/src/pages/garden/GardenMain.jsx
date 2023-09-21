@@ -1,7 +1,6 @@
 import GardenTodoList from "./todolist/GardenTodoList";
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {CRow} from "@coreui/react";
-import getChemicalListForSelect from "../../api/service/getChemicalListForSelect";
 import GButton from "../../components/button/GButton";
 import WaitingForWateringList from "./waitinglist/WaitingForWateringList";
 import RoutineList from "./RoutineList";
@@ -11,6 +10,8 @@ import CIcon from "@coreui/icons-react";
 import {cilHappy} from "@coreui/icons";
 import Booped from "../../components/animation/Booped";
 import {Link} from "react-router-dom";
+import getData from "../../api/backend-api/common/getData";
+import {useDispatch} from "react-redux";
 
 const GardenMain = ({
                       todoList,
@@ -22,11 +23,16 @@ const GardenMain = ({
                       deleteInWaitingListAndTodoList
                     }) => {
 
-  // 약품 리스트(물주기 시에 사용)
-  const [chemicalList, setChemicalList] = useState([]);
+  const dispatch = useDispatch();
+
+  const setChemicalList = async () => {
+    const data = await getData("/chemical");
+    console.log("data", data);
+    dispatch({type: 'setChemicals', payload: data});
+  }
 
   useEffect(() => {
-    getChemicalListForSelect(setChemicalList);
+    setChemicalList();
   }, [])
 
   // 식물 상태 업데이트 이후 메시지 띄우기
@@ -58,7 +64,6 @@ const GardenMain = ({
             ? <></>
             : <WaitingForWateringList
               waitingList={waitingList}
-              chemicalList={chemicalList}
               openNotification={openNotification}
               deleteInWaitingListAndTodoList={deleteInWaitingListAndTodoList}
             />
@@ -78,7 +83,6 @@ const GardenMain = ({
                 updateGardenAfterWatering={updateGardenAfterWatering}
                 openNotification={openNotification}
                 deleteInWaitingListAndTodoList={deleteInWaitingListAndTodoList}
-                chemicalList={chemicalList}
                 todoList={todoList}/>
             </div>
           </>

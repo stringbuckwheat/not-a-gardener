@@ -4,31 +4,28 @@ import ChemicalList from "./ChemicalList";
 import Loading from "../../components/data/Loading";
 import getData from "../../api/backend-api/common/getData";
 import AddChemical from "./AddChemical";
+import {useDispatch} from "react-redux";
 
 const Chemical = () => {
   const [isLoading, setLoading] = useState(true);
   const [hasChemical, setHasChemical] = useState(false);
-  const [chemicalList, setChemicalList] = useState([]);
+
+  const dispatch = useDispatch();
 
   const onMountChemical = async () => {
-    console.log("chemical mount");
     const data = await getData("/chemical");
     console.log("data", data);
+
+    dispatch({type: 'setChemicals', payload: data});
+
     setLoading(false);
     setHasChemical(data.length > 0);
-    setChemicalList(data);
   }
 
   // on mount
   useEffect(() => {
     onMountChemical();
   }, [])
-
-  const addChemical = (chemical) => {
-    chemicalList.unshift(chemical);
-    setChemicalList(() => chemicalList);
-    console.log("chemicalList", chemicalList);
-  }
 
   if (isLoading) {
     return (
@@ -39,10 +36,10 @@ const Chemical = () => {
       title="등록한 비료/살충제가 없어요"
       buttonSize={"lg"}
       buttonTitle={"비료/살충제 추가하기"}
-      addForm={<AddChemical addChemical={addChemical} afterAdd={() => setHasChemical(true)}/>}
+      addForm={<AddChemical afterAdd={() => setHasChemical(true)}/>}
     />
   } else {
-    return <ChemicalList chemicalList={chemicalList} addChemical={addChemical}/>
+    return <ChemicalList />
   }
 }
 

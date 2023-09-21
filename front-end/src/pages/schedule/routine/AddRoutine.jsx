@@ -7,7 +7,7 @@ import InputWithFeedback from "../../../components/input/InputWithFeedback";
 import ValidationSubmitButton from "../../../components/button/ValidationSubmitButton";
 import postData from "../../../api/backend-api/common/postData";
 
-const AddRoutine = ({plantList, onClickRoutineFormButton, addRoutine}) => {
+const AddRoutine = ({onClickRoutineFormButton, addRoutine}) => {
   const style = {fontSize: "0.9em"}
   const formLabelColor = "garden"
 
@@ -63,8 +63,9 @@ const AddRoutine = ({plantList, onClickRoutineFormButton, addRoutine}) => {
       <div className="mb-2">
         <span className={`text-${formLabelColor}`} style={style}>식물</span>
         <SelectPlant
-          plantList={plantList}
-          onChange={ (plantId) => {setRoutine(() => ({...routine, plantId: plantId}))}}
+          onChange={(plantId) => {
+            setRoutine(() => ({...routine, plantId: plantId}))
+          }}
           size="small"
           className="width-full"/>
       </div>

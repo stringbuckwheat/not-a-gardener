@@ -1,8 +1,6 @@
 import axios from "axios";
 import logOut from "../utils/function/logout";
 
-let refreshToken = "";
-
 // axios 인스턴스 생성
 const authAxios = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -17,7 +15,11 @@ const reissueAccessToken = async () => {
     refreshToken: localStorage.getItem("refreshToken")
   };
 
-  const response = await axios.post(`${process.env.REACT_APP_API_URL}/token`, data);
+  const response = await axios.post(`${process.env.REACT_APP_API_URL}/token`, data)
+    .catch((e) => {
+      alert(e.response.data.message);
+      logOut();
+    });
   return response.data;
 }
 
@@ -65,7 +67,7 @@ authAxios.interceptors.response.use(
       // 진행 중인 요청 이어하기
       return authAxios({
         ...originRequest,
-        headers: {...originRequest.headers, Authorization: `Bearer ${accessToken}`},
+        headers: {...originRequest.headers, Authorization: `Bearer ${res.accessToken}`},
         sent: true
       })
 
@@ -73,6 +75,7 @@ authAxios.interceptors.response.use(
       alert(error.response.data.message);
       logOut();
     } else if (errorCode == "B009" || errorCode == "B011" || errorCode == "B010") {
+      alert(errorCode + " : " + error.response.data.message);
       logOut();
     }
 

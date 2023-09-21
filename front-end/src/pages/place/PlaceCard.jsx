@@ -10,7 +10,6 @@ import {Link} from "react-router-dom";
  * @constructor
  */
 const PlaceCard = ({place}) => {
-  console.log("place", place);
   let color = "";
   let icon = {};
 

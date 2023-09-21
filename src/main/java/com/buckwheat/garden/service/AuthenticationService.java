@@ -12,6 +12,9 @@ public interface AuthenticationService {
     /* 로그인 */
     Info login(Login login);
 
+    // 로그아웃
+    void logOut(Long id);
+
     /* access token 갱신 */
     Token refreshAccessToken(Refresh token);
 

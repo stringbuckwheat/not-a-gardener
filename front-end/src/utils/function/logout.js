@@ -1,4 +1,10 @@
-const logOut = () => {
+import axios from "axios";
+
+const logOut = async () => {
+  // 서버 redis 삭제
+  await axios.post(`${process.env.REACT_APP_API_URL}/logout/${localStorage.getItem("gardenerId")}`, null);
+
+  // localstorage 정리
   const provider = localStorage.getItem("provider");
   localStorage.clear();
 

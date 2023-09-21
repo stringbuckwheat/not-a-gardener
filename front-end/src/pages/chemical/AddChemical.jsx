@@ -4,8 +4,9 @@ import chemicalTypeArray from "src/utils/dataArray/chemicalTypeArray"
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 import postData from "../../api/backend-api/common/postData";
 import getChemicalFormArray from "../../utils/function/getChemicalFormArray";
+import {useDispatch} from "react-redux";
 
-const AddChemical = ({addChemical, afterAdd}) => {
+const AddChemical = ({afterAdd}) => {
   const [chemical, setChemical] = useState({
     name: "",
     type: chemicalTypeArray[0].value,
@@ -13,9 +14,11 @@ const AddChemical = ({addChemical, afterAdd}) => {
     active: "Y"
   })
 
+  const dispatch = useDispatch();
+
   const onChange = (e) => {
     const {name, value} = e.target;
-    setChemical(setChemical => ({...chemical, [name]: value}));
+    setChemical(() => ({...chemical, [name]: value}));
   }
 
   const isValid = chemical.name != ''
@@ -25,7 +28,10 @@ const AddChemical = ({addChemical, afterAdd}) => {
   const submit = async () => {
     const res = await postData("/chemical", chemical);
     console.log("add chemical res", res);
-    addChemical(res);
+
+    // redux 업데이트
+    dispatch({type: 'addChemicals', payload: res});
+
     afterAdd && afterAdd();
   }
 
