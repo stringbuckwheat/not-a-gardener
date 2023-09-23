@@ -23,7 +23,7 @@ const AddPlace = ({afterAdd}) => {
 
   const onChange = (e) => {
     const {name, value} = e.target;
-    setPlace(setPlace => ({...place, [name]: value}));
+    setPlace(() => ({...place, [name]: value}));
   }
 
   const isValid = place.name !== "";
