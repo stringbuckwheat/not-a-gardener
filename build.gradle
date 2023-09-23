@@ -82,7 +82,7 @@ tasks.withType(JavaCompile){
 	options.generatedSourceOutputDirectory = file(queryDslDir)
 }
 
-def profile = project.hasProperty("profile") ? project.property("profile").toString() : "local"
+def profile = project.hasProperty("profile") ? project.property("profile").toString() : "prod"
 
 sourceSets {
 	main {
