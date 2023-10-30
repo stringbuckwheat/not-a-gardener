@@ -12,14 +12,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsUtils;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity //(debug = true)
@@ -35,28 +36,19 @@ public class SecurityConfig {
     private String allowedOrigin;
 
     /**
-     * 리액트 서버와 통신하기 위해 CORS 문제 해결
-     * @return CorsFilter
+     * CORS 설정
      */
-    @Bean
-    public CorsFilter corsFilter() {
-        log.debug("origin: {}", allowedOrigin);
+    CorsConfigurationSource corsConfigurationSource() {
+        return request -> {
+            CorsConfiguration config = new CorsConfiguration();
+            config.setAllowedHeaders(Collections.singletonList("*"));
+            config.setAllowedMethods(Collections.singletonList("*"));
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
+            config.setAllowedOriginPatterns(Collections.singletonList(allowedOrigin));
+            config.setAllowCredentials(true);
 
-        // 요청에 credential 권한이 있는지 없는지
-        // Authorization으로 사용자 인증 시 true
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin(allowedOrigin);
-        config.addAllowedHeader("*"); // 노출해도 되는 헤더
-
-        // 허용할 메소드.
-        // 특정 메소드만 허용하려면 HttpMethod.GET 식으로 추가
-        config.addAllowedMethod("*");
-        source.registerCorsConfiguration("/**", config);
-
-        return new CorsFilter(source);
+            return config;
+        };
     }
 
     /**
@@ -67,33 +59,23 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .httpBasic().disable() // 로그인 인증창 해제
-                .csrf().disable() // REST Api이므로 csrf disable
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // JWT 토큰 인증이므로 세션은 stateless
 
-                .and()
-                .authorizeRequests() // 리퀘스트 설정
-                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll() // Preflight 요청 허용
-                .antMatchers("/login", "/token", "/oauth", "/register/**", "/forgot/**", "/logout").permitAll() // 누구나 접근가능
-                .antMatchers("/chemical/**", "/garden/**", "/gardener/**", "/goal/**", "/info",
-                        "/place/**", "/plant/**", "/routine/**", "/watering/**").authenticated() // 인증 권한 필요
+        httpSecurity.httpBasic(HttpBasicConfigurer::disable)
+                .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorize ->
+                        authorize
+                                .requestMatchers("/api/login", "/api/token", "/api/oauth", "/api/register/**", "/api/forgot/**", "/api/logout").permitAll() // MEMIL 모든 접속 허용
 
-                .and()
-                .addFilter(this.corsFilter()) // CORS 필터 등록 // ********
-
-                // 기본 인증 필터인 UsernamePasswordAuthenticationFilter 대신 Custom 필터 등록
+                                .requestMatchers("/api/chemical/**", "/api/garden/**", "/api/gardener/**", "/api/goal/**", "/api/info",
+                                        "/api/place/**", "/api/plant/**", "/api/routine/**", "/api/watering/**").authenticated()
+                )
+                .oauth2Login(oauth2Configurer -> oauth2Configurer
+                        .successHandler(successHandler)
+                        .userInfoEndpoint(configurer -> configurer.userService(oAuth2MemberService))
+                )
                 .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
-
-                // ⭐️⭐️⭐️⭐️⭐️
-                .addFilterBefore(jwtExceptionFilter, JwtFilter.class)
-
-                // OAuth2 로그인 설정
-                .oauth2Login().loginPage("/")
-                // 성공 시 수행할 핸들러
-                .successHandler(successHandler)
-                // OAuth2 로그인 성공 이후 설정
-                .userInfoEndpoint().userService(oAuth2MemberService);
+                .addFilterBefore(jwtExceptionFilter, JwtFilter.class);
 
         return httpSecurity.build();
     }

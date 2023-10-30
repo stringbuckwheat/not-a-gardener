@@ -1,5 +1,7 @@
 package com.buckwheat.garden.data.entity;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,8 +9,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Routine {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long routineId;
 
     // 루틴 내용
@@ -36,7 +36,7 @@ public class Routine {
     @NotNull
     private LocalDate createDate;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name="gardener_id")
     @OnDelete(action= OnDeleteAction.CASCADE)
     private Gardener gardener;

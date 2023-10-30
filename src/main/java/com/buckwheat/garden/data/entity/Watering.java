@@ -1,11 +1,11 @@
 package com.buckwheat.garden.data.entity;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
@@ -17,14 +17,14 @@ import java.time.LocalDate;
 @NoArgsConstructor // Entity는 기본 생성자를 가지고 있어야 한다
 public class Watering {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) // auto-increment
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment
     private Long wateringId;
 
     @NotNull
     private LocalDate wateringDate; // 물 준 날짜
 
     // FK
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name="plant_id")
     @OnDelete(action= OnDeleteAction.CASCADE)
     private Plant plant;

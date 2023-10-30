@@ -1,12 +1,12 @@
 package com.buckwheat.garden.data.entity;
 
 import com.buckwheat.garden.data.dto.plant.PlantRequest;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import java.util.List;
 @ToString(of = {"plantId", "name"})
 public class Plant {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) // auto-increment
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment
     private Long plantId;
 
     @NotNull
@@ -50,7 +50,7 @@ public class Plant {
     private LocalDateTime createDate;
 
     // FK
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name="gardener_id")
     @OnDelete(action= OnDeleteAction.CASCADE)
     private Gardener gardener;

@@ -1,9 +1,9 @@
 package com.buckwheat.garden.data.entity;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 public class Gardener {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long gardenerId;
 
     @NotNull
