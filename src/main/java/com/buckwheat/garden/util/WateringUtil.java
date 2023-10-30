@@ -16,7 +16,6 @@ import java.util.List;
 @Slf4j
 @Component
 public class WateringUtil {
-
     public WateringMessage getWateringMsg(Plant plant){
         // 첫번째 물주기면
         if (plant.getWaterings().size() == 1) {

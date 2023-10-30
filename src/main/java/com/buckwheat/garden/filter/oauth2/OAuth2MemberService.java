@@ -13,8 +13,6 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-
 /**
  * access token을 사용하여 OAuth2 서버에서 유저 정보를 가져온다.
  * 데이터베이스에 Gardener를 저장/수정한다.
@@ -55,12 +53,6 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
 
         // 기존 회원이면 update, 신규 회원이면 save
         Gardener gardener = saveOrUpdate(oAuth2Attribute);
-
-        // oAuth2User.getAttributes()로 가져오는 map은 수정 불가능한 맵
-        // Gardener 테이블의 PK를 (username이 아니라) gardener_id로 잡고 있으므로
-        // PK 값을 함께 Security Context에 저장하기 위해 평범한 map으로 변환
-        Map<String, Object> attributes = oAuth2Attribute.toMap();
-        attributes.put("gardenerId", gardener.getGardenerId());
 
         // UserPrincipal: Authentication에 담을 OAuth2User와 (일반 로그인 용)UserDetails를 implements한 커스텀 클래스
         return UserPrincipal.create(gardener, oAuth2Attribute.getAttributes());

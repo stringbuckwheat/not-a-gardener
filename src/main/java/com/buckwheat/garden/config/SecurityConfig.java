@@ -4,7 +4,6 @@ import com.buckwheat.garden.filter.JwtExceptionFilter;
 import com.buckwheat.garden.filter.JwtFilter;
 import com.buckwheat.garden.filter.oauth2.OAuth2MemberService;
 import com.buckwheat.garden.filter.oauth2.OAuth2SuccessHandler;
-import com.buckwheat.garden.service.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,9 +26,9 @@ import java.util.Collections;
 @RequiredArgsConstructor
 @Slf4j
 public class SecurityConfig {
-    private final TokenProvider tokenProvider;
     private final OAuth2MemberService oAuth2MemberService;
     private final OAuth2SuccessHandler successHandler;
+    private final JwtFilter jwtFilter;
     private final JwtExceptionFilter jwtExceptionFilter;
 
     @Value("${origin}")
@@ -74,7 +73,7 @@ public class SecurityConfig {
                         .successHandler(successHandler)
                         .userInfoEndpoint(configurer -> configurer.userService(oAuth2MemberService))
                 )
-                .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtExceptionFilter, JwtFilter.class);
 
         return httpSecurity.build();

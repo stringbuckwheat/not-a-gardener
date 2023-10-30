@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
 // 사용자 정보를 담을 Class
@@ -16,10 +15,8 @@ import java.util.Map;
 @Getter
 public class OAuth2Attribute {
     private Map<String, Object> attributes;
-    private String attributeKey;
     private String email;
     private String name;
-    private String picture;
     private String provider;
 
     public static OAuth2Attribute of(String provider, String attributeKey, Map<String, Object> attributes){
@@ -39,9 +36,7 @@ public class OAuth2Attribute {
         return OAuth2Attribute.builder()
                 .name(String.valueOf(attributes.get("name")))
                 .email(String.valueOf(attributes.get("email")))
-                .picture(String.valueOf(attributes.get("picture")))
                 .attributes(attributes)
-                .attributeKey(attributeKey)
                 .provider("google")
                 .build();
     }
@@ -54,9 +49,7 @@ public class OAuth2Attribute {
         return OAuth2Attribute.builder()
                 .name(String.valueOf(kakaoProfile.get("nickname")))
                 .email(String.valueOf(kakaoAccount.get("email")))
-                .picture(String.valueOf(kakaoProfile.get("profile_image_url")))
                 .attributes(kakaoAccount)
-                .attributeKey(attributeKey)
                 .provider("kakao")
                 .build();
     }
@@ -68,23 +61,9 @@ public class OAuth2Attribute {
         return OAuth2Attribute.builder()
                 .name(String.valueOf(response.get("name")))
                 .email(String.valueOf(response.get("email")))
-                .picture(String.valueOf(response.get("profile_image")))
                 .attributes(response)
-                .attributeKey(attributeKey)
                 .provider("naver")
                 .build();
-    }
-
-    public Map<String, Object> toMap() {
-        Map<String, Object> map = new HashMap<>();
-
-        map.put("id", attributeKey);
-        map.put("key", attributeKey);
-        map.put("name", name);
-        map.put("email", email);
-        map.put("picture", picture);
-
-        return map;
     }
 
     public Gardener toEntity(){

@@ -23,10 +23,11 @@ const SocialLogin = () => {
       <h6>간편 로그인</h6>
       <hr/>
       {
-        providers.map((provider, index) =>
-          (<CCol xs={4} className={"text-center"}>
+        providers.map((provider, index) =>{
+
+          return (<CCol xs={4} className={"text-center"}>
           <a
-            href={provider !== "naver" ? `${authorizationUrl}/${provider}` : "javascript:alert('검수 승인 대기중입니다')"}
+            href={provider !== "naver" ? `http://localhost:8080${authorizationUrl}/${provider}` : "javascript:alert('검수 승인 대기중입니다')"}
             className="social-button"
             id={`${provider}-connect`}>
           </a>
@@ -38,7 +39,7 @@ const SocialLogin = () => {
               </animated.div>
               : <></>
           }
-        </CCol>)
+        </CCol>)}
         )
       }
     </CRow>

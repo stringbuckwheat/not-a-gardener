@@ -30,12 +30,10 @@ public class Plant {
 
     private String species; // 식물 종은 null 허용
 
-    @NotNull
     private int recentWateringPeriod; // 평균 관수 주기
 
     private int earlyWateringPeriod;
 
-    @NotNull
     private String medium;
 
     private LocalDate birthday;
@@ -46,7 +44,6 @@ public class Plant {
     // 물주기를 미룬 날짜
     private LocalDate postponeDate;
 
-    @NotNull
     private LocalDateTime createDate;
 
     // FK

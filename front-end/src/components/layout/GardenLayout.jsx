@@ -1,6 +1,9 @@
 import React from 'react'
 import {Navigate} from 'react-router-dom';
-import {AppContent, AppSidebar, AppFooter, AppHeader} from '../index'
+import AppSidebar from "./AppSidebar";
+import AppHeader from "./AppHeader";
+import AppContent from "./AppContent";
+import AppFooter from "./AppFooter";
 
 /**
  * 로그인 이후 모든 페이지의 레이아웃
