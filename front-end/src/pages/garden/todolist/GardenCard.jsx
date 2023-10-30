@@ -71,7 +71,7 @@ const GardenCard = ({
                     <div>
                       <div className={`fs-6 fw-semibold text-black`}>{plant.name}</div>
                       <div className="small text-black new-line">
-                        <small>{`${plant.species} / ${plant.name}`}</small></div>
+                        <small>{plant.species}</small></div>
                       <GardenTag className="small" plant={garden}/>
                       <p
                         className={`text-${color} fw-semibold small new-line mt-2 `}>

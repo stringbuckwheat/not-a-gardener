@@ -73,8 +73,9 @@ const GardenMain = ({
         todoList.length == 0
           ?
           <Empty title="목마른 식물이 없어요"/>
-          : <>
-            <Link to={"/plant"} className="d-flex justify-content-end mb-5">
+          :
+          <>
+            <Link to={"/plant"} className="d-flex justify-content-end mb-4 mt-3">
               <GButton color="teal" className="float-end">전체 식물 보기</GButton>
             </Link>
             <div className="mt-2">

@@ -1,9 +1,12 @@
 import mediumArray from "src/utils/dataArray/mediumArray";
 import {useState} from "react";
 import FormProvider from "src/components/form/FormProvider";
-import ModifyFormButtons from "src/components/button/ModifyFormButtons";
+import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
+import updateData from "../../api/backend-api/common/updateData";
+import {useNavigate} from "react-router-dom";
 
 const ModifyPlant = ({changeModifyState, placeList, plant}) => {
+  const navigate = useNavigate();
   const [updatedPlant, setUpdatedPlant] = useState(plant);
 
   const onChange = (e) => {
@@ -48,17 +51,28 @@ const ModifyPlant = ({changeModifyState, placeList, plant}) => {
     }
   ];
 
+  const validation = updatedPlant.name != '';
+
+  const submit = async () => {
+    const res = await updateData(`/plant/${plant.id}`, updatedPlant);
+    navigate("", {replace: true, state: res});
+    changeModifyState();
+  }
+
   return (
     <FormProvider
       title="식물 수정"
       inputObject={updatedPlant}
       itemObjectArray={itemObjectArray}
       onChange={onChange}
-      submitBtn={<ModifyFormButtons
-        data={updatedPlant}
-        url={`/plant/${plant.id}`}
-        changeModifyState={changeModifyState}
-        validation={plant.name != ""}/>}/>
+      submitBtn={
+        <ValidationSubmitButton
+          className="float-end"
+          isValid={validation}
+          title={"수정하기"}
+          onClickValid={submit}
+          onClickInvalidMsg={"입력값을 확인해주세요"}/>
+    }/>
   )
 }
 

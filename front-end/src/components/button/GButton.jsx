@@ -6,7 +6,9 @@ const GButton = ({color, className, onClick, size, children}) => {
     <Button
       className={`bg-${color} text-white ${className}`}
       onClick={onClick}
-    size={size}>{children}</Button>
+      size={size}>
+      {children}
+    </Button>
   )
 }
 

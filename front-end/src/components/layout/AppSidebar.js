@@ -1,7 +1,7 @@
 import React from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 
-import {CSidebar, CSidebarBrand, CSidebarNav} from '@coreui/react'
+import {CHeaderToggler, CSidebar, CSidebarBrand, CSidebarNav} from '@coreui/react'
 
 import {AppSidebarNav} from './AppSidebarNav'
 
@@ -28,9 +28,13 @@ const AppSidebar = () => {
         dispatch({type: 'setSidebar', sidebarShow: visible})
       }}
     >
+
+      {/* 로고, 사이드바 접기 */}
       <CSidebarBrand className="d-none d-md-flex">
         <Logo width="15vw" height="4vw" fill={"#E14A1E"} onClick={() => navigate("/")}/>
       </CSidebarBrand>
+
+      {/* 사이드바 메뉴 */}
       <CSidebarNav>
         <SimpleBar>
           <AppSidebarNav items={navigation}/>

@@ -19,7 +19,7 @@ const Watering = React.lazy(() => import('../pages/watering/Watering'))
 const routes = [
   {path: '/', exact: true, name: 'Garden', element: Garden},
 
-  {path: '/gardener', name: 'gardener', element: Gardener},
+  {path: '/me', exact: true, name: 'Gardener', element: Gardener},
 
   {path: '/place', name: 'place', element: Place},
   {path: '/place/:placeId', name: 'place detail', element: PlaceDetail},

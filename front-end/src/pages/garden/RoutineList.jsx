@@ -1,9 +1,9 @@
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import ClickableTag from "../../components/tag/basic/ClickableTag";
 import {CCol} from "@coreui/react";
 import React, {useState} from "react";
 import RoutineStateUpdateModal from "../../components/modal/RoutineStateUpdateModal";
-import ContentChangeWhenHoveredTag from "../../components/tag/basic/ContentChangeWhenHoveredTag";
+import {Tag} from "antd";
 
 const RoutineList = ({routineList, afterRoutine}) => {
   const [isTitleHovered, setIsTitleHovered] = useState(false);
@@ -16,6 +16,9 @@ const RoutineList = ({routineList, afterRoutine}) => {
     console.log('routineForModal', routineForModal);
     setIsModalVisible(true);
   }
+
+  const navigate = useNavigate();
+  const [isTagHovered, setIsTagHovered] = useState();
 
   return (
     <CCol md={6} xs={12}>
@@ -36,12 +39,19 @@ const RoutineList = ({routineList, afterRoutine}) => {
       <div>
         {
           routineList.length == 0
-            ? <ContentChangeWhenHoveredTag to={"/schedule"} color={"gold"} hoveredContent={" 첫 루틴을 등록할래요 "} defaultContent={"등록된 루틴이 없어요"} />
+            ?
+            <Tag
+              color={isTagHovered ? "gold-inverse" : "gold"}
+              onClick={() => navigate("/schedule")}
+              onMouseEnter={() => setIsTagHovered(!isTagHovered)}
+              onMouseLeave={() => setIsTagHovered(!isTagHovered)}
+            >
+              {isTagHovered ? " 첫 루틴을 등록할래요 " : "등록된 루틴이 없어요"}
+            </Tag>
             :
             routineList.map((routine, index) => {
               const isCompleted = routine.isCompleted === "Y";
               const routineForModal = {routineId: routine.id, isCompleted, content: routine.content, index}
-              // console.log("routineForModal", routineForModal);
 
               return <ClickableTag
                 key={routine.id}

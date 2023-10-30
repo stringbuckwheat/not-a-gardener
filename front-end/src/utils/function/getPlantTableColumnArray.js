@@ -53,11 +53,16 @@ const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey
         render: (_, record) => (
           <Tag color="green">{record.placeName}</Tag>
         ),
-        filters: placeList.map((place) => ({
-          text: place.placeName,
-          value: place.placeName
-        })),
-        onFilter: (value, record) => record.placeName.indexOf(value) == 0,
+        filters: placeList.map((place) => {
+          return (
+            {
+              text: place.label,
+              value: place.value
+            }
+          )
+
+        }),
+        onFilter: (value, record) => (record.placeId == value),
       },
       {
         title: '물주기',
