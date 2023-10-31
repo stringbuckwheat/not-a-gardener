@@ -27,7 +27,7 @@ const SocialLogin = () => {
 
           return (<CCol xs={4} className={"text-center"}>
           <a
-            href={provider !== "naver" ? `http://localhost:8080${authorizationUrl}/${provider}` : "javascript:alert('검수 승인 대기중입니다')"}
+            href={provider !== "naver" ? `${authorizationUrl}/${provider}` : "javascript:alert('검수 승인 대기중입니다')"}
             className="social-button"
             id={`${provider}-connect`}>
           </a>

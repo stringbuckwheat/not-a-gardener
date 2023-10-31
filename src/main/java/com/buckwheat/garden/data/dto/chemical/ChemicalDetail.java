@@ -1,9 +1,6 @@
 package com.buckwheat.garden.data.dto.chemical;
 
-import com.buckwheat.garden.data.dto.watering.WateringResponseInChemical;
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @ToString
@@ -11,5 +8,5 @@ import java.util.List;
 @AllArgsConstructor
 public class ChemicalDetail {
     private ChemicalDto chemical;
-    private List<WateringResponseInChemical> waterings;
+    private long wateringSize;
 }

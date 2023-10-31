@@ -1,6 +1,7 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.dao.ChemicalDao;
+import com.buckwheat.garden.dao.WateringDao;
 import com.buckwheat.garden.data.dto.chemical.ChemicalDetail;
 import com.buckwheat.garden.data.dto.chemical.ChemicalDto;
 import com.buckwheat.garden.data.dto.watering.WateringResponseInChemical;
@@ -8,6 +9,7 @@ import com.buckwheat.garden.data.entity.Chemical;
 import com.buckwheat.garden.service.ChemicalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ChemicalServiceImpl implements ChemicalService {
     private final ChemicalDao chemicalDao;
+    private final WateringDao wateringDao;
 
     /**
      * 전체 chemical 리스트
@@ -41,12 +44,17 @@ public class ChemicalServiceImpl implements ChemicalService {
     @Override
     public ChemicalDetail getDetail(Long chemicalId, Long gardenerId) {
         Chemical chemical = chemicalDao.getChemicalByChemicalIdAndGardenerId(chemicalId, gardenerId);
+        Long wateringSize = wateringDao.getCountByChemical_ChemicalId(chemicalId);
 
-        List<WateringResponseInChemical> waterings = chemical.getWaterings().stream()
+        return new ChemicalDetail(ChemicalDto.from(chemical), wateringSize);
+    }
+
+    @Override
+    public List<WateringResponseInChemical> getWateringWithPaging(Long chemicalId, Pageable pageable) {
+        return wateringDao.getWateringsByChemicalIdWithPage(chemicalId, pageable)
+                .stream()
                 .map(WateringResponseInChemical::from)
                 .collect(Collectors.toList());
-
-        return new ChemicalDetail(ChemicalDto.from(chemical), waterings);
     }
 
     @Override

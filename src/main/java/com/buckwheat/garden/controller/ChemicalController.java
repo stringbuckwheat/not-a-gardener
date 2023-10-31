@@ -2,10 +2,13 @@ package com.buckwheat.garden.controller;
 
 import com.buckwheat.garden.data.dto.chemical.ChemicalDetail;
 import com.buckwheat.garden.data.dto.chemical.ChemicalDto;
+import com.buckwheat.garden.data.dto.watering.WateringResponseInChemical;
 import com.buckwheat.garden.data.token.UserPrincipal;
 import com.buckwheat.garden.service.ChemicalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +39,11 @@ public class ChemicalController {
     @GetMapping("/{chemicalId}")
     public ChemicalDetail getDetail(@PathVariable Long chemicalId, @AuthenticationPrincipal UserPrincipal user){
         return chemicalService.getDetail(chemicalId, user.getId());
+    }
+
+    @GetMapping("/{chemicalId}/watering")
+    public List<WateringResponseInChemical> getWateringWithPaging(@PathVariable Long chemicalId, @PageableDefault(size = 10) Pageable pageable){
+        return chemicalService.getWateringWithPaging(chemicalId, pageable);
     }
 
     /**

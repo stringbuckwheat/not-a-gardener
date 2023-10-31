@@ -2,42 +2,42 @@ import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react"
 import ChemicalTag from "src/components/tag/ChemicalTag";
 import DetailLayout from "src/components/data/layout/DetailLayout";
-import {Table} from "antd";
 import FormProvider from "src/components/form/FormProvider";
 import getChemicalFormArray from "../../utils/function/getChemicalFormArray";
-import wateringTableColumnArray from "../../utils/dataArray/wateringTableColumnInChemicalArray";
 import RemoveModal from "../../components/modal/RemoveModal";
 import deleteData from "../../api/backend-api/common/deleteData";
 import getData from "../../api/backend-api/common/getData";
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 import updateData from "../../api/backend-api/common/updateData";
+import ChemicalTable from "./ChemicalTable";
 
 const ChemicalDetail = () => {
   const chemicalId = useParams().chemicalId;
   const state = useLocation().state;
 
   const [chemical, setChemical] = useState({});
-  const [wateringList, setWateringList] = useState([]);
   const [modifyChemical, setModifyChemical] = useState(chemical);
   const [onModify, setOnModify] = useState(false);
+  const [wateringSize, setWateringSize] = useState(0);
 
   const navigate = useNavigate();
 
   const onMountChemicalDetail = async () => {
+    console.log("ONMOUNTCHEMICALDETAIL")
+
     try {
-      const res = await getData(`/chemical/${chemicalId}`);
+      const res = await getData(`/chemical/${chemicalId}?page=0`);
 
       console.log("res", res);
       setChemical(res.chemical);
+      setWateringSize(res.wateringSize);
       setModifyChemical(res.chemical);
-      setWateringList(res.waterings);
     } catch (e) {
       if (e.code === "B006") {
         alert("해당 약품/비료를 찾을 수 없어요");
         navigate("/chemical");
       }
     }
-
   }
 
   useEffect(() => {
@@ -45,7 +45,6 @@ const ChemicalDetail = () => {
   }, []);
 
   useEffect(() => {
-    console.log("state", state);
     if (state == null) {
       return;
     }
@@ -81,7 +80,7 @@ const ChemicalDetail = () => {
         url="/chemical"
         path={chemicalId}
         deleteTitle="비료/살균/살충제"
-        tags={<ChemicalTag chemical={chemical} wateringListSize={wateringList.length}/>}
+        tags={<ChemicalTag chemical={chemical} wateringListSize={wateringSize}/>}
         onClickModifyBtn={() => setOnModify(!onModify)}
         deleteModal={
           <RemoveModal
@@ -89,9 +88,7 @@ const ChemicalDetail = () => {
             modalTitle={"이 비료/살균/살충제를 삭제하실 건가요?"}
             deleteButtonTitle={"삭제하기"}
             modalContent={"물주기 기록은 보존됩니다."}/>}
-        bottomData={<Table
-          columns={wateringTableColumnArray}
-          dataSource={wateringList}/>}
+        bottomData={<ChemicalTable chemicalId={chemicalId} wateringSize={wateringSize}/>}
       />)
     :
     (<FormProvider

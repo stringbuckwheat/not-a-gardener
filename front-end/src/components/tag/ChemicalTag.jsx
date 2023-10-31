@@ -1,8 +1,6 @@
 import {Space, Tag} from 'antd';
 
 const ChemicalTag = ({chemical, wateringListSize}) => {
-  console.log("chemical", chemical);
-
   return (
     <Space size={[0, 8]} wrap>
       <Tag color="blue">{chemical.type}</Tag>

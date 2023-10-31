@@ -14,7 +14,6 @@ const Chemical = () => {
 
   const onMountChemical = async () => {
     const data = await getData("/chemical");
-    console.log("data", data);
 
     dispatch({type: 'setChemicals', payload: data});
 

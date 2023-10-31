@@ -12,6 +12,7 @@ import com.buckwheat.garden.repository.PlantRepository;
 import com.buckwheat.garden.repository.WateringRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,6 +64,16 @@ public class WateringDaoImpl implements WateringDao {
     @Override
     public List<ChemicalUsage> getLatestChemicalUsages(Long gardenerId, Long plantId) {
         return wateringRepository.findLatestChemicalizedDayList(gardenerId, plantId);
+    }
+
+    @Override
+    public List<Watering> getWateringsByChemicalIdWithPage(Long chemicalId, Pageable pageable) {
+        return wateringRepository.findWateringsByChemicalIdWithPage(chemicalId, pageable);
+    }
+
+    @Override
+    public Long getCountByChemical_ChemicalId(Long chemicalId) {
+        return wateringRepository.countByChemical_ChemicalId(chemicalId);
     }
 
     @Override
