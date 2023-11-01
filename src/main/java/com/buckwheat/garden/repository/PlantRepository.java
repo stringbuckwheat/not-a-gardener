@@ -43,6 +43,8 @@ public interface PlantRepository extends JpaRepository<Plant, Long>, PlantReposi
     @EntityGraph(attributePaths = {"place", "waterings", "waterings.chemical"}, type= EntityGraph.EntityGraphType.FETCH)
     Optional<Plant> findByPlantId(Long plantId);
 
+    int countByPlace_PlaceId(Long placeId);
+
     // 메인페이지 todolist 용 메소드
     @Query(value = "SELECT p.plant_id plantId, p.name name, p.species, p.recent_watering_period recentWateringPeriod, " +
             " p.early_watering_period earlyWateringPeriod, p.medium, p.birthday, p.condition_date conditionDate, " +

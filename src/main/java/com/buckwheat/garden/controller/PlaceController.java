@@ -2,11 +2,13 @@ package com.buckwheat.garden.controller;
 
 import com.buckwheat.garden.data.dto.place.PlaceCard;
 import com.buckwheat.garden.data.dto.place.PlaceDto;
-import com.buckwheat.garden.data.dto.place.PlaceWithPlants;
+import com.buckwheat.garden.data.dto.plant.PlantInPlace;
 import com.buckwheat.garden.data.token.UserPrincipal;
 import com.buckwheat.garden.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,8 +37,16 @@ public class PlaceController {
      * @return
      */
     @GetMapping("/{placeId}")
-    public PlaceWithPlants getDetail(@PathVariable Long placeId, @AuthenticationPrincipal UserPrincipal user){
+    public PlaceDto getDetail(@PathVariable Long placeId, @AuthenticationPrincipal UserPrincipal user){
         return placeService.getDetail(placeId, user.getId());
+    }
+
+    /**
+     * 장소 내 식물 리스트 페이징
+     */
+    @GetMapping("/{placeId}/plant")
+    public List<PlantInPlace> getPlantsWithPaging(@PathVariable Long placeId, @PageableDefault(size = 10) Pageable pageable){
+        return placeService.getPlantsWithPaging(placeId, pageable);
     }
 
     /**

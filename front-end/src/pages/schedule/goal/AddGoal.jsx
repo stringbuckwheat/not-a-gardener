@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import CIcon from "@coreui/icons-react";
 import {cilX} from "@coreui/icons";
-import InputWithFeedback from "../../../components/input/InputWithFeedback";
+import InputWithFeedback from "../../../components/form/input/InputWithFeedback";
 import SelectPlant from "../../../components/select/SelectPlant";
 import {Card} from "antd";
 import ValidationSubmitButton from "../../../components/button/ValidationSubmitButton";

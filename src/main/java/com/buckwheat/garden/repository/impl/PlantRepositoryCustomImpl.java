@@ -4,6 +4,7 @@ import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.repository.PlantRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -23,6 +24,18 @@ public class PlantRepositoryCustomImpl implements PlantRepositoryCustom {
                 .leftJoin(plant.waterings, watering)
                 .where(plant.gardener.gardenerId.eq(gardenerId)
                         .and(watering.plant.plantId.isNull()))
+                .fetch();
+    }
+
+    @Override
+    public List<Plant> findPlantsByPlaceIdWithPage(Long placeId, Pageable pageable) {
+        return queryFactory
+                .selectFrom(plant)
+                .join(plant.place, place)
+                .where(plant.place.placeId.eq(placeId))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(plant.createDate.desc())
                 .fetch();
     }
 }

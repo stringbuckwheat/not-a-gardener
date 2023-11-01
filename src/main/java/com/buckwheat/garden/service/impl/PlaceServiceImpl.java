@@ -3,12 +3,13 @@ package com.buckwheat.garden.service.impl;
 import com.buckwheat.garden.dao.PlaceDao;
 import com.buckwheat.garden.data.dto.place.PlaceCard;
 import com.buckwheat.garden.data.dto.place.PlaceDto;
-import com.buckwheat.garden.data.dto.place.PlaceWithPlants;
 import com.buckwheat.garden.data.dto.plant.PlantInPlace;
 import com.buckwheat.garden.data.entity.Place;
+import com.buckwheat.garden.repository.PlantRepository;
 import com.buckwheat.garden.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PlaceServiceImpl implements PlaceService {
     private final PlaceDao placeDao;
-
+    private final PlantRepository plantRepository;
 
     /**
      * 전체 장소 리스트
@@ -40,14 +41,17 @@ public class PlaceServiceImpl implements PlaceService {
      * @return 해당 장소의 식물 개수를 포함하는 장소 정보
      */
     @Override
-    public PlaceWithPlants getDetail(Long placeId, Long gardenerId) {
+    public PlaceDto getDetail(Long placeId, Long gardenerId) {
         Place place = placeDao.getPlaceWithPlants(placeId, gardenerId);
+        int plantListSize = plantRepository.countByPlace_PlaceId(placeId);
+        return PlaceDto.from(place, plantListSize);
+    }
 
-        List<PlantInPlace> plants = place.getPlants().stream()
+    @Override
+    public List<PlantInPlace> getPlantsWithPaging(Long placeId, Pageable pageable) {
+        return plantRepository.findPlantsByPlaceIdWithPage(placeId, pageable).stream()
                 .map(PlantInPlace::from)
                 .collect(Collectors.toList());
-
-        return new PlaceWithPlants(PlaceDto.from(place), plants);
     }
 
     @Override

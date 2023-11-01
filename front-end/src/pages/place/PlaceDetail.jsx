@@ -19,7 +19,6 @@ const PlaceDetail = () => {
 
   const [loading, setLoading] = useState(true);
   const [place, setPlace] = useState({});
-  const [plantList, setPlantList] = useState([]);
 
   // 수정 컴포넌트를 띄울지, 상세보기 컴포넌트를 띄울지
   const [onModify, setOnModify] = useState(false);
@@ -31,14 +30,13 @@ const PlaceDetail = () => {
   const onClickModifyBtn = () => setOnModify(!onModify);
 
   const onMountPlaceDetail = async () => {
-    try{
+    try {
       const res = await getData(`/place/${placeId}`);
       console.log("res", res);
-      setPlace(res.place);
-      setPlantList(res.plantList);
+      setPlace({...res});
       setLoading(false);
     } catch (e) {
-      if(e.code === "B006"){
+      if (e.code === "B006") {
         alert("해당 장소를 찾을 수 없어요");
         navigate("/place");
       }
@@ -46,24 +44,17 @@ const PlaceDetail = () => {
   }
 
   useEffect(() => {
+    console.log("state", state);
+
     if (state == null) {
       return;
     }
 
-    if (!state.place && !state.plantList) {
-      // 장소 수정
-      setPlace(state);
-      return;
-    }
-
-    // 다른 장소의 식물 이동
-    setPlace(state.place);
-    setPlantList(state.plantList);
-  }, [state])
-
-  useEffect(() => {
+    console.log("장소수정")
+    console.log("state", state);
     onMountPlaceDetail();
-  }, [placeId]);
+    setPlace(state);
+  }, [state])
 
   if (loading) {
     return <Loading/>
@@ -77,17 +68,17 @@ const PlaceDetail = () => {
         url="/place"
         path={placeId}
         deleteTitle="장소"
-        tags={<PlaceTag place={place} howManyPlant={plantList.length}/>}
+        tags={<PlaceTag place={place} howManyPlant={place.plantListSize}/>}
         onClickModifyBtn={onClickModifyBtn}
         deleteModal={
           <DeletePlaceModal
-            placeId={placeId}
-            plantListSize={plantList.length}/>}
+            placeId={place.id}
+            plantListSize={place.plantListSize}/>}
         bottomData={
           <PlaceTableForPlant
+            placeId={placeId}
+            plantListSize={place.plantListSize}
             placeName={place.name}
-            plantList={plantList}
-            setPlantList={setPlantList}
           />}
       />
       :

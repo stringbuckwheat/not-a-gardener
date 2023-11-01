@@ -1,5 +1,5 @@
 import {Input} from "antd";
-import InputFeedbackSpan from "../etc/InputFeedbackSpan";
+import InputFeedbackSpan from "../../etc/InputFeedbackSpan";
 import React from "react";
 
 const InputWithFeedback = ({name, label, labelColor, size, onChange, defaultValue, feedbackMsg, className}) => {

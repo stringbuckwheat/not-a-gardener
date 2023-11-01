@@ -9,7 +9,8 @@ import deleteData from "../../api/backend-api/common/deleteData";
 import getData from "../../api/backend-api/common/getData";
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 import updateData from "../../api/backend-api/common/updateData";
-import ChemicalTable from "./ChemicalTable";
+import TableWithPage from "../../components/data/TableWithPage";
+import wateringTableColumnArray from "../../utils/dataArray/wateringTableColumnInChemicalArray";
 
 const ChemicalDetail = () => {
   const chemicalId = useParams().chemicalId;
@@ -73,6 +74,10 @@ const ChemicalDetail = () => {
     setOnModify(false);
   }
 
+  const getChemicalUsage = async (page) => {
+    return (await getData(`/chemical/${chemicalId}/watering?page=${page - 1}`));
+  }
+
   return !onModify
     ? (
       <DetailLayout
@@ -88,7 +93,7 @@ const ChemicalDetail = () => {
             modalTitle={"이 비료/살균/살충제를 삭제하실 건가요?"}
             deleteButtonTitle={"삭제하기"}
             modalContent={"물주기 기록은 보존됩니다."}/>}
-        bottomData={<ChemicalTable chemicalId={chemicalId} wateringSize={wateringSize}/>}
+        bottomData={<TableWithPage columns={wateringTableColumnArray} getDataSource={getChemicalUsage} total={wateringSize}/>}
       />)
     :
     (<FormProvider

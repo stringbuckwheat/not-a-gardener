@@ -39,8 +39,6 @@ public class WateringRepositoryCustomImpl implements WateringRepositoryCustom {
 
     @Override
     public List<Watering> findWateringsByChemicalIdWithPage(Long chemicalId, Pageable pageable) {
-        log.debug("pageable.getPageSize : {}", pageable.getPageSize());
-
         List<Watering> waterings = queryFactory
                 .selectFrom(watering)
                 .from(watering)

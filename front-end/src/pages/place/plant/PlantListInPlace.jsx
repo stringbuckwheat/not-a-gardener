@@ -1,10 +1,13 @@
-import {Table} from 'antd';
-import {useState} from 'react';
+import {Flex, Pagination, Table} from 'antd';
+import {useEffect, useState} from 'react';
 import ChangePlaceOfPlantOnPlace from './ChangePlaceOfPlantOnPlace';
 import AddPlantInPlaceButtons from './AddPlantInPlaceButtons';
 import getPlantListForPlacePlantTable from "../../../utils/function/getPlantListForPlacePlantTable";
 import deleteData from "../../../api/backend-api/common/deleteData";
 import getPlantTableColArrInPlace from "../../../utils/function/getPlantTableColArrInPlace";
+import getData from "../../../api/backend-api/common/getData";
+import wateringTableColumnArray from "../../../utils/dataArray/wateringTableColumnInChemicalArray";
+import TableWithPage from "../../../components/data/TableWithPage";
 
 /**
  * 장소 페이지 하단, 이 장소에 속한 식물들
@@ -15,7 +18,7 @@ import getPlantTableColArrInPlace from "../../../utils/function/getPlantTableCol
  * @returns {JSX.Element}
  * @constructor
  */
-const PlaceTableForPlant = ({plantList, setPlantList, placeName}) => {
+const PlaceTableForPlant = ({plantList, setPlantList, placeName, placeId, plantListSize}) => {
   // select
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
@@ -40,6 +43,12 @@ const PlaceTableForPlant = ({plantList, setPlantList, placeName}) => {
     setPlantList(() => deletedList);
   }
 
+  const getPlants = async (page) => {
+    console.log("placeId", placeId);
+    const plantList = (await getData(`/place/${placeId}/plant?page=${page - 1}`));
+    return getPlantListForPlacePlantTable(plantList);
+  }
+
   return (
     <div className="mt-4">
       {
@@ -53,10 +62,12 @@ const PlaceTableForPlant = ({plantList, setPlantList, placeName}) => {
             plantList={plantList}
             setPlantList={setPlantList}/>
       }
-      <Table
+      <TableWithPage
+        key={placeId}
+        rowSelection={rowSelection}
         columns={getPlantTableColArrInPlace(deletePlant)}
-        dataSource={getPlantListForPlacePlantTable(plantList)}
-        rowSelection={rowSelection} // for multi-select
+        getDataSource={getPlants}
+        total={plantListSize}
       />
     </div>
   )

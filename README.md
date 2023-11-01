@@ -70,6 +70,7 @@ not-a-gardener/
 │   ├── components/   ## 재사용할 컴포넌트
 │   ├── pages/        ## 페이지
 │   ├── utils/        ## util 함수
+│   └── redux/        ## redux reducer, store...
 ├── gradle/  
 │ └── wrapper/  
 └── src/

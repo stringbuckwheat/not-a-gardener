@@ -3,7 +3,7 @@ import {cilX} from "@coreui/icons";
 import {Card, Checkbox, Input, Row, Select, Space} from "antd";
 import React, {useState} from "react";
 import SelectPlant from "../../../components/select/SelectPlant";
-import InputWithFeedback from "../../../components/input/InputWithFeedback";
+import InputWithFeedback from "../../../components/form/input/InputWithFeedback";
 import ValidationSubmitButton from "../../../components/button/ValidationSubmitButton";
 import postData from "../../../api/backend-api/common/postData";
 
