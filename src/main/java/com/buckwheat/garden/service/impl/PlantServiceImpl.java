@@ -4,19 +4,17 @@ import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.data.dto.garden.GardenResponse;
 import com.buckwheat.garden.data.dto.place.ModifyPlace;
 import com.buckwheat.garden.data.dto.place.PlaceDto;
-import com.buckwheat.garden.data.dto.plant.PlantDetail;
 import com.buckwheat.garden.data.dto.plant.PlantRequest;
 import com.buckwheat.garden.data.dto.plant.PlantResponse;
-import com.buckwheat.garden.data.dto.watering.WateringForOnePlant;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.projection.Calculate;
 import com.buckwheat.garden.service.PlantService;
-import com.buckwheat.garden.util.WateringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +24,6 @@ import java.util.stream.Collectors;
 public class PlantServiceImpl implements PlantService {
     private final PlantDao plantDao;
     private final GardenResponseProvider gardenResponseProvider;
-    private final WateringUtil wateringUtil;
 
     /**
      * 전체 식물 리스트
@@ -48,12 +45,13 @@ public class PlantServiceImpl implements PlantService {
      * @return
      */
     @Override
-    public PlantDetail getDetail(Long plantId, Long gardenerId) {
+    public PlantResponse getDetail(Long plantId, Long gardenerId) {
         Plant plant = plantDao.getPlantWithPlantIdAndGardenerId(plantId, gardenerId);
 
-        List<WateringForOnePlant> waterings = wateringUtil.withWateringPeriodList(plant.getWaterings());
+        int totalWaterings = plantDao.getTotalWateringsForPlant(plantId);
+        LocalDate latestWateringDate = plantDao.getLatestWateringDate(plantId);
 
-        return new PlantDetail(PlantResponse.from(plant), waterings);
+        return PlantResponse.from(plant, totalWaterings, latestWateringDate);
     }
 
     @Override

@@ -10,11 +10,13 @@ import com.buckwheat.garden.data.projection.RawGarden;
 import com.buckwheat.garden.repository.GardenerRepository;
 import com.buckwheat.garden.repository.PlaceRepository;
 import com.buckwheat.garden.repository.PlantRepository;
+import com.buckwheat.garden.repository.WateringRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -25,6 +27,7 @@ public class PlantDaoImpl implements PlantDao {
     private final PlantRepository plantRepository;
     private final PlaceRepository placeRepository;
     private final GardenerRepository gardenerRepository;
+    private final WateringRepository wateringRepository;
 
     @Override
     public List<RawGarden> getGarden(Long gardenerId) {
@@ -108,5 +111,15 @@ public class PlantDaoImpl implements PlantDao {
     @Override
     public void deleteBy(Long id, Long gardenerId){
         plantRepository.deleteById(id);
+    }
+
+    @Override
+    public int getTotalWateringsForPlant(Long plantId) {
+        return wateringRepository.countByPlant_PlantId(plantId);
+    }
+
+    @Override
+    public LocalDate getLatestWateringDate(Long plantId) {
+        return wateringRepository.findLatestWateringDate(plantId);
     }
 }

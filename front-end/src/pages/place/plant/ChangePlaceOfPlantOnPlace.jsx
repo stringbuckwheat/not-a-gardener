@@ -50,7 +50,7 @@ const ChangePlaceOfPlantOnPlace = ({setSelectedRowKeys, selectedPlantId}) => {
   const modifyPlaceOfPlant = async () => {
     await updateData(`/plant/place/${placeId}`, {placeId, plants: selectedPlantId})
     setSelectedRowKeys([]);
-    navigate(`/place/${placeId}`);
+    navigate(`/place/${placeId}`, {state: {placeId: placeId}});
   }
 
   return (

@@ -17,17 +17,17 @@ const PlantDetail = () => {
   const state = useLocation().state;
 
   const [plant, setPlant] = useState({});
-  const [wateringList, setWateringList] = useState([{}]);
+  const [totalWaterings, setTotalWaterings] = useState();
 
   const navigate = useNavigate();
 
   const onMount = async () => {
-    try{
+    try {
       const res = await getData(`/plant/${plantId}`);
-      setPlant(res.plant);
-      setWateringList(res.waterings);
+      setPlant(res);
+      setTotalWaterings(res.totalWaterings);
     } catch (e) {
-      if(e.code === "B006"){
+      if (e.code === "B006") {
         alert("해당 식물을 찾을 수 없어요");
         navigate("/plant");
       }
@@ -61,14 +61,14 @@ const PlantDetail = () => {
         deleteTitle="식물"
         tags={<PlantTag
           plant={plant}
-          latestWateringDate={wateringList[0]}
-          wateringListSize={wateringList.length}/>}
+          latestWateringDate={plant.latestWateringDate}
+          wateringListSize={totalWaterings}/>}
         onClickModifyBtn={onClickModifyBtn}
         bottomData={<WateringList
-          plant={plant}
-          setPlant={setPlant}
-          wateringList={wateringList}
-          setWateringList={setWateringList}/>}
+          total={totalWaterings}
+          setTotal={setTotalWaterings}
+          plantId={plantId}
+          setPlant={setPlant}/>}
       />
       :
       <ModifyPlant

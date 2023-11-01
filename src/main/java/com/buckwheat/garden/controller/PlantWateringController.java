@@ -6,6 +6,8 @@ import com.buckwheat.garden.data.dto.watering.WateringRequest;
 import com.buckwheat.garden.service.PlantWateringService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,46 +22,52 @@ public class PlantWateringController {
 
     /**
      * 한 식물의 물주기 기록 리스트
+     *
      * @param plantId
      * @return
      */
     @GetMapping("")
-    public List<WateringForOnePlant> getAll(@PathVariable long plantId){
-        return plantWateringService.getAll(plantId);
+    public List<WateringForOnePlant> getAllWithPaging(@PathVariable long plantId, @PageableDefault(size = 10) Pageable pageable) {
+        return plantWateringService.getAll(plantId, pageable);
     }
+
 
     /**
      * 식물 상세 페이지에서 물주기
+     *
      * @param wateringRequest
      * @return
      */
     @PostMapping("")
-    public AfterWatering add(@RequestBody WateringRequest wateringRequest){
-        return plantWateringService.add(wateringRequest);
+    public AfterWatering add(@RequestBody WateringRequest wateringRequest, @PageableDefault(size = 10) Pageable pageable) {
+        return plantWateringService.add(wateringRequest, pageable);
     }
 
     /**
      * 식물 상세페이지에서 물주기 수정
+     *
      * @param wateringRequest
      * @return
      */
     @PutMapping("/{wateringId}")
-    public AfterWatering modify(@RequestBody WateringRequest wateringRequest){
+    public AfterWatering modify(@RequestBody WateringRequest wateringRequest, @PageableDefault(size = 10) Pageable pageable) {
         log.debug("request: {}", wateringRequest);
-        return plantWateringService.modify(wateringRequest);
+        return plantWateringService.modify(wateringRequest, pageable);
     }
 
     /**
      * 한 식물의 물주기 기록 '한 개' 지우기
+     *
      * @param wateringId
      */
     @DeleteMapping("/{wateringId}")
-    public void delete(@PathVariable Long wateringId){
+    public void delete(@PathVariable Long wateringId) {
         plantWateringService.delete(wateringId);
     }
 
     /**
      * 해당 식물의 물주기 모두 지우기
+     *
      * @param plantId
      */
     @DeleteMapping("")

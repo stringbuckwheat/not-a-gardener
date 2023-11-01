@@ -44,6 +44,10 @@ const PlaceDetail = () => {
   }
 
   useEffect(() => {
+    onMountPlaceDetail();
+  }, [])
+
+  useEffect(() => {
     console.log("state", state);
 
     if (state == null) {

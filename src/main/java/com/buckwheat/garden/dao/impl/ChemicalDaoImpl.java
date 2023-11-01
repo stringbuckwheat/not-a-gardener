@@ -20,12 +20,12 @@ public class ChemicalDaoImpl implements ChemicalDao {
     private final GardenerRepository gardenerRepository;
 
     @Override
-    public List<Chemical> getActivatedChemicalsByGardenerId(Long gardenerId){
+    public List<Chemical> getAllActivate(Long gardenerId) {
         return chemicalRepository.findByActiveAndGardener_GardenerId("Y", gardenerId);
     }
 
     @Override
-    public Chemical getChemicalByChemicalIdAndGardenerId(Long chemicalId, Long gardenerId){
+    public Chemical getChemicalByChemicalIdAndGardenerId(Long chemicalId, Long gardenerId) {
         return chemicalRepository.findByChemicalIdAndGardener_GardenerId(chemicalId, gardenerId)
                 .orElseThrow(NoSuchElementException::new);
     }

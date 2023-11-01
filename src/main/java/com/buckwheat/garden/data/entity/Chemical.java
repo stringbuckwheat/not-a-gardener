@@ -6,9 +6,6 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Table(name = "chemical")
 @Getter
@@ -44,10 +41,6 @@ public class Chemical {
     @JoinColumn(name = "gardener_id")
     @OnDelete(action= OnDeleteAction.CASCADE) // ddl: on delete cascade
     private Gardener gardener;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "chemical")
-    @OrderBy("watering_date desc")
-    private List<Watering> waterings = new ArrayList<>();
 
     public void deactivate(){
         this.active = "N";

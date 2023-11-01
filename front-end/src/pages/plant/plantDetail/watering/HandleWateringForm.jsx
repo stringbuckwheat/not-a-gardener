@@ -10,7 +10,9 @@ const HandleWateringForm = ({
                               isWateringFormOpen,
                               setIsWateringFormOpen,
                               setEditingKey,
-                              wateringCallBack
+                              wateringCallBack,
+                              total,
+                              setTotal
                             }) => {
   const deleteAllWatering = async () => {
     await deleteData(`/plant/${plantId}/watering`);
@@ -31,6 +33,8 @@ const HandleWateringForm = ({
           closeForm={() => setIsWateringFormOpen(!isWateringFormOpen)}
           chemicalList={chemicalList}
           wateringCallBack={wateringCallBack}
+          total={total}
+          setTotal={setTotal}
         />
         :
         <Space size={[1, 5]} className="float-end">

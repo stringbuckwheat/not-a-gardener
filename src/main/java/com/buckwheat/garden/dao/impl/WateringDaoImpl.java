@@ -31,9 +31,11 @@ public class WateringDaoImpl implements WateringDao {
     @Override
     @Transactional
     public Watering addWatering(WateringRequest wateringRequest) {
+        // TODO 단순 존재 유무만 쿼리
+        // Querydsl 의 exist 는 내부적으로 count 쿼리를 사용하고 있기에, limit(1) 을 직접 구현해서 사용하는 것이 좋습니다.
         Watering w = wateringRepository.findByWateringDateAndPlant_PlantId(wateringRequest.getWateringDate(), wateringRequest.getPlantId());
 
-        if(w != null){
+        if (w != null) {
             throw new AlreadyWateredException();
         }
 
@@ -51,8 +53,8 @@ public class WateringDaoImpl implements WateringDao {
     }
 
     @Override
-    public List<Watering> getWateringListByPlantId(Long plantId) {
-        return wateringRepository.findByPlant_PlantIdOrderByWateringDateDesc(plantId);
+    public List<Watering> getWateringListByPlantId(Long plantId, Pageable pageable) {
+        return wateringRepository.findWateringsByPlantIdWithPage(plantId, pageable);
     }
 
     @Override
@@ -72,7 +74,7 @@ public class WateringDaoImpl implements WateringDao {
     }
 
     @Override
-    public Long getCountByChemical_ChemicalId(Long chemicalId) {
+    public int getCountByChemical_ChemicalId(Long chemicalId) {
         return wateringRepository.countByChemical_ChemicalId(chemicalId);
     }
 

@@ -6,6 +6,7 @@ import com.buckwheat.garden.data.entity.Place;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.projection.RawGarden;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface PlantDao {
@@ -21,4 +22,6 @@ public interface PlantDao {
     Place updatePlantPlace(ModifyPlace modifyPlantPlaceDto, Long gardenerId);
     void updateConditionDate(Plant plant);
     void deleteBy(Long id, Long gardenerId);
+    int getTotalWateringsForPlant(Long plantId);
+    LocalDate getLatestWateringDate(Long plantId);
 }

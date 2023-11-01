@@ -17,7 +17,7 @@ import getDisabledDate from 'src/utils/function/getDisabledDate';
  * @returns {JSX.Element}
  * @constructor
  */
-const WateringForm = ({plantId, closeForm, chemicalList, wateringCallBack}) => {
+const WateringForm = ({plantId, closeForm, chemicalList, wateringCallBack, total, setTotal}) => {
   const [watering, setWatering] = useState({plantId, chemicalId: chemicalList[0].value});
 
   const onSubmit = async () => {
@@ -27,8 +27,9 @@ const WateringForm = ({plantId, closeForm, chemicalList, wateringCallBack}) => {
     try {
       res = await postData(`/plant/${plantId}/watering`, watering);
       console.log("res", res);
+      setTotal(total + 1);
     } catch (e) {
-      if(e.code == "B005"){
+      if (e.code == "B005") {
         alert(e.message);
       }
     } finally {

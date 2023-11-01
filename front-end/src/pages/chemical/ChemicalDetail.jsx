@@ -27,7 +27,7 @@ const ChemicalDetail = () => {
     console.log("ONMOUNTCHEMICALDETAIL")
 
     try {
-      const res = await getData(`/chemical/${chemicalId}?page=0`);
+      const res = await getData(`/chemical/${chemicalId}`);
 
       console.log("res", res);
       setChemical(res.chemical);
@@ -93,7 +93,9 @@ const ChemicalDetail = () => {
             modalTitle={"이 비료/살균/살충제를 삭제하실 건가요?"}
             deleteButtonTitle={"삭제하기"}
             modalContent={"물주기 기록은 보존됩니다."}/>}
-        bottomData={<TableWithPage columns={wateringTableColumnArray} getDataSource={getChemicalUsage} total={wateringSize}/>}
+        bottomData={<TableWithPage columns={wateringTableColumnArray}
+                                   getDataSource={getChemicalUsage}
+                                   total={wateringSize}/>}
       />)
     :
     (<FormProvider

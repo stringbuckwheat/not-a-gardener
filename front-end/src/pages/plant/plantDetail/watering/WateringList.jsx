@@ -18,13 +18,14 @@ import getChemicalListForSelect from "../../../../api/service/getChemicalListFor
 import getWateringListForTable from "../../../../utils/function/getWateringListForTable";
 import getWateringTableColumnArray from "../../../../utils/function/getWateringTableColumnArray";
 import getMergedColumns from "../../../../utils/function/getMergedColumns";
+import getData from "../../../../api/backend-api/common/getData";
 
 /**
  * 한 식물의 물주기 정보 plant detail 아래쪽 table
  * @param {*} props
  * @returns
  */
-const WateringList = ({plant, setPlant, wateringList, setWateringList}) => {
+const WateringList = ({plantId, setPlant, total, setTotal}) => {
   dayjs.extend(customParseFormat)
   dayjs.extend(advancedFormat)
   dayjs.extend(weekday)
@@ -32,14 +33,28 @@ const WateringList = ({plant, setPlant, wateringList, setWateringList}) => {
   dayjs.extend(weekOfYear)
   dayjs.extend(weekYear)
 
+  // 테이블에 넣을 물주기 데이터
+  const [waterings, setWaterings] = useState([]);
+  const [page, setPage] = useState(1);
+
   const [editWatering, setEditWatering] = useState({});
   const [chemicalList, setChemicalList] = useState([]);
   const [isWateringFormOpen, setIsWateringFormOpen] = useState(false);
 
   // 해당 유저의 chemical list
   useEffect(() => {
+    console.log("onmount")
     getChemicalListForSelect(setChemicalList);
   }, [])
+
+  useEffect(() => {
+    onMountWateringList();
+  }, [page])
+
+  const onMountWateringList = async () => {
+    const res = await getData(`/plant/${plantId}/watering?page=${page - 1}`);
+    setWaterings(() => res);
+  }
 
   // editable rows
   const [form] = Form.useForm();
@@ -55,7 +70,7 @@ const WateringList = ({plant, setPlant, wateringList, setWateringList}) => {
     });
 
     setEditWatering({
-      plantId: plant.id,
+      plantId: plantId,
       id: record.id,
       wateringDate: record.wateringDate,
       chemicalId: record.chemicalId,
@@ -69,7 +84,7 @@ const WateringList = ({plant, setPlant, wateringList, setWateringList}) => {
 
   const wateringCallBack = (res) => {
     console.log("wateringCallBack res", res);
-    setWateringList(res.waterings);
+    setWaterings(res.waterings);
     res.plant && setPlant(res.plant);
 
     if (res.wateringMsg) {
@@ -80,14 +95,21 @@ const WateringList = ({plant, setPlant, wateringList, setWateringList}) => {
 
   const updateWatering = async () => {
     console.log("update watering === editWatering", editWatering);
-    const res = await updateData(`/plant/${plant.id}/watering/${editWatering.id}`, editWatering);
+    const res = await updateData(`/plant/${plantId}/watering/${editWatering.id}?page=${page - 1}`, editWatering);
     wateringCallBack(res);
     setEditingKey('');
   };
 
   const deleteWatering = async (wateringId) => {
-    await deleteData(`/plant/${plant.id}/watering/${wateringId}`);
-    setWateringList(wateringList.filter(watering => watering.id !== wateringId))
+    await deleteData(`/plant/${plantId}/watering/${wateringId}`);
+
+    // 마지막 페이지 물주기 하나 남았을 때 삭제하면 한 페이지 앞으로 당김
+    if (waterings.length == 1 && page > 1) {
+      setPage(() => page - 1);
+    }
+
+    setWaterings(waterings.filter(watering => watering.id !== wateringId));
+    setTotal(total - 1);
   };
 
   const wateringTableColumnArray = getWateringTableColumnArray(isEditing, updateWatering, editingKey, cancel, edit, deleteWatering);
@@ -121,21 +143,23 @@ const WateringList = ({plant, setPlant, wateringList, setWateringList}) => {
       <CContainer>
         <div className="mt-4 mb-3">
           <HandleWateringForm
-            plantId={plant.id}
-            setWateringList={setWateringList}
+            plantId={plantId}
+            setWateringList={setWaterings}
             chemicalList={chemicalList}
             isWateringFormOpen={isWateringFormOpen}
             setIsWateringFormOpen={setIsWateringFormOpen}
             setEditingKey={setEditingKey}
             wateringCallBack={wateringCallBack}
+            total={total}
+            setTotal={setTotal}
           />
         </div>
         <Form form={form} component={false}>
           <Table
             components={tableBody}
-            pagination={{onChange: cancel}}
+            pagination={{onChange: (page) => setPage(() => page), total: total}}
             columns={mergedColumns}
-            dataSource={getWateringListForTable(wateringList)}
+            dataSource={getWateringListForTable(waterings)}
           />
         </Form>
       </CContainer>

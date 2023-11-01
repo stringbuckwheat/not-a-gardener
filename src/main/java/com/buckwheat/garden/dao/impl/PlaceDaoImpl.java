@@ -4,9 +4,12 @@ import com.buckwheat.garden.dao.PlaceDao;
 import com.buckwheat.garden.data.dto.place.PlaceDto;
 import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Place;
+import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.repository.GardenerRepository;
 import com.buckwheat.garden.repository.PlaceRepository;
+import com.buckwheat.garden.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +21,7 @@ import java.util.NoSuchElementException;
 public class PlaceDaoImpl implements PlaceDao {
     private final PlaceRepository placeRepository;
     private final GardenerRepository gardenerRepository;
+    private final PlantRepository plantRepository;
 
     /**
      * @param gardenerId
@@ -33,6 +37,16 @@ public class PlaceDaoImpl implements PlaceDao {
     public Place getPlaceWithPlants(Long placeId, Long gardenerId) {
         return placeRepository.findByPlaceIdAndGardener_GardenerId(placeId, gardenerId)
                 .orElseThrow(NoSuchElementException::new);
+    }
+
+    @Override
+    public int countPlantsInPlace(Long placeId) {
+        return plantRepository.countByPlace_PlaceId(placeId);
+    }
+
+    @Override
+    public List<Plant> getPlantsInPlace(Long placeId, Pageable pageable) {
+        return plantRepository.findPlantsByPlaceIdWithPage(placeId, pageable);
     }
 
     /**

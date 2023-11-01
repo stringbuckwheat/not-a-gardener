@@ -3,7 +3,6 @@ package com.buckwheat.garden.service;
 import com.buckwheat.garden.data.dto.garden.GardenResponse;
 import com.buckwheat.garden.data.dto.place.ModifyPlace;
 import com.buckwheat.garden.data.dto.place.PlaceDto;
-import com.buckwheat.garden.data.dto.plant.PlantDetail;
 import com.buckwheat.garden.data.dto.plant.PlantRequest;
 import com.buckwheat.garden.data.dto.plant.PlantResponse;
 
@@ -14,7 +13,7 @@ public interface PlantService {
     List<PlantResponse> getAll(Long gardenerId);
 
     /* 하나의 식물 */
-    PlantDetail getDetail(Long plantId, Long gardenerId);
+    PlantResponse getDetail(Long plantId, Long gardenerId);
 
     /* 식물 추가 */
     GardenResponse add(Long gardenerId, PlantRequest plantRequest);

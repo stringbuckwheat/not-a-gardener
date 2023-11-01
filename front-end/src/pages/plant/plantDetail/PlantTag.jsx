@@ -23,7 +23,7 @@ const PlantTag = ({plant, wateringListSize, latestWateringDate}) => {
 
   // 며칠 전에 물을 줬는지 계산
   const getLatestWateringDate = () => {
-    const latestWateringDay = new Date(latestWateringDate.wateringDate);
+    const latestWateringDay = new Date(latestWateringDate);
 
     const diffTime = today.getTime() - latestWateringDay.getTime();
     const diffDate = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // 올림
@@ -35,7 +35,7 @@ const PlantTag = ({plant, wateringListSize, latestWateringDate}) => {
     const recentWateringPeriod = plant.recentWateringPeriod;
 
     // 마지막 물주기 날짜에서 recentWateringPeriod 더하고
-    const nextWateringDate = new Date(latestWateringDate.wateringDate);
+    const nextWateringDate = new Date(latestWateringDate);
     nextWateringDate.setDate(nextWateringDate.getDate() + recentWateringPeriod);
 
     // 위 날짜에서 오늘 날짜를 뺸다
@@ -72,13 +72,13 @@ const PlantTag = ({plant, wateringListSize, latestWateringDate}) => {
   }
 
   const isNotDry = () => {
-    if(isToday(plant.conditionDate)){
+    if (isToday(plant.conditionDate)) {
       return <Tag color={"orange-inverse"}>오늘은 물이 마르지 않았어요</Tag>
     }
   }
 
   const isPostponed = () => {
-    if(isToday(plant.postponeDate)){
+    if (isToday(plant.postponeDate)) {
       return <Tag color={"orange-inverse"}>오늘 물주기를 미뤘어요</Tag>
     }
   }

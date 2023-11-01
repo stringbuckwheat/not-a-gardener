@@ -30,7 +30,7 @@ public class ChemicalServiceImpl implements ChemicalService {
      */
     @Override
     public List<ChemicalDto> getAll(Long gardenerId) {
-        return chemicalDao.getActivatedChemicalsByGardenerId(gardenerId).stream()
+        return chemicalDao.getAllActivate(gardenerId).stream()
                 .map(ChemicalDto::from)
                 .collect(Collectors.toList());
     }
@@ -44,7 +44,7 @@ public class ChemicalServiceImpl implements ChemicalService {
     @Override
     public ChemicalDetail getDetail(Long chemicalId, Long gardenerId) {
         Chemical chemical = chemicalDao.getChemicalByChemicalIdAndGardenerId(chemicalId, gardenerId);
-        Long wateringSize = wateringDao.getCountByChemical_ChemicalId(chemicalId);
+        int wateringSize = wateringDao.getCountByChemical_ChemicalId(chemicalId);
 
         return new ChemicalDetail(ChemicalDto.from(chemical), wateringSize);
     }

@@ -19,7 +19,8 @@ public interface WateringRepository extends JpaRepository<Watering, Long>, Water
 
     Watering findByWateringDateAndPlant_PlantId(LocalDate wateringDate, long plantId);
 
-    Long countByChemical_ChemicalId(Long chemicalId);
+    int countByChemical_ChemicalId(Long chemicalId);
+    int countByPlant_PlantId(Long placeId);
 
     @Transactional
     void deleteAllByPlant_PlantId(Long plantId);

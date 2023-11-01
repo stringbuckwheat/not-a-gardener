@@ -9,4 +9,6 @@ import java.util.List;
 public interface WateringRepositoryCustom {
     List<Watering> findAllWateringListByGardenerId(Long gardenerId, LocalDate startDate, LocalDate endDate);
     List<Watering> findWateringsByChemicalIdWithPage(Long chemicalId, Pageable pageable);
+    List<Watering> findWateringsByPlantIdWithPage(Long plantId, Pageable pageable);
+    LocalDate findLatestWateringDate(Long plantId);
 }

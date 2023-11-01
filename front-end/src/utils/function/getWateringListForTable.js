@@ -1,12 +1,15 @@
 const getWateringListForTable = (wateringList) => {
-  wateringList.map((watering) => (
-    {
-      ...watering,
-      wateringPeriod: watering.wateringPeriod === 0
-        ? ""
-        : `${watering.wateringPeriod}일만에`
-    }
-  ))
+  return wateringList.map((watering) => {
+    return (
+      {
+        ...watering,
+        period: watering.period == 0
+          ? "첫 관수 기록일!"
+          : `${watering.period}일만에`
+      }
+    )
+  }
+)
 
   return wateringList;
 }
