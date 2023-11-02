@@ -1,5 +1,7 @@
 package com.buckwheat.garden.repository.impl;
 
+import com.buckwheat.garden.data.dto.garden.QWaitingForWatering;
+import com.buckwheat.garden.data.dto.garden.WaitingForWatering;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.repository.PlantRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -17,9 +19,30 @@ public class PlantRepositoryCustomImpl implements PlantRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Plant> findWaitingForWateringList(Long gardenerId) {
-        return queryFactory
+    public Boolean existByGardenerId(Long gardenerId) {
+        Plant fetchOne = queryFactory
                 .selectFrom(plant)
+                .where(plant.gardener.gardenerId.eq(gardenerId))
+                .fetchFirst();
+
+        return fetchOne != null;
+    }
+
+    @Override
+    public List<WaitingForWatering> findWaitingForWateringList(Long gardenerId) {
+        return queryFactory
+                .select(
+                        new QWaitingForWatering(
+                                plant.plantId,
+                                plant.name,
+                                plant.species,
+                                plant.medium,
+                                plant.place.placeId,
+                                plant.place.name,
+                                plant.createDate
+                        )
+                )
+                .from(plant)
                 .join(plant.place, place)
                 .leftJoin(plant.waterings, watering)
                 .where(plant.gardener.gardenerId.eq(gardenerId)

@@ -1,14 +1,13 @@
 package com.buckwheat.garden.dao;
 
 import com.buckwheat.garden.data.dto.chemical.ChemicalDto;
-import com.buckwheat.garden.data.entity.Chemical;
 
 import java.util.List;
 
 public interface ChemicalDao {
-    List<Chemical> getAllActivate(Long gardenerId);
-    Chemical getChemicalByChemicalIdAndGardenerId(Long chemicalId, Long gardenerId);
-    Chemical save(Long gardenerId, ChemicalDto chemicalRequest);
-    Chemical update(Long gardenerId, ChemicalDto chemicalRequest);
-    void deactivateChemical(Long chemicalId, Long gardenerId);
+    List<ChemicalDto> readAll(Long gardenerId);
+    ChemicalDto readChemical(Long chemicalId, Long gardenerId);
+    ChemicalDto create(Long gardenerId, ChemicalDto chemicalRequest);
+    ChemicalDto update(Long gardenerId, ChemicalDto chemicalRequest);
+    void deactivate(Long chemicalId, Long gardenerId);
 }

@@ -1,6 +1,7 @@
 package com.buckwheat.garden.dao.impl;
 
 import com.buckwheat.garden.dao.GardenerDao;
+import com.buckwheat.garden.data.dto.gardener.GardenerDetail;
 import com.buckwheat.garden.data.projection.Username;
 import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.error.code.ExceptionCode;
@@ -19,13 +20,13 @@ public class GardenerDaoImpl implements GardenerDao {
     private final GardenerRepository gardenerRepository;
 
     @Override
-    public Optional<Gardener> getGardenerByUsername(String username){
-        return gardenerRepository.findByUsername(username);
+    public Optional<Gardener> readByUsername(String username){
+        return gardenerRepository.findByProviderIsNullAndUsername(username);
     }
 
     @Override
     public Gardener getGardenerForLogin(String username) {
-        return gardenerRepository.findByUsername(username)
+        return gardenerRepository.findByProviderIsNullAndUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode()));
     }
 
@@ -57,5 +58,10 @@ public class GardenerDaoImpl implements GardenerDao {
     @Override
     public Gardener getGardenerById(Long id) {
         return gardenerRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    }
+
+    @Override
+    public GardenerDetail getGardenerDetailByGardenerId(Long id) {
+        return gardenerRepository.findGardenerDetailByGardenerId(id);
     }
 }

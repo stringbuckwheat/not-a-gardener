@@ -1,6 +1,6 @@
 package com.buckwheat.garden.data.dto.gardener;
 
-import com.buckwheat.garden.data.entity.Gardener;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 /**
  * 회원 관리 페이지
  */
-@AllArgsConstructor
 @Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -21,14 +20,13 @@ public class GardenerDetail {
     private LocalDateTime createDate;
     private String provider;
 
-    public static GardenerDetail from(Gardener gardener) {
-        return GardenerDetail.builder()
-                .id(gardener.getGardenerId())
-                .username(gardener.getUsername())
-                .email(gardener.getEmail())
-                .name(gardener.getName())
-                .createDate(gardener.getCreateDate())
-                .provider(gardener.getProvider())
-                .build();
+    @QueryProjection
+    public GardenerDetail(Long id, String username, String email, String name, LocalDateTime createDate, String provider) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.name = name;
+        this.createDate = createDate;
+        this.provider = provider;
     }
 }

@@ -20,34 +20,34 @@ public class ChemicalDaoImpl implements ChemicalDao {
     private final GardenerRepository gardenerRepository;
 
     @Override
-    public List<Chemical> getAllActivate(Long gardenerId) {
-        return chemicalRepository.findByActiveAndGardener_GardenerId("Y", gardenerId);
+    public List<ChemicalDto> readAll(Long gardenerId) {
+        return chemicalRepository.findAllChemicals(gardenerId);
     }
 
     @Override
-    public Chemical getChemicalByChemicalIdAndGardenerId(Long chemicalId, Long gardenerId) {
-        return chemicalRepository.findByChemicalIdAndGardener_GardenerId(chemicalId, gardenerId)
-                .orElseThrow(NoSuchElementException::new);
+    public ChemicalDto readChemical(Long chemicalId, Long gardenerId) {
+        return chemicalRepository.findByChemicalIdAndGardenerId(chemicalId, gardenerId);
     }
 
     @Override
-    public Chemical save(Long gardenerId, ChemicalDto chemicalRequest) {
+    public ChemicalDto create(Long gardenerId, ChemicalDto chemicalRequest) {
         Gardener gardener = gardenerRepository.getReferenceById(gardenerId);
-        return chemicalRepository.save(chemicalRequest.toEntity(gardener));
+        Chemical chemical = chemicalRepository.save(chemicalRequest.toEntity(gardener));
+        return ChemicalDto.from(chemical);
     }
 
     @Override
     @Transactional
-    public Chemical update(Long gardenerId, ChemicalDto chemicalRequest) {
+    public ChemicalDto update(Long gardenerId, ChemicalDto chemicalRequest) {
         Chemical chemical = chemicalRepository.findById(chemicalRequest.getId()).orElseThrow(NoSuchElementException::new);
         chemical.update(chemicalRequest.getName(), chemicalRequest.getType(), chemicalRequest.getPeriod());
 
-        return chemical;
+        return ChemicalDto.from(chemical);
     }
 
     @Override
     @Transactional
-    public void deactivateChemical(Long chemicalId, Long gardenerId) {
+    public void deactivate(Long chemicalId, Long gardenerId) {
         Chemical chemical = chemicalRepository.findByChemicalIdAndGardener_GardenerId(chemicalId, gardenerId)
                 .orElseThrow(NoSuchElementException::new);
         chemical.deactivate();

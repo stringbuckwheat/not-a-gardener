@@ -6,7 +6,6 @@ import com.buckwheat.garden.data.dto.plant.PlantRequest;
 import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Place;
 import com.buckwheat.garden.data.entity.Plant;
-import com.buckwheat.garden.data.projection.RawGarden;
 import com.buckwheat.garden.repository.GardenerRepository;
 import com.buckwheat.garden.repository.PlaceRepository;
 import com.buckwheat.garden.repository.PlantRepository;
@@ -30,16 +29,6 @@ public class PlantDaoImpl implements PlantDao {
     private final WateringRepository wateringRepository;
 
     @Override
-    public List<RawGarden> getGarden(Long gardenerId) {
-        return plantRepository.findGardenByGardenerId(gardenerId);
-    }
-
-    @Override
-    public List<Plant> getWaitingForWateringList(Long gardenerId) {
-        return plantRepository.findWaitingForWateringList(gardenerId);
-    }
-
-    @Override
     public List<Plant> getPlantsByGardenerId(Long gardenerId){
         return plantRepository.findByGardener_GardenerIdOrderByCreateDateDesc(gardenerId);
     }
@@ -53,11 +42,6 @@ public class PlantDaoImpl implements PlantDao {
     public Plant getPlantWithPlantIdAndGardenerId(Long plantId, Long gardenerId){
         return plantRepository.findByPlantIdAndGardener_GardenerId(plantId, gardenerId)
                 .orElseThrow(NoSuchElementException::new);
-    }
-
-    @Override
-    public List<Plant> getPlantsForGarden(Long gardenerId){
-        return plantRepository.findByGardener_GardenerId(gardenerId);
     }
 
     @Override
@@ -82,6 +66,7 @@ public class PlantDaoImpl implements PlantDao {
     }
 
     @Override
+    @Transactional
     public Plant updateWateringPeriod(Plant plant, int period) {
         if (period != plant.getRecentWateringPeriod()) {
             return plant.updateAverageWateringPeriod(period);

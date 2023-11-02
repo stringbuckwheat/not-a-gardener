@@ -2,11 +2,11 @@ package com.buckwheat.garden.data.dto.chemical;
 
 import com.buckwheat.garden.data.entity.Chemical;
 import com.buckwheat.garden.data.entity.Gardener;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor
 @Builder
 @ToString
 public class ChemicalDto {
@@ -14,6 +14,14 @@ public class ChemicalDto {
     private String name;
     private String type;
     private int period;
+
+    @QueryProjection
+    public ChemicalDto(Long id, String name, String type, int period) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.period = period;
+    }
 
     public static ChemicalDto from(Chemical chemical) {
         return ChemicalDto.builder()

@@ -42,7 +42,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      */
     @Override
     public String hasSameUsername(String username) {
-        Optional<Gardener> gardener = gardenerDao.getGardenerByUsername(username);
+        Optional<Gardener> gardener = gardenerDao.readByUsername(username);
         return gardener.isEmpty() ? null : gardener.get().getUsername();
     }
 
@@ -69,7 +69,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      */
     @Override
     public Info login(Login login) {
-        log.debug("login 메소드: {}", login);
         Gardener gardener = gardenerDao.getGardenerForLogin(login.getUsername());
 
         // 비밀번호 일치 여부 검사

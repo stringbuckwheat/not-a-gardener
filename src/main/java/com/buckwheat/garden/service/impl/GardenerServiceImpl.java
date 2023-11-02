@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 
@@ -21,7 +22,7 @@ public class GardenerServiceImpl implements GardenerService {
 
     @Override
     public GardenerDetail getOne(Long id) {
-        return GardenerDetail.from(gardenerDao.getGardenerById(id));
+        return gardenerDao.getGardenerDetailByGardenerId(id);
     }
 
     @Override
@@ -40,12 +41,20 @@ public class GardenerServiceImpl implements GardenerService {
     }
 
     @Override
-    public GardenerDetail modify(GardenerDetail gardenerDetail) {
+    @Transactional
+    public GardenerDetail update(GardenerDetail gardenerDetail) {
         Gardener gardener = gardenerDao.getGardenerByGardenerId(gardenerDetail.getId())
                 .orElseThrow(NoSuchElementException::new);
         gardener.updateEmailAndName(gardenerDetail.getEmail(), gardenerDetail.getName());
 
-        return GardenerDetail.from(gardenerDao.save(gardener));
+        return GardenerDetail.builder()
+                .id(gardener.getGardenerId())
+                .username(gardener.getUsername())
+                .email(gardener.getEmail())
+                .name(gardener.getName())
+                .createDate(gardener.getCreateDate())
+                .provider(gardener.getProvider())
+                .build();
     }
 
     @Override

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/gardener")
 @RequiredArgsConstructor
-// 어떠한 빈(Bean)에 생성자가 오직 하나만 있고, 생성자의 파라미터 타입이 빈으로 등록 가능한 존재라면 이 빈은 @Autowired 어노테이션 없이도 의존성 주입이 가능하다.
 public class GardenerController {
     private final GardenerService gardenerService;
 
@@ -37,13 +36,13 @@ public class GardenerController {
 
     /* 회원정보 변경 */
     @PutMapping("/{gardenerId}")
-    public GardenerDetail modify(@RequestBody GardenerDetail gardenerDetail, @PathVariable long gardenerId) {
-        return gardenerService.modify(gardenerDetail);
+    public GardenerDetail update(@RequestBody GardenerDetail gardenerDetail, @PathVariable long gardenerId) {
+        return gardenerService.update(gardenerDetail);
     }
 
     /* 탈퇴 */
     @DeleteMapping("/{gardenerId}")
-    public void deleteGardener(@PathVariable("gardenerId") long gardenerId) {
+    public void delete(@PathVariable("gardenerId") long gardenerId) {
         gardenerService.delete(gardenerId);
     }
 }

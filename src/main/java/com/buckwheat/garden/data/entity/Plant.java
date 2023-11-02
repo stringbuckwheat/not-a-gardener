@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-@ToString(of = {"plantId", "name"})
+@ToString(of = {"plantId", "name", "recentWateringPeriod"})
 public class Plant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment
@@ -30,7 +30,7 @@ public class Plant {
 
     private String species; // 식물 종은 null 허용
 
-    private int recentWateringPeriod; // 평균 관수 주기
+    private int recentWateringPeriod; // 최근 관수 주기
 
     private int earlyWateringPeriod;
 

@@ -11,7 +11,7 @@ public interface GardenerService {
     boolean identify(Long id, Login login);
 
     // 회원 정보 변경
-    GardenerDetail modify(GardenerDetail gardenerDetail);
+    GardenerDetail update(GardenerDetail gardenerDetail);
 
     // 회원 정보에서 비밀번호 변경
     void updatePassword(Long id, Login login);

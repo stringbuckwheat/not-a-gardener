@@ -5,7 +5,6 @@ import com.buckwheat.garden.dao.WateringDao;
 import com.buckwheat.garden.data.dto.chemical.ChemicalDetail;
 import com.buckwheat.garden.data.dto.chemical.ChemicalDto;
 import com.buckwheat.garden.data.dto.watering.WateringResponseInChemical;
-import com.buckwheat.garden.data.entity.Chemical;
 import com.buckwheat.garden.service.ChemicalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,10 +28,8 @@ public class ChemicalServiceImpl implements ChemicalService {
      * @return dto로 변환한 chemical list
      */
     @Override
-    public List<ChemicalDto> getAll(Long gardenerId) {
-        return chemicalDao.getAllActivate(gardenerId).stream()
-                .map(ChemicalDto::from)
-                .collect(Collectors.toList());
+    public List<ChemicalDto> readAll(Long gardenerId) {
+        return chemicalDao.readAll(gardenerId);
     }
 
     /**
@@ -42,15 +39,15 @@ public class ChemicalServiceImpl implements ChemicalService {
      * @return 해당 chemical의 상세 정보 및 사용내역 리스트
      */
     @Override
-    public ChemicalDetail getDetail(Long chemicalId, Long gardenerId) {
-        Chemical chemical = chemicalDao.getChemicalByChemicalIdAndGardenerId(chemicalId, gardenerId);
+    public ChemicalDetail readOne(Long chemicalId, Long gardenerId) {
+        ChemicalDto chemical = chemicalDao.readChemical(chemicalId, gardenerId);
         int wateringSize = wateringDao.getCountByChemical_ChemicalId(chemicalId);
 
-        return new ChemicalDetail(ChemicalDto.from(chemical), wateringSize);
+        return new ChemicalDetail(chemical, wateringSize);
     }
 
     @Override
-    public List<WateringResponseInChemical> getWateringWithPaging(Long chemicalId, Pageable pageable) {
+    public List<WateringResponseInChemical> readWateringsForChemical(Long chemicalId, Pageable pageable) {
         return wateringDao.getWateringsByChemicalIdWithPage(chemicalId, pageable)
                 .stream()
                 .map(WateringResponseInChemical::from)
@@ -58,17 +55,17 @@ public class ChemicalServiceImpl implements ChemicalService {
     }
 
     @Override
-    public ChemicalDto add(Long gardenerId, ChemicalDto chemicalRequest) {
-        return ChemicalDto.from(chemicalDao.save(gardenerId, chemicalRequest));
+    public ChemicalDto create(Long gardenerId, ChemicalDto chemicalRequest) {
+        return chemicalDao.create(gardenerId, chemicalRequest);
     }
 
     @Override
-    public ChemicalDto modify(Long gardenerId, ChemicalDto chemicalRequest) {
-        return ChemicalDto.from(chemicalDao.update(gardenerId, chemicalRequest));
+    public ChemicalDto update(Long gardenerId, ChemicalDto chemicalRequest) {
+        return chemicalDao.update(gardenerId, chemicalRequest);
     }
 
     @Override
     public void deactivate(Long chemicalId, Long gardenerId) {
-        chemicalDao.deactivateChemical(chemicalId, gardenerId);
+        chemicalDao.deactivate(chemicalId, gardenerId);
     }
 }

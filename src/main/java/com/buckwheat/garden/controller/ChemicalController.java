@@ -28,7 +28,7 @@ public class ChemicalController {
      */
     @GetMapping("")
     public List<ChemicalDto> getAll(@AuthenticationPrincipal UserPrincipal user){
-        return chemicalService.getAll(user.getId());
+        return chemicalService.readAll(user.getId());
     }
 
     /**
@@ -38,12 +38,12 @@ public class ChemicalController {
      */
     @GetMapping("/{chemicalId}")
     public ChemicalDetail getDetail(@PathVariable Long chemicalId, @AuthenticationPrincipal UserPrincipal user){
-        return chemicalService.getDetail(chemicalId, user.getId());
+        return chemicalService.readOne(chemicalId, user.getId());
     }
 
     @GetMapping("/{chemicalId}/watering")
     public List<WateringResponseInChemical> getWateringWithPaging(@PathVariable Long chemicalId, @PageableDefault(size = 10) Pageable pageable){
-        return chemicalService.getWateringWithPaging(chemicalId, pageable);
+        return chemicalService.readWateringsForChemical(chemicalId, pageable);
     }
 
     /**
@@ -53,8 +53,8 @@ public class ChemicalController {
      * @return 수정한 ChemicalDTO
      */
     @PostMapping("")
-    public ChemicalDto add(@AuthenticationPrincipal UserPrincipal user, @RequestBody ChemicalDto chemicalRequest){
-        return chemicalService.add(user.getId(), chemicalRequest);
+    public ChemicalDto postChemical(@AuthenticationPrincipal UserPrincipal user, @RequestBody ChemicalDto chemicalRequest){
+        return chemicalService.create(user.getId(), chemicalRequest);
     }
 
     /**
@@ -64,8 +64,8 @@ public class ChemicalController {
      * @return 수정한 Chemical
      */
     @PutMapping("/{chemicalId}")
-    public ChemicalDto modify(@AuthenticationPrincipal UserPrincipal user, @RequestBody ChemicalDto chemicalRequest){
-        return chemicalService.modify(user.getId(), chemicalRequest);
+    public ChemicalDto update(@AuthenticationPrincipal UserPrincipal user, @RequestBody ChemicalDto chemicalRequest){
+        return chemicalService.update(user.getId(), chemicalRequest);
     }
 
     /**
@@ -73,8 +73,8 @@ public class ChemicalController {
      * 물주기 기록을 유지하기 위해 삭제X
      * @param chemicalId
      */
-    @DeleteMapping("/{chemicalId}/deactivate")
-    public void deactivate(@PathVariable Long chemicalId, @AuthenticationPrincipal UserPrincipal user){
+    @DeleteMapping("/{chemicalId}")
+    public void delete(@PathVariable Long chemicalId, @AuthenticationPrincipal UserPrincipal user){
         chemicalService.deactivate(chemicalId, user.getId());
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class ForgotServiceImpl implements ForgotService {
         return new Forgot(identificationCode, email, usernames);
     }
 
+    @Override
     public void sendEmail(String identificationCode, String email){
         // 메일 내용 만들기
         StringBuilder stringBuilder = new StringBuilder();
@@ -67,13 +69,12 @@ public class ForgotServiceImpl implements ForgotService {
     }
 
     @Override
+    @Transactional
     public void resetPassword(Login login) {
-        Gardener gardener = gardenerDao.getGardenerByUsername(login.getUsername())
+        Gardener gardener = gardenerDao.readByUsername(login.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode()));
 
         String encryptedPassword = encoder.encode(login.getPassword());
         gardener.changePassword(encryptedPassword);
-
-        gardenerDao.save(gardener);
     }
 }

@@ -51,7 +51,7 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
         // attribute: {name, id, key, email, picture}
         OAuth2Attribute oAuth2Attribute = OAuth2Attribute.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
-        // 기존 회원이면 update, 신규 회원이면 save
+        // 기존 회원이면 update, 신규 회원이면 create
         Gardener gardener = saveOrUpdate(oAuth2Attribute);
 
         // UserPrincipal: Authentication에 담을 OAuth2User와 (일반 로그인 용)UserDetails를 implements한 커스텀 클래스
