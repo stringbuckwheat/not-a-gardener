@@ -6,10 +6,16 @@ import SocialLogin from "./SocialLogin";
 import LoginForm from "./LoginForm";
 import RegisterCard from "./RegisterCard";
 import LoginPageWrapper from "./LoginPageWrapper";
+import {Navigate} from "react-router-dom";
+import React from "react";
 
 const Login = () => {
   const sm = {width: '100%'}
   const lg = {width: '44%'}
+
+  if (localStorage.getItem("accessToken")) {
+    return <Navigate to="/" replace={true}/>
+  }
 
   return (
     <LoginPageWrapper>

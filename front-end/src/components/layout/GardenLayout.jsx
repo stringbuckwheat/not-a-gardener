@@ -4,6 +4,7 @@ import AppSidebar from "./AppSidebar";
 import AppHeader from "./AppHeader";
 import AppContent from "./AppContent";
 import AppFooter from "./AppFooter";
+import {useDispatch} from "react-redux";
 
 /**
  * 로그인 이후 모든 페이지의 레이아웃
@@ -15,6 +16,9 @@ const GardenLayout = () => {
   if (!localStorage.getItem("accessToken")) {
     return <Navigate to="/login" replace={true}/>
   }
+
+  const dispatch = useDispatch();
+  dispatch({type: 'setName', name: localStorage.getItem("name")})
 
   return (
     <div>

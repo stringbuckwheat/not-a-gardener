@@ -5,8 +5,11 @@ import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import setLocalStorage from "../../api/service/setLocalStorage";
+import {useDispatch} from "react-redux";
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
+
   const [msg, setMsg] = useState('');
 
   const [login, setLogin] = useState({
@@ -37,7 +40,10 @@ const LoginForm = () => {
   const submit = async () => {
     try {
       const res = await axios.post(`${process.env.REACT_APP_API_URL}/login`, login);
+      console.log("res", res);
+
       await setLocalStorage(res.data);
+      dispatch({type: 'setName', name: res.data.simpleInfo.name});
 
       // garden 페이지로 이동
       navigate('/', {replace: true});

@@ -11,7 +11,7 @@ import {cilHappy} from "@coreui/icons";
 import Booped from "../../components/animation/Booped";
 import {Link} from "react-router-dom";
 import getData from "../../api/backend-api/common/getData";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 const GardenMain = ({
                       todoList,
@@ -27,7 +27,6 @@ const GardenMain = ({
 
   const setChemicalList = async () => {
     const data = await getData("/chemical");
-    console.log("data", data);
     dispatch({type: 'setChemicals', payload: data});
   }
 
@@ -50,7 +49,7 @@ const GardenMain = ({
     <div className="mt-3">
       {contextHolder}
       <Space>
-        <div className="text-garden bold fs-4">가드너 <span className="bg-york">{localStorage.getItem("name")}</span>님의 오늘
+        <div className="text-garden bold fs-4">가드너 <span className="bg-york">{useSelector(state => state.sidebar.name)}</span>님의 오늘
           할 일이에요!
         </div>
         <Booped rotation={20} timing={200}>

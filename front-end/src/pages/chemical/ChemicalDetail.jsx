@@ -64,7 +64,7 @@ const ChemicalDetail = () => {
     && (modifyChemical.period * 1) > 0;
 
   const deactivate = async () => {
-    await deleteData(`/chemical/${chemical.id}/deactivate`);
+    await deleteData(`/chemical/${chemical.id}`);
     navigate("/chemical", {replace: true});
   }
 

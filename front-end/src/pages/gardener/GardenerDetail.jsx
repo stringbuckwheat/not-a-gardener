@@ -11,9 +11,11 @@ import updateData from "../../api/backend-api/common/updateData";
 import InputFeedback from "../../components/form/input/InputFeedback";
 import DeleteModal from "../../components/modal/DeleteModal";
 import ChangePasswordModal from "../../components/modal/ChangePassWordModal";
+import {useDispatch} from "react-redux";
 
 const GardenerDetail = ({gardener, setGardener}) => {
   console.log("최초 gardener", gardener);
+  const dispatch = useDispatch();
   const isBasicLogin = gardener.provider == null;
 
   // 수정용 input 칸 disabled 여부
@@ -35,6 +37,11 @@ const GardenerDetail = ({gardener, setGardener}) => {
     const updatedGardener = await updateData(`/gardener/${gardener.id}`, modifyGardener);
     console.log("updatedGardener", updatedGardener);
     setGardener(() => updatedGardener);
+
+    // header 업데이트
+    localStorage.setItem("name", updatedGardener.name);
+    dispatch({type: 'setName', name: updatedGardener.name});
+
     setIsDisabled(true);
   }
 

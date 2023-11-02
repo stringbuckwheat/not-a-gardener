@@ -1,7 +1,9 @@
 const sidebar = (state = {}, { type, name, payload, ...rest }) => {
   switch (type) {
     case 'setSidebar':
-      return {...rest};
+      return {...state, ...rest};
+    case 'setName':
+      return {...state, name};
     default:
       return state
   }

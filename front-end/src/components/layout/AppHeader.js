@@ -15,8 +15,9 @@ import logOut from "../../utils/function/logout";
 import {useNavigate} from "react-router-dom";
 
 const AppHeader = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const sidebarShow = useSelector((state) => state.sidebar.sidebarShow);
+  const name = useSelector(state => state.sidebar.name);
   const navigate = useNavigate();
 
   const items = [
@@ -46,7 +47,7 @@ const AppHeader = () => {
         <Dropdown menu={{items}} trigger={['click']}>
           <Space>
             <CAvatar src={sprout} size="sm"/>
-            <Tag color="#305738" size="large">{localStorage.getItem("name")}</Tag>
+            <Tag color="#305738" size="large">{name}</Tag>
             <DownOutlined/>
           </Space>
         </Dropdown>
