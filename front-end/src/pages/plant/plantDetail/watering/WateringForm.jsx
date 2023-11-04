@@ -7,6 +7,7 @@ import {DatePicker} from 'antd';
 import {useState} from 'react';
 import postData from 'src/api/backend-api/common/postData';
 import getDisabledDate from 'src/utils/function/getDisabledDate';
+import {useDispatch} from "react-redux";
 
 /**
  * 물주기 폼
@@ -17,17 +18,19 @@ import getDisabledDate from 'src/utils/function/getDisabledDate';
  * @returns {JSX.Element}
  * @constructor
  */
-const WateringForm = ({plantId, closeForm, chemicalList, wateringCallBack, total, setTotal}) => {
+const WateringForm = ({plantId, closeForm, chemicalList, wateringCallBack, page}) => {
   const [watering, setWatering] = useState({plantId, chemicalId: chemicalList[0].value});
+  const dispatch = useDispatch();
 
   const onSubmit = async () => {
     console.log("submit data", watering);
-    let res;
 
     try {
-      res = await postData(`/plant/${plantId}/watering`, watering);
+      const res = await postData(`/plant/${plantId}/watering?page=${page - 1}`, watering);
       console.log("res", res);
-      setTotal(total + 1);
+      dispatch({type: 'addWatering', payload: null})
+
+      wateringCallBack(res);
     } catch (e) {
       if (e.code == "B005") {
         alert(e.message);
@@ -35,8 +38,6 @@ const WateringForm = ({plantId, closeForm, chemicalList, wateringCallBack, total
     } finally {
       closeForm();
     }
-
-    wateringCallBack(res);
   }
 
   return (

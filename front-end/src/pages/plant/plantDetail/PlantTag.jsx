@@ -1,9 +1,11 @@
 import {Space, Tag} from "antd";
+import {useSelector} from "react-redux";
 
-const PlantTag = ({plant, wateringListSize, latestWateringDate}) => {
-  console.log("plant tag plant", plant);
+const PlantTag = ({plant, latestWateringDate}) => {
   const tmp = new Date();
   const today = new Date(tmp.getFullYear(), tmp.getMonth(), tmp.getDate());
+  const totalWaterings = useSelector(state => state.waterings.totalWaterings);
+
 
   const getLatestWateringDateMsg = () => {
     const diffDate = getLatestWateringDate();
@@ -101,14 +103,14 @@ const PlantTag = ({plant, wateringListSize, latestWateringDate}) => {
           <>
             <Tag color="magenta">{getLatestWateringDateMsg()}</Tag>
             {
-              calculateNextWateringDate() && wateringListSize > 1
+              calculateNextWateringDate() && totalWaterings > 1
                 ? <Tag color="orange">{calculateNextWateringDate()}</Tag>
                 : <></>
             }
           </>
           : <></>
       }
-      <Tag color="cyan">{wateringListSize == 0 ? "물주기 기록이 없어요" : `${wateringListSize}번 물을 줬어요`}</Tag>
+      <Tag color="cyan">{totalWaterings == 0 ? "물주기 기록이 없어요" : `${totalWaterings}번 물을 줬어요`}</Tag>
       {isNotDry()}
       {isPostponed()}
     </Space>

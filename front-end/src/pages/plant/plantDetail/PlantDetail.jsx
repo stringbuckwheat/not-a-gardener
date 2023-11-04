@@ -6,6 +6,7 @@ import ModifyPlant from '../ModifyPlant';
 import getPlaceList from 'src/api/service/getPlaceList';
 import WateringList from './watering/WateringList';
 import getData from "../../../api/backend-api/common/getData";
+import {useDispatch} from "react-redux";
 
 /**
  * 식물 상세 정보 페이지 (해당 식물의 물주기 기록 포함)
@@ -17,15 +18,17 @@ const PlantDetail = () => {
   const state = useLocation().state;
 
   const [plant, setPlant] = useState({});
-  const [totalWaterings, setTotalWaterings] = useState();
+  const [onModify, setOnModify] = useState(false);
+  const [placeList, setPlaceList] = useState({});
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onMount = async () => {
     try {
       const res = await getData(`/plant/${plantId}`);
       setPlant(res);
-      setTotalWaterings(res.totalWaterings);
+      dispatch({type: 'setTotalWaterings', payload: res.totalWaterings});
     } catch (e) {
       if (e.code === "B006") {
         alert("해당 식물을 찾을 수 없어요");
@@ -41,9 +44,6 @@ const PlantDetail = () => {
   useEffect(() => {
     state && setPlant(state.plant);
   }, [state])
-
-  const [onModify, setOnModify] = useState(false);
-  const [placeList, setPlaceList] = useState({});
 
   const onClickModifyBtn = async () => {
     const places = await getPlaceList();
@@ -61,12 +61,9 @@ const PlantDetail = () => {
         deleteTitle="식물"
         tags={<PlantTag
           plant={plant}
-          latestWateringDate={plant.latestWateringDate}
-          wateringListSize={totalWaterings}/>}
+          latestWateringDate={plant.latestWateringDate}/>}
         onClickModifyBtn={onClickModifyBtn}
         bottomData={<WateringList
-          total={totalWaterings}
-          setTotal={setTotalWaterings}
           plantId={plantId}
           setPlant={setPlant}/>}
       />

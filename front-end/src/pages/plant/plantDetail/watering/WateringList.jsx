@@ -19,13 +19,14 @@ import getWateringListForTable from "../../../../utils/function/getWateringListF
 import getWateringTableColumnArray from "../../../../utils/function/getWateringTableColumnArray";
 import getMergedColumns from "../../../../utils/function/getMergedColumns";
 import getData from "../../../../api/backend-api/common/getData";
+import {useDispatch, useSelector} from "react-redux";
 
 /**
  * 한 식물의 물주기 정보 plant detail 아래쪽 table
  * @param {*} props
  * @returns
  */
-const WateringList = ({plantId, setPlant, total, setTotal}) => {
+const WateringList = ({plantId, setPlant}) => {
   dayjs.extend(customParseFormat)
   dayjs.extend(advancedFormat)
   dayjs.extend(weekday)
@@ -100,6 +101,8 @@ const WateringList = ({plantId, setPlant, total, setTotal}) => {
     setEditingKey('');
   };
 
+  const dispatch = useDispatch();
+
   const deleteWatering = async (wateringId) => {
     await deleteData(`/plant/${plantId}/watering/${wateringId}`);
 
@@ -109,7 +112,7 @@ const WateringList = ({plantId, setPlant, total, setTotal}) => {
     }
 
     setWaterings(waterings.filter(watering => watering.id !== wateringId));
-    setTotal(total - 1);
+    dispatch({type: 'deleteWatering', payload: null});
   };
 
   const wateringTableColumnArray = getWateringTableColumnArray(isEditing, updateWatering, editingKey, cancel, edit, deleteWatering);
@@ -136,6 +139,9 @@ const WateringList = ({plantId, setPlant, total, setTotal}) => {
     }
   }
 
+  const totalWaterings = useSelector(state => state.waterings.totalWaterings);
+  console.log("totalWaterings", totalWaterings);
+
   return (
     <>
       {contextHolder}
@@ -144,20 +150,19 @@ const WateringList = ({plantId, setPlant, total, setTotal}) => {
         <div className="mt-4 mb-3">
           <HandleWateringForm
             plantId={plantId}
+            page={page}
             setWateringList={setWaterings}
             chemicalList={chemicalList}
             isWateringFormOpen={isWateringFormOpen}
             setIsWateringFormOpen={setIsWateringFormOpen}
             setEditingKey={setEditingKey}
             wateringCallBack={wateringCallBack}
-            total={total}
-            setTotal={setTotal}
           />
         </div>
         <Form form={form} component={false}>
           <Table
             components={tableBody}
-            pagination={{onChange: (page) => setPage(() => page), total: total}}
+            pagination={{onChange: (page) => setPage(() => page), total: totalWaterings}}
             columns={mergedColumns}
             dataSource={getWateringListForTable(waterings)}
           />

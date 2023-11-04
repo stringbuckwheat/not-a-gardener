@@ -2,6 +2,7 @@ import {CButton} from "@coreui/react";
 import {Popconfirm, Space} from "antd";
 import WateringForm from "./WateringForm";
 import deleteData from "../../../../api/backend-api/common/deleteData";
+import {useDispatch} from "react-redux";
 
 const HandleWateringForm = ({
                               plantId,
@@ -11,12 +12,14 @@ const HandleWateringForm = ({
                               setIsWateringFormOpen,
                               setEditingKey,
                               wateringCallBack,
-                              total,
-                              setTotal
+                              page
                             }) => {
+  const dispatch = useDispatch();
+
   const deleteAllWatering = async () => {
     await deleteData(`/plant/${plantId}/watering`);
     setWateringList([]);
+    dispatch({type: 'deleteAllWaterings', payload: null})
   }
 
   const onClickWateringFormBtn = () => {
@@ -33,8 +36,7 @@ const HandleWateringForm = ({
           closeForm={() => setIsWateringFormOpen(!isWateringFormOpen)}
           chemicalList={chemicalList}
           wateringCallBack={wateringCallBack}
-          total={total}
-          setTotal={setTotal}
+          page={page}
         />
         :
         <Space size={[1, 5]} className="float-end">

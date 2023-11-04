@@ -1,10 +1,11 @@
 import PlantTable from "./plantDetail/PlantTable";
-import PlantListLayout from "src/components/data/layout/PlantListLayout";
 import PlantListTag from "./PlantListTag";
 import {useEffect, useState} from "react";
 import AddPlant from "./AddPlant";
 import getData from "../../api/backend-api/common/getData";
 import {useDispatch} from "react-redux";
+import {CButton, CCard, CCardBody, CCol} from "@coreui/react";
+import {Space} from "antd";
 
 /**
  * 식물 리스트 메인 페이지
@@ -50,15 +51,32 @@ const PlantList = () => {
       afterAdd={switchAddForm}
     />
   ) : (
-    <PlantListLayout
-      title="나의 식물"
-      url="/plant"
-      deleteTitle="식물"
-      // setSearchWord={setSearchWord}
-      addFormOpen={switchAddForm}
-      tags={<PlantListTag/>}
-      bottomData={<PlantTable />}
-    />
+    <div className="row justify-content-md-center">
+      <CCol md="auto" className="minWidth-full">
+        <CCard sm={6} className="mb-4">
+          <CCardBody>
+            <div>
+              <h4 className="mt-3 mb-3">{"나의 식물"}</h4>
+              <PlantListTag/>
+            </div>
+            <div className="float-end mb-3">
+              <Space>
+                {/*<Search setSearchWord={setSearchWord}/>*/}
+                <CButton
+                  onClick={switchAddForm}
+                  color="success"
+                  size="sm"
+                  variant="outline"
+                  shape="rounded-pill">
+                  식물 추가하기
+                </CButton>
+              </Space>
+            </div>
+            <PlantTable />
+          </CCardBody>
+        </CCard>
+      </CCol>
+    </div>
   )
 }
 

@@ -39,7 +39,6 @@ const GardenCardAction = ({
                             deleteInWaitingListAndTodoList
                           }) => {
   const chemicals = useSelector(state => state.chemicals.forSelect);
-  console.log("chemicals", chemicals);
 
   const [selected, setSelected] = useState("");
   const [chemicalId, setChemicalId] = useState(0);

@@ -68,7 +68,6 @@ const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey
         title: '물주기',
         dataIndex: 'recentWateringPeriod',
         key: 'recentWateringPeriod',
-        responsive: ['lg'],
         sorter: (a, b) => {
           if (a.recentWateringPeriod > b.recentWateringPeriod) return 1;
           if (a.recentWateringPeriod === b.recentWateringPeriod) return 0;
@@ -77,10 +76,9 @@ const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey
         sortDirection: ['descend']
       },
       {
-        title: '태그',
+        title: '마지막 관수',
         key: 'tags',
         dataIndex: 'tags',
-        responsive: ['lg'],
         render: (tags) => {
           return (
             <>
@@ -91,7 +89,7 @@ const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey
               }
               {
                 tags.latestWateringDate
-                  ? <div><Tag className="mb-1" color="geekblue">마지막 관수: {tags.latestWateringDate}</Tag></div>
+                  ? <div><Tag className="mb-1" color="geekblue">{tags.latestWateringDate}</Tag></div>
                   : <></>
               }
             </>
@@ -115,6 +113,7 @@ const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey
         title: '',
         dataIndex: '',
         key: '',
+        responsive: ['lg'],
         render: (_, record) => {
           const editable = isEditing(record);
           return (
