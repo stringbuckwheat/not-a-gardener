@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,26 +34,21 @@ public class PlantWateringServiceImpl implements PlantWateringService {
      * @return WateringResponseDto
      */
     @Override
-    @Transactional
     public AfterWatering add(WateringRequest wateringRequest, Pageable pageable) {
         wateringDao.addWatering(wateringRequest);
         return getAfterWatering(wateringRequest.getPlantId(), pageable);
     }
 
     @Override
-    @Transactional
     public AfterWatering getAfterWatering(Long plantId, Pageable pageable){
         // *****
         Plant plant = plantDao.getPlantWithPlaceAndWatering(plantId);
-        log.debug("plant: {}", plant);
+
         WateringMessage wateringMsg = wateringUtil.getWateringMsg(plant);
 
         // 리턴용 DTO 만들기
         List<WateringForOnePlant> waterings = getAll(plant.getPlantId(), pageable);
         Plant resPlant = plantDao.updateWateringPeriod(plant, wateringMsg.getAverageWateringDate());
-        log.debug("origin period: {}", plant.getRecentWateringPeriod());
-        log.debug("calculate: {}", wateringMsg.getAverageWateringDate());
-        log.debug("resPlant:{}", resPlant);
 
         return AfterWatering.from(PlantResponse.from(resPlant), wateringMsg, waterings);
     }
@@ -68,7 +62,9 @@ public class PlantWateringServiceImpl implements PlantWateringService {
             return wateringUtil.withWateringPeriodList(waterings);
         }
 
-        return waterings.stream().map(WateringForOnePlant::from).collect(Collectors.toList());
+        List<WateringForOnePlant> result = waterings.stream().map(WateringForOnePlant::from).collect(Collectors.toList());
+
+        return result;
     }
 
     @Override

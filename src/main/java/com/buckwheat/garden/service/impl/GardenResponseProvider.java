@@ -98,7 +98,7 @@ public class GardenResponseProvider {
     // -1           0           1
     // 비료 사용 안함  맹물 주기      비료주기
     public ChemicalCode getChemicalCode(Long plantId, Long gardenerId) {
-        List<ChemicalUsage> latestChemicalUsages = wateringDao.getLatestChemicalUsages(plantId, gardenerId);
+        List<ChemicalUsage> latestChemicalUsages = wateringDao.getLatestChemicalUsages(gardenerId, plantId);
 
         // index 필요
         // chemical list index에 맞춰 해당 chemical을 줘야하는지 말아야하는지 산출

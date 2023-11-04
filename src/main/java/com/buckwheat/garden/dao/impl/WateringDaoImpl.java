@@ -65,7 +65,7 @@ public class WateringDaoImpl implements WateringDao {
 
     @Override
     public List<ChemicalUsage> getLatestChemicalUsages(Long gardenerId, Long plantId) {
-        return wateringRepository.findLatestChemicalizedDayList(gardenerId, plantId);
+        return wateringRepository.findLatestChemicalizedDayList(gardenerId, plantId, "Y");
     }
 
     @Override

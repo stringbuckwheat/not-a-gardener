@@ -66,10 +66,9 @@ public class PlantDaoImpl implements PlantDao {
     }
 
     @Override
-    @Transactional
     public Plant updateWateringPeriod(Plant plant, int period) {
         if (period != plant.getRecentWateringPeriod()) {
-            return plant.updateAverageWateringPeriod(period);
+            plantRepository.save(plant.updateAverageWateringPeriod(period));
         }
 
         return plant;

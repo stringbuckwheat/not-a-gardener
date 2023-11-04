@@ -29,8 +29,8 @@ public class GardenController {
      *      List<RoutineDto.GardenResponse> routineList: 루틴으로 등록된 할일 리스트
      */
     @GetMapping("")
-    public GardenMain getGardenToDo(@AuthenticationPrincipal UserPrincipal user){
-        return gardenService.getGardenToDo(user.getId());
+    public GardenMain getGardenMain(@AuthenticationPrincipal UserPrincipal user){
+        return gardenService.readGarden(user.getId());
     }
 
     /**
@@ -42,6 +42,6 @@ public class GardenController {
      */
     @GetMapping("/plants")
     public List<GardenResponse> getAll(@AuthenticationPrincipal UserPrincipal user){
-        return gardenService.getAll(user.getId());
+        return gardenService.readAll(user.getId());
     }
 }

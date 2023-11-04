@@ -13,7 +13,7 @@ public enum ExceptionCode {
     REFRESH_TOKEN_EXPIRED("B002", "리프레쉬 토큰 만료", "로그인 시간이 만료되었습니다"),
     WRONG_ACCOUNT("B003", "아이디/비밀번호 오류", "아이디 또는 비밀번호를 다시 확인해주세요."),
     NO_ACCOUNT("B004", "계정 정보 없음", "해당 유저를 찾을 수 없어요"),
-    ALREADY_WATERED("B005", "오늘 이미 물 줌", "이미 오늘 물을 줬어요"),
+    ALREADY_WATERED("B005", "이미 물 준 날짜", "이 날짜엔 이미 물을 줬어요"),
     NO_SUCH_ITEM("B006", "해당 아이템 없음", "해당 아이템을 찾을 수 없어요"),
     NO_ACCOUNT_FOR_EMAIL("B007", "해당 이메일의 가입 계정 없음", "해당 이메일로 가입한 회원이 없어요"),
     WRONG_PASSWORD("B008", "비밀번호 오류", "비밀번호를 확인해주세요"),

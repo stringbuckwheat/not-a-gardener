@@ -30,6 +30,8 @@ public class PlantResponse {
     private int totalWaterings;
     private LocalDate latestWateringDate;
 
+    private long wateringId;
+
     public static PlantResponse from(Plant plant) {
         return PlantResponse.builder()
                 .id(plant.getPlantId())
@@ -47,7 +49,7 @@ public class PlantResponse {
                 .build();
     }
 
-    public static PlantResponse from(Plant plant, int totalWaterings, LocalDate latestWateringDate){
+    public static PlantResponse from(Plant plant, int totalWaterings, LocalDate latestWateringDate) {
         return PlantResponse.builder()
                 .id(plant.getPlantId())
                 .name(plant.getName())
