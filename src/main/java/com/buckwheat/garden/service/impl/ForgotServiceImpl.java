@@ -1,11 +1,11 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.dao.GardenerDao;
 import com.buckwheat.garden.data.dto.gardener.Forgot;
 import com.buckwheat.garden.data.dto.gardener.Login;
 import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.projection.Username;
 import com.buckwheat.garden.error.code.ExceptionCode;
+import com.buckwheat.garden.repository.GardenerRepository;
 import com.buckwheat.garden.service.ForgotService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,21 +24,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ForgotServiceImpl implements ForgotService {
-    private final GardenerDao gardenerDao;
+    private final GardenerRepository gardenerRepository;
     private final JavaMailSender mailSender;
     private final BCryptPasswordEncoder encoder;
     @Value("${spring.mail.username}")
     private String sendFrom;
 
-    /**
-     * 계정 찾기
-     *
-     * @param email
-     * @return
-     */
     @Override
+    @Transactional(readOnly = true)
     public Forgot forgotAccount(String email) {
-        List<Username> usernames = gardenerDao.getUsernameByEmail(email);
+        List<Username> usernames = gardenerRepository.findByProviderIsNullAndEmail(email);
 
         if (usernames.size() == 0) {
             throw new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT_FOR_EMAIL.getCode());
@@ -52,7 +47,7 @@ public class ForgotServiceImpl implements ForgotService {
     }
 
     @Override
-    public void sendEmail(String identificationCode, String email){
+    public void sendEmail(String identificationCode, String email) {
         // 메일 내용 만들기
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("본인 확인 코드는 [ ")
@@ -71,7 +66,7 @@ public class ForgotServiceImpl implements ForgotService {
     @Override
     @Transactional
     public void resetPassword(Login login) {
-        Gardener gardener = gardenerDao.readByUsername(login.getUsername())
+        Gardener gardener = gardenerRepository.findByProviderIsNullAndUsername(login.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode()));
 
         String encryptedPassword = encoder.encode(login.getPassword());

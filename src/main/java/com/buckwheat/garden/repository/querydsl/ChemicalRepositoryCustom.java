@@ -1,4 +1,4 @@
-package com.buckwheat.garden.repository;
+package com.buckwheat.garden.repository.querydsl;
 
 import com.buckwheat.garden.data.dto.chemical.ChemicalDto;
 

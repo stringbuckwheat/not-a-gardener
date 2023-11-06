@@ -1,13 +1,10 @@
-package com.buckwheat.garden.dao;
+package com.buckwheat.garden.repository.command;
 
 import com.buckwheat.garden.data.dto.routine.RoutineComplete;
 import com.buckwheat.garden.data.dto.routine.RoutineRequest;
 import com.buckwheat.garden.data.entity.Routine;
 
-import java.util.List;
-
-public interface RoutineDao {
-    List<Routine> getRoutinesByGardenerId(Long gardenerId);
+public interface RoutineCommandRepository {
     Routine save(Long gardenerId, RoutineRequest routineRequest);
     Routine update(RoutineRequest routineRequest);
     Routine complete(RoutineComplete routineComplete);

@@ -1,6 +1,6 @@
-package com.buckwheat.garden.dao.impl;
+package com.buckwheat.garden.repository.command.impl;
 
-import com.buckwheat.garden.dao.GoalDao;
+import com.buckwheat.garden.repository.command.GoalCommandRepository;
 import com.buckwheat.garden.data.dto.goal.GoalDto;
 import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Goal;
@@ -12,21 +12,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Repository
 @RequiredArgsConstructor
 @Slf4j
-public class GoalDaoImpl implements GoalDao {
+public class GoalCommandRepositoryImpl implements GoalCommandRepository {
     private final GoalRepository goalRepository;
     private final PlantRepository plantRepository;
     private final GardenerRepository gardenerRepository;
-
-    @Override
-    public List<Goal> getGoalListBy(Long gardenerId) {
-        return goalRepository.findByGardener_GardenerId(gardenerId);
-    }
 
     @Override
     public Goal save(Long gardenerId, GoalDto goalRequest) {

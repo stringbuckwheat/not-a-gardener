@@ -1,6 +1,6 @@
-package com.buckwheat.garden.dao.impl;
+package com.buckwheat.garden.repository.command.impl;
 
-import com.buckwheat.garden.dao.RoutineDao;
+import com.buckwheat.garden.repository.command.RoutineCommandRepository;
 import com.buckwheat.garden.data.dto.routine.RoutineComplete;
 import com.buckwheat.garden.data.dto.routine.RoutineRequest;
 import com.buckwheat.garden.data.entity.Gardener;
@@ -12,20 +12,14 @@ import com.buckwheat.garden.repository.RoutineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Repository
 @RequiredArgsConstructor
-public class RoutineDaoImpl implements RoutineDao {
+public class RoutineCommandRepositoryImpl implements RoutineCommandRepository {
     private final RoutineRepository routineRepository;
     private final PlantRepository plantRepository;
     private final GardenerRepository gardenerRepository;
-
-    @Override
-    public List<Routine> getRoutinesByGardenerId(Long gardenerId){
-        return routineRepository.findByGardener_GardenerId(gardenerId);
-    }
 
     @Override
     public Routine save(Long gardenerId, RoutineRequest routineRequest){

@@ -1,7 +1,7 @@
-package com.buckwheat.garden.repository.impl;
+package com.buckwheat.garden.repository.querydsl.impl;
 
 import com.buckwheat.garden.data.entity.Watering;
-import com.buckwheat.garden.repository.WateringRepositoryCustom;
+import com.buckwheat.garden.repository.querydsl.WateringRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -90,5 +90,13 @@ public class WateringRepositoryCustomImpl implements WateringRepositoryCustom {
                 .fetchFirst();
 
         return fetchOne != null;
+    }
+
+    public List<Watering> findLatestFourWateringDate(Long plantId){
+        return queryFactory.selectFrom(watering)
+                .where(watering.plant.plantId.eq(plantId))
+                .orderBy(watering.wateringDate.desc())
+                .limit(4)
+                .fetch();
     }
 }

@@ -1,6 +1,6 @@
-package com.buckwheat.garden.dao.impl;
+package com.buckwheat.garden.repository.command.impl;
 
-import com.buckwheat.garden.dao.PlantDao;
+import com.buckwheat.garden.repository.command.PlantCommandRepository;
 import com.buckwheat.garden.data.dto.place.ModifyPlace;
 import com.buckwheat.garden.data.dto.plant.PlantRequest;
 import com.buckwheat.garden.data.entity.Gardener;
@@ -16,33 +16,16 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Repository
 @RequiredArgsConstructor
 @Slf4j
-public class PlantDaoImpl implements PlantDao {
+public class PlantCommandRepositoryImpl implements PlantCommandRepository {
     private final PlantRepository plantRepository;
     private final PlaceRepository placeRepository;
     private final GardenerRepository gardenerRepository;
     private final WateringRepository wateringRepository;
-
-    @Override
-    public List<Plant> getPlantsByGardenerId(Long gardenerId){
-        return plantRepository.findByGardener_GardenerIdOrderByCreateDateDesc(gardenerId);
-    }
-
-    @Override
-    public Plant getPlantWithPlaceAndWatering(Long id) {
-        return plantRepository.findByPlantId(id).orElseThrow(NoSuchElementException::new);
-    }
-
-    @Override
-    public Plant getPlantWithPlantIdAndGardenerId(Long plantId, Long gardenerId){
-        return plantRepository.findByPlantIdAndGardener_GardenerId(plantId, gardenerId)
-                .orElseThrow(NoSuchElementException::new);
-    }
 
     @Override
     public Plant save(Long gardenerId, PlantRequest plantRequest) {
@@ -66,16 +49,6 @@ public class PlantDaoImpl implements PlantDao {
     }
 
     @Override
-    public Plant updateWateringPeriod(Plant plant, int period) {
-        if (period != plant.getRecentWateringPeriod()) {
-            plant.updateRecentWateringPeriod(period);
-            plantRepository.save(plant);
-        }
-
-        return plant;
-    }
-
-    @Override
     @Transactional
     public Place updatePlantPlace(ModifyPlace modifyPlantPlace, Long gardenerId){
         Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(modifyPlantPlace.getPlaceId(), gardenerId)
@@ -89,19 +62,9 @@ public class PlantDaoImpl implements PlantDao {
         return place;
     }
 
-    public void updateConditionDate(Plant plant){
-        plant.updateConditionDate();
-        plantRepository.save(plant);
-    }
-
     @Override
     public void deleteBy(Long id, Long gardenerId){
         plantRepository.deleteById(id);
-    }
-
-    @Override
-    public int getTotalWateringsForPlant(Long plantId) {
-        return wateringRepository.countByPlant_PlantId(plantId);
     }
 
     @Override

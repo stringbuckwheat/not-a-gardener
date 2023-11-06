@@ -1,58 +1,23 @@
-package com.buckwheat.garden.dao.impl;
+package com.buckwheat.garden.repository.command.impl;
 
-import com.buckwheat.garden.dao.PlaceDao;
+import com.buckwheat.garden.repository.command.PlaceCommandRepository;
 import com.buckwheat.garden.data.dto.place.PlaceDto;
 import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Place;
-import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.repository.GardenerRepository;
 import com.buckwheat.garden.repository.PlaceRepository;
-import com.buckwheat.garden.repository.PlantRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Repository
 @RequiredArgsConstructor
-public class PlaceDaoImpl implements PlaceDao {
+public class PlaceCommandRepositoryImpl implements PlaceCommandRepository {
     private final PlaceRepository placeRepository;
     private final GardenerRepository gardenerRepository;
-    private final PlantRepository plantRepository;
 
-    /**
-     * @param gardenerId
-     * @return
-     * @Transactional X, EntityGraph로 한 번에 조회
-     */
-    @Override
-    public List<Place> getPlacesByGardenerId(Long gardenerId) {
-        return placeRepository.findByGardener_GardenerIdOrderByCreateDate(gardenerId);
-    }
-
-    @Override
-    public Place getPlaceWithPlants(Long placeId, Long gardenerId) {
-        return placeRepository.findByPlaceIdAndGardener_GardenerId(placeId, gardenerId)
-                .orElseThrow(NoSuchElementException::new);
-    }
-
-    @Override
-    public int countPlantsInPlace(Long placeId) {
-        return plantRepository.countByPlace_PlaceId(placeId);
-    }
-
-    @Override
-    public List<Plant> getPlantsInPlace(Long placeId, Pageable pageable) {
-        return plantRepository.findPlantsByPlaceIdWithPage(placeId, pageable);
-    }
-
-    /**
-     * @param placeRequest
-     * @return
-     */
     @Override
     public Place save(Long gardenerId, PlaceDto placeRequest) {
         Gardener gardener = gardenerRepository.getReferenceById(gardenerId);

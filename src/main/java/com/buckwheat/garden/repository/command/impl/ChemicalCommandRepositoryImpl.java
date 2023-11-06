@@ -1,6 +1,6 @@
-package com.buckwheat.garden.dao.impl;
+package com.buckwheat.garden.repository.command.impl;
 
-import com.buckwheat.garden.dao.ChemicalDao;
+import com.buckwheat.garden.repository.command.ChemicalCommandRepository;
 import com.buckwheat.garden.data.dto.chemical.ChemicalDto;
 import com.buckwheat.garden.data.entity.Chemical;
 import com.buckwheat.garden.data.entity.Gardener;
@@ -10,24 +10,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @Repository
-public class ChemicalDaoImpl implements ChemicalDao {
+public class ChemicalCommandRepositoryImpl implements ChemicalCommandRepository {
     private final ChemicalRepository chemicalRepository;
     private final GardenerRepository gardenerRepository;
-
-    @Override
-    public List<ChemicalDto> readAll(Long gardenerId) {
-        return chemicalRepository.findAllChemicals(gardenerId);
-    }
-
-    @Override
-    public ChemicalDto readChemical(Long chemicalId, Long gardenerId) {
-        return chemicalRepository.findByChemicalIdAndGardenerId(chemicalId, gardenerId);
-    }
 
     @Override
     public ChemicalDto create(Long gardenerId, ChemicalDto chemicalRequest) {

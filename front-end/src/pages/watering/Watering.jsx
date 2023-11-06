@@ -92,13 +92,9 @@ const Watering = () => {
 
   const onDelete = (watering) => {
     const afterDelete = wateringList[watering.wateringDate].filter(w => w.id !== watering.wateringId);
-    console.log("afterDelete", afterDelete);
     wateringList[watering.wateringDate] = afterDelete;
-    console.log("wateringList", wateringList);
     setWateringList(() => ({...wateringList}));
-    console.log("wateringDetail", wateringDetail);
     setWateringDetail(() => wateringDetail.filter(w => w.id !== watering.wateringId));
-    console.log("wateringDetail handle 이후", wateringDetail);
   }
 
   useEffect(() => {

@@ -2,6 +2,7 @@ package com.buckwheat.garden.repository;
 
 import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.projection.Username;
+import com.buckwheat.garden.repository.querydsl.GardenerRepositoryCustom;
 import org.springframework.data.repository.Repository;
 
 import java.util.List;

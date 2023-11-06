@@ -3,7 +3,7 @@ const plants = (state = [], {type, payload}) => {
     case 'setPlants':
       return [...payload];
     case 'addPlant':
-      return state.concat(payload);
+      return [payload, ...state];
     case 'updatePlant':
       const editedId = payload.plant.id;
 

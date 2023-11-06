@@ -1,9 +1,9 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.dao.GardenerDao;
 import com.buckwheat.garden.data.dto.gardener.GardenerDetail;
 import com.buckwheat.garden.data.dto.gardener.Login;
 import com.buckwheat.garden.data.entity.Gardener;
+import com.buckwheat.garden.repository.GardenerRepository;
 import com.buckwheat.garden.service.GardenerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,33 +18,34 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class GardenerServiceImpl implements GardenerService {
     private final BCryptPasswordEncoder encoder;
-    private final GardenerDao gardenerDao;
+    private final GardenerRepository gardenerRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public GardenerDetail getOne(Long id) {
-        return gardenerDao.getGardenerDetailByGardenerId(id);
+        return gardenerRepository.findGardenerDetailByGardenerId(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean identify(Long id, Login login) {
+        Gardener gardener = gardenerRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        return encoder.matches(login.getPassword(), gardener.getPassword());
     }
 
     @Override
     public void updatePassword(Long id, Login login) {
-        Gardener gardener = gardenerDao.getGardenerById(id);
+        Gardener gardener = gardenerRepository.findById(id).orElseThrow(NoSuchElementException::new);
         String encryptedPassword = encoder.encode(login.getPassword());
         gardener.changePassword(encryptedPassword);
 
-        gardenerDao.save(gardener);
-    }
-
-    @Override
-    public boolean identify(Long id, Login login) {
-        Gardener gardener = gardenerDao.getGardenerById(id);
-        return encoder.matches(login.getPassword(), gardener.getPassword());
+        gardenerRepository.save(gardener);
     }
 
     @Override
     @Transactional
     public GardenerDetail update(GardenerDetail gardenerDetail) {
-        Gardener gardener = gardenerDao.getGardenerByGardenerId(gardenerDetail.getId())
-                .orElseThrow(NoSuchElementException::new);
+        Gardener gardener = gardenerRepository.findById(gardenerDetail.getId()).orElseThrow(NoSuchElementException::new);
         gardener.updateEmailAndName(gardenerDetail.getEmail(), gardenerDetail.getName());
 
         return GardenerDetail.builder()
@@ -59,6 +60,6 @@ public class GardenerServiceImpl implements GardenerService {
 
     @Override
     public void delete(Long gardenerId) {
-        gardenerDao.deleteBy(gardenerId);
+        gardenerRepository.findGardenerDetailByGardenerId(gardenerId);
     }
 }

@@ -1,4 +1,4 @@
-package com.buckwheat.garden.repository;
+package com.buckwheat.garden.repository.querydsl;
 
 import com.buckwheat.garden.data.entity.Watering;
 import org.springframework.data.domain.Pageable;
@@ -12,4 +12,5 @@ public interface WateringRepositoryCustom {
     List<Watering> findWateringsByPlantIdWithPage(Long plantId, Pageable pageable);
     LocalDate findLatestWateringDate(Long plantId);
     Boolean existByWateringDateAndPlantId(LocalDate wateringDate, Long plantId);
+    List<Watering> findLatestFourWateringDate(Long plantId);
 }

@@ -1,11 +1,12 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.dao.RoutineDao;
+import com.buckwheat.garden.repository.command.RoutineCommandRepository;
 import com.buckwheat.garden.data.dto.routine.RoutineComplete;
 import com.buckwheat.garden.data.dto.routine.RoutineMain;
 import com.buckwheat.garden.data.dto.routine.RoutineRequest;
 import com.buckwheat.garden.data.dto.routine.RoutineResponse;
 import com.buckwheat.garden.data.entity.Routine;
+import com.buckwheat.garden.repository.RoutineRepository;
 import com.buckwheat.garden.service.RoutineService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,15 +20,17 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class RoutineServiceImpl implements RoutineService {
-    private final RoutineDao routineDao;
+    private final RoutineCommandRepository routineDao;
+    private final RoutineRepository routineRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public RoutineMain getAll(Long gardenerId) {
         List<RoutineResponse> toDoList = new ArrayList<>();
         List<RoutineResponse> notToDoList = new ArrayList<>();
 
         // dto로 변환
-        for (Routine routine : routineDao.getRoutinesByGardenerId(gardenerId)) {
+        for (Routine routine : routineRepository.findByGardener_GardenerId(gardenerId)) {
             RoutineResponse r = RoutineResponse.from(routine);
 
             if(r.getHasToDoToday().equals("Y")){

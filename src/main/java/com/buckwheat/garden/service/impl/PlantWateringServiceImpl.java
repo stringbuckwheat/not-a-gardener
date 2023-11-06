@@ -1,10 +1,11 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.dao.WateringDao;
+import com.buckwheat.garden.repository.command.WateringCommandRepository;
 import com.buckwheat.garden.data.dto.plant.PlantResponse;
 import com.buckwheat.garden.data.dto.watering.*;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Watering;
+import com.buckwheat.garden.repository.WateringRepository;
 import com.buckwheat.garden.service.PlantWateringService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,11 +22,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class PlantWateringServiceImpl implements PlantWateringService {
-    private final WateringDao wateringDao;
+    private final WateringCommandRepository wateringDao;
+    private final WateringRepository wateringRepository;
 
     @Override
     public PlantWateringResponse add(WateringRequest wateringRequest, Pageable pageable) {
-        AfterWatering afterWatering = wateringDao.addWatering(wateringRequest);
+        AfterWatering afterWatering = wateringDao.add(wateringRequest);
 
         List<WateringForOnePlant> waterings = getAll(wateringRequest.getPlantId(), pageable);
 
@@ -34,7 +36,7 @@ public class PlantWateringServiceImpl implements PlantWateringService {
 
     @Override
     public List<WateringForOnePlant> getAll(Long plantId, Pageable pageable) {
-        List<Watering> waterings = wateringDao.getWateringListByPlantId(plantId, pageable); // orderByWateringDateDesc
+        List<Watering> waterings = wateringRepository.findWateringsByPlantIdWithPage(plantId, pageable); // orderByWateringDateDesc
 
         // 며칠만에 물 줬는지
         if (waterings.size() >= 2) {
@@ -69,7 +71,7 @@ public class PlantWateringServiceImpl implements PlantWateringService {
 
     @Override
     public PlantWateringResponse modify(WateringRequest wateringRequest, Pageable pageable, Long gardenerId) {
-        AfterWatering afterWatering = wateringDao.modifyWatering(wateringRequest, gardenerId);
+        AfterWatering afterWatering = wateringDao.update(wateringRequest, gardenerId);
 
         Plant plant = afterWatering.getPlant();
         WateringMessage wateringMsg = afterWatering.getWateringMessage();

@@ -11,7 +11,7 @@ const GoalCardTag = ({isCompleted, plantId, plantName}) => {
     return <></>;
   }
 
-  const completeTag = isCompleted ? <Tag color={"yellow-inverse"} className="text-orange">완료!</Tag> : <></>;
+  const completeTag = isCompleted ? <Tag color={"yellow-inverse"} className="text-orange">달성!</Tag> : <></>;
   const plantTag = plantName
     ? <LinkHoverTag color="green" to={`/plant/${plantId}`} content={plantName}/>
     : <></>;

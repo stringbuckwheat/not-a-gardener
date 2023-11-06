@@ -1,4 +1,4 @@
-package com.buckwheat.garden.repository;
+package com.buckwheat.garden.repository.querydsl;
 
 import com.buckwheat.garden.data.dto.garden.WaitingForWatering;
 import com.buckwheat.garden.data.entity.Plant;
@@ -15,4 +15,5 @@ public interface PlantRepositoryCustom {
     Boolean existByGardenerId(Long gardenerId);
     List<WaitingForWatering> findWaitingForWateringList(Long gardenerId);
     List<Plant> findPlantsByPlaceIdWithPage(Long placeId, Pageable pageable);
+    List<Plant> findAllPlants(Long gardenerId);
 }

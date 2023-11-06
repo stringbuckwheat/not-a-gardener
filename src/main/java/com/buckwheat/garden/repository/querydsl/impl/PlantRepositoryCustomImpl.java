@@ -1,9 +1,9 @@
-package com.buckwheat.garden.repository.impl;
+package com.buckwheat.garden.repository.querydsl.impl;
 
 import com.buckwheat.garden.data.dto.garden.QWaitingForWatering;
 import com.buckwheat.garden.data.dto.garden.WaitingForWatering;
 import com.buckwheat.garden.data.entity.Plant;
-import com.buckwheat.garden.repository.PlantRepositoryCustom;
+import com.buckwheat.garden.repository.querydsl.PlantRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -58,6 +58,15 @@ public class PlantRepositoryCustomImpl implements PlantRepositoryCustom {
                 .where(plant.place.placeId.eq(placeId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(plant.createDate.desc())
+                .fetch();
+    }
+
+    @Override
+    public List<Plant> findAllPlants(Long gardenerId) {
+        return queryFactory.selectFrom(plant)
+                .join(plant.place, place)
+                .where(plant.gardener.gardenerId.eq(gardenerId))
                 .orderBy(plant.createDate.desc())
                 .fetch();
     }

@@ -1,53 +1,53 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.dao.PlaceDao;
+import com.buckwheat.garden.repository.command.PlaceCommandRepository;
 import com.buckwheat.garden.data.dto.place.PlaceCard;
 import com.buckwheat.garden.data.dto.place.PlaceDto;
 import com.buckwheat.garden.data.dto.plant.PlantInPlace;
 import com.buckwheat.garden.data.entity.Place;
+import com.buckwheat.garden.repository.PlaceRepository;
+import com.buckwheat.garden.repository.PlantRepository;
 import com.buckwheat.garden.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class PlaceServiceImpl implements PlaceService {
-    private final PlaceDao placeDao;
+    private final PlaceCommandRepository placeCommandRepository;
+    private final PlaceRepository placeRepository;
+    private final PlantRepository plantRepository;
 
-    /**
-     * 전체 장소 리스트
-     * @param gardenerId int
-     * @return 각 장소의 식물 개수를 포함하는 장소 정보 리스트
-     */
     @Override
+    @Transactional(readOnly = true)
     public List<PlaceCard> getAll(Long gardenerId) {
-        return placeDao.getPlacesByGardenerId(gardenerId).stream()
+        return placeRepository.findByGardener_GardenerIdOrderByCreateDate(gardenerId)
+                .stream()
                 .map(PlaceCard::from)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 한 장소의 정보
-     * @param placeId
-     * @param gardenerId
-     * @return 해당 장소의 식물 개수를 포함하는 장소 정보
-     */
     @Override
+    @Transactional(readOnly = true)
     public PlaceDto getDetail(Long placeId, Long gardenerId) {
-        Place place = placeDao.getPlaceWithPlants(placeId, gardenerId);
-        int plantListSize = placeDao.countPlantsInPlace(placeId);
+        Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(placeId, gardenerId)
+                .orElseThrow(NoSuchElementException::new);
+        int plantListSize = plantRepository.countByPlace_PlaceId(placeId);
         return PlaceDto.from(place, plantListSize);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<PlantInPlace> getPlantsWithPaging(Long placeId, Pageable pageable) {
-        return placeDao.getPlantsInPlace(placeId, pageable).stream()
+        return plantRepository.findPlantsByPlaceIdWithPage(placeId, pageable).stream()
                 .map(PlantInPlace::from)
                 .collect(Collectors.toList());
     }
@@ -55,26 +55,17 @@ public class PlaceServiceImpl implements PlaceService {
     @Override
     public PlaceCard add(Long gardenerId, PlaceDto placeRequest) {
         // FK인 Gardener와 createDate로 쓸 LocalDateTime.now()를 포함한 엔티티를 저장
-        Place place = placeDao.save(gardenerId, placeRequest);
+        Place place = placeCommandRepository.save(gardenerId, placeRequest);
         return PlaceCard.from(place);
     }
 
-    /**
-     * 장소 수정
-     * @param placeRequest
-     * @return 수정 후 데이터
-     */
     @Override
     public PlaceDto modify(PlaceDto placeRequest, Long gardenerId) {
-        return PlaceDto.from(placeDao.update(placeRequest, gardenerId));
+        return PlaceDto.from(placeCommandRepository.update(placeRequest, gardenerId));
     }
 
-    /**
-     * 장소 하나 삭제
-     * @param placeId
-     */
     @Override
     public void delete(Long placeId, Long gardenerId) {
-        placeDao.deleteBy(placeId, gardenerId);
+        placeCommandRepository.deleteBy(placeId, gardenerId);
     }
 }
