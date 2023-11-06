@@ -3,7 +3,7 @@ package com.buckwheat.garden.filter.oauth2;
 import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.token.OAuth2Attribute;
 import com.buckwheat.garden.data.token.UserPrincipal;
-import com.buckwheat.garden.repository.GardenerRepository;
+import com.buckwheat.garden.dao.GardenerDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -23,10 +23,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
-    private final GardenerRepository gardenerRepository;
+    private final GardenerDao gardenerDao;
 
     /**
      * OAuth2 로그인 성공 정보를 바탕으로 UserPrincipal을 만들어 반환한다
+     *
      * @param userRequest 로그인한 유저 리퀘스트
      * @return Authenticaion 객체에 담을 UserPrincipal(Custom)
      * @throws OAuth2AuthenticationException
@@ -60,13 +61,14 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
 
     /**
      * DB에 사용자 정보를 저장/수정한다
+     *
      * @param oAuth2Attribute 엔티티를 만들 정보들
      * @return
      */
-    public Gardener saveOrUpdate(OAuth2Attribute oAuth2Attribute){
-        Gardener gardener = gardenerRepository.findByUsernameAndProvider(oAuth2Attribute.getEmail(), oAuth2Attribute.getProvider())
+    public Gardener saveOrUpdate(OAuth2Attribute oAuth2Attribute) {
+        Gardener gardener = gardenerDao.findByUsernameAndProvider(oAuth2Attribute.getEmail(), oAuth2Attribute.getProvider())
                 .orElse(oAuth2Attribute.toEntity());
 
-        return gardenerRepository.save(gardener);
+        return gardenerDao.save(gardener);
     }
 }

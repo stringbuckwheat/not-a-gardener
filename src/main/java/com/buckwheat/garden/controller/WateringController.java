@@ -22,17 +22,17 @@ public class WateringController {
     private final WateringService wateringService;
 
     @GetMapping("/date/{date}")
-    public Map<LocalDate, List<WateringByDate>> getAll(@AuthenticationPrincipal UserPrincipal user, @PathVariable String date){
+    public Map<LocalDate, List<WateringByDate>> getAll(@AuthenticationPrincipal UserPrincipal user, @PathVariable String date) {
         return wateringService.getAll(user.getId(), LocalDate.parse(date, DateTimeFormatter.ISO_DATE));
     }
 
     @PostMapping("")
-    public WateringByDate add(@RequestBody WateringRequest wateringRequest){
+    public WateringByDate add(@RequestBody WateringRequest wateringRequest) {
         return wateringService.add(wateringRequest);
     }
 
     @DeleteMapping("/{wateringId}")
-    public void delete(@PathVariable Long wateringId, @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody Map<String, Long> request){
+    public void delete(@PathVariable Long wateringId, @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody Map<String, Long> request) {
         wateringService.delete(wateringId, request.get("plantId"), userPrincipal.getId());
     }
 }

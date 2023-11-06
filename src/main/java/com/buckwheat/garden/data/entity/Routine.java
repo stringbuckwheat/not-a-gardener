@@ -36,23 +36,23 @@ public class Routine {
     @NotNull
     private LocalDate createDate;
 
-    @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="gardener_id")
-    @OnDelete(action= OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "gardener_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Gardener gardener;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="plant_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "plant_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Plant plant;
 
-    public void update(String content, int cycle, Plant plant){
+    public void update(String content, int cycle, Plant plant) {
         this.content = content;
         this.cycle = cycle;
         this.plant = plant;
     }
 
-    public void complete(LocalDate lastCompleteDate){
+    public void complete(LocalDate lastCompleteDate) {
         this.lastCompleteDate = lastCompleteDate;
     }
 }

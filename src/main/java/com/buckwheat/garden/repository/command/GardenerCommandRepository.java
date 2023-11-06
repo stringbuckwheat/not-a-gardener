@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface GardenerCommandRepository extends Repository<Gardener, Long> {
     Optional<Gardener> findById(Long gardenerId);
+
     void deleteById(Long gardenerId);
 }

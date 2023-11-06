@@ -14,15 +14,13 @@ import org.springframework.web.bind.annotation.*;
 public class RegisterController {
     private final AuthenticationService authenticationService;
 
-    /* 아이디 중복 검사 */
     @GetMapping("/username/{username}")
-    public String hasSameUsername(@PathVariable String username){
+    public String hasSameUsername(@PathVariable String username) {
         return authenticationService.hasSameUsername(username);
     }
 
-    /* 회원 가입 */
     @PostMapping("")
-    public Info add(@RequestBody Register register){
+    public Info add(@RequestBody Register register) {
         return authenticationService.add(register);
     }
 }

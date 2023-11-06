@@ -19,27 +19,27 @@ public class RoutineController {
     private final RoutineService routineService;
 
     @GetMapping("")
-    public RoutineMain getAll(@AuthenticationPrincipal UserPrincipal user){
+    public RoutineMain getAll(@AuthenticationPrincipal UserPrincipal user) {
         return routineService.getAll(user.getId());
     }
 
     @PostMapping("")
-    public RoutineResponse add(@AuthenticationPrincipal UserPrincipal user, @RequestBody RoutineRequest routineRequest){
+    public RoutineResponse add(@AuthenticationPrincipal UserPrincipal user, @RequestBody RoutineRequest routineRequest) {
         return routineService.add(user.getId(), routineRequest);
     }
 
     @PutMapping("/{routineId}/complete")
-    public RoutineResponse complete(@RequestBody RoutineComplete routineComplete){
+    public RoutineResponse complete(@RequestBody RoutineComplete routineComplete) {
         return routineService.complete(routineComplete);
     }
 
     @PutMapping("/{routineId}")
-    public RoutineResponse modify(@RequestBody RoutineRequest routineRequest){
+    public RoutineResponse modify(@RequestBody RoutineRequest routineRequest) {
         return routineService.update(routineRequest);
     }
 
     @DeleteMapping("/{routineId}")
-    public void deleteRoutine(@PathVariable Long routineId){
+    public void deleteRoutine(@PathVariable Long routineId) {
         routineService.delete(routineId);
     }
 }

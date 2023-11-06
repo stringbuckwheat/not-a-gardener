@@ -34,16 +34,16 @@ public class Gardener {
 
     private String provider;
 
-    public void changePassword(String encryptPassword){
+    public void changePassword(String encryptPassword) {
         this.password = encryptPassword;
     }
 
-    public void updateEmailAndName(String email, String name){
+    public void updateEmailAndName(String email, String name) {
         this.email = email;
         this.name = name;
     }
 
-    public void updateRecentLogin(){
+    public void updateRecentLogin() {
         this.recentLogin = LocalDateTime.now();
     }
 }

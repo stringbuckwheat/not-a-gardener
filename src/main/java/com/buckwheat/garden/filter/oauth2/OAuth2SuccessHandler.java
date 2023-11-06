@@ -21,10 +21,12 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private final TokenProvider tokenProvider;
     private final String TARGET_URL = "http://not-a-gardener.xyz/oauth/";
     // private final String TARGET_URL = "http://localhost:3000/oauth/";
+
     /**
      * 로그인 성공 시 부가작업
      * JWT 발급 후 token과 함께 리다이렉트
-     * @param request 인증 성공된 리퀘스트
+     *
+     * @param request        인증 성공된 리퀘스트
      * @param response
      * @param authentication Security Context의 Authentication
      * @throws IOException

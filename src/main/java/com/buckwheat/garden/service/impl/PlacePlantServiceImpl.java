@@ -15,7 +15,7 @@ public class PlacePlantServiceImpl implements PlacePlantService {
     private final PlantCommandRepository plantCommandRepository;
 
     @Override
-    public PlantInPlace addPlantInPlace(Long gardenerId, PlantRequest plantRequest){
+    public PlantInPlace addPlantInPlace(Long gardenerId, PlantRequest plantRequest) {
         return PlantInPlace.from(plantCommandRepository.save(gardenerId, plantRequest));
     }
 }

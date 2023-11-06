@@ -9,9 +9,14 @@ import java.util.List;
 
 public interface ChemicalService {
     List<ChemicalDto> getAll(Long gardenerId);
+
     ChemicalDetail getOne(Long chemicalId, Long gardenerId);
+
     List<WateringResponseInChemical> getWateringsForChemical(Long chemicalId, Pageable pageable);
+
     ChemicalDto add(Long gardenerId, ChemicalDto chemicalRequest);
+
     ChemicalDto update(Long gardenerId, ChemicalDto chemicalRequest);
+
     void deactivate(Long chemicalId, Long gardenerId);
 }

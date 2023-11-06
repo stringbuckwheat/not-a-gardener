@@ -2,6 +2,7 @@ package com.buckwheat.garden.data.dto.routine;
 
 import com.buckwheat.garden.data.entity.Routine;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
+@Slf4j
 public class RoutineResponse {
     private Long id;
     private String content;
@@ -24,7 +26,7 @@ public class RoutineResponse {
     private String hasToDoToday;
     private String isCompleted;
 
-    public static RoutineResponse from(Routine routine){
+    public static RoutineResponse from(Routine routine) {
         LocalDate today = LocalDateTime.now().toLocalDate();
 
         return RoutineResponse.builder()
@@ -39,9 +41,9 @@ public class RoutineResponse {
                 .build();
     }
 
-    public static String isCompleted(LocalDate today, LocalDate lastCompleteDate){
+    public static String isCompleted(LocalDate today, LocalDate lastCompleteDate) {
         // 한 번도 완료한 적 없는 루틴
-        if(lastCompleteDate == null){
+        if (lastCompleteDate == null) {
             return "N";
         }
 

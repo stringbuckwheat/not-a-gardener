@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @ToString
-public class PlantDetail{
+public class PlantDetail {
     PlantResponse plant;
     List<WateringForOnePlant> waterings;
 }

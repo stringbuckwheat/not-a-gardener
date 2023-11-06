@@ -8,8 +8,12 @@ import java.util.List;
 
 public interface PlantRepositoryCustom {
     Boolean existByGardenerId(Long gardenerId);
+
     List<WaitingForWatering> findWaitingForWateringList(Long gardenerId);
+
     List<Plant> findAllPlants(Long gardenerId);
+
     Long countWateringByPlantId(Long plantId);
+
     LocalDate findLatestWateringDateByPlantId(Long plantId);
 }

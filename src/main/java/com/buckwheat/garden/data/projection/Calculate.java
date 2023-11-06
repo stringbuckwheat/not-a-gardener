@@ -19,7 +19,7 @@ public class Calculate {
     private PlantResponse plant;
     private Long gardenerId;
 
-    public static Calculate from(RawGarden rawGarden, Long gardenerId){
+    public static Calculate from(RawGarden rawGarden, Long gardenerId) {
         return Calculate.builder()
                 .postponeDate(rawGarden.getPostponeDate())
                 .birthday(rawGarden.getBirthday())
@@ -29,10 +29,10 @@ public class Calculate {
                 .build();
     }
 
-    public static Calculate from(Plant plant, Long gardenerId){
+    public static Calculate from(Plant plant, Long gardenerId) {
         LocalDate latestWateringDate = null;
 
-        if(plant.getWaterings() != null && plant.getWaterings().size() > 0 ){
+        if (plant.getWaterings() != null && plant.getWaterings().size() > 0) {
             latestWateringDate = plant.getWaterings().get(0).getWateringDate();
         }
 

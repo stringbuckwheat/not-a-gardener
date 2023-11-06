@@ -20,28 +20,30 @@ import java.util.NoSuchElementException;
 public class GlobalExceptionHandler {
     /**
      * 리프레쉬 토큰 만료
+     *
      * @param e ExpiredRefreshTokenException(Custom)
      * @return
      */
     @ExceptionHandler(ExpiredRefreshTokenException.class)
-    public HttpEntity<ErrorResponse> handleExpiredRefreshTokenException(ExpiredRefreshTokenException e){
+    public HttpEntity<ErrorResponse> handleExpiredRefreshTokenException(ExpiredRefreshTokenException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ErrorResponse.from(ExceptionCode.REFRESH_TOKEN_EXPIRED));
     }
 
     @ExceptionHandler(NoSuchElementException.class)
-    public HttpEntity<ErrorResponse> handleNoSuchElementException(NoSuchElementException e){
+    public HttpEntity<ErrorResponse> handleNoSuchElementException(NoSuchElementException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(ErrorResponse.from(ExceptionCode.NO_SUCH_ITEM));
     }
 
     /**
      * 로그인 시 ID/PW 틀림
+     *
      * @param e BadCredentialsException
      * @return
      */
     @ExceptionHandler(BadCredentialsException.class)
-    public HttpEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException e){
+    public HttpEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException e) {
         ExceptionCode exceptionCode = ExceptionCode.of(e.getMessage());
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -50,11 +52,12 @@ public class GlobalExceptionHandler {
 
     /**
      * 해당 계정 없음
+     *
      * @param e UsernameNotFoundException
      * @return
      */
     @ExceptionHandler(UsernameNotFoundException.class)
-    public HttpEntity<ErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException e){
+    public HttpEntity<ErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException e) {
         ExceptionCode exceptionCode = ExceptionCode.of(e.getMessage());
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -63,11 +66,12 @@ public class GlobalExceptionHandler {
 
     /**
      * 이미 오늘 물 줬는데 또 물 주기 누름
+     *
      * @param e AlreadyWateredException(Custom)
      * @return
      */
     @ExceptionHandler(AlreadyWateredException.class)
-    public HttpEntity<ErrorResponse> handleAlreadyWateredException(AlreadyWateredException e){
+    public HttpEntity<ErrorResponse> handleAlreadyWateredException(AlreadyWateredException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ErrorResponse.from(ExceptionCode.ALREADY_WATERED));
     }

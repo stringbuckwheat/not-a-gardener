@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Getter
 @ToString
-public class RoutineComplete{
+public class RoutineComplete {
     private Long id;
     private LocalDate lastCompleteDate;
 }

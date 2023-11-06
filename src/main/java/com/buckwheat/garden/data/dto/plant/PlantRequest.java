@@ -23,7 +23,7 @@ public class PlantRequest {
     private LocalDate birthday;
     private Long placeId;
 
-    public Plant toEntityWith(Gardener gardener, Place place){
+    public Plant toEntityWith(Gardener gardener, Place place) {
         return Plant.builder()
                 .gardener(gardener)
                 .place(place)

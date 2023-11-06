@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface GardenService {
     GardenMain getGarden(Long gardenerId);
+
     List<GardenResponse> getAll(Long gardenerId);
 }

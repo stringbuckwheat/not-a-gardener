@@ -67,7 +67,7 @@ public class ChemicalRepositoryCustomImpl implements ChemicalRepositoryCustom {
     }
 
     @Override
-    public  List<Watering> findWateringsByChemicalIdWithPage(Long chemicalId, Pageable pageable){
+    public List<Watering> findWateringsByChemicalIdWithPage(Long chemicalId, Pageable pageable) {
         return queryFactory
                 .selectFrom(watering)
                 .join(watering.plant, plant)

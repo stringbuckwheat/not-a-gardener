@@ -3,7 +3,7 @@ package com.buckwheat.garden.filter.oauth2;
 import com.buckwheat.garden.data.token.ActiveGardener;
 import com.buckwheat.garden.data.token.UserPrincipal;
 import com.buckwheat.garden.error.code.ExceptionCode;
-import com.buckwheat.garden.repository.RedisRepository;
+import com.buckwheat.garden.repository.command.RedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +18,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final RedisRepository redisRepository;
 
     /**
-     *
      * @param username gardenerId가 저장되어 있다
      * @return Gardener 객체를 포함한 UserPrincipal -> UsernamePasswordAuthenticationToken에 넣는다
      * @throws UsernameNotFoundException

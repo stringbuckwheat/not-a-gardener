@@ -8,7 +8,7 @@ import com.buckwheat.garden.data.dto.watering.WateringMessage;
 import com.buckwheat.garden.data.dto.watering.WateringRequest;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.projection.Calculate;
-import com.buckwheat.garden.repository.PlantRepository;
+import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.repository.command.WateringCommandRepository;
 import com.buckwheat.garden.service.GardenWateringService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class GardenWateringServiceImpl implements GardenWateringService {
     private final WateringCommandRepository wateringCommandRepository;
-    private final PlantRepository plantRepository;
+    private final PlantDao plantDao;
     private final GardenResponseProvider gardenResponseProvider;
 
     @Override
@@ -42,7 +42,7 @@ public class GardenWateringServiceImpl implements GardenWateringService {
         // 리턴용
         WateringMessage wateringMsg = null;
 
-        Plant plant = plantRepository.findByPlantId(plantId).orElseThrow(NoSuchElementException::new);
+        Plant plant = plantDao.findByPlantId(plantId).orElseThrow(NoSuchElementException::new);
 
         // 한 번도 물 준 적 없는 경우
         if (plant.getWaterings().size() == 0) {
@@ -78,7 +78,7 @@ public class GardenWateringServiceImpl implements GardenWateringService {
     @Override
     @Transactional
     public int postpone(Long plantId) {
-        Plant plant = plantRepository.findByPlantId(plantId).orElseThrow(NoSuchElementException::new);
+        Plant plant = plantDao.findByPlantId(plantId).orElseThrow(NoSuchElementException::new);
         // 미룰래요(그냥 귀찮아서 물주기 미룬 경우) == averageWateringPeriod 업데이트 안함!!
         // postponeDate를 업데이트함
         plant.updatePostponeDate();

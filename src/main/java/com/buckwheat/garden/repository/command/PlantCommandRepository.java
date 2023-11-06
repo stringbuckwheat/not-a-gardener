@@ -7,7 +7,10 @@ import com.buckwheat.garden.data.entity.Plant;
 
 public interface PlantCommandRepository {
     Plant save(Long gardenerId, PlantRequest plantRequest);
+
     Plant update(PlantRequest plantRequest, Long gardenerId);
+
     Place updatePlantPlace(ModifyPlace modifyPlantPlaceDto, Long gardenerId);
+
     void deleteBy(Long id, Long gardenerId);
 }

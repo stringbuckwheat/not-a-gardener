@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @Builder
-public class PlaceCard{
+public class PlaceCard {
     private Long id;
     private String name;
     private String artificialLight;
@@ -21,7 +21,7 @@ public class PlaceCard{
     private int plantListSize;
     private LocalDateTime createDate;
 
-    public static PlaceCard from(Place place){
+    public static PlaceCard from(Place place) {
         int plantListSize = place.getPlants() != null ? place.getPlants().size() : 0;
 
         return PlaceCard.builder()

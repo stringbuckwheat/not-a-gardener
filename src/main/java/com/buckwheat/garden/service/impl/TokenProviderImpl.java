@@ -4,7 +4,7 @@ import com.buckwheat.garden.data.token.AccessToken;
 import com.buckwheat.garden.data.token.ActiveGardener;
 import com.buckwheat.garden.data.token.RefreshToken;
 import com.buckwheat.garden.data.token.UserPrincipal;
-import com.buckwheat.garden.repository.RedisRepository;
+import com.buckwheat.garden.repository.command.RedisRepository;
 import com.buckwheat.garden.service.TokenProvider;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -49,7 +49,7 @@ public class TokenProviderImpl implements TokenProvider {
     }
 
     @Override
-    public AccessToken createAccessToken(Long gardenerId, String name){
+    public AccessToken createAccessToken(Long gardenerId, String name) {
         // claims 만들기
         Map<String, String> claims = new HashMap<>();
 
@@ -85,7 +85,7 @@ public class TokenProviderImpl implements TokenProvider {
         }
     }
 
-    public RefreshToken createRefreshToken(Long gardenerId, String name){
+    public RefreshToken createRefreshToken(Long gardenerId, String name) {
         RefreshToken refreshToken = new RefreshToken();
         redisRepository.save(new ActiveGardener(gardenerId, name, refreshToken, LocalDateTime.now()));
 

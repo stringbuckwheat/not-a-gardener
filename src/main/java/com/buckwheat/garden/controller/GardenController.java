@@ -21,12 +21,12 @@ public class GardenController {
     private final GardenService gardenService;
 
     @GetMapping("")
-    public GardenMain getGardenMain(@AuthenticationPrincipal UserPrincipal user){
+    public GardenMain getGardenMain(@AuthenticationPrincipal UserPrincipal user) {
         return gardenService.getGarden(user.getId());
     }
 
     @GetMapping("/plants")
-    public List<GardenResponse> getAll(@AuthenticationPrincipal UserPrincipal user){
+    public List<GardenResponse> getAll(@AuthenticationPrincipal UserPrincipal user) {
         return gardenService.getAll(user.getId());
     }
 }

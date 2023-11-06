@@ -5,7 +5,7 @@ import com.buckwheat.garden.data.dto.gardener.Login;
 import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.projection.Username;
 import com.buckwheat.garden.error.code.ExceptionCode;
-import com.buckwheat.garden.repository.GardenerRepository;
+import com.buckwheat.garden.dao.GardenerDao;
 import com.buckwheat.garden.service.ForgotService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ForgotServiceImpl implements ForgotService {
-    private final GardenerRepository gardenerRepository;
+    private final GardenerDao gardenerDao;
     private final JavaMailSender mailSender;
     private final BCryptPasswordEncoder encoder;
 
@@ -34,7 +34,7 @@ public class ForgotServiceImpl implements ForgotService {
     @Override
     @Transactional(readOnly = true)
     public Forgot forgotAccount(String email) {
-        List<Username> usernames = gardenerRepository.findByProviderIsNullAndEmail(email);
+        List<Username> usernames = gardenerDao.findByProviderIsNullAndEmail(email);
 
         if (usernames.size() == 0) {
             throw new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT_FOR_EMAIL.getCode());
@@ -67,7 +67,7 @@ public class ForgotServiceImpl implements ForgotService {
     @Override
     @Transactional
     public void resetPassword(Login login) {
-        Gardener gardener = gardenerRepository.findByProviderIsNullAndUsername(login.getUsername())
+        Gardener gardener = gardenerDao.findByProviderIsNullAndUsername(login.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode()));
 
         String encryptedPassword = encoder.encode(login.getPassword());

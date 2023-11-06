@@ -17,34 +17,18 @@ import org.springframework.web.bind.annotation.*;
 public class GardenWateringController {
     private final GardenWateringService gardenWateringService;
 
-    /**
-     * 메인 페이지에서 물주기 추가하기
-     * @param user
-     * @param wateringRequest
-     * @return
-     */
     @PostMapping("")
-    public GardenWateringResponse add(@AuthenticationPrincipal UserPrincipal user, @RequestBody WateringRequest wateringRequest){
+    public GardenWateringResponse add(@AuthenticationPrincipal UserPrincipal user, @RequestBody WateringRequest wateringRequest) {
         return gardenWateringService.add(user.getId(), wateringRequest);
     }
 
-    /**
-     * 메인 페이지에서 화분이 아직 마르지 않았다고 요청
-     * @param plantId
-     * @return
-     */
     @PutMapping("/not-dry")
-    public WateringMessage notDry(@PathVariable Long plantId){
+    public WateringMessage notDry(@PathVariable Long plantId) {
         return gardenWateringService.notDry(plantId);
     }
 
-    /**
-     * 물주기 (귀찮아서) 미루기
-     * @param plantId
-     * @return 새로운 wateringCode;
-     */
     @PutMapping("/postpone")
-    public int postpone(@PathVariable Long plantId){
+    public int postpone(@PathVariable Long plantId) {
         return gardenWateringService.postpone(plantId);
     }
 }

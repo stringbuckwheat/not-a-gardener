@@ -69,6 +69,7 @@ public class WateringServiceImpl implements WateringService {
         return firstDayOfMonth.plusDays(firstDayOfMonth.lengthOfMonth() + tmp);
     }
 
+    @Override
     public WateringByDate add(WateringRequest wateringRequest) {
         // 물주기 저장
         AfterWatering afterWatering = wateringCommandRepository.add(wateringRequest);
@@ -79,6 +80,7 @@ public class WateringServiceImpl implements WateringService {
         return WateringByDate.from(latestWatering, plant, latestWatering.getChemical());
     }
 
+    @Override
     public void delete(Long wateringId, Long plantId, Long gardenerId) {
         wateringCommandRepository.deleteById(wateringId, plantId, gardenerId);
     }

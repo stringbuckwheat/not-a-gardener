@@ -24,7 +24,7 @@ import java.util.List;
 public class GardenResponseProvider {
     private final WateringQueryRepository wateringQueryRepository;
 
-    public GardenResponse getGardenResponse(Calculate calculate){
+    public GardenResponse getGardenResponse(Calculate calculate) {
         // 미루기를 누른 경우
         if (calculate.getPostponeDate() != null
                 && LocalDate.now().compareTo(calculate.getPostponeDate()) == 0) {
@@ -53,7 +53,7 @@ public class GardenResponseProvider {
         // 어떤 비료를 줘야하는지 알려준다
         ChemicalCode chemicalCode = null;
 
-        if(wateringCode == 0 || wateringCode == 1){
+        if (wateringCode == 0 || wateringCode == 1) {
             chemicalCode = getChemicalCode(plant.getId(), calculate.getGardenerId());
         }
 

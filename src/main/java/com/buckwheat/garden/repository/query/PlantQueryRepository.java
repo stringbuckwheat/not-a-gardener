@@ -12,6 +12,7 @@ import java.util.Optional;
 
 public interface PlantQueryRepository extends Repository<Plant, Long>, PlantRepositoryCustom {
     List<Plant> findByGardener_GardenerIdOrderByPlantIdDesc(Long gardenerId);
+
     Optional<Plant> findByPlantIdAndGardener_GardenerId(Long plantId, Long gardenerId);
 
     // 메인페이지 todolist 용 메소드

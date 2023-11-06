@@ -16,11 +16,11 @@ public enum AfterWateringCode {
 
     private final int code;
 
-    AfterWateringCode(int code){
+    AfterWateringCode(int code) {
         this.code = code;
     }
 
-    public int getCode(){
+    public int getCode() {
         return code;
     }
 }

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 public class GardenerController {
     private final GardenerService gardenerService;
 
-    /* 회원정보 보기 */
     @GetMapping("/{gardenerId}")
     public GardenerDetail getOne(@AuthenticationPrincipal UserPrincipal user) {
         return gardenerService.getOne(user.getId());
@@ -28,19 +27,16 @@ public class GardenerController {
         return gardenerService.identify(user.getId(), login);
     }
 
-    /* 로그인 후 비밀번호 변경 */
     @PutMapping("/password")
     public void updatePassword(@RequestBody Login login, @AuthenticationPrincipal UserPrincipal user) {
         gardenerService.updatePassword(user.getId(), login);
     }
 
-    /* 회원정보 변경 */
     @PutMapping("/{gardenerId}")
     public GardenerDetail update(@RequestBody GardenerDetail gardenerDetail, @PathVariable long gardenerId) {
         return gardenerService.update(gardenerDetail);
     }
 
-    /* 탈퇴 */
     @DeleteMapping("/{gardenerId}")
     public void delete(@PathVariable("gardenerId") long gardenerId) {
         gardenerService.delete(gardenerId);

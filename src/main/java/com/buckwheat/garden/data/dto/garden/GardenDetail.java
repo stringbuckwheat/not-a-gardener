@@ -39,7 +39,7 @@ public class GardenDetail {
                 .build();
     }
 
-    public static GardenDetail noRecord(LocalDate birthday){
+    public static GardenDetail noRecord(LocalDate birthday) {
         return GardenDetail.builder()
                 .latestWateringDate(null)
                 .anniversary(getAnniversary(birthday))

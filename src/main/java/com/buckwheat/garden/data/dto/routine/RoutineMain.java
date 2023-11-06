@@ -8,7 +8,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @ToString
-public class RoutineMain{
+public class RoutineMain {
     List<RoutineResponse> todoList;
     List<RoutineResponse> notToDoList;
 }

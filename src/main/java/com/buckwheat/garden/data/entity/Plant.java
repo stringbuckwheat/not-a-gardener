@@ -47,21 +47,21 @@ public class Plant {
     private LocalDateTime createDate;
 
     // FK
-    @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="gardener_id")
-    @OnDelete(action= OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "gardener_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Gardener gardener;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="place_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "place_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Place place;
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="plant", cascade = CascadeType.MERGE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "plant", cascade = CascadeType.MERGE)
     @OrderBy("watering_date desc")
     private List<Watering> waterings = new ArrayList<>();
 
-    public void update(PlantRequest plantRequest, Place place){
+    public void update(PlantRequest plantRequest, Place place) {
         this.name = plantRequest.getName();
         this.medium = plantRequest.getMedium();
         this.species = plantRequest.getSpecies();
@@ -70,23 +70,23 @@ public class Plant {
         this.place = place;
     }
 
-    public void updatePlace(Place place){
+    public void updatePlace(Place place) {
         this.place = place;
     }
 
-    public void updateRecentWateringPeriod(int averageWateringPeriod){
+    public void updateRecentWateringPeriod(int averageWateringPeriod) {
         this.recentWateringPeriod = averageWateringPeriod;
     }
 
-    public void updateConditionDate(){
+    public void updateConditionDate() {
         this.conditionDate = LocalDate.now();
     }
 
-    public void updatePostponeDate(){
+    public void updatePostponeDate() {
         this.postponeDate = LocalDate.now();
     }
 
-    public void initConditionDateAndPostponeDate(){
+    public void initConditionDateAndPostponeDate() {
         this.conditionDate = null;
         this.postponeDate = null;
     }

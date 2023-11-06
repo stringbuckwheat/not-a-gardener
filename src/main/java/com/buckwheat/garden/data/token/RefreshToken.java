@@ -10,7 +10,7 @@ public class RefreshToken {
     private String token;
     private LocalDateTime expiredAt;
 
-    public RefreshToken(){
+    public RefreshToken() {
         this.token = UUID.randomUUID().toString();
         this.expiredAt = LocalDateTime.now().plusHours(3);
     }

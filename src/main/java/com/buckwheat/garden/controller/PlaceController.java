@@ -21,61 +21,33 @@ import java.util.List;
 public class PlaceController {
     private final PlaceService placeService;
 
-    /**
-     * 유저의 전체 장소 리스트
-     * @param user
-     * @return 유저의 전체 장소 리스트, 카드용 DTO에 담아 보낸다.
-     */
     @GetMapping("")
-    public List<PlaceCard> getAll(@AuthenticationPrincipal UserPrincipal user){
+    public List<PlaceCard> getAll(@AuthenticationPrincipal UserPrincipal user) {
         return placeService.getAll(user.getId());
     }
 
-    /**
-     * 하나의 장소 정보
-     * @param placeId
-     * @return
-     */
     @GetMapping("/{placeId}")
-    public PlaceDto getDetail(@PathVariable Long placeId, @AuthenticationPrincipal UserPrincipal user){
+    public PlaceDto getDetail(@PathVariable Long placeId, @AuthenticationPrincipal UserPrincipal user) {
         return placeService.getDetail(placeId, user.getId());
     }
 
-    /**
-     * 장소 내 식물 리스트 페이징
-     */
     @GetMapping("/{placeId}/plant")
-    public List<PlantInPlace> getPlantsWithPaging(@PathVariable Long placeId, @PageableDefault(size = 10) Pageable pageable){
+    public List<PlantInPlace> getPlantsWithPaging(@PathVariable Long placeId, @PageableDefault(size = 10) Pageable pageable) {
         return placeService.getPlantsWithPaging(placeId, pageable);
     }
 
-    /**
-     * 장소 추가
-     * @param placeRequest
-     * @param user
-     * @return
-     */
     @PostMapping("")
-    public PlaceCard add(@RequestBody PlaceDto placeRequest, @AuthenticationPrincipal UserPrincipal user){
+    public PlaceCard add(@RequestBody PlaceDto placeRequest, @AuthenticationPrincipal UserPrincipal user) {
         return placeService.add(user.getId(), placeRequest);
     }
 
-    /**
-     * 장소 수정
-     * @param placeRequest
-     * @return 수정한 장소 정보
-     */
     @PutMapping("/{placeId}")
-    public PlaceDto modify(@RequestBody PlaceDto placeRequest, @AuthenticationPrincipal UserPrincipal user){
+    public PlaceDto modify(@RequestBody PlaceDto placeRequest, @AuthenticationPrincipal UserPrincipal user) {
         return placeService.update(placeRequest, user.getId());
     }
 
-    /**
-     * 하나의 장소 삭제
-     * @param placeId
-     */
     @DeleteMapping("/{placeId}")
-    public void delete(@PathVariable long placeId, @AuthenticationPrincipal UserPrincipal user){
+    public void delete(@PathVariable long placeId, @AuthenticationPrincipal UserPrincipal user) {
         placeService.delete(placeId, user.getId());
     }
 }

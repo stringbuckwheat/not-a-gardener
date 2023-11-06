@@ -19,8 +19,8 @@ public class OAuth2Attribute {
     private String name;
     private String provider;
 
-    public static OAuth2Attribute of(String provider, String attributeKey, Map<String, Object> attributes){
-        switch(provider){
+    public static OAuth2Attribute of(String provider, String attributeKey, Map<String, Object> attributes) {
+        switch (provider) {
             case "google":
                 return ofGoogle(attributeKey, attributes);
             case "kakao":
@@ -32,7 +32,7 @@ public class OAuth2Attribute {
         }
     }
 
-    private static OAuth2Attribute ofGoogle(String attributeKey, Map<String, Object> attributes){
+    private static OAuth2Attribute ofGoogle(String attributeKey, Map<String, Object> attributes) {
         return OAuth2Attribute.builder()
                 .name(String.valueOf(attributes.get("name")))
                 .email(String.valueOf(attributes.get("email")))
@@ -66,7 +66,7 @@ public class OAuth2Attribute {
                 .build();
     }
 
-    public Gardener toEntity(){
+    public Gardener toEntity() {
         // 신규 생성에만 쓰기 때문에 gardenerId는 없음
         return Gardener
                 .builder()

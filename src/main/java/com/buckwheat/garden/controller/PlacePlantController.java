@@ -20,7 +20,7 @@ public class PlacePlantController {
     private final PlacePlantService placePlantService;
 
     @PostMapping("")
-    public PlantInPlace addPlantInPlace(@RequestBody PlantRequest plantRequest, @AuthenticationPrincipal UserPrincipal user){
+    public PlantInPlace addPlantInPlace(@RequestBody PlantRequest plantRequest, @AuthenticationPrincipal UserPrincipal user) {
         return placePlantService.addPlantInPlace(user.getId(), plantRequest);
     }
 }

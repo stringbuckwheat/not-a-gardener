@@ -13,7 +13,7 @@ public class ErrorResponse {
     private String title;
     private String message;
 
-    public static ErrorResponse from(ExceptionCode code){
+    public static ErrorResponse from(ExceptionCode code) {
         return new ErrorResponse(code.getCode(), code.getTitle(), code.getMessage());
     }
 }

@@ -9,7 +9,7 @@ public class WebController implements ErrorController {
     private final String ERROR_PATH = "/error";
 
     @GetMapping(ERROR_PATH)
-    public String handleError(){
+    public String handleError() {
         return "/index.html";
     }
 }

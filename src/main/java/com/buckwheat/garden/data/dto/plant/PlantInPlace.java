@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @Getter
-public class PlantInPlace{
+public class PlantInPlace {
     private Long id;
     private String name;
     private String species;
@@ -18,7 +18,7 @@ public class PlantInPlace{
     private String medium;
     private LocalDate createDate;
 
-    public static PlantInPlace from(Plant plant){
+    public static PlantInPlace from(Plant plant) {
         return PlantInPlace.builder()
                 .id(plant.getPlantId())
                 .name(plant.getName())

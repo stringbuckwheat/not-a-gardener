@@ -16,7 +16,7 @@ public class RoutineRequest {
     private int cycle;
     private Long plantId;
 
-    public Routine toEntityWith(Plant plant, Gardener gardener){
+    public Routine toEntityWith(Plant plant, Gardener gardener) {
         return Routine.builder()
                 .routineId(id)
                 .content(content)

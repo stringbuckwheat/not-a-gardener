@@ -15,7 +15,7 @@ public class SimpleInfo {
         return new SimpleInfo(gardener.getGardenerId(), gardener.getName(), gardener.getProvider());
     }
 
-    public static SimpleInfo from(Long gardenerId, String name, String provider){
+    public static SimpleInfo from(Long gardenerId, String name, String provider) {
         return new SimpleInfo(gardenerId, name, provider);
     }
 }

@@ -9,5 +9,6 @@ import java.util.Optional;
 
 public interface PlaceQueryRepository extends Repository<Place, Long>, PlaceRepositoryCustom {
     List<Place> findByGardener_GardenerIdOrderByCreateDate(Long gardenerId);
+
     Optional<Place> findByPlaceIdAndGardener_GardenerId(Long placeId, Long gardenerId);
 }

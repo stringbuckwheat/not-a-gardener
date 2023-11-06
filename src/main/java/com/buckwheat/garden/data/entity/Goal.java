@@ -17,8 +17,6 @@ import org.hibernate.annotations.OnDeleteAction;
 @AllArgsConstructor
 @Builder
 public class Goal {
-    /* 식물 키우기 목표 */
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long goalId;
@@ -32,21 +30,21 @@ public class Goal {
 
     // FK
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="plant_id")
-    @OnDelete(action= OnDeleteAction.CASCADE)
+    @JoinColumn(name = "plant_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Plant plant;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="gardener_id")
-    @OnDelete(action= OnDeleteAction.CASCADE)
+    @JoinColumn(name = "gardener_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Gardener gardener;
 
-    public void update(String content, Plant plant){
+    public void update(String content, Plant plant) {
         this.content = content;
         this.plant = plant;
     }
 
-    public void completeGoal(String complete){
+    public void completeGoal(String complete) {
         this.complete = complete;
     }
 }

@@ -20,7 +20,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Place {
-    /* 식물을 놓은 장소 */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long placeId;
@@ -41,9 +40,9 @@ public class Place {
     private LocalDateTime createDate;
 
     // FK
-    @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="gardener_id")
-    @OnDelete(action= OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "gardener_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Gardener gardener;
 
     // 양방향 매핑
@@ -51,7 +50,7 @@ public class Place {
     @OrderBy("create_date DESC")
     private List<Plant> plants = new ArrayList<>();
 
-    public void update(String name, String option, String artificialLight){
+    public void update(String name, String option, String artificialLight) {
         this.name = name;
         this.option = option;
         this.artificialLight = artificialLight;

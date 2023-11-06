@@ -14,7 +14,6 @@ import org.hibernate.annotations.OnDeleteAction;
 @AllArgsConstructor
 @ToString(of = {"chemicalId", "name", "period"})
 public class Chemical {
-    /* 비료 정보 기록 */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long chemicalId;
@@ -39,14 +38,14 @@ public class Chemical {
     // 그러나 Gardener는 Chemical를 몰라도 상관없으므로 단방향 매핑
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gardener_id")
-    @OnDelete(action= OnDeleteAction.CASCADE) // ddl: on delete cascade
+    @OnDelete(action = OnDeleteAction.CASCADE) // ddl: on delete cascade
     private Gardener gardener;
 
-    public void deactivate(){
+    public void deactivate() {
         this.active = "N";
     }
 
-    public void update(String name, String type, int period){
+    public void update(String name, String type, int period) {
         this.name = name;
         this.type = type;
         this.period = period;

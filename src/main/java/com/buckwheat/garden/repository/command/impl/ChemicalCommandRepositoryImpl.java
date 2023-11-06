@@ -4,8 +4,8 @@ import com.buckwheat.garden.repository.command.ChemicalCommandRepository;
 import com.buckwheat.garden.data.dto.chemical.ChemicalDto;
 import com.buckwheat.garden.data.entity.Chemical;
 import com.buckwheat.garden.data.entity.Gardener;
-import com.buckwheat.garden.repository.ChemicalRepository;
-import com.buckwheat.garden.repository.GardenerRepository;
+import com.buckwheat.garden.dao.ChemicalDao;
+import com.buckwheat.garden.dao.GardenerDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,20 +15,20 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 @Repository
 public class ChemicalCommandRepositoryImpl implements ChemicalCommandRepository {
-    private final ChemicalRepository chemicalRepository;
-    private final GardenerRepository gardenerRepository;
+    private final ChemicalDao chemicalDao;
+    private final GardenerDao gardenerDao;
 
     @Override
     public ChemicalDto create(Long gardenerId, ChemicalDto chemicalRequest) {
-        Gardener gardener = gardenerRepository.getReferenceById(gardenerId);
-        Chemical chemical = chemicalRepository.save(chemicalRequest.toEntity(gardener));
+        Gardener gardener = gardenerDao.getReferenceById(gardenerId);
+        Chemical chemical = chemicalDao.save(chemicalRequest.toEntity(gardener));
         return ChemicalDto.from(chemical);
     }
 
     @Override
     @Transactional
     public ChemicalDto update(Long gardenerId, ChemicalDto chemicalRequest) {
-        Chemical chemical = chemicalRepository.findById(chemicalRequest.getId()).orElseThrow(NoSuchElementException::new);
+        Chemical chemical = chemicalDao.findById(chemicalRequest.getId()).orElseThrow(NoSuchElementException::new);
         chemical.update(chemicalRequest.getName(), chemicalRequest.getType(), chemicalRequest.getPeriod());
 
         return ChemicalDto.from(chemical);
@@ -37,7 +37,7 @@ public class ChemicalCommandRepositoryImpl implements ChemicalCommandRepository 
     @Override
     @Transactional
     public void deactivate(Long chemicalId, Long gardenerId) {
-        Chemical chemical = chemicalRepository.findByChemicalIdAndGardener_GardenerId(chemicalId, gardenerId)
+        Chemical chemical = chemicalDao.findByChemicalIdAndGardener_GardenerId(chemicalId, gardenerId)
                 .orElseThrow(NoSuchElementException::new);
         chemical.deactivate();
     }

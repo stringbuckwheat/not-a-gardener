@@ -4,8 +4,8 @@ import com.buckwheat.garden.repository.command.PlaceCommandRepository;
 import com.buckwheat.garden.data.dto.place.PlaceDto;
 import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Place;
-import com.buckwheat.garden.repository.GardenerRepository;
-import com.buckwheat.garden.repository.PlaceRepository;
+import com.buckwheat.garden.dao.GardenerDao;
+import com.buckwheat.garden.dao.PlaceDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,19 +15,19 @@ import java.util.NoSuchElementException;
 @Repository
 @RequiredArgsConstructor
 public class PlaceCommandRepositoryImpl implements PlaceCommandRepository {
-    private final PlaceRepository placeRepository;
-    private final GardenerRepository gardenerRepository;
+    private final PlaceDao placeDao;
+    private final GardenerDao gardenerDao;
 
     @Override
     public Place save(Long gardenerId, PlaceDto placeRequest) {
-        Gardener gardener = gardenerRepository.getReferenceById(gardenerId);
-        return placeRepository.save(placeRequest.toEntityWith(gardener));
+        Gardener gardener = gardenerDao.getReferenceById(gardenerId);
+        return placeDao.save(placeRequest.toEntityWith(gardener));
     }
 
     @Override
     @Transactional
     public Place update(PlaceDto placeRequest, Long gardenerId) {
-        Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(placeRequest.getId(), gardenerId)
+        Place place = placeDao.findByPlaceIdAndGardener_GardenerId(placeRequest.getId(), gardenerId)
                 .orElseThrow(NoSuchElementException::new);
 
         place.update(
@@ -41,6 +41,6 @@ public class PlaceCommandRepositoryImpl implements PlaceCommandRepository {
 
     @Override
     public void deleteBy(Long placeId, Long gardenerId) {
-        placeRepository.deleteById(placeId);
+        placeDao.deleteById(placeId);
     }
 }

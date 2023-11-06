@@ -23,16 +23,16 @@ public class Watering {
     private LocalDate wateringDate; // 물 준 날짜
 
     // FK
-    @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="plant_id")
-    @OnDelete(action= OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "plant_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Plant plant;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chemical_id")
     private Chemical chemical;
 
-    public Watering update(LocalDate wateringDate, Plant plant, Chemical chemical){
+    public Watering update(LocalDate wateringDate, Plant plant, Chemical chemical) {
         this.wateringDate = wateringDate;
         this.plant = plant;
         this.chemical = chemical;

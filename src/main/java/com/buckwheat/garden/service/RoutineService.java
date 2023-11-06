@@ -7,8 +7,12 @@ import com.buckwheat.garden.data.dto.routine.RoutineResponse;
 
 public interface RoutineService {
     RoutineMain getAll(Long gardenerId);
+
     RoutineResponse add(Long gardenerId, RoutineRequest routineRequest);
+
     RoutineResponse update(RoutineRequest routineRequest);
+
     RoutineResponse complete(RoutineComplete routineComplete);
+
     void delete(Long id);
 }

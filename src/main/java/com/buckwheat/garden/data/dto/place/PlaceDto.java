@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 @AllArgsConstructor
-public class PlaceDto{
+public class PlaceDto {
     private Long id;
     private String name;
     private String artificialLight;
@@ -22,10 +22,11 @@ public class PlaceDto{
 
     /**
      * createDate로 쓸 LocalDateTime.now()를 포함한 엔티티를 반환
+     *
      * @param gardener FK 매핑
      * @return Place
      */
-    public Place toEntityWith(Gardener gardener){
+    public Place toEntityWith(Gardener gardener) {
         return Place.builder()
                 .placeId(id)
                 .name(name)
@@ -36,7 +37,7 @@ public class PlaceDto{
                 .build();
     }
 
-    public static PlaceDto from(Place place){
+    public static PlaceDto from(Place place) {
         return PlaceDto.builder()
                 .id(place.getPlaceId())
                 .name(place.getName())
@@ -45,7 +46,7 @@ public class PlaceDto{
                 .build();
     }
 
-    public static PlaceDto from(Place place, Long plantListSize){
+    public static PlaceDto from(Place place, Long plantListSize) {
         return PlaceDto.builder()
                 .id(place.getPlaceId())
                 .name(place.getName())

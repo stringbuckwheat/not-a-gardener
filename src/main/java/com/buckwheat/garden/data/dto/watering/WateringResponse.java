@@ -36,7 +36,7 @@ public class WateringResponse {
     }
 
     // TODO test 메소드
-    public static WateringResponse from(LocalDate latestWateringDate){
+    public static WateringResponse from(LocalDate latestWateringDate) {
         return WateringResponse.builder().wateringDate(latestWateringDate).build();
     }
 

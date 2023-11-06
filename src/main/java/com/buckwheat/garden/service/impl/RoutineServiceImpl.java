@@ -33,7 +33,7 @@ public class RoutineServiceImpl implements RoutineService {
         for (Routine routine : routineQueryRepository.findByGardener_GardenerId(gardenerId)) {
             RoutineResponse r = RoutineResponse.from(routine);
 
-            if(r.getHasToDoToday().equals("Y")){
+            if (r.getHasToDoToday().equals("Y")) {
                 toDoList.add(r);
                 continue;
             }

@@ -30,13 +30,13 @@ public enum ExceptionCode {
     private String title;
     private String message;
 
-    ExceptionCode(String code, String title, String message){
+    ExceptionCode(String code, String title, String message) {
         this.code = code;
         this.title = title;
         this.message = message;
     }
 
-    public static ExceptionCode of(String code){
+    public static ExceptionCode of(String code) {
         return ExceptionCode.valueOf(CODE_MAP.get(code));
     }
 }

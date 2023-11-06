@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 public class ForgotController {
     private final ForgotService forgotService;
 
-    /* 이메일로 계정 확인 - 아이디/비밀번호 찾기 */
     @GetMapping("/email/{email}")
     public Forgot forgotAccount(@PathVariable String email) {
         return forgotService.forgotAccount(email);
