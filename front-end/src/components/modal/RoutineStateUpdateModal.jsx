@@ -5,19 +5,21 @@ import React from "react";
 import GButton from "../button/GButton";
 import {Button, Space} from "antd";
 import LinkHoverTag from "../tag/basic/LinkHoverTag";
+import {useDispatch} from "react-redux";
 
-const RoutineStateUpdateModal = ({visible, closeModal, routineForModal, afterRoutine, index}) => {
+const RoutineStateUpdateModal = ({visible, closeModal, routineForModal,}) => {
   if (!routineForModal.content) {
     return;
   }
 
-  console.log("routineForModal", routineForModal);
+  const dispatch = useDispatch();
 
   const confirm = async () => {
     const res = await updateRoutineState(routineForModal.routineId, !routineForModal.isCompleted);
-    afterRoutine(routineForModal.index, res);
+    dispatch({type: 'updateRoutine', payload: res})
     closeModal();
   }
+
   const getTitle = () => {
     const isEndWithVowelForModal = isEndWithVowel(routineForModal.content);
     console.log("isEndWithVowelForModal", isEndWithVowelForModal);

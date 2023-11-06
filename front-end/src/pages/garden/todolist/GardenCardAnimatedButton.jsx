@@ -5,6 +5,7 @@ import {CaretRightOutlined, StepBackwardOutlined, StepForwardOutlined} from "@an
 import {CCol,} from "@coreui/react";
 import updateData from "../../../api/backend-api/common/updateData";
 import getWateringNotificationMsg from "../../../utils/function/getWateringNotificationMsg";
+import {useDispatch} from "react-redux";
 
 /**
  * 메인 페이지 할일 카드에 마우스를 올릴 시 나타날 버튼 세가지
@@ -15,23 +16,19 @@ import getWateringNotificationMsg from "../../../utils/function/getWateringNotif
  * @param index
  * @param postponeWatering 물주기 미룬 후 콜백함수. 객체 내부 뜯어서 wateringCode만 교체
  * @param wateringCode 이미 미뤘는데 또 미루겠다고 하면 return (6이면 리턴)
- * @param handleWaitingList waitinglist action 콜백함수
- * @param deleteInWaitingListAndTodoList todolist action 콜백함수, plantId로 waitinglist/todolist에서 모두 삭제
  * @returns {JSX.Element}
  * @constructor
  */
 const GardenCardAnimatedButton = ({
                                     setSelected,
-                                    y,
+                                    y = 5,
                                     plantId,
                                     openNotification,
                                     index,
-                                    postponeWatering,
                                     wateringCode,
-                                    handleWaitingList,
-                                    deleteInWaitingListAndTodoList
                                   }) => {
   const [hovered, setHovered] = useState(-1);
+  const dispatch = useDispatch();
 
   const mouseEnter = (index) => setHovered(() => index);
   const mouseLeave = () => setHovered(-1);
@@ -44,8 +41,7 @@ const GardenCardAnimatedButton = ({
     console.log("not-dry res", res);
 
     // 현재 todoList에서 삭제
-    handleWaitingList && handleWaitingList();
-    deleteInWaitingListAndTodoList && deleteInWaitingListAndTodoList(plantId);
+    dispatch({type: 'deleteInTodoList', payload: plantId});
 
     // res가 없는 경우 -> 한 번도 물 준 적 없는 경우
     let msg = {
@@ -68,8 +64,7 @@ const GardenCardAnimatedButton = ({
     }
 
     const res = await updateData(`/garden/${plantId}/watering/postpone`, null);
-    postponeWatering && postponeWatering(index, res);
-    handleWaitingList && handleWaitingList();
+    dispatch({type: 'updateTodoList', payload: {index, res}});
   }
 
   // #4169E1 라벤더

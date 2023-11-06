@@ -5,7 +5,7 @@ import CIcon from "@coreui/icons-react";
 import {cilDrop} from "@coreui/icons";
 import postData from "../../../api/backend-api/common/postData";
 import getWateringNotificationMsg from "../../../utils/function/getWateringNotificationMsg";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 /**
  * not-dry, water, postpone 버튼들 혹은 물주기 폼
@@ -29,19 +29,14 @@ const GardenCardAction = ({
                             hovered,
                             plantId,
                             openNotification,
-                            updateGardenAfterWatering,
-                            y = 5,
                             wateringCode,
                             index,
-                            deleteInTodoList,
-                            postponeWatering,
-                            handleWaitingList,
-                            deleteInWaitingListAndTodoList
                           }) => {
   const chemicals = useSelector(state => state.chemicals.forSelect);
 
   const [selected, setSelected] = useState("");
   const [chemicalId, setChemicalId] = useState(0);
+  const dispatch = useDispatch();
 
   // 물을 줬어요 버튼
   const submitWatering = async () => {
@@ -56,17 +51,13 @@ const GardenCardAction = ({
       console.log("submit watering", res);
 
       // waitinglist에서의 action 후 콜백 함수. todolist, waitinglist에서 삭제한 후 모달 닫기
-      handleWaitingList && handleWaitingList();
-      deleteInWaitingListAndTodoList && deleteInWaitingListAndTodoList(plantId);
+      dispatch({type: 'deleteInTodoList', payload: plantId});
 
       // 메시지 띄우기
       const msg = getWateringNotificationMsg(res.wateringMsg.afterWateringCode);
       openNotification(msg);
-
-      // garden 카드 갈아끼우기
-      updateGardenAfterWatering && updateGardenAfterWatering(res.gardenResponse);
-
       setSelected("");
+
     } catch (e) {
       if(e.code == "B005"){
         alert(e.message);
@@ -78,15 +69,10 @@ const GardenCardAction = ({
   if (hovered && selected == "") {
     return <GardenCardAnimatedButton
       setSelected={setSelected}
-      y={y}
       plantId={plantId}
       openNotification={openNotification}
       index={index}
-      deleteInTodoList={deleteInTodoList}
-      postponeWatering={postponeWatering}
       wateringCode={wateringCode}
-      handleWaitingList={handleWaitingList}
-      deleteInWaitingListAndTodoList={deleteInWaitingListAndTodoList}
     />
   } else if (selected === "watered") {
     return (

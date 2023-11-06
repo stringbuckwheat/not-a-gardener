@@ -3,15 +3,13 @@ import getData from "../../api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";
 import GardenMain from "./GardenMain";
 import NoItemForPlant from "../../components/empty/NoItemForPlant";
+import {useDispatch} from "react-redux";
 
 const Garden = () => {
   const [isLoading, setLoading] = useState(true);
   const [hasPlant, setHasPlant] = useState(false);
 
-  // 할일 리스트
-  const [todoList, setTodoList] = useState([]);
-  const [waitingList, setWaitingList] = useState([]);
-  const [routineList, setRoutineList] = useState([]);
+  const dispatch = useDispatch();
 
   const onMountGarden = async () => {
     console.log("onMountGarden");
@@ -23,66 +21,22 @@ const Garden = () => {
 
     data.todoList.sort((a, b) => (a.gardenDetail.wateringCode - b.gardenDetail.wateringCode));
 
-    setTodoList(data.todoList);
-    setWaitingList(data.waitingList);
-    setRoutineList(data.routineList);
+    dispatch({type: 'setTodoList', payload: data.todoList});
+    dispatch({type: 'setWaitingList', payload: data.waitingList});
+    dispatch({type: 'setRoutineList', payload: data.routineList});
   }
 
   useEffect(() => {
     onMountGarden();
   }, [])
 
-
-  const updateGardenAfterWatering = (gardenResponse) => {
-    const updatedTodoList = todoList.filter((plant) => plant.plant.id !== gardenResponse.plant.id);
-    setTodoList(() => [...updatedTodoList]);
-  }
-
-  // postpone
-  const postponeWatering = (index, res) => {
-    const handleTodoList = () => {
-      const prevGarden = todoList.splice(index, 1)[0];
-      const prevGardenDetail = prevGarden.gardenDetail;
-      const newGardenDetail = {...prevGardenDetail, wateringCode: res};
-      return [...todoList, {...prevGarden, gardenDetail: newGardenDetail}];
-    }
-
-    setTodoList(() => handleTodoList());
-  }
-
-  // 해당 인덱스의 루틴을 삭제
-  const afterRoutine = (index, res) => {
-    routineList.splice(index, 1, res);
-    setRoutineList(() => routineList);
-  }
-
-  // 해당 인덱스의 식물을 waitingList와 todoList에서 삭제
-  const deleteInWaitingListAndTodoList = (plantId) => {
-    const updatedWaitingList = waitingList.filter((plant) => plant.id !== plantId);
-    setWaitingList(() => [...updatedWaitingList]);
-    const updatedTodoList = todoList.filter((plant) => plant.plant.id !== plantId);
-    setTodoList(() => [...updatedTodoList]);
-  }
-
-  const firstAddCallback = () => {
-    onMountGarden();
-  }
-
   if (isLoading) {
     return <Loading/>
   } else if (!hasPlant) {
-    return <NoItemForPlant afterAdd={firstAddCallback}/>
+    return <NoItemForPlant afterAdd={onMountGarden}/>
   } else {
     return (
-      <GardenMain
-        todoList={todoList}
-        updateGardenAfterWatering={updateGardenAfterWatering}
-        waitingList={waitingList}
-        routineList={routineList}
-        afterRoutine={afterRoutine}
-        postponeWatering={postponeWatering}
-        deleteInWaitingListAndTodoList={deleteInWaitingListAndTodoList}
-      />
+      <GardenMain />
     )
   }
 }

@@ -14,9 +14,7 @@ const Plant = () => {
   const onMountPlant = async () => {
     const data = await getData("/garden/plants");
     dispatch({type: 'setPlants', payload: data});
-
     setLoading(false);
-
     setHasPlant(data.length > 0);
   }
 

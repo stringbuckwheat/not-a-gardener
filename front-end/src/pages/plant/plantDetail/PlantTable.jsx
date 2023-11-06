@@ -19,21 +19,12 @@ const EditableRow = ({index, form, ...props}) => {
   );
 };
 
-/**
- * 전체 식물 리스트
- * @param originPlantList
- * @param setPlantList
- * @param placeList
- * @returns {JSX.Element}
- * @constructor
- */
 const PlantTable = () => {
   const plants = useSelector(state => state.plants);
   const places = useSelector(state => state.places.forSelect);
   const dispatch = useDispatch();
 
   const [form] = Form.useForm();
-  const plantList = getPlantListForPlantTable(plants);
 
   const deletePlant = async (plantId) => {
     await deleteData(`/plant/${plantId}`);
@@ -81,7 +72,6 @@ const PlantTable = () => {
   }
 
   const columns = getPlantTableColumnArray(places, isEditing, cancel, edit, editingKey, updatePlant, deletePlant);
-
   const mergedColumns = getMergedColumns(columns, 'placeName', 'select', 'text', isEditing);
 
   return (
@@ -102,7 +92,7 @@ const PlantTable = () => {
         pagination={{onChange: cancel}}
         locale={locale}
         columns={mergedColumns}
-        dataSource={plantList}
+        dataSource={getPlantListForPlantTable(plants)}
       />
     </div>
   )

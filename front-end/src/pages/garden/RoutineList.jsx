@@ -4,21 +4,22 @@ import {CCol} from "@coreui/react";
 import React, {useState} from "react";
 import RoutineStateUpdateModal from "../../components/modal/RoutineStateUpdateModal";
 import {Tag} from "antd";
+import {useSelector} from "react-redux";
 
-const RoutineList = ({routineList, afterRoutine}) => {
+const RoutineList = () => {
   const [isTitleHovered, setIsTitleHovered] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [routineForModal, setRoutineForModal] = useState({});
+  const [isTagHovered, setIsTagHovered] = useState();
+
+  const routineList = useSelector(state => state.gardens.routineList);
 
   const onClickTag = (routineForModal) => {
-    console.log("onClickTag");
     setRoutineForModal(() => routineForModal);
-    console.log('routineForModal', routineForModal);
     setIsModalVisible(true);
   }
 
   const navigate = useNavigate();
-  const [isTagHovered, setIsTagHovered] = useState();
 
   return (
     <CCol md={6} xs={12}>
@@ -32,10 +33,10 @@ const RoutineList = ({routineList, afterRoutine}) => {
         </div>
       </Link>
       <RoutineStateUpdateModal
-        routineForModal={routineForModal}
         visible={isModalVisible}
-        afterRoutine={afterRoutine}
-        closeModal={() => setIsModalVisible(false)}/>
+        closeModal={() => setIsModalVisible(false)}
+        routineForModal={routineForModal}
+      />
       <div>
         {
           routineList.length == 0

@@ -11,23 +11,16 @@ import WateringCodeIcon from "../../../components/etc/WateringCodeIcon";
  * 메인페이지 할 일 카드
  * @param index
  * @param deleteInTodoList
- * @param deleteInWaitingListAndTodoList todolist, waitinglist에서 모두 삭제 -- action 콜백함수
  * @param garden
  * @param openNotification
- * @param updateGardenAfterWatering
- * @param postponeWatering
  * @returns {JSX.Element}
  * @constructor
  */
 const GardenCard = ({
                       index,
-                      deleteInWaitingListAndTodoList,
                       garden,
                       openNotification,
-                      updateGardenAfterWatering,
-                      postponeWatering
                     }) => {
-  // console.log("garden", garden);
   const gardenDetail = garden.gardenDetail;
   const plant = garden.plant;
 
@@ -49,13 +42,9 @@ const GardenCard = ({
           <GardenCardAction
             hovered={hovered}
             plantId={plant.id}
-            plantName={plant.name}
             wateringCode={gardenDetail.wateringCode}
             openNotification={openNotification}
-            updateGardenAfterWatering={updateGardenAfterWatering}
-            postponeWatering={postponeWatering}
             index={index}
-            deleteInWaitingListAndTodoList={deleteInWaitingListAndTodoList}
           />
           <Link
             className="no-text-decoration"
