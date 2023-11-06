@@ -1,7 +1,6 @@
 package com.buckwheat.garden.service.impl;
 
 import com.buckwheat.garden.code.WateringCode;
-import com.buckwheat.garden.repository.command.WateringCommandRepository;
 import com.buckwheat.garden.data.dto.garden.GardenResponse;
 import com.buckwheat.garden.data.dto.garden.GardenWateringResponse;
 import com.buckwheat.garden.data.dto.watering.AfterWatering;
@@ -10,6 +9,7 @@ import com.buckwheat.garden.data.dto.watering.WateringRequest;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.projection.Calculate;
 import com.buckwheat.garden.repository.PlantRepository;
+import com.buckwheat.garden.repository.command.WateringCommandRepository;
 import com.buckwheat.garden.service.GardenWateringService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,13 +24,13 @@ import java.util.NoSuchElementException;
 @Slf4j
 @RequiredArgsConstructor
 public class GardenWateringServiceImpl implements GardenWateringService {
-    private final WateringCommandRepository wateringDao;
+    private final WateringCommandRepository wateringCommandRepository;
     private final PlantRepository plantRepository;
     private final GardenResponseProvider gardenResponseProvider;
 
     @Override
     public GardenWateringResponse add(Long gardenerId, WateringRequest wateringRequest) {
-        AfterWatering afterWatering = wateringDao.add(wateringRequest);
+        AfterWatering afterWatering = wateringCommandRepository.add(wateringRequest);
         GardenResponse gardenResponse = gardenResponseProvider.getGardenResponse(Calculate.from(afterWatering.getPlant(), gardenerId));
 
         return new GardenWateringResponse(gardenResponse, afterWatering.getWateringMessage());

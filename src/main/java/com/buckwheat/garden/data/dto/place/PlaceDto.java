@@ -18,7 +18,7 @@ public class PlaceDto{
     private String name;
     private String artificialLight;
     private String option;
-    private int plantListSize;
+    private Long plantListSize;
 
     /**
      * createDate로 쓸 LocalDateTime.now()를 포함한 엔티티를 반환
@@ -45,7 +45,7 @@ public class PlaceDto{
                 .build();
     }
 
-    public static PlaceDto from(Place place, int plantListSize){
+    public static PlaceDto from(Place place, Long plantListSize){
         return PlaceDto.builder()
                 .id(place.getPlaceId())
                 .name(place.getName())

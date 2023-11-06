@@ -1,12 +1,12 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.repository.command.RoutineCommandRepository;
 import com.buckwheat.garden.data.dto.routine.RoutineComplete;
 import com.buckwheat.garden.data.dto.routine.RoutineMain;
 import com.buckwheat.garden.data.dto.routine.RoutineRequest;
 import com.buckwheat.garden.data.dto.routine.RoutineResponse;
 import com.buckwheat.garden.data.entity.Routine;
-import com.buckwheat.garden.repository.RoutineRepository;
+import com.buckwheat.garden.repository.command.RoutineCommandRepository;
+import com.buckwheat.garden.repository.query.RoutineQueryRepository;
 import com.buckwheat.garden.service.RoutineService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +20,8 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class RoutineServiceImpl implements RoutineService {
-    private final RoutineCommandRepository routineDao;
-    private final RoutineRepository routineRepository;
+    private final RoutineCommandRepository routineCommandRepository;
+    private final RoutineQueryRepository routineQueryRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -30,7 +30,7 @@ public class RoutineServiceImpl implements RoutineService {
         List<RoutineResponse> notToDoList = new ArrayList<>();
 
         // dto로 변환
-        for (Routine routine : routineRepository.findByGardener_GardenerId(gardenerId)) {
+        for (Routine routine : routineQueryRepository.findByGardener_GardenerId(gardenerId)) {
             RoutineResponse r = RoutineResponse.from(routine);
 
             if(r.getHasToDoToday().equals("Y")){
@@ -46,22 +46,22 @@ public class RoutineServiceImpl implements RoutineService {
 
     @Override
     public RoutineResponse add(Long gardenerId, RoutineRequest routineRequest) {
-        return RoutineResponse.from(routineDao.save(gardenerId, routineRequest));
+        return RoutineResponse.from(routineCommandRepository.save(gardenerId, routineRequest));
     }
 
     @Override
-    public RoutineResponse modify(RoutineRequest routineDto) {
-        return RoutineResponse.from(routineDao.update(routineDto));
+    public RoutineResponse update(RoutineRequest routineDto) {
+        return RoutineResponse.from(routineCommandRepository.update(routineDto));
     }
 
     @Override
     @Transactional
     public RoutineResponse complete(RoutineComplete routineDto) {
-        return RoutineResponse.from(routineDao.complete(routineDto));
+        return RoutineResponse.from(routineCommandRepository.complete(routineDto));
     }
 
     @Override
     public void delete(Long id) {
-        routineDao.deleteBy(id);
+        routineCommandRepository.deleteBy(id);
     }
 }

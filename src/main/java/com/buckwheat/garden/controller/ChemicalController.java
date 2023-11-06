@@ -28,7 +28,7 @@ public class ChemicalController {
      */
     @GetMapping("")
     public List<ChemicalDto> getAll(@AuthenticationPrincipal UserPrincipal user){
-        return chemicalService.readAll(user.getId());
+        return chemicalService.getAll(user.getId());
     }
 
     /**
@@ -38,12 +38,12 @@ public class ChemicalController {
      */
     @GetMapping("/{chemicalId}")
     public ChemicalDetail getDetail(@PathVariable Long chemicalId, @AuthenticationPrincipal UserPrincipal user){
-        return chemicalService.readOne(chemicalId, user.getId());
+        return chemicalService.getOne(chemicalId, user.getId());
     }
 
     @GetMapping("/{chemicalId}/watering")
     public List<WateringResponseInChemical> getWateringWithPaging(@PathVariable Long chemicalId, @PageableDefault(size = 10) Pageable pageable){
-        return chemicalService.readWateringsForChemical(chemicalId, pageable);
+        return chemicalService.getWateringsForChemical(chemicalId, pageable);
     }
 
     /**
@@ -54,7 +54,7 @@ public class ChemicalController {
      */
     @PostMapping("")
     public ChemicalDto postChemical(@AuthenticationPrincipal UserPrincipal user, @RequestBody ChemicalDto chemicalRequest){
-        return chemicalService.create(user.getId(), chemicalRequest);
+        return chemicalService.add(user.getId(), chemicalRequest);
     }
 
     /**

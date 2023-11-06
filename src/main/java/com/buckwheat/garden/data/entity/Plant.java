@@ -61,15 +61,13 @@ public class Plant {
     @OrderBy("watering_date desc")
     private List<Watering> waterings = new ArrayList<>();
 
-    public Plant update(PlantRequest plantRequest, Place place){
+    public void update(PlantRequest plantRequest, Place place){
         this.name = plantRequest.getName();
         this.medium = plantRequest.getMedium();
         this.species = plantRequest.getSpecies();
         this.recentWateringPeriod = plantRequest.getRecentWateringPeriod();
         this.birthday = plantRequest.getBirthday();
         this.place = place;
-
-        return this;
     }
 
     public void updatePlace(Place place){

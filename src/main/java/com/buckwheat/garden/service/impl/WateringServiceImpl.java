@@ -1,12 +1,12 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.repository.command.WateringCommandRepository;
 import com.buckwheat.garden.data.dto.watering.AfterWatering;
 import com.buckwheat.garden.data.dto.watering.WateringByDate;
 import com.buckwheat.garden.data.dto.watering.WateringRequest;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Watering;
-import com.buckwheat.garden.repository.WateringRepository;
+import com.buckwheat.garden.repository.command.WateringCommandRepository;
+import com.buckwheat.garden.repository.query.WateringQueryRepository;
 import com.buckwheat.garden.service.WateringService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +23,8 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class WateringServiceImpl implements WateringService {
-    private final WateringCommandRepository wateringDao;
-    private final WateringRepository wateringRepository;
+    private final WateringCommandRepository wateringCommandRepository;
+    private final WateringQueryRepository wateringQueryRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -37,7 +37,7 @@ public class WateringServiceImpl implements WateringService {
 
         Map<LocalDate, List<WateringByDate>> map = new HashMap<>(); // 날짜: 리스트
 
-        for (Watering watering : wateringRepository.findAllWateringListByGardenerId(gardenerId, startDate, endDate)) {
+        for (Watering watering : wateringQueryRepository.findAllWateringListByGardenerId(gardenerId, startDate, endDate)) {
             List<WateringByDate> tmpList = map.get(watering.getWateringDate());
 
             if (tmpList == null) {
@@ -71,7 +71,7 @@ public class WateringServiceImpl implements WateringService {
 
     public WateringByDate add(WateringRequest wateringRequest) {
         // 물주기 저장
-        AfterWatering afterWatering = wateringDao.add(wateringRequest);
+        AfterWatering afterWatering = wateringCommandRepository.add(wateringRequest);
 
         Plant plant = afterWatering.getPlant();
         Watering latestWatering = plant.getWaterings().get(0);
@@ -80,6 +80,6 @@ public class WateringServiceImpl implements WateringService {
     }
 
     public void delete(Long wateringId, Long plantId, Long gardenerId) {
-        wateringDao.deleteById(wateringId, plantId, gardenerId);
+        wateringCommandRepository.deleteById(wateringId, plantId, gardenerId);
     }
 }

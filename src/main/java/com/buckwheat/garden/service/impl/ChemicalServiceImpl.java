@@ -1,11 +1,10 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.repository.command.ChemicalCommandRepository;
 import com.buckwheat.garden.data.dto.chemical.ChemicalDetail;
 import com.buckwheat.garden.data.dto.chemical.ChemicalDto;
 import com.buckwheat.garden.data.dto.watering.WateringResponseInChemical;
-import com.buckwheat.garden.repository.querydsl.ChemicalRepositoryCustom;
-import com.buckwheat.garden.repository.WateringRepository;
+import com.buckwheat.garden.repository.command.ChemicalCommandRepository;
+import com.buckwheat.garden.repository.query.querydsl.ChemicalRepositoryCustom;
 import com.buckwheat.garden.service.ChemicalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,36 +19,35 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ChemicalServiceImpl implements ChemicalService {
-    private final ChemicalRepositoryCustom chemicalRepository;
     private final ChemicalCommandRepository chemicalCommandRepository;
-    private final WateringRepository wateringRepository;
+    private final ChemicalRepositoryCustom chemicalRepository; // Query Repository
 
     @Override
     @Transactional(readOnly = true)
-    public List<ChemicalDto> readAll(Long gardenerId) {
+    public List<ChemicalDto> getAll(Long gardenerId) {
         return chemicalRepository.findAllChemicals(gardenerId);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public ChemicalDetail readOne(Long chemicalId, Long gardenerId) {
+    public ChemicalDetail getOne(Long chemicalId, Long gardenerId) {
         ChemicalDto chemical = chemicalRepository.findByChemicalIdAndGardenerId(chemicalId, gardenerId);
-        int wateringSize = wateringRepository.countByChemical_ChemicalId(chemicalId);
+        Long wateringSize = chemicalRepository.countWateringByChemicalId(chemicalId);
 
         return new ChemicalDetail(chemical, wateringSize);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<WateringResponseInChemical> readWateringsForChemical(Long chemicalId, Pageable pageable) {
-        return wateringRepository.findWateringsByChemicalIdWithPage(chemicalId, pageable)
+    public List<WateringResponseInChemical> getWateringsForChemical(Long chemicalId, Pageable pageable) {
+        return chemicalRepository.findWateringsByChemicalIdWithPage(chemicalId, pageable)
                 .stream()
                 .map(WateringResponseInChemical::from)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ChemicalDto create(Long gardenerId, ChemicalDto chemicalRequest) {
+    public ChemicalDto add(Long gardenerId, ChemicalDto chemicalRequest) {
         return chemicalCommandRepository.create(gardenerId, chemicalRequest);
     }
 

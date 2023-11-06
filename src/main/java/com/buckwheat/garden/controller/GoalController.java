@@ -29,7 +29,7 @@ public class GoalController {
 
     @PutMapping("/{goalId}")
     public GoalDto modify(@RequestBody GoalDto goalRequest) {
-        return goalService.modify(goalRequest);
+        return goalService.update(goalRequest);
     }
 
     @PutMapping("/{goalId}/complete")

@@ -10,8 +10,6 @@ const Plant = () => {
 
   const [isLoading, setLoading] = useState(true);
   const [hasPlant, setHasPlant] = useState(false);
-  const [originPlantList, setOriginPlantList] = useState([])
-  const [plantList, setPlantList] = useState([]);
 
   const onMountPlant = async () => {
     const data = await getData("/garden/plants");
@@ -20,18 +18,11 @@ const Plant = () => {
     setLoading(false);
 
     setHasPlant(data.length > 0);
-
-    data.sort((a, b) => new Date(b.plant.createDate) - new Date(a.plant.createDate));
-
-    setPlantList(data);
-    setOriginPlantList(data);
   }
 
   useEffect(() => {
     onMountPlant();
   }, [])
-
-
 
   if (isLoading) {
     return <Loading/>

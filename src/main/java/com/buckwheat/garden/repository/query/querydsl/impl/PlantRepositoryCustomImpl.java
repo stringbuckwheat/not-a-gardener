@@ -1,13 +1,14 @@
-package com.buckwheat.garden.repository.querydsl.impl;
+package com.buckwheat.garden.repository.query.querydsl.impl;
 
 import com.buckwheat.garden.data.dto.garden.QWaitingForWatering;
 import com.buckwheat.garden.data.dto.garden.WaitingForWatering;
 import com.buckwheat.garden.data.entity.Plant;
-import com.buckwheat.garden.repository.querydsl.PlantRepositoryCustom;
+import com.buckwheat.garden.repository.query.querydsl.PlantRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.buckwheat.garden.data.entity.QPlace.place;
@@ -15,6 +16,7 @@ import static com.buckwheat.garden.data.entity.QPlant.plant;
 import static com.buckwheat.garden.data.entity.QWatering.watering;
 
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PlantRepositoryCustomImpl implements PlantRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
@@ -51,23 +53,29 @@ public class PlantRepositoryCustomImpl implements PlantRepositoryCustom {
     }
 
     @Override
-    public List<Plant> findPlantsByPlaceIdWithPage(Long placeId, Pageable pageable) {
-        return queryFactory
-                .selectFrom(plant)
-                .join(plant.place, place)
-                .where(plant.place.placeId.eq(placeId))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(plant.createDate.desc())
-                .fetch();
-    }
-
-    @Override
     public List<Plant> findAllPlants(Long gardenerId) {
         return queryFactory.selectFrom(plant)
                 .join(plant.place, place)
                 .where(plant.gardener.gardenerId.eq(gardenerId))
                 .orderBy(plant.createDate.desc())
                 .fetch();
+    }
+
+    @Override
+    public Long countWateringByPlantId(Long plantId) {
+        return queryFactory
+                .select(watering.count())
+                .from(watering)
+                .where(watering.plant.plantId.eq(plantId))
+                .fetchFirst();
+    }
+
+    @Override
+    public LocalDate findLatestWateringDateByPlantId(Long plantId) {
+        return queryFactory
+                .select(watering.wateringDate.max())
+                .from(watering)
+                .where(watering.plant.plantId.eq(plantId))
+                .fetchOne();
     }
 }

@@ -30,6 +30,7 @@ public class Gardener {
 
     @NotNull
     private LocalDateTime createDate;
+    private LocalDateTime recentLogin;
 
     private String provider;
 
@@ -40,5 +41,9 @@ public class Gardener {
     public void updateEmailAndName(String email, String name){
         this.email = email;
         this.name = name;
+    }
+
+    public void updateRecentLogin(){
+        this.recentLogin = LocalDateTime.now();
     }
 }

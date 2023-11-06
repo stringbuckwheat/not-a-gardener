@@ -55,7 +55,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public Info login(Login login) {
         Gardener gardener = gardenerRepository.findByProviderIsNullAndUsername(login.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode()));
@@ -64,6 +64,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (!encoder.matches(login.getPassword(), gardener.getPassword())) {
             throw new BadCredentialsException(ExceptionCode.WRONG_PASSWORD.getCode());
         }
+
+        gardener.updateRecentLogin();
 
         return setAuthentication(gardener);
     }

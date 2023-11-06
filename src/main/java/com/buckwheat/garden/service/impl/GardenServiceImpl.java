@@ -8,8 +8,8 @@ import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Routine;
 import com.buckwheat.garden.data.projection.Calculate;
 import com.buckwheat.garden.data.projection.RawGarden;
-import com.buckwheat.garden.repository.PlantRepository;
-import com.buckwheat.garden.repository.RoutineRepository;
+import com.buckwheat.garden.repository.query.PlantQueryRepository;
+import com.buckwheat.garden.repository.query.RoutineQueryRepository;
 import com.buckwheat.garden.service.GardenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,21 +25,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GardenServiceImpl implements GardenService {
     private final GardenResponseProvider gardenResponseProvider;
-    private final PlantRepository plantRepository;
-    private final RoutineRepository routineRepository;
+    private final PlantQueryRepository plantQueryRepository;
+    private final RoutineQueryRepository routineQueryRepository;
 
     @Override
     @Transactional(readOnly = true)
-    public GardenMain readGarden(Long gardenerId) {
-        if (!plantRepository.existByGardenerId(gardenerId)) {
+    public GardenMain getGarden(Long gardenerId) {
+        if (!plantQueryRepository.existByGardenerId(gardenerId)) {
             return new GardenMain(false, null, null, null);
         }
 
-        List<WaitingForWatering> waitingForWatering = plantRepository.findWaitingForWateringList(gardenerId);
-        log.debug("waitingForWateirng.size: {}", waitingForWatering.size());
-        List<RawGarden> plantsToDo = plantRepository.findGardenByGardenerId(gardenerId);
-        log.debug("plantsTodo.size: {}", plantsToDo.size());
-        List<Routine> routineList = routineRepository.findByGardener_GardenerId(gardenerId);
+        List<WaitingForWatering> waitingForWatering = plantQueryRepository.findWaitingForWateringList(gardenerId);
+        List<RawGarden> plantsToDo = plantQueryRepository.findGardenByGardenerId(gardenerId);
+        List<Routine> routineList = routineQueryRepository.findByGardener_GardenerId(gardenerId);
 
         List<GardenResponse> todoList = new ArrayList<>();
 
@@ -58,11 +56,11 @@ public class GardenServiceImpl implements GardenService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<GardenResponse> readAll(Long gardenerId) {
+    public List<GardenResponse> getAll(Long gardenerId) {
         List<GardenResponse> gardenList = new ArrayList<>();
 
         // 필요한 것들 계산해서 gardenDto list 리턴
-        for (Plant plant : plantRepository.findByGardener_GardenerIdOrderByPlantIdDesc(gardenerId)) {
+        for (Plant plant : plantQueryRepository.findByGardener_GardenerIdOrderByPlantIdDesc(gardenerId)) {
             gardenList.add(gardenResponseProvider.getGardenResponse(Calculate.from(plant, gardenerId)));
         }
 

@@ -8,7 +8,7 @@ import com.buckwheat.garden.data.dto.plant.PlantResponse;
 import com.buckwheat.garden.data.dto.watering.WateringResponse;
 import com.buckwheat.garden.data.projection.Calculate;
 import com.buckwheat.garden.data.projection.ChemicalUsage;
-import com.buckwheat.garden.repository.WateringRepository;
+import com.buckwheat.garden.repository.query.WateringQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class GardenResponseProvider {
-    private final WateringRepository wateringRepository;
+    private final WateringQueryRepository wateringQueryRepository;
 
     public GardenResponse getGardenResponse(Calculate calculate){
         // 미루기를 누른 경우
@@ -100,7 +100,7 @@ public class GardenResponseProvider {
     // 비료 사용 안함  맹물 주기      비료주기
     @Transactional(readOnly = true)
     public ChemicalCode getChemicalCode(Long plantId, Long gardenerId) {
-        List<ChemicalUsage> latestChemicalUsages = wateringRepository.findLatestChemicalizedDayList(gardenerId, plantId, "Y");
+        List<ChemicalUsage> latestChemicalUsages = wateringQueryRepository.findLatestChemicalizedDayList(gardenerId, plantId, "Y");
 
         // index 필요
         // chemical list index에 맞춰 해당 chemical을 줘야하는지 말아야하는지 산출

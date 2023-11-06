@@ -27,7 +27,7 @@ public class PlantResponse {
     private LocalDate postponeDate;
     private LocalDate conditionDate;
 
-    private int totalWaterings;
+    private Long totalWaterings;
     private LocalDate latestWateringDate;
 
     private long wateringId;
@@ -49,7 +49,7 @@ public class PlantResponse {
                 .build();
     }
 
-    public static PlantResponse from(Plant plant, int totalWaterings, LocalDate latestWateringDate) {
+    public static PlantResponse from(Plant plant, Long totalWaterings, LocalDate latestWateringDate) {
         return PlantResponse.builder()
                 .id(plant.getPlantId())
                 .name(plant.getName())

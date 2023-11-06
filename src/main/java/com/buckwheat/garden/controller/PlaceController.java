@@ -67,7 +67,7 @@ public class PlaceController {
      */
     @PutMapping("/{placeId}")
     public PlaceDto modify(@RequestBody PlaceDto placeRequest, @AuthenticationPrincipal UserPrincipal user){
-        return placeService.modify(placeRequest, user.getId());
+        return placeService.update(placeRequest, user.getId());
     }
 
     /**

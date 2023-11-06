@@ -33,6 +33,7 @@ public class Register {
                 .password(password)
                 .name(name)
                 .createDate(LocalDateTime.now())
+                .recentLogin(LocalDateTime.now())
                 .build();
     }
 }

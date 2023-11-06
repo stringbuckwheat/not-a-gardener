@@ -62,13 +62,13 @@ const LoginForm = () => {
           <CInputGroupText>
             <CIcon icon={cilUser}/>
           </CInputGroupText>
-          <CFormInput placeholder="ID" name="username" onChange={onChange}/>
+          <CFormInput placeholder="ID" name="username" onChange={onChange} defaultValue={"testgardener"}/>
         </CInputGroup>
         <CInputGroup className="mb-2">
           <CInputGroupText>
             <CIcon icon={cilLockLocked}/>
           </CInputGroupText>
-          <CFormInput name="password" type="password" placeholder="PW" onChange={onChange}/>
+          <CFormInput name="password" type="password" placeholder="PW" onChange={onChange} defaultValue={"testgardener123!"}/>
         </CInputGroup>
         <Link to="/forgot" className="text-decoration-none text-garden">
           <span style={{fontSize: 13}}><CIcon icon={cilLockLocked}/> 아이디/비밀번호 찾기</span>

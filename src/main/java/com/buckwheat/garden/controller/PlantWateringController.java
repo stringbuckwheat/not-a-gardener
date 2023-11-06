@@ -53,7 +53,7 @@ public class PlantWateringController {
      */
     @PutMapping("/{wateringId}")
     public PlantWateringResponse modify(@RequestBody WateringRequest wateringRequest, @PageableDefault(size = 10) Pageable pageable, @AuthenticationPrincipal UserPrincipal userPrincipal) {
-        return plantWateringService.modify(wateringRequest, pageable, userPrincipal.getId());
+        return plantWateringService.update(wateringRequest, pageable, userPrincipal.getId());
     }
 
     /**

@@ -1,12 +1,11 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.repository.command.PlaceCommandRepository;
 import com.buckwheat.garden.data.dto.place.PlaceCard;
 import com.buckwheat.garden.data.dto.place.PlaceDto;
 import com.buckwheat.garden.data.dto.plant.PlantInPlace;
 import com.buckwheat.garden.data.entity.Place;
-import com.buckwheat.garden.repository.PlaceRepository;
-import com.buckwheat.garden.repository.PlantRepository;
+import com.buckwheat.garden.repository.command.PlaceCommandRepository;
+import com.buckwheat.garden.repository.query.PlaceQueryRepository;
 import com.buckwheat.garden.service.PlaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,13 +22,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PlaceServiceImpl implements PlaceService {
     private final PlaceCommandRepository placeCommandRepository;
-    private final PlaceRepository placeRepository;
-    private final PlantRepository plantRepository;
+    private final PlaceQueryRepository placeQueryRepository;
 
     @Override
     @Transactional(readOnly = true)
     public List<PlaceCard> getAll(Long gardenerId) {
-        return placeRepository.findByGardener_GardenerIdOrderByCreateDate(gardenerId)
+        return placeQueryRepository.findByGardener_GardenerIdOrderByCreateDate(gardenerId)
                 .stream()
                 .map(PlaceCard::from)
                 .collect(Collectors.toList());
@@ -38,16 +36,16 @@ public class PlaceServiceImpl implements PlaceService {
     @Override
     @Transactional(readOnly = true)
     public PlaceDto getDetail(Long placeId, Long gardenerId) {
-        Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(placeId, gardenerId)
+        Place place = placeQueryRepository.findByPlaceIdAndGardener_GardenerId(placeId, gardenerId)
                 .orElseThrow(NoSuchElementException::new);
-        int plantListSize = plantRepository.countByPlace_PlaceId(placeId);
+        Long plantListSize = placeQueryRepository.countPlantsByPlaceId(placeId);
         return PlaceDto.from(place, plantListSize);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<PlantInPlace> getPlantsWithPaging(Long placeId, Pageable pageable) {
-        return plantRepository.findPlantsByPlaceIdWithPage(placeId, pageable).stream()
+        return placeQueryRepository.findPlantsByPlaceIdWithPage(placeId, pageable).stream()
                 .map(PlantInPlace::from)
                 .collect(Collectors.toList());
     }
@@ -60,7 +58,7 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public PlaceDto modify(PlaceDto placeRequest, Long gardenerId) {
+    public PlaceDto update(PlaceDto placeRequest, Long gardenerId) {
         return PlaceDto.from(placeCommandRepository.update(placeRequest, gardenerId));
     }
 

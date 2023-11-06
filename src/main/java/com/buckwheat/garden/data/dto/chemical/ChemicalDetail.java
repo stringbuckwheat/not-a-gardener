@@ -8,5 +8,5 @@ import lombok.*;
 @AllArgsConstructor
 public class ChemicalDetail {
     private ChemicalDto chemical;
-    private int wateringSize;
+    private Long wateringSize;
 }

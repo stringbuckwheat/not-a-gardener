@@ -1,8 +1,8 @@
-package com.buckwheat.garden.repository.querydsl.impl;
+package com.buckwheat.garden.repository.query.querydsl.impl;
 
 import com.buckwheat.garden.data.dto.gardener.GardenerDetail;
 import com.buckwheat.garden.data.dto.gardener.QGardenerDetail;
-import com.buckwheat.garden.repository.querydsl.GardenerRepositoryCustom;
+import com.buckwheat.garden.repository.query.querydsl.GardenerRepositoryCustom;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;

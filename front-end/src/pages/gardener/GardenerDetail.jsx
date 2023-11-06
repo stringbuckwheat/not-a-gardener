@@ -49,7 +49,7 @@ const GardenerDetail = ({gardener, setGardener}) => {
 
   const deleteCallback = () => {
     localStorage.clear();
-    window.location.replace('/');
+    window.location.replace('/login');
   }
 
   const getSocialAccount = () => {

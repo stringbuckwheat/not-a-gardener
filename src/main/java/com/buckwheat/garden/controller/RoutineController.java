@@ -35,7 +35,7 @@ public class RoutineController {
 
     @PutMapping("/{routineId}")
     public RoutineResponse modify(@RequestBody RoutineRequest routineRequest){
-        return routineService.modify(routineRequest);
+        return routineService.update(routineRequest);
     }
 
     @DeleteMapping("/{routineId}")

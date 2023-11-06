@@ -65,7 +65,7 @@ public class PlantController {
      */
     @PutMapping("/{plantId}")
     public GardenResponse modify(@RequestBody PlantRequest plantRequest, @AuthenticationPrincipal UserPrincipal user) {
-        return plantService.modify(user.getId(), plantRequest);
+        return plantService.update(user.getId(), plantRequest);
     }
 
     /**
@@ -76,7 +76,7 @@ public class PlantController {
      */
     @PutMapping("/place/{placeId}")
     public PlaceDto modifyPlace(@RequestBody ModifyPlace modifyPlace, @AuthenticationPrincipal UserPrincipal user) {
-        return plantService.modifyPlace(modifyPlace, user.getId());
+        return plantService.updatePlace(modifyPlace, user.getId());
     }
 
     /**

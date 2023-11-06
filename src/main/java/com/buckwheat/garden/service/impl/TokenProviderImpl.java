@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Key;
 import java.time.LocalDateTime;
@@ -59,26 +60,13 @@ public class TokenProviderImpl implements TokenProvider {
         return new AccessToken(gardenerId, key, claims);
     }
 
-    /**
-     * JwtFilter에서 사용
-     * 헤더에서 받아온 token을 주면 이 클래스의 멤버변수로 지정된 key 값을 포함하여 JwtAuthToken 객체 리턴
-     * 유효한 토큰인지 확인하기 위해 쓴다.
-     *
-     * @param token 헤더에서 받아온 token
-     * @return JwtAuthToken 객체
-     */
     @Override
     public AccessToken convertAuthToken(String token) {
         return new AccessToken(token, key);
     }
 
-    /**
-     * JwtFilter에서 유효한 토큰인지를 확인한 후 Security Context에 저장할 Authentication 리턴
-     *
-     * @param authToken 헤더에 담겨 온 Jwt를 decode한 것
-     * @return UsernamePasswordAuthenticationToken(user, null, role)
-     */
     @Override
+    @Transactional(readOnly = true)
     public Authentication getAuthentication(AccessToken authToken) {
         if (authToken.validate()) {
             // authToken에 담긴 데이터를 받아온다

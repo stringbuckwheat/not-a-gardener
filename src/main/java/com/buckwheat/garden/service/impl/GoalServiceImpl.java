@@ -1,9 +1,9 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.repository.command.GoalCommandRepository;
 import com.buckwheat.garden.data.dto.goal.GoalDto;
 import com.buckwheat.garden.data.entity.Goal;
-import com.buckwheat.garden.repository.GoalRepository;
+import com.buckwheat.garden.repository.command.GoalCommandRepository;
+import com.buckwheat.garden.repository.query.GoalQueryRepository;
 import com.buckwheat.garden.service.GoalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,12 +18,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GoalServiceImpl implements GoalService {
     private final GoalCommandRepository goalCommandRepository;
-    private final GoalRepository goalRepository;
+    private final GoalQueryRepository goalQueryRepository;
 
     @Override
     @Transactional(readOnly = true)
     public List<GoalDto> getAll(Long gardenerId) {
-        return goalRepository.findByGardener_GardenerId(gardenerId).stream()
+        return goalQueryRepository.findByGardener_GardenerId(gardenerId).stream()
                 .map(GoalDto::from)
                 .collect(Collectors.toList());
     }
@@ -35,7 +35,7 @@ public class GoalServiceImpl implements GoalService {
     }
 
     @Override
-    public GoalDto modify(GoalDto goalRequest) {
+    public GoalDto update(GoalDto goalRequest) {
         Goal goal = goalCommandRepository.update(goalRequest);
         return GoalDto.from(goal);
     }
@@ -48,6 +48,6 @@ public class GoalServiceImpl implements GoalService {
 
     @Override
     public void delete(Long id) {
-        goalRepository.deleteById(id);
+        goalCommandRepository.deleteBy(id);
     }
 }

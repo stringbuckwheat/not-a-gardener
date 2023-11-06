@@ -27,6 +27,7 @@ public class ForgotServiceImpl implements ForgotService {
     private final GardenerRepository gardenerRepository;
     private final JavaMailSender mailSender;
     private final BCryptPasswordEncoder encoder;
+
     @Value("${spring.mail.username}")
     private String sendFrom;
 

@@ -2,17 +2,15 @@ package com.buckwheat.garden.repository;
 
 import com.buckwheat.garden.data.entity.Goal;
 import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
-@Repository
-public interface GoalRepository extends JpaRepository<Goal, Long> {
-    @EntityGraph(attributePaths = {"plant"}, type = EntityGraph.EntityGraphType.FETCH)
-    List<Goal> findByGardener_GardenerId(Long gardenerId);
-
+public interface GoalRepository extends Repository<Goal, Long> {
     @EntityGraph(attributePaths = {"plant"}, type = EntityGraph.EntityGraphType.FETCH)
     Optional<Goal> findByGoalId(Long goalId);
+
+    Optional<Goal> findById(Long goalId);
+    Goal save(Goal goal);
+    void deleteById(Long goalId);
 }
