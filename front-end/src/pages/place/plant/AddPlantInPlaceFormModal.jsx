@@ -2,8 +2,9 @@ import getPlantFormArrayWithPlaceName from "../../../utils/function/getPlantForm
 import FormProvider from "../../../components/form/FormProvider";
 import {useState} from "react";
 import postData from "../../../api/backend-api/common/postData";
-import {ConfigProvider, Modal} from "antd";
+import {ConfigProvider, Modal, Space, Tooltip} from "antd";
 import InputFeedbackSpan from "../../../components/etc/InputFeedbackSpan";
+import {QuestionCircleTwoTone} from "@ant-design/icons";
 
 /**
  * 장소에서 새 식물 추가하기 폼
@@ -33,7 +34,19 @@ const AddPlantInPlaceFormModal = ({visible, callBackFunction, placeId, placeName
 
   const submit = async () => {
     const res = await postData(`/place/${placeId}/plant`, plant);
-    callBackFunction(res);
+
+    callBackFunction({
+      key: res.id,
+      id: res.id,
+      name: res.name,
+      species: res.species,
+      recentWateringPeriod:
+        res.recentWateringPeriod == 0
+          ? <Space align="middle"><Tooltip title={"물주기를 알아가는 중이에요"}><QuestionCircleTwoTone/></Tooltip></Space>
+          : res.recentWateringPeriod,
+      tags: [res.medium],
+      createDate: res.createDate
+    });
   }
 
   const isValid = plant.name != '' &&

@@ -98,6 +98,7 @@ const PlantTable = () => {
           }
         }}
         className="mt-3 new-line"
+        style={{width: "inherit"}}
         pagination={{onChange: cancel}}
         locale={locale}
         columns={mergedColumns}

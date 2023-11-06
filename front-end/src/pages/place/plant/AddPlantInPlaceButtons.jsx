@@ -7,17 +7,17 @@ import AddPlantInPlaceFormModal from "./AddPlantInPlaceFormModal";
 
 /**
  * 장소 페이지 내 식물 리스트 위 새 식물을 추가하거나 이 장소에 식물을 수정할 버튼들
- * => 부모 컴포넌트: PlantListInPlace.jsx
+ * => 부모 컴포넌트: PlaceTableForPlant.jsx
  * @param placeName
  * @param setPlantList
  * @returns {JSX.Element} ModifyPlaceOfPlantForm || AddPlantInPlaceFormModal || 버튼들
  * @constructor
  */
-const AddPlantInPlaceButtons = ({placeName, setPlantList}) => {
+const AddPlantInPlaceButtons = ({placeName, setPlants}) => {
   const placeId = useParams().placeId;
 
-  const [moveFormVisible, setMoveFormVisible] = useState(false);
   const [addPlantFormVisible, setAddPlantFormVisible] = useState(false);
+  const [moveFormVisible, setMoveFormVisible] = useState(false);
 
   const onClickAddPlantBtn = async () => {
     setAddPlantFormVisible(true);
@@ -26,7 +26,7 @@ const AddPlantInPlaceButtons = ({placeName, setPlantList}) => {
 
   const callBackFunction = (res) => {
     setAddPlantFormVisible(false);
-    setPlantList(plantList => [res, ...plantList]);
+    setPlants(plantList => [res, ...plantList]);
   }
 
   if (addPlantFormVisible) {
@@ -39,7 +39,7 @@ const AddPlantInPlaceButtons = ({placeName, setPlantList}) => {
       setAddPlantFormVisible={setAddPlantFormVisible}/>
   } else if (moveFormVisible) {
     // 다른 장소의 식물 이동을 누른 경우
-    return <ModifyPlaceOfPlantForm placeId={placeId} setMoveFormVisible={setMoveFormVisible}/>
+    return <ModifyPlaceOfPlantForm placeId={placeId} setMoveFormVisible={setMoveFormVisible} setPlants={setPlants}/>
   }
 
   // 아무것도 선택하지 않았을 시 버튼들 렌더링

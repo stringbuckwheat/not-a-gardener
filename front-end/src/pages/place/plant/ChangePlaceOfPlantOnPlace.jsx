@@ -22,7 +22,7 @@ const ChangePlaceOfPlantOnPlace = ({setSelectedRowKeys, selectedPlantId}) => {
   // 장소 수정 함수
   const navigate = useNavigate();
 
-  // 변경할 장소의 placeNo
+  // 변경할 장소의 placeId
   const [placeId, setPlaceId] = useState(0);
 
   // select로 쓸 유저의 장소 리스트

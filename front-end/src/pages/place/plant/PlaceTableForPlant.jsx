@@ -8,6 +8,7 @@ import getPlantTableColArrInPlace from "../../../utils/function/getPlantTableCol
 import getData from "../../../api/backend-api/common/getData";
 import wateringTableColumnArray from "../../../utils/dataArray/wateringTableColumnInChemicalArray";
 import TableWithPage from "../../../components/data/TableWithPage";
+import {useParams} from "react-router-dom";
 
 /**
  * 장소 페이지 하단, 이 장소에 속한 식물들
@@ -18,9 +19,12 @@ import TableWithPage from "../../../components/data/TableWithPage";
  * @returns {JSX.Element}
  * @constructor
  */
-const PlaceTableForPlant = ({plantList, setPlantList, placeName, placeId, plantListSize}) => {
+const PlaceTableForPlant = ({placeName, plantListSize}) => {
+  const placeId = useParams().placeId;
+
   // select
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [plants, setPlants] = useState([]);
 
   const onSelectChange = (newSelectedRowKeys) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -38,16 +42,20 @@ const PlaceTableForPlant = ({plantList, setPlantList, placeName, placeId, plantL
     console.log("deletePlant");
     console.log("plantId", plantId);
     await deleteData(`/plant/${plantId}`);
-    const deletedList = plantList.filter(plant => plant.id !== plantId);
+    const deletedList = plants.filter(plant => plant.id !== plantId);
     console.log("deletedList", deletedList);
-    setPlantList(() => deletedList);
+    setPlants(() => deletedList);
   }
 
-  const getPlants = async (page) => {
-    console.log("placeId", placeId);
+  const onMountPlaceTableForPlant = async (page) => {
     const plantList = (await getData(`/place/${placeId}/plant?page=${page - 1}`));
-    return getPlantListForPlacePlantTable(plantList);
+    setPlants(() => getPlantListForPlacePlantTable(plantList));
   }
+
+  useEffect(() => {
+    console.log("placeId changed")
+    onMountPlaceTableForPlant();
+  }, [placeId]);
 
   return (
     <div className="mt-4">
@@ -59,16 +67,15 @@ const PlaceTableForPlant = ({plantList, setPlantList, placeName, placeId, plantL
           />
           : <AddPlantInPlaceButtons
             placeName={placeName}
-            plantList={plantList}
-            setPlantList={setPlantList}/>
+            setPlants={setPlants}
+          />
       }
-      <TableWithPage
-        key={placeId}
+
+      <Table
         rowSelection={rowSelection}
+        pagination={{onChange: (page) => onMountPlaceTableForPlant(page), total: plantListSize}}
         columns={getPlantTableColArrInPlace(deletePlant)}
-        getDataSource={getPlants}
-        total={plantListSize}
-      />
+        dataSource={plants}/>
     </div>
   )
 }

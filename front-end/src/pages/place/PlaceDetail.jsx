@@ -3,7 +3,7 @@ import DetailLayout from 'src/components/data/layout/DetailLayout';
 import PlaceTag from './PlaceTag';
 import {useEffect, useState} from 'react';
 import ModifyPlace from './ModifyPlace';
-import PlaceTableForPlant from 'src/pages/place/plant/PlantListInPlace';
+import PlaceTableForPlant from 'src/pages/place/plant/PlaceTableForPlant';
 import DeletePlaceModal from "../../components/modal/DeletePlaceModal";
 import getData from "../../api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";

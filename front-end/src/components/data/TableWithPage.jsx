@@ -6,7 +6,7 @@ const TableWithPage = ({columns, getDataSource, total, rowSelection, key}) => {
 
   const paging = async (page) => {
     const res = await getDataSource(page);
-    setDataSource(res);
+    setDataSource(() => res);
   }
 
   useEffect(() => {

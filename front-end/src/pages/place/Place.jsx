@@ -19,7 +19,6 @@ const Place = () => {
 
   const onMount = async () => {
     const data = await getData("/place");
-    console.log("data", data);
 
     dispatch({type: 'setPlaces', payload: data});
 
