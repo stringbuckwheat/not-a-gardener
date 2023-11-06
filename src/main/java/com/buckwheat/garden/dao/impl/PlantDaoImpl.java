@@ -68,7 +68,8 @@ public class PlantDaoImpl implements PlantDao {
     @Override
     public Plant updateWateringPeriod(Plant plant, int period) {
         if (period != plant.getRecentWateringPeriod()) {
-            plantRepository.save(plant.updateAverageWateringPeriod(period));
+            plant.updateRecentWateringPeriod(period);
+            plantRepository.save(plant);
         }
 
         return plant;
@@ -89,7 +90,8 @@ public class PlantDaoImpl implements PlantDao {
     }
 
     public void updateConditionDate(Plant plant){
-        plantRepository.save(plant.updateConditionDate());
+        plant.updateConditionDate();
+        plantRepository.save(plant);
     }
 
     @Override

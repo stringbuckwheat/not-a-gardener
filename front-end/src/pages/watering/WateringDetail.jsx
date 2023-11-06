@@ -7,7 +7,6 @@ import WateringFormInCalendar from "./WateringFormInCalendar";
 import WateringList from "./WateringList";
 
 const WateringDetail = ({selectedDate, wateringDetail, onAdd, isWateringFormOpened, setIsWateringFormOpened, onDelete}) => {
-  // console.log("selectedDate", selectedDate.toISOString());
   const [chemicalList, setChemicalList] = useState([]);
   const [plantList, setPlantList] = useState([]);
 

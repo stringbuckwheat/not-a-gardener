@@ -12,5 +12,5 @@ public interface WateringService {
     WateringByDate add(WateringRequest wateringRequest);
     LocalDate getStartDate(LocalDate firstDayOfMonth);
     LocalDate getEndDate(LocalDate firstDayOfMonth);
-    void delete(long wateringId);
+    void delete(Long wateringId, Long plantId, Long gardenerId);
 }

@@ -32,8 +32,7 @@ public class WateringController {
     }
 
     @DeleteMapping("/{wateringId}")
-    public void delete(@PathVariable long wateringId){
-        wateringService.delete(wateringId);
+    public void delete(@PathVariable Long wateringId, @AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody Map<String, Long> request){
+        wateringService.delete(wateringId, request.get("plantId"), userPrincipal.getId());
     }
-
 }

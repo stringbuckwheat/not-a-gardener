@@ -1,21 +1,18 @@
 import {Badge, Popconfirm, Space} from "antd";
 import LinkHoverTag from "../../components/tag/basic/LinkHoverTag";
 import isEndWithVowel from "../../utils/function/isEndWithVowel";
-import {useState} from "react";
-import {DeleteOutlined} from "@ant-design/icons";
-import deleteData from "../../api/backend-api/common/deleteData";
 import DeleteIconBtn from "../../components/button/DeleteIconBtn";
+import deleteWithData from "../../api/backend-api/common/deleteWithData";
 
 const WateringList = ({wateringDetail, onDelete}) => {
-  console.log("wateringDetail", wateringDetail);
   if (!wateringDetail || wateringDetail.length == 0) {
     return;
   }
 
   const deleteWatering = async (watering) => {
-    console.log("watering", watering); // wateringId, wateringDate
+    console.log("delete watering", watering); // wateringId, wateringDate
     console.log("wateringDetail", wateringDetail);
-    await deleteData(`/watering/${watering.wateringId}`);
+    await deleteWithData(`/watering/${watering.wateringId}`, {plantId: watering.plantId});
     onDelete && onDelete(watering);
   }
 
@@ -30,8 +27,9 @@ const WateringList = ({wateringDetail, onDelete}) => {
   return (
     <>
       {wateringDetail.map((watering) => {
-          console.log("watering", watering);
-          const forDelete = {wateringId: watering.id, wateringDate: watering.wateringDate};
+          console.log("watering in map", watering);
+
+          const forDelete = {wateringId: watering.id, wateringDate: watering.wateringDate, plantId: watering.plantId};
 
           return (
             <div key={watering.id}>

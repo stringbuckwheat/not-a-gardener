@@ -39,7 +39,7 @@ public class WateringRepositoryCustomImpl implements WateringRepositoryCustom {
 
     @Override
     public List<Watering> findWateringsByChemicalIdWithPage(Long chemicalId, Pageable pageable) {
-        List<Watering> waterings = queryFactory
+        return queryFactory
                 .selectFrom(watering)
                 .join(watering.plant, plant)
                 .fetchJoin()
@@ -52,8 +52,6 @@ public class WateringRepositoryCustomImpl implements WateringRepositoryCustom {
                 .limit(pageable.getPageSize()) // 페이지 사이즈
                 .orderBy(watering.wateringDate.desc())
                 .fetch();
-
-        return waterings;
     }
 
     @Override
@@ -76,5 +74,21 @@ public class WateringRepositoryCustomImpl implements WateringRepositoryCustom {
                 .from(watering)
                 .where(watering.plant.plantId.eq(plantId))
                 .fetchOne();
+    }
+
+    @Override
+    public Boolean existByWateringDateAndPlantId(LocalDate wateringDate, Long plantId) {
+        Integer fetchOne = queryFactory
+                .selectOne()
+                .from(watering)
+                .where(
+                        watering.wateringDate.eq(wateringDate)
+                                .and(
+                                        watering.plant.plantId.eq(plantId)
+                                )
+                )
+                .fetchFirst();
+
+        return fetchOne != null;
     }
 }

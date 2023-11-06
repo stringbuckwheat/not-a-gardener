@@ -9,12 +9,11 @@ import org.hibernate.annotations.OnDeleteAction;
 import java.time.LocalDate;
 
 @Entity
-@Getter
-@Setter
 @Table(name = "watering")
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-@AllArgsConstructor // Builder 쓰려면 있어야 함
-@NoArgsConstructor // Entity는 기본 생성자를 가지고 있어야 한다
 public class Watering {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment

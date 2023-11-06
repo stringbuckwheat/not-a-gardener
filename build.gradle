@@ -50,7 +50,7 @@ dependencies {
 	// ETC
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.apache.commons:commons-lang3'
-
+	
 	// redis
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis'
 
@@ -71,19 +71,10 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+def frontDir = "$projectDir/front-end"
+
 clean {
 	delete file('src/main/generated')
-}
-
-def frontDir = "$projectDir/front-end"
-def queryDslDir = 'src/main/generated'
-
-clean {
-	delete file(queryDslDir)
-}
-
-tasks.withType(JavaCompile){
-	options.generatedSourceOutputDirectory = file(queryDslDir)
 }
 
 def profile = project.hasProperty("profile") ? project.property("profile").toString() : "prod"
@@ -91,7 +82,7 @@ def profile = project.hasProperty("profile") ? project.property("profile").toStr
 sourceSets {
 	main {
 		resources {
-			srcDirs = ["$frontDir/build", "$projectDir/src/main/resources", "src/main/resources/resources-${profile}"]
+			srcDirs = ["$projectDir/src/main/resources", "src/main/resources/resources-${profile}"]
 		}
 	}
 }
@@ -101,6 +92,7 @@ processResources {
 }
 
 task copyWebApp(type: Copy) {
+	println("profile: " + profile);
 	from "$frontDir/build"
 	into "$projectDir/src/main/resources/static"
 	println("copyWebApp")

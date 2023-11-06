@@ -11,4 +11,5 @@ public interface WateringRepositoryCustom {
     List<Watering> findWateringsByChemicalIdWithPage(Long chemicalId, Pageable pageable);
     List<Watering> findWateringsByPlantIdWithPage(Long plantId, Pageable pageable);
     LocalDate findLatestWateringDate(Long plantId);
+    Boolean existByWateringDateAndPlantId(LocalDate wateringDate, Long plantId);
 }

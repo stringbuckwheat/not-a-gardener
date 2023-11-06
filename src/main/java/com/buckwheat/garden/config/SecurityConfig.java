@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -34,6 +35,10 @@ public class SecurityConfig {
     @Value("${origin}")
     private String allowedOrigin;
 
+    private static final String[] AUTH_WHITELIST = {
+            "/api/login", "/api/token", "/api/oauth", "/api/register/**", "/api/forgot/**", "/api/logout", "/static/**"
+    };
+
     /**
      * CORS 설정
      */
@@ -52,6 +57,7 @@ public class SecurityConfig {
 
     /**
      * Security Filter Chain 커스터마이징
+     *
      * @param httpSecurity
      * @return
      * @throws Exception
@@ -62,17 +68,20 @@ public class SecurityConfig {
         httpSecurity.httpBasic(HttpBasicConfigurer::disable)
                 .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .requestMatchers("/api/login", "/api/token", "/api/oauth", "/api/register/**", "/api/forgot/**", "/api/logout").permitAll() // MEMIL 모든 접속 허용
-
                                 .requestMatchers("/api/chemical/**", "/api/garden/**", "/api/gardener/**", "/api/goal/**", "/api/info",
                                         "/api/place/**", "/api/plant/**", "/api/routine/**", "/api/watering/**").authenticated()
+                                .anyRequest().permitAll()
                 )
+
                 .oauth2Login(oauth2Configurer -> oauth2Configurer
+                        .loginPage("/")
                         .successHandler(successHandler)
                         .userInfoEndpoint(configurer -> configurer.userService(oAuth2MemberService))
                 )
+                .formLogin(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtExceptionFilter, JwtFilter.class);
 
@@ -81,10 +90,11 @@ public class SecurityConfig {
 
     /**
      * 비밀번호 암호화 및 일치 여부 확인에 사용
+     *
      * @return BCryptPasswordEncoder
      */
     @Bean
-    public BCryptPasswordEncoder encodePw(){
+    public BCryptPasswordEncoder encodePw() {
         return new BCryptPasswordEncoder();
     }
 

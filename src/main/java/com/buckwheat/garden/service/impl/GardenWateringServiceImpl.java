@@ -5,13 +5,12 @@ import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.dao.WateringDao;
 import com.buckwheat.garden.data.dto.garden.GardenResponse;
 import com.buckwheat.garden.data.dto.garden.GardenWateringResponse;
+import com.buckwheat.garden.data.dto.watering.AfterWatering;
 import com.buckwheat.garden.data.dto.watering.WateringMessage;
 import com.buckwheat.garden.data.dto.watering.WateringRequest;
 import com.buckwheat.garden.data.entity.Plant;
-import com.buckwheat.garden.data.entity.Watering;
 import com.buckwheat.garden.data.projection.Calculate;
 import com.buckwheat.garden.service.GardenWateringService;
-import com.buckwheat.garden.util.WateringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,21 +25,14 @@ import java.time.LocalDate;
 public class GardenWateringServiceImpl implements GardenWateringService {
     private final WateringDao wateringDao;
     private final PlantDao plantDao;
-    private final WateringUtil wateringUtil;
     private final GardenResponseProvider gardenResponseProvider;
 
     @Override
     public GardenWateringResponse add(Long gardenerId, WateringRequest wateringRequest) {
-        Watering watering = wateringDao.addWatering(wateringRequest);
+        AfterWatering afterWatering = wateringDao.addWatering(wateringRequest);
+        GardenResponse gardenResponse = gardenResponseProvider.getGardenResponse(Calculate.from(afterWatering.getPlant(), gardenerId));
 
-        // 관수 메시지 받아옴
-        Plant plant = plantDao.getPlantWithPlaceAndWatering(wateringRequest.getPlantId());
-        WateringMessage wateringMsg = wateringUtil.getWateringMsg(plant);
-        plant = plantDao.updateWateringPeriod(watering.getPlant(), wateringMsg.getAverageWateringDate());
-
-        GardenResponse gardenResponse = gardenResponseProvider.getGardenResponse(Calculate.from(plant, gardenerId));
-
-        return new GardenWateringResponse(gardenResponse, wateringMsg);
+        return new GardenWateringResponse(gardenResponse, afterWatering.getWateringMessage());
     }
 
     @Override
@@ -72,7 +64,8 @@ public class GardenWateringServiceImpl implements GardenWateringService {
         } else if (period >= plant.getRecentWateringPeriod()) {
             // averageWateringPeriod 업데이트
             // 오늘 한정 garden에 안 뜨게 해야함 => updateDate에 오늘 날짜 추가
-            plant.updateAverageWateringPeriod(period + 1).updateConditionDate();
+            plant.updateRecentWateringPeriod(period + 1);
+            plant.updateConditionDate();
 
             // 물주기 늘어나는 중이라는 wateringMsg 만들기
             wateringMsg = new WateringMessage(1, period + 1);

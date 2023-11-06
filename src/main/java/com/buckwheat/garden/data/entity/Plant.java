@@ -72,30 +72,24 @@ public class Plant {
         return this;
     }
 
-    public Plant updatePlace(Place place){
+    public void updatePlace(Place place){
         this.place = place;
-        return this;
     }
 
-    public Plant updateAverageWateringPeriod(int averageWateringPeriod){
+    public void updateRecentWateringPeriod(int averageWateringPeriod){
         this.recentWateringPeriod = averageWateringPeriod;
-        return this;
     }
 
-    public Plant updateConditionDate(){
+    public void updateConditionDate(){
         this.conditionDate = LocalDate.now();
-        return this;
     }
 
-    public Plant updatePostponeDate(){
+    public void updatePostponeDate(){
         this.postponeDate = LocalDate.now();
-        return this;
     }
 
-    public Plant initConditionDateAndPostponeDate(){
+    public void initConditionDateAndPostponeDate(){
         this.conditionDate = null;
         this.postponeDate = null;
-
-        return this;
     }
 }

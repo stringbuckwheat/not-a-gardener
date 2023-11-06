@@ -1,21 +1,19 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.dao.WateringDao;
 import com.buckwheat.garden.data.dto.plant.PlantResponse;
-import com.buckwheat.garden.data.dto.watering.AfterWatering;
-import com.buckwheat.garden.data.dto.watering.WateringForOnePlant;
-import com.buckwheat.garden.data.dto.watering.WateringMessage;
-import com.buckwheat.garden.data.dto.watering.WateringRequest;
+import com.buckwheat.garden.data.dto.watering.*;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Watering;
 import com.buckwheat.garden.service.PlantWateringService;
-import com.buckwheat.garden.util.WateringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,33 +22,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PlantWateringServiceImpl implements PlantWateringService {
     private final WateringDao wateringDao;
-    private final PlantDao plantDao;
-    private final WateringUtil wateringUtil;
-
-    /**
-     * 물주기 기록 추가
-     *
-     * @param wateringRequest
-     * @return WateringResponseDto
-     */
-    @Override
-    public AfterWatering add(WateringRequest wateringRequest, Pageable pageable) {
-        wateringDao.addWatering(wateringRequest);
-        return getAfterWatering(wateringRequest.getPlantId(), pageable);
-    }
 
     @Override
-    public AfterWatering getAfterWatering(Long plantId, Pageable pageable){
-        // *****
-        Plant plant = plantDao.getPlantWithPlaceAndWatering(plantId);
+    public PlantWateringResponse add(WateringRequest wateringRequest, Pageable pageable) {
+        AfterWatering afterWatering = wateringDao.addWatering(wateringRequest);
 
-        WateringMessage wateringMsg = wateringUtil.getWateringMsg(plant);
+        List<WateringForOnePlant> waterings = getAll(wateringRequest.getPlantId(), pageable);
 
-        // 리턴용 DTO 만들기
-        List<WateringForOnePlant> waterings = getAll(plant.getPlantId(), pageable);
-        Plant resPlant = plantDao.updateWateringPeriod(plant, wateringMsg.getAverageWateringDate());
-
-        return AfterWatering.from(PlantResponse.from(resPlant), wateringMsg, waterings);
+        return PlantWateringResponse.from(PlantResponse.from(afterWatering.getPlant()), afterWatering.getWateringMessage(), waterings);
     }
 
     @Override
@@ -59,23 +38,49 @@ public class PlantWateringServiceImpl implements PlantWateringService {
 
         // 며칠만에 물 줬는지
         if (waterings.size() >= 2) {
-            return wateringUtil.withWateringPeriodList(waterings);
+            return withWateringPeriodList(waterings);
         }
 
-        List<WateringForOnePlant> result = waterings.stream().map(WateringForOnePlant::from).collect(Collectors.toList());
+        return waterings.stream().map(WateringForOnePlant::from).collect(Collectors.toList());
+    }
 
-        return result;
+    public List<WateringForOnePlant> withWateringPeriodList(List<Watering> list) {
+        List<WateringForOnePlant> waterings = new ArrayList<>();
+
+        for (int i = 0; i < list.size(); i++) {
+            // 마지막 요소이자 가장 옛날 물주기
+            // => 전 요소가 없으므로 며칠만에 물 줬는지 계산 X
+            if (i == list.size() - 1) {
+                waterings.add(WateringForOnePlant.from(list.get(i)));
+                break;
+            }
+
+            // 며칠만에 물줬는지 계산
+            LocalDateTime afterWateringDate = list.get(i).getWateringDate().atStartOfDay();
+            LocalDateTime prevWateringDate = list.get(i + 1).getWateringDate().atStartOfDay();
+
+            int wateringPeriod = (int) Duration.between(prevWateringDate, afterWateringDate).toDays();
+
+            waterings.add(WateringForOnePlant.withWateringPeriodFrom(list.get(i), wateringPeriod));
+        }
+
+        return waterings;
     }
 
     @Override
-    public AfterWatering modify(WateringRequest wateringRequest, Pageable pageable) {
-        Watering watering = wateringDao.modifyWatering(wateringRequest);
-        return getAfterWatering(wateringRequest.getPlantId(), pageable);
+    public PlantWateringResponse modify(WateringRequest wateringRequest, Pageable pageable, Long gardenerId) {
+        AfterWatering afterWatering = wateringDao.modifyWatering(wateringRequest, gardenerId);
+
+        Plant plant = afterWatering.getPlant();
+        WateringMessage wateringMsg = afterWatering.getWateringMessage();
+        List<WateringForOnePlant> waterings = getAll(plant.getPlantId(), pageable);
+
+        return PlantWateringResponse.from(PlantResponse.from(plant), wateringMsg, waterings);
     }
 
     @Override
-    public void delete(Long id) {
-        wateringDao.deleteById(id);
+    public void delete(Long wateringId, Long plantId, Long gardenerId) {
+        wateringDao.deleteById(wateringId, plantId, gardenerId);
     }
 
     @Override

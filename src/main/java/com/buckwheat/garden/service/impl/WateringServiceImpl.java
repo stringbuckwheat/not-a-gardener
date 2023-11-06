@@ -1,14 +1,12 @@
 package com.buckwheat.garden.service.impl;
 
-import com.buckwheat.garden.dao.PlantDao;
 import com.buckwheat.garden.dao.WateringDao;
+import com.buckwheat.garden.data.dto.watering.AfterWatering;
 import com.buckwheat.garden.data.dto.watering.WateringByDate;
-import com.buckwheat.garden.data.dto.watering.WateringMessage;
 import com.buckwheat.garden.data.dto.watering.WateringRequest;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Watering;
 import com.buckwheat.garden.service.WateringService;
-import com.buckwheat.garden.util.WateringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,8 +22,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class WateringServiceImpl implements WateringService {
     private final WateringDao wateringDao;
-    private final PlantDao plantDao;
-    private final WateringUtil wateringUtil;
 
     @Override
     public Map<LocalDate, List<WateringByDate>> getAll(Long gardenerId, LocalDate date) {
@@ -33,9 +29,7 @@ public class WateringServiceImpl implements WateringService {
         // 1일이 일요일이 아니면 앞으로 한 주 뒤로 한 주
         LocalDate firstDayOfMonth = LocalDate.of(date.getYear(), date.getMonth(), 1);
         LocalDate startDate = getStartDate(firstDayOfMonth);
-        log.debug("startDate: {}", startDate);
         LocalDate endDate = getEndDate(firstDayOfMonth);
-        log.debug("endDate: {}", endDate);
 
         Map<LocalDate, List<WateringByDate>> map = new HashMap<>(); // 날짜: 리스트
 
@@ -73,19 +67,15 @@ public class WateringServiceImpl implements WateringService {
 
     public WateringByDate add(WateringRequest wateringRequest){
         // 물주기 저장
-        Watering watering = wateringDao.addWatering(wateringRequest);
+        AfterWatering afterWatering = wateringDao.addWatering(wateringRequest);
 
-        // 물주기 계산 로직
-        Plant plant = plantDao.getPlantWithPlaceAndWatering(wateringRequest.getPlantId());
-        WateringMessage wateringMsg = wateringUtil.getWateringMsg(plant);
+        Plant plant = afterWatering.getPlant();
+        Watering latestWatering = plant.getWaterings().get(0);
 
-        // 필요시 물주기 정보 업데이트
-        plant = plantDao.updateWateringPeriod(watering.getPlant(), wateringMsg.getAverageWateringDate());
-
-        return WateringByDate.from(watering, plant, watering.getChemical());
+        return WateringByDate.from(latestWatering, plant, latestWatering.getChemical());
     }
 
-    public void delete(long wateringId){
-        wateringDao.deleteById(wateringId);
+    public void delete(Long wateringId, Long plantId, Long gardenerId){
+        wateringDao.deleteById(wateringId, plantId, gardenerId);
     }
 }
