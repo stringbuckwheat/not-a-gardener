@@ -1,17 +1,23 @@
-import React from 'react'
-import {Navigate} from 'react-router-dom';
-import AppSidebar from "./AppSidebar";
-import AppHeader from "./AppHeader";
-import AppContent from "./AppContent";
-import AppFooter from "./AppFooter";
-import {useDispatch} from "react-redux";
+import {Button, ConfigProvider, Dropdown, Layout, Menu, Space, Tag} from 'antd';
+import React, {Suspense, useState} from "react";
+import {ReactComponent as Logo} from "../../assets/images/logo.svg";
 
-/**
- * 로그인 이후 모든 페이지의 레이아웃
- * 페이지에 따라 AppContent 부분만 바꿔끼움
- * @returns {JSX.Element}
- * @constructor
- */
+const {Footer, Content} = Layout;
+
+import {
+  DownOutlined,
+  MenuFoldOutlined,
+} from '@ant-design/icons';
+import Sidebar from "./Sidebar";
+import Loading from "../data/Loading";
+import {Navigate, Route, Routes, useNavigate} from "react-router-dom";
+import routes from "../../utils/routes";
+import {useDispatch} from "react-redux";
+import {CAvatar} from "@coreui/react";
+import sprout from "../../assets/images/sprout.png";
+import logOut from "../../utils/function/logout";
+import GardenHeader from "./GardenHeader";
+
 const GardenLayout = () => {
   if (!localStorage.getItem("accessToken")) {
     return <Navigate to="/login" replace={true}/>
@@ -20,17 +26,57 @@ const GardenLayout = () => {
   const dispatch = useDispatch();
   dispatch({type: 'setName', name: localStorage.getItem("name")})
 
+  const [collapsed, setCollapsed] = useState(false);
+
   return (
-    <div>
-      <AppSidebar/>
-      <div className="wrapper d-flex flex-column min-vh-100 bg-light">
-        <AppHeader/>
-        <div className="body flex-grow-1 px-3">
-          <AppContent/>
-        </div>
-        <AppFooter/>
-      </div>
-    </div>
+    <ConfigProvider
+      theme={{
+        components: {
+          Layout: {
+            headerBg: "white",
+            siderBg: "white"
+          },
+        },
+      }}
+    >
+      <Layout>
+        <Sidebar collapsed={collapsed} setCollapsed={setCollapsed}/>
+
+        <Layout>
+          <GardenHeader collapsed={collapsed} setCollapsed={setCollapsed}/>
+          <Content
+            style={{
+              padding: '1rem 2rem',
+            }}
+          >
+            <Suspense fallback={<Loading/>}>
+              <Routes>
+                {routes.map((route, idx) => {
+                  return (
+                    route.element && (
+                      <Route
+                        key={idx}
+                        path={route.path}
+                        exact={route.exact}
+                        name={route.name}
+                        element={<route.element/>}
+                      />
+                    )
+                  )
+                })}
+              </Routes>
+            </Suspense>
+          </Content>
+
+          <Footer className={"text-center"}>
+            <span className="ms-1 small">not-a-gardener by memil</span>
+          </Footer>
+        </Layout>
+
+
+      </Layout>
+    </ConfigProvider>
+
   )
 }
 

@@ -3,7 +3,7 @@ const theme = {
   components: {
     token: {
       colorPrimary: '#E14A1E', // orange
-      colorBgContainer: '#f6ffed',
+      colorBgContainer: '#008000',
     },
     Button: {
       colorPrimary: '#E14A1E', // orange
