@@ -1,6 +1,6 @@
-import {CButton, CCard, CCardBody} from "@coreui/react";
-import CIcon from "@coreui/icons-react";
 import React from "react";
+import {Card, Col} from "antd";
+import Style from '../../pages/login/ForgotAccount.module.scss'
 
 /**
  * 계정 찾기 카드
@@ -13,22 +13,21 @@ import React from "react";
  * @returns {JSX.Element}
  * @constructor
  */
-const ForgotAccountCard = ({icon, color, onClick, title, buttonSize, iconSize = "8xl"}) => {
+const ForgotAccountCard = ({icon, onClick, title}) => {
   return (
-    <CCard
-      style={{minHeight: "50vh", height: "100%"}}
-      className={`bg-${color}`}
-      onClick={onClick}>
-      <CCardBody className="d-flex align-items-center justify-content-center">
+    <Col md={12} style={{padding: "0.5rem"}} >
+      <Card
+        className={Style.card}
+        style={{minHeight: "40vh", alignItems: "center", justifyContent: "center",}}
+        onClick={onClick}>
         <div className="text-center">
           <div>
-            <CIcon icon={icon} size={iconSize} className={`${color === 'orange' ? "text-beige" : "text-orange"} mb-2`}/>
+            {icon}
           </div>
-          <CButton style={{border: 'none'}} size={buttonSize}
-                   className={`${color === 'orange' ? "bg-beige text-orange" : "bg-orange text-beige"} `}>{title}</CButton>
+          <div style={{fontSize: "1rem"}}>{title}</div>
         </div>
-      </CCardBody>
-    </CCard>
+      </Card>
+    </Col>
   )
 }
 

@@ -15,10 +15,9 @@ const NotifyUsername = ({email, gardenerList}) => {
             <div className="mb-1" key={index}><b>* {gardener.username}</b></div>))
         }
       </div>
-
       <Space>
         <Link to="/login">
-          <Button className="bg-orange text-white float-end mt-2">로그인 하러가기</Button>
+          <Button type="primary" className="float-end mt-2">로그인 하러가기</Button>
         </Link>
       </Space>
     </div>

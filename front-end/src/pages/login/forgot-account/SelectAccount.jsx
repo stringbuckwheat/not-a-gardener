@@ -1,4 +1,4 @@
-import {Radio, Space} from "antd";
+import {Button, Radio, Space} from "antd";
 import React, {useState} from "react";
 import ChangePassword from "./ChangePassword";
 import {CButton} from "@coreui/react";
@@ -36,11 +36,11 @@ const SelectAccount = ({email, gardenerList}) => {
           </Space>
         </Radio.Group>
         <p className="text-orange" style={style}>비밀번호를 변경할 계정을 골라주세요</p>
-        <CButton
-          type={"button"}
-          size={"sm"}
+        <Button
+          type={"primary"}
+          htmlType={"button"}
           onClick={() => setIsSelected(true)}
-          className={"bg-orange float-end mt-2 border-0 text-white"}>{"제출"}</CButton>
+          className={"float-end mt-2 border-0"}>{"제출"}</Button>
       </div>
     )
 }

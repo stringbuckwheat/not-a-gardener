@@ -1,6 +1,6 @@
-import {CCol, CRow} from "@coreui/react";
 import React from "react";
 import {animated, useSpring} from "@react-spring/web";
+import {Col, Row} from "antd";
 
 const SocialLogin = () => {
   const recentLogin = localStorage.getItem("provider");
@@ -19,30 +19,33 @@ const SocialLogin = () => {
   })
 
   return (
-    <CRow className='mt-5'>
+    <div className='mt-5'>
       <h6>간편 로그인</h6>
       <hr/>
-      {
-        providers.map((provider, index) =>{
+      <Row justify={"space-between"}>
+        {
+          providers.map((provider, index) => {
 
-          return (<CCol xs={4} className={"text-center"}>
-          <a
-            href={provider !== "naver" ? `${authorizationUrl}/${provider}` : "javascript:alert('검수 승인 대기중입니다')"}
-            className="social-button"
-            id={`${provider}-connect`}>
-          </a>
-          {
-            provider === recentLogin
-              ?
-              <animated.div style={springProps}>
-                <p style={{fontSize: "12px", fontWeight: "bold"}}>최근 로그인</p>
-              </animated.div>
-              : <></>
-          }
-        </CCol>)}
-        )
-      }
-    </CRow>
+              return (<Col md={7} className={"text-center"}>
+                <a
+                  href={provider !== "naver" ? `${authorizationUrl}/${provider}` : "javascript:alert('검수 승인 대기중입니다')"}
+                  className="social-button"
+                  id={`${provider}-connect`}>
+                </a>
+                {
+                  provider === recentLogin
+                    ?
+                    <animated.div style={springProps}>
+                      <p style={{fontSize: "12px", fontWeight: "bold"}}>최근 로그인</p>
+                    </animated.div>
+                    : <></>
+                }
+              </Col>)
+            }
+          )
+        }
+      </Row>
+    </div>
   )
 }
 

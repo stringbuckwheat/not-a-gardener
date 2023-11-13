@@ -5,6 +5,16 @@
   font-style: normal;
 }
 
+.link {
+  text-decoration: none;
+  color: #305738;
+}
+
+.link:hover {
+  color: darkgray;
+  transition: color 200ms ease;
+}
+
 /* darkgreen */
 .bg-garden {
   --cui-bg-opacity: 1;

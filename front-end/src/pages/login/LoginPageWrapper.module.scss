@@ -1,0 +1,17 @@
+.min-height-full{
+  min-height: 100vh;
+}
+
+.row {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 100vw;
+}
+
+.logo{
+  justify-content: center;
+  width: 100%;
+}

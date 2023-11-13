@@ -1,22 +1,12 @@
-import {ReactComponent as Logo} from "../../assets/images/logo.svg"
 import React, {useState} from 'react'
 import {Navigate, useNavigate} from 'react-router-dom'
-import {
-  CCard,
-  CCardBody,
-  CCol,
-  CContainer,
-  CRow,
-  CForm
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
-import {cilHappy, cilLockLocked, cilUser} from '@coreui/icons'
 import axios from 'axios'
-import Booped from "../../components/animation/Booped";
-import {Space} from "antd";
+import {Card, Form, Space} from "antd";
 import setLocalStorage from "../../api/service/setLocalStorage";
-import InputFeedback from "../../components/form/input/InputFeedback";
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
+import LoginPageWrapper from "./LoginPageWrapper";
+import FormInputText from "./FormInputText";
+import Style from './Register.module.scss'
 
 const Register = () => {
   if (localStorage.getItem("accessToken")) {
@@ -27,12 +17,12 @@ const Register = () => {
   const [register, setRegister] = useState({
     username: "",
     email: "",
-    name: "",
+    name: " ",
     password: ""
   })
 
   // 상태
-  const [usernameCheck, setUsernameCheck] = useState(false);
+  const [usernameCheck, setUsernameCheck] = useState('rejected'); // success, error, validating
   const [repeatPw, setRepeatPw] = useState(false);
 
   // input 값의 변동이 있을 시 객체 데이터 setting
@@ -57,8 +47,10 @@ const Register = () => {
       return;
     }
 
+    setUsernameCheck('validating')
+
     const res = await axios.get(`${process.env.REACT_APP_API_URL}/register/username/${username}`);
-    setUsernameCheck(res.data == "");
+    setUsernameCheck(res.data == "" ? "success" : "error");
   }
 
   const navigate = useNavigate();
@@ -74,99 +66,101 @@ const Register = () => {
 
   } // end for onSubmit
 
-  const isValid = usernameCheck
+  const isValid = usernameCheck === "success"
     && idRegex.test(register.username)
     && pwRegex.test(register.password)
     && emailRegex.test(register.email)
     && register.name !== ''
     && repeatPw;
 
+  const usernameFeedback = {
+    "warning": "영문 소문자 혹은 숫자, 6자 이상 20자 이하여야해요.",
+    "error": "이미 사용중인 아이디예요."
+  }
+
+  const getUsernameValidateStatus = () => {
+    if (register.username == "") {
+      return "";
+    } else if (!idRegex.test(register.username)) {
+      return "warning";
+    } else if (usernameCheck !== "success") {
+      return usernameCheck; // validating, error
+    } else if (usernameCheck === "success" && idRegex.test(register.username)) {
+      return "success";
+    }
+  }
+
+  const registerForm = [
+    {
+      name: "username",
+      label: "ID",
+      onChange: (e) => username(e.target.value),
+      validateStatus: getUsernameValidateStatus(),
+      help: usernameFeedback,
+    },
+    {
+      name: "name",
+      label: "이름",
+      onChange: onChange,
+      validateStatus: register.name === '' ? "warning" : "",
+      help: {"warning": "이름은 비워둘 수 없어요"},
+    },
+    {
+      name: "email",
+      label: "이메일",
+      onChange: onChange,
+      validateStatus: register.email == "" ? "" : !emailRegex.test(register.email) ? "warning" : "success",
+      help: {"warning": "이메일 형식을 확인해주세요. 계정 찾기 시에 필요합니다!"},
+    },
+    {
+      validateStatus: register.password == "" ? "" : !pwRegex.test(register.password) ? "warning" : "success",
+      help: {"warning": "숫자, 특수문자를 포함하여 8자리 이상이어야 해요."},
+      type: "password",
+      label: "비밀번호",
+      name: "password",
+      onChange: onChange
+    },
+    {
+      validateStatus: register.password == "" ? "" : !repeatPw ? "warning" : "success",
+      help: {"warning": "비밀번호를 확인해주세요"},
+      type: "password",
+      label: "비밀번호 확인",
+      onChange: (e) => setRepeatPw(register.password === e.target.value)
+    }
+  ]
+
   return (
-    <div className="bg-garden min-vh-100 d-flex flex-row align-items-center">
-      <CContainer>
-        <div>
-          <Logo className="float-end" width={"60vw"} height={"15vh"} fill={"#E14A1E"}/>
-        </div>
-        <CRow className="d-flex align-items-center justify-content-center width-full">
-          <CCol md={8}>
-            <CCard className="mx-4">
-              <CCardBody className="p-4">
-                <CForm>
-                  <Space className="mb-3">
-                    <span style={{fontSize: "2em"}} className="text-success">새로운 가드너님, 반갑습니다</span>
-                    <Booped rotation={20} timing={200}>
-                      <CIcon icon={cilHappy} height={35} className="text-success"/>
-                    </Booped>
-                  </Space>
+    <LoginPageWrapper>
+      <Card>
+        <Space className="mb-3">
+          <h3 className="text-success">새로운 가드너님, 반갑습니다! <span className={Style.greeting}>🤚</span></h3>
+        </Space>
 
-                  <InputFeedback
-                    label={<CIcon icon={cilUser}/>}
-                    placeholder="아이디"
-                    name="username"
-                    required
-                    valid={idRegex.test(register.username) && usernameCheck}
-                    invalid={!idRegex.test(register.username) || !usernameCheck}
-                    feedbackInvalid={!idRegex.test(register.username) ? "영문 소문자 혹은 숫자, 6자 이상 20자 이하여야해요." : "이미 사용중인 아이디예요."}
-                    feedbackValid="사용 가능한 아이디입니다"
-                    onChange={(e) => username(e.target.value)}
-                  />
-                  <InputFeedback
-                    label={<CIcon icon={cilUser}/>}
-                    placeholder="이름"
-                    name="name"
-                    required
-                    valid={register.name !== ''}
-                    invalid={register.name === ''}
-                    feedbackInvalid="이름은 비워둘 수 없어요."
-                    onChange={onChange}
-                  />
-                  <InputFeedback
-                    label="@"
-                    placeholder="이메일"
-                    name="email"
-                    required
-                    valid={emailRegex.test(register.email)}
-                    invalid={!emailRegex.test(register.email)}
-                    feedbackInvalid={register.email == "" ? "" : "이메일 형식을 확인해주세요"}
-                    onChange={onChange}
-                  />
-                  <InputFeedback
-                    label={<CIcon icon={cilLockLocked}/>}
-                    type="password"
-                    placeholder="비밀번호"
-                    name="password"
-                    onChange={onChange}
-                    required
-                    valid={pwRegex.test(register.password)}
-                    invalid={!pwRegex.test(register.password)}
-                    feedbackValid="사용 가능한 비밀번호입니다"
-                    feedbackInvalid="숫자, 특수문자를 포함하여 8자리 이상이어야 해요."/>
+        {/* 회원가입 폼 */}
+        <Form layout="vertical">
+          {
+            registerForm.map(input =>
+              <FormInputText
+                validateStatus={input.validateStatus}
+                help={input.help}
+                type={input.type}
+                label={input.label}
+                name={input.name}
+                onChange={input.onChange}
+                required={true}
+              />)
+          }
 
-                  <InputFeedback
-                    label={<CIcon icon={cilLockLocked}/>}
-                    type="password"
-                    placeholder="비밀번호 확인"
-                    onChange={(e) => setRepeatPw(e.target.value === register.password)}
-                    required
-                    valid={repeatPw}
-                    invalid={!repeatPw}
-                    feedbackInvalid="비밀번호를 확인해주세요"
-                  />
-
-                  <div className="d-grid">
-                    <ValidationSubmitButton
-                      isValid={isValid}
-                      onClickValid={onSubmit}
-                      onClickInvalidMsg={!isValid ? "입력한 정보를 확인해주세요" : ""}
-                      title="가입하기"/>
-                  </div>
-                </CForm>
-              </CCardBody>
-            </CCard>
-          </CCol>
-        </CRow>
-      </CContainer>
-    </div>
+          <div className="d-grid">
+            <ValidationSubmitButton
+              isValid={isValid}
+              onClickValid={onSubmit}
+              onClickInvalidMsg={!isValid ? "입력한 정보를 확인해주세요" : ""}
+              title="가입하기"/>
+          </div>
+        </Form>
+      </Card>
+    </LoginPageWrapper>
   )
 }
 

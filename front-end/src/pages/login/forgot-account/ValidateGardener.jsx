@@ -1,7 +1,5 @@
-import {CCol, CCard, CCardBody} from "@coreui/react";
-import ForgotAccountCard from "../../../components/card/ForgotAccountCard";
 import VerifyAccountContent from "./VerifyAccountContent";
-import React from "react";
+import {Card} from "antd";
 
 /**
  * 아이디/비밀번호 찾기의 첫 단계인 이메일 인증 페이지
@@ -15,27 +13,18 @@ import React from "react";
  * @returns {JSX.Element}
  * @constructor
  */
+
+const style = {minHeight: "40vh", height: "100%", justifyContent: "center", alignItems: "center", display: "flex",}
 const ValidateGardener = ({icon, title, setEmail, setGardenerList, successContent}) => {
   return (
     <>
-      <CCol md={3}>
-        <ForgotAccountCard
-          color="orange"
-          icon={icon}
-          iconSize="6xl"
-          buttonSize="sm"
-          title={title}/>
-      </CCol>
-      <CCard
-        style={{minHeight: "50vh", height: "100%"}}
-        className={`bg-beige`}>
-        <CCardBody className="d-flex align-items-center justify-content-center">
+      <div style={{fontSize: "2rem"}}>{icon} {title}</div>
+      <Card style={style}>
         <VerifyAccountContent
           setEmail={setEmail}
           setGardenerList={setGardenerList}
           successContent={successContent}/>
-        </CCardBody>
-      </CCard>
+      </Card>
     </>
   )
 }

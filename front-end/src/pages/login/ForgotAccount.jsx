@@ -1,11 +1,12 @@
 import LoginPageWrapper from "./LoginPageWrapper";
 import ForgotAccountCard from "../../components/card/ForgotAccountCard";
-import {cilLockLocked, cilUser} from "@coreui/icons";
 import React, {useState} from "react";
 import NotifyUsername from "./forgot-account/NotifyUsername";
 import SelectAccount from "./forgot-account/SelectAccount";
 import ValidateGardener from "./forgot-account/ValidateGardener";
 import {Navigate} from "react-router-dom";
+import {LockOutlined, UserOutlined} from "@ant-design/icons";
+import {Col, Row} from "antd";
 
 /**
  * 아이디를 찾을지, 비밀번호를 찾을지 선택하는 페이지
@@ -36,14 +37,14 @@ const ForgotAccount = () => {
   if (forgot === "username") {
     props = {
       ...props,
-      icon: cilUser,
+      icon: <UserOutlined style={{fontSize: "2rem"}}/>,
       title: "아이디 찾기",
       successContent: <NotifyUsername email={email} gardenerList={gardenerList}/>
     }
   } else if (forgot === "password") {
     props = {
       ...props,
-      icon: cilLockLocked,
+      icon: <LockOutlined style={{fontSize: "2rem"}}/>,
       title: "비밀번호 찾기",
       successContent: <SelectAccount email={email} gardenerList={gardenerList}/>
     }
@@ -56,18 +57,16 @@ const ForgotAccount = () => {
         forgot !== ""
           ? <ValidateGardener {...props}/>
           : (
-            <>
-              <ForgotAccountCard
-                onClick={() => setForgot("username")}
-                color="orange"
-                icon={cilUser}
-                title="아이디를 잊어버렸어요"/>
-              <ForgotAccountCard
-                onClick={() => setForgot("password")}
-                color="beige"
-                icon={cilLockLocked}
-                title="비밀번호를 잊어버렸어요"/>
-            </>
+            <Row style={{justifyContent: "center"}}>
+                <ForgotAccountCard
+                  onClick={() => setForgot("username")}
+                  icon={<UserOutlined style={{fontSize: "7rem"}}/>}
+                  title="아이디를 잊어버렸어요"/>
+                <ForgotAccountCard
+                  onClick={() => setForgot("password")}
+                  icon={<LockOutlined style={{fontSize: "7rem"}}/>}
+                  title="비밀번호를 잊어버렸어요"/>
+            </Row>
           )
       }
     </LoginPageWrapper>

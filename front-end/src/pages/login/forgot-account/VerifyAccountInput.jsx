@@ -6,7 +6,7 @@ const VerifyAccountInput = ({label, size, handleInput, defaultValue, onClick, bu
 
   return (
     <div className="mb-2">
-      <span className="text-garden" style={{fontSize: "0.9em"}}>{label}</span>
+      <span className="text-garden" style={{fontSize: "0.9rem"}}>{label}</span>
       <div>
         <Space.Compact>
           <Input
@@ -14,7 +14,7 @@ const VerifyAccountInput = ({label, size, handleInput, defaultValue, onClick, bu
             onChange={handleInput}
             defaultValue={defaultValue}
           />
-          <Button className="bg-orange text-white" onClick={onClick}>{buttonTitle}</Button>
+          <Button type="primary" onClick={onClick}>{buttonTitle}</Button>
         </Space.Compact>
       </div>
       <InputFeedbackSpan feedbackMsg={feedbackMsg}/>
