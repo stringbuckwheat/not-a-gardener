@@ -86,6 +86,10 @@ public class Plant {
         this.postponeDate = LocalDate.now();
     }
 
+    public void initEarlyWateringPeriod(int period) {
+        this.earlyWateringPeriod = period;
+    }
+
     public void initConditionDateAndPostponeDate() {
         this.conditionDate = null;
         this.postponeDate = null;

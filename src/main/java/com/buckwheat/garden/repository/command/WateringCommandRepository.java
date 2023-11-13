@@ -3,11 +3,12 @@ package com.buckwheat.garden.repository.command;
 import com.buckwheat.garden.data.dto.watering.AfterWatering;
 import com.buckwheat.garden.data.dto.watering.WateringMessage;
 import com.buckwheat.garden.data.dto.watering.WateringRequest;
+import com.buckwheat.garden.data.entity.Plant;
 
 public interface WateringCommandRepository {
     AfterWatering add(WateringRequest wateringRequest);
 
-    WateringMessage updateWateringPeriod(Long plantId);
+    WateringMessage updateWateringPeriod(Plant plant);
 
     AfterWatering update(WateringRequest wateringRequest, Long gardenerId);
 

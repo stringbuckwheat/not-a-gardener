@@ -52,7 +52,6 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public PlaceCard add(Long gardenerId, PlaceDto placeRequest) {
-        // FK인 Gardener와 createDate로 쓸 LocalDateTime.now()를 포함한 엔티티를 저장
         Place place = placeCommandRepository.save(gardenerId, placeRequest);
         return PlaceCard.from(place);
     }

@@ -15,5 +15,5 @@ public class WateringMessage {
     // 3    두 번째 물주기 기록
 
     private int afterWateringCode;
-    private int averageWateringDate; // 며칠만에 물 줬는지
+    private int recentWateringPeriod;
 }

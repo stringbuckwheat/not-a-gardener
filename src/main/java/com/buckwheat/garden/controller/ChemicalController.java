@@ -37,7 +37,7 @@ public class ChemicalController {
     }
 
     @PostMapping("")
-    public ChemicalDto postChemical(@AuthenticationPrincipal UserPrincipal user, @RequestBody ChemicalDto chemicalRequest) {
+    public ChemicalDto add(@AuthenticationPrincipal UserPrincipal user, @RequestBody ChemicalDto chemicalRequest) {
         return chemicalService.add(user.getId(), chemicalRequest);
     }
 

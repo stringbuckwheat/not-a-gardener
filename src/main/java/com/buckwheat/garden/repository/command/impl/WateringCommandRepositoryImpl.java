@@ -1,6 +1,10 @@
 package com.buckwheat.garden.repository.command.impl;
 
+import com.buckwheat.garden.PlantUtils;
 import com.buckwheat.garden.code.AfterWateringCode;
+import com.buckwheat.garden.dao.ChemicalDao;
+import com.buckwheat.garden.dao.PlantDao;
+import com.buckwheat.garden.dao.WateringDao;
 import com.buckwheat.garden.data.dto.watering.AfterWatering;
 import com.buckwheat.garden.data.dto.watering.WateringMessage;
 import com.buckwheat.garden.data.dto.watering.WateringRequest;
@@ -8,17 +12,12 @@ import com.buckwheat.garden.data.entity.Chemical;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Watering;
 import com.buckwheat.garden.error.exception.AlreadyWateredException;
-import com.buckwheat.garden.dao.ChemicalDao;
-import com.buckwheat.garden.dao.PlantDao;
-import com.buckwheat.garden.dao.WateringDao;
 import com.buckwheat.garden.repository.command.WateringCommandRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -48,51 +47,29 @@ public class WateringCommandRepositoryImpl implements WateringCommandRepository 
         plant.getWaterings().add(wateringRequest.toEntityWithPlantAndChemical(plant, chemical));
         plantDao.save(plant);
 
-        // 관수 주기 업데이트
-        WateringMessage wateringMessage = updateWateringPeriod(plant.getPlantId());
+        // 관수 주기 계산 및 업데이트
+        WateringMessage afterWatering = updateWateringPeriod(plant);
 
         // 저장
-        return new AfterWatering(plant, wateringMessage);
+        return new AfterWatering(plant, afterWatering);
     }
 
     @Override
-    public WateringMessage updateWateringPeriod(Long plantId) {
-        Plant plant = plantDao.findByPlantId(plantId).orElseThrow(NoSuchElementException::new);
-        List<Watering> waterings = wateringDao.findLatestFourWateringDate(plantId);
+    public WateringMessage updateWateringPeriod(Plant plant) {
+        List<Watering> waterings = wateringDao.findLatestFourWateringDate(plant.getPlantId());
+        WateringMessage afterWatering = PlantUtils.calculateWateringPeriod(waterings, plant.getRecentWateringPeriod());
+        log.debug("{}의 이전 관수주기: {}, 현재 관수주기: {}", plant.getName(), plant.getRecentWateringPeriod(), afterWatering.getRecentWateringPeriod());
 
-        // 첫번째 물주기면
-        if (waterings.size() == 0) {
-            return null;
-        } else if (waterings.size() == 1) {
-            return new WateringMessage(AfterWateringCode.FIRST_WATERING.getCode(), plant.getRecentWateringPeriod());
-        } else if (waterings.size() == 2) {
-            return new WateringMessage(AfterWateringCode.SECOND_WATERING.getCode(), plant.getRecentWateringPeriod());
+        // 첫 recent watering period 기록
+        if(afterWatering.getAfterWateringCode() == AfterWateringCode.INIT_WATERING_PERIOD.getCode()){
+            // 초기 관수 주기 저장
+            plant.updateRecentWateringPeriod(afterWatering.getRecentWateringPeriod());
+            plant.initEarlyWateringPeriod(afterWatering.getRecentWateringPeriod());
+        } else if(afterWatering.getRecentWateringPeriod() != plant.getRecentWateringPeriod()){
+            plant.updateRecentWateringPeriod(afterWatering.getRecentWateringPeriod());
         }
 
-        LocalDateTime latestWateringDate = waterings.get(0).getWateringDate().atStartOfDay();
-        LocalDateTime prevWateringDate = waterings.get(1).getWateringDate().atStartOfDay();
-
-        int period = (int) Duration.between(prevWateringDate, latestWateringDate).toDays();
-
-        if (waterings.size() == 3) {
-            // 첫 물주기 측정 완료
-            plant.updateRecentWateringPeriod(period);
-            plantDao.save(plant);
-            return new WateringMessage(AfterWateringCode.INIT_WATERING_PERIOD.getCode(), period);
-        }
-
-        // 물주기 짧아짐: -1
-        // 물주기 똑같음: 0
-        // 물주기 길어짐: 1
-        int afterWateringCode = Integer.compare(period, plant.getRecentWateringPeriod());
-
-        // 물주기 간격 변화 시 저장
-        if (period != plant.getRecentWateringPeriod()) {
-            plant.updateRecentWateringPeriod(period);
-            plantDao.save(plant);
-        }
-
-        return new WateringMessage(afterWateringCode, period);
+        return afterWatering;
     }
 
     @Override
@@ -116,7 +93,7 @@ public class WateringCommandRepositoryImpl implements WateringCommandRepository 
         wateringDao.save(watering.update(wateringRequest.getWateringDate(), plant, chemical));
 
         // recent watering period 수정
-        WateringMessage wateringMessage = updateWateringPeriod(plant.getPlantId());
+        WateringMessage wateringMessage = updateWateringPeriod(plant);
 
         return new AfterWatering(plant, wateringMessage);
     }
@@ -126,7 +103,7 @@ public class WateringCommandRepositoryImpl implements WateringCommandRepository 
     public WateringMessage deleteById(Long wateringId, Long plantId, Long gardenerId) {
         wateringDao.deleteById(wateringId);
         Plant plant = plantDao.findByPlantIdAndGardener_GardenerId(plantId, gardenerId).orElseThrow(NoSuchElementException::new);
-        return updateWateringPeriod(plant.getPlantId());
+        return updateWateringPeriod(plant);
     }
 
     @Override
@@ -135,7 +112,8 @@ public class WateringCommandRepositoryImpl implements WateringCommandRepository 
         wateringDao.deleteAllByPlant_PlantId(plantId);
 
         Plant plant = plantDao.findById(plantId).orElseThrow(NoSuchElementException::new);
-        // Recent Watering Period 초기화
+        // 물주기 Period 초기화
         plant.updateRecentWateringPeriod(0);
+        plant.initEarlyWateringPeriod(0);
     }
 }
