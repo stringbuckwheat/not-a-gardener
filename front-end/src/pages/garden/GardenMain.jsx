@@ -1,6 +1,6 @@
 import GardenTodoList from "./todolist/GardenTodoList";
 import React, {useEffect} from "react";
-import WaitingForWateringList from "./waitinglist/WaitingForWateringList";
+import WaitingForWateringList from "./WaitingForWateringList";
 import RoutineList from "./RoutineList";
 import {notification, Row, Space} from "antd";
 import Booped from "../../components/animation/Booped";

@@ -1,4 +1,4 @@
-import ClickableTag from "../../../components/tag/basic/ClickableTag";
+import ClickableTag from "../../components/tag/basic/ClickableTag";
 import {Col, Tooltip} from "antd";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";

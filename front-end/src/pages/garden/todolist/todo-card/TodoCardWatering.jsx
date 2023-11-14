@@ -1,6 +1,4 @@
 import {Button, Select, Space} from "antd";
-import CIcon from "@coreui/icons-react";
-import {cilDrop} from "@coreui/icons";
 import React, {useState} from "react";
 import postData from "../../../../api/backend-api/common/postData";
 import getWateringNotificationMsg from "../../../../utils/function/getWateringNotificationMsg";
@@ -45,8 +43,8 @@ const TodoCardWatering = ({plantId, openNotification, setSelected, flipCard}) =>
   return (
     <div className="d-flex justify-content-between">
       <Space className="mb-1">
-        <CIcon icon={cilDrop} className="text-info"/>
-        <Select options={chemicals} defaultValue={0} style={{width: 120}}
+        <span>💧</span>
+        <Select options={chemicals} defaultValue={0} style={{width: 100}}
                 onChange={(value) => setChemicalId(value)}/>
         <span>을 줬어요</span>
       </Space>

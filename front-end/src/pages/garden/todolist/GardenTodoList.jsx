@@ -30,12 +30,11 @@ const GardenTodoList = ({openNotification}) => {
         <GButton color="teal" className="float-end">전체 식물 보기</GButton>
       </Link>
       <div className="mt-2">
-        <Row>
           {
             trailSprings.map((spring, index) => (
               <Col md={6} sm={8} xs={24} className="mb-5"
                    key={`${todoList[index].gardenDetail.wateringCode}-${index}`}>
-                <animated.div style={{...spring}} className="parent card-container-item">
+                <animated.div style={{...spring}}>
                   <ToDoCard
                     index={index}
                     garden={todoList[index]}
@@ -44,7 +43,6 @@ const GardenTodoList = ({openNotification}) => {
               </Col>
             ))
           }
-        </Row>
       </div>
     </>
   )

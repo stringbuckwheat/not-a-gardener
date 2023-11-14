@@ -24,12 +24,12 @@ const RoutineList = () => {
     <Col md={12} xs={24}>
       <Link to="/schedule"
             className={`no-text-decoration text-${isTitleHovered ? "orange" : "black"}`}>
-        <div
+        <span
           className={`small fw-bold`}
           onMouseEnter={() => setIsTitleHovered(!isTitleHovered)}
           onMouseLeave={() => setIsTitleHovered(!isTitleHovered)}>
           {localStorage.getItem("name")}님의 루틴
-        </div>
+        </span>
       </Link>
       <RoutineStateUpdateModal
         visible={isModalVisible}

@@ -16,14 +16,6 @@ const Schedule = () => {
   const onMountSchedule = async () => {
     // 루틴
     const routineList = await getData("/routine");
-
-    if (routineList.todoList) {
-      routineList.todoList.sort((a, b) => {
-        if (a.isCompleted > b.isCompleted) return 1;
-        if (a.isCompleted < b.isCompleted) return -1;
-      });
-    }
-
     setRoutines(routineList);
 
     // 목표

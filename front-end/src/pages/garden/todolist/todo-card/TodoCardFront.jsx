@@ -1,18 +1,18 @@
-import {CCol, CRow} from "@coreui/react";
 import WateringCodeIcon from "../../../../components/etc/WateringCodeIcon";
 import TodoTag from "../TodoTag";
 import getWateringMsg from "../../../../utils/function/getWateringMsg";
 import React from "react";
+import {Col, Row} from "antd";
+import Style from './TodoCard.moduls.scss'
 
 const TodoCardFront = ({garden, color, flipCard}) => {
   return (
-    <div onClick={() => flipCard(garden.plant.id)}>
-    <CRow className="d-flex align-items-center" >
-      <CCol xs={2} className="text-center">
+    <Row onClick={() => flipCard(garden.plant.id)}>
+    <Row className="d-flex align-items-center" >
+      <Col xs={5} className="text-center mr-1">
         <WateringCodeIcon wateringCode={garden.gardenDetail.wateringCode}/>
-      </CCol>
-      <CCol xs={1}></CCol>
-      <CCol xs={8}>
+      </Col>
+      <Col xs={16}>
         <div>
           <div className={`fs-6 fw-semibold text-black`}>{garden.plant.name}</div>
           <div className="small text-black new-line">
@@ -23,9 +23,9 @@ const TodoCardFront = ({garden, color, flipCard}) => {
             {getWateringMsg(garden.gardenDetail)}
           </p>
         </div>
-      </CCol>
-    </CRow>
-    </div>
+      </Col>
+    </Row>
+    </Row>
   )
 }
 

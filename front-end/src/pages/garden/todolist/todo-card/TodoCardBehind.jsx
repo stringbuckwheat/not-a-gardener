@@ -9,10 +9,10 @@ const TodoCardBehind = ({openNotification, index, flipCard, garden, color}) => {
   // 무슨 버튼을 눌렀는지
   const [selected, setSelected] = useState("");
 
-  return (<>
-    <Row>
-      <div className={"width-full"} onClick={() => flipCard(0)}>
-        <div className={"d-flex justify-content-between"}>
+  return (
+    <div>
+      <div onClick={() => flipCard(0)} style={{margin: "0.7rem"}}>
+        <div className={"d-flex justify-content-between"} >
           <span className={`fs-6 fw-semibold text-black`}>{garden.plant.name}</span>
           <LeftOutlined/>
         </div>
@@ -21,26 +21,25 @@ const TodoCardBehind = ({openNotification, index, flipCard, garden, color}) => {
           {getWateringMsg(garden.gardenDetail)}
         </p>
       </div>
-    </Row>
-    {
-      selected == "" ?
-        <TodoCardButton
-          plantId={garden.plant.id}
-          setSelected={setSelected}
-          openNotification={openNotification}
-          index={index}
-        />
-        :
-        selected == "watered" ?
-          <TodoCardWatering
-            plantId={garden.plant.id}
-            setSelected={setSelected}
-            openNotification={openNotification}
-            flipCard={flipCard}
-          />
-          : <></>
-    }
-  </>)
+        {
+          selected == "" ?
+            <TodoCardButton
+              plantId={garden.plant.id}
+              setSelected={setSelected}
+              openNotification={openNotification}
+              index={index}
+            />
+            :
+            selected == "watered" ?
+              <TodoCardWatering
+                plantId={garden.plant.id}
+                setSelected={setSelected}
+                openNotification={openNotification}
+                flipCard={flipCard}
+              />
+              : <></>
+        }
+    </div>)
 
 }
 

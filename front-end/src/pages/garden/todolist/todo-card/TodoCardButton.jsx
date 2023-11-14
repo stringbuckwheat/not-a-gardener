@@ -1,8 +1,7 @@
 import {useTrail, animated} from "@react-spring/web";
-import {Row} from "antd";
+import {Col, Row} from "antd";
 import React, {useState} from "react";
 import {CaretRightOutlined, StepBackwardOutlined, StepForwardOutlined} from "@ant-design/icons";
-import {CCol,} from "@coreui/react";
 import {useDispatch} from "react-redux";
 import updateData from "../../../../api/backend-api/common/updateData";
 import getWateringNotificationMsg from "../../../../utils/function/getWateringNotificationMsg";
@@ -25,12 +24,7 @@ const TodoCardButton = ({
                           openNotification,
                           index,
                         }) => {
-
-  const [hovered, setHovered] = useState(-1);
   const dispatch = useDispatch();
-
-  const mouseEnter = (index) => setHovered(() => index);
-  const mouseLeave = () => setHovered(-1);
 
   const onClickNotDry = async () => {
     // 안 말랐어요
@@ -61,23 +55,20 @@ const TodoCardButton = ({
     dispatch({type: 'updateTodoList', payload: {index, res}});
   }
 
-  // #4169E1 라벤더
-  const style = {fontSize: "2vw"}
-
   const buttons = [
     {
       title: "안 말랐어요",
-      icon: <StepBackwardOutlined style={style}/>,
+      icon: <StepBackwardOutlined className={"font-2rem"}/>,
       onClick: onClickNotDry
     },
     {
       title: "물을 줬어요!",
-      icon: <CaretRightOutlined style={style}/>,
+      icon: <CaretRightOutlined className={"font-2rem"}/>,
       onClick: () => setSelected('watered')
     },
     {
       title: "미룰래요",
-      icon: <StepForwardOutlined style={style}/>,
+      icon: <StepForwardOutlined className={"font-2rem"}/>,
       onClick: onClickPostpone
     }
   ]
@@ -88,29 +79,28 @@ const TodoCardButton = ({
   });
 
   return (
-    <Row className="mb-1">
+    <Row className={"mt"}>
       {trailSprings.map((spring, index) => (
-        <CCol
-          xs={4}
-          key={index}
+        <Col
+          xs={8}
           className={"text-center"}
-          onClick={buttons[index].onClick}
-          onMouseEnter={() => mouseEnter(index)}
-          onMouseLeave={mouseLeave}>
+          key={index}
+          onClick={buttons[index].onClick}>
           <animated.button
-            className={`mb-1 animated-btn ${hovered == index ? "text-black" : "text-dark"}`}
+            className={`mb-1 animated-btn water-btn`}
             style={{
-              ...spring
+              ...spring,
             }}
           >
-            {buttons[index].icon}
-            <div
-              style={{fontSize: "0.8em"}}
-              className={`${hovered == index ? "text-black bold" : "text-dark"}`}>
-              {buttons[index].title}
+            <div className={"water-btn-m"}>
+              {buttons[index].icon}
+              <p
+                className={`water-btn-text`}>
+                {buttons[index].title}
+              </p>
             </div>
           </animated.button>
-        </CCol>
+        </Col>
       ))}
     </Row>
   );

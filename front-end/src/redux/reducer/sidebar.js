@@ -1,9 +1,13 @@
-const sidebar = (state = {}, { type, name, payload, ...rest }) => {
+const initialState = {
+  sidebarCollapsed: false,
+  name: ""
+}
+const sidebar = (state = initialState, {type, payload}) => {
   switch (type) {
     case 'setSidebar':
-      return {...state, ...rest};
+      return {...state, sidebarCollapsed: payload};
     case 'setName':
-      return {...state, name};
+      return {...state, name: payload};
     default:
       return state
   }

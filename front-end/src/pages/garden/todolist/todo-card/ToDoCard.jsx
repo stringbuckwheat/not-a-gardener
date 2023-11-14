@@ -1,8 +1,9 @@
 import React, {useState} from "react";
-import {CCard, CCardBody,} from "@coreui/react";
 import wateringCodeDesign from "../../../../utils/dataArray/wateringCodeDesign";
 import TodoCardFront from "./TodoCardFront";
 import TodoCardBehind from "./TodoCardBehind";
+import {Card} from "antd";
+import Style from "./TodoCard.moduls.scss"
 
 /**
  * 메인페이지 할 일 카드
@@ -34,19 +35,17 @@ const ToDoCardInfo = ({
   const props = {garden, color, flipCard};
 
   return (
-    <CCard>
-      <CCardBody>
-        {
-          clickedPlant !== 0 ?
-            <TodoCardBehind
-              {...props}
-              openNotification={openNotification}
-              index={index}
-            />
-            : <TodoCardFront {...props} />
-        }
-      </CCardBody>
-    </CCard>
+    <Card className={Style.card} style={{borderRadius: "20px", borderWidth: "0.7px", border: "solid lightgray"}}>
+      {
+        clickedPlant !== 0 ?
+          <TodoCardBehind
+            {...props}
+            openNotification={openNotification}
+            index={index}
+          />
+          : <TodoCardFront {...props} />
+      }
+    </Card>
   )
 }
 
