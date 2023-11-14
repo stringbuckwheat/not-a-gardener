@@ -1,6 +1,6 @@
 import {Tag, Space} from "antd";
 
-const GardenTag = (props) => {
+const TodoTag = (props) => {
   const plant = props.plant.plant;
   const gardenDetail = props.plant.gardenDetail;
 
@@ -45,4 +45,4 @@ const GardenTag = (props) => {
   )
 }
 
-export default GardenTag;
+export default TodoTag;

@@ -3,12 +3,12 @@ import {Row} from "antd";
 import React, {useState} from "react";
 import {CaretRightOutlined, StepBackwardOutlined, StepForwardOutlined} from "@ant-design/icons";
 import {CCol,} from "@coreui/react";
-import updateData from "../../../api/backend-api/common/updateData";
-import getWateringNotificationMsg from "../../../utils/function/getWateringNotificationMsg";
 import {useDispatch} from "react-redux";
+import updateData from "../../../../api/backend-api/common/updateData";
+import getWateringNotificationMsg from "../../../../utils/function/getWateringNotificationMsg";
 
 /**
- * 메인 페이지 할일 카드에 마우스를 올릴 시 나타날 버튼 세가지
+ * 메인 페이지 할일 카드에 클릭시 시 나타날 버튼 세가지
  * @param setSelected // 어떤 버튼을 선택했는지
  * @param y
  * @param plantId
@@ -19,14 +19,13 @@ import {useDispatch} from "react-redux";
  * @returns {JSX.Element}
  * @constructor
  */
-const GardenCardAnimatedButton = ({
-                                    setSelected,
-                                    y = 5,
-                                    plantId,
-                                    openNotification,
-                                    index,
-                                    wateringCode,
-                                  }) => {
+const TodoCardButton = ({
+                          setSelected,
+                          plantId,
+                          openNotification,
+                          index,
+                        }) => {
+
   const [hovered, setHovered] = useState(-1);
   const dispatch = useDispatch();
 
@@ -58,11 +57,6 @@ const GardenCardAnimatedButton = ({
   }
 
   const onClickPostpone = async () => {
-    // 오늘 이미 미뤘는데 오늘 또 미루겠다고 하면 동작X
-    if(wateringCode == 6){
-      return;
-    }
-
     const res = await updateData(`/garden/${plantId}/watering/postpone`, null);
     dispatch({type: 'updateTodoList', payload: {index, res}});
   }
@@ -89,8 +83,8 @@ const GardenCardAnimatedButton = ({
   ]
 
   const trailSprings = useTrail(buttons.length, {
-    from: {transform: `translateY(${y * -1}px)`},
-    to: {transform: `translateY(${y}px)`}
+    from: {transform: `translateY(-5px)`},
+    to: {transform: `translateY(5px)`}
   });
 
   return (
@@ -122,4 +116,4 @@ const GardenCardAnimatedButton = ({
   );
 }
 
-export default GardenCardAnimatedButton
+export default TodoCardButton

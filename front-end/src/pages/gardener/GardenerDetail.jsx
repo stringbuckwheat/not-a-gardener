@@ -40,7 +40,7 @@ const GardenerDetail = ({gardener, setGardener}) => {
 
     // header 업데이트
     localStorage.setItem("name", updatedGardener.name);
-    dispatch({type: 'setName', name: updatedGardener.name});
+    dispatch({type: 'setName', payload: updatedGardener.name});
 
     setIsDisabled(true);
   }

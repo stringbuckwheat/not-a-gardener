@@ -6,11 +6,14 @@ import React from "react";
 import logOut from "../../utils/function/logout";
 import {useNavigate} from "react-router-dom";
 import {Header} from "antd/es/layout/layout";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
-const GardenHeader = ({collapsed, setCollapsed}) => {
+const GardenHeader = () => {
   const navigate = useNavigate();
   const name = useSelector(state => state.sidebar.name);
+  const collapsed = useSelector(state => state.sidebar.sidebarCollapsed);
+
+  const dispatch = useDispatch();
 
   const items = [
     {
@@ -27,7 +30,7 @@ const GardenHeader = ({collapsed, setCollapsed}) => {
 
   const iconProps = {
     style: { fontSize: "1.2rem", color: "grey"},
-    onClick: () => setCollapsed(!collapsed)
+    onClick: () => dispatch({type: 'setSidebar', payload: !collapsed})
   }
 
   return (

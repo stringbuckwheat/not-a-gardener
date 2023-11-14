@@ -1,12 +1,11 @@
-import GardenCard from "./GardenCard";
 import React from "react";
 import {Col, Row} from "antd";
 import {useTrail, animated} from "@react-spring/web";
-import {CCol} from "@coreui/react";
 import {useSelector} from "react-redux";
 import Empty from "../../../components/empty/Empty";
 import {Link} from "react-router-dom";
 import GButton from "../../../components/button/GButton";
+import ToDoCard from "./todo-card/ToDoCard";
 
 /**
  *
@@ -15,9 +14,7 @@ import GButton from "../../../components/button/GButton";
  * @returns {JSX.Element}
  * @constructor
  */
-const GardenTodoList = ({
-                          openNotification,
-                        }) => {
+const GardenTodoList = ({openNotification}) => {
   const todoList = useSelector(state => state.gardens.todoList);
 
   const animation = {
@@ -37,9 +34,9 @@ const GardenTodoList = ({
           {
             trailSprings.map((spring, index) => (
               <Col md={6} sm={8} xs={24} className="mb-5"
-                    key={`${todoList[index].gardenDetail.wateringCode}-${index}`}>
+                   key={`${todoList[index].gardenDetail.wateringCode}-${index}`}>
                 <animated.div style={{...spring}} className="parent card-container-item">
-                  <GardenCard
+                  <ToDoCard
                     index={index}
                     garden={todoList[index]}
                     openNotification={openNotification}/>

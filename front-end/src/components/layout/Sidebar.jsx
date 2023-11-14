@@ -2,7 +2,8 @@ import {Menu} from "antd";
 import Sider from "antd/es/layout/Sider";
 import {ReactComponent as Logo} from "../../assets/images/logo.svg";
 import React, {useState} from "react";
-import {Link, Navigate, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
 
 const items = [
   {
@@ -35,7 +36,13 @@ const items = [
 ]
 
 
-const Sidebar = ({collapsed, setCollapsed}) => {
+const Sidebar = () => {
+  // 사이드바 펼침, 닫기
+  const collapsed = useSelector(state => state.sidebar.sidebarCollapsed);
+  console.log("collapsed", collapsed);
+
+  const dispatch = useDispatch();
+
   const [current, setCurrent] = useState("/");
   const navigate = useNavigate();
 
@@ -48,12 +55,11 @@ const Sidebar = ({collapsed, setCollapsed}) => {
     <Sider
       breakpoint="lg"
       collapsedWidth="0"
-      onCollapse={(collapsed, type) => setCollapsed(collapsed)}
+      onCollapse={(collapsed, type) => dispatch({type: 'setSidebar', payload: !collapsed})}
       collapsed={collapsed}
       style={{minHeight: "100vh", minWidth: "30vw"}}
     >
       <div style={{justifyContent: "center", display: "flex"}}>
-        {/* todo header 높이에 맞추기*/}
         <Logo width="13vw" height="4vw" fill={"green"} onClick={() => navigate("/")} style={{padding: "0.2rem",}}/>
       </div>
       <Menu

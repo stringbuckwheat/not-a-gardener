@@ -1,22 +1,13 @@
-import {Button, ConfigProvider, Dropdown, Layout, Menu, Space, Tag} from 'antd';
+import {ConfigProvider, Layout,} from 'antd';
 import React, {Suspense, useState} from "react";
-import {ReactComponent as Logo} from "../../assets/images/logo.svg";
-
-const {Footer, Content} = Layout;
-
-import {
-  DownOutlined,
-  MenuFoldOutlined,
-} from '@ant-design/icons';
 import Sidebar from "./Sidebar";
 import Loading from "../data/Loading";
-import {Navigate, Route, Routes, useNavigate} from "react-router-dom";
+import {Navigate, Route, Routes,} from "react-router-dom";
 import routes from "../../utils/routes";
 import {useDispatch} from "react-redux";
-import {CAvatar} from "@coreui/react";
-import sprout from "../../assets/images/sprout.png";
-import logOut from "../../utils/function/logout";
 import GardenHeader from "./GardenHeader";
+const {Footer, Content} = Layout;
+
 
 const GardenLayout = () => {
   if (!localStorage.getItem("accessToken")) {
@@ -24,9 +15,7 @@ const GardenLayout = () => {
   }
 
   const dispatch = useDispatch();
-  dispatch({type: 'setName', name: localStorage.getItem("name")})
-
-  const [collapsed, setCollapsed] = useState(false);
+  dispatch({type: 'setName', payload: localStorage.getItem("name")})
 
   return (
     <ConfigProvider
@@ -40,10 +29,10 @@ const GardenLayout = () => {
       }}
     >
       <Layout>
-        <Sidebar collapsed={collapsed} setCollapsed={setCollapsed}/>
+        <Sidebar />
 
         <Layout>
-          <GardenHeader collapsed={collapsed} setCollapsed={setCollapsed}/>
+          <GardenHeader />
           <Content
             style={{
               padding: '1rem 2rem',
@@ -72,8 +61,6 @@ const GardenLayout = () => {
             <span className="ms-1 small">not-a-gardener by memil</span>
           </Footer>
         </Layout>
-
-
       </Layout>
     </ConfigProvider>
 
