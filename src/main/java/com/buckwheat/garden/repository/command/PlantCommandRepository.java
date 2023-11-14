@@ -6,6 +6,7 @@ import com.buckwheat.garden.data.entity.Place;
 import com.buckwheat.garden.data.entity.Plant;
 
 public interface PlantCommandRepository {
+    Plant findByPlantId(Long plantId);
     Plant save(Long gardenerId, PlantRequest plantRequest);
 
     Plant update(PlantRequest plantRequest, Long gardenerId);

@@ -35,10 +35,12 @@ const GardenTag = (props) => {
 
   return (
     <div className="mt-2">
-      <Space size={[0, 5]} wrap>
-        <Tag>{getAverageWateringPeriodMsg()}</Tag>
-        <Tag>{getLatestWateringDateMsg()}</Tag>
-      </Space>
+        <div>
+          <Tag>{getAverageWateringPeriodMsg()}</Tag>
+        </div>
+        <div style={{marginTop: "0.4rem"}}>
+          <Tag>{getLatestWateringDateMsg()}</Tag>
+        </div>
     </div>
   )
 }

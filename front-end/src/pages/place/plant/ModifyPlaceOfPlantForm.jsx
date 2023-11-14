@@ -2,9 +2,7 @@ import {Form, Select, Space, Tooltip} from "antd";
 import {CButton} from "@coreui/react";
 import {useEffect, useState} from "react";
 import getData from "../../../api/backend-api/common/getData";
-import {useNavigate} from "react-router-dom";
 import updateData from "../../../api/backend-api/common/updateData";
-import {QuestionCircleTwoTone} from "@ant-design/icons";
 import getPlantListForPlacePlantTable from "../../../utils/function/getPlantListForPlacePlantTable";
 
 /**
@@ -21,24 +19,22 @@ const ModifyPlaceOfPlantForm = ({placeId, setMoveFormVisible, setPlants}) => {
   const [options, setOptions] = useState([{}])
   const [selectedPlantList, setSelectedPlantList] = useState([]);
 
-  const navigate = useNavigate();
-
   const onMountModifyPlaceOfPlantForm = async () => {
     const plantList = await getData("/plant");
-    const options = [];
+    const plantOptions = [];
 
     for (let plant of plantList) {
       if (plant.placeId == placeId) {
         continue;
       }
 
-      options.push({
+      plantOptions.push({
         label: `${plant.name} (${plant.placeName})`,
         value: plant.id,
       })
     }
 
-    setOptions(options);
+    setOptions(plantOptions);
   }
 
   useEffect(() => {

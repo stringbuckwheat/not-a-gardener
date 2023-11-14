@@ -64,4 +64,9 @@ public class PlantCommandRepositoryImpl implements PlantCommandRepository {
     public void deleteBy(Long id, Long gardenerId) {
         plantDao.deleteById(id);
     }
+
+    @Override
+    public Plant findByPlantId(Long plantId) {
+        return plantDao.findByPlantId(plantId).orElseThrow(NoSuchElementException::new);
+    }
 }

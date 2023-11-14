@@ -1,9 +1,8 @@
 import {Link, useNavigate} from "react-router-dom";
 import ClickableTag from "../../components/tag/basic/ClickableTag";
-import {CCol} from "@coreui/react";
 import React, {useState} from "react";
 import RoutineStateUpdateModal from "../../components/modal/RoutineStateUpdateModal";
-import {Tag} from "antd";
+import {Col, Tag} from "antd";
 import {useSelector} from "react-redux";
 
 const RoutineList = () => {
@@ -22,7 +21,7 @@ const RoutineList = () => {
   const navigate = useNavigate();
 
   return (
-    <CCol md={6} xs={12}>
+    <Col md={12} xs={24}>
       <Link to="/schedule"
             className={`no-text-decoration text-${isTitleHovered ? "orange" : "black"}`}>
         <div
@@ -62,7 +61,7 @@ const RoutineList = () => {
             })
         }
       </div>
-    </CCol>
+    </Col>
   )
 }
 

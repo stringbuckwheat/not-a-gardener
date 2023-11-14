@@ -1,6 +1,6 @@
 import GardenCard from "./GardenCard";
 import React from "react";
-import {Row} from "antd";
+import {Col, Row} from "antd";
 import {useTrail, animated} from "@react-spring/web";
 import {CCol} from "@coreui/react";
 import {useSelector} from "react-redux";
@@ -36,7 +36,7 @@ const GardenTodoList = ({
         <Row>
           {
             trailSprings.map((spring, index) => (
-              <CCol md={3} sm={4} xs={12} className="mb-5"
+              <Col md={6} sm={8} xs={24} className="mb-5"
                     key={`${todoList[index].gardenDetail.wateringCode}-${index}`}>
                 <animated.div style={{...spring}} className="parent card-container-item">
                   <GardenCard
@@ -44,7 +44,7 @@ const GardenTodoList = ({
                     garden={todoList[index]}
                     openNotification={openNotification}/>
                 </animated.div>
-              </CCol>
+              </Col>
             ))
           }
         </Row>

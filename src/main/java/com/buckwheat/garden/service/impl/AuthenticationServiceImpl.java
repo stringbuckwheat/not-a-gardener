@@ -7,8 +7,9 @@ import com.buckwheat.garden.data.token.ActiveGardener;
 import com.buckwheat.garden.data.token.RefreshToken;
 import com.buckwheat.garden.data.token.UserPrincipal;
 import com.buckwheat.garden.error.code.ExceptionCode;
-import com.buckwheat.garden.dao.GardenerDao;
+import com.buckwheat.garden.repository.command.GardenerCommandRepository;
 import com.buckwheat.garden.repository.command.RedisRepository;
+import com.buckwheat.garden.repository.query.GardenerQueryRepository;
 import com.buckwheat.garden.service.AuthenticationService;
 import com.buckwheat.garden.service.TokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -31,22 +32,23 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
-    private final GardenerDao gardenerDao;
     private final TokenProvider tokenProvider;
     private final BCryptPasswordEncoder encoder;
     private final RedisRepository redisRepository;
+    private final GardenerQueryRepository gardenerQueryRepository;
+    private final GardenerCommandRepository gardenerCommandRepository;
 
     @Override
     @Transactional(readOnly = true)
     public String hasSameUsername(String username) {
-        Optional<Gardener> gardener = gardenerDao.findByProviderIsNullAndUsername(username);
+        Optional<Gardener> gardener = gardenerQueryRepository.findByProviderIsNullAndUsername(username);
         return gardener.isEmpty() ? null : gardener.get().getUsername();
     }
 
     @Override
     @Transactional(readOnly = true)
     public Info getGardenerInfo(Long id) {
-        Gardener gardener = gardenerDao.findById(id).orElseThrow(NoSuchElementException::new);
+        Gardener gardener = gardenerQueryRepository.findById(id).orElseThrow(NoSuchElementException::new);
         ActiveGardener activeGardener = redisRepository.findById(id)
                 .orElseThrow(NoSuchElementException::new);
         RefreshToken refreshToken = activeGardener.getRefreshToken();
@@ -57,7 +59,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public Info login(Login login) {
-        Gardener gardener = gardenerDao.findByProviderIsNullAndUsername(login.getUsername())
+        Gardener gardener = gardenerCommandRepository.findByProviderIsNullAndUsername(login.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode()));
 
         // 비밀번호 일치 여부 검사
@@ -91,7 +93,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public Info add(Register register) {
         // DTO에 암호화된 비밀번호 저장한 뒤 엔티티로 변환
-        Gardener gardener = gardenerDao.save(
+        Gardener gardener = gardenerCommandRepository.save(
                 register
                         .encryptPassword(encoder.encode(register.getPassword()))
                         .toEntity()

@@ -1,14 +1,13 @@
 import GardenTodoList from "./todolist/GardenTodoList";
 import React, {useEffect} from "react";
-import {CRow} from "@coreui/react";
 import WaitingForWateringList from "./waitinglist/WaitingForWateringList";
 import RoutineList from "./RoutineList";
-import {notification, Space} from "antd";
-import CIcon from "@coreui/icons-react";
-import {cilHappy} from "@coreui/icons";
+import {notification, Row, Space} from "antd";
 import Booped from "../../components/animation/Booped";
 import getData from "../../api/backend-api/common/getData";
 import {useDispatch, useSelector} from "react-redux";
+import {SmileOutlined} from "@ant-design/icons";
+
 
 const GardenMain = () => {
   const dispatch = useDispatch();
@@ -33,6 +32,8 @@ const GardenMain = () => {
     });
   };
 
+  // todo booped 고치기
+
   return (
     <div className="mt-3">
       {contextHolder}
@@ -42,13 +43,13 @@ const GardenMain = () => {
           할 일이에요!
         </div>
         <Booped rotation={20} timing={200}>
-          <CIcon icon={cilHappy} height={30} className="text-success"/>
+          <SmileOutlined className={"text-success"} style={{fontSize: "1.7rem"}}/>
         </Booped>
       </Space>
-      <CRow className="mt-4">
+      <Row className="mt-4">
         <RoutineList/>
         <WaitingForWateringList />
-      </CRow>
+      </Row>
       <GardenTodoList openNotification={openNotification}/>
     </div>
   )
