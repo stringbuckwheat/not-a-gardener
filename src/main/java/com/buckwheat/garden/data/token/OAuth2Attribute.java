@@ -19,20 +19,20 @@ public class OAuth2Attribute {
     private String name;
     private String provider;
 
-    public static OAuth2Attribute of(String provider, String attributeKey, Map<String, Object> attributes) {
+    public static OAuth2Attribute of(String provider, Map<String, Object> attributes){
         switch (provider) {
             case "google":
-                return ofGoogle(attributeKey, attributes);
+                return ofGoogle(attributes);
             case "kakao":
-                return ofKakao("email", attributes);
+                return ofKakao(attributes);
             case "naver":
-                return ofNaver("id", attributes);
+                return ofNaver(attributes);
             default:
                 throw new RuntimeException();
         }
     }
 
-    private static OAuth2Attribute ofGoogle(String attributeKey, Map<String, Object> attributes) {
+    private static OAuth2Attribute ofGoogle(Map<String, Object> attributes) {
         return OAuth2Attribute.builder()
                 .name(String.valueOf(attributes.get("name")))
                 .email(String.valueOf(attributes.get("email")))
@@ -41,7 +41,7 @@ public class OAuth2Attribute {
                 .build();
     }
 
-    private static OAuth2Attribute ofKakao(String attributeKey,
+    private static OAuth2Attribute ofKakao(
                                            Map<String, Object> attributes) {
         Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
         Map<String, Object> kakaoProfile = (Map<String, Object>) kakaoAccount.get("profile");
@@ -54,7 +54,7 @@ public class OAuth2Attribute {
                 .build();
     }
 
-    private static OAuth2Attribute ofNaver(String attributeKey,
+    private static OAuth2Attribute ofNaver(
                                            Map<String, Object> attributes) {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
 

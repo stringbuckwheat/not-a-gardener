@@ -40,17 +40,9 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
         // 구글 로그인인지, 네이버 로그인인지
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
-        // OAuth를 지원하는 소셜 서비스들간의 약속
-        // 어떤 소셜서비스든 그 서비스에서 각 계정마다의 유니크한 id값을 전달해주겠다
-        // 구글은 sub, 네이버는 id 필드가 유니크 필드
-        String userNameAttributeName = userRequest.getClientRegistration()
-                .getProviderDetails()
-                .getUserInfoEndpoint()
-                .getUserNameAttributeName();
-
         // OAuth2UserService를 통해 가져온 데이터를 담을 클래스
         // attribute: {name, id, key, email, picture}
-        OAuth2Attribute oAuth2Attribute = OAuth2Attribute.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
+        OAuth2Attribute oAuth2Attribute = OAuth2Attribute.of(registrationId, oAuth2User.getAttributes());
 
         // 기존 회원이면 update, 신규 회원이면 create
         Gardener gardener = saveOrUpdate(oAuth2Attribute);
@@ -68,6 +60,7 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
     public Gardener saveOrUpdate(OAuth2Attribute oAuth2Attribute) {
         Gardener gardener = gardenerCommandRepository.findByUsernameAndProvider(oAuth2Attribute.getEmail(), oAuth2Attribute.getProvider())
                 .orElse(oAuth2Attribute.toEntity());
+        gardener.updateRecentLogin();
 
         return gardenerCommandRepository.save(gardener);
     }

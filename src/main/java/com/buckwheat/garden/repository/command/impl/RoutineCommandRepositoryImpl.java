@@ -6,9 +6,9 @@ import com.buckwheat.garden.data.dto.routine.RoutineRequest;
 import com.buckwheat.garden.data.entity.Gardener;
 import com.buckwheat.garden.data.entity.Plant;
 import com.buckwheat.garden.data.entity.Routine;
-import com.buckwheat.garden.dao.GardenerDao;
-import com.buckwheat.garden.dao.PlantDao;
-import com.buckwheat.garden.dao.RoutineDao;
+import com.buckwheat.garden.repository.dao.GardenerDao;
+import com.buckwheat.garden.repository.dao.PlantDao;
+import com.buckwheat.garden.repository.dao.RoutineDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

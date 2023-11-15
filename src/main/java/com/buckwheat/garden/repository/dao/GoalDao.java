@@ -1,4 +1,4 @@
-package com.buckwheat.garden.dao;
+package com.buckwheat.garden.repository.dao;
 
 import com.buckwheat.garden.data.entity.Goal;
 import org.springframework.data.jpa.repository.EntityGraph;

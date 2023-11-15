@@ -1,4 +1,4 @@
-package com.buckwheat.garden.dao;
+package com.buckwheat.garden.repository.dao;
 
 import com.buckwheat.garden.data.entity.Watering;
 import com.buckwheat.garden.repository.query.querydsl.WateringRepositoryCustom;

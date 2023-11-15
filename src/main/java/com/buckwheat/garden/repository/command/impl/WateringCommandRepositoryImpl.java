@@ -2,9 +2,9 @@ package com.buckwheat.garden.repository.command.impl;
 
 import com.buckwheat.garden.PlantUtils;
 import com.buckwheat.garden.code.AfterWateringCode;
-import com.buckwheat.garden.dao.ChemicalDao;
-import com.buckwheat.garden.dao.PlantDao;
-import com.buckwheat.garden.dao.WateringDao;
+import com.buckwheat.garden.repository.dao.ChemicalDao;
+import com.buckwheat.garden.repository.dao.PlantDao;
+import com.buckwheat.garden.repository.dao.WateringDao;
 import com.buckwheat.garden.data.dto.watering.AfterWatering;
 import com.buckwheat.garden.data.dto.watering.WateringMessage;
 import com.buckwheat.garden.data.dto.watering.WateringRequest;
