@@ -1,14 +1,72 @@
-import {Flex, Pagination, Table} from 'antd';
+import {Popconfirm, Space, Table, Tag} from 'antd';
 import {useEffect, useState} from 'react';
 import ChangePlaceOfPlantOnPlace from './ChangePlaceOfPlantOnPlace';
 import AddPlantInPlaceButtons from './AddPlantInPlaceButtons';
 import getPlantListForPlacePlantTable from "../../../utils/function/getPlantListForPlacePlantTable";
 import deleteData from "../../../api/backend-api/common/deleteData";
-import getPlantTableColArrInPlace from "../../../utils/function/getPlantTableColArrInPlace";
 import getData from "../../../api/backend-api/common/getData";
-import wateringTableColumnArray from "../../../utils/dataArray/wateringTableColumnInChemicalArray";
-import TableWithPage from "../../../components/data/TableWithPage";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
+import {DeleteOutlined} from "@ant-design/icons";
+
+const getPlantTableColArrInPlace = (deletePlant) => {
+
+  return (
+    [
+      {
+        title: '식물 이름',
+        dataIndex: 'name',
+        key: 'name',
+        render: (_, record) =>
+          (
+            <Link to={`/plant/${record.id}`} className="text-decoration-none">
+              {record.name}
+            </Link>
+          )
+      },
+      {
+        title: '식물 종',
+        dataIndex: 'species',
+        key: 'species',
+        responsive: ['lg']
+      },
+      {
+        title: '최근 물주기',
+        dataIndex: 'recentWateringPeriod',
+        key: 'recentWateringPeriod',
+        responsive: ['lg']
+      },
+      {
+        title: '기타',
+        key: 'tags',
+        dataIndex: 'tags',
+        responsive: ['lg'],
+        render: (_, {tags}) => (
+          <>
+            {tags.map((tag, idx) => (<Tag key={idx}>{tag}</Tag>))}
+          </>
+        ),
+      },
+      {
+        title: '',
+        dataIndex: 'plantDetail',
+        key: 'plantDetail',
+        render: (_, record) => (
+          <Space size="middle">
+            <Popconfirm
+              title={`${record.name}을 삭제하실 건가요?`}
+              discription="삭제한 식물은 복구할 수 없어요"
+              okText="네"
+              cancelText="아니요"
+              onConfirm={() => deletePlant(record.id)}
+            >
+              <DeleteOutlined/>
+            </Popconfirm>
+          </Space>
+        )
+      }
+    ]
+  )
+}
 
 /**
  * 장소 페이지 하단, 이 장소에 속한 식물들
@@ -58,7 +116,7 @@ const PlaceTableForPlant = ({placeName, plantListSize}) => {
   }, [placeId]);
 
   return (
-    <div className="mt-4">
+    <div style={{marginTop: "1rem"}}>
       {
         hasSelected
           ? <ChangePlaceOfPlantOnPlace

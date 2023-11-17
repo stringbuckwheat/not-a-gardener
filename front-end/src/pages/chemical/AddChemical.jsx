@@ -1,10 +1,10 @@
 import {useState} from "react"
-import FormProvider from "src/components/form/FormProvider"
 import chemicalTypeArray from "src/utils/dataArray/chemicalTypeArray"
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 import postData from "../../api/backend-api/common/postData";
 import getChemicalFormArray from "../../utils/function/getChemicalFormArray";
 import {useDispatch} from "react-redux";
+import FormProvider from "../../components/form/FormProvider";
 
 const AddChemical = ({afterAdd}) => {
   const [chemical, setChemical] = useState({
@@ -42,11 +42,11 @@ const AddChemical = ({afterAdd}) => {
       itemObjectArray={getChemicalFormArray(chemical)}
       onChange={onChange}
       submitBtn={<ValidationSubmitButton
-        className="float-end mt-2"
+        className="float-end"
         isValid={isValid}
         onClickValid={submit}
         onClickInvalidMsg={isValid ? "" : "입력 내용을 확인해주세요"}
-        title="약품 추가" />}/>
+        title="약품 추가"/>}/>
   )
 }
 

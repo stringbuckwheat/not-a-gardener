@@ -1,6 +1,7 @@
 import {Button, Popconfirm, Space} from "antd";
-import CIcon from "@coreui/icons-react";
-import {cilPen, cilTrash, cilX} from "@coreui/icons";
+import {CloseOutlined, DeleteOutlined, EditOutlined} from "@ant-design/icons";
+
+// TODO WateringListAction과 같음
 
 /**
  * Plant Table Row의 액션 버튼 렌더링
@@ -18,28 +19,22 @@ const PlantEditableCellAction = ({record, editable, cancel, edit, editingKey, up
   const disabled = editingKey !== 0
 
   return editable ? (
-    <Space className="d-flex justify-content-end">
-      <Button onClick={updatePlant} size="small">
-        <CIcon className="text-success" icon={cilPen}/>
-      </Button>
+    <Space className="justify-content-end">
+      <Button onClick={updatePlant} icon={<EditOutlined/>}/>
       <Popconfirm
         title="취소하시겠어요?"
         okText="네"
         cancelText="아니요"
         onConfirm={cancel}>
-        <Button size="small">
-          <CIcon icon={cilX}/>
-        </Button>
+        <Button icon={<CloseOutlined/>}/>
       </Popconfirm>
     </Space>
   ) : (
-    <Space className="d-flex justify-content-end">
+    <Space className="justify-content-end">
       <Button
-        size="small"
         disabled={disabled}
-        onClick={() => edit(record)}>
-        <CIcon className="text-success" icon={cilPen}/>
-      </Button>
+        onClick={() => edit(record)}
+        icon={<EditOutlined/>}/>
       <Popconfirm
         placement="topRight"
         title="이 식물을 삭제하실건가요?"
@@ -48,9 +43,7 @@ const PlantEditableCellAction = ({record, editable, cancel, edit, editingKey, up
         okText="네"
         cancelText="아니요"
       >
-        <Button size="small" disabled={disabled}>
-          <CIcon icon={cilTrash}/>
-        </Button>
+        <Button disabled={disabled} icon={<DeleteOutlined/>}/>
       </Popconfirm>
     </Space>
   )

@@ -3,7 +3,7 @@ import {Col, Row} from "antd";
 import {useTrail, animated} from "@react-spring/web";
 import {useSelector} from "react-redux";
 import Empty from "../../../components/empty/Empty";
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import GButton from "../../../components/button/GButton";
 import ToDoCard from "./todo-card/ToDoCard";
 
@@ -16,6 +16,7 @@ import ToDoCard from "./todo-card/ToDoCard";
  */
 const GardenTodoList = ({openNotification}) => {
   const todoList = useSelector(state => state.gardens.todoList);
+  const navigate = useNavigate();
 
   const animation = {
     from: {opacity: 0},
@@ -26,24 +27,24 @@ const GardenTodoList = ({openNotification}) => {
 
   return todoList.length == 0 ? (<Empty title="목마른 식물이 없어요"/>) : (
     <>
-      <Link to={"/plant"} className="d-flex justify-content-end mb-4 mt-3">
-        <GButton color="teal" className="float-end">전체 식물 보기</GButton>
-      </Link>
-      <div className="mt-2">
-          {
-            trailSprings.map((spring, index) => (
-              <Col md={6} sm={8} xs={24} className="mb-5"
-                   key={`${todoList[index].gardenDetail.wateringCode}-${index}`}>
-                <animated.div style={{...spring}}>
-                  <ToDoCard
-                    index={index}
-                    garden={todoList[index]}
-                    openNotification={openNotification}/>
-                </animated.div>
-              </Col>
-            ))
-          }
+      <div style={{display: "flex", justifyContent: "flex-end", margin: "0.5rem 0"}}>
+        <GButton color="teal" className="float-end" onClick={() => navigate('/plant')}>전체 식물 보기</GButton>
       </div>
+      <Row>
+        {
+          trailSprings.map((spring, index) => (
+            <Col md={6} sm={8} xs={24} style={{marginBottom: "1rem"}}
+                 key={`${todoList[index].gardenDetail.wateringCode}-${index}`}>
+              <animated.div style={{...spring}}>
+                <ToDoCard
+                  index={index}
+                  garden={todoList[index]}
+                  openNotification={openNotification}/>
+              </animated.div>
+            </Col>
+          ))
+        }
+      </Row>
     </>
   )
 }

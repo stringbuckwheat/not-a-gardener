@@ -75,7 +75,7 @@ const PlantTable = () => {
   const mergedColumns = getMergedColumns(columns, 'placeName', 'select', 'text', isEditing);
 
   return (
-    <div className="mt-3">
+    <div>
       <Table
         components={{
           body: {
@@ -87,7 +87,7 @@ const PlantTable = () => {
               {...props} />
           }
         }}
-        className="mt-3 new-line"
+        className="new-line"
         style={{width: "inherit"}}
         pagination={{onChange: cancel}}
         locale={locale}

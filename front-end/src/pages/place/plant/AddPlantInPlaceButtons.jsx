@@ -1,6 +1,5 @@
 import {useState} from "react";
-import {Space} from 'antd';
-import {CButton} from "@coreui/react";
+import {Button, Space} from 'antd';
 import {useParams} from "react-router-dom";
 import ModifyPlaceOfPlantForm from "./ModifyPlaceOfPlantForm";
 import AddPlantInPlaceFormModal from "./AddPlantInPlaceFormModal";
@@ -44,21 +43,14 @@ const AddPlantInPlaceButtons = ({placeName, setPlants}) => {
 
   // 아무것도 선택하지 않았을 시 버튼들 렌더링
   return (
-    <div className="float-end mb-4">
+    <div style={{float: "right", marginBottom: "1rem"}}>
       <Space>
-        <CButton
-          size="sm"
-          variant="outline"
-          onClick={onClickAddPlantBtn}
-          color="success">새 식물 추가</CButton>
-        <CButton
-          size="sm"
-          variant="outline"
+        <Button onClick={onClickAddPlantBtn}>새 식물 추가 </Button>
+        <Button
           onClick={() => {
             setMoveFormVisible(true)
             setAddPlantFormVisible(false)
-          }}
-          color="success">다른 장소의 식물 이동</CButton>
+          }}>다른 장소의 식물 이동</Button>
       </Space>
     </div>
   )

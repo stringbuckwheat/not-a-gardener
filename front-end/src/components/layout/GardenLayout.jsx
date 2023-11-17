@@ -6,6 +6,7 @@ import {Navigate, Route, Routes,} from "react-router-dom";
 import routes from "../../utils/routes";
 import {useDispatch} from "react-redux";
 import GardenHeader from "./GardenHeader";
+
 const {Footer, Content} = Layout;
 
 
@@ -29,10 +30,10 @@ const GardenLayout = () => {
       }}
     >
       <Layout>
-        <Sidebar />
+        <Sidebar/>
 
         <Layout>
-          <GardenHeader />
+          <GardenHeader/>
           <Content
             style={{
               padding: '1rem 2rem',
@@ -57,8 +58,8 @@ const GardenLayout = () => {
             </Suspense>
           </Content>
 
-          <Footer className={"text-center"}>
-            <span className="ms-1 small">not-a-gardener by memil</span>
+          <Footer style={{textAlign: "center"}}>
+            <span style={{marginRight: "0.25rem", fontSize: "0.8rem"}}>not-a-gardener by memil</span>
           </Footer>
         </Layout>
       </Layout>

@@ -1,14 +1,17 @@
-import {Button} from "antd";
-import React from "react";
+import {Button, ConfigProvider} from "antd";
+import themeGreen from "../../themeGreen";
 
-const GButton = ({color, className, onClick, size, children}) => {
+const GButton = ({className, onClick, size, children}) => {
   return (
-    <Button
-      className={`bg-${color} text-white ${className}`}
-      onClick={onClick}
-      size={size}>
-      {children}
-    </Button>
+    <ConfigProvider theme={themeGreen}>
+      <Button
+        type="primary"
+        className={className}
+        onClick={onClick}
+        size={size}>
+        {children}
+      </Button>
+    </ConfigProvider>
   )
 }
 

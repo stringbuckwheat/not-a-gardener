@@ -1,11 +1,10 @@
-import CIcon from "@coreui/icons-react";
-import {cilX} from "@coreui/icons";
-import {Card, Checkbox, Input, Row, Select, Space} from "antd";
+import {Card, Checkbox, Input, Row, Space} from "antd";
 import React, {useState} from "react";
 import SelectPlant from "../../../components/select/SelectPlant";
 import InputWithFeedback from "../../../components/form/input/InputWithFeedback";
 import ValidationSubmitButton from "../../../components/button/ValidationSubmitButton";
 import postData from "../../../api/backend-api/common/postData";
+import {CloseOutlined} from "@ant-design/icons";
 
 const AddRoutine = ({onClickRoutineFormButton, addRoutine}) => {
   const style = {fontSize: "0.9em"}
@@ -43,15 +42,12 @@ const AddRoutine = ({onClickRoutineFormButton, addRoutine}) => {
   }
 
   return (
-    <Card className="mb-2">
-      <div className="mb-2">
-        <span className="fs-6 text-orange">루틴 추가</span>
-        <CIcon
-          icon={cilX}
-          className="float-end"
-          onClick={onClickRoutineFormButton}/>
+    <Card style={{marginBottom: "1rem"}}>
+      <div style={{marginBottom: "1rem"}}>
+        <span style={{fontSize: "1rem"}} className="text-orange">루틴 추가</span>
+        <CloseOutlined className="float-end" style={{color: "grey"}} onClick={onClickRoutineFormButton}/>
       </div>
-      <div className="mb-2">
+      <div style={{marginBottom: "1rem"}}>
         <InputWithFeedback
           name="content"
           label="루틴 내용"
@@ -60,7 +56,7 @@ const AddRoutine = ({onClickRoutineFormButton, addRoutine}) => {
           onChange={onChange}
           feedbackMsg={routine.content == "" ? "루틴 내용은 비워둘 수 없어요" : ""}/>
       </div>
-      <div className="mb-2">
+      <div style={{marginBottom: "1rem"}}>
         <span className={`text-${formLabelColor}`} style={style}>식물</span>
         <SelectPlant
           onChange={(plantId) => {
@@ -69,7 +65,7 @@ const AddRoutine = ({onClickRoutineFormButton, addRoutine}) => {
           size="small"
           className="width-full"/>
       </div>
-      <div className="mb-3">
+      <div style={{marginBottom: "1rem"}}>
         <Row>
           <Space>
             {

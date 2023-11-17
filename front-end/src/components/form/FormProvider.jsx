@@ -1,5 +1,5 @@
-import {CCard, CCardBody, CCol, CForm} from '@coreui/react'
-import InputHandler from './InputHandler'
+import {Card, Col, Form, Row} from "antd";
+import InputHandler from "./InputHandler";
 
 /**
  * Form 자동화 컴포넌트
@@ -13,24 +13,22 @@ import InputHandler from './InputHandler'
  */
 const FormProvider = ({title, itemObjectArray, submitBtn, inputObject, onChange}) => {
   return (
-    <div className="row justify-content-md-center align-items-center height-95">
-      <CCol md="auto" className="minWidth-70">
-        <CCard sm={6} className="mb-4">
-          <CCardBody>
-            <h4 className="mt-3 mb-3">{title}</h4>
-            <CForm validated={true}>
-              {/* input, select 등을 구해서 채움 */}
-              <InputHandler
-                itemObjectArray={itemObjectArray}
-                onChange={onChange}
-                inputObject={inputObject}/>
-              {/* 등록 제출 버튼 */}
-              {submitBtn}
-            </CForm>
-          </CCardBody>
-        </CCard>
-      </CCol>
-    </div>
+    <Row style={{justifyContent: "center", alignItems: "center", height: "95%"}}>
+      <Col md={12} xs={24} style={{minWidth: "40%"}}>
+        <Card md={6} style={{marginBottom: "1.5rem"}}>
+          <h4 className={"text-garden"}>{title}</h4>
+          <Form layout="vertical">
+            {/* input, select 등을 구해서 채움 */}
+            <InputHandler
+              itemObjectArray={itemObjectArray}
+              onChange={onChange}
+              inputObject={inputObject}/>
+            {/* 등록 제출 버튼 */}
+            {submitBtn}
+          </Form>
+        </Card>
+      </Col>
+    </Row>
   );
 }
 

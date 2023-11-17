@@ -1,4 +1,3 @@
-import {CContainer} from "@coreui/react";
 import getWateringNotificationMsg from "src/utils/function/getWateringNotificationMsg";
 import HandleWateringForm from "./HandleWateringForm";
 import deleteData from "src/api/backend-api/common/deleteData";
@@ -15,11 +14,26 @@ import weekYear from 'dayjs/plugin/weekYear'
 import updateData from "src/api/backend-api/common/updateData";
 import WateringEditableCell from "./WateringEditableCell";
 import getChemicalListForSelect from "../../../../api/service/getChemicalListForSelect";
-import getWateringListForTable from "../../../../utils/function/getWateringListForTable";
 import getWateringTableColumnArray from "../../../../utils/function/getWateringTableColumnArray";
 import getMergedColumns from "../../../../utils/function/getMergedColumns";
 import getData from "../../../../api/backend-api/common/getData";
 import {useDispatch, useSelector} from "react-redux";
+
+const getWateringListForTable = (wateringList) => {
+  return wateringList.map((watering) => {
+      return (
+        {
+          ...watering,
+          period: watering.period == 0
+            ? "첫 관수 기록일!"
+            : `${watering.period}일만에`
+        }
+      )
+    }
+  )
+
+  return wateringList;
+}
 
 /**
  * 한 식물의 물주기 정보 plant detail 아래쪽 table
@@ -44,7 +58,6 @@ const WateringList = ({plantId, setPlant}) => {
 
   // 해당 유저의 chemical list
   useEffect(() => {
-    console.log("onmount")
     getChemicalListForSelect(setChemicalList);
   }, [])
 
@@ -146,28 +159,26 @@ const WateringList = ({plantId, setPlant}) => {
     <>
       {contextHolder}
 
-      <CContainer>
-        <div className="mt-4 mb-3">
-          <HandleWateringForm
-            plantId={plantId}
-            page={page}
-            setWateringList={setWaterings}
-            chemicalList={chemicalList}
-            isWateringFormOpen={isWateringFormOpen}
-            setIsWateringFormOpen={setIsWateringFormOpen}
-            setEditingKey={setEditingKey}
-            wateringCallBack={wateringCallBack}
-          />
-        </div>
-        <Form form={form} component={false}>
-          <Table
-            components={tableBody}
-            pagination={{onChange: (page) => setPage(() => page), total: totalWaterings}}
-            columns={mergedColumns}
-            dataSource={getWateringListForTable(waterings)}
-          />
-        </Form>
-      </CContainer>
+      <div style={{margin: "1rem 0"}}>
+        <HandleWateringForm
+          plantId={plantId}
+          page={page}
+          setWateringList={setWaterings}
+          chemicalList={chemicalList}
+          isWateringFormOpen={isWateringFormOpen}
+          setIsWateringFormOpen={setIsWateringFormOpen}
+          setEditingKey={setEditingKey}
+          wateringCallBack={wateringCallBack}
+        />
+      </div>
+      <Form form={form} component={false}>
+        <Table
+          components={tableBody}
+          pagination={{onChange: (page) => setPage(() => page), total: totalWaterings}}
+          columns={mergedColumns}
+          dataSource={getWateringListForTable(waterings)}
+        />
+      </Form>
     </>
   )
 }

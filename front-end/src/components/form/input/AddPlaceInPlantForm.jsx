@@ -1,5 +1,4 @@
-import {CButton, CFormSelect, CInputGroup, CInputGroupText} from "@coreui/react";
-import {Alert, Input, Space} from "antd";
+import {Alert, Form, Input, Select, Space, Button} from "antd";
 import React, {useState} from "react";
 import InputFeedbackSpan from "../../etc/InputFeedbackSpan";
 import postData from "../../../api/backend-api/common/postData";
@@ -18,6 +17,7 @@ const AddPlaceInPlantForm = ({addPlace}) => {
   const submit = async () => {
     if (placeName == "") {
       setMsg("장소 이름을 입력해주세요");
+      return;
     }
 
     const data = {
@@ -33,12 +33,14 @@ const AddPlaceInPlantForm = ({addPlace}) => {
 
   return (
     <>
-      <CInputGroup>
-        <CInputGroupText id="basic-addon1">{"장소"}</CInputGroupText>
-        <CFormSelect disabled/>
-      </CInputGroup>
+      <Form.Item
+        label={"장소"}
+        required={true}
+      >
+        <Select disabled={true} style={{width: "100%"}}/>
+      </Form.Item>
       <Alert
-        className="mt-1 mb-3"
+        style={{marginTop: "0.25rem", marginBottom: "1rem"}}
         message={!isAddFormOpened ? "식물을 등록하려면 최소 하나의 장소가 필요해요." : ""}
         type="warning"
         action={
@@ -51,14 +53,13 @@ const AddPlaceInPlantForm = ({addPlace}) => {
                          placeholder={"장소 이름"} style={{width: "100%"}}/>
                 </>
                 : <></>}
-              <CButton
-                color="success"
+              <Button
+                type={"primary"}
+                size={"small"}
                 onClick={isAddFormOpened ? submit : () => setIsAddFormOpened(true)}
-                size={"sm"}
-                variant="outline"
-                shape="rounded-pill">
+              >
                 {"장소 추가"}
-              </CButton>
+              </Button>
             </Space>
           </div>
         }

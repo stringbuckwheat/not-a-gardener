@@ -132,10 +132,7 @@ const Register = () => {
   return (
     <LoginPageWrapper>
       <Card>
-        <Space className="mb-3">
-          <h3 className="text-success">새로운 가드너님, 반갑습니다! <span className={Style.greeting}>🤚</span></h3>
-        </Space>
-
+        <h3>새로운 가드너님, 반갑습니다! <span className={Style.greeting}>🤚</span></h3>
         {/* 회원가입 폼 */}
         <Form layout="vertical">
           {
@@ -151,7 +148,7 @@ const Register = () => {
               />)
           }
 
-          <div className="d-grid">
+          <div className={Style.register}>
             <ValidationSubmitButton
               isValid={isValid}
               onClickValid={onSubmit}

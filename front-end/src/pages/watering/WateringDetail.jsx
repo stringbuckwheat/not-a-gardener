@@ -1,4 +1,3 @@
-import {CContainer} from "@coreui/react";
 import GButton from "../../components/button/GButton";
 import {useState} from "react";
 import getChemicalListForSelect from "../../api/service/getChemicalListForSelect";
@@ -6,7 +5,14 @@ import getData from "../../api/backend-api/common/getData";
 import WateringFormInCalendar from "./WateringFormInCalendar";
 import WateringList from "./WateringList";
 
-const WateringDetail = ({selectedDate, wateringDetail, onAdd, isWateringFormOpened, setIsWateringFormOpened, onDelete}) => {
+const WateringDetail = ({
+                          selectedDate,
+                          wateringDetail,
+                          onAdd,
+                          isWateringFormOpened,
+                          setIsWateringFormOpened,
+                          onDelete
+                        }) => {
   const [chemicalList, setChemicalList] = useState([]);
   const [plantList, setPlantList] = useState([]);
 
@@ -32,30 +38,27 @@ const WateringDetail = ({selectedDate, wateringDetail, onAdd, isWateringFormOpen
   }
 
   return (
-    <CContainer className="mt-4">
-      <div className="d-flex justify-content-between">
-        <span className="fw-6 text-info bold">{selectedDate?.format("M월 D일 dd요일")}</span>
+    <div style={{marginTop: "2rem"}}>
+      <div className="justify-content-between">
+        <span
+          style={{color: "#007BFF", marginBottom: "1rem", fontSize: "1rem"}}>{selectedDate?.format("M월 D일 dd요일")}</span>
         {
           !isWateringFormOpened
             ? <GButton color="teal" onClick={onClickAddWatering}>이 날짜에 물주기 추가하기</GButton>
             : <></>
         }
       </div>
-      <div className="mb-2">
-        <WateringList wateringDetail={wateringDetail} onDelete={onDelete}/>
-      </div>
+      <WateringList wateringDetail={wateringDetail} onDelete={onDelete}/>
       {/* 물주기 폼 */}
-      <div className="mb-2">
-        <WateringFormInCalendar
-          selectedDate={selectedDate}
-          onAdd={onAdd}
-          chemicalList={chemicalList}
-          plantList={plantList}
-          isWateringFormOpened={isWateringFormOpened}
-          setIsWateringFormOpened={setIsWateringFormOpened}
-        />
-      </div>
-    </CContainer>
+      <WateringFormInCalendar
+        selectedDate={selectedDate}
+        onAdd={onAdd}
+        chemicalList={chemicalList}
+        plantList={plantList}
+        isWateringFormOpened={isWateringFormOpened}
+        setIsWateringFormOpened={setIsWateringFormOpened}
+      />
+    </div>
   )
 }
 

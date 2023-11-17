@@ -19,13 +19,12 @@ const SocialLogin = () => {
   })
 
   return (
-    <div className='mt-5'>
-      <h6>간편 로그인</h6>
+    <div style={{marginTop: "3.5rem"}}>
+      <h5>간편 로그인</h5>
       <hr/>
-      <Row justify={"space-between"}>
+      <Row justify={"space-between"} style={{marginTop: "1rem"}}>
         {
           providers.map((provider, index) => {
-
               return (<Col md={7} className={"text-center"}>
                 <a
                   href={provider !== "naver" ? `${authorizationUrl}/${provider}` : "javascript:alert('검수 승인 대기중입니다')"}

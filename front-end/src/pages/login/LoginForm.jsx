@@ -59,7 +59,7 @@ const LoginForm = () => {
 
   return (
     <>
-      <h4 className="mt-3">로그인</h4>
+      <h4 style={{marginTop: "1rem"}}>로그인</h4>
       <p className="text-danger"><small>{msg}</small></p>
       <form onSubmit={inputCheck} method="POST">
         <Input size="large" prefix={<UserOutlined style={{margin: "0 0.5rem"}}/>}
@@ -68,7 +68,7 @@ const LoginForm = () => {
                style={{marginTop: "0.7rem"}}
                name="password" type="password" placeholder="PW" onChange={onChange} defaultValue={login.password}/>
         <Button type={"primary"} htmlType="submit" className={"float-end"}
-                style={{width: "6rem", marginTop: "1rem"}}> 로그인</Button>
+                style={{marginTop: "1rem",}}>로그인</Button>
       </form>
     </>
   )

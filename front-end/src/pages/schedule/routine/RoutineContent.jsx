@@ -5,25 +5,25 @@ import {Row} from "antd";
 import React from "react";
 
 const RoutineContent = ({
-                              isRoutineFormOpened,
-                              onClickRoutineFormButton,
-                              addRoutine,
-                              toDoList,
-                              deleteRoutine,
-                              completeRoutine,
-                              notToDoList
-                            }) => {
-  const style = {fontSize: "0.8em"}
+                          isRoutineFormOpened,
+                          onClickRoutineFormButton,
+                          addRoutine,
+                          toDoList,
+                          deleteRoutine,
+                          completeRoutine,
+                          notToDoList
+                        }) => {
+  const style = {fontSize: "0.8rem"}
 
   return (
     <>
-      <div className="mb-4">
-        <span className="fs-5 text-garden">나의 루틴</span>
+      <div>
+        <span style={{fontSize: "1.25rem", fontWeight: "bold"}} className={"text-garden"}>나의 루틴</span>
         {!isRoutineFormOpened
           ? <GButton color="garden" className="float-end" onClick={onClickRoutineFormButton}>추가</GButton> : <></>}
       </div>
       {/* 루틴 추가 */}
-      <div className="mb-4">
+      <div style={{marginBottom: "1.5rem"}}>
         {isRoutineFormOpened
           ? <AddRoutine
             onClickRoutineFormButton={onClickRoutineFormButton}
@@ -34,7 +34,7 @@ const RoutineContent = ({
       {/* 루틴 리스트 영역 */}
       <div>
         <div style={style}>오늘 할 일</div>
-        <div className="mb-2">
+        <div style={{marginBottom: "2.5rem"}}>
           {
             toDoList.map((routine, idx) =>
               <RoutineCard

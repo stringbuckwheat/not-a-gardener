@@ -1,4 +1,4 @@
-import {Tag, Space} from "antd";
+import {Tag} from "antd";
 
 const TodoTag = (props) => {
   const plant = props.plant.plant;
@@ -35,12 +35,12 @@ const TodoTag = (props) => {
 
   return (
     <div className="mt-2">
-        <div>
-          <Tag>{getAverageWateringPeriodMsg()}</Tag>
-        </div>
-        <div style={{marginTop: "0.4rem"}}>
-          <Tag>{getLatestWateringDateMsg()}</Tag>
-        </div>
+      <div>
+        <Tag>{getAverageWateringPeriodMsg()}</Tag>
+      </div>
+      <div style={{marginTop: "0.4rem"}}>
+        <Tag>{getLatestWateringDateMsg()}</Tag>
+      </div>
     </div>
   )
 }

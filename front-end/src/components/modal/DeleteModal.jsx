@@ -1,27 +1,19 @@
 import React from 'react'
 import {useNavigate} from 'react-router-dom';
-import {
-  CButton,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
-} from '@coreui/react'
 import deleteData from 'src/api/backend-api/common/deleteData';
 import {useState} from 'react';
 import {DeleteOutlined} from '@ant-design/icons';
-import {Tooltip} from 'antd';
+import {Button, Modal, Tooltip} from 'antd';
 import isEndWithVowel from "../../utils/function/isEndWithVowel";
 
 // url, path 분리해놔야 navigate으로 쓰기 편함
-const DeleteModal = ({title, url, path, deleteTooltipMsg, deleteCallBackFunction, button}) => {
+const DeleteModal = ({title, url, path, deleteTooltipMsg, deleteCallBackFunction, button, detailMsg}) => {
 
   const deleteVisibleButton = button
     ? button
     : <Tooltip title={deleteTooltipMsg}>
       <DeleteOutlined
-        className="font-size-18 text-grey"
+        style={{fontSize: "1.2rem", color: "grey"}}
         onClick={() => {
           setVisible(true)
         }}/>
@@ -45,21 +37,26 @@ const DeleteModal = ({title, url, path, deleteTooltipMsg, deleteCallBackFunction
   const [visible, setVisible] = useState(false);
   const closeDeleteModal = () => setVisible(false);
 
+  const footer = <>
+    <Button type={"text"} onClick={remove}><small>삭제하기</small></Button>
+    <Button type="primary" onClick={closeDeleteModal}>돌아가기</Button>
+  </>
+
   return (
     <>
-      <CModal alignment="center" visible={visible} onClose={closeDeleteModal}>
-        <CModalHeader>
-          <CModalTitle>{modalTitleMsg} 삭제하실 건가요?</CModalTitle>
-        </CModalHeader>
-        <CModalBody>삭제한 {modalBodyMsg} 복구할 수 없습니다.</CModalBody>
-        <CModalFooter>
-          <CButton color="link-secondary" onClick={remove}><small>삭제하기</small></CButton>
-          <CButton color="success" onClick={closeDeleteModal}>돌아가기</CButton>
-        </CModalFooter>
-      </CModal>
       <div onClick={() => setVisible(true)}>
         {deleteVisibleButton}
       </div>
+      <Modal open={visible}
+             onClose={closeDeleteModal}
+             closable={false}
+             footer={footer}>
+        <h3 style={{marginBottom: "1rem"}}>{modalTitleMsg} 삭제하실 건가요?</h3>
+        <div>삭제한 {modalBodyMsg} 복구할 수 없습니다.</div>
+        {
+          detailMsg ? <div>{detailMsg}</div> : <></>
+        }
+      </Modal>
     </>
   )
 }

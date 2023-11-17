@@ -1,6 +1,7 @@
-import {CButton, CContainer, CImage, CRow} from "@coreui/react";
 import React, {useState} from "react";
-import forNoPlant from "../../assets/images/forNoPlant.png";
+import {Button} from "antd";
+import forNoPlant from '../../assets/images/forNoPlant.png'
+import Style from './Empty.module.scss'
 
 /**
  * 데이터 없음 페이지 or 추가하기 폼
@@ -19,27 +20,18 @@ const NoItem = ({title, buttonSize, buttonTitle, addForm}) => {
       {addForm}
     </>
   ) : (
-    <CContainer fluid className="text-center">
-      <CRow className="text-center mt-5">
-        <h2>{title}</h2>
-        <div className="d-grid gap-2 col-6 mx-auto mt-2">
-          <CButton
-            onClick={() => setIsAddFormOpened(true)}
-            color="success"
-            size={buttonSize}
-            variant="outline"
-            shape="rounded-pill">
-            {buttonTitle}
-          </CButton>
-        </div>
-      </CRow>
-      <CRow>
-        <CImage
-          className="width-100 display-block"
-          src={forNoPlant}
-          fluid/>
-      </CRow>
-    </CContainer>
+    <div style={{textAlign: "center"}}>
+      <h2 className={Style.title}>{title}</h2>
+      <div className={Style.long}>
+        <Button
+          className={Style.button}
+          onClick={() => setIsAddFormOpened(true)}
+          size={buttonSize}>
+          {buttonTitle}
+        </Button>
+      </div>
+      <img src={forNoPlant}/>
+    </div>
   )
 }
 

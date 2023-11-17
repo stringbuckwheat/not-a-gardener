@@ -1,10 +1,10 @@
-import {CCardGroup, CContainer} from '@coreui/react'
 import Routine from "./routine/Routine";
 import {useEffect, useState} from "react";
 import getData from "../../api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";
 import Goal from "./goal/Goal";
 import {useDispatch} from "react-redux";
+import {Col, Row} from "antd";
 
 const Schedule = () => {
   const dispatch = useDispatch();
@@ -50,17 +50,19 @@ const Schedule = () => {
   return loading ? (
     <Loading/>
   ) : (
-    <CContainer>
-      <CCardGroup>
-        <Routine routines={routines} />
+    <Row>
+      <Col md={12} style={{display: "flex"}}>
+        <Routine routines={routines}/>
+      </Col>
+      <Col md={12} style={{display: "flex"}}>
         <Goal
           goals={goals}
           addGoal={addGoal}
           deleteGoal={deleteGoal}
           completeGoal={completeGoal}
         />
-      </CCardGroup>
-    </CContainer>
+      </Col>
+    </Row>
   )
 }
 

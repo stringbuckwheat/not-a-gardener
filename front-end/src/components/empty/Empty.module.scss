@@ -1,0 +1,29 @@
+.center {
+  display: flex;
+  text-align: center;
+}
+
+.title {
+  margin-top: 5rem;
+}
+
+.long {
+  display: grid;
+  gap: 0.5rem;
+  width: 50%;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.button {
+  background-color: green;
+  color: white;
+  border-radius: 20px;
+  height: 2.5rem;
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+img {
+  width: 95%
+}

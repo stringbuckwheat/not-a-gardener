@@ -8,11 +8,12 @@ import {Spin} from "antd";
  * @constructor
  */
 const Loading = () => {
-  const loading = <LoadingOutlined style={{fontSize: "10vw"}} className="text-orange" spin/>;
+  const loading = <LoadingOutlined style={{fontSize: "10rem"}} className="text-orange" spin/>;
 
   return (
     <div
-      className="d-flex justify-content-center align-items-center height-70vh">
+      style={{display: "flex", justifyContent: "center", alignItems: "center", height: "100vh"}}
+      >
       <Spin indicator={loading}/>
     </div>
   )

@@ -3,8 +3,11 @@ import {Space, Tooltip} from "antd";
 import {QuestionCircleTwoTone} from "@ant-design/icons";
 
 const getPlantListForPlantTable = (plants) => {
-  const plantListForPlantTable = plants.map((pl) => {
+  if (plants.length == 0) {
+    return []
+  }
 
+  const plantListForPlantTable = plants.map((pl) => {
     const plant = pl.plant;
     const gardenDetail = pl.gardenDetail;
     const latestWateringDate = gardenDetail.latestWateringDate;

@@ -13,7 +13,7 @@ const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey
         key: 'wateringCode',
         render: (_, record) => {
           return (
-            <WateringCodeIcon wateringCode={record.wateringCode} height={20} wateringMsg={record.tags.wateringMsg}/>
+            <WateringCodeIcon wateringCode={record.wateringCode} size={"2rem"} wateringMsg={record.tags.wateringMsg}/>
           )
         },
         sorter: (a, b) => a.wateringCode - b.wateringCode,
@@ -32,7 +32,7 @@ const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey
               {record.name}
             </Link>
             {
-              record.species ? <p className="small">({record.species})</p> : <></>
+              record.species ? <p><small>({record.species})</small></p> : <></>
             }
           </>
         )
@@ -84,12 +84,12 @@ const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey
             <>
               {
                 tags.anniversary
-                  ? <div><Tag className="mb-1">{tags.anniversary}</Tag></div>
+                  ? <div><Tag style={{marginBottom: "0.25rem"}}>{tags.anniversary}</Tag></div>
                   : <></>
               }
               {
                 tags.latestWateringDate
-                  ? <div><Tag className="mb-1" color="geekblue">{tags.latestWateringDate}</Tag></div>
+                  ? <div><Tag style={{marginBottom: "0.25rem"}} color="geekblue">{tags.latestWateringDate}</Tag></div>
                   : <></>
               }
             </>

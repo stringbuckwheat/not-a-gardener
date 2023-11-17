@@ -52,35 +52,35 @@ const ChangePassword = ({username}) => {
   // 변경 완료(isUpdated) 시 완료 페이지 렌더링
   // 변경 중일 시 비밀번호 입력 페이지 렌더링
   return isUpdated ? (
-    <div className="d-flex justify-content-center align-items-center">
+    <div className="align-center">
       <div className="text-center">
         <div>비밀번호를 변경했어요!</div>
         <Link to="/login">
-          <Button className="bg-orange text-white mt-3">로그인 하러가기</Button>
+          <Button className="bg-orange" style={{color: "white", marginTop: "1rem"}}>로그인 하러가기</Button>
         </Link>
       </div>
     </div>
   ) : (
     <div>
-      <div className="mb-3">
-        <span className="text-garden" style={{fontSize: "0.9em"}}>새로운 비밀번호를 입력해주세요</span>
+      <div style={{marginTop: "1rem"}}>
+        <span className="text-garden">새로운 비밀번호를 입력해주세요</span>
         <div>
-          <Input name="password" type="password" onChange={onChange}/>
+          <Input name="password" type="password" onChange={onChange} style={{width: "17rem"}}/>
         </div>
         <InputFeedbackSpan
           feedbackMsg={getPasswordFeedbackMsg()}
           color={verifyPassword(password.password) ? "success" : "danger"}/>
       </div>
 
-      <div className="mb-3">
-        <span className="text-garden" style={{fontSize: "0.9em"}}>비밀번호를 한번 더 입력해주세요</span>
+      <div style={{marginTop: "1rem"}}>
+        <span className="text-garden">비밀번호를 한번 더 입력해주세요</span>
         <div>
           <Input name="repeatPassword" type="password" onChange={onChange}/>
         </div>
         <InputFeedbackSpan feedbackMsg={getRepeatPasswordFeedbackMsg()}/>
       </div>
 
-      <div className="mt-1 float-end">
+      <div style={{marginTop: "1rem", float: "right"}}>
         <ValidationSubmitButton
           isValid={verifyPassword(password.password) && password.password === password.repeatPassword}
           onClickValid={submit}

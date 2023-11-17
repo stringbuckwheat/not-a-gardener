@@ -1,12 +1,11 @@
 import React, {useState} from "react";
-import CIcon from "@coreui/icons-react";
-import {cilX} from "@coreui/icons";
 import InputWithFeedback from "../../../components/form/input/InputWithFeedback";
 import SelectPlant from "../../../components/select/SelectPlant";
 import {Card} from "antd";
 import ValidationSubmitButton from "../../../components/button/ValidationSubmitButton";
 import InputFeedbackSpan from "../../../components/etc/InputFeedbackSpan";
 import postData from "../../../api/backend-api/common/postData";
+import {CloseOutlined} from "@ant-design/icons";
 
 const AddGoal = ({onClickGoalFormButton, addGoal}) => {
   const style = {fontSize: "0.9em"}
@@ -25,15 +24,12 @@ const AddGoal = ({onClickGoalFormButton, addGoal}) => {
   }
 
   return (
-    <Card className="mb-2">
-      <div className="mb-2">
-        <span className="fs-6 text-orange">목표 추가</span>
-        <CIcon
-          icon={cilX}
-          className="float-end"
-          onClick={onClickGoalFormButton}/>
+    <Card style={{marginBottom: "1rem"}}>
+      <div style={{marginBottom: "1rem"}}>
+        <span style={{fontSize: "1rem"}} className="text-orange">목표 추가</span>
+        <CloseOutlined className="float-end" style={{color: "grey"}} onClick={onClickGoalFormButton}/>
       </div>
-      <div className="mb-2">
+      <div style={{marginBottom: "1rem"}}>
         <InputWithFeedback
           label="목표"
           labelColor={formLabelColor}
@@ -41,7 +37,7 @@ const AddGoal = ({onClickGoalFormButton, addGoal}) => {
           onChange={(e) => setGoal(() => ({...goal, content: e.target.value}))}
           feedbackMsg={goal.content == "" ? "목표를 입력해주세요" : ""}/>
       </div>
-      <div className="mb-2">
+      <div style={{marginBottom: "1rem"}}>
         <span className={`text-${formLabelColor}`} style={style}>식물</span>
         <SelectPlant
           onChange={(plantId) => setGoal(() => ({...goal, plantId: plantId}))}

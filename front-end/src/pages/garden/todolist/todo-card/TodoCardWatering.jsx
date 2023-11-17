@@ -13,7 +13,7 @@ const TodoCardWatering = ({plantId, openNotification, setSelected, flipCard}) =>
 
   // 물을 줬어요 제출
   const submitWatering = async () => {
-    try{
+    try {
       const data = {
         plantId,
         chemicalId,
@@ -34,22 +34,22 @@ const TodoCardWatering = ({plantId, openNotification, setSelected, flipCard}) =>
       setSelected("");
       flipCard(0);
     } catch (e) {
-      if(e.code == "B005"){
+      if (e.code == "B005") {
         alert(e.message);
       }
     }
   }
 
   return (
-    <div className="d-flex justify-content-between">
-      <Space className="mb-1">
+    <div style={{display: "flex", justifyContent: "space-between"}}>
+      <Space>
         <span>💧</span>
         <Select options={chemicals} defaultValue={0} style={{width: 100}}
                 onChange={(value) => setChemicalId(value)}/>
         <span>을 줬어요</span>
       </Space>
       <Space>
-        <Button onClick={submitWatering} className="bg-info text-white" size="small">제출</Button>
+        <Button onClick={submitWatering} style={{backgroundColor: "#007BFF", color: "white"}} size="small">제출</Button>
       </Space>
     </div>
   )

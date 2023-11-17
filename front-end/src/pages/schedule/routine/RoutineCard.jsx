@@ -32,7 +32,7 @@ const RoutineCard = ({routine, deleteRoutine, index, completeRoutine}) => {
   }
 
   return (
-    <div className="mb-3">
+    <div style={{marginBottom: "1rem"}}>
       <div>
         <Space>
           <Checkbox
@@ -53,13 +53,13 @@ const RoutineCard = ({routine, deleteRoutine, index, completeRoutine}) => {
           okText="네"
           cancelText="아니요"
         >
-          <CloseOutlined className="m-1 float-end text-dark" style={{fontSize: "0.9em"}}/>
+          <CloseOutlined className="float-end text-dark" style={{fontSize: "0.9em"}}/>
         </Popconfirm>
 
       </div>
-      <div className="d-flex justify-content-end">
+      <div className="justify-content-end">
         <Tag color={`${isCompleted || !hasToDoToday ? "" : "blue"}`}>{`${routine.cycle}일마다 한 번`}</Tag>
-        <LinkHoverTag content={routine.plantName} color={"green"} to={`/plant/${routine.plantId}`} />
+        <LinkHoverTag content={routine.plantName} color={"green"} to={`/plant/${routine.plantId}`}/>
       </div>
     </div>
   )

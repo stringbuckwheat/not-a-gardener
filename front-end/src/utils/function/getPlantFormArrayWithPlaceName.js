@@ -1,7 +1,7 @@
 import mediumArray from "../dataArray/mediumArray";
 
 const getPlantFormArrayWithPlaceName = (placeName) => {
-  const plantFormArr = [
+  return [
     {
       inputType: "text",
       label: "식물 이름",
@@ -40,8 +40,6 @@ const getPlantFormArrayWithPlaceName = (placeName) => {
       required: false
     }
   ]
-
-  return plantFormArr;
 }
 
 export default getPlantFormArrayWithPlaceName;

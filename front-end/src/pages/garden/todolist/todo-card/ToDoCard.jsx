@@ -1,9 +1,8 @@
 import React, {useState} from "react";
-import wateringCodeDesign from "../../../../utils/dataArray/wateringCodeDesign";
 import TodoCardFront from "./TodoCardFront";
 import TodoCardBehind from "./TodoCardBehind";
 import {Card} from "antd";
-import Style from "./TodoCard.moduls.scss"
+import Style from "./TodoCard.module.scss"
 
 /**
  * 메인페이지 할 일 카드
@@ -19,11 +18,12 @@ const ToDoCardInfo = ({
                         garden,
                         openNotification,
                       }) => {
-  let color = "danger";
+  let color = "#dc3545";
+  const colors = ["#007BFF", "#007BFF", "orange", "green", "green", "green", "grey"];
   const wateringCode = garden.gardenDetail.wateringCode;
 
   if (wateringCode >= 0) {
-    color = wateringCodeDesign[wateringCode].color;
+    color = colors[wateringCode];
   }
 
   const [clickedPlant, setClickedPlant] = useState(0);
@@ -32,10 +32,12 @@ const ToDoCardInfo = ({
     setClickedPlant(() => plantId);
   }
 
-  const props = {garden, color, flipCard};
+  const props = {garden, flipCard, color};
 
   return (
-    <Card className={Style.card} style={{borderRadius: "20px", borderWidth: "0.7px", border: "solid lightgray"}}>
+    <Card
+      bodyStyle={{width: "100%"}}
+      className={Style.card}>
       {
         clickedPlant !== 0 ?
           <TodoCardBehind

@@ -15,13 +15,13 @@ const GoalContent = ({
 
   return (
     <>
-      <div className="mb-4">
-        <span className="fs-5 text-garden">나의 목표</span>
+      <div>
+        <span style={{fontSize: "1.25rem", fontWeight: "bold"}} className="text-garden">나의 목표</span>
         {!isAddFormOpened
           ? <GButton color="garden" className="float-end" onClick={changeFormOpen}>추가</GButton> : <></>}
       </div>
       {/* 목표 추가 */}
-      <div className="mb-5">
+      <div style={{marginBottom: "2.5rem"}}>
         {isAddFormOpened
           ? <AddGoal
             onClickGoalFormButton={changeFormOpen}
@@ -32,7 +32,7 @@ const GoalContent = ({
 
       {/* 목표 리스트 영역 */}
       <div>
-        <div className="mb-2">
+        <div>
           {
             goalList.map((goal, idx) =>
               <GoalCard

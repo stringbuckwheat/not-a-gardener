@@ -1,10 +1,10 @@
 import {useTrail, animated} from "@react-spring/web";
 import {Col, Row} from "antd";
-import React, {useState} from "react";
 import {CaretRightOutlined, StepBackwardOutlined, StepForwardOutlined} from "@ant-design/icons";
 import {useDispatch} from "react-redux";
 import updateData from "../../../../api/backend-api/common/updateData";
 import getWateringNotificationMsg from "../../../../utils/function/getWateringNotificationMsg";
+import {useState} from "react";
 
 /**
  * 메인 페이지 할일 카드에 클릭시 시 나타날 버튼 세가지
@@ -13,8 +13,6 @@ import getWateringNotificationMsg from "../../../../utils/function/getWateringNo
  * @param plantId
  * @param openNotification
  * @param index
- * @param postponeWatering 물주기 미룬 후 콜백함수. 객체 내부 뜯어서 wateringCode만 교체
- * @param wateringCode 이미 미뤘는데 또 미루겠다고 하면 return (6이면 리턴)
  * @returns {JSX.Element}
  * @constructor
  */
@@ -24,7 +22,12 @@ const TodoCardButton = ({
                           openNotification,
                           index,
                         }) => {
+  const [hovered, setHovered] = useState(-1);
   const dispatch = useDispatch();
+
+  const mouseEnter = (index) => setHovered(() => index);
+  const mouseLeave = () => setHovered(-1);
+
 
   const onClickNotDry = async () => {
     // 안 말랐어요
@@ -55,20 +58,22 @@ const TodoCardButton = ({
     dispatch({type: 'updateTodoList', payload: {index, res}});
   }
 
+  const icon = {fontSize: "2rem"}
+
   const buttons = [
     {
       title: "안 말랐어요",
-      icon: <StepBackwardOutlined className={"font-2rem"}/>,
+      icon: <StepBackwardOutlined style={icon}/>,
       onClick: onClickNotDry
     },
     {
       title: "물을 줬어요!",
-      icon: <CaretRightOutlined className={"font-2rem"}/>,
+      icon: <CaretRightOutlined style={icon}/>,
       onClick: () => setSelected('watered')
     },
     {
       title: "미룰래요",
-      icon: <StepForwardOutlined className={"font-2rem"}/>,
+      icon: <StepForwardOutlined style={icon}/>,
       onClick: onClickPostpone
     }
   ]
@@ -79,23 +84,28 @@ const TodoCardButton = ({
   });
 
   return (
-    <Row className={"mt"}>
+    <Row style={{marginTop: "1.5rem"}}>
       {trailSprings.map((spring, index) => (
         <Col
           xs={8}
-          className={"text-center"}
+          style={{textAlign: "center"}}
           key={index}
-          onClick={buttons[index].onClick}>
+          onClick={buttons[index].onClick}
+          onMouseEnter={() => mouseEnter(index)}
+          onMouseLeave={mouseLeave}>
           <animated.button
-            className={`mb-1 animated-btn water-btn`}
+            className={`animated-btn`}
             style={{
               ...spring,
+              color: hovered == index ? "black" : "#4f5d73"
             }}
           >
-            <div className={"water-btn-m"}>
+            <div style={{margin: "0 1rem"}}>
               {buttons[index].icon}
+              {/* TODO class 수정*/}
               <p
-                className={`water-btn-text`}>
+                style={{fontSize: "0.7rem", whiteSpace: "nowrap"}}
+                className={`${hovered == index ? "text-black bold" : "text-dark"}`}>
                 {buttons[index].title}
               </p>
             </div>

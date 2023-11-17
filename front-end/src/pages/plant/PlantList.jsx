@@ -4,8 +4,7 @@ import {useEffect, useState} from "react";
 import AddPlant from "./AddPlant";
 import getData from "../../api/backend-api/common/getData";
 import {useDispatch} from "react-redux";
-import {CButton, CCard, CCardBody, CCol} from "@coreui/react";
-import {Space} from "antd";
+import {Button, Card, Col, Space} from "antd";
 
 /**
  * 식물 리스트 메인 페이지
@@ -22,11 +21,6 @@ const PlantList = () => {
 
   const dispatch = useDispatch();
 
-  // const search = (searchWord) => {
-  //   const searchedList = originPlantList.filter(plant => plant.plant.name.includes(searchWord));
-  //   setPlantList(searchedList);
-  // }
-
   const onMountPlantList = async () => {
     const rawPlace = await getData("/place");
     dispatch({type: "setPlaces", payload: rawPlace});
@@ -36,14 +30,6 @@ const PlantList = () => {
     onMountPlantList();
   }, []);
 
-  // useEffect(() => {
-  //   if (searchWord !== "") {
-  //     search(searchWord)
-  //   } else {
-  //     setPlantList(originPlantList);
-  //   }
-  // }, [searchWord])
-
   const switchAddForm = () => setIsAddFormOpened(!isAddFormOpened);
 
   return isAddFormOpened ? (
@@ -51,31 +37,30 @@ const PlantList = () => {
       afterAdd={switchAddForm}
     />
   ) : (
-    <div className="row justify-content-md-center">
-      <CCol md="auto" className="minWidth-full">
-        <CCard sm={6} className="mb-4">
-          <CCardBody>
-            <div>
-              <h4 className="mt-3 mb-3">{"나의 식물"}</h4>
-              <PlantListTag/>
-            </div>
-            <div className="float-end mb-3">
-              <Space>
-                {/*<Search setSearchWord={setSearchWord}/>*/}
-                <CButton
-                  onClick={switchAddForm}
-                  color="success"
-                  size="sm"
-                  variant="outline"
-                  shape="rounded-pill">
-                  식물 추가하기
-                </CButton>
-              </Space>
-            </div>
-            <PlantTable />
-          </CCardBody>
-        </CCard>
-      </CCol>
+    <div className="justify-content-center" style={{padding: "1rem", minWidth: "100%"}}>
+      <Col md="auto" style={{minWidth: "100%"}}>
+        <Card sm={6}>
+          <div>
+            <h4 className={"text-garden"}>{"나의 식물"}</h4>
+            <PlantListTag/>
+          </div>
+          <div className="float-end" style={{marginTop: "1rem"}}>
+            <Space>
+              <Button
+                style={{marginBottom: "1rem"}}
+                onClick={switchAddForm}
+                type={"default"}
+                color="success"
+                size="sm"
+                variant="outline"
+                shape="rounded-pill">
+                식물 추가하기
+              </Button>
+            </Space>
+          </div>
+          <PlantTable/>
+        </Card>
+      </Col>
     </div>
   )
 }

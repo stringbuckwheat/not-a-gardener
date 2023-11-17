@@ -1,10 +1,10 @@
 import getPlantFormArrayWithPlaceName from "../../../utils/function/getPlantFormArrayWithPlaceName";
-import FormProvider from "../../../components/form/FormProvider";
 import {useState} from "react";
 import postData from "../../../api/backend-api/common/postData";
-import {ConfigProvider, Modal, Space, Tooltip} from "antd";
+import {ConfigProvider, Form, Modal, Space, Tooltip} from "antd";
 import InputFeedbackSpan from "../../../components/etc/InputFeedbackSpan";
 import {QuestionCircleTwoTone} from "@ant-design/icons";
+import InputHandler from "../../../components/form/InputHandler";
 
 /**
  * 장소에서 새 식물 추가하기 폼
@@ -66,17 +66,19 @@ const AddPlantInPlaceFormModal = ({visible, callBackFunction, placeId, placeName
              okText="추가"
              okButtonProps={{onClick: isValid ? submit : () => setFeedbackMsg(true)}}
              cancelText="돌아가기"
+             style={{padding: "1rem"}}
              onCancel={() => setAddPlantFormVisible(false)}
       >
-        <FormProvider
-          inputObject={plant}
-          itemObjectArray={getPlantFormArrayWithPlaceName(placeName)}
-          onChange={onChange}
-        />
+        <Form layout="vertical">
+          <InputHandler
+            itemObjectArray={getPlantFormArrayWithPlaceName(placeName)}
+            onChange={onChange}
+            inputObject={plant}/>
+        </Form>
         {
           feedbackMsg
             ?
-            <div className="d-flex justify-content-end">
+            <div style={{display: "flex", justifyContent: "end"}}>
               <InputFeedbackSpan feedbackMsg={getFeedbackMsg()} color="danger"/>
             </div>
             : <></>

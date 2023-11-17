@@ -21,11 +21,11 @@ const RoutineList = () => {
   const navigate = useNavigate();
 
   return (
-    <Col md={12} xs={24}>
+    <Col md={12} xs={24} style={{margin: "0.5rem 0"}}>
       <Link to="/schedule"
             className={`no-text-decoration text-${isTitleHovered ? "orange" : "black"}`}>
         <span
-          className={`small fw-bold`}
+          style={{fontWeight: "bold"}}
           onMouseEnter={() => setIsTitleHovered(!isTitleHovered)}
           onMouseLeave={() => setIsTitleHovered(!isTitleHovered)}>
           {localStorage.getItem("name")}님의 루틴

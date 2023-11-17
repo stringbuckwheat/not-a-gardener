@@ -2,15 +2,14 @@ import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react"
 import ChemicalTag from "src/components/tag/ChemicalTag";
 import DetailLayout from "src/components/data/layout/DetailLayout";
-import FormProvider from "src/components/form/FormProvider";
 import getChemicalFormArray from "../../utils/function/getChemicalFormArray";
-import RemoveModal from "../../components/modal/RemoveModal";
 import deleteData from "../../api/backend-api/common/deleteData";
 import getData from "../../api/backend-api/common/getData";
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 import updateData from "../../api/backend-api/common/updateData";
 import TableWithPage from "../../components/data/TableWithPage";
 import wateringTableColumnArray from "../../utils/dataArray/wateringTableColumnInChemicalArray";
+import FormProvider from "../../components/form/FormProvider";
 
 const ChemicalDetail = () => {
   const chemicalId = useParams().chemicalId;
@@ -87,15 +86,10 @@ const ChemicalDetail = () => {
         deleteTitle="비료/살균/살충제"
         tags={<ChemicalTag chemical={chemical} wateringListSize={wateringSize}/>}
         onClickModifyBtn={() => setOnModify(!onModify)}
-        deleteModal={
-          <RemoveModal
-            remove={deactivate}
-            modalTitle={"이 비료/살균/살충제를 삭제하실 건가요?"}
-            deleteButtonTitle={"삭제하기"}
-            modalContent={"물주기 기록은 보존됩니다."}/>}
         bottomData={<TableWithPage columns={wateringTableColumnArray}
                                    getDataSource={getChemicalUsage}
                                    total={wateringSize}/>}
+        detailMsg={"단, 물주기 기록은 보존됩니다."}
       />)
     :
     (<FormProvider

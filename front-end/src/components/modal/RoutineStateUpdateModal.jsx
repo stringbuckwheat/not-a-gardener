@@ -1,9 +1,8 @@
 import updateRoutineState from "../../api/backend-api/updateRoutineState";
-import {CModal, CModalBody} from "@coreui/react";
 import isEndWithVowel from "../../utils/function/isEndWithVowel";
 import React from "react";
 import GButton from "../button/GButton";
-import {Button, Space} from "antd";
+import {Button, Modal} from "antd";
 import LinkHoverTag from "../tag/basic/LinkHoverTag";
 import {useDispatch} from "react-redux";
 
@@ -39,17 +38,14 @@ const RoutineStateUpdateModal = ({visible, closeModal, routineForModal,}) => {
   }
 
   return (
-    <CModal alignment="center" visible={visible} onClose={closeModal}>
-      <CModalBody>
-        <h6 className="mb-4 mt-2 d-flex">{getTitle()}</h6>
-        <div>
-          <Space className="float-end">
-            <GButton color="teal" onClick={confirm}>네</GButton>
-            <Button onClick={closeModal}>아니요</Button>
-          </Space>
-        </div>
-      </CModalBody>
-    </CModal>
+    <Modal open={visible} onClose={closeModal} closable={false}
+           footer={
+             <>
+               <GButton color="teal" onClick={confirm}>네</GButton>
+               <Button onClick={closeModal}>아니요</Button>
+             </>}>
+      <h6 style={{marginBottom: "2rem", marginTop: "1rem", display: "flex"}}>{getTitle()}</h6>
+    </Modal>
   )
 }
 

@@ -1,8 +1,8 @@
-import {CCard, CCardBody} from "@coreui/react";
 import React, {useState} from "react";
 import RoutineContent from "./RoutineContent";
 import NoSchedule from "../../../components/empty/NoSchedule";
 import AddRoutine from "./AddRoutine";
+import {Card} from "antd";
 
 const Routine = ({routines}) => {
   const [toDoList, setToDoList] = useState(routines.todoList);
@@ -36,34 +36,32 @@ const Routine = ({routines}) => {
   }
 
   return (
-    <CCard className="p-4">
-      <CCardBody>
-        {
-          toDoList.length == 0 && notToDoList.length == 0
-            ?
-            <NoSchedule
-              isAddFormOpened={isRoutineFormOpened}
-              title="루틴"
-              onClickShowAddForm={onClickRoutineFormButton}
-            >
-              <AddRoutine
-                onClickRoutineFormButton={onClickRoutineFormButton}
-                addRoutine={addRoutine}
-              />
-            </NoSchedule>
-            :
-            <RoutineContent
-              isRoutineFormOpened={isRoutineFormOpened}
+    <Card className="width-full" style={{margin: "0 1rem", padding: "1rem"}}>
+      {
+        toDoList.length == 0 && notToDoList.length == 0
+          ?
+          <NoSchedule
+            isAddFormOpened={isRoutineFormOpened}
+            title="루틴"
+            onClickShowAddForm={onClickRoutineFormButton}
+          >
+            <AddRoutine
               onClickRoutineFormButton={onClickRoutineFormButton}
               addRoutine={addRoutine}
+            />
+          </NoSchedule>
+          :
+          <RoutineContent
+            isRoutineFormOpened={isRoutineFormOpened}
+            onClickRoutineFormButton={onClickRoutineFormButton}
+            addRoutine={addRoutine}
 
-              toDoList={toDoList}
-              deleteRoutine={deleteRoutine}
-              completeRoutine={completeRoutine}
-              notToDoList={notToDoList}/>
-        }
-      </CCardBody>
-    </CCard>
+            toDoList={toDoList}
+            deleteRoutine={deleteRoutine}
+            completeRoutine={completeRoutine}
+            notToDoList={notToDoList}/>
+      }
+    </Card>
   )
 }
 

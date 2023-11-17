@@ -1,6 +1,7 @@
-import {CCol, CWidgetStatsF} from "@coreui/react";
-import {cilPlus} from "@coreui/icons";
-import CIcon from '@coreui/icons-react';
+import {Card, Col, Row} from "antd";
+import React from "react";
+import {PlusOutlined} from "@ant-design/icons";
+import Style from './ItemCard.module.scss'
 
 /**
  * 추가하기 카드
@@ -10,17 +11,19 @@ import CIcon from '@coreui/icons-react';
  * @constructor
  */
 const AddItemCard = ({addMsg, onClick}) => {
-
   return (
-    <CCol md={3} xs={12}>
-      <CWidgetStatsF
-        onClick={onClick}
-        className="mb-3"
-        color="dark"
-        icon={<CIcon icon={cilPlus} height={30}/>}
-        value={addMsg}
-      />
-    </CCol>
+    <Col md={6} xs={24} className={Style.wrapper}>
+      <Card className={Style.card} onClick={onClick}>
+        <Row>
+          <Col style={{alignItems: "center"}}>
+              <PlusOutlined className={Style.icon} />
+          </Col>
+          <Col style={{marginLeft: "1.5rem",}}>
+            <div style={{color: "#4f5d73", fontWeight: "bold", fontSize: "1rem", marginTop: "1.5rem"}}>{addMsg}</div>
+          </Col>
+        </Row>
+      </Card>
+    </Col>
   )
 }
 

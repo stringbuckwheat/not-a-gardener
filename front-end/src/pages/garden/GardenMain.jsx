@@ -35,20 +35,20 @@ const GardenMain = () => {
   // todo booped 고치기
 
   return (
-    <div className="mt-3">
+    <div style={{marginTop: "1.5rem"}}>
       {contextHolder}
       <Space>
-        <div className="text-garden bold fs-4">가드너 <span
+        <div className="text-garden" style={{fontSize: "1.7rem"}}>가드너 <span
           className="bg-york">{useSelector(state => state.sidebar.name)}</span>님의 오늘
           할 일이에요!
         </div>
         <Booped rotation={20} timing={200}>
-          <SmileOutlined className={"text-success"} style={{fontSize: "1.7rem"}}/>
+          <SmileOutlined style={{fontSize: "2rem", color: "green"}}/>
         </Booped>
       </Space>
-      <Row className="mt-4">
+      <Row style={{marginTop: "1rem"}}>
         <RoutineList/>
-        <WaitingForWateringList />
+        <WaitingForWateringList/>
       </Row>
       <GardenTodoList openNotification={openNotification}/>
     </div>

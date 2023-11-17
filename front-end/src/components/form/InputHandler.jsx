@@ -1,10 +1,14 @@
-import InputSelect from './input/InputSelect'
-import Input from './input/Input'
-import InputDate from './input/InputDate';
+import InputSelect from "./InputSelect";
+import InputText from "./InputText";
+import InputDate from "./InputDate";
 
 const InputHandler = ({itemObjectArray, onChange, inputObject}) => {
   // text, number
   const invalidMsg = (inputItem) => {
+    if (inputItem.feedbackInvalid) {
+      return inputItem.feedbackInvalid;
+    }
+
     return inputItem.inputType === "text" ? invalidMsgForText(inputItem) : invalidMsgForNumber(inputItem);
   }
   const invalidMsgForText = (inputItem) => {
@@ -21,8 +25,8 @@ const InputHandler = ({itemObjectArray, onChange, inputObject}) => {
         const type = inputItem.inputType;
 
         return type === "select" ? <InputSelect {...commonProps}/>
-          : type === "date" ? <InputDate {...commonProps}/>
-            : <Input {...commonProps} feedbackInvalid={invalidMsg(inputItem)}/>
+          : type === "date" ? <InputDate {...commonProps} feedbackInvalid={invalidMsg(inputItem)}/>
+            : <InputText {...commonProps} feedbackInvalid={invalidMsg(inputItem)}/>
       }
     ))
 }

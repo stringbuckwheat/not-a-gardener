@@ -7,7 +7,7 @@ const WaitingForWateringList = () => {
   const navigate = useNavigate();
   const waitingList = useSelector(state => state.gardens.waitingList);
 
-  if(waitingList.length == 0){
+  if (waitingList.length == 0) {
     return <></>
   }
 
@@ -16,9 +16,9 @@ const WaitingForWateringList = () => {
   }
 
   return (
-    <Col md={12} xs={24}>
+    <Col md={12} xs={24} style={{margin: "0.5rem 0"}}>
       <Tooltip placement={"topLeft"} title={"물 주기를 2회 이상 기록해주세요"}>
-        <div className="small fw-bold text-black">물주기 정보를 기다리고 있는 식물들</div>
+        <div style={{fontWeight: "bold"}}>물주기 정보를 기다리고 있는 식물들</div>
       </Tooltip>
       <div>
         {

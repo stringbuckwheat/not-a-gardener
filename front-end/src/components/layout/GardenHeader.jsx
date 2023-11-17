@@ -1,6 +1,5 @@
-import {DownOutlined, MenuFoldOutlined, MenuUnfoldOutlined} from "@ant-design/icons";
-import {Dropdown, Space, Tag} from "antd";
-import {CAvatar} from "@coreui/react";
+import {DownOutlined, MenuFoldOutlined, MenuUnfoldOutlined,} from "@ant-design/icons";
+import {Avatar, Dropdown, Space, Tag} from "antd";
 import sprout from "../../assets/images/sprout.png";
 import React from "react";
 import logOut from "../../utils/function/logout";
@@ -29,7 +28,7 @@ const GardenHeader = () => {
   ];
 
   const iconProps = {
-    style: { fontSize: "1.2rem", color: "grey"},
+    style: {fontSize: "1.2rem", color: "grey"},
     onClick: () => dispatch({type: 'setSidebar', payload: !collapsed})
   }
 
@@ -49,7 +48,7 @@ const GardenHeader = () => {
 
       <Dropdown menu={{items}} trigger={['click']}>
         <Space style={{marginRight: "1rem"}}>
-          <CAvatar src={sprout} size="sm"/>
+          <Avatar size="medium" src={sprout}/>
           <Tag color="#305738" size="large">{name}</Tag>
           <DownOutlined/>
         </Space>

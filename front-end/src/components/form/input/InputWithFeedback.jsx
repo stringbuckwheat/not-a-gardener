@@ -5,7 +5,7 @@ import React from "react";
 const InputWithFeedback = ({name, label, labelColor, size, onChange, defaultValue, feedbackMsg, className}) => {
   const style = {fontSize: "0.9em"};
   return (
-    <div className={`mb-2 ${className}`}>
+    <div style={{marginBottom: "0.5rem"}} className={className}>
       <span className={`text-${labelColor}`} style={style}>{label}</span>
       <div>
         <Input

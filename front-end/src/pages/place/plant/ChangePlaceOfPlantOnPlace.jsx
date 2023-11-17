@@ -54,14 +54,14 @@ const ChangePlaceOfPlantOnPlace = ({setSelectedRowKeys, selectedPlantId}) => {
   }
 
   return (
-    <div className="mb-3 float-end">
+    <div style={{marginBottom: "1.5rem", float: "right"}}>
       <Space>
         <SwapRightOutlined
-          className="font-size-20 text-success"/>
+          style={{fontSize: "1.5rem", color: "green"}}/>
         {`${selectedPlantId.length}개의 식물을`}
         <Select
           size={"small"}
-          className="width-100"
+          style={{width: "8rem", height: "1.7rem"}}
           onChange={(value) => setPlaceId(value)}
           options={placeList}/>
         으로

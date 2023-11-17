@@ -1,0 +1,52 @@
+.card {
+  border-radius: 20px;
+  border-width: 0.7px;
+  border: solid lightgray;
+  min-height: 30vh;
+  display: flex;
+  align-items: center;
+  margin: 0.3rem;
+}
+
+.front-wrap {
+  min-width: 100%;
+}
+
+.wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 100%;
+}
+
+.center {
+  text-align: center;
+}
+
+.name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: black;
+}
+
+.msg {
+  font-weight: 600;
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+  margin-top: 0.5rem;
+}
+
+.behind-info {
+  margin: 0.7rem;
+}
+
+.behind-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.behind-name {
+  font-size: 2rem;
+  font-weight: bold;
+  color: black;
+}

@@ -1,9 +1,9 @@
 import mediumArray from "src/utils/dataArray/mediumArray";
 import {useState} from "react";
-import FormProvider from "src/components/form/FormProvider";
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 import updateData from "../../api/backend-api/common/updateData";
 import {useNavigate} from "react-router-dom";
+import FormProvider from "../../components/form/FormProvider";
 
 const ModifyPlant = ({changeModifyState, placeList, plant}) => {
   const navigate = useNavigate();
@@ -34,14 +34,16 @@ const ModifyPlant = ({changeModifyState, placeList, plant}) => {
       label: "장소",
       name: "placeId",
       defaultValue: plant.placeId,
-      optionArray: placeList
+      optionArray: placeList,
+      required: true
     },
     {
       inputType: "select",
       label: "식재 환경",
       name: "medium",
       defaultValue: plant.medium,
-      optionArray: mediumArray
+      optionArray: mediumArray,
+      required: true
     },
     {
       inputType: "number",
@@ -72,7 +74,7 @@ const ModifyPlant = ({changeModifyState, placeList, plant}) => {
           title={"수정하기"}
           onClickValid={submit}
           onClickInvalidMsg={"입력값을 확인해주세요"}/>
-    }/>
+      }/>
   )
 }
 

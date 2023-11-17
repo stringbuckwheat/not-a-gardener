@@ -5,14 +5,76 @@
   font-style: normal;
 }
 
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.75rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  margin-top: 0;
+  font-size: 1.25rem;
+}
+
+h5 {
+  font-size: 1rem;
+}
+
+h6 {
+  font-size: 0.75rem;
+}
+
+.align-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-decoration-none {
+  text-decoration: none !important
+}
+
+.float-end {
+  float: right !important;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+
+.justify-content-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.justify-content-end {
+  display: flex;
+  justify-content: end;
+}
+
 .link {
   text-decoration: none;
   color: #305738;
 }
 
+.text-danger {
+  color: #dc3545;
+}
+
 .link:hover {
   color: darkgray;
   transition: color 200ms ease;
+}
+
+.text-center {
+  text-align: center !important;
 }
 
 /* darkgreen */
@@ -22,20 +84,24 @@
 }
 
 /*teal green*/
-.bg-teal{
+.bg-teal {
   background-color: #6d9773 !important;
 }
 
-.bg-beige{
+.bg-beige {
   background-color: #FEEFBB !important;
 }
 
-.bg-orange{
+.bg-orange {
   background-color: #E14A1E !important;
 }
 
-.bg-york{
+.bg-york {
   background-color: #ffba00 !important;
+}
+
+.bg-light {
+  background-color: #ebedef;
 }
 
 /*****/
@@ -57,6 +123,10 @@
 
 .text-york {
   color: #ffba00 !important;
+}
+
+.text-dark {
+  color: rgba(79, 93, 115) !important;
 }
 
 /* garden card */

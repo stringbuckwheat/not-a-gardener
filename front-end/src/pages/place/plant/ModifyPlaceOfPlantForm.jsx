@@ -1,6 +1,5 @@
-import {Form, Select, Space, Tooltip} from "antd";
-import {CButton} from "@coreui/react";
-import {useEffect, useState} from "react";
+import {Button, Form, Select, Space} from "antd";
+import React, {useEffect, useState} from "react";
 import getData from "../../../api/backend-api/common/getData";
 import updateData from "../../../api/backend-api/common/updateData";
 import getPlantListForPlacePlantTable from "../../../utils/function/getPlantListForPlacePlantTable";
@@ -55,8 +54,8 @@ const ModifyPlaceOfPlantForm = ({placeId, setMoveFormVisible, setPlants}) => {
   }
 
   return (
-    <Form className="mb-5" layout="vertical" autoComplete="off">
-      <Form.Item name="name" label="다른 장소의 식물 가져오기" className="mb-2">
+    <Form layout="vertical" autoComplete="off">
+      <Form.Item name="name" label="다른 장소의 식물 가져오기">
         <Select
           mode="multiple"
           allowClear
@@ -64,19 +63,11 @@ const ModifyPlaceOfPlantForm = ({placeId, setMoveFormVisible, setPlants}) => {
           options={options}
         />
       </Form.Item>
-      <Space className="float-end">
-        <CButton
-          size="sm"
-          variant="outline"
-          onClick={() => {
-            setMoveFormVisible(false)
-          }}
-          color="dark">취소</CButton>
-        <CButton
-          size="sm"
-          variant="outline"
-          onClick={submit}
-          color="success">제출</CButton>
+      <Space style={{float: "right", marginBottom: "1rem"}}>
+        <Button type={"text"} onClick={() => setMoveFormVisible(false)}>
+          취소
+        </Button>
+        <Button onClick={submit}>제출</Button>
       </Space>
     </Form>
   )

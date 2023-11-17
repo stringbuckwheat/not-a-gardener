@@ -1,8 +1,9 @@
 import {Badge, Popconfirm, Space} from "antd";
 import LinkHoverTag from "../../components/tag/basic/LinkHoverTag";
 import isEndWithVowel from "../../utils/function/isEndWithVowel";
-import DeleteIconBtn from "../../components/button/DeleteIconBtn";
 import deleteWithData from "../../api/backend-api/common/deleteWithData";
+import {useState} from "react";
+import {DeleteOutlined} from "@ant-design/icons";
 
 const WateringList = ({wateringDetail, onDelete}) => {
   if (!wateringDetail || wateringDetail.length == 0) {
@@ -24,6 +25,9 @@ const WateringList = ({wateringDetail, onDelete}) => {
     return `${chemicalName}${isEndWithVowel(chemicalName) ? "를" : "을"} 주었어요`
   }
 
+  const [isHovered, setIsHovered] = useState(false);
+  const handleHover = () => setIsHovered(!isHovered);
+
   return (
     <>
       {wateringDetail.map((watering) => {
@@ -44,7 +48,9 @@ const WateringList = ({wateringDetail, onDelete}) => {
                     okText="네"
                     cancelText="아니요"
                     onConfirm={() => deleteWatering(forDelete)}>
-                    <DeleteIconBtn/>
+                    <DeleteOutlined onMouseEnter={handleHover}
+                                    onMouseLeave={handleHover}
+                                    className={isHovered ? "text-orange" : ""}/>
                   </Popconfirm>
                 </Space>
                 </span>

@@ -22,29 +22,28 @@ const ValidationSubmitButton = ({isValid, onClickValid, onClickInvalidMsg, title
     onClickValid();
   }
 
-  if(!isValid){
+  if (!isValid) {
     return (
-      <>
-        <div className={className}>
-          <div>
-            <InputFeedbackSpan feedbackMsg={invalidMsg}/>
-          </div>
-          <Button
-            size={size}
-            className={`bg-light text-dark ${className}`}
-            onClick={() => setInvalidMsg(onClickInvalidMsg)}>
-            {title}
-          </Button>
+      <div className={className}>
+        <div>
+          <InputFeedbackSpan feedbackMsg={invalidMsg}/>
         </div>
-      </>
+        <Button
+          type={"text"}
+          size={size}
+          className={`bg-light ${className}`}
+          onClick={() => setInvalidMsg(onClickInvalidMsg)}>
+          {title}
+        </Button>
+      </div>
     )
   }
 
   return (
     <Button
-      type="button"
+      type="primary"
       size={size}
-      className={`bg-orange text-white ${className}`}
+      className={className}
       onClick={onSubmit}
       disabled={isSubmitted}
     >

@@ -6,7 +6,7 @@ import SelectAccount from "./forgot-account/SelectAccount";
 import ValidateGardener from "./forgot-account/ValidateGardener";
 import {Navigate} from "react-router-dom";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
-import {Col, Row} from "antd";
+import {Row} from "antd";
 
 /**
  * 아이디를 찾을지, 비밀번호를 찾을지 선택하는 페이지
@@ -58,14 +58,14 @@ const ForgotAccount = () => {
           ? <ValidateGardener {...props}/>
           : (
             <Row style={{justifyContent: "center"}}>
-                <ForgotAccountCard
-                  onClick={() => setForgot("username")}
-                  icon={<UserOutlined style={{fontSize: "7rem"}}/>}
-                  title="아이디를 잊어버렸어요"/>
-                <ForgotAccountCard
-                  onClick={() => setForgot("password")}
-                  icon={<LockOutlined style={{fontSize: "7rem"}}/>}
-                  title="비밀번호를 잊어버렸어요"/>
+              <ForgotAccountCard
+                onClick={() => setForgot("username")}
+                icon={<UserOutlined style={{fontSize: "7rem"}}/>}
+                title="아이디를 잊어버렸어요"/>
+              <ForgotAccountCard
+                onClick={() => setForgot("password")}
+                icon={<LockOutlined style={{fontSize: "7rem"}}/>}
+                title="비밀번호를 잊어버렸어요"/>
             </Row>
           )
       }

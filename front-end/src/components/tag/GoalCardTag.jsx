@@ -17,7 +17,7 @@ const GoalCardTag = ({isCompleted, plantId, plantName}) => {
     : <></>;
 
   return (
-    <div className="d-flex justify-content-end">
+    <div style={{display: "flex", justifyContent: "end"}}>
       {completeTag}
       {plantTag}
     </div>

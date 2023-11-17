@@ -31,7 +31,7 @@ const GoalCard = ({goal, index, completeGoal, deleteGoal}) => {
   }
 
   return (
-    <div className="mb-3">
+    <div style={{marginBottom: "1rem"}}>
       <div>
         <Space>
           <Checkbox
@@ -51,7 +51,7 @@ const GoalCard = ({goal, index, completeGoal, deleteGoal}) => {
           okText="네"
           cancelText="아니요"
         >
-          <CloseOutlined className="m-1 float-end text-dark" style={{fontSize: "0.9em"}}/>
+          <CloseOutlined className="float-end text-dark" style={{fontSize: "0.9em"}}/>
         </Popconfirm>
       </div>
       <GoalCardTag isCompleted={isCompleted} plantName={goal.plantName} plantId={goal.plantId}/>

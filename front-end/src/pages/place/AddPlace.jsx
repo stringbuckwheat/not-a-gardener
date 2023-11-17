@@ -1,9 +1,9 @@
 import getPlaceInputItemArray from "src/utils/function/getPlaceInputItemArray";
-import FormProvider from "src/components/form/FormProvider";
 import {useState} from "react";
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 import postData from "../../api/backend-api/common/postData";
 import {useDispatch} from "react-redux";
+import FormProvider from "../../components/form/FormProvider";
 
 /**
  * 장소 추가
@@ -46,7 +46,7 @@ const AddPlace = ({afterAdd}) => {
       itemObjectArray={getPlaceInputItemArray(place)}
       onChange={onChange}
       submitBtn={<ValidationSubmitButton
-        className="float-end mt-2"
+        className="float-end"
         isValid={isValid}
         onClickValid={submit}
         onClickInvalidMsg={isValid ? "" : "입력 내용을 확인해주세요"}

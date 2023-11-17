@@ -1,9 +1,6 @@
 import React, {useState} from "react";
 import {Input} from "antd";
-import CIcon from "@coreui/icons-react";
-import {cilLockLocked} from "@coreui/icons";
-import {CButton} from "@coreui/react";
-import updateData from "../../../api/backend-api/common/updateData";
+import {LockOutlined} from "@ant-design/icons";
 
 /**
  * 비밀번호 바꾸기 폼
@@ -16,8 +13,7 @@ import updateData from "../../../api/backend-api/common/updateData";
  * @returns {JSX.Element}
  * @constructor
  */
-const ChangePasswordForm = ({current, setCurrent, closeModal, prevPassword}) => {
-  const [newPassword, setNewPassword] = useState("");
+const ChangePasswordForm = ({prevPassword, newPassword, setNewPassword}) => {
   const [confirm, setConfirm] = useState(false);
 
   const pwRegex = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,50}$/;
@@ -34,11 +30,6 @@ const ChangePasswordForm = ({current, setCurrent, closeModal, prevPassword}) => 
     }
   }
 
-  const onSubmit = async () => {
-    await updateData("/gardener/password", {password: newPassword});
-    setCurrent(current + 1);
-  }
-
   const getPasswordFeedbackMsg = () => {
     let msg = "숫자, 특수문자를 포함하여 8자리 이상이어야 해요."; // regex 통과 못함
 
@@ -52,42 +43,33 @@ const ChangePasswordForm = ({current, setCurrent, closeModal, prevPassword}) => 
   }
 
   return (
-    <>
-      <div>
+    <div>
+      <div style={{marginBottom: "0.8rem"}}>
+        <span style={{fontSize: "0.8rem", float: "left", marginBottom: "0.25rem"}}
+              className={`text-${isPasswordValid ? "success" : "danger"}`}>
+          {getPasswordFeedbackMsg()}
+        </span>
         <Input
           placeholder="새 비밀번호를 입력해주세요"
           type="password"
-          prefix={<CIcon icon={cilLockLocked}/>}
+          prefix={<LockOutlined/>}
           onChange={(e) => setNewPassword(e.target.value)}
         />
-        <span
-          style={{fontSize: "12px"}}
-          className={`text-${isPasswordValid ? "success" : "danger"} float-end mb-1`}>
-        {getPasswordFeedbackMsg()}
-      </span>
+      </div>
+      <div>
+        <span style={{fontSize: "0.8rem", float: "left", marginBottom: "0.25rem"}}
+              className={`text-${isValid ? "success" : "danger"} float-end mb-1`}>
+          {getConfirmMsg()}
+        </span>
         <Input
           placeholder="다시 한 번 입력해주세요"
           type="password"
-          prefix={<CIcon icon={cilLockLocked}/>}
+          prefix={<LockOutlined/>}
           onChange={(e) => setConfirm(e.target.value)}
         />
-        <span
-          style={{fontSize: "12px"}}
-          className={`text-${isValid ? "success" : "danger"} float-end mb-1`}>
-        {getConfirmMsg()}
-      </span>
+
       </div>
-      <div className="float-end mt-4">
-        <CButton color="link-secondary" size="sm" onClick={closeModal}>돌아가기</CButton>
-        <CButton
-          color={isValid ? "success" : "light"}
-          disabled={!(isValid)}
-          size="sm"
-          onClick={onSubmit}>
-          제출하기
-        </CButton>
-      </div>
-    </>
+    </div>
   )
 }
 

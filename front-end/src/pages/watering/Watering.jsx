@@ -5,7 +5,6 @@ import Loading from "../../components/data/Loading";
 import {Badge, Calendar, ConfigProvider} from 'antd';
 import 'dayjs/locale/ko';
 import locale from "antd/es/date-picker/locale/ko_KR";
-import {CContainer} from "@coreui/react";
 import WateringDetail from "./WateringDetail";
 
 const Watering = () => {
@@ -51,7 +50,7 @@ const Watering = () => {
     const listData = getListData(value);
     return (
       <>
-        {listData.map((item) => (<Badge key={item.content} status={item.type} text={item.content}/>))}
+        {listData.map((item) => (<div><Badge key={item.content} status={item.type} text={item.content}/></div>))}
       </>
     );
   };
@@ -108,8 +107,8 @@ const Watering = () => {
     <Loading/>
   ) : (
     <ConfigProvider theme={{token: {colorPrimary: '#6d9773'}}}>
-      <CContainer className="bg-white">
-        <h5 className="mt-2 mb-1 pt-3 text-garden">물주기 기록</h5>
+      <div className="bg-white" style={{padding: "1rem 1.5rem"}}>
+        <h4 className={"text-garden"}>물주기 기록</h4>
         <WateringDetail
           onDelete={onDelete}
           isWateringFormOpened={isWateringFormOpened}
@@ -118,13 +117,13 @@ const Watering = () => {
           selectedDate={selectedDate}
           wateringDetail={wateringDetail}/>
         <Calendar
-          className="mt-1"
+          style={{marginTop: "1rem", padding: "1rem"}}
           locale={locale}
           dateCellRender={dateCellRender}
           onSelect={onSelect}
           onPanelChange={onPanelChange}
         />
-      </CContainer>
+      </div>
     </ConfigProvider>
   );
 }

@@ -1,5 +1,4 @@
-import {CButton} from "@coreui/react";
-import {Popconfirm, Space} from "antd";
+import {Button, Popconfirm, Space} from "antd";
 import WateringForm from "./WateringForm";
 import deleteData from "../../../../api/backend-api/common/deleteData";
 import {useDispatch} from "react-redux";
@@ -39,7 +38,7 @@ const HandleWateringForm = ({
           page={page}
         />
         :
-        <Space size={[1, 5]} className="float-end">
+        <Space className="float-end" style={{marginBottom: "1rem"}}>
           <Popconfirm
             placement="topRight"
             title="물주기 기록을 모두 지웁니다"
@@ -48,9 +47,9 @@ const HandleWateringForm = ({
             okText="네"
             cancelText="아니요"
           >
-            <CButton color="link-secondary"><small>물주기 기록 전체 삭제</small></CButton>
+            <Button type={"text"}>물주기 기록 전체 삭제</Button>
           </Popconfirm>
-          <CButton onClick={onClickWateringFormBtn} color="primary" size="sm" shape="rounded-pill">물주기</CButton>
+          <Button onClick={onClickWateringFormBtn} type="primary">물주기</Button>
         </Space>
       }
     </>
