@@ -61,7 +61,7 @@ not-a-gardener🌿는, 관수 기록 시 직전 물 준 날짜와 비교해서 �
 ```
 not-a-gardener/
 ├── build.gradle
-├── front-end/        ## React
+├── front-end/        ## ⭐️ Frontend
 │ ├── public/
 │ └── src/
 │   ├── App.js  
@@ -69,28 +69,32 @@ not-a-gardener/
 │   ├── assets/       ## 이미지, 로고 등
 │   ├── components/   ## 재사용할 컴포넌트
 │   ├── pages/        ## 페이지
-│   ├── utils/        ## util 함수
-│   └── redux/        ## redux reducer, store...
+│   ├── redux/        ## redux reducer, store...
+│   ├── theme/        ## 디자인(global)
+│   └── utils/        ## util 함수
 ├── gradle/  
 │ └── wrapper/  
-└── src/
-   ├── main/  
-   │   └── java  
-   │       └── com/buckwheat/garden   
-   │         ├── GardenApplication.java  
-   │         ├── code/          ## 관수코드, 관수 후 주기 변경 알림 코드 등
-   │         ├── config/        ## 설정 클래스
-   │         ├── controller/    ## 컨트롤러
-   │         ├── dao/           ## Repository 진입 전 공통 로직
-   │         ├── data/          ## Entity, DTO, Token
-   │         ├── error/         ## ExceptionHandler, 응답 객체
-   │         │   ├── code/      ## 에러코드(Enum)
-   │         │   └── exception/ ## Custom Exception
-   │         ├── filter/        ## 인증 필터들
-   │         ├── repository/    ## 리파지토리
-   │         ├── service/       ## 서비스
-   │         └── util/          ## util 함수
-   └── test/                    ## test 코드
+└── src/            ## ⭐️ Backend
+   └──  main/  
+       └── java  
+           └── com/buckwheat/garden   
+             ├── GardenApplication.java  
+             ├── domain             ## 도메인 별 분류
+             │   ├── chemical/      ## 비료/살충/살균제
+             │   ├── gardener/      ## 회원
+             │   ├── goal/          ## 목표
+             │   ├── place/         ## 장소
+             │   ├── plant/         ## 식물
+             │   ├── routine/       ## 루틴
+             │   ├── todo/          ## 할일
+             │   └── watering/      ## 물주기
+             └── global
+                ├── code/          ## 관수코드, 관수 후 주기 변경 알림 코드 등
+                ├── config/         ## 설정 클래스
+                ├── error/         ## ExceptionHandler, 응답 객체
+                |   ├── code/      ## 에러코드(Enum)
+                |   └── exception/ ## Custom Exception
+                └── filter/        ## 인증 필터들
 ```
 Spring boot 프로젝트 내에 React 디렉토리가 있는 구조입니다.
 

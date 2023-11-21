@@ -1,5 +1,5 @@
 import {Button, ConfigProvider} from "antd";
-import themeGreen from "../../themeGreen";
+import themeGreen from "../../theme/themeGreen";
 
 const GButton = ({className, onClick, size, children}) => {
   return (

@@ -80,7 +80,7 @@ const WateringFormInCalendar = ({
             </Col>
           </Row>
 
-          <div style={{marginTop: "1rem", display: "flex", justifyContent: "end"}}>
+          <div style={{marginTop: "1rem", display: "flex", justifyContent: "flex-end"}}>
             <Space>
               <GButton color="dark" size="small" onClick={() => setIsWateringFormOpened(false)}>취소</GButton>
               <ValidationSubmitButton

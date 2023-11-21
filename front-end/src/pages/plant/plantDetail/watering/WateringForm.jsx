@@ -69,7 +69,7 @@ const WateringForm = ({plantId, closeForm, chemicalList, wateringCallBack, page}
             </Col>
           </Row>
 
-          <div style={{marginTop: "1rem", display: "flex", justifyContent: "end"}}>
+          <div style={{marginTop: "1rem", display: "flex", justifyContent: "flex-end"}}>
             <Space>
               <Button onClick={closeForm} type={"text"} size="small">뒤로 가기</Button>
               {

@@ -17,7 +17,7 @@ const GoalCardTag = ({isCompleted, plantId, plantName}) => {
     : <></>;
 
   return (
-    <div style={{display: "flex", justifyContent: "end"}}>
+    <div style={{display: "flex", justifyContent: "flex-end"}}>
       {completeTag}
       {plantTag}
     </div>

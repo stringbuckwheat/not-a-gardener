@@ -78,7 +78,7 @@ const AddPlantInPlaceFormModal = ({visible, callBackFunction, placeId, placeName
         {
           feedbackMsg
             ?
-            <div style={{display: "flex", justifyContent: "end"}}>
+            <div style={{display: "flex", justifyContent: "flex-end"}}>
               <InputFeedbackSpan feedbackMsg={getFeedbackMsg()} color="danger"/>
             </div>
             : <></>
