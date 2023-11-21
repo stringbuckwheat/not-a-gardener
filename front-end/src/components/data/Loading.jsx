@@ -9,11 +9,16 @@ import {Spin} from "antd";
  */
 const Loading = () => {
   const loading = <LoadingOutlined style={{fontSize: "10rem"}} className="text-orange" spin/>;
+  const style = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+    backgroundColor: "white"
+  };
 
   return (
-    <div
-      style={{display: "flex", justifyContent: "center", alignItems: "center", height: "100vh"}}
-      >
+    <div style={style}>
       <Spin indicator={loading}/>
     </div>
   )

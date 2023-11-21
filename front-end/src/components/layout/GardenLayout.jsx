@@ -24,7 +24,7 @@ const GardenLayout = () => {
         components: {
           Layout: {
             headerBg: "white",
-            siderBg: "white"
+            siderBg: "white",
           },
         },
       }}
@@ -64,7 +64,6 @@ const GardenLayout = () => {
         </Layout>
       </Layout>
     </ConfigProvider>
-
   )
 }
 

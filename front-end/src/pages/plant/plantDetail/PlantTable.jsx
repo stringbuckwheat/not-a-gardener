@@ -19,8 +19,17 @@ const EditableRow = ({index, form, ...props}) => {
   );
 };
 
-const PlantTable = () => {
-  const plants = useSelector(state => state.plants);
+const PlantTable = ({search}) => {
+  const getPlants = () => {
+    const plants = useSelector(state => state.plants);
+
+    if(search){
+      return plants.filter(plant => plant.plant.name.includes(search));
+    }
+
+    return plants;
+  }
+
   const places = useSelector(state => state.places.forSelect);
   const dispatch = useDispatch();
 
@@ -92,7 +101,7 @@ const PlantTable = () => {
         pagination={{onChange: cancel}}
         locale={locale}
         columns={mergedColumns}
-        dataSource={getPlantListForPlantTable(plants)}
+        dataSource={getPlantListForPlantTable(getPlants())}
       />
     </div>
   )

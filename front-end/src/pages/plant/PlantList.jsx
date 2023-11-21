@@ -4,7 +4,8 @@ import {useEffect, useState} from "react";
 import AddPlant from "./AddPlant";
 import getData from "../../api/backend-api/common/getData";
 import {useDispatch} from "react-redux";
-import {Button, Card, Col, Space} from "antd";
+import {Button, Card, Col, Input, Space} from "antd";
+import {SearchOutlined} from "@ant-design/icons";
 
 /**
  * 식물 리스트 메인 페이지
@@ -32,22 +33,26 @@ const PlantList = () => {
 
   const switchAddForm = () => setIsAddFormOpened(!isAddFormOpened);
 
+  const [search, setSearch] = useState();
+  const onChangeSearch = (e) => {
+    console.log("검색어!", e.target.value);
+    setSearch(e.target.value);
+  }
+
   return isAddFormOpened ? (
-    <AddPlant
-      afterAdd={switchAddForm}
-    />
+    <AddPlant afterAdd={switchAddForm}/>
   ) : (
     <div className="justify-content-center" style={{padding: "1rem", minWidth: "100%"}}>
       <Col md="auto" style={{minWidth: "100%"}}>
         <Card sm={6}>
           <div>
-            <h4 className={"text-garden"}>{"나의 식물"}</h4>
+            <h4 className={"text-garden"} style={{marginBottom: "0.5rem"}}>{"나의 식물"}</h4>
             <PlantListTag/>
           </div>
           <div className="float-end" style={{marginTop: "1rem"}}>
-            <Space>
+            <Space style={{marginBottom: "1rem"}}>
+              <Input onChange={onChangeSearch} prefix={<SearchOutlined />} style={{width: "8rem"}} />
               <Button
-                style={{marginBottom: "1rem"}}
                 onClick={switchAddForm}
                 type={"default"}
                 color="success"
@@ -58,7 +63,7 @@ const PlantList = () => {
               </Button>
             </Space>
           </div>
-          <PlantTable/>
+          <PlantTable search={search}/>
         </Card>
       </Col>
     </div>

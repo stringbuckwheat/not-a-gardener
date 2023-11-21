@@ -2,7 +2,7 @@ import {Menu} from "antd";
 import Sider from "antd/es/layout/Sider";
 import {ReactComponent as Logo} from "../../assets/images/logo.svg";
 import React, {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 
 const items = [
@@ -39,11 +39,11 @@ const items = [
 const Sidebar = () => {
   // 사이드바 펼침, 닫기
   const collapsed = useSelector(state => state.sidebar.sidebarCollapsed);
-  console.log("collapsed", collapsed);
 
   const dispatch = useDispatch();
+  const location = useLocation();
 
-  const [current, setCurrent] = useState("/");
+  const [current, setCurrent] = useState(`/${location.pathname.split("/")[1]}`);
   const navigate = useNavigate();
 
   const onMenu = (e) => {
@@ -51,12 +51,17 @@ const Sidebar = () => {
     setCurrent(e.key);
   }
 
+  const onBreakPoint = (broken) => {
+    dispatch({type: "setSidebar", payload: broken})
+  }
+
   return (
     <Sider
       breakpoint="lg"
       collapsedWidth="0"
-      onCollapse={(collapsed, type) => dispatch({type: 'setSidebar', payload: !collapsed})}
+      onBreakpoint={onBreakPoint}
       collapsed={collapsed}
+      trigger={null}
       style={{minHeight: "100vh", minWidth: "30vw"}}
     >
       <div style={{justifyContent: "center", display: "flex"}}>

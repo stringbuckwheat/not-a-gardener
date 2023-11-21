@@ -74,9 +74,12 @@ const Watering = () => {
 
   const onAdd = (res) => {
     // 키가 wateringDate인 value를 가져와서 그 value에 res 추가
+    console.log("onAdd res", res);
     let prevWatering = wateringList[res.wateringDate]; // array or undefined
+    console.log("prevWatering", prevWatering);
 
     if (!prevWatering) {
+      console.log("prevWatering 없음")
       wateringList[res.wateringDate] = [{...res}];
 
       setWateringList(() => ({...wateringList}));

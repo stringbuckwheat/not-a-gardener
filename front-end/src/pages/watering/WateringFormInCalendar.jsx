@@ -16,6 +16,7 @@ const WateringFormInCalendar = ({
   const [watering, setWatering] = useState({});
 
   useEffect(() => {
+    console.log("selectedDate", selectedDate.toISOString().split("T").at(0));
     if (plantList && chemicalList) {
       setWatering({
         chemicalId: chemicalList.at(0)?.value,
@@ -30,7 +31,7 @@ const WateringFormInCalendar = ({
   }
 
   const submit = async () => {
-    console.log("watering", watering);
+    console.log("submit watering", watering);
 
     try {
       const res = await postData("/watering", watering);
