@@ -8,6 +8,11 @@
   margin: 0.3rem;
 }
 
+.card:hover {
+  border: solid green;
+  transition: border 400ms ease;
+}
+
 .front-wrap {
   min-width: 100%;
 }
