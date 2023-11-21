@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(of={"wateringId", "wateringDate", "chemical.name"})
 public class Watering {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment

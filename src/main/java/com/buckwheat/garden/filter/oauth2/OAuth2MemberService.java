@@ -1,9 +1,9 @@
 package com.buckwheat.garden.filter.oauth2;
 
 import com.buckwheat.garden.data.entity.Gardener;
-import com.buckwheat.garden.data.token.OAuth2Attribute;
-import com.buckwheat.garden.data.token.UserPrincipal;
-import com.buckwheat.garden.repository.command.GardenerCommandRepository;
+import com.buckwheat.garden.gardener.GardenerRepository;
+import com.buckwheat.garden.gardener.token.OAuth2Attribute;
+import com.buckwheat.garden.gardener.token.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
-    private final GardenerCommandRepository gardenerCommandRepository;
+    private final GardenerRepository gardenerRepository;
 
     /**
      * OAuth2 로그인 성공 정보를 바탕으로 UserPrincipal을 만들어 반환한다
@@ -58,10 +58,10 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
      * @return
      */
     public Gardener saveOrUpdate(OAuth2Attribute oAuth2Attribute) {
-        Gardener gardener = gardenerCommandRepository.findByUsernameAndProvider(oAuth2Attribute.getEmail(), oAuth2Attribute.getProvider())
+        Gardener gardener = gardenerRepository.findByUsernameAndProvider(oAuth2Attribute.getEmail(), oAuth2Attribute.getProvider())
                 .orElse(oAuth2Attribute.toEntity());
         gardener.updateRecentLogin();
 
-        return gardenerCommandRepository.save(gardener);
+        return gardenerRepository.save(gardener);
     }
 }

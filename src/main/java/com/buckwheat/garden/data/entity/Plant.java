@@ -1,6 +1,6 @@
 package com.buckwheat.garden.data.entity;
 
-import com.buckwheat.garden.data.dto.plant.PlantRequest;
+import com.buckwheat.garden.plant.plant.PlantRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

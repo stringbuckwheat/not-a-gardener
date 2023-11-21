@@ -1,7 +1,7 @@
 package com.buckwheat.garden.filter;
 
-import com.buckwheat.garden.data.token.AccessToken;
-import com.buckwheat.garden.service.TokenProvider;
+import com.buckwheat.garden.gardener.token.AccessToken;
+import com.buckwheat.garden.gardener.TokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

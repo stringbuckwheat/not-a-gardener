@@ -1,6 +1,6 @@
 package com.buckwheat.garden.data.projection;
 
-import com.buckwheat.garden.data.dto.plant.PlantResponse;
+import com.buckwheat.garden.plant.plant.PlantResponse;
 import com.buckwheat.garden.data.entity.Plant;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;

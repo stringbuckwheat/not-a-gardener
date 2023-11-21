@@ -1,8 +1,8 @@
 package com.buckwheat.garden.filter.oauth2;
 
-import com.buckwheat.garden.data.token.AccessToken;
-import com.buckwheat.garden.data.token.UserPrincipal;
-import com.buckwheat.garden.service.TokenProvider;
+import com.buckwheat.garden.gardener.token.AccessToken;
+import com.buckwheat.garden.gardener.token.UserPrincipal;
+import com.buckwheat.garden.gardener.TokenProvider;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
