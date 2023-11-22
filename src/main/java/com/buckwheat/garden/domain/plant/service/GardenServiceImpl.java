@@ -1,13 +1,12 @@
 package com.buckwheat.garden.domain.plant.service;
 
-import com.buckwheat.garden.domain.plant.dto.projection.Calculate;
-import com.buckwheat.garden.domain.plant.Plant;
-import com.buckwheat.garden.domain.plant.repository.PlantRepository;
-import com.buckwheat.garden.domain.plant.dto.projection.RawGarden;
-import com.buckwheat.garden.domain.routine.Routine;
 import com.buckwheat.garden.domain.plant.dto.garden.GardenMain;
 import com.buckwheat.garden.domain.plant.dto.garden.GardenResponse;
 import com.buckwheat.garden.domain.plant.dto.garden.WaitingForWatering;
+import com.buckwheat.garden.domain.plant.dto.projection.Calculate;
+import com.buckwheat.garden.domain.plant.dto.projection.RawGarden;
+import com.buckwheat.garden.domain.plant.repository.PlantRepository;
+import com.buckwheat.garden.domain.routine.Routine;
 import com.buckwheat.garden.domain.routine.RoutineRepository;
 import com.buckwheat.garden.domain.routine.dto.RoutineResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,11 +36,9 @@ public class GardenServiceImpl implements GardenService {
         List<RawGarden> plantsToDo = plantRepository.findGardenByGardenerId(gardenerId);
         List<Routine> routineList = routineRepository.findByGardener_GardenerId(gardenerId);
 
-        List<GardenResponse> todoList = new ArrayList<>();
-
-        for (RawGarden rawGarden : plantsToDo) {
-            todoList.add(gardenResponseProvider.getGardenResponse(Calculate.from(rawGarden, gardenerId)));
-        }
+        List<GardenResponse> todoList = plantsToDo.stream()
+                .map(rawGarden -> gardenResponseProvider.getGardenResponse(Calculate.from(rawGarden, gardenerId)))
+                .collect(Collectors.toList());
 
         // 오늘 루틴 리스트
         List<RoutineResponse> routines = routineList.stream()
@@ -56,13 +52,8 @@ public class GardenServiceImpl implements GardenService {
     @Override
     @Transactional(readOnly = true)
     public List<GardenResponse> getAll(Long gardenerId) {
-        List<GardenResponse> gardenList = new ArrayList<>();
-
-        // 필요한 것들 계산해서 gardenDto list 리턴
-        for (Plant plant : plantRepository.findByGardener_GardenerIdOrderByPlantIdDesc(gardenerId)) {
-            gardenList.add(gardenResponseProvider.getGardenResponse(Calculate.from(plant, gardenerId)));
-        }
-
-        return gardenList;
+        return plantRepository.findByGardener_GardenerIdOrderByPlantIdDesc(gardenerId).stream()
+                .map(plant -> gardenResponseProvider.getGardenResponse(Calculate.from(plant, gardenerId)))
+                .collect(Collectors.toList());
     }
 }

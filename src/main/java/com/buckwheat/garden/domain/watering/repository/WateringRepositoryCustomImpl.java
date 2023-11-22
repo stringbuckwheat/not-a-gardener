@@ -1,6 +1,8 @@
 package com.buckwheat.garden.domain.watering.repository;
 
 import com.buckwheat.garden.domain.watering.Watering;
+import com.buckwheat.garden.domain.watering.dto.ChemicalUsage;
+import com.buckwheat.garden.domain.watering.dto.QChemicalUsage;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,7 @@ import java.util.List;
 import static com.buckwheat.garden.domain.chemical.QChemical.chemical;
 import static com.buckwheat.garden.domain.plant.QPlant.plant;
 import static com.buckwheat.garden.domain.watering.QWatering.watering;
+import static org.hibernate.internal.util.NullnessHelper.coalesce;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -44,6 +47,26 @@ public class WateringRepositoryCustomImpl implements WateringRepositoryCustom {
                 .from(watering)
                 .where(watering.plant.plantId.eq(plantId))
                 .fetchOne();
+    }
+
+    @Override
+    public List<ChemicalUsage> findLatestChemicalizedDayList(Long gardenerId, Long plantId, String active) {
+        return queryFactory
+                .select(
+                        new QChemicalUsage(
+                                chemical.chemicalId,
+                                chemical.period,
+                                chemical.name,
+                                coalesce(watering.wateringDate.max(), watering.wateringDate.min())
+                        )
+                )
+                .from(chemical)
+                .leftJoin(watering)
+                .on(chemical.chemicalId.eq(watering.chemical.chemicalId).and(watering.plant.plantId.eq(plantId)))
+                .where(chemical.gardener.gardenerId.eq(gardenerId).and(chemical.active.eq(active)))
+                .groupBy(chemical.chemicalId, chemical.period, chemical.name)
+                .orderBy(chemical.period.desc())
+                .fetch();
     }
 
     @Override
