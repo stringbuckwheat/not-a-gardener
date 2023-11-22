@@ -1,9 +1,9 @@
 package com.buckwheat.garden.global.filter.oauth2;
 
+import com.buckwheat.garden.domain.gardener.repository.RedisRepository;
 import com.buckwheat.garden.domain.gardener.token.ActiveGardener;
 import com.buckwheat.garden.domain.gardener.token.UserPrincipal;
 import com.buckwheat.garden.global.error.code.ExceptionCode;
-import com.buckwheat.garden.domain.gardener.repository.RedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;

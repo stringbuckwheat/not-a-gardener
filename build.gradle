@@ -93,7 +93,11 @@ processResources {
 
 task copyWebApp(type: Copy) {
 	println("profile: " + profile);
-	from "$frontDir/build"
+
+	from("$frontDir/build") {
+		exclude '**/generated/**' // generated 제외
+	}
+
 	into "$projectDir/src/main/resources/static"
 	println("copyWebApp")
 }
