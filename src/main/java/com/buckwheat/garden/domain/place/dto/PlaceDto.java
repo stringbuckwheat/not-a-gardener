@@ -2,6 +2,7 @@ package com.buckwheat.garden.domain.place.dto;
 
 import com.buckwheat.garden.domain.gardener.Gardener;
 import com.buckwheat.garden.domain.place.Place;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,10 +15,19 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class PlaceDto {
+    @Schema(description = "장소 id", example = "1")
     private Long id;
+
+    @Schema(description = "장소 이름", example = "창가")
     private String name;
+
+    @Schema(description = "식물등 사용 여부", example = "Y")
     private String artificialLight;
+
+    @Schema(description = "장소 타입", example = "실내")
     private String option;
+
+    @Schema(description = "장소에 속한 식물 수", example = "6")
     private Long plantListSize;
 
     /**

@@ -28,14 +28,21 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response); // go to 'JwtAuthenticationFilter'
         } catch (ExpiredJwtException e) {
+            log.debug("ExpiredJwtException");
             setErrorResponse(response, ErrorResponse.from(ExceptionCode.ACCESS_TOKEN_EXPIRED));
         } catch (MalformedJwtException e) {
             // 토큰 값이 올바르지 않을 때
+            log.debug("MalformedJwtException");
+
             setErrorResponse(response, ErrorResponse.from(ExceptionCode.INVALID_JWT_TOKEN));
         } catch (JwtException | SecurityException e) {
+            log.debug("JwtException | SecurityException ");
             setErrorResponse(response, ErrorResponse.from(ExceptionCode.CANNOT_LOGIN));
         } catch (UsernameNotFoundException e) {
+            log.debug("UsernameNotFoundException");
             setErrorResponse(response, ErrorResponse.from(ExceptionCode.REFRESH_TOKEN_EXPIRED));
+        } catch (Exception e) {
+            log.debug("e: {}", e);
         }
     }
 

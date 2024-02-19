@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class GardenServiceImpl implements GardenService {
-    private final GardenResponseProvider gardenResponseProvider;
+    private final GardenResponseMapper gardenResponseMapper;
     private final PlantRepository plantRepository;
     private final RoutineRepository routineRepository;
 
@@ -37,7 +37,7 @@ public class GardenServiceImpl implements GardenService {
         List<Routine> routineList = routineRepository.findByGardener_GardenerId(gardenerId);
 
         List<GardenResponse> todoList = plantsToDo.stream()
-                .map(rawGarden -> gardenResponseProvider.getGardenResponse(Calculate.from(rawGarden, gardenerId)))
+                .map(rawGarden -> gardenResponseMapper.getGardenResponse(Calculate.from(rawGarden, gardenerId)))
                 .collect(Collectors.toList());
 
         // 오늘 루틴 리스트
@@ -53,7 +53,7 @@ public class GardenServiceImpl implements GardenService {
     @Transactional(readOnly = true)
     public List<GardenResponse> getAll(Long gardenerId) {
         return plantRepository.findByGardener_GardenerIdOrderByPlantIdDesc(gardenerId).stream()
-                .map(plant -> gardenResponseProvider.getGardenResponse(Calculate.from(plant, gardenerId)))
+                .map(plant -> gardenResponseMapper.getGardenResponse(Calculate.from(plant, gardenerId)))
                 .collect(Collectors.toList());
     }
 }

@@ -29,6 +29,7 @@ public class JwtFilter extends OncePerRequestFilter {
         // Request의 Header에 담긴 토큰 값을 가져온다
 
         String token = request.getHeader(AUTHORIZATION_HEADER);
+        log.debug("---- token: {}", token);
 
         // 공백 혹은 null이 아니고 Bearer로 시작하면
         if (StringUtils.hasText(token) && token.startsWith(BEARER_PREFIX)) {
@@ -44,6 +45,7 @@ public class JwtFilter extends OncePerRequestFilter {
         log.debug("*** JWT FILTER *** 주소: {}", request.getRequestURL());
 
         String token = resolveToken(request);
+        log.debug("token: {}", token);
 
         // 디코딩할만한 토큰이 왔으면
         if (token != null) {

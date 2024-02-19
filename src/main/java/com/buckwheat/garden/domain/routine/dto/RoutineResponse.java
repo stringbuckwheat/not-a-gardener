@@ -1,6 +1,7 @@
 package com.buckwheat.garden.domain.routine.dto;
 
 import com.buckwheat.garden.domain.routine.Routine;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,15 +16,29 @@ import java.time.LocalDateTime;
 @ToString
 @Slf4j
 public class RoutineResponse {
+    @Schema(description = "루틴 id", example = "1")
     private Long id;
+
+    @Schema(description = "루틴 내용", example = "아디안텀 1일 1관수!")
     private String content;
+
+    @Schema(description = "루틴 주기", example = "1")
     private int cycle;
+
+    @Schema(description = "루틴 해당 식물 id", example = "2")
     private Long plantId;
+
+    @Schema(description = "루틴 해당 식물 이름", example = "아디안텀")
     private String plantName;
+
+    @Schema(description = "가장 최근 완료한 날", example = "2024-02-01")
     private LocalDate lastCompleteDate;
 
     // 계산해서 넣는 값
+    @Schema(description = "오늘 해야하는 일인지", example = "Y")
     private String hasToDoToday;
+
+    @Schema(description = "완료된 상태인지", example = "N")
     private String isCompleted;
 
     public static RoutineResponse from(Routine routine) {

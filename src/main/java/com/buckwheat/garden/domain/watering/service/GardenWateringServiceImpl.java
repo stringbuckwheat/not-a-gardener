@@ -3,7 +3,7 @@ package com.buckwheat.garden.domain.watering.service;
 import com.buckwheat.garden.global.code.WateringCode;
 import com.buckwheat.garden.domain.plant.Plant;
 import com.buckwheat.garden.domain.plant.dto.projection.Calculate;
-import com.buckwheat.garden.domain.plant.service.GardenResponseProvider;
+import com.buckwheat.garden.domain.plant.service.GardenResponseMapper;
 import com.buckwheat.garden.domain.plant.repository.PlantRepository;
 import com.buckwheat.garden.domain.plant.dto.garden.GardenResponse;
 import com.buckwheat.garden.domain.plant.dto.garden.GardenWateringResponse;
@@ -25,13 +25,13 @@ import java.util.NoSuchElementException;
 public class GardenWateringServiceImpl implements GardenWateringService {
     private final WateringCommandService wateringCommandService;
     private final PlantRepository plantRepository;
-    private final GardenResponseProvider gardenResponseProvider;
+    private final GardenResponseMapper gardenResponseMapper;
 
     @Override
     @Transactional
     public GardenWateringResponse add(Long gardenerId, WateringRequest wateringRequest) {
         AfterWatering afterWatering = wateringCommandService.add(wateringRequest);
-        GardenResponse gardenResponse = gardenResponseProvider.getGardenResponse(Calculate.from(afterWatering.getPlant(), gardenerId));
+        GardenResponse gardenResponse = gardenResponseMapper.getGardenResponse(Calculate.from(afterWatering.getPlant(), gardenerId));
 
         return new GardenWateringResponse(gardenResponse, afterWatering.getWateringMessage());
     }

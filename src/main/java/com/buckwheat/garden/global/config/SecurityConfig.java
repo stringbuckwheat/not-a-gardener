@@ -1,5 +1,6 @@
 package com.buckwheat.garden.global.config;
 
+import com.buckwheat.garden.global.filter.CustomAuthenticationEntryPoint;
 import com.buckwheat.garden.global.filter.JwtExceptionFilter;
 import com.buckwheat.garden.global.filter.JwtFilter;
 import com.buckwheat.garden.global.filter.oauth2.OAuth2MemberService;
@@ -23,7 +24,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import java.util.Collections;
 
 @Configuration
-@EnableWebSecurity //(debug = true)
+@EnableWebSecurity
 @RequiredArgsConstructor
 @Slf4j
 public class SecurityConfig {
@@ -34,6 +35,7 @@ public class SecurityConfig {
 
     @Value("${origin}")
     private String allowedOrigin;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     private static final String[] AUTH_WHITELIST = {
             "/api/login", "/api/token", "/api/oauth", "/api/register/**", "/api/forgot/**", "/api/logout", "/static/**"
@@ -75,6 +77,7 @@ public class SecurityConfig {
                                         "/api/place/**", "/api/plant/**", "/api/routine/**", "/api/watering/**").authenticated()
                                 .anyRequest().permitAll()
                 )
+                .exceptionHandling(e -> e.authenticationEntryPoint(customAuthenticationEntryPoint))
 
                 .oauth2Login(oauth2Configurer -> oauth2Configurer
                         .loginPage("/")

@@ -2,6 +2,7 @@ package com.buckwheat.garden.domain.plant.dto.garden;
 
 import com.buckwheat.garden.global.code.WateringCode;
 import com.buckwheat.garden.domain.watering.dto.WateringResponse;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,18 +16,20 @@ import java.time.LocalDate;
 @Getter
 @ToString
 public class GardenDetail {
-    // 마지막 관수
+    @Schema(description = "가장 최근 물 준 날짜", example = "2023-01-28")
     private WateringResponse latestWateringDate;
 
-    // 이하 계산해서 넣는 정보
-    private String anniversary; // 키운지 며칠 지났는지
+    @Schema(description = "키운지 며칠 지났는지", example = "999")
+    private String anniversary;
+
+    @Schema(description = "물 준지 며칠 지났는지", example = "2")
     private int wateringDDay;
 
-    // 물주기 정보
+    @Schema(description = "물 주기 코드", example = "2")
     private int wateringCode;
 
-    // 비료 주기 정보
-    ChemicalCode chemicalCode;
+    @Schema(description = "(오늘 비료를 줄 날이라면) 비료 정보")
+    ChemicalInfo chemicalInfo;
 
     public static GardenDetail lazy(LocalDate latestWateringDate, LocalDate birthday) {
         return GardenDetail.builder()
@@ -35,7 +38,7 @@ public class GardenDetail {
                 .anniversary(getAnniversary(birthday))
                 .wateringDDay(latestWateringDate == null ? -1 : 0)
                 .wateringCode(WateringCode.YOU_ARE_LAZY.getCode())
-                .chemicalCode(null)
+                .chemicalInfo(null)
                 .build();
     }
 
@@ -45,7 +48,7 @@ public class GardenDetail {
                 .anniversary(getAnniversary(birthday))
                 .wateringDDay(-1)
                 .wateringCode(WateringCode.NO_RECORD.getCode())
-                .chemicalCode(null)
+                .chemicalInfo(null)
                 .build();
     }
 

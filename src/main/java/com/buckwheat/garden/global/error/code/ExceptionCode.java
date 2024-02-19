@@ -1,5 +1,6 @@
 package com.buckwheat.garden.global.error.code;
 
+import com.buckwheat.garden.global.error.ErrorResponse;
 import lombok.Getter;
 
 import java.util.Collections;
@@ -9,6 +10,7 @@ import java.util.stream.Stream;
 
 @Getter
 public enum ExceptionCode {
+    PLEASE_LOGIN("B000", "인증이 필요한 엔드포인트", "로그인 해주세요"),
     ACCESS_TOKEN_EXPIRED("B001", "액세스 토큰 만료", "액세스 토큰 만료"),
     REFRESH_TOKEN_EXPIRED("B002", "리프레쉬 토큰 만료", "로그인 시간이 만료되었습니다"),
     WRONG_ACCOUNT("B003", "아이디/비밀번호 오류", "아이디 또는 비밀번호를 다시 확인해주세요."),
@@ -34,6 +36,10 @@ public enum ExceptionCode {
         this.code = code;
         this.title = title;
         this.message = message;
+    }
+
+    public ErrorResponse createErrorResponse() {
+        return new ErrorResponse(code, title, message);
     }
 
     public static ExceptionCode of(String code) {

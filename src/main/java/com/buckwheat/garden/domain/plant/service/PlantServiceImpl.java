@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class PlantServiceImpl implements PlantService {
     private final PlantCommandService plantCommandService;
     private final PlantRepository plantRepository;
-    private final GardenResponseProvider gardenResponseProvider;
+    private final GardenResponseMapper gardenResponseMapper;
 
     @Override
     @Transactional(readOnly = true)
@@ -51,14 +51,14 @@ public class PlantServiceImpl implements PlantService {
     @Transactional
     public GardenResponse add(Long gardenerId, PlantRequest plantRequest) {
         return plantCommandService.save(gardenerId, plantRequest, plant ->
-                gardenResponseProvider.getGardenResponse(Calculate.from(plant, gardenerId)));
+                gardenResponseMapper.getGardenResponse(Calculate.from(plant, gardenerId)));
     }
 
     @Override
     @Transactional
     public GardenResponse update(Long gardenerId, PlantRequest plantRequest) {
         return plantCommandService.update(plantRequest, gardenerId, plant ->
-                gardenResponseProvider.getGardenResponse(Calculate.from(plant, gardenerId)));
+                gardenResponseMapper.getGardenResponse(Calculate.from(plant, gardenerId)));
     }
 
     @Override

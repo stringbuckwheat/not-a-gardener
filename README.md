@@ -43,7 +43,7 @@ not-a-gardener🌿는, 관수 기록 시 직전 물 준 날짜와 비교해서 �
 
 ## ✔ 개발스택
 <div align="left">
-  <img src="https://img.shields.io/badge/Spring%20Boot%20(2.7)-6DB33F?style=flat-square&logo=Spring%20Boot&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Spring%20Boot%20(3.1)-6DB33F?style=flat-square&logo=Spring%20Boot&logoColor=white"/>
   <img src="https://img.shields.io/badge/JPA-yellow?style=flat-square"/>
   <img src="https://img.shields.io/badge/QueryDsl-purple?style=flat-square"/>
   <img src="https://img.shields.io/badge/React%20(18.2)-61DAFB?style=flat-square&logo=React&logoColor=black"/>
@@ -103,7 +103,7 @@ Spring boot 프로젝트 내에 React 디렉토리가 있는 구조입니다.
 
 # 2. 구현 목록 / 프로젝트 결과물
 
-간단한 API 명세서는 [이곳](https://docs.google.com/spreadsheets/u/1/d/e/2PACX-1vTMaab2AHIyjCG6Y1eGQi4vUyfQ5QumdqJvFrqhTmPjmu7KGuG3TGI9-ivn8c-6rEu0QjbK-Gw80DCR/pubhtml?gid=0&single=true)에서 보실 수 있습니다.
+API 명세서는 [이곳](http://not-a-gardener.xyz/swagger-ui/index.html)에서 보실 수 있습니다.
 
 <br>
 

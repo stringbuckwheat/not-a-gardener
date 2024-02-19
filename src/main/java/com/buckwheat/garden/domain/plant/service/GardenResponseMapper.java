@@ -1,6 +1,6 @@
 package com.buckwheat.garden.domain.plant.service;
 
-import com.buckwheat.garden.domain.plant.dto.garden.ChemicalCode;
+import com.buckwheat.garden.domain.plant.dto.garden.ChemicalInfo;
 import com.buckwheat.garden.domain.plant.dto.garden.GardenDetail;
 import com.buckwheat.garden.domain.plant.dto.garden.GardenResponse;
 import com.buckwheat.garden.domain.plant.dto.plant.PlantResponse;
@@ -21,7 +21,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class GardenResponseProvider {
+public class GardenResponseMapper {
     private final WateringRepository wateringRepository;
 
     public GardenResponse getGardenResponse(Calculate calculate) {
@@ -46,16 +46,16 @@ public class GardenResponseProvider {
         // 이 식물은 목이 말라요, 흙이 말랐는지 확인해보세요 ... 등의 watering code를 계산
         int wateringCode = getWateringCode(plant.getRecentWateringPeriod(), wateringDDay);
 
-        // chemicalCode: 물을 줄 식물에 대해서 맹물을 줄지 비료/약품 희석액을 줄지 알려주는 용도
+        // chemicalInfo: 물을 줄 식물에 대해서 맹물을 줄지 비료/약품 희석액을 줄지 알려주는 용도
         // 어떤 비료를 줘야하는지 알려준다
-        ChemicalCode chemicalCode = getChemicalCode(plant.getId(), calculate.getGardenerId(), wateringCode);
+        ChemicalInfo chemicalInfo = getChemicalCode(plant.getId(), calculate.getGardenerId(), wateringCode);
 
         return GardenDetail.builder()
                 .latestWateringDate(WateringResponse.from(calculate.getLatestWateringDate()))
                 .anniversary(GardenDetail.getAnniversary(calculate.getBirthday()))
                 .wateringDDay(wateringDDay)
                 .wateringCode(wateringCode)
-                .chemicalCode(chemicalCode)
+                .chemicalInfo(chemicalInfo)
                 .build();
     }
 
@@ -91,7 +91,7 @@ public class GardenResponseProvider {
     }
 
     @Transactional(readOnly = true)
-    public ChemicalCode getChemicalCode(Long plantId, Long gardenerId, int wateringCode) {
+    public ChemicalInfo getChemicalCode(Long plantId, Long gardenerId, int wateringCode) {
         List<ChemicalUsage> latestChemicalUsages = wateringRepository.findLatestChemicalizedDayList(gardenerId, plantId, "Y");
 
         for (ChemicalUsage latestFertilizingInfo : latestChemicalUsages) {
@@ -101,7 +101,7 @@ public class GardenResponseProvider {
                 int period = (int) Duration.between(latestFertilizedDate.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays();
                 if (period >= (int) latestFertilizingInfo.getPeriod()
                         && (wateringCode == WateringCode.THIRSTY.getCode() || wateringCode == WateringCode.CHECK.getCode())) {
-                    return new ChemicalCode(latestFertilizingInfo.getChemicalId(), latestFertilizingInfo.getName());
+                    return new ChemicalInfo(latestFertilizingInfo.getChemicalId(), latestFertilizingInfo.getName());
                 }
             }
         }

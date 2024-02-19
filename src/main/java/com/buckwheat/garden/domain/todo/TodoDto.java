@@ -1,6 +1,7 @@
 package com.buckwheat.garden.domain.todo;
 
 import com.buckwheat.garden.domain.gardener.Gardener;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -11,9 +12,16 @@ import java.time.LocalDate;
 @Getter
 @ToString
 public class TodoDto {
+    @Schema(description = "할일 id", example = "1")
     private Long todoId;
+
+    @Schema(description = "할일 내용", example = "온시디움 분갈이")
     private String task;
+
+    @Schema(description = "마감 기한", example = "2024-02-07")
     private LocalDate deadline;
+
+    @Schema(description = "완료 일자")
     private LocalDate completeDate;
 
     public TodoDto(String task, LocalDate deadline) {
