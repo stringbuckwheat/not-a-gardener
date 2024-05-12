@@ -45,12 +45,13 @@ public class AccessToken {
     public Optional<String> createJwtAuthToken(Long id, Map<String, String> claimMap, Date expiredDate) {
         Claims claims = new DefaultClaims(claimMap);
 
-        return Optional.ofNullable(Jwts.builder()
-                .setSubject(String.valueOf(id))
-                .addClaims(claims)
-                .signWith(key, SignatureAlgorithm.HS256)
-                .setExpiration(expiredDate)
-                .compact()
+        return Optional.ofNullable(
+                Jwts.builder()
+                        .setSubject(String.valueOf(id))
+                        .addClaims(claims)
+                        .signWith(key, SignatureAlgorithm.HS256)
+                        .setExpiration(expiredDate)
+                        .compact()
         );
     }
 

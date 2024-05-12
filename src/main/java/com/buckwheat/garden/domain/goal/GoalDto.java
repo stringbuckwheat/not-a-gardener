@@ -3,6 +3,7 @@ package com.buckwheat.garden.domain.goal;
 import com.buckwheat.garden.domain.gardener.Gardener;
 import com.buckwheat.garden.domain.plant.Plant;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 
@@ -16,6 +17,7 @@ public class GoalDto {
     private Long id;
 
     @Schema(description = "목표 내용", example = "사라왁 꽃 보기")
+    @NotBlank
     private String content;
 
     @Schema(description = "달성 여부", example = "N")

@@ -3,6 +3,8 @@ package com.buckwheat.garden.domain.plant.dto.plant;
 import com.buckwheat.garden.domain.gardener.Gardener;
 import com.buckwheat.garden.domain.place.Place;
 import com.buckwheat.garden.domain.plant.Plant;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,11 +18,17 @@ import java.time.LocalDateTime;
 @ToString
 public class PlantRequest {
     private Long id;
+    @NotBlank
     private String name;
+
     private String medium;
+
     private String species;
+
     private int recentWateringPeriod;
     private LocalDate birthday;
+
+    @NotNull
     private Long placeId;
 
     public Plant toEntityWith(Gardener gardener, Place place) {

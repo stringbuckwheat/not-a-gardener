@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         ActiveGardener gardener = redisRepository.findById(Long.parseLong(username))
                 .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_TOKEN_IN_REDIS.getCode()));
-
+        
         return new UserPrincipal(gardener.getGardenerId(), gardener.getName());
     }
 }

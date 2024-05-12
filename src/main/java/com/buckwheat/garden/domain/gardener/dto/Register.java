@@ -1,6 +1,8 @@
 package com.buckwheat.garden.domain.gardener.dto;
 
 import com.buckwheat.garden.domain.gardener.Gardener;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -14,9 +16,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class Register {
+    @NotBlank
     private String username;
+
+    @Email
     private String email;
+
+    @NotBlank
     private String password;
+
+    @NotBlank
     private String name;
 
     /* 암호화된 password builder 패턴으로 사용중*/

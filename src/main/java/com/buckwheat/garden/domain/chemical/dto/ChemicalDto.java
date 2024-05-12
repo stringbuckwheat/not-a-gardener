@@ -2,27 +2,33 @@ package com.buckwheat.garden.domain.chemical.dto;
 
 import com.buckwheat.garden.domain.chemical.Chemical;
 import com.buckwheat.garden.domain.gardener.Gardener;
-import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
 @ToString
 public class ChemicalDto {
     @Schema(description = "약품 id", example = "1")
     private Long id;
 
+    @NotBlank(message = "약품 이름은 필수 입력값입니다.")
     @Schema(description = "약품 이름", example = "하이포넥스")
     private String name;
 
+    @NotBlank(message = "약품 분류는 필수 입력값입니다.")
     @Schema(description = "약품 분류", example = "기본 NPK 비료")
     private String type;
 
+    @NotNull(message = "시비 주기는 필수 입력값입니다.")
+    @Positive(message = "시비 주기는 양수만 입력 가능합니다.")
     @Schema(description = "시비 주기", example = "7")
     private int period;
 
-    @QueryProjection
+    @Builder
     public ChemicalDto(Long id, String name, String type, int period) {
         this.id = id;
         this.name = name;

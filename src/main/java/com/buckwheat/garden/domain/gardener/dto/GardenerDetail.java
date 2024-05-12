@@ -2,6 +2,9 @@ package com.buckwheat.garden.domain.gardener.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -15,15 +18,19 @@ import java.time.LocalDateTime;
 @ToString
 public class GardenerDetail {
     @Schema(description = "회원 id", example = "1")
+    @NotNull
     private Long id;
 
     @Schema(description = "아이디", example = "perfectgardener")
+    @NotBlank
     private String username;
 
     @Schema(description = "이메일", example = "perfectgardener@gardener.com")
+    @Email
     private String email;
 
     @Schema(description = "이름", example = "식집사")
+    @NotBlank
     private String name;
 
     @Schema(description = "가입일", example = "2024-02-01")
