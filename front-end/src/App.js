@@ -2,7 +2,7 @@ import React, {Suspense} from 'react';
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import Loading from "./components/data/Loading";
 import {ConfigProvider} from "antd";
-import themeOrange from "./themeOrange";
+import themeOrange from "./theme/themeOrange";
 
 // Pages
 const Login = React.lazy(() => import('./pages/login/Login'))

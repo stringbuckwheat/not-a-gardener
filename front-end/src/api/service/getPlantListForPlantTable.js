@@ -26,7 +26,7 @@ const getPlantListForPlantTable = (plants) => {
       placeName: plant.placeName,
       placeId: plant.placeId,
 
-      chemicalCode: gardenDetail.chemicalCode,
+      chemicalInfo: gardenDetail.chemicalInfo,
       wateringCode: gardenDetail.wateringCode,
       wateringDDay: gardenDetail.wateringDDay,
       tags: {

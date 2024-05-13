@@ -1,5 +1,5 @@
-const getChemicalizingMsg = (chemicalCode) => {
-  return chemicalCode ? `${chemicalCode.chemicalName}를 주세요!` : "맹물을 주세요!";
+const getChemicalizingMsg = (chemicalInfo) => {
+  return chemicalInfo ? `${chemicalInfo.chemicalName}를 주세요!` : "맹물을 주세요!";
 }
 
 const getWateringMsg = (gardenDetail) => {
@@ -14,12 +14,12 @@ const getWateringMsg = (gardenDetail) => {
   } else if (gardenDetail.wateringCode == 1) {
     // 물을 줘야함
     wateringMsg = "오늘은 물 주는 날이에요.\n"
-    wateringMsg += getChemicalizingMsg(gardenDetail.chemicalCode);
+    wateringMsg += getChemicalizingMsg(gardenDetail.chemicalInfo);
 
   } else if (gardenDetail.wateringCode == 2) {
     // 물 주기 하루 전(목마를 확률 높음)
     wateringMsg = "물 주기가 하루 남았어요.\n화분이 말랐다면 "
-    wateringMsg += getChemicalizingMsg(gardenDetail.chemicalCode);
+    wateringMsg += getChemicalizingMsg(gardenDetail.chemicalInfo);
 
   } else if (gardenDetail.wateringCode == 3) {
     wateringMsg = "물주기가 늘어나고 있어요";
