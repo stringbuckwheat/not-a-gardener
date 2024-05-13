@@ -1,4 +1,4 @@
-package xyz.notagardener.domain.gardener.dto;
+package xyz.notagardener.gardener.forgot;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -13,9 +13,6 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 public class Forgot {
-    @Schema(description = "본인 확인 코드", example = "ABC123")
-    private String identificationCode;
-
     @Schema(description = "이메일", example = "testgardener@gardener.com")
     private String email;
 

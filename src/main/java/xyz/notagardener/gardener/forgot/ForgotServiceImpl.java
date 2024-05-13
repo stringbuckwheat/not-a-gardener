@@ -1,21 +1,20 @@
-package xyz.notagardener.domain.gardener.service;
+package xyz.notagardener.gardener.forgot;
 
-import xyz.notagardener.domain.gardener.Gardener;
-import xyz.notagardener.domain.gardener.repository.GardenerRepository;
-import xyz.notagardener.domain.gardener.dto.Username;
-import xyz.notagardener.domain.gardener.dto.Forgot;
-import xyz.notagardener.domain.gardener.dto.Login;
-import xyz.notagardener.common.error.code.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.authentication.dto.Login;
+import xyz.notagardener.gardener.gardener.GardenerRepository;
 
 import java.util.List;
 
@@ -24,6 +23,7 @@ import java.util.List;
 @Slf4j
 public class ForgotServiceImpl implements ForgotService {
     private final GardenerRepository gardenerRepository;
+    private final LostGardenerRepository lostGardenerRepository;
     private final JavaMailSender mailSender;
     private final BCryptPasswordEncoder encoder;
 
@@ -43,7 +43,10 @@ public class ForgotServiceImpl implements ForgotService {
         String identificationCode = RandomStringUtils.randomAlphanumeric(6);
         sendEmail(identificationCode, email); // 이메일 보내기
 
-        return new Forgot(identificationCode, email, usernames);
+        // Redis 저장
+        LostGardener lostGardener = new LostGardener(identificationCode, email, usernames);
+
+        return new Forgot(email, usernames);
     }
 
     private void sendEmail(String identificationCode, String email) {
@@ -60,6 +63,20 @@ public class ForgotServiceImpl implements ForgotService {
         message.setText(stringBuilder.toString());
 
         mailSender.send(message);
+    }
+
+    @Override
+    public VerifyRequest verifyIdentificationCode(VerifyRequest verifyRequest) {
+        LostGardener lostGardener = lostGardenerRepository.findById(verifyRequest.getIdentificationCode())
+                .orElseThrow(() -> new BadCredentialsException(ExceptionCode.NO_IDENTIFICATION_INFO_IN_REDIS.getCode()));
+
+        if(!verifyRequest.getEmail().equals(lostGardener.getEmail())) {
+            throw new BadCredentialsException(ExceptionCode.NOT_YOUR_IDENTIFICATION_CODE.getCode());
+        }
+
+        lostGardenerRepository.deleteById(lostGardener.getIdentificationCode());
+
+        return verifyRequest;
     }
 
     @Override

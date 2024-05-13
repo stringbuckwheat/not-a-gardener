@@ -1,7 +1,6 @@
-package xyz.notagardener.domain.gardener.service;
+package xyz.notagardener.gardener.authentication;
 
-import com.buckwheat.garden.domain.gardener.dto.*;
-import xyz.notagardener.domain.gardener.dto.*;
+import xyz.notagardener.gardener.authentication.dto.*;
 
 public interface AuthenticationService {
     String hasSameUsername(String username);

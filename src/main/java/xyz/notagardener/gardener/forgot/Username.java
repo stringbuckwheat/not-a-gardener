@@ -1,4 +1,4 @@
-package xyz.notagardener.domain.gardener.dto;
+package xyz.notagardener.gardener.forgot;
 
 public interface Username {
     String getUsername();

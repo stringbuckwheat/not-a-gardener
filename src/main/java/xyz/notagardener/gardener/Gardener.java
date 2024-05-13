@@ -1,4 +1,4 @@
-package xyz.notagardener.domain.gardener;
+package xyz.notagardener.gardener;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

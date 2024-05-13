@@ -1,14 +1,14 @@
-package xyz.notagardener.domain.gardener.service;
+package xyz.notagardener.gardener.gardener;
 
-import xyz.notagardener.domain.gardener.Gardener;
-import xyz.notagardener.domain.gardener.repository.GardenerRepository;
-import xyz.notagardener.domain.gardener.dto.GardenerDetail;
-import xyz.notagardener.domain.gardener.dto.Login;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.authentication.dto.Login;
 
 import java.util.NoSuchElementException;
 
@@ -22,20 +22,22 @@ public class GardenerServiceImpl implements GardenerService {
     @Override
     @Transactional(readOnly = true)
     public GardenerDetail getOne(Long id) {
-        return gardenerRepository.findGardenerDetailByGardenerId(id);
+        return gardenerRepository.findGardenerDetailByGardenerId(id).orElseThrow(NoSuchElementException::new);
     }
 
     @Override
     @Transactional(readOnly = true)
     public boolean identify(Long id, Login login) {
-        Gardener gardener = gardenerRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        Gardener gardener = gardenerRepository.findById(id)
+                .orElseThrow(() -> new BadCredentialsException(ExceptionCode.WRONG_PASSWORD.getCode()));
         return encoder.matches(login.getPassword(), gardener.getPassword());
     }
 
     @Override
     @Transactional
     public void updatePassword(Long id, Login login) {
-        Gardener gardener = gardenerRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        Gardener gardener = gardenerRepository.findById(id)
+                .orElseThrow(() -> new BadCredentialsException(ExceptionCode.WRONG_ACCOUNT.getCode()));
         String encryptedPassword = encoder.encode(login.getPassword());
         gardener.changePassword(encryptedPassword);
     }
@@ -43,7 +45,12 @@ public class GardenerServiceImpl implements GardenerService {
     @Override
     @Transactional
     public GardenerDetail update(GardenerDetail gardenerDetail) {
-        Gardener gardener = gardenerRepository.findById(gardenerDetail.getId()).orElseThrow(NoSuchElementException::new);
+        if(!gardenerDetail.isValid()) {
+            throw new IllegalArgumentException(ExceptionCode.INVALID_REQUEST_DATA.getCode());
+        }
+
+        Gardener gardener = gardenerRepository.findById(gardenerDetail.getId())
+                .orElseThrow(() -> new BadCredentialsException(ExceptionCode.WRONG_ACCOUNT.getCode()));
         gardener.updateEmailAndName(gardenerDetail.getEmail(), gardenerDetail.getName());
 
         return GardenerDetail.builder()

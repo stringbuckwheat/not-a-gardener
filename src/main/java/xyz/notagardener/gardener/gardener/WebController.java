@@ -1,4 +1,4 @@
-package xyz.notagardener.domain.gardener.controller;
+package xyz.notagardener.gardener.gardener;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;

@@ -1,14 +1,5 @@
-package xyz.notagardener.domain.gardener.service;
+package xyz.notagardener.gardener.authentication;
 
-import xyz.notagardener.domain.gardener.Gardener;
-import com.buckwheat.garden.domain.gardener.dto.*;
-import xyz.notagardener.domain.gardener.repository.GardenerRepository;
-import xyz.notagardener.domain.gardener.repository.RedisRepository;
-import xyz.notagardener.domain.gardener.token.AccessToken;
-import xyz.notagardener.domain.gardener.token.ActiveGardener;
-import xyz.notagardener.domain.gardener.token.RefreshToken;
-import xyz.notagardener.domain.gardener.token.UserPrincipal;
-import xyz.notagardener.common.error.code.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,7 +10,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.notagardener.domain.gardener.dto.*;
+import xyz.notagardener.common.auth.*;
+import xyz.notagardener.common.auth.dto.AccessToken;
+import xyz.notagardener.common.auth.dto.RefreshToken;
+import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.authentication.dto.*;
+import xyz.notagardener.gardener.gardener.GardenerRepository;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -32,7 +29,7 @@ import java.util.Optional;
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final TokenProvider tokenProvider;
     private final BCryptPasswordEncoder encoder;
-    private final RedisRepository redisRepository;
+    private final ActiveGardenerRepository activeGardenerRepository;
     private final GardenerRepository gardenerRepository;
 
     @Override
@@ -46,7 +43,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Transactional(readOnly = true)
     public Info getGardenerInfo(Long id) {
         Gardener gardener = gardenerRepository.findById(id).orElseThrow(NoSuchElementException::new);
-        ActiveGardener activeGardener = redisRepository.findById(id)
+        ActiveGardener activeGardener = activeGardenerRepository.findById(id)
                 .orElseThrow(NoSuchElementException::new);
         RefreshToken refreshToken = activeGardener.getRefreshToken();
 
@@ -90,6 +87,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional
     public Info add(Register register) {
+        boolean hasSameId = hasSameUsername(register.getUsername()) != null;
+
+        // 유효성 검사
+        if(!register.isValid() || hasSameUsername(register.getUsername()) != null) {
+            throw new IllegalArgumentException(ExceptionCode.INVALID_REQUEST_DATA.getCode());
+        }
+
         // DTO에 암호화된 비밀번호 저장한 뒤 엔티티로 변환
         Gardener gardener = gardenerRepository.save(
                 register
@@ -103,17 +107,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public Token refreshAccessToken(Refresh token) {
         String reqRefreshToken = token.getRefreshToken();
-        ActiveGardener activeGardener = redisRepository.findById(token.getGardenerId())
+        ActiveGardener activeGardener = activeGardenerRepository.findById(token.getGardenerId())
                 .orElseThrow(() -> new BadCredentialsException(ExceptionCode.NO_TOKEN_IN_REDIS.getCode()));
         RefreshToken savedRefreshToken = activeGardener.getRefreshToken();
 
         if (!reqRefreshToken.equals(savedRefreshToken.getToken())) {
             // redis의 refresh token과 일치하지 않음 -- B011
-            redisRepository.deleteById(token.getGardenerId());
+            activeGardenerRepository.deleteById(token.getGardenerId());
             throw new BadCredentialsException(ExceptionCode.INVALID_REFRESH_TOKEN.getCode());
         } else if (savedRefreshToken.getExpiredAt().isBefore(LocalDateTime.now())) {
             // refresh token 만료 -- B002
-            redisRepository.deleteById(token.getGardenerId());
+            activeGardenerRepository.deleteById(token.getGardenerId());
             throw new BadCredentialsException(ExceptionCode.REFRESH_TOKEN_EXPIRED.getCode());
         }
 
@@ -124,13 +128,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // Access token 재발급 시 Refresh Token도 재발급
         RefreshToken newRefreshToken = new RefreshToken();
         activeGardener.updateRefreshToken(newRefreshToken);
-        redisRepository.save(activeGardener);
+        activeGardenerRepository.save(activeGardener);
 
         return new Token(accessToken.getToken(), newRefreshToken.getToken());
     }
 
     @Override
     public void logOut(Long id) {
-        redisRepository.deleteById(id);
+        activeGardenerRepository.deleteById(id);
     }
 }

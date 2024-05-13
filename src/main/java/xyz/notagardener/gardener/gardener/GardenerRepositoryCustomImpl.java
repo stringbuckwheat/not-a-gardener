@@ -1,11 +1,11 @@
-package xyz.notagardener.domain.gardener.repository;
+package xyz.notagardener.gardener.gardener;
 
-import xyz.notagardener.domain.gardener.dto.GardenerDetail;
-import xyz.notagardener.domain.gardener.dto.QGardenerDetail;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.notagardener.domain.gardener.QGardener;
+import xyz.notagardener.gardener.QGardener;
+
+import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -14,8 +14,8 @@ public class GardenerRepositoryCustomImpl implements GardenerRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public GardenerDetail findGardenerDetailByGardenerId(Long gardenerId) {
-        return queryFactory.select(
+    public Optional<GardenerDetail> findGardenerDetailByGardenerId(Long gardenerId) {
+        GardenerDetail result = queryFactory.select(
                         new QGardenerDetail(
                                 QGardener.gardener.gardenerId,
                                 QGardener.gardener.username,
@@ -28,5 +28,7 @@ public class GardenerRepositoryCustomImpl implements GardenerRepositoryCustom {
                 .from(QGardener.gardener)
                 .where(QGardener.gardener.gardenerId.eq(gardenerId))
                 .fetchOne();
+
+        return Optional.ofNullable(result);
     }
 }

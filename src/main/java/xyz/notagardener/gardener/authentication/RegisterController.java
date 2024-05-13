@@ -1,8 +1,5 @@
-package xyz.notagardener.domain.gardener.controller;
+package xyz.notagardener.gardener.authentication;
 
-import xyz.notagardener.domain.gardener.dto.Info;
-import xyz.notagardener.domain.gardener.dto.Register;
-import xyz.notagardener.domain.gardener.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import xyz.notagardener.gardener.authentication.dto.Info;
+import xyz.notagardener.gardener.authentication.dto.Register;
 
 @Slf4j
 @RestController

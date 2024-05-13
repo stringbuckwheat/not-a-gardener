@@ -1,4 +1,4 @@
-package xyz.notagardener.domain.gardener.dto;
+package xyz.notagardener.gardener.gardener;
 
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -47,5 +47,15 @@ public class GardenerDetail {
         this.name = name;
         this.createDate = createDate;
         this.provider = provider;
+    }
+
+    public boolean isValid() {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+
+        return email != null
+                && email.matches(emailRegex)
+                && name != null
+                && name.length() > 0
+                && name.length() < 20;
     }
 }

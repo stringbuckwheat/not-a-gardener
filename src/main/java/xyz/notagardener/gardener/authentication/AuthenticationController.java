@@ -1,11 +1,6 @@
-package xyz.notagardener.domain.gardener.controller;
+package xyz.notagardener.gardener.authentication;
 
-import xyz.notagardener.domain.gardener.dto.Info;
-import xyz.notagardener.domain.gardener.dto.Login;
-import xyz.notagardener.domain.gardener.dto.Refresh;
-import xyz.notagardener.domain.gardener.dto.Token;
-import xyz.notagardener.domain.gardener.service.AuthenticationService;
-import xyz.notagardener.domain.gardener.token.UserPrincipal;
+import xyz.notagardener.common.auth.UserPrincipal;
 import xyz.notagardener.common.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,13 +13,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import xyz.notagardener.gardener.authentication.dto.Info;
+import xyz.notagardener.gardener.authentication.dto.Login;
+import xyz.notagardener.gardener.authentication.dto.Refresh;
+import xyz.notagardener.gardener.authentication.dto.Token;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
 @Tag(name = "Authentications", description = "인증 관련 API")
-public class AuthController {
+public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @Operation(
