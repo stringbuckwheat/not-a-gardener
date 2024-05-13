@@ -1,8 +1,8 @@
-package xyz.notagardener.domain.chemical.repository;
+package xyz.notagardener.chemical.repository;
 
-import xyz.notagardener.domain.chemical.dto.ChemicalDto;
-import xyz.notagardener.domain.watering.Watering;
 import org.springframework.data.domain.Pageable;
+import xyz.notagardener.chemical.dto.ChemicalDto;
+import xyz.notagardener.watering.Watering;
 
 import java.util.List;
 import java.util.Optional;

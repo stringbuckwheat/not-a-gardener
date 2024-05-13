@@ -1,14 +1,14 @@
-package xyz.notagardener.domain.chemical.service;
+package xyz.notagardener.chemical.service;
 
-import xyz.notagardener.domain.chemical.Chemical;
-import xyz.notagardener.domain.chemical.dto.ChemicalDto;
-import xyz.notagardener.domain.chemical.repository.ChemicalRepository;
-import xyz.notagardener.domain.chemical.repository.ServiceCallBack;
-import xyz.notagardener.domain.gardener.Gardener;
-import xyz.notagardener.domain.gardener.repository.GardenerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.notagardener.chemical.dto.ChemicalDto;
+import xyz.notagardener.chemical.repository.ChemicalRepository;
+import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.common.ServiceCallBack;
+import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.gardener.GardenerRepository;
 
 import java.util.NoSuchElementException;
 

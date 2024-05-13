@@ -1,4 +1,4 @@
-package xyz.notagardener.domain.chemical.service;
+package xyz.notagardener.chemical.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -7,11 +7,11 @@ import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import xyz.notagardener.domain.chemical.Chemical;
-import xyz.notagardener.domain.chemical.dto.ChemicalDto;
-import xyz.notagardener.domain.chemical.repository.ChemicalRepository;
-import xyz.notagardener.domain.gardener.Gardener;
-import xyz.notagardener.domain.gardener.repository.GardenerRepository;
+import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.chemical.dto.ChemicalDto;
+import xyz.notagardener.chemical.repository.ChemicalRepository;
+import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.gardener.GardenerRepository;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -28,7 +28,7 @@ class ChemicalCommandServiceImplTest {
     private ChemicalRepository chemicalRepository;
 
     @InjectMocks
-    private xyz.notagardener.domain.chemical.service.ChemicalCommandServiceImpl chemicalCommandService;
+    private ChemicalCommandServiceImpl chemicalCommandService;
 
     @BeforeEach
     void setUp() {

@@ -1,7 +1,7 @@
-package xyz.notagardener.domain.chemical.repository;
+package xyz.notagardener.chemical.repository;
 
-import xyz.notagardener.domain.chemical.Chemical;
 import org.springframework.data.repository.Repository;
+import xyz.notagardener.chemical.Chemical;
 
 import java.util.Optional;
 

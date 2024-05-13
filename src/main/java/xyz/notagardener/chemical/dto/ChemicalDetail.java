@@ -1,4 +1,4 @@
-package xyz.notagardener.domain.chemical.dto;
+package xyz.notagardener.chemical.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;

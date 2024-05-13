@@ -1,7 +1,7 @@
-package xyz.notagardener.domain.chemical.service;
+package xyz.notagardener.chemical.service;
 
-import xyz.notagardener.domain.chemical.dto.ChemicalDto;
-import xyz.notagardener.domain.chemical.repository.ServiceCallBack;
+import xyz.notagardener.chemical.dto.ChemicalDto;
+import xyz.notagardener.common.ServiceCallBack;
 
 public interface ChemicalCommandService {
     <T> T save(Long gardenerId, ChemicalDto chemicalRequest, ServiceCallBack<T> callBack);

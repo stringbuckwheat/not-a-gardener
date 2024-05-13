@@ -1,11 +1,5 @@
-package xyz.notagardener.domain.chemical;
+package xyz.notagardener.chemical;
 
-import xyz.notagardener.domain.chemical.dto.ChemicalDetail;
-import xyz.notagardener.domain.chemical.dto.ChemicalDto;
-import xyz.notagardener.domain.chemical.service.ChemicalService;
-import xyz.notagardener.domain.gardener.token.UserPrincipal;
-import xyz.notagardener.domain.watering.dto.WateringResponseInChemical;
-import xyz.notagardener.common.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -22,6 +16,12 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import xyz.notagardener.chemical.dto.ChemicalDetail;
+import xyz.notagardener.chemical.dto.ChemicalDto;
+import xyz.notagardener.chemical.service.ChemicalService;
+import xyz.notagardener.common.error.ErrorResponse;
+import xyz.notagardener.common.auth.UserPrincipal;
+import xyz.notagardener.watering.dto.WateringResponseInChemical;
 
 import java.util.List;
 

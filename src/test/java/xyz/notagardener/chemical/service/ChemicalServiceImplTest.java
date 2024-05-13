@@ -1,14 +1,5 @@
-package xyz.notagardener.domain.chemical.service;
+package xyz.notagardener.chemical.service;
 
-import xyz.notagardener.domain.chemical.Chemical;
-import xyz.notagardener.domain.chemical.dto.ChemicalDetail;
-import xyz.notagardener.domain.chemical.dto.ChemicalDto;
-import xyz.notagardener.domain.chemical.repository.ChemicalRepository;
-import xyz.notagardener.domain.gardener.Gardener;
-import xyz.notagardener.domain.place.Place;
-import xyz.notagardener.domain.plant.Plant;
-import xyz.notagardener.domain.watering.Watering;
-import xyz.notagardener.domain.watering.dto.WateringResponseInChemical;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -20,6 +11,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Pageable;
+import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.chemical.dto.ChemicalDetail;
+import xyz.notagardener.chemical.dto.ChemicalDto;
+import xyz.notagardener.chemical.repository.ChemicalRepository;
+import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.place.Place;
+import xyz.notagardener.plant.Plant;
+import xyz.notagardener.watering.Watering;
+import xyz.notagardener.watering.dto.WateringResponseInChemical;
 
 import java.util.*;
 

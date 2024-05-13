@@ -1,17 +1,17 @@
-package xyz.notagardener.domain.chemical.repository;
+package xyz.notagardener.chemical.repository;
 
-import xyz.notagardener.domain.chemical.dto.ChemicalDto;
-import xyz.notagardener.domain.chemical.dto.QChemicalDto;
-import xyz.notagardener.domain.watering.Watering;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.notagardener.domain.chemical.QChemical;
-import xyz.notagardener.domain.place.QPlace;
-import xyz.notagardener.domain.plant.QPlant;
-import xyz.notagardener.domain.watering.QWatering;
+import xyz.notagardener.chemical.QChemical;
+import xyz.notagardener.chemical.dto.ChemicalDto;
+import xyz.notagardener.chemical.dto.QChemicalDto;
+import xyz.notagardener.place.QPlace;
+import xyz.notagardener.plant.QPlant;
+import xyz.notagardener.watering.QWatering;
+import xyz.notagardener.watering.Watering;
 
 import java.util.List;
 import java.util.Optional;

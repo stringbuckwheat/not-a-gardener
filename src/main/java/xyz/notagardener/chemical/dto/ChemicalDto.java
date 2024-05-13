@@ -1,13 +1,13 @@
-package xyz.notagardener.domain.chemical.dto;
+package xyz.notagardener.chemical.dto;
 
-import xyz.notagardener.domain.chemical.Chemical;
-import xyz.notagardener.domain.gardener.Gardener;
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
+import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.gardener.Gardener;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
