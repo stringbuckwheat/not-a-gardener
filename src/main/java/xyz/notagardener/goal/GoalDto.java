@@ -1,7 +1,7 @@
-package xyz.notagardener.domain.goal;
+package xyz.notagardener.goal;
 
-import xyz.notagardener.domain.gardener.Gardener;
-import xyz.notagardener.domain.plant.Plant;
+import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.plant.Plant;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -29,6 +29,26 @@ public class GoalDto {
     @Schema(description = "식물 이름", example = "베고니아 사라왁")
     private String plantName;
 
+    public boolean isValidForSave() {
+        return content != null
+                && content.length() > 0
+                && content.length() < 80
+                && complete != null
+                && complete.equals("N")
+                && plantId >= 0;
+    }
+
+    public boolean isValidForUpdate() {
+        return id != null
+                && id > 0
+                && content != null
+                && content.length() > 0
+                && content.length() < 50
+                && complete != null
+                && (complete.equals("Y") || complete.equals("N"))
+                && plantId >= 0;
+    }
+
     public Goal toEntityWith(Gardener gardener, Plant plant) {
         return Goal.builder()
                 .goalId(id)
@@ -40,22 +60,17 @@ public class GoalDto {
     }
 
     public static GoalDto from(Goal goal) {
-        // plant == nullable
-        if (goal.getPlant() != null) {
-            return GoalDto.builder()
-                    .id(goal.getGoalId())
-                    .content(goal.getContent())
-                    .complete(goal.getComplete())
-                    .plantId(goal.getPlant().getPlantId())
-                    .plantName(goal.getPlant().getName())
-                    .build();
-        }
-
-        return GoalDto.builder()
+        GoalDtoBuilder builder = GoalDto.builder()
                 .id(goal.getGoalId())
                 .content(goal.getContent())
-                .complete(goal.getComplete())
-                .build();
+                .complete(goal.getComplete());
+
+        if (goal.getPlant() != null) {
+            builder.plantId(goal.getPlant().getPlantId())
+                    .plantName(goal.getPlant().getName());
+        }
+
+        return builder.build();
     }
 }
 

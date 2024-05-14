@@ -1,6 +1,6 @@
-package xyz.notagardener.domain.goal;
+package xyz.notagardener.goal;
 
-import xyz.notagardener.domain.gardener.token.UserPrincipal;
+import xyz.notagardener.common.auth.UserPrincipal;
 import xyz.notagardener.common.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -106,8 +106,8 @@ public class GoalController {
             )
     })
     @PutMapping("/{goalId}")
-    public GoalDto modify(@RequestBody GoalDto goalRequest) {
-        return goalService.update(goalRequest);
+    public GoalDto modify(@RequestBody GoalDto goalRequest, @AuthenticationPrincipal UserPrincipal user) {
+        return goalService.update(user.getId(), goalRequest);
     }
 
     @Operation(summary = "(인증) 목표 달성", description = "인증된 사용자의 목표 달성")
@@ -144,8 +144,8 @@ public class GoalController {
             )
     })
     @PutMapping("/{goalId}/complete")
-    public GoalDto complete(@PathVariable Long goalId) {
-        return goalService.complete(goalId);
+    public GoalDto complete(@PathVariable Long goalId, @AuthenticationPrincipal UserPrincipal user) {
+        return goalService.complete(goalId, user.getId());
     }
 
     @Operation(
@@ -172,7 +172,7 @@ public class GoalController {
             }
     )
     @DeleteMapping("/{goalId}")
-    public void delete(@PathVariable Long goalId) {
-        goalService.delete(goalId);
+    public void delete(@PathVariable Long goalId, @AuthenticationPrincipal UserPrincipal user) {
+        goalService.delete(goalId, user.getId());
     }
 }

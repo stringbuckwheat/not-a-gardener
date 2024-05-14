@@ -23,7 +23,10 @@ public enum ExceptionCode {
     INVALID_REFRESH_TOKEN("B011", "유효하지 않은 리프레쉬 토큰", "비정상적인 움직임이 발생했어요. 다시 로그인해주세요."),
     INVALID_JWT_TOKEN("B010", "유효하지 않은 액세스 토큰", "접근 권한이 없어요. 다시 로그인해주세요"),
     CANNOT_LOGIN("B012", "로그인 할 수 없음", "로그인 할 수 없음"),
-    NOT_YOUR_THING("B013", "권한 없음", "권한 없음");
+    NOT_YOUR_THING("B013", "권한 없음", "권한 없음"),
+    INVALID_REQUEST_DATA("BE014", "유효하지 않은 데이터", "입력 값을 확인해주세요"),
+    NO_IDENTIFICATION_INFO_IN_REDIS("BE015", "레디스에 해당 확인코드 정보 없음", "입력 값을 확인해주세요"),
+    NOT_YOUR_IDENTIFICATION_CODE("BE016", "본인 확인 코드 불일치", "본인 확인 코드 불일치");
 
     private static final Map<String, String> CODE_MAP = Collections.unmodifiableMap(
             Stream.of(values()).collect(Collectors.toMap(ExceptionCode::getCode, ExceptionCode::name))

@@ -1,13 +1,10 @@
-package xyz.notagardener.domain.goal;
+package xyz.notagardener.goal;
 
-import xyz.notagardener.domain.plant.Plant;
-import xyz.notagardener.domain.gardener.Gardener;
+import lombok.*;
+import xyz.notagardener.plant.Plant;
+import xyz.notagardener.gardener.Gardener;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -15,7 +12,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Table(name = "goal")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class Goal {

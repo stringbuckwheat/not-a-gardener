@@ -1,4 +1,4 @@
-package xyz.notagardener.domain.goal;
+package xyz.notagardener.goal;
 
 import java.util.List;
 
@@ -7,9 +7,9 @@ public interface GoalService {
 
     GoalDto add(Long gardenerId, GoalDto goalRequest);
 
-    GoalDto update(GoalDto goalRequest);
+    GoalDto update(Long gardenerId, GoalDto goalRequest);
 
-    GoalDto complete(Long id);
+    GoalDto complete(Long goalId, Long gardenerId);
 
-    void delete(Long id);
+    void delete(Long goalId, Long gardenerId);
 }
