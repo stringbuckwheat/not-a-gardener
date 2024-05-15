@@ -16,6 +16,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.GardenerNotInSessionException;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.common.auth.TokenProvider;
 import xyz.notagardener.gardener.authentication.dto.*;
@@ -90,7 +91,7 @@ class AuthenticationServiceImplTest {
 
     @Test
     @DisplayName("가드너 정보 가져오기")
-    void test_GetGardenerInfo_WhenValidGardenerId() {
+    void getGardenerInfo_WhenValidGardenerId_ReturnGardenerInfo() {
         // Given
         Long gardenerId = 1L;
         String name = "메밀";
@@ -111,6 +112,40 @@ class AuthenticationServiceImplTest {
         assertEquals(gardener.getName(), result.getSimpleInfo().getName());
         assertEquals(refreshToken.getToken(), result.getToken().getRefreshToken());
     }
+
+    @Test
+    @DisplayName("가드너 정보 가져오기: 유효하지 않은 gardenerId - 실패")
+    void getGardenerInfo_WhenGardenerIdNotExist_ThrowUsernameNotFoundException() {
+        // Given
+        Long gardenerId = 1L;
+
+        when(gardenerRepository.findById(gardenerId)).thenReturn(Optional.empty());
+
+        // When, Then
+        Executable executable = () -> authenticationService.getGardenerInfo(gardenerId);
+
+        UsernameNotFoundException e = assertThrows(UsernameNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_ACCOUNT.getCode(), e.getMessage());
+    }
+
+    @Test
+    @DisplayName("가드너 정보 가져오기: Redis에 사용자 정보 없음 - 실패")
+    void getGardenerInfo_WhenGardenerNotExistInRedis_ThrowGardenerNotInSessionException() {
+        // Given
+        Long gardenerId = 1L;
+        String name = "메밀";
+
+        Gardener gardener = Gardener.builder().gardenerId(gardenerId).name(name).build();
+
+        when(gardenerRepository.findById(gardenerId)).thenReturn(Optional.of(gardener));
+        when(activeGardenerRepository.findById(gardenerId)).thenReturn(Optional.empty());
+
+        // When
+        Executable executable = () -> authenticationService.getGardenerInfo(gardenerId);
+        GardenerNotInSessionException e = assertThrows(GardenerNotInSessionException.class, executable);
+        assertEquals(ExceptionCode.NO_TOKEN_IN_REDIS.getCode(), e.getMessage());
+    }
+
 
     private AccessToken mockAccessToken(Long gardenerId) {
         //// 가짜 키 만들기
@@ -310,7 +345,7 @@ class AuthenticationServiceImplTest {
 
     @Test
     @DisplayName("Silent Refresh: 현재 로그인하지 않은 사용자 (유효하지 않은 gardenerId)")
-    void refreshAccessToken_WhenGardenerIdNotExistInRedis_ThrowsBadCredentialsException() {
+    void refreshAccessToken_WhenGardenerIdNotExistInRedis_ThrowsGardenerNotInSessionException() {
         // Given
         Long invalidGardenerId = 1L;
         String refreshToken = "refresh_token";
@@ -319,7 +354,7 @@ class AuthenticationServiceImplTest {
 
         // When, Then
         Executable executable = () -> authenticationService.refreshAccessToken(new Refresh(invalidGardenerId, refreshToken));
-        BadCredentialsException e = assertThrows(BadCredentialsException.class, executable);
+        GardenerNotInSessionException e = assertThrows(GardenerNotInSessionException.class, executable);
         assertEquals(ExceptionCode.NO_TOKEN_IN_REDIS.getCode(), e.getMessage());
     }
 

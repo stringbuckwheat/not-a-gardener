@@ -10,17 +10,20 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.notagardener.common.auth.*;
+import xyz.notagardener.common.auth.ActiveGardener;
+import xyz.notagardener.common.auth.ActiveGardenerRepository;
+import xyz.notagardener.common.auth.TokenProvider;
+import xyz.notagardener.common.auth.UserPrincipal;
 import xyz.notagardener.common.auth.dto.AccessToken;
 import xyz.notagardener.common.auth.dto.RefreshToken;
 import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.GardenerNotInSessionException;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.gardener.authentication.dto.*;
 import xyz.notagardener.gardener.gardener.GardenerRepository;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Slf4j
@@ -42,9 +45,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional(readOnly = true)
     public Info getGardenerInfo(Long id) {
-        Gardener gardener = gardenerRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        Gardener gardener = gardenerRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode()));
+
         ActiveGardener activeGardener = activeGardenerRepository.findById(id)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> new GardenerNotInSessionException(ExceptionCode.NO_TOKEN_IN_REDIS.getCode()));
+
         RefreshToken refreshToken = activeGardener.getRefreshToken();
 
         return Info.from("", refreshToken.getToken(), gardener);
@@ -108,7 +114,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public Token refreshAccessToken(Refresh token) {
         String reqRefreshToken = token.getRefreshToken();
         ActiveGardener activeGardener = activeGardenerRepository.findById(token.getGardenerId())
-                .orElseThrow(() -> new BadCredentialsException(ExceptionCode.NO_TOKEN_IN_REDIS.getCode()));
+                .orElseThrow(() -> new GardenerNotInSessionException(ExceptionCode.NO_TOKEN_IN_REDIS.getCode()));
         RefreshToken savedRefreshToken = activeGardener.getRefreshToken();
 
         if (!reqRefreshToken.equals(savedRefreshToken.getToken())) {

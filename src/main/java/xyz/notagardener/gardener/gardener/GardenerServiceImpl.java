@@ -2,15 +2,13 @@ package xyz.notagardener.gardener.gardener;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.gardener.authentication.dto.Login;
-
-import java.util.NoSuchElementException;
 
 @Service
 @Slf4j
@@ -22,14 +20,16 @@ public class GardenerServiceImpl implements GardenerService {
     @Override
     @Transactional(readOnly = true)
     public GardenerDetail getOne(Long id) {
-        return gardenerRepository.findGardenerDetailByGardenerId(id).orElseThrow(NoSuchElementException::new);
+        return gardenerRepository.findGardenerDetailByGardenerId(id)
+                .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode()));
     }
 
     @Override
     @Transactional(readOnly = true)
     public boolean identify(Long id, Login login) {
         Gardener gardener = gardenerRepository.findById(id)
-                .orElseThrow(() -> new BadCredentialsException(ExceptionCode.WRONG_PASSWORD.getCode()));
+                .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode()));
+
         return encoder.matches(login.getPassword(), gardener.getPassword());
     }
 
@@ -37,7 +37,8 @@ public class GardenerServiceImpl implements GardenerService {
     @Transactional
     public void updatePassword(Long id, Login login) {
         Gardener gardener = gardenerRepository.findById(id)
-                .orElseThrow(() -> new BadCredentialsException(ExceptionCode.WRONG_ACCOUNT.getCode()));
+                .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.WRONG_ACCOUNT.getCode()));
+
         String encryptedPassword = encoder.encode(login.getPassword());
         gardener.changePassword(encryptedPassword);
     }
@@ -50,7 +51,7 @@ public class GardenerServiceImpl implements GardenerService {
         }
 
         Gardener gardener = gardenerRepository.findById(gardenerDetail.getId())
-                .orElseThrow(() -> new BadCredentialsException(ExceptionCode.WRONG_ACCOUNT.getCode()));
+                .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode()));
         gardener.updateEmailAndName(gardenerDetail.getEmail(), gardenerDetail.getName());
 
         return GardenerDetail.builder()

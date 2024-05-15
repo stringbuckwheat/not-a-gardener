@@ -8,10 +8,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.VerificationException;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.gardener.authentication.dto.Login;
 import xyz.notagardener.gardener.gardener.GardenerRepository;
@@ -114,7 +114,7 @@ class ForgotServiceImplTest {
 
     @Test
     @DisplayName("확인 코드 검증: 레디스에 해당 정보 없음 - 확인 코드(PK) 오류")
-    void verifyIdentificationCode_WhenIdentificationCodeInvalid_ThrowsBadCredentialsException() {
+    void verifyIdentificationCode_WhenIdentificationCodeInvalid_ThrowsVerificationException() {
         // Given
         String email = "testgardener@notagardener.xyz";
         String identificationCode = "IDENTIFICATION_CODE";
@@ -124,13 +124,13 @@ class ForgotServiceImplTest {
 
         // When, Then
         Executable executable = () -> forgotService.verifyIdentificationCode(verifyRequest);
-        BadCredentialsException e = assertThrows(BadCredentialsException.class, executable);
+        VerificationException e = assertThrows(VerificationException.class, executable);
         assertEquals(ExceptionCode.NO_IDENTIFICATION_INFO_IN_REDIS.getCode(), e.getMessage());
     }
 
     @Test
-    @DisplayName("확인 코드 검증: 확인 코드가 본인 것이 아님 - 이메일 오휴")
-    void verifyIdentificationCode_WhenEmailInvalid_ThrowsBadCredentialsException() {
+    @DisplayName("확인 코드 검증: 확인 코드가 본인 것이 아님 - 이메일 오류")
+    void verifyIdentificationCode_WhenEmailInvalid_ThrowsVerificationException() {
         // Given
         String invalidEmail = "notyourcode@notagardener.xyz";
         String validEmail = "thatsmycode@notagardener.xyz";
@@ -142,7 +142,7 @@ class ForgotServiceImplTest {
 
         // When, Then
         Executable executable = () -> forgotService.verifyIdentificationCode(verifyRequest);
-        BadCredentialsException e = assertThrows(BadCredentialsException.class, executable);
+        VerificationException e = assertThrows(VerificationException.class, executable);
         assertEquals(ExceptionCode.NOT_YOUR_IDENTIFICATION_CODE.getCode(), e.getMessage());
     }
 

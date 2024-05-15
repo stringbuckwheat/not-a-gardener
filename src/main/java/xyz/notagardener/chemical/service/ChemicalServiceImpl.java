@@ -9,6 +9,8 @@ import xyz.notagardener.chemical.Chemical;
 import xyz.notagardener.chemical.dto.ChemicalDetail;
 import xyz.notagardener.chemical.dto.ChemicalDto;
 import xyz.notagardener.chemical.repository.ChemicalRepository;
+import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.watering.dto.WateringResponseInChemical;
 
 import java.util.List;
@@ -32,7 +34,7 @@ public class ChemicalServiceImpl implements ChemicalService {
     @Transactional(readOnly = true)
     public ChemicalDetail getOne(Long chemicalId, Long gardenerId) {
         ChemicalDto chemical = chemicalRepository.findByChemicalIdAndGardenerId(chemicalId, gardenerId)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> new NoSuchElementException(ExceptionCode.NO_SUCH_ITEM.getCode()));
 
         Long wateringSize = chemicalRepository.countWateringByChemicalId(chemicalId);
 
@@ -51,12 +53,22 @@ public class ChemicalServiceImpl implements ChemicalService {
     @Override
     @Transactional
     public ChemicalDto add(Long gardenerId, ChemicalDto chemicalRequest) {
+        // 유효성 검사
+        if (!chemicalRequest.isValidForSave()) {
+            throw new IllegalArgumentException(ExceptionCode.INVALID_REQUEST_DATA.getCode());
+        }
+
         return chemicalCommandService.save(gardenerId, chemicalRequest, ChemicalDto::from);
     }
 
     @Override
     @Transactional
     public ChemicalDto update(Long gardenerId, ChemicalDto chemicalRequest) {
+        // 유효성 검사
+        if (!chemicalRequest.isValidForUpdate()) {
+            throw new IllegalArgumentException(ExceptionCode.INVALID_REQUEST_DATA.getCode());
+        }
+
         return chemicalCommandService.update(gardenerId, chemicalRequest, ChemicalDto::from);
     }
 
@@ -64,11 +76,10 @@ public class ChemicalServiceImpl implements ChemicalService {
     @Transactional
     public void deactivate(Long chemicalId, Long gardenerId) {
         Chemical chemical = chemicalRepository.findById(chemicalId).orElseThrow(NoSuchElementException::new);
+        Long ownerId = chemical.getGardener().getGardenerId(); // 실 소유자
 
-        Long ownerId = chemical.getGardener().getGardenerId();
-
-        if(!ownerId.equals(gardenerId)) {
-            throw new IllegalArgumentException("B013");
+        if (!ownerId.equals(gardenerId)) {
+            throw new UnauthorizedAccessException(ExceptionCode.NOT_YOUR_THING.getCode());
         }
 
         chemical.deactivate();

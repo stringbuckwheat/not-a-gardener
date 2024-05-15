@@ -7,14 +7,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Pageable;
 import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.chemical.ChemicalType;
 import xyz.notagardener.chemical.dto.ChemicalDetail;
 import xyz.notagardener.chemical.dto.ChemicalDto;
 import xyz.notagardener.chemical.repository.ChemicalRepository;
+import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.place.Place;
 import xyz.notagardener.plant.Plant;
@@ -22,6 +27,7 @@ import xyz.notagardener.watering.Watering;
 import xyz.notagardener.watering.dto.WateringResponseInChemical;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -132,6 +138,74 @@ class ChemicalServiceImplTest {
         assertEquals(expectedWaterings.size(), result.size());
     }
 
+    static Stream<ChemicalDto> invalidChemicalSavingData() {
+        String validName = "하이포넥스";
+        String validType = ChemicalType.NPK_FERTILIZER.getType();
+        int validPeriod = 14;
+
+        return Stream.of(
+                ChemicalDto.builder().name(null).type(validType).period(validPeriod).build(),
+                ChemicalDto.builder().name("").type(validType).period(validPeriod).build(),
+                ChemicalDto.builder().name("reallyreallyreallyreallyreallyreallylongname").type(validType).period(validPeriod).build(),
+
+                ChemicalDto.builder().name(validName).type(null).period(validPeriod).build(),
+                ChemicalDto.builder().name(validName).type("이상한 타입").period(validPeriod).build(),
+
+                ChemicalDto.builder().name(validName).type(validType).period(0).build(),
+                ChemicalDto.builder().name(validName).type(validType).period(-1).build()
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidChemicalSavingData")
+    @DisplayName("저장: 유효하지 않은 입력값 - 실패")
+    void save_WhenRequestDataInvalid_ThrowIllegalArgumentException(ChemicalDto chemicalDto) {
+        // Given
+        Long gardenerId = 1L;
+        Gardener gardener = Gardener.builder().build();
+
+        // When, Then
+        Executable executable = () -> chemicalService.add(gardenerId, chemicalDto);
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
+        assertEquals(ExceptionCode.INVALID_REQUEST_DATA.getCode(), e.getMessage());
+    }
+
+    static Stream<ChemicalDto> invalidChemicalUpdateData() {
+        Long validId = 1L;
+        String validName = "하이포넥스";
+        String validType = ChemicalType.NPK_FERTILIZER.getType();
+        int validPeriod = 14;
+
+        return Stream.of(
+                new ChemicalDto(null, validName, validType, validPeriod),
+                new ChemicalDto(-1L, validName, validType, validPeriod),
+
+                new ChemicalDto(validId, null, validType, validPeriod),
+                new ChemicalDto(validId, "", validType, validPeriod),
+                new ChemicalDto(validId, "reallyreallyreallyreallyreallyreallylongname", validType, validPeriod),
+
+                new ChemicalDto(validId, validName, null, validPeriod),
+                new ChemicalDto(validId, validName, "weird input", validPeriod),
+
+                new ChemicalDto(validId, validName, validType, -1),
+                new ChemicalDto(validId, validName, validType, 0)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidChemicalUpdateData")
+    @DisplayName("수정: 유효하지 않은 입력값 - 실패")
+    void update_WhenRequestDataInvalid_ThrowIllegalArgumentException(ChemicalDto chemicalDto) {
+        // Given
+        Long gardenerId = 1L;
+        Gardener gardener = Gardener.builder().build();
+
+        // When, Then
+        Executable executable = () -> chemicalService.update(gardenerId, chemicalDto);
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
+        assertEquals(ExceptionCode.INVALID_REQUEST_DATA.getCode(), e.getMessage());
+    }
+
     @Test
     @DisplayName("(논리) 삭제: Happy Path")
     void deactivate_WhenChemicalExists_ShouldDeactivate() {
@@ -166,7 +240,8 @@ class ChemicalServiceImplTest {
         // When, Then
         Executable execute = () -> chemicalService.deactivate(chemicalId, gardenerId);
 
-        assertThrows(IllegalArgumentException.class, execute);
+        UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, execute);
+        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), e.getMessage());
     }
 
     @Test

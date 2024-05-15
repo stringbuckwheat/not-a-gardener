@@ -7,9 +7,13 @@ import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.chemical.ChemicalType;
 import xyz.notagardener.chemical.dto.ChemicalDto;
 import xyz.notagardener.chemical.repository.ChemicalRepository;
+import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.gardener.gardener.GardenerRepository;
 
@@ -40,7 +44,7 @@ class ChemicalCommandServiceImplTest {
     void save_ShouldReturnSavedChemical() {
         // Given
         Long gardenerId = 1L;
-        ChemicalDto chemicalDto = new ChemicalDto(null, "Chemical Name", "Chemical Type", 10);
+        ChemicalDto chemicalDto = new ChemicalDto(null, "Chemical Name", ChemicalType.MICRONUTRIENT_FERTILIZER.getType(), 10);
         Gardener gardener = Gardener.builder().build();
         Chemical savedChemical = Chemical.builder()
                 .chemicalId(1L) // 생성된 id 값
@@ -63,14 +67,29 @@ class ChemicalCommandServiceImplTest {
     }
 
     @Test
+    @DisplayName("저장: 회원 정보 없음 - 실패")
+    void save_WhenGardenerNotExist_ThrowUsernameNotFoundException() {
+        // Given
+        Long gardenerId = 1L;
+        ChemicalDto chemicalDto = new ChemicalDto(null, "Chemical Name", ChemicalType.MICRONUTRIENT_FERTILIZER.getType(), 10);
+
+        when(gardenerRepository.getReferenceById(gardenerId)).thenReturn(null);
+
+        // When, Then
+        Executable executable = () -> chemicalCommandService.save(gardenerId, chemicalDto, chemical -> chemical);
+        UsernameNotFoundException e = assertThrows(UsernameNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_ACCOUNT.getCode(), e.getMessage());
+    }
+
+    @Test
     @DisplayName("수정: Happy Path")
     void update_WhenChemicalExists_ShouldReturnUpdatedChemical() {
         // given
         Long gardenerId = 1L;
         Long chemicalId = 1L;
         ChemicalDto chemicalDto = new ChemicalDto(chemicalId, "Updated Name", "Updated Type", 10);
-        Gardener gardener = Gardener.builder().build();
-        Chemical existingChemical = Chemical.builder().build();
+        Gardener gardener = Gardener.builder().gardenerId(gardenerId).build();
+        Chemical existingChemical = Chemical.builder().gardener(gardener).build();
 
         when(chemicalRepository.findById(chemicalId)).thenReturn(Optional.of(existingChemical));
 
@@ -85,7 +104,7 @@ class ChemicalCommandServiceImplTest {
     }
 
     @Test
-    @DisplayName("수정: 기존 약품이 존재하지 않는 경우")
+    @DisplayName("수정: 기존 약품이 존재하지 않는 경우 - 실패")
     void update_WhenChemicalNotExists_ShouldThrowNoSuchElementException() {
         // Given
         Long gardenerId = 1L;
@@ -96,6 +115,27 @@ class ChemicalCommandServiceImplTest {
 
         // When, Then
         Executable execute = () -> chemicalCommandService.update(gardenerId, chemicalDto, chemical -> chemical);
-        assertThrows(NoSuchElementException.class, execute);
+        NoSuchElementException e = assertThrows(NoSuchElementException.class, execute);
+        assertEquals(ExceptionCode.NO_SUCH_ITEM.getCode(), e.getMessage());
+    }
+
+    @Test
+    @DisplayName("수정: 기존 약품이 존재하지 않는 경우 - 실패")
+    void update_WhenGardenerIdNotMatch_ThrowUnauthorizedAccessException() {
+        // Given
+        Long gardenerId = 1L; // 입력값
+        Long ownerId = 2L; // 실제 약품 소유자
+        Long chemicalId = 1L;
+        ChemicalDto chemicalDto = new ChemicalDto(chemicalId, "Updated Name", "Updated Type", 10);
+
+        Gardener owner = Gardener.builder().gardenerId(2L).build();
+        Chemical existingChemical = Chemical.builder().gardener(owner).build();
+
+        when(chemicalRepository.findById(chemicalId)).thenReturn(Optional.of(existingChemical));
+
+        // When, Then
+        Executable execute = () -> chemicalCommandService.update(gardenerId, chemicalDto, chemical -> chemical);
+        UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, execute);
+        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), e.getMessage());
     }
 }

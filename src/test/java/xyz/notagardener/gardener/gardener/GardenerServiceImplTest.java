@@ -9,14 +9,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.gardener.authentication.dto.Login;
 
 import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -41,7 +40,7 @@ class GardenerServiceImplTest {
     }
 
     @Test
-    @DisplayName("한 회원의 정보")
+    @DisplayName("한 회원의 정보: 성공")
     void getOne_WhenGardenerIdValid_ReturnGardenerDetail() {
         // Given
         Long gardenerId = 1L;
@@ -60,7 +59,7 @@ class GardenerServiceImplTest {
 
     @Test
     @DisplayName("한 회원의 정보 - gardenerId 오류")
-    void getOne_WhenGardenerIdNotExist_ThrowNoSuchElementException() {
+    void getOne_WhenGardenerIdNotExist_ThrowUsernameNotFoundException() {
         // Given
         Long gardenerId = 1L;
 
@@ -68,7 +67,8 @@ class GardenerServiceImplTest {
 
         // When, Then
         Executable executable = () -> gardenerService.getOne(gardenerId);
-        assertThrows(NoSuchElementException.class, executable);
+        UsernameNotFoundException e = assertThrows(UsernameNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_ACCOUNT.getCode(), e.getMessage());
     }
 
     @Test
@@ -100,7 +100,7 @@ class GardenerServiceImplTest {
 
     @Test
     @DisplayName("신원 확인: 해당 username의 회원 없음")
-    void identify_WhenUsernameNotExist_ThrowBadCredentialException() {
+    void identify_WhenUsernameNotExist_ThrowUsernameNotFoundException() {
         // Given
         Long gardenerId = 1L;
         String username = "testgardener";
@@ -112,12 +112,12 @@ class GardenerServiceImplTest {
 
         // When, Then
         Executable executable = () -> gardenerService.identify(gardenerId, login);
-        BadCredentialsException e = assertThrows(BadCredentialsException.class, executable);
-        assertEquals(ExceptionCode.WRONG_PASSWORD.getCode(), e.getMessage());
+        UsernameNotFoundException e = assertThrows(UsernameNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_ACCOUNT.getCode(), e.getMessage());
     }
 
     @Test
-    @DisplayName("신원 확인 -> 비밀번호 불일치")
+    @DisplayName("신원 확인: 비밀번호 불일치")
     void identify_WhenPasswordInvalid_ReturnFalse() {
         // Given
         Long gardenerId = 1L;
@@ -169,7 +169,7 @@ class GardenerServiceImplTest {
 
     @Test
     @DisplayName("비밀번호 변경: 실패(PK 오류)")
-    void updatePassword_WhenGardenerIdNotExist_ThrowBadCredentialException() {
+    void updatePassword_WhenGardenerIdNotExist_ThrowUsernameNotFoundException() {
         // Given
         Long id = 1L;
         String username = "testgardener";
@@ -181,7 +181,7 @@ class GardenerServiceImplTest {
 
         // When, Then
         Executable executable = () -> gardenerService.updatePassword(id, login);
-        BadCredentialsException e = assertThrows(BadCredentialsException.class, executable);
+        UsernameNotFoundException e = assertThrows(UsernameNotFoundException.class, executable);
         assertEquals(ExceptionCode.WRONG_ACCOUNT.getCode(), e.getMessage());
     }
 
@@ -243,7 +243,7 @@ class GardenerServiceImplTest {
 
     @Test
     @DisplayName("회원 정보 변경: gardenerId 오류")
-    void update_WhenGardenerIdNotExist_ThrowsNoSuchElementException() {
+    void update_WhenGardenerIdNotExist_ThrowsUsernameNotFoundException() {
         // Given
         GardenerDetail request = GardenerDetail.builder()
                 .id(1L)
@@ -256,8 +256,8 @@ class GardenerServiceImplTest {
 
         // When, Then
         Executable executable = () ->  gardenerService.update(request);
-        BadCredentialsException e = assertThrows(BadCredentialsException.class, executable);
-        assertEquals(ExceptionCode.WRONG_ACCOUNT.getCode(), e.getMessage());
+        UsernameNotFoundException e = assertThrows(UsernameNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_ACCOUNT.getCode(), e.getMessage());
     }
 
     @ParameterizedTest

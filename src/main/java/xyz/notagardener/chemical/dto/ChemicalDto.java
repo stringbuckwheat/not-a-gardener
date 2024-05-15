@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.chemical.ChemicalType;
 import xyz.notagardener.gardener.Gardener;
 
 @Getter
@@ -28,6 +29,14 @@ public class ChemicalDto {
     @Positive(message = "시비 주기는 양수만 입력 가능합니다.")
     @Schema(description = "시비 주기", example = "7")
     private int period;
+
+    public boolean isValidForSave() {
+        return name != null && name.length() > 0 && name.length() < 30 && ChemicalType.isValidType(type) && period > 0;
+    }
+
+    public boolean isValidForUpdate() {
+        return id != null && id > 0L && isValidForSave();
+    }
 
     @Builder
     @QueryProjection

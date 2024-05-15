@@ -6,12 +6,12 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.VerificationException;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.gardener.authentication.dto.Login;
 import xyz.notagardener.gardener.gardener.GardenerRepository;
@@ -44,7 +44,7 @@ public class ForgotServiceImpl implements ForgotService {
         sendEmail(identificationCode, email); // 이메일 보내기
 
         // Redis 저장
-        LostGardener lostGardener = new LostGardener(identificationCode, email, usernames);
+        lostGardenerRepository.save(new LostGardener(identificationCode, email, usernames));
 
         return new Forgot(email, usernames);
     }
@@ -67,13 +67,16 @@ public class ForgotServiceImpl implements ForgotService {
 
     @Override
     public VerifyRequest verifyIdentificationCode(VerifyRequest verifyRequest) {
+        // 본인 확인 코드로 redis 검색
         LostGardener lostGardener = lostGardenerRepository.findById(verifyRequest.getIdentificationCode())
-                .orElseThrow(() -> new BadCredentialsException(ExceptionCode.NO_IDENTIFICATION_INFO_IN_REDIS.getCode()));
+                .orElseThrow(() -> new VerificationException(ExceptionCode.NO_IDENTIFICATION_INFO_IN_REDIS.getCode()));
 
+        // 한 번 더 확인
         if(!verifyRequest.getEmail().equals(lostGardener.getEmail())) {
-            throw new BadCredentialsException(ExceptionCode.NOT_YOUR_IDENTIFICATION_CODE.getCode());
+            throw new VerificationException(ExceptionCode.NOT_YOUR_IDENTIFICATION_CODE.getCode());
         }
 
+        // redis에서 확인코드 삭제
         lostGardenerRepository.deleteById(lostGardener.getIdentificationCode());
 
         return verifyRequest;
@@ -85,7 +88,7 @@ public class ForgotServiceImpl implements ForgotService {
         Gardener gardener = gardenerRepository.findByProviderIsNullAndUsername(login.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode()));
 
-        String encryptedPassword = encoder.encode(login.getPassword());
-        gardener.changePassword(encryptedPassword);
+        // 새 비밀번호 인코딩 후 저장
+        gardener.changePassword(encoder.encode(login.getPassword()));
     }
 }
