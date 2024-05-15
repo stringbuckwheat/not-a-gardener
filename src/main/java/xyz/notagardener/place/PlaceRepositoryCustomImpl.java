@@ -1,15 +1,15 @@
-package xyz.notagardener.domain.place;
+package xyz.notagardener.place;
 
-import xyz.notagardener.domain.plant.Plant;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.notagardener.plant.Plant;
 
 import java.util.List;
 
-import static xyz.notagardener.domain.place.QPlace.place;
-import static xyz.notagardener.domain.plant.QPlant.plant;
+import static xyz.notagardener.place.QPlace.place;
+import static xyz.notagardener.plant.QPlant.plant;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)

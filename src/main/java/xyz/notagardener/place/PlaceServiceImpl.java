@@ -1,15 +1,18 @@
-package xyz.notagardener.domain.place;
+package xyz.notagardener.place;
 
-import xyz.notagardener.domain.gardener.Gardener;
-import xyz.notagardener.domain.place.dto.PlaceCard;
-import xyz.notagardener.domain.place.dto.PlaceDto;
-import xyz.notagardener.domain.plant.dto.plant.PlantInPlace;
-import xyz.notagardener.domain.gardener.repository.GardenerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
+import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.gardener.GardenerRepository;
+import xyz.notagardener.place.dto.PlaceCard;
+import xyz.notagardener.place.dto.PlaceDto;
+import xyz.notagardener.plant.dto.plant.PlantInPlace;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -21,6 +24,18 @@ import java.util.stream.Collectors;
 public class PlaceServiceImpl implements PlaceService {
     private final PlaceRepository placeRepository;
     private final GardenerRepository gardenerRepository;
+
+    public Place getPlaceByPlaceIdAndGardenerId(Long placeId, Long gardenerId) {
+        Place place = placeRepository.findByPlaceId(placeId)
+                .orElseThrow(() -> new NoSuchElementException(ExceptionCode.NO_SUCH_ITEM.getCode()));
+
+        // 소유자 확인
+        if (!place.getGardener().getGardenerId().equals(gardenerId)) {
+            throw new UnauthorizedAccessException(ExceptionCode.NOT_YOUR_THING.getCode());
+        }
+
+        return place;
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -34,9 +49,9 @@ public class PlaceServiceImpl implements PlaceService {
     @Override
     @Transactional(readOnly = true)
     public PlaceDto getDetail(Long placeId, Long gardenerId) {
-        Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(placeId, gardenerId)
-                .orElseThrow(NoSuchElementException::new);
+        Place place = getPlaceByPlaceIdAndGardenerId(placeId, gardenerId);
         Long plantListSize = placeRepository.countPlantsByPlaceId(placeId);
+
         return PlaceDto.from(place, plantListSize);
     }
 
@@ -51,8 +66,17 @@ public class PlaceServiceImpl implements PlaceService {
     @Override
     @Transactional
     public PlaceCard add(Long gardenerId, PlaceDto placeRequest) {
+        if (!placeRequest.isValidForSave()) {
+            throw new IllegalArgumentException(ExceptionCode.INVALID_REQUEST_DATA.getCode());
+        }
+
         Gardener gardener = gardenerRepository.getReferenceById(gardenerId);
-        Place place =  placeRepository.save(placeRequest.toEntityWith(gardener));
+
+        if (gardener == null) {
+            throw new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode());
+        }
+
+        Place place = placeRepository.save(placeRequest.toEntityWith(gardener));
 
         return PlaceCard.from(place);
     }
@@ -60,8 +84,11 @@ public class PlaceServiceImpl implements PlaceService {
     @Override
     @Transactional
     public PlaceDto update(PlaceDto placeRequest, Long gardenerId) {
-        Place place = placeRepository.findByPlaceIdAndGardener_GardenerId(placeRequest.getId(), gardenerId)
-                .orElseThrow(NoSuchElementException::new);
+        if (!placeRequest.isValidForUpdate()) {
+            throw new IllegalArgumentException(ExceptionCode.INVALID_REQUEST_DATA.getCode());
+        }
+
+        Place place = getPlaceByPlaceIdAndGardenerId(placeRequest.getId(), gardenerId);
 
         place.update(
                 placeRequest.getName(),
@@ -74,6 +101,7 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     public void delete(Long placeId, Long gardenerId) {
-        placeRepository.deleteById(placeId);
+        Place place = getPlaceByPlaceIdAndGardenerId(placeId, gardenerId);
+        placeRepository.delete(place);
     }
 }

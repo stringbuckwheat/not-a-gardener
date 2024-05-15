@@ -1,7 +1,7 @@
-package xyz.notagardener.domain.place;
+package xyz.notagardener.place;
 
-import xyz.notagardener.domain.plant.Plant;
-import xyz.notagardener.domain.gardener.Gardener;
+import xyz.notagardener.plant.Plant;
+import xyz.notagardener.gardener.Gardener;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

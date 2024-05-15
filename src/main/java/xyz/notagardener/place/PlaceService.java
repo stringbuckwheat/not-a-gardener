@@ -1,9 +1,9 @@
-package xyz.notagardener.domain.place;
+package xyz.notagardener.place;
 
-import xyz.notagardener.domain.place.dto.PlaceCard;
-import xyz.notagardener.domain.place.dto.PlaceDto;
-import xyz.notagardener.domain.plant.dto.plant.PlantInPlace;
 import org.springframework.data.domain.Pageable;
+import xyz.notagardener.place.dto.PlaceCard;
+import xyz.notagardener.place.dto.PlaceDto;
+import xyz.notagardener.plant.dto.plant.PlantInPlace;
 
 import java.util.List;
 

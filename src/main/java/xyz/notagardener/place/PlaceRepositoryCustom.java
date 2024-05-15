@@ -1,7 +1,7 @@
-package xyz.notagardener.domain.place;
+package xyz.notagardener.place;
 
-import xyz.notagardener.domain.plant.Plant;
 import org.springframework.data.domain.Pageable;
+import xyz.notagardener.plant.Plant;
 
 import java.util.List;
 

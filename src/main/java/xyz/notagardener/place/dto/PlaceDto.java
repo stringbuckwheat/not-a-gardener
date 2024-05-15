@@ -1,10 +1,11 @@
-package xyz.notagardener.domain.place.dto;
+package xyz.notagardener.place.dto;
 
-import xyz.notagardener.domain.gardener.Gardener;
-import xyz.notagardener.domain.place.Place;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.place.Place;
+import xyz.notagardener.place.PlaceType;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 @AllArgsConstructor
+@EqualsAndHashCode
 public class PlaceDto {
     @Schema(description = "장소 id", example = "1")
     private Long id;
@@ -33,6 +35,15 @@ public class PlaceDto {
 
     @Schema(description = "장소에 속한 식물 수", example = "6")
     private Long plantListSize;
+
+    public boolean isValidForSave() {
+        boolean artificialLightValid = artificialLight != null && (artificialLight.equals("Y") || artificialLight.equals("N"));
+        return name != null && name.length() > 0 && name.length() < 50 && PlaceType.isValid(option) && artificialLightValid;
+    }
+
+    public boolean isValidForUpdate() {
+        return id != null && id > 0L && isValidForSave();
+    }
 
     /**
      * createDate로 쓸 LocalDateTime.now()를 포함한 엔티티를 반환

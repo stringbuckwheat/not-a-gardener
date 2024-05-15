@@ -1,10 +1,11 @@
-package xyz.notagardener.domain.place.dto;
+package xyz.notagardener.place.dto;
 
-import xyz.notagardener.domain.place.Place;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import xyz.notagardener.place.Place;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode
 public class PlaceCard {
     @Schema(description = "장소 id", example = "1")
     private Long id;

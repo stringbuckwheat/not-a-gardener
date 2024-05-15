@@ -16,7 +16,7 @@ public enum ChemicalType {
     public final String type;
 
     // 위 enum 중에 존재하는지 검사
-    public static boolean isValidType(String type) {
+    public static boolean isValid(String type) {
         for(ChemicalType chemicalType : values()) {
             if(chemicalType.getType().equals(type)) {
                 return true;

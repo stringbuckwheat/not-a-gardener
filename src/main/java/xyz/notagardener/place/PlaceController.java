@@ -1,10 +1,5 @@
-package xyz.notagardener.domain.place;
+package xyz.notagardener.place;
 
-import xyz.notagardener.domain.gardener.token.UserPrincipal;
-import xyz.notagardener.domain.place.dto.PlaceCard;
-import xyz.notagardener.domain.place.dto.PlaceDto;
-import xyz.notagardener.domain.plant.dto.plant.PlantInPlace;
-import xyz.notagardener.common.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,6 +15,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import xyz.notagardener.common.error.ErrorResponse;
+import xyz.notagardener.common.auth.UserPrincipal;
+import xyz.notagardener.place.dto.PlaceCard;
+import xyz.notagardener.place.dto.PlaceDto;
+import xyz.notagardener.plant.dto.plant.PlantInPlace;
 
 import java.util.List;
 

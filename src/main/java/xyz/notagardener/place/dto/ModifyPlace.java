@@ -1,4 +1,4 @@
-package xyz.notagardener.domain.place.dto;
+package xyz.notagardener.place.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

@@ -31,7 +31,7 @@ public class ChemicalDto {
     private int period;
 
     public boolean isValidForSave() {
-        return name != null && name.length() > 0 && name.length() < 30 && ChemicalType.isValidType(type) && period > 0;
+        return name != null && name.length() > 0 && name.length() < 30 && ChemicalType.isValid(type) && period > 0;
     }
 
     public boolean isValidForUpdate() {
