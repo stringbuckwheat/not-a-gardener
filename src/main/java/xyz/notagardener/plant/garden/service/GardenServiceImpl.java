@@ -1,18 +1,17 @@
-package xyz.notagardener.domain.plant.service;
+package xyz.notagardener.plant.garden.service;
 
-import xyz.notagardener.domain.plant.dto.garden.GardenMain;
-import xyz.notagardener.domain.plant.dto.garden.GardenResponse;
-import xyz.notagardener.domain.plant.dto.garden.WaitingForWatering;
-import xyz.notagardener.domain.plant.dto.projection.Calculate;
-import xyz.notagardener.domain.plant.dto.projection.RawGarden;
-import xyz.notagardener.domain.plant.repository.PlantRepository;
-import xyz.notagardener.domain.routine.Routine;
-import xyz.notagardener.domain.routine.RoutineRepository;
-import xyz.notagardener.domain.routine.dto.RoutineResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.notagardener.plant.garden.dto.GardenMain;
+import xyz.notagardener.plant.garden.dto.GardenResponse;
+import xyz.notagardener.plant.garden.dto.RawGarden;
+import xyz.notagardener.plant.garden.dto.WaitingForWatering;
+import xyz.notagardener.plant.plant.PlantRepository;
+import xyz.notagardener.routine.Routine;
+import xyz.notagardener.routine.RoutineRepository;
+import xyz.notagardener.routine.dto.RoutineResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,7 +36,7 @@ public class GardenServiceImpl implements GardenService {
         List<Routine> routineList = routineRepository.findByGardener_GardenerId(gardenerId);
 
         List<GardenResponse> todoList = plantsToDo.stream()
-                .map(rawGarden -> gardenResponseMapper.getGardenResponse(Calculate.from(rawGarden, gardenerId)))
+                .map(rawGarden -> gardenResponseMapper.getGardenResponse(rawGarden, gardenerId))
                 .collect(Collectors.toList());
 
         // 오늘 루틴 리스트
@@ -52,8 +51,8 @@ public class GardenServiceImpl implements GardenService {
     @Override
     @Transactional(readOnly = true)
     public List<GardenResponse> getAll(Long gardenerId) {
-        return plantRepository.findByGardener_GardenerIdOrderByPlantIdDesc(gardenerId).stream()
-                .map(plant -> gardenResponseMapper.getGardenResponse(Calculate.from(plant, gardenerId)))
+        return plantRepository.findAllPlantsWithLatestWateringDate(gardenerId).stream()
+                .map(rawGarden -> gardenResponseMapper.getGardenResponse((RawGarden) rawGarden, gardenerId))
                 .collect(Collectors.toList());
     }
 }

@@ -1,4 +1,4 @@
-package xyz.notagardener.domain.plant.dto.projection;
+package xyz.notagardener.plant.garden.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -1,0 +1,432 @@
+package xyz.notagardener.place;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
+import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.gardener.GardenerRepository;
+import xyz.notagardener.place.dto.PlaceCard;
+import xyz.notagardener.place.dto.PlaceDto;
+import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.plant.dto.PlantInPlace;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+class PlaceServiceImplTest {
+    @Mock
+    private PlaceRepository placeRepository;
+
+    @Mock
+    private GardenerRepository gardenerRepository;
+
+    @InjectMocks
+    private PlaceServiceImpl placeService;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    @DisplayName("한 장소 가져오기(+ 권한 검사)")
+    void getPlaceByPlaceIdAndGardenerId_WhenValid_ReturnPlace() {
+        // Given
+        Long placeId = 1L;
+        Long gardenerId = 2L;
+
+        Gardener gardener = Gardener.builder().gardenerId(gardenerId).build();
+        Place place = Place.builder().placeId(placeId).gardener(gardener).build();
+
+        when(placeRepository.findByPlaceId(placeId)).thenReturn(Optional.of(place));
+
+        // When
+        Place result = placeService.getPlaceByPlaceIdAndGardenerId(placeId, gardenerId);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(placeId, result.getPlaceId());
+    }
+
+    @Test
+    @DisplayName("한 장소 가져오기(+ 권한 검사): 그런 장소 없음 - 실패")
+    void getPlaceByPlaceIdAndGardenerId_WhenPlaceNotExist_ThrowNoSuchElementException() {
+        // Given
+        Long placeId = 1L;
+
+        when(placeRepository.findByPlaceId(placeId)).thenReturn(Optional.empty());
+
+        // When, Then
+        Executable executable = () -> placeService.getPlaceByPlaceIdAndGardenerId(placeId, 1L);
+        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
+        assertEquals(ExceptionCode.NO_SUCH_ITEM.getCode(), e.getMessage());
+    }
+
+    @Test
+    @DisplayName("한 장소 가져오기(+ 권한 검사): 내 장소가 아님 - 실패")
+    void getPlaceByPlaceIdAndGardenerId_WhenNotYourPlace_ThrowUnauthorizedAccessException() {
+        // Given
+        Long placeId = 1L;
+        Long gardenerId = 2L;
+        Long ownerId = 3L;
+
+        Gardener owner = Gardener.builder().gardenerId(ownerId).build();
+        Place place = Place.builder().placeId(placeId).gardener(owner).build();
+
+        when(placeRepository.findByPlaceId(placeId)).thenReturn(Optional.of(place));
+
+        // When, Then
+        Executable executable = () -> placeService.getPlaceByPlaceIdAndGardenerId(placeId, gardenerId);
+        UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
+        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), e.getMessage());
+    }
+
+    @Test
+    @DisplayName("한 회원의 장소 모두 가져오기")
+    void getAll_ShouldReturnPlaceCardList() {
+        // Given
+        Long gardenerId = 1L;
+
+        List<Place> places = new ArrayList<>();
+        places.add(Place.builder().build());
+        places.add(Place.builder().build());
+
+        when(placeRepository.findByGardener_GardenerIdOrderByCreateDate(gardenerId)).thenReturn(places);
+
+        // When
+        List<PlaceCard> result = placeService.getAll(gardenerId);
+
+        // Then
+        assertEquals(places.size(), result.size());
+    }
+
+    @Test
+    @DisplayName("한 장소의 상세 정보: 성공")
+    void getDetail_ShouldReturnPlaceDto() {
+        // Given
+        Long placeId = 1L;
+        Long gardenerId = 2L;
+
+        Gardener gardener = Gardener.builder().gardenerId(gardenerId).build();
+        Place place = Place.builder().placeId(placeId).gardener(gardener).build();
+
+        when(placeRepository.findByPlaceId(placeId)).thenReturn(Optional.of(place));
+        when(placeRepository.countPlantsByPlaceId(placeId)).thenReturn(5L);
+
+        // When
+        PlaceDto result = placeService.getDetail(placeId, gardenerId);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(placeId, result.getId());
+    }
+
+    @Test
+    @DisplayName("한 장소의 상세 정보: 해당 장소 없음 - 실패")
+    void getDetail_WhenPlaceNotExist_ShouldThrowNoSuchElementException() {
+        // Given
+        Long placeId = 1L;
+
+        when(placeRepository.findByPlaceId(placeId)).thenReturn(Optional.empty());
+
+        // When, Then
+        Executable executable = () -> placeService.getDetail(placeId, 1L);
+        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
+        assertEquals(ExceptionCode.NO_SUCH_ITEM.getCode(), e.getMessage());
+    }
+
+    @Test
+    @DisplayName("한 장소의 상세 정보: 내 장소가 아님 - 실패")
+    void getDetail_WhenPlaceNotMine_ShouldThrowUnauthorizedAccessException() {
+        // Given
+        Long placeId = 1L;
+        Long gardenerId = 2L;
+        Long ownerId = 3L;
+
+        Gardener owner = Gardener.builder().gardenerId(ownerId).build();
+        Place place = Place.builder().placeId(placeId).gardener(owner).build();
+
+        when(placeRepository.findByPlaceId(placeId)).thenReturn(Optional.of(place));
+
+        // When, Then
+        Executable executable = () -> placeService.getDetail(placeId, gardenerId);
+        UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
+        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), e.getMessage());
+    }
+
+    @Test
+    @DisplayName("한 장소에 속한 식물(페이징)")
+    void getPlantsWithPaging() {
+        // Given
+        Long placeId = 1L;
+        Pageable pageable = PageRequest.of(0, 10);
+
+        List<Plant> plants = List.of(
+                Plant.builder().plantId(1L).createDate(LocalDateTime.now()).build(),
+                Plant.builder().plantId(2L).createDate(LocalDateTime.now()).build()
+        );
+
+        when(placeRepository.findPlantsByPlaceIdWithPage(eq(placeId), any(Pageable.class))).thenReturn(plants);
+
+        // When
+        List<PlantInPlace> result = placeService.getPlantsWithPaging(placeId, pageable);
+
+        // Then
+        List<PlantInPlace> expected = plants.stream().map(PlantInPlace::from).collect(Collectors.toList());
+
+        assertEquals(plants.size(), result.size());
+        assertEquals(expected, result);
+    }
+
+    @Test
+    @DisplayName("장소 추가: 성공")
+    void add_WhenValid_ReturnPlaceCard() {
+        // Given
+        Long gardenerId = 1L;
+        PlaceDto request = PlaceDto.builder().name("새로운 장소").artificialLight("Y").option(PlaceType.INSIDE.getType()).build();
+
+        Gardener gardener = Gardener.builder().gardenerId(gardenerId).build();
+        Place savedPlace = Place.builder()
+                .placeId(2L)
+                .name(request.getName())
+                .gardener(gardener)
+                .artificialLight(request.getArtificialLight())
+                .option(request.getOption())
+                .createDate(LocalDateTime.now())
+                .build();
+
+        when(gardenerRepository.getReferenceById(gardenerId)).thenReturn(gardener);
+        when(placeRepository.save(any())).thenReturn(savedPlace);
+
+        // When
+        PlaceCard result = placeService.add(gardenerId, request);
+
+        // Then
+        assertNotNull(result);
+        assertNotNull(result.getId());
+        assertEquals(PlaceCard.from(savedPlace), result);
+    }
+
+    static Stream<PlaceDto> invalidPlaceSavingData() {
+        String validName = "새로운 장소";
+        String validArtificialLight = "Y";
+        String validOption = PlaceType.OUTSIDE.getType();
+
+        return Stream.of(
+                PlaceDto.builder().name(null).artificialLight(validArtificialLight).option(validOption).build(),
+                PlaceDto.builder().name("").artificialLight(validArtificialLight).option(validOption).build(),
+                PlaceDto.builder().name("reallyreallyreallyreallyreallyreallyreallyreallylongname").artificialLight(validArtificialLight).option(validOption).build(),
+
+                PlaceDto.builder().name(validName).artificialLight(null).option(validOption).build(),
+                PlaceDto.builder().name(validName).artificialLight("").option(validOption).build(),
+                PlaceDto.builder().name(validName).artificialLight("T").option(validOption).build(),
+
+                PlaceDto.builder().name(validName).artificialLight(validArtificialLight).option(null).build(),
+                PlaceDto.builder().name(validName).artificialLight(validArtificialLight).option("").build(),
+                PlaceDto.builder().name(validName).artificialLight(validArtificialLight).option("WRONG_PLACEOPTION").build()
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidPlaceSavingData")
+    @DisplayName("장소 추가: 입력값 유효성 검사 실패")
+    void add_WhenRequestDataInvalid_ShouldThrowIllegalArgumentException(PlaceDto request) {
+        // Given
+        Long gardenerId = 1L;
+        Gardener gardener = Gardener.builder().gardenerId(gardenerId).build();
+
+        when(gardenerRepository.getReferenceById(gardenerId)).thenReturn(gardener);
+
+        // When, Then
+        Executable executable = () -> placeService.add(gardenerId, request);
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
+        assertEquals(ExceptionCode.INVALID_REQUEST_DATA.getCode(), e.getMessage());
+    }
+
+    @Test
+    @DisplayName("장소 추가: 그런 gardener 없음")
+    void add_WhenGardenerNotExist_ShouldThrowUsernameNotFoundException() {
+        // Given
+        Long gardenerId = 1L;
+        PlaceDto request = PlaceDto.builder().name("새로운 장소").artificialLight("Y").option(PlaceType.INSIDE.getType()).build();
+
+        when(gardenerRepository.getReferenceById(gardenerId)).thenReturn(null);
+
+        // When, Then
+        Executable executable = () -> placeService.add(gardenerId, request);
+        UsernameNotFoundException e = assertThrows(UsernameNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_ACCOUNT.getCode(), e.getMessage());
+    }
+
+    @Test
+    @DisplayName("장소 수정: 성공")
+    void update_WhenValid_ShouldReturnPlaceDto() {
+        // Given
+        Long gardenerId = 1L;
+        PlaceDto request = PlaceDto.builder().id(1L).name("새로운 장소").artificialLight("Y").option(PlaceType.INSIDE.getType()).build();
+
+        Gardener gardener = Gardener.builder().gardenerId(gardenerId).build();
+        Place prevPlace = Place.builder()
+                .placeId(request.getId())
+                .name(request.getName())
+                .gardener(gardener)
+                .artificialLight(request.getArtificialLight())
+                .option(request.getOption())
+                .createDate(LocalDateTime.now())
+                .build();
+
+        when(placeRepository.findByPlaceId(request.getId())).thenReturn(Optional.of(prevPlace));
+
+        // When
+        PlaceDto result = placeService.update(request, gardenerId);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(PlaceDto.from(prevPlace), result);
+    }
+
+    @Test
+    @DisplayName("장소 수정: 그런 장소 없음")
+    void update_WhenPlaceNotExist_ShouldThrowNoSuchElementException() {
+        // Given
+        Long gardenerId = 1L;
+        PlaceDto request = PlaceDto.builder().id(1L).name("새로운 장소").artificialLight("Y").option(PlaceType.INSIDE.getType()).build();
+
+        when(placeRepository.findByPlaceId(request.getId())).thenReturn(Optional.empty());
+
+        // When, Then
+        Executable executable = () -> placeService.update(request, gardenerId);
+        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
+        assertEquals(ExceptionCode.NO_SUCH_ITEM.getCode(), e.getMessage());
+    }
+
+    @Test
+    @DisplayName("장소 수정: 내 장소가 아님")
+    void update_WhenPlaceNotMine_ShouldThrowUnauthorizedAccessException() {
+        // Given
+        Long gardenerId = 1L; // 입력값
+        Long ownerId = 2L; // 실 소유주
+        PlaceDto request = PlaceDto.builder().id(1L).name("새로운 장소").artificialLight("Y").option(PlaceType.INSIDE.getType()).build();
+
+        Gardener owner = Gardener.builder().gardenerId(ownerId).build(); // 실제 소유자
+        Place prevPlace = Place.builder().placeId(request.getId()).gardener(owner).build();
+
+        when(placeRepository.findByPlaceId(request.getId())).thenReturn(Optional.of(prevPlace));
+
+        // When, Then
+        Executable executable = () -> placeService.update(request, gardenerId);
+        UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
+        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), e.getMessage());
+    }
+
+    static Stream<PlaceDto> invalidUpdateData() {
+        Long validId = 1L;
+        String validName = "새로운 장소";
+        String validArtificialLight = "Y";
+        String validOption = PlaceType.OUTSIDE.getType();
+
+        return Stream.of(
+                PlaceDto.builder().id(null).name(null).artificialLight(validArtificialLight).option(validOption).build(),
+                PlaceDto.builder().id(-1L).name(null).artificialLight(validArtificialLight).option(validOption).build(),
+                PlaceDto.builder().id(0L).name(null).artificialLight(validArtificialLight).option(validOption).build(),
+
+                PlaceDto.builder().id(validId).name(null).artificialLight(validArtificialLight).option(validOption).build(),
+                PlaceDto.builder().id(validId).name("").artificialLight(validArtificialLight).option(validOption).build(),
+                PlaceDto.builder().id(validId).name("reallyreallyreallyreallyreallyreallyreallyreallylongname").artificialLight(validArtificialLight).option(validOption).build(),
+
+                PlaceDto.builder().id(validId).name(validName).artificialLight(null).option(validOption).build(),
+                PlaceDto.builder().id(validId).name(validName).artificialLight("").option(validOption).build(),
+                PlaceDto.builder().id(validId).name(validName).artificialLight("T").option(validOption).build(),
+
+                PlaceDto.builder().id(validId).name(validName).artificialLight(validArtificialLight).option(null).build(),
+                PlaceDto.builder().id(validId).name(validName).artificialLight(validArtificialLight).option("").build(),
+                PlaceDto.builder().id(validId).name(validName).artificialLight(validArtificialLight).option("WRONG_PLACEOPTION").build()
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidUpdateData")
+    @DisplayName("장소 수정: 입력 데이터 유효성 검사 실패")
+    void update_WhenRequestDataInvalid_ShouldThrowIllegalArgumentException(PlaceDto request) {
+        // Given
+        Long gardenerId = 1L;
+
+        // When, Then
+        Executable executable = () -> placeService.update(request, gardenerId);
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
+        assertEquals(ExceptionCode.INVALID_REQUEST_DATA.getCode(), e.getMessage());
+    }
+
+    @Test
+    @DisplayName("장소 삭제: 성공")
+    void delete_WhenValid_ShouldDeletePlace() {
+        // Given
+        Long placeId = 1L;
+        Long gardenerId = 1L;
+
+        Gardener gardener = Gardener.builder().gardenerId(gardenerId).build();
+        Place place = Place.builder().placeId(placeId).gardener(gardener).build();
+
+        when(placeRepository.findByPlaceId(placeId)).thenReturn(Optional.of(place));
+
+        // When
+        placeService.delete(placeId, gardenerId);
+
+        // Then
+        verify(placeRepository, times(1)).delete(place);
+    }
+
+    @Test
+    @DisplayName("장소 삭제: 그런 장소 없음")
+    void delete_WhenPlaceNotExist_ShouldThrowNoSuchElementException() {
+        // Given
+        Long placeId = 1L;
+        Long gardenerId = 2L;
+
+        when(placeRepository.findByPlaceId(placeId)).thenReturn(Optional.empty());
+
+        // When, Then
+        Executable executable = () -> placeService.delete(placeId, gardenerId);
+        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
+        assertEquals(ExceptionCode.NO_SUCH_ITEM.getCode(), e.getMessage());
+    }
+
+    @Test
+    @DisplayName("장소 삭제: 내 장소가 아님")
+    void delete_WhenPlaceNotMine_ShouldThrowUnauthorizedAccessException() {
+        // Given
+        Long placeId = 1L;
+        Long gardenerId = 2L; // 요청자
+        Long ownerId = 3L; // 소유자
+
+        Gardener owner = Gardener.builder().gardenerId(ownerId).build();
+        Place place = Place.builder().placeId(placeId).gardener(owner).build();
+
+        when(placeRepository.findByPlaceId(placeId)).thenReturn(Optional.of(place));
+
+        // When, Then
+        Executable executable = () -> placeService.delete(placeId, gardenerId);
+        UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
+        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), e.getMessage());
+    }
+}
