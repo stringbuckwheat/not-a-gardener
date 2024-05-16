@@ -1,8 +1,8 @@
-package xyz.notagardener.domain.watering.code;
+package xyz.notagardener.watering.code;
 
 public enum WateringCode {
     LATE_WATERING(-1), // 물주기 놓침
-    NO_RECORD(0), // 물주기 정보 부족
+    NOT_ENOUGH_RECORD(0), // 물주기 정보 부족
     THIRSTY(1), // 물주기
     CHECK(2), // 체크하기(물주기 하루 전)
     RESCHEDULED(3), // 물주기 늘어나는 중

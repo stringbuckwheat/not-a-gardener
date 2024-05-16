@@ -1,7 +1,7 @@
-package xyz.notagardener.domain.plant.dto.garden;
+package xyz.notagardener.plant.garden.dto;
 
-import xyz.notagardener.domain.watering.code.WateringCode;
-import xyz.notagardener.domain.watering.dto.WateringResponse;
+import xyz.notagardener.watering.code.WateringCode;
+import xyz.notagardener.watering.dto.WateringResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,7 +47,7 @@ public class GardenDetail {
                 .latestWateringDate(null)
                 .anniversary(getAnniversary(birthday))
                 .wateringDDay(-1)
-                .wateringCode(WateringCode.NO_RECORD.getCode())
+                .wateringCode(WateringCode.NOT_ENOUGH_RECORD.getCode())
                 .chemicalInfo(null)
                 .build();
     }

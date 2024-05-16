@@ -12,7 +12,7 @@ import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.gardener.gardener.GardenerRepository;
 import xyz.notagardener.place.dto.PlaceCard;
 import xyz.notagardener.place.dto.PlaceDto;
-import xyz.notagardener.plant.dto.plant.PlantInPlace;
+import xyz.notagardener.plant.plant.dto.PlantInPlace;
 
 import java.util.List;
 import java.util.NoSuchElementException;

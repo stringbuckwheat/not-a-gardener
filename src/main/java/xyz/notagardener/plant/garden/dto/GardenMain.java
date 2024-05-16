@@ -1,6 +1,6 @@
-package xyz.notagardener.domain.plant.dto.garden;
+package xyz.notagardener.plant.garden.dto;
 
-import xyz.notagardener.domain.routine.dto.RoutineResponse;
+import xyz.notagardener.routine.dto.RoutineResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 

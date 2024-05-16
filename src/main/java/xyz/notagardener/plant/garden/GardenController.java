@@ -1,9 +1,8 @@
-package xyz.notagardener.domain.plant.controller;
+package xyz.notagardener.plant.garden;
 
-import xyz.notagardener.domain.gardener.token.UserPrincipal;
-import xyz.notagardener.domain.plant.dto.garden.GardenMain;
-import xyz.notagardener.domain.plant.dto.garden.GardenResponse;
-import xyz.notagardener.domain.plant.service.GardenService;
+import xyz.notagardener.common.auth.UserPrincipal;
+import xyz.notagardener.plant.garden.dto.GardenMain;
+import xyz.notagardener.plant.garden.dto.GardenResponse;
 import xyz.notagardener.common.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -20,6 +19,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import xyz.notagardener.plant.garden.service.GardenService;
 
 import java.util.List;
 

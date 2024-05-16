@@ -3,7 +3,7 @@ package xyz.notagardener.place;
 import org.springframework.data.domain.Pageable;
 import xyz.notagardener.place.dto.PlaceCard;
 import xyz.notagardener.place.dto.PlaceDto;
-import xyz.notagardener.plant.dto.plant.PlantInPlace;
+import xyz.notagardener.plant.plant.dto.PlantInPlace;
 
 import java.util.List;
 

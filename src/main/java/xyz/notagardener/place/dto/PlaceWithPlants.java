@@ -1,6 +1,6 @@
 package xyz.notagardener.place.dto;
 
-import xyz.notagardener.plant.dto.plant.PlantInPlace;
+import xyz.notagardener.plant.plant.dto.PlantInPlace;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
