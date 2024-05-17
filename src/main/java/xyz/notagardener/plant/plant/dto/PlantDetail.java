@@ -1,9 +1,10 @@
-package xyz.notagardener.domain.plant.dto.plant;
+package xyz.notagardener.plant.plant.dto;
 
-import xyz.notagardener.domain.watering.dto.WateringForOnePlant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
+import xyz.notagardener.plant.garden.dto.PlantResponse;
+import xyz.notagardener.watering.dto.WateringForOnePlant;
 
 import java.util.List;
 

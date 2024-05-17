@@ -1,12 +1,9 @@
 package xyz.notagardener.plant.garden.dto;
 
+import lombok.*;
 import xyz.notagardener.watering.code.WateringCode;
 import xyz.notagardener.watering.dto.WateringResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -15,6 +12,7 @@ import java.time.LocalDate;
 @Builder
 @Getter
 @ToString
+@EqualsAndHashCode
 public class GardenDetail {
     @Schema(description = "가장 최근 물 준 날짜", example = "2023-01-28")
     private WateringResponse latestWateringDate;

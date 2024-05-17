@@ -31,4 +31,5 @@ public interface RawGarden {
     Long getWateringId();
 
     LocalDate getLatestWateringDate();
+    Long getTotalWatering();
 }

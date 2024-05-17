@@ -138,8 +138,6 @@ class GardenResponseMapperImplTest {
         // Given
         Long gardenerId = 1L;
         int wateringPeriod = 3;
-        LocalDate lastDrinkingDay = LocalDate.now().minusDays(wateringPeriod); // 3일 전 물 줌
-        Long plantId = 2L;
 
         // 약품 정보
         // 줘야할 비료가 하나인 경우

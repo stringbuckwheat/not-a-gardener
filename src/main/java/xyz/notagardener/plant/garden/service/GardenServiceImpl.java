@@ -8,7 +8,7 @@ import xyz.notagardener.plant.garden.dto.GardenMain;
 import xyz.notagardener.plant.garden.dto.GardenResponse;
 import xyz.notagardener.plant.garden.dto.RawGarden;
 import xyz.notagardener.plant.garden.dto.WaitingForWatering;
-import xyz.notagardener.plant.plant.PlantRepository;
+import xyz.notagardener.plant.plant.repository.PlantRepository;
 import xyz.notagardener.routine.Routine;
 import xyz.notagardener.routine.RoutineRepository;
 import xyz.notagardener.routine.dto.RoutineResponse;

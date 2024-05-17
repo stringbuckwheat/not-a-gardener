@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.garden.dto.*;
-import xyz.notagardener.plant.plant.PlantRepository;
+import xyz.notagardener.plant.plant.repository.PlantRepository;
 import xyz.notagardener.routine.Routine;
 import xyz.notagardener.routine.RoutineRepository;
 import xyz.notagardener.watering.code.WateringCode;
@@ -126,15 +126,15 @@ class GardenServiceImplTest {
         Long gardenerId = 1L;
         int missedDay = 5;
 
-        List<PlantWithLatestWateringDate> rawGardens = Arrays.asList(
-                (PlantWithLatestWateringDate) rawGardenFactory.getPostponedPlant(),
-                (PlantWithLatestWateringDate) rawGardenFactory.getPlantWithNoWateringRecord(),
-                (PlantWithLatestWateringDate) rawGardenFactory.getPlantWithOneWateringRecord(),
-                (PlantWithLatestWateringDate) rawGardenFactory.getWateredTodayPlant(),
-                (PlantWithLatestWateringDate) rawGardenFactory.getThirstyPlant(3),
-                (PlantWithLatestWateringDate) rawGardenFactory.getCheckingPlant(3),
-                (PlantWithLatestWateringDate) rawGardenFactory.getLeaveHerAlonePlant(3),
-                (PlantWithLatestWateringDate) rawGardenFactory.getDryOutPlant(3, missedDay)
+        List<PlantResponse> rawGardens = Arrays.asList(
+                (PlantResponse) rawGardenFactory.getPostponedPlant(),
+                (PlantResponse) rawGardenFactory.getPlantWithNoWateringRecord(),
+                (PlantResponse) rawGardenFactory.getPlantWithOneWateringRecord(),
+                (PlantResponse) rawGardenFactory.getWateredTodayPlant(),
+                (PlantResponse) rawGardenFactory.getThirstyPlant(3),
+                (PlantResponse) rawGardenFactory.getCheckingPlant(3),
+                (PlantResponse) rawGardenFactory.getLeaveHerAlonePlant(3),
+                (PlantResponse) rawGardenFactory.getDryOutPlant(3, missedDay)
         );
 
         when(plantRepository.findAllPlantsWithLatestWateringDate(gardenerId)).thenReturn(rawGardens);
@@ -167,15 +167,15 @@ class GardenServiceImplTest {
         Long gardenerId = 1L;
         int missedDay = 5;
 
-        List<PlantWithLatestWateringDate> rawGardens = Arrays.asList(
-                (PlantWithLatestWateringDate) rawGardenFactory.getPostponedPlant(),
-                (PlantWithLatestWateringDate) rawGardenFactory.getPlantWithNoWateringRecord(),
-                (PlantWithLatestWateringDate) rawGardenFactory.getPlantWithOneWateringRecord(),
-                (PlantWithLatestWateringDate) rawGardenFactory.getWateredTodayPlant(),
-                (PlantWithLatestWateringDate) rawGardenFactory.getThirstyPlant(3),
-                (PlantWithLatestWateringDate) rawGardenFactory.getCheckingPlant(3),
-                (PlantWithLatestWateringDate) rawGardenFactory.getLeaveHerAlonePlant(3),
-                (PlantWithLatestWateringDate) rawGardenFactory.getDryOutPlant(3, missedDay)
+        List<PlantResponse> rawGardens = Arrays.asList(
+                (PlantResponse) rawGardenFactory.getPostponedPlant(),
+                (PlantResponse) rawGardenFactory.getPlantWithNoWateringRecord(),
+                (PlantResponse) rawGardenFactory.getPlantWithOneWateringRecord(),
+                (PlantResponse) rawGardenFactory.getWateredTodayPlant(),
+                (PlantResponse) rawGardenFactory.getThirstyPlant(3),
+                (PlantResponse) rawGardenFactory.getCheckingPlant(3),
+                (PlantResponse) rawGardenFactory.getLeaveHerAlonePlant(3),
+                (PlantResponse) rawGardenFactory.getDryOutPlant(3, missedDay)
         );
 
 

@@ -3,11 +3,7 @@ package xyz.notagardener.plant.garden.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import xyz.notagardener.plant.garden.dto.ChemicalInfo;
-import xyz.notagardener.plant.garden.dto.GardenDetail;
-import xyz.notagardener.plant.garden.dto.GardenResponse;
-import xyz.notagardener.plant.garden.dto.RawGarden;
-import xyz.notagardener.plant.plant.dto.PlantResponse;
+import xyz.notagardener.plant.garden.dto.*;
 import xyz.notagardener.watering.code.WateringCode;
 import xyz.notagardener.watering.dto.ChemicalUsage;
 import xyz.notagardener.watering.dto.WateringResponse;
@@ -24,7 +20,7 @@ public class GardenResponseMapperImpl implements GardenResponseMapper {
 
     @Override
     public GardenResponse getGardenResponse(RawGarden rawGarden, Long gardenerId) {
-        PlantResponse plantResponse = PlantResponse.from(rawGarden); // 식물 기본 정보, 가공 없이 리턴
+        PlantResponse plantResponse = (PlantResponse) rawGarden;
         GardenDetail gardenDetail = getGardenDetail(rawGarden, gardenerId);
         return new GardenResponse(plantResponse, gardenDetail);
     }

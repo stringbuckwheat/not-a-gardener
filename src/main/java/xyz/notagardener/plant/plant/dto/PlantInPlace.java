@@ -1,16 +1,18 @@
-package xyz.notagardener.domain.plant.dto.plant;
+package xyz.notagardener.plant.plant.dto;
 
-import xyz.notagardener.domain.plant.Plant;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import xyz.notagardener.plant.Plant;
 
 import java.time.LocalDate;
 
 @AllArgsConstructor
 @Builder
 @Getter
+@EqualsAndHashCode
 public class PlantInPlace {
     @Schema(description = "식물 id", example = "6")
     private Long id;

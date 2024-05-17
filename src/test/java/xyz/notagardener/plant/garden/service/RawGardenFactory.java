@@ -1,6 +1,6 @@
 package xyz.notagardener.plant.garden.service;
 
-import xyz.notagardener.plant.garden.dto.PlantWithLatestWateringDate;
+import xyz.notagardener.plant.garden.dto.PlantResponse;
 import xyz.notagardener.plant.garden.dto.RawGarden;
 
 import java.time.LocalDate;
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 public class RawGardenFactory {
     public RawGarden getPostponedPlant() {
-        return PlantWithLatestWateringDate.builder()
+        return PlantResponse.builder()
                 .plantId(2L)
                 .postponeDate(LocalDate.now())
                 .createDate(LocalDateTime.now())
@@ -16,7 +16,7 @@ public class RawGardenFactory {
     }
 
     public RawGarden getPlantWithNoWateringRecord() {
-        return PlantWithLatestWateringDate.builder()
+        return PlantResponse.builder()
                 .plantId(3L)
                 .postponeDate(null)
                 .createDate(LocalDateTime.now())
@@ -24,7 +24,7 @@ public class RawGardenFactory {
     }
 
     public RawGarden getWateredTodayPlant() {
-        return PlantWithLatestWateringDate.builder()
+        return PlantResponse.builder()
                 .plantId(4L)
                 .postponeDate(null)
                 .recentWateringPeriod(3)
@@ -34,7 +34,7 @@ public class RawGardenFactory {
     }
 
     public RawGarden getPlantWithOneWateringRecord() {
-        return PlantWithLatestWateringDate.builder()
+        return PlantResponse.builder()
                 .plantId(5L)
                 .postponeDate(null)
                 .recentWateringPeriod(0)
@@ -44,7 +44,7 @@ public class RawGardenFactory {
     }
 
     public RawGarden getThirstyPlant(int wateringPeriod) {
-        return PlantWithLatestWateringDate.builder()
+        return PlantResponse.builder()
                 .plantId(6L)
                 .postponeDate(null)
                 .recentWateringPeriod(wateringPeriod)
@@ -54,7 +54,7 @@ public class RawGardenFactory {
     }
 
     public RawGarden getCheckingPlant(int wateringPeriod) {
-        return PlantWithLatestWateringDate.builder()
+        return PlantResponse.builder()
                 .plantId(7L)
                 .postponeDate(null)
                 .recentWateringPeriod(wateringPeriod)
@@ -64,7 +64,7 @@ public class RawGardenFactory {
     }
 
     public RawGarden getLeaveHerAlonePlant(int wateringPeriod) {
-        return PlantWithLatestWateringDate.builder()
+        return PlantResponse.builder()
                 .plantId(8L)
                 .postponeDate(null)
                 .recentWateringPeriod(wateringPeriod)
@@ -74,7 +74,7 @@ public class RawGardenFactory {
     }
 
     public RawGarden getDryOutPlant(int wateringPeriod, int missedDay) {
-        return PlantWithLatestWateringDate.builder()
+        return PlantResponse.builder()
                 .plantId(9L)
                 .postponeDate(null)
                 .recentWateringPeriod(wateringPeriod)

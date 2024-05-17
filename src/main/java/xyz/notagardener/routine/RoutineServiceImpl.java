@@ -2,7 +2,6 @@ package xyz.notagardener.routine;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.common.error.code.ExceptionCode;
@@ -18,7 +17,6 @@ import xyz.notagardener.routine.dto.RoutineResponse;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -28,22 +26,12 @@ public class RoutineServiceImpl implements RoutineService {
     private final PlantRepository plantRepository;
     private final GardenerRepository gardenerRepository;
 
-    private Gardener getGardenerByGardenerId(Long gardenerId) {
-        Gardener gardener = gardenerRepository.getReferenceById(gardenerId);
-
-        if (gardener == null) {
-            throw new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode());
-        }
-
-        return gardener;
-    }
-
     private Plant getPlantByPlantIdAndGardenerId(Long plantId, Long gardenerId) {
         Plant plant = plantRepository.findById(plantId)
                 .orElseThrow(() -> new NoSuchElementException(ExceptionCode.NO_SUCH_ITEM.getCode()));
 
         if (!plant.getGardener().getGardenerId().equals(gardenerId)) {
-            throw new UnauthorizedAccessException(ExceptionCode.NOT_YOUR_THING.getCode());
+            throw new UnauthorizedAccessException("PLANT", gardenerId);
         }
 
         return plant;
@@ -54,7 +42,7 @@ public class RoutineServiceImpl implements RoutineService {
                 .orElseThrow(() -> new NoSuchElementException(ExceptionCode.NO_SUCH_ITEM.getCode()));
 
         if (!routine.getGardener().getGardenerId().equals(gardenerId)) {
-            throw new UnauthorizedAccessException(ExceptionCode.NOT_YOUR_THING.getCode());
+            throw new UnauthorizedAccessException("ROUTINE", gardenerId);
         }
 
         return routine;
@@ -66,15 +54,15 @@ public class RoutineServiceImpl implements RoutineService {
         List<RoutineResponse> routines = routineRepository.findByGardener_GardenerId(gardenerId)
                 .stream()
                 .map(RoutineResponse::from)
-                .collect(Collectors.toList());
+                .toList();
 
         List<RoutineResponse> toDoList = routines.stream()
                 .filter(routine -> routine.getHasToDoToday().equals("Y"))
-                .collect(Collectors.toList());
+                .toList();
 
         List<RoutineResponse> notToDoList = routines.stream()
                 .filter(routine -> !routine.getHasToDoToday().equals("Y"))
-                .collect(Collectors.toList());
+                .toList();
 
         return new RoutineMain(toDoList, notToDoList);
     }
@@ -86,7 +74,7 @@ public class RoutineServiceImpl implements RoutineService {
             throw new IllegalArgumentException(ExceptionCode.INVALID_REQUEST_DATA.getCode());
         }
 
-        Gardener gardener = getGardenerByGardenerId(gardenerId);
+        Gardener gardener = gardenerRepository.getReferenceById(gardenerId);
         Plant plant = getPlantByPlantIdAndGardenerId(routineRequest.getPlantId(), gardenerId);
         Routine routine = routineRepository.save(routineRequest.toEntityWith(plant, gardener));
 

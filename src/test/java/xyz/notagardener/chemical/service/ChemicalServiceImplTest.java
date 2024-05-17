@@ -241,7 +241,7 @@ class ChemicalServiceImplTest {
         Executable execute = () -> chemicalService.deactivate(chemicalId, gardenerId);
 
         UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, execute);
-        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), e.getMessage());
+        assertEquals("NOT_YOUR_CHEMICAL", e.getMessage());
     }
 
     @Test

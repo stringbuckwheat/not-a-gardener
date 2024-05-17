@@ -1,9 +1,8 @@
-package xyz.notagardener.domain.plant.controller;
+package xyz.notagardener.plant.place;
 
-import xyz.notagardener.domain.gardener.token.UserPrincipal;
-import xyz.notagardener.domain.plant.dto.plant.PlantInPlace;
-import xyz.notagardener.domain.plant.dto.plant.PlantRequest;
-import xyz.notagardener.domain.plant.service.PlacePlantService;
+import xyz.notagardener.common.auth.UserPrincipal;
+import xyz.notagardener.plant.plant.dto.PlantInPlace;
+import xyz.notagardener.plant.plant.dto.PlantRequest;
 import xyz.notagardener.common.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

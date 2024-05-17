@@ -15,7 +15,7 @@ import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.gardener.gardener.GardenerRepository;
 import xyz.notagardener.plant.Plant;
-import xyz.notagardener.plant.plant.PlantRepository;
+import xyz.notagardener.plant.plant.repository.PlantRepository;
 
 import java.util.ArrayList;
 import java.util.List;

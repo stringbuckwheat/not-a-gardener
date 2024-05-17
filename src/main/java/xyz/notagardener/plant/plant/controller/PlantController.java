@@ -1,13 +1,5 @@
-package xyz.notagardener.domain.plant.controller;
+package xyz.notagardener.plant.plant.controller;
 
-import xyz.notagardener.domain.gardener.token.UserPrincipal;
-import xyz.notagardener.domain.place.dto.ModifyPlace;
-import xyz.notagardener.domain.place.dto.PlaceDto;
-import xyz.notagardener.domain.plant.dto.garden.GardenResponse;
-import xyz.notagardener.domain.plant.dto.plant.PlantRequest;
-import xyz.notagardener.domain.plant.dto.plant.PlantResponse;
-import xyz.notagardener.domain.plant.service.PlantService;
-import xyz.notagardener.common.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,6 +13,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import xyz.notagardener.common.auth.UserPrincipal;
+import xyz.notagardener.common.error.ErrorResponse;
+import xyz.notagardener.place.dto.ModifyPlace;
+import xyz.notagardener.place.dto.PlaceDto;
+import xyz.notagardener.plant.garden.dto.GardenResponse;
+import xyz.notagardener.plant.garden.dto.PlantResponse;
+import xyz.notagardener.plant.plant.dto.PlantRequest;
+import xyz.notagardener.plant.plant.service.PlantService;
 
 import java.util.List;
 

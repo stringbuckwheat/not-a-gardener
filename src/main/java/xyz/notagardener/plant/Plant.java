@@ -1,14 +1,14 @@
-package xyz.notagardener.domain.plant;
+package xyz.notagardener.plant;
 
-import xyz.notagardener.domain.watering.Watering;
-import xyz.notagardener.domain.gardener.Gardener;
-import xyz.notagardener.domain.place.Place;
-import xyz.notagardener.domain.plant.dto.plant.PlantRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.plant.plant.dto.PlantRequest;
+import xyz.notagardener.place.Place;
+import xyz.notagardener.watering.Watering;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

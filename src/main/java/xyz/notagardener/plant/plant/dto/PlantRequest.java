@@ -1,14 +1,11 @@
-package xyz.notagardener.domain.plant.dto.plant;
+package xyz.notagardener.plant.plant.dto;
 
-import xyz.notagardener.domain.gardener.Gardener;
-import xyz.notagardener.domain.place.Place;
-import xyz.notagardener.domain.plant.Plant;
+import lombok.*;
+import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.place.Place;
+import xyz.notagardener.plant.Plant;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,6 +13,8 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
+@Builder
+@AllArgsConstructor
 public class PlantRequest {
     private Long id;
     @NotBlank
