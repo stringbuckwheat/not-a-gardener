@@ -1,6 +1,6 @@
-package xyz.notagardener.domain.routine.dto;
+package xyz.notagardener.routine.dto;
 
-import xyz.notagardener.domain.routine.Routine;
+import xyz.notagardener.routine.Routine;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +51,7 @@ public class RoutineResponse {
                 .plantId(routine.getPlant().getPlantId())
                 .plantName(routine.getPlant().getName())
                 .lastCompleteDate(routine.getLastCompleteDate())
-                .hasToDoToday(hasToDoToday(LocalDateTime.now(), routine))
+                .hasToDoToday(hasToDoToday(routine.getLastCompleteDate(), routine.getCycle()) ? "Y" : "N")
                 .isCompleted(isCompleted(today, routine.getLastCompleteDate()))
                 .build();
     }
@@ -65,17 +65,17 @@ public class RoutineResponse {
         return lastCompleteDate.compareTo(today) == 0 ? "Y" : "N";
     }
 
-    public static String hasToDoToday(LocalDateTime today, Routine routine) {
+    public static boolean hasToDoToday(LocalDate lastCompleteDate, int cycle) {
         // 한번도 완료하지 않은 루틴
-        if (routine.getLastCompleteDate() == null) {
-            return "Y";
+        if (lastCompleteDate == null) {
+            return true;
         }
 
         // 완료한지 얼마나 지났는지 계산
-        int period = (int) Duration.between(routine.getLastCompleteDate().atStartOfDay(), today).toDays();
+        int period = (int) Duration.between(lastCompleteDate.atStartOfDay(), LocalDateTime.now()).toDays();
 
         // 오늘 했거나 할 주기가 돌아왔으면 Y
-        return (period == 0 || period >= routine.getCycle()) ? "Y" : "N";
+        return (period == 0 || period >= cycle);
     }
 }
 

@@ -1,4 +1,4 @@
-package xyz.notagardener.domain.routine;
+package xyz.notagardener.routine;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.Repository;
@@ -16,4 +16,5 @@ public interface RoutineRepository extends Repository<Routine, Long> {
     Routine save(Routine routine);
 
     void deleteById(Long routineId);
+    void delete(Routine routine);
 }

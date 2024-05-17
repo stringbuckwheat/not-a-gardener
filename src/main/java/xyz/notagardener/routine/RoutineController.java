@@ -1,10 +1,10 @@
-package xyz.notagardener.domain.routine;
+package xyz.notagardener.routine;
 
-import xyz.notagardener.domain.gardener.token.UserPrincipal;
-import xyz.notagardener.domain.routine.dto.RoutineComplete;
-import xyz.notagardener.domain.routine.dto.RoutineMain;
-import xyz.notagardener.domain.routine.dto.RoutineRequest;
-import xyz.notagardener.domain.routine.dto.RoutineResponse;
+import xyz.notagardener.common.auth.UserPrincipal;
+import xyz.notagardener.routine.dto.RoutineComplete;
+import xyz.notagardener.routine.dto.RoutineMain;
+import xyz.notagardener.routine.dto.RoutineRequest;
+import xyz.notagardener.routine.dto.RoutineResponse;
 import xyz.notagardener.common.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -84,7 +84,7 @@ public class RoutineController {
     })
     @PostMapping("")
     public RoutineResponse add(@AuthenticationPrincipal UserPrincipal user, @RequestBody RoutineRequest routineRequest) {
-        return routineService.add(user.getId(), routineRequest);
+        return routineService.add(routineRequest, user.getId());
     }
 
     @Operation(summary = "(인증) 루틴 완료", description = "인증된 사용자의 루틴 완료 처리")
@@ -118,8 +118,8 @@ public class RoutineController {
             )
     })
     @PutMapping("/{routineId}/complete")
-    public RoutineResponse complete(@RequestBody RoutineComplete routineComplete) {
-        return routineService.complete(routineComplete);
+    public RoutineResponse complete(@RequestBody RoutineComplete routineComplete, @AuthenticationPrincipal UserPrincipal user) {
+        return routineService.complete(routineComplete, user.getId());
     }
 
     @Operation(summary = "(인증) 루틴 수정", description = "인증된 사용자의 루틴 수정")
@@ -153,8 +153,8 @@ public class RoutineController {
             )
     })
     @PutMapping("/{routineId}")
-    public RoutineResponse modify(@RequestBody RoutineRequest routineRequest) {
-        return routineService.update(routineRequest);
+    public RoutineResponse modify(@RequestBody RoutineRequest routineRequest, @AuthenticationPrincipal UserPrincipal user) {
+        return routineService.update(routineRequest, user.getId());
     }
 
     @Operation(
@@ -181,7 +181,7 @@ public class RoutineController {
             }
     )
     @DeleteMapping("/{routineId}")
-    public void deleteRoutine(@PathVariable Long routineId) {
-        routineService.delete(routineId);
+    public void deleteRoutine(@PathVariable Long routineId, @AuthenticationPrincipal UserPrincipal user) {
+        routineService.delete(routineId, user.getId());
     }
 }

@@ -1,13 +1,10 @@
-package xyz.notagardener.domain.routine;
+package xyz.notagardener.routine;
 
-import xyz.notagardener.domain.gardener.Gardener;
-import xyz.notagardener.domain.plant.Plant;
+import lombok.*;
+import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.plant.Plant;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -18,7 +15,7 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Routine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

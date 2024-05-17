@@ -1,4 +1,4 @@
-package xyz.notagardener.domain.routine.dto;
+package xyz.notagardener.routine.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;

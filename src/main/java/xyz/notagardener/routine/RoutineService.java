@@ -1,18 +1,18 @@
-package xyz.notagardener.domain.routine;
+package xyz.notagardener.routine;
 
-import xyz.notagardener.domain.routine.dto.RoutineComplete;
-import xyz.notagardener.domain.routine.dto.RoutineMain;
-import xyz.notagardener.domain.routine.dto.RoutineRequest;
-import xyz.notagardener.domain.routine.dto.RoutineResponse;
+import xyz.notagardener.routine.dto.RoutineComplete;
+import xyz.notagardener.routine.dto.RoutineMain;
+import xyz.notagardener.routine.dto.RoutineRequest;
+import xyz.notagardener.routine.dto.RoutineResponse;
 
 public interface RoutineService {
     RoutineMain getAll(Long gardenerId);
 
-    RoutineResponse add(Long gardenerId, RoutineRequest routineRequest);
+    RoutineResponse add(RoutineRequest routineRequest, Long gardenerId);
 
-    RoutineResponse update(RoutineRequest routineRequest);
+    RoutineResponse update(RoutineRequest routineRequest, Long gardenerId);
 
-    RoutineResponse complete(RoutineComplete routineComplete);
+    RoutineResponse complete(RoutineComplete routineComplete, Long gardenerId);
 
-    void delete(Long id);
+    void delete(Long routineId, Long gardenerId);
 }
