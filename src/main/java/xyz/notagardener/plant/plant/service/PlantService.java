@@ -1,10 +1,10 @@
-package xyz.notagardener.domain.plant.service;
+package xyz.notagardener.plant.plant.service;
 
-import xyz.notagardener.domain.place.dto.ModifyPlace;
-import xyz.notagardener.domain.place.dto.PlaceDto;
-import xyz.notagardener.domain.plant.dto.garden.GardenResponse;
-import xyz.notagardener.domain.plant.dto.plant.PlantRequest;
-import xyz.notagardener.domain.plant.dto.plant.PlantResponse;
+import xyz.notagardener.place.dto.ModifyPlace;
+import xyz.notagardener.place.dto.PlaceDto;
+import xyz.notagardener.plant.garden.dto.GardenResponse;
+import xyz.notagardener.plant.garden.dto.PlantResponse;
+import xyz.notagardener.plant.plant.dto.PlantRequest;
 
 import java.util.List;
 

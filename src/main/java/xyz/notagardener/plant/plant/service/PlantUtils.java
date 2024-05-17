@@ -1,8 +1,8 @@
-package xyz.notagardener.domain.plant;
+package xyz.notagardener.plant.plant.service;
 
-import xyz.notagardener.domain.watering.code.AfterWateringCode;
-import xyz.notagardener.domain.watering.dto.WateringMessage;
-import xyz.notagardener.domain.watering.Watering;
+import xyz.notagardener.watering.code.AfterWateringCode;
+import xyz.notagardener.watering.dto.WateringMessage;
+import xyz.notagardener.watering.Watering;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
