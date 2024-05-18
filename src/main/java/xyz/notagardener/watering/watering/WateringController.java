@@ -1,9 +1,9 @@
-package xyz.notagardener.domain.watering.controller;
+package xyz.notagardener.watering.watering;
 
-import xyz.notagardener.domain.gardener.token.UserPrincipal;
-import xyz.notagardener.domain.watering.dto.WateringByDate;
-import xyz.notagardener.domain.watering.dto.WateringRequest;
-import xyz.notagardener.domain.watering.service.WateringService;
+import xyz.notagardener.common.auth.UserPrincipal;
+import xyz.notagardener.watering.watering.dto.WateringByDate;
+import xyz.notagardener.watering.watering.dto.WateringRequest;
+import xyz.notagardener.watering.watering.service.WateringService;
 import xyz.notagardener.common.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -98,8 +98,8 @@ public class WateringController {
             )
     })
     @PostMapping("")
-    public WateringByDate add(@RequestBody WateringRequest wateringRequest) {
-        return wateringService.add(wateringRequest);
+    public WateringByDate add(@RequestBody WateringRequest wateringRequest, @AuthenticationPrincipal UserPrincipal user) {
+        return wateringService.add(wateringRequest, user.getId());
     }
 
     @Operation(

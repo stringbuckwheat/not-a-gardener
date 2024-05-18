@@ -1,11 +1,11 @@
-package xyz.notagardener.domain.watering.service;
+package xyz.notagardener.watering.watering.service;
 
-import xyz.notagardener.domain.watering.Watering;
-import xyz.notagardener.domain.watering.repository.WateringRepository;
-import xyz.notagardener.domain.watering.dto.AfterWatering;
-import xyz.notagardener.domain.watering.dto.WateringByDate;
-import xyz.notagardener.domain.watering.dto.WateringRequest;
-import xyz.notagardener.domain.plant.Plant;
+import xyz.notagardener.watering.Watering;
+import xyz.notagardener.watering.watering.repository.WateringRepository;
+import xyz.notagardener.watering.watering.dto.AfterWatering;
+import xyz.notagardener.watering.watering.dto.WateringByDate;
+import xyz.notagardener.watering.watering.dto.WateringRequest;
+import xyz.notagardener.plant.Plant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -66,9 +66,9 @@ public class WateringServiceImpl implements WateringService {
     }
 
     @Override
-    public WateringByDate add(WateringRequest wateringRequest) {
+    public WateringByDate add(WateringRequest wateringRequest, Long gardenerId) {
         // 물주기 저장
-        AfterWatering afterWatering = wateringCommandService.add(wateringRequest);
+        AfterWatering afterWatering = wateringCommandService.add(wateringRequest, gardenerId);
 
         Plant plant = afterWatering.getPlant();
         Watering latestWatering = plant.getWaterings().get(plant.getWaterings().size() - 1); // 방금 물 준 거 들고와야함

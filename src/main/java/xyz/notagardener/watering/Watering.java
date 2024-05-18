@@ -1,12 +1,12 @@
-package xyz.notagardener.domain.watering;
+package xyz.notagardener.watering;
 
-import xyz.notagardener.domain.chemical.Chemical;
-import xyz.notagardener.domain.plant.Plant;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.plant.Plant;
 
 import java.time.LocalDate;
 
@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @ToString(of={"wateringId", "wateringDate", "chemical.name"})
 public class Watering {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto-increment
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long wateringId;
 
     @NotNull

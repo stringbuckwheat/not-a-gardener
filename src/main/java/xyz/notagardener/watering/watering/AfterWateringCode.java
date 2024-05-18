@@ -1,4 +1,4 @@
-package xyz.notagardener.domain.watering.code;
+package xyz.notagardener.watering.watering;
 
 public enum AfterWateringCode {
     // -1   물주기가 줄어들었어요!
@@ -12,7 +12,8 @@ public enum AfterWateringCode {
     SCHEDULE_LENGTHEN(1),
     FIRST_WATERING(2),
     SECOND_WATERING(3),
-    INIT_WATERING_PERIOD(4);
+    INIT_WATERING_PERIOD(4),
+    NO_RECORD(5);
 
     private final int code;
 

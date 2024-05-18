@@ -1,21 +1,21 @@
-package xyz.notagardener.domain.watering.repository;
+package xyz.notagardener.watering.watering.repository;
 
-import xyz.notagardener.domain.watering.Watering;
-import xyz.notagardener.domain.watering.dto.ChemicalUsage;
-import xyz.notagardener.domain.watering.dto.QChemicalUsage;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.notagardener.watering.Watering;
+import xyz.notagardener.watering.watering.dto.ChemicalUsage;
+import xyz.notagardener.watering.watering.dto.QChemicalUsage;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static xyz.notagardener.domain.chemical.QChemical.chemical;
-import static xyz.notagardener.domain.plant.QPlant.plant;
-import static xyz.notagardener.domain.watering.QWatering.watering;
 import static org.hibernate.internal.util.NullnessHelper.coalesce;
+import static xyz.notagardener.chemical.QChemical.chemical;
+import static xyz.notagardener.plant.QPlant.plant;
+import static xyz.notagardener.watering.QWatering.watering;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -87,6 +87,8 @@ public class WateringRepositoryCustomImpl implements WateringRepositoryCustom {
 
     public List<Watering> findLatestFourWateringDate(Long plantId) {
         return queryFactory.selectFrom(watering)
+                .join(watering.plant, plant)
+                .fetchJoin()
                 .where(watering.plant.plantId.eq(plantId))
                 .orderBy(watering.wateringDate.desc())
                 .limit(4)
