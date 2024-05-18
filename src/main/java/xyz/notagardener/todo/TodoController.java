@@ -1,6 +1,6 @@
-package xyz.notagardener.domain.todo;
+package xyz.notagardener.todo;
 
-import xyz.notagardener.domain.gardener.token.UserPrincipal;
+import xyz.notagardener.common.auth.UserPrincipal;
 import xyz.notagardener.common.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -79,8 +79,8 @@ public class TodoController {
             )
     })
     @PostMapping("")
-    public TodoDto add(@RequestBody TodoDto todoDto, @AuthenticationPrincipal UserPrincipal userPrincipal){
-        return todoService.add(todoDto, userPrincipal.getId());
+    public TodoDto add(@RequestBody TodoDto todoDto, @AuthenticationPrincipal UserPrincipal user){
+        return todoService.add(todoDto, user.getId());
     }
 
     @Operation(summary = "(인증) 할 일 수정", description = "인증된 사용자의 할 일 수정")
@@ -114,8 +114,8 @@ public class TodoController {
             )
     })
     @PutMapping("/{todoId}")
-    public TodoDto update(@RequestBody TodoDto todoDto){
-        return todoService.update(todoDto);
+    public TodoDto update(@RequestBody TodoDto todoDto, @AuthenticationPrincipal UserPrincipal user){
+        return todoService.update(todoDto, user.getId());
     }
 
     @Operation(
@@ -142,7 +142,7 @@ public class TodoController {
             }
     )
     @DeleteMapping("/{todoId}")
-    public void delete(@PathVariable Long todoId){
-        todoService.delete(todoId);
+    public void delete(@PathVariable Long todoId, @AuthenticationPrincipal UserPrincipal user){
+        todoService.delete(todoId, user.getId());
     }
 }

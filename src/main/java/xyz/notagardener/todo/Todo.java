@@ -1,6 +1,6 @@
-package xyz.notagardener.domain.todo;
+package xyz.notagardener.todo;
 
-import xyz.notagardener.domain.gardener.Gardener;
+import xyz.notagardener.gardener.Gardener;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

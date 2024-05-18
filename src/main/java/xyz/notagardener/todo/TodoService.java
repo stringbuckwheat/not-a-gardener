@@ -1,4 +1,4 @@
-package xyz.notagardener.domain.todo;
+package xyz.notagardener.todo;
 
 import java.util.List;
 
@@ -7,9 +7,9 @@ public interface TodoService {
 
     List<TodoDto> getAll(Long gardenerId);
 
-    TodoDto update(TodoDto todoDto);
+    TodoDto update(TodoDto todoDto, Long gardenerId);
 
-    TodoDto complete(TodoDto todoDto);
+    TodoDto complete(TodoDto todoDto, Long gardenerId);
 
-    void delete(Long todoId);
+    void delete(Long todoId, Long gardenerId);
 }

@@ -1,4 +1,4 @@
-package xyz.notagardener.domain.todo;
+package xyz.notagardener.todo;
 
 import org.springframework.data.repository.Repository;
 
@@ -10,4 +10,5 @@ public interface TodoRepository extends Repository<Todo, Long> {
     Todo save(Todo todo);
     Optional<Todo> findById(Long todoId);
     void deleteById(Long todoId);
+    void delete(Todo todo);
 }

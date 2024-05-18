@@ -1,6 +1,6 @@
-package xyz.notagardener.domain.todo;
+package xyz.notagardener.todo;
 
-import xyz.notagardener.domain.gardener.Gardener;
+import xyz.notagardener.gardener.Gardener;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
