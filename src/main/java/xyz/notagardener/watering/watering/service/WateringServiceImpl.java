@@ -33,20 +33,16 @@ public class WateringServiceImpl implements WateringService {
         LocalDate startDate = getStartDate(firstDayOfMonth);
         LocalDate endDate = getEndDate(firstDayOfMonth);
 
-        Map<LocalDate, List<WateringByDate>> map = new HashMap<>(); // 날짜: 리스트
+        Map<LocalDate, List<WateringByDate>> result = new HashMap<>(); // 날짜: 리스트
 
-        for (Watering watering : wateringRepository.findAllWateringListByGardenerId(gardenerId, startDate, endDate)) {
-            List<WateringByDate> tmpList = map.get(watering.getWateringDate());
+        wateringRepository.findAllWateringListByGardenerId(gardenerId, startDate, endDate)
+                .forEach(watering -> {
+                    // key 값으로 들고오는데, 없으면 새 값을 맵에 추가해줌
+                    result.computeIfAbsent(watering.getWateringDate(), key -> new ArrayList<>())
+                            .add(WateringByDate.from(watering));
+                });
 
-            if (tmpList == null) {
-                tmpList = new ArrayList<>();
-            }
-
-            tmpList.add(WateringByDate.from(watering));
-            map.put(watering.getWateringDate(), tmpList);
-        }
-
-        return map;
+        return result;
     }
 
     // 달력 시작 날짜
