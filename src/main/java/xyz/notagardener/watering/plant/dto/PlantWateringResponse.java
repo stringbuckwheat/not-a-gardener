@@ -1,11 +1,12 @@
-package xyz.notagardener.domain.watering.dto;
+package xyz.notagardener.watering.plant.dto;
 
-import xyz.notagardener.domain.plant.dto.plant.PlantResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import xyz.notagardener.plant.garden.dto.PlantResponse;
+import xyz.notagardener.watering.watering.dto.WateringMessage;
 
 import java.util.List;
 

@@ -1,8 +1,8 @@
-package xyz.notagardener.domain.watering.dto;
+package xyz.notagardener.watering.watering.dto;
 
-import xyz.notagardener.domain.plant.Plant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import xyz.notagardener.plant.Plant;
 
 @AllArgsConstructor
 @Getter

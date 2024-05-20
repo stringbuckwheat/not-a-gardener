@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-class InvalidWateringRequestProvider implements ArgumentsProvider {
+public class InvalidWateringRequestProvider implements ArgumentsProvider {
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
         Gardener requester = Gardener.builder().gardenerId(3L).build(); // 요청자

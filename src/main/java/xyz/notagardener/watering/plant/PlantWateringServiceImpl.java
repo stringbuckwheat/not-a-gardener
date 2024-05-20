@@ -1,16 +1,20 @@
-package xyz.notagardener.domain.watering.service;
+package xyz.notagardener.watering.plant;
 
-import xyz.notagardener.domain.plant.Plant;
-import xyz.notagardener.domain.plant.dto.plant.PlantResponse;
-import xyz.notagardener.domain.watering.Watering;
-import xyz.notagardener.domain.watering.repository.WateringRepository;
-import com.buckwheat.garden.domain.watering.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.notagardener.domain.watering.dto.*;
+import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.garden.dto.PlantResponse;
+import xyz.notagardener.watering.Watering;
+import xyz.notagardener.watering.plant.dto.PlantWateringResponse;
+import xyz.notagardener.watering.plant.dto.WateringForOnePlant;
+import xyz.notagardener.watering.watering.dto.AfterWatering;
+import xyz.notagardener.watering.watering.dto.WateringMessage;
+import xyz.notagardener.watering.watering.dto.WateringRequest;
+import xyz.notagardener.watering.watering.repository.WateringRepository;
+import xyz.notagardener.watering.watering.service.WateringCommandService;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -27,8 +31,8 @@ public class PlantWateringServiceImpl implements PlantWateringService {
 
     @Override
     @Transactional
-    public PlantWateringResponse add(WateringRequest wateringRequest, Pageable pageable) {
-        AfterWatering afterWatering = wateringCommandService.add(wateringRequest);
+    public PlantWateringResponse add(WateringRequest wateringRequest, Pageable pageable, Long gardenerId) {
+        AfterWatering afterWatering = wateringCommandService.add(wateringRequest, gardenerId);
 
         List<WateringForOnePlant> waterings = getAll(wateringRequest.getPlantId(), pageable);
 
@@ -49,27 +53,32 @@ public class PlantWateringServiceImpl implements PlantWateringService {
     }
 
     @Transactional(readOnly = true)
-    public List<WateringForOnePlant> withWateringPeriodList(List<Watering> list) {
-        List<WateringForOnePlant> waterings = new ArrayList<>();
+    private List<WateringForOnePlant> withWateringPeriodList(List<Watering> waterings) {
+        List<WateringForOnePlant> result = new ArrayList<>();
 
-        for (int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < waterings.size(); i++) {
+            Watering currentWatering = waterings.get(i);
+
             // 마지막 요소이자 가장 옛날 물주기
             // => 전 요소가 없으므로 며칠만에 물 줬는지 계산 X
-            if (i == list.size() - 1) {
-                waterings.add(WateringForOnePlant.from(list.get(i)));
-                break;
+            if (i == waterings.size() - 1) {
+                result.add(WateringForOnePlant.from(waterings.get(i)));
+            } else {
+                // 며칠만에 물줬는지 계산
+                Watering nextWatering = waterings.get(i + 1);
+                int wateringPeriod = calculateWateringPeriod(currentWatering, nextWatering);
+
+                result.add(WateringForOnePlant.withWateringPeriodFrom(currentWatering, wateringPeriod));
             }
-
-            // 며칠만에 물줬는지 계산
-            LocalDateTime afterWateringDate = list.get(i).getWateringDate().atStartOfDay();
-            LocalDateTime prevWateringDate = list.get(i + 1).getWateringDate().atStartOfDay();
-
-            int wateringPeriod = (int) Duration.between(prevWateringDate, afterWateringDate).toDays();
-
-            waterings.add(WateringForOnePlant.withWateringPeriodFrom(list.get(i), wateringPeriod));
         }
 
-        return waterings;
+        return result;
+    }
+
+    private int calculateWateringPeriod(Watering currentWatering, Watering nextWatering) {
+        LocalDateTime currentWateringDate = currentWatering.getWateringDate().atStartOfDay();
+        LocalDateTime nextWateringDate = nextWatering.getWateringDate().atStartOfDay();
+        return (int) Duration.between(nextWateringDate, currentWateringDate).toDays();
     }
 
     @Override
@@ -90,7 +99,7 @@ public class PlantWateringServiceImpl implements PlantWateringService {
     }
 
     @Override
-    public void deleteAll(Long plantId) {
-        wateringCommandService.deleteByPlantId(plantId);
+    public void deleteAll(Long plantId, Long gardenerId) {
+        wateringCommandService.deleteByPlantId(plantId, gardenerId);
     }
 }

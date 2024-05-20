@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.chemical.Chemical;
 import xyz.notagardener.chemical.repository.ChemicalRepository;
+import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.AlreadyWateredException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.plant.Plant;
@@ -20,6 +21,7 @@ import xyz.notagardener.watering.watering.repository.WateringRepository;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Service
@@ -29,6 +31,12 @@ public class WateringCommandServiceImpl implements WateringCommandService {
     private final WateringRepository wateringRepository;
     private final ChemicalRepository chemicalRepository;
     private final PlantRepository plantRepository;
+
+    private static final Map<Integer, String> WATERING_CODE_MAP = Map.of(
+            -1, AfterWateringCode.SCHEDULE_SHORTEN.getCode(),
+            0, AfterWateringCode.NO_CHANGE.getCode(),
+            1, AfterWateringCode.SCHEDULE_LENGTHEN.getCode()
+    );
 
     private void validateWatering(WateringRequest wateringRequest) {
         if (wateringRepository.existByWateringDateAndPlantId(wateringRequest.getWateringDate(), wateringRequest.getPlantId())) {
@@ -42,7 +50,7 @@ public class WateringCommandServiceImpl implements WateringCommandService {
         Chemical chemical = chemicalRepository.findById(chemicalId).orElseThrow(NoSuchElementException::new);
 
         if(chemical != null && !chemical.getGardener().getGardenerId().equals(gardnerId)) {
-            throw new UnauthorizedAccessException("CHEMICAL", gardnerId);
+            throw new UnauthorizedAccessException(ExceptionCode.NOT_YOUR_CHEMICAL);
         }
 
         return chemical;
@@ -52,7 +60,7 @@ public class WateringCommandServiceImpl implements WateringCommandService {
         Plant plant = plantRepository.findByPlantId(plantId).orElseThrow(NoSuchElementException::new);
 
         if(!plant.getGardener().getGardenerId().equals(gardenerId)) {
-            throw new UnauthorizedAccessException("PLANT", gardenerId);
+            throw new UnauthorizedAccessException(ExceptionCode.NOT_YOUR_PLANT);
         }
 
         return plant;
@@ -90,11 +98,11 @@ public class WateringCommandServiceImpl implements WateringCommandService {
     }
 
     private void updatePlantWateringPeriod(Plant plant, WateringMessage afterWatering) {
-        int afterWateringCode = afterWatering.getAfterWateringCode();
+        String afterWateringCode = afterWatering.getAfterWateringCode();
         int recentWateringPeriod = afterWatering.getRecentWateringPeriod();
 
         // 첫 recent watering period 기록
-        if (afterWateringCode == AfterWateringCode.INIT_WATERING_PERIOD.getCode()) {
+        if (AfterWateringCode.INIT_WATERING_PERIOD.getCode().equals(afterWateringCode)) {
             // 초기 관수 주기 저장
             plant.updateRecentWateringPeriod(recentWateringPeriod);
             plant.initEarlyWateringPeriod(recentWateringPeriod);
@@ -118,7 +126,8 @@ public class WateringCommandServiceImpl implements WateringCommandService {
         if (waterings.size() == 3) return new WateringMessage(AfterWateringCode.INIT_WATERING_PERIOD.getCode(), period);
 
         // 물주기 짧아짐: -1, 물주기 똑같음: 0, 물주기 길어짐: 1
-        int afterWateringCode = Integer.compare(period, prevPeriod);
+        int comparisonResult = Integer.compare(period, prevPeriod);
+        String afterWateringCode = WATERING_CODE_MAP.get(comparisonResult);
 
         return new WateringMessage(afterWateringCode, period);
     }

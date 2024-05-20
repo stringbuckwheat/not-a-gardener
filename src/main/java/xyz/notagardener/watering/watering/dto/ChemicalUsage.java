@@ -1,4 +1,4 @@
-package xyz.notagardener.domain.watering.dto;
+package xyz.notagardener.watering.watering.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;

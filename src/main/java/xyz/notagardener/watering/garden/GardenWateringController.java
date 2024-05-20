@@ -1,10 +1,9 @@
-package xyz.notagardener.domain.watering.controller;
+package xyz.notagardener.watering.garden;
 
-import xyz.notagardener.domain.gardener.token.UserPrincipal;
-import xyz.notagardener.domain.plant.dto.garden.GardenWateringResponse;
-import xyz.notagardener.domain.watering.dto.WateringMessage;
-import xyz.notagardener.domain.watering.dto.WateringRequest;
-import xyz.notagardener.domain.watering.service.GardenWateringService;
+import xyz.notagardener.common.auth.UserPrincipal;
+import xyz.notagardener.watering.garden.dto.GardenWateringResponse;
+import xyz.notagardener.watering.watering.dto.WateringMessage;
+import xyz.notagardener.watering.watering.dto.WateringRequest;
 import xyz.notagardener.common.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -96,8 +95,8 @@ public class GardenWateringController {
             )
     })
     @PutMapping("/not-dry")
-    public WateringMessage notDry(@PathVariable Long plantId) {
-        return gardenWateringService.notDry(plantId);
+    public WateringMessage notDry(@PathVariable Long plantId, @AuthenticationPrincipal UserPrincipal user) {
+        return gardenWateringService.notDry(plantId, user.getId());
     }
 
     @Operation(summary = "(인증) '물 주기를 미룰래요' 기록", description = "그냥 귀찮아서 미룰 때. WateringCode.YOU_ARE_LAZY(1) 반환")
@@ -132,7 +131,7 @@ public class GardenWateringController {
             )
     })
     @PutMapping("/postpone")
-    public int postpone(@PathVariable Long plantId) {
-        return gardenWateringService.postpone(plantId);
+    public String postpone(@PathVariable Long plantId, @AuthenticationPrincipal UserPrincipal user) {
+        return gardenWateringService.postpone(plantId, user.getId());
     }
 }

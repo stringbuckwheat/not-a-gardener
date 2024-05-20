@@ -3,12 +3,14 @@ package xyz.notagardener.watering.watering.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.watering.Watering;
+import xyz.notagardener.watering.watering.AfterWateringCode;
 import xyz.notagardener.watering.watering.dto.AfterWatering;
 import xyz.notagardener.watering.watering.dto.WateringByDate;
 import xyz.notagardener.watering.watering.dto.WateringMessage;
@@ -40,6 +42,7 @@ class WateringServiceImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    @ParameterizedTest
     @ArgumentsSource(WateringListProvider.class)
     @DisplayName("물주기(캘린더) 데이터: 성공")
     void getAll(List<Watering> waterings, int expected) {
@@ -70,7 +73,7 @@ class WateringServiceImplTest {
         );
 
         Plant plant = Plant.builder().plantId(1L).waterings(waterings).build();
-        WateringMessage wateringMessage = new WateringMessage(3, 0);
+        WateringMessage wateringMessage = new WateringMessage(AfterWateringCode.SECOND_WATERING.getCode(), 0);
 
         AfterWatering afterWatering = new AfterWatering(plant, wateringMessage);
 

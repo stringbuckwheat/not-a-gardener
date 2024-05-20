@@ -1,8 +1,8 @@
-package xyz.notagardener.domain.watering.dto;
+package xyz.notagardener.watering.watering.dto;
 
-import xyz.notagardener.domain.chemical.Chemical;
-import xyz.notagardener.domain.plant.Plant;
-import xyz.notagardener.domain.watering.Watering;
+import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.plant.Plant;
+import xyz.notagardener.watering.Watering;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -37,22 +37,17 @@ public class WateringByDate {
     }
 
     public static WateringByDate from(Watering watering, Plant plant, Chemical chemical) {
-        if (chemical == null) {
-            return WateringByDate.builder()
-                    .id(watering.getWateringId())
-                    .plantId(plant.getPlantId())
-                    .plantName(plant.getName())
-                    .wateringDate(watering.getWateringDate())
-                    .build();
-        }
-
-        return WateringByDate.builder()
+        WateringByDate.WateringByDateBuilder builder = WateringByDate.builder()
                 .id(watering.getWateringId())
                 .plantId(plant.getPlantId())
                 .plantName(plant.getName())
-                .chemicalId(chemical.getChemicalId())
-                .chemicalName(chemical.getName())
-                .wateringDate(watering.getWateringDate())
-                .build();
+                .wateringDate(watering.getWateringDate());
+
+        if (chemical != null) {
+            builder.chemicalId(chemical.getChemicalId())
+                    .chemicalName(chemical.getName());
+        }
+
+        return builder.build();
     }
 }

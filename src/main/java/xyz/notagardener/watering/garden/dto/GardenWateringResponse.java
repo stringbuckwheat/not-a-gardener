@@ -1,6 +1,7 @@
-package xyz.notagardener.plant.garden.dto;
+package xyz.notagardener.watering.garden.dto;
 
-import xyz.notagardener.watering.dto.WateringMessage;
+import xyz.notagardener.plant.garden.dto.GardenResponse;
+import xyz.notagardener.watering.watering.dto.WateringMessage;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 

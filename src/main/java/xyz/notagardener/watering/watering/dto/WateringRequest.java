@@ -1,26 +1,24 @@
-package xyz.notagardener.domain.watering.dto;
+package xyz.notagardener.watering.watering.dto;
 
-import xyz.notagardener.domain.chemical.Chemical;
-import xyz.notagardener.domain.plant.Plant;
-import xyz.notagardener.domain.watering.Watering;
+import lombok.*;
+import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.plant.Plant;
+import xyz.notagardener.watering.Watering;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.time.LocalDate;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @ToString
+@AllArgsConstructor
+@Builder
 public class WateringRequest {
     private Long id;
 
     @NotNull
     private Long plantId;
 
-    @NotNull
     private Long chemicalId;
 
     @NotNull

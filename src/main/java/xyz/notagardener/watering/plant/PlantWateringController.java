@@ -1,11 +1,5 @@
-package xyz.notagardener.domain.watering.controller;
+package xyz.notagardener.watering.plant;
 
-import xyz.notagardener.domain.gardener.token.UserPrincipal;
-import xyz.notagardener.domain.watering.dto.PlantWateringResponse;
-import xyz.notagardener.domain.watering.dto.WateringForOnePlant;
-import xyz.notagardener.domain.watering.dto.WateringRequest;
-import xyz.notagardener.domain.watering.service.PlantWateringService;
-import xyz.notagardener.common.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,6 +15,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import xyz.notagardener.common.error.ErrorResponse;
+import xyz.notagardener.common.auth.UserPrincipal;
+import xyz.notagardener.watering.watering.dto.WateringRequest;
+import xyz.notagardener.watering.plant.dto.PlantWateringResponse;
+import xyz.notagardener.watering.plant.dto.WateringForOnePlant;
 
 import java.util.List;
 
@@ -101,8 +100,8 @@ public class PlantWateringController {
             )
     })
     @PostMapping("")
-    public PlantWateringResponse add(@RequestBody WateringRequest wateringRequest, @PageableDefault(size = 10) Pageable pageable) {
-        return plantWateringService.add(wateringRequest, pageable);
+    public PlantWateringResponse add(@RequestBody WateringRequest wateringRequest, @PageableDefault(size = 10) Pageable pageable, @AuthenticationPrincipal UserPrincipal user) {
+        return plantWateringService.add(wateringRequest, pageable, user.getId());
     }
 
     @Operation(summary = "(인증) 한 식물의 물 주기 기록 수정", description = "인증된 사용자의 한 식물에 대한 물 주기 기록 수정")
@@ -195,7 +194,7 @@ public class PlantWateringController {
             }
     )
     @DeleteMapping("")
-    public void deleteAll(@PathVariable long plantId) {
-        plantWateringService.deleteAll(plantId);
+    public void deleteAll(@PathVariable Long plantId, @AuthenticationPrincipal UserPrincipal user) {
+        plantWateringService.deleteAll(plantId, user.getId());
     }
 }
