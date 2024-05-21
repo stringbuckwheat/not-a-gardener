@@ -1,6 +1,6 @@
-package xyz.notagardener.domain.watering.dto;
+package xyz.notagardener.chemical.dto;
 
-import xyz.notagardener.domain.watering.Watering;
+import xyz.notagardener.watering.Watering;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,14 +32,12 @@ public class WateringResponseInChemical {
     @Schema(description = "물 준 날짜", example = "2024-01-30")
     private LocalDate wateringDate;
 
-    public static WateringResponseInChemical from(Watering watering) {
-        return WateringResponseInChemical.builder()
-                .id(watering.getWateringId())
-                .plantId(watering.getPlant().getPlantId())
-                .plantName(watering.getPlant().getName())
-                .placeId(watering.getPlant().getPlace().getPlaceId())
-                .placeName(watering.getPlant().getPlace().getName())
-                .wateringDate(watering.getWateringDate())
-                .build();
+    public WateringResponseInChemical(Watering watering) {
+        this.id = watering.getWateringId();
+        this.plantId = watering.getPlant().getPlantId();
+        this.plantName = watering.getPlant().getName();
+        this.placeId = watering.getPlant().getPlace().getPlaceId();
+        this.placeName = watering.getPlant().getPlace().getName();
+        this.wateringDate = watering.getWateringDate();
     }
 }

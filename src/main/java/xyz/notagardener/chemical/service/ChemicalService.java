@@ -3,7 +3,7 @@ package xyz.notagardener.chemical.service;
 import org.springframework.data.domain.Pageable;
 import xyz.notagardener.chemical.dto.ChemicalDetail;
 import xyz.notagardener.chemical.dto.ChemicalDto;
-import xyz.notagardener.watering.dto.WateringResponseInChemical;
+import xyz.notagardener.chemical.dto.WateringResponseInChemical;
 
 import java.util.List;
 
