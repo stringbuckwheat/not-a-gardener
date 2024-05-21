@@ -1,6 +1,7 @@
-package xyz.notagardener.gardener.forgot;
+package xyz.notagardener.gardener.repository;
 
 import org.springframework.data.repository.Repository;
+import xyz.notagardener.gardener.dto.LostGardener;
 
 import java.util.Optional;
 

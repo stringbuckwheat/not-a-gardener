@@ -1,5 +1,6 @@
-package xyz.notagardener.gardener.gardener;
+package xyz.notagardener.gardener.dto;
 
+import jakarta.validation.constraints.Size;
 import xyz.notagardener.gardener.Gardener;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -16,33 +17,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class Register {
-    @NotBlank
+    @NotBlank(message = "아이디는 비워둘 수 없어요")
     private String username;
 
-    @Email
+    @Email(message = "이메일 형식을 지켜주세요")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "비밀번호는 비워둘 수 없어요")
     private String password;
 
-    @NotBlank
+    @NotBlank(message = "이름은 비워둘 수 없어요")
+    @Size(min = 1, max = 30)
     private String name;
-
-
-    // 유효성 검사
-    public boolean isValid() {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-
-        return username != null
-                && username.matches("^[A-Za-z]{1}[A-Za-z0-9_-]{5,19}$") //
-                && email != null
-                && email.matches(emailRegex)
-                && password != null
-                && password.matches("(?=.*\\d{1,50})(?=.*[~`!@#$%\\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,50}")
-                && name != null
-                && name.length() > 0
-                && name.length() < 20;
-    }
 
     /* 암호화된 password builder 패턴으로 사용중*/
     public Register encryptPassword(String BCryptpassword) {

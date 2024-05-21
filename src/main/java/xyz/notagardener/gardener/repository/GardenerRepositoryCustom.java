@@ -1,4 +1,6 @@
-package xyz.notagardener.gardener.gardener;
+package xyz.notagardener.gardener.repository;
+
+import xyz.notagardener.gardener.dto.GardenerDetail;
 
 import java.util.Optional;
 

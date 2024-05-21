@@ -1,4 +1,4 @@
-package xyz.notagardener.gardener.forgot;
+package xyz.notagardener.gardener.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,10 +11,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.VerificationException;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.authentication.dto.Login;
-import xyz.notagardener.gardener.gardener.GardenerRepository;
+import xyz.notagardener.gardener.dto.*;
+import xyz.notagardener.gardener.repository.GardenerRepository;
+import xyz.notagardener.gardener.repository.LostGardenerRepository;
 
 import java.util.List;
 
@@ -35,7 +38,7 @@ public class ForgotServiceImpl implements ForgotService {
     public Forgot forgotAccount(String email) {
         List<Username> usernames = gardenerRepository.findByProviderIsNullAndEmail(email);
 
-        if (usernames.size() == 0) {
+        if (usernames.isEmpty()) {
             throw new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT_FOR_EMAIL.getCode());
         }
 
@@ -66,12 +69,12 @@ public class ForgotServiceImpl implements ForgotService {
     }
 
     @Override
-    public VerifyRequest verifyIdentificationCode(VerifyRequest verifyRequest) {
+    public VerifyResponse verifyIdentificationCode(VerifyRequest verifyRequest) {
         // 본인 확인 코드로 redis 검색
         LostGardener lostGardener = lostGardenerRepository.findById(verifyRequest.getIdentificationCode())
-                .orElseThrow(() -> new VerificationException(ExceptionCode.NO_IDENTIFICATION_INFO_IN_REDIS));
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_IDENTIFICATION_INFO_IN_REDIS));
 
-        // 한 번 더 확인
+        // 본인 여부 확인
         if(!verifyRequest.getEmail().equals(lostGardener.getEmail())) {
             throw new VerificationException(ExceptionCode.NOT_YOUR_IDENTIFICATION_CODE);
         }
@@ -79,7 +82,7 @@ public class ForgotServiceImpl implements ForgotService {
         // redis에서 확인코드 삭제
         lostGardenerRepository.deleteById(lostGardener.getIdentificationCode());
 
-        return verifyRequest;
+        return new VerifyResponse(true);
     }
 
     @Override

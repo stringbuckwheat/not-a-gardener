@@ -1,4 +1,4 @@
-package xyz.notagardener.gardener.gardener;
+package xyz.notagardener.gardener.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,11 +26,11 @@ public class GardenerDetail {
     private String username;
 
     @Schema(description = "이메일", example = "perfectgardener@gardener.com")
-    @Email
+    @Email(message = "이메일 형식을 지켜주세요")
     private String email;
 
     @Schema(description = "이름", example = "식집사")
-    @NotBlank
+    @NotBlank(message = "이름은 비워둘 수 없어요")
     private String name;
 
     @Schema(description = "가입일", example = "2024-02-01")
@@ -47,15 +47,5 @@ public class GardenerDetail {
         this.name = name;
         this.createDate = createDate;
         this.provider = provider;
-    }
-
-    public boolean isValid() {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-
-        return email != null
-                && email.matches(emailRegex)
-                && name != null
-                && name.length() > 0
-                && name.length() < 20;
     }
 }

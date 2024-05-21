@@ -1,10 +1,10 @@
-package xyz.notagardener.gardener.forgot;
+package xyz.notagardener.gardener.dto;
 
-import lombok.Getter;
-import org.springframework.data.annotation.Id;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.time.LocalDateTime;

@@ -40,13 +40,13 @@ public class ChemicalController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Success: 한 회원의 전체 약품 리스트",
+                    description = "OK: 한 회원의 전체 약품 리스트",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             array = @ArraySchema(schema = @Schema(implementation = ChemicalDto.class)))
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "PLEASE_LOGIN",
+                    description = "UNAUTHORIZED: PLEASE_LOGIN",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
@@ -173,7 +173,7 @@ public class ChemicalController {
     public ResponseEntity<ChemicalDto> add(@AuthenticationPrincipal UserPrincipal user, @RequestBody @Valid ChemicalDto chemicalRequest) {
         // 유효성 검사
         if (!ChemicalType.isValid(chemicalRequest.getType())) {
-            throw new IllegalArgumentException(ExceptionCode.CHEMICAL_TYPE_INVALID.getCode());
+            throw new IllegalArgumentException(ExceptionCode.INVALID_CHEMICAL_TYPE.getCode());
         }
 
         ChemicalDto chemicalDto = chemicalService.add(user.getId(), chemicalRequest);

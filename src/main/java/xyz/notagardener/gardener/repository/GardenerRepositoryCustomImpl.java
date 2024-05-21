@@ -1,9 +1,11 @@
-package xyz.notagardener.gardener.gardener;
+package xyz.notagardener.gardener.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.gardener.QGardener;
+import xyz.notagardener.gardener.dto.GardenerDetail;
+import xyz.notagardener.gardener.dto.QGardenerDetail;
 
 import java.util.Optional;
 

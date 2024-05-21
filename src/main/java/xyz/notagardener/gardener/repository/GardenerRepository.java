@@ -1,8 +1,8 @@
-package xyz.notagardener.gardener.gardener;
+package xyz.notagardener.gardener.repository;
 
 import org.springframework.data.repository.Repository;
 import xyz.notagardener.gardener.Gardener;
-import xyz.notagardener.gardener.forgot.Username;
+import xyz.notagardener.gardener.dto.Username;
 
 import java.util.List;
 import java.util.Optional;

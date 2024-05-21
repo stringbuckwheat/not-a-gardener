@@ -1,5 +1,7 @@
-package xyz.notagardener.gardener.gardener;
+package xyz.notagardener.gardener.controller;
 
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import xyz.notagardener.authentication.dto.Login;
 import xyz.notagardener.authentication.model.UserPrincipal;
 import xyz.notagardener.common.error.ErrorResponse;
@@ -15,6 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.gardener.GardenerUtils;
+import xyz.notagardener.gardener.dto.GardenerDetail;
+import xyz.notagardener.gardener.dto.VerifyResponse;
+import xyz.notagardener.gardener.service.GardenerService;
 
 @Slf4j
 @RestController
@@ -28,17 +35,17 @@ public class GardenerController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Success: 본인의 회원 정보",
+                    description = "OK: 본인의 회원 정보",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = GardenerDetail.class))
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Unauthorized",
+                    description = "UNAUTHORIZED: PLEASE_LOGIN",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"B000\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
+                                    value = "{\"code\": \"PLEASE_LOGIN\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
                             )
                     )
             )
@@ -52,90 +59,128 @@ public class GardenerController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Success: 비밀번호 일치 여부",
+                    description = "OK: 비밀번호 일치 여부",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = Boolean.class))
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Unauthorized",
+                    description = "UNAUTHORIZED: PLEASE_LOGIN",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"B000\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
+                                    value = "{\"code\": \"PLEASE_LOGIN\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
                             )
                     )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "No Such Item",
+                    description = "NOT_FOUND: 계정 정보 없음 ",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"B006\", \"title\": \"해당 아이템 없음\", \"message\": \"해당 아이템을 찾을 수 없어요\"}"
+                                    value = "{\"code\": \"NO_ACCOUNT\", \"title\": \"계정 정보 없음\", \"message\": \"해당 유저를 찾을 수 없어요\"}"
                             )
                     )
             )
     })
     @PostMapping("/password")
-    public boolean identify(@RequestBody Login login, @AuthenticationPrincipal UserPrincipal user) {
-        return gardenerService.identify(user.getId(), login);
+    public ResponseEntity<VerifyResponse> identify(@RequestBody Login login, @AuthenticationPrincipal UserPrincipal user) {
+        VerifyResponse result = gardenerService.identify(user.getId(), login);
+        return ResponseEntity.ok().body(result);
     }
 
     @Operation(summary = "(인증) 비밀번호 변경")
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
-                    description = "Success: 비밀번호 변경 성공"
+                    responseCode = "204",
+                    description = "NO_CONTENT: 비밀번호 변경 성공"
             ),
             @ApiResponse(
-                    responseCode = "401",
-                    description = "Unauthorized",
+                    responseCode = "400",
+                    description = "BAD_REQUEST: 비밀번호 유효성 검사 실패",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"B000\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
+                                    value = "{\"code\": \"INVALID_PASSWORD\", \"title\": \"비밀번호 유효성 검사 실패\", \"message\": \"숫자, 특수문자를 포함하여 8자리 이상이어야 해요.\"}"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "UNAUTHORIZED: PLEASE_LOGIN",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{\"code\": \"PLEASE_LOGIN\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
                             )
                     )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "No Such Item",
+                    description = "NOT_FOUND: 계정 정보 없음 ",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"B006\", \"title\": \"해당 아이템 없음\", \"message\": \"해당 아이템을 찾을 수 없어요\"}"
+                                    value = "{\"code\": \"NO_ACCOUNT\", \"title\": \"계정 정보 없음\", \"message\": \"해당 유저를 찾을 수 없어요\"}"
                             )
                     )
             )
     })
     @PutMapping("/password")
-    public void updatePassword(@RequestBody Login login, @AuthenticationPrincipal UserPrincipal user) {
+    public ResponseEntity<Void> updatePassword(@RequestBody Login login, @AuthenticationPrincipal UserPrincipal user) {
+        if (!GardenerUtils.isPasswordValid(login.getPassword())) {
+            throw new IllegalArgumentException(ExceptionCode.INVALID_PASSWORD.getCode());
+        }
+
         gardenerService.updatePassword(user.getId(), login);
+
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "(인증) 회원 정보 변경")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Success: 성공 시 회원 정보 리턴",
+                    description = "OK: 성공 시 회원 정보 리턴",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = GardenerDetail.class))
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Unauthorized",
+                    description = "UNAUTHORIZED: PLEASE_LOGIN",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"B000\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
+                                    value = "{\"code\": \"PLEASE_LOGIN\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "BAD_REQUEST: 유효성 검사 실패",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{\"code\": \"NAME_NOT_BLANK\", \"message\": \"이름은 비워둘 수 없어요.\"}"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "NOT_FOUND: 계정 정보 없음 ",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{\"code\": \"NO_ACCOUNT\", \"title\": \"계정 정보 없음\", \"message\": \"해당 유저를 찾을 수 없어요\"}"
                             )
                     )
             )
     })
     @PutMapping("/{gardenerId}")
-    public GardenerDetail update(@RequestBody GardenerDetail gardenerDetail, @PathVariable long gardenerId) {
-        return gardenerService.update(gardenerDetail);
+    public ResponseEntity<GardenerDetail> update(@RequestBody @Valid GardenerDetail gardenerDetail, @PathVariable long gardenerId) {
+        GardenerDetail gardenerDetail1 = gardenerService.update(gardenerDetail);
+        return ResponseEntity.ok().body(gardenerDetail1);
     }
 
     @Operation(summary = "(인증) 회원 탈퇴")
@@ -146,21 +191,21 @@ public class GardenerController {
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Unauthorized",
+                    description = "UNAUTHORIZED: PLEASE_LOGIN",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"B000\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
+                                    value = "{\"code\": \"PLEASE_LOGIN\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
                             )
                     )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "No Such Item",
+                    description = "NOT_FOUND: 계정 정보 없음 ",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"B006\", \"title\": \"해당 아이템 없음\", \"message\": \"해당 아이템을 찾을 수 없어요\"}"
+                                    value = "{\"code\": \"NO_ACCOUNT\", \"title\": \"계정 정보 없음\", \"message\": \"해당 유저를 찾을 수 없어요\"}"
                             )
                     )
             )
