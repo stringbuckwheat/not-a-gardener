@@ -1,6 +1,6 @@
 package xyz.notagardener.gardener.gardener;
 
-import xyz.notagardener.gardener.authentication.dto.Login;
+import xyz.notagardener.authentication.dto.Login;
 
 public interface GardenerService {
     // 회원 정보 보기

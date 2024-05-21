@@ -1,6 +1,6 @@
 package xyz.notagardener.gardener.forgot;
 
-import xyz.notagardener.gardener.authentication.dto.Login;
+import xyz.notagardener.authentication.dto.Login;
 
 public interface ForgotService {
     // 본인 확인 코드 리턴 및 신원 확인

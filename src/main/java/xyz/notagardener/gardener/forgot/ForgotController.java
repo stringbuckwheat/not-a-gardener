@@ -1,6 +1,6 @@
 package xyz.notagardener.gardener.forgot;
 
-import xyz.notagardener.gardener.authentication.dto.Login;
+import xyz.notagardener.authentication.dto.Login;
 import xyz.notagardener.common.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;

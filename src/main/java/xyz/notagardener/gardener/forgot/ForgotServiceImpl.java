@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.VerificationException;
 import xyz.notagardener.gardener.Gardener;
-import xyz.notagardener.gardener.authentication.dto.Login;
+import xyz.notagardener.authentication.dto.Login;
 import xyz.notagardener.gardener.gardener.GardenerRepository;
 
 import java.util.List;
@@ -69,11 +69,11 @@ public class ForgotServiceImpl implements ForgotService {
     public VerifyRequest verifyIdentificationCode(VerifyRequest verifyRequest) {
         // 본인 확인 코드로 redis 검색
         LostGardener lostGardener = lostGardenerRepository.findById(verifyRequest.getIdentificationCode())
-                .orElseThrow(() -> new VerificationException(ExceptionCode.NO_IDENTIFICATION_INFO_IN_REDIS.getCode()));
+                .orElseThrow(() -> new VerificationException(ExceptionCode.NO_IDENTIFICATION_INFO_IN_REDIS));
 
         // 한 번 더 확인
         if(!verifyRequest.getEmail().equals(lostGardener.getEmail())) {
-            throw new VerificationException(ExceptionCode.NOT_YOUR_IDENTIFICATION_CODE.getCode());
+            throw new VerificationException(ExceptionCode.NOT_YOUR_IDENTIFICATION_CODE);
         }
 
         // redis에서 확인코드 삭제

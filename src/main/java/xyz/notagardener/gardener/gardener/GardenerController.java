@@ -1,7 +1,7 @@
 package xyz.notagardener.gardener.gardener;
 
-import xyz.notagardener.gardener.authentication.dto.Login;
-import xyz.notagardener.common.auth.UserPrincipal;
+import xyz.notagardener.authentication.dto.Login;
+import xyz.notagardener.authentication.model.UserPrincipal;
 import xyz.notagardener.common.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.gardener.Gardener;
-import xyz.notagardener.gardener.authentication.dto.Login;
+import xyz.notagardener.authentication.dto.Login;
 
 @Service
 @Slf4j

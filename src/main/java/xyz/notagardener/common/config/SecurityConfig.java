@@ -1,10 +1,10 @@
 package xyz.notagardener.common.config;
 
-import xyz.notagardener.common.filter.CustomAuthenticationEntryPoint;
-import xyz.notagardener.common.filter.JwtFilter;
-import xyz.notagardener.common.filter.oauth2.OAuth2SuccessHandler;
-import xyz.notagardener.common.filter.JwtExceptionFilter;
-import xyz.notagardener.common.filter.oauth2.OAuth2MemberService;
+import xyz.notagardener.authentication.config.CustomAuthenticationEntryPoint;
+import xyz.notagardener.authentication.config.JwtFilter;
+import xyz.notagardener.authentication.service.OAuth2SuccessHandler;
+import xyz.notagardener.authentication.config.JwtExceptionFilter;
+import xyz.notagardener.authentication.service.OAuth2MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,9 +41,6 @@ public class SecurityConfig {
             "/api/login", "/api/token", "/api/oauth", "/api/register/**", "/api/forgot/**", "/api/logout", "/static/**"
     };
 
-    /**
-     * CORS 설정
-     */
     CorsConfigurationSource corsConfigurationSource() {
         return request -> {
             CorsConfiguration config = new CorsConfiguration();
@@ -57,16 +54,8 @@ public class SecurityConfig {
         };
     }
 
-    /**
-     * Security Filter Chain 커스터마이징
-     *
-     * @param httpSecurity
-     * @return
-     * @throws Exception
-     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-
         httpSecurity.httpBasic(HttpBasicConfigurer::disable)
                 .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
@@ -91,11 +80,6 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 
-    /**
-     * 비밀번호 암호화 및 일치 여부 확인에 사용
-     *
-     * @return BCryptPasswordEncoder
-     */
     @Bean
     public BCryptPasswordEncoder encodePw() {
         return new BCryptPasswordEncoder();
