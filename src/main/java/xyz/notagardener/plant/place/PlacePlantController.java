@@ -1,6 +1,10 @@
 package xyz.notagardener.plant.place;
 
-import xyz.notagardener.common.auth.UserPrincipal;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
+import xyz.notagardener.authentication.model.UserPrincipal;
+import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.plant.plant.dto.MediumType;
 import xyz.notagardener.plant.plant.dto.PlantInPlace;
 import xyz.notagardener.plant.plant.dto.PlantRequest;
 import xyz.notagardener.common.error.ErrorResponse;
@@ -23,16 +27,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/place/{placeId}/plant")
+@RequestMapping("/api/place/{id}/plant")
 @Tag(name = "Place-Plants", description = "장소 페이지 내 식물 관련 API")
 public class PlacePlantController {
     private final PlacePlantService placePlantService;
 
-    @Operation(summary = "(인증) 해당 장소에 식물 추가", description = "해당 장소에 인증된 사용자의 식물 추가")
+    @Operation(summary = "해당 장소에 식물 추가", description = "해당 장소에 인증된 사용자의 식물 추가")
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
-                    description = "Success: 식물 추가 성공",
+                    responseCode = "201",
+                    description = "CREATED: 식물 추가 성공",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = PlantInPlace.class),
                             examples = @ExampleObject(
@@ -41,28 +45,44 @@ public class PlacePlantController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "401",
-                    description = "Unauthorized",
+                    responseCode = "403",
+                    description = "FORBIDDEN: 요청자의 장소가 아님",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"B000\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
+                                    value = "{\"code\": \"NOT_YOUR_PLACE\", \"title\": \"요청자의 장소가 아님\", \"message\": \"당신의 장소가 아니에요\"}"
                             )
                     )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "No Such Item",
+                    description = "NOT_FOUND: 해당 장소 없음",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"B006\", \"title\": \"해당 아이템 없음\", \"message\": \"해당 아이템을 찾을 수 없어요\"}"
+                                    value = "{\"code\": \"NO_SUCH_PLACE\", \"title\": \"해당 장소 없음\", \"message\": \"해당 장소를 찾을 수 없어요\"}"
                             )
                     )
-            )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "BAD_REQUEST: 유효성 검사 실패",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = {
+                                    @ExampleObject(
+                                            value = "{\"code\": \"CONTENT_NOT_BLANK\", \"message\": \"목표 내용을 입력해주세요.\"}"
+                                    ),
+                            }
+                    )
+            ),
     })
     @PostMapping("")
-    public PlantInPlace addPlantInPlace(@RequestBody PlantRequest plantRequest, @AuthenticationPrincipal UserPrincipal user) {
-        return placePlantService.addPlantInPlace(user.getId(), plantRequest);
+    public ResponseEntity<PlantInPlace> addPlantInPlace(@RequestBody @Valid PlantRequest plantRequest, @AuthenticationPrincipal UserPrincipal user) {
+        if(!MediumType.isValid(plantRequest.getMedium())) {
+            throw new IllegalArgumentException(ExceptionCode.INVALID_REQUEST_DATA.getCode());
+        }
+
+        return ResponseEntity.ok().body(placePlantService.addPlantInPlace(user.getId(), plantRequest));
     }
 }

@@ -36,7 +36,7 @@ import java.util.List;
 public class ChemicalController {
     private final ChemicalService chemicalService;
 
-    @Operation(summary = "(인증) 한 회원의 전체 약품 리스트")
+    @Operation(summary = "한 회원의 전체 약품 리스트")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -61,7 +61,7 @@ public class ChemicalController {
         return ResponseEntity.ok().body(chemicals);
     }
 
-    @Operation(summary = "(인증) 한 약품의 상세 정보")
+    @Operation(summary = "한 약품의 상세 정보")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -107,7 +107,7 @@ public class ChemicalController {
     }
 
     @Operation(
-            summary = "(인증) 한 약품의 시비 정보",
+            summary = "한 약품의 시비 정보",
             description = "10개 단위 페이징"
     )
     @ApiResponses(value = {
@@ -134,7 +134,7 @@ public class ChemicalController {
         return ResponseEntity.ok().body(result);
     }
 
-    @Operation(summary = "(인증) 약품 추가", description = "인증된 사용자의 약품 추가")
+    @Operation(summary = "약품 추가", description = "인증된 사용자의 약품 추가")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
@@ -180,7 +180,7 @@ public class ChemicalController {
         return ResponseEntity.status(HttpStatus.CREATED).body(chemicalDto);
     }
 
-    @Operation(summary = "(인증) 약품 수정", description = "인증된 사용자의 약품 수정")
+    @Operation(summary = "약품 수정", description = "인증된 사용자의 약품 수정")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -242,7 +242,7 @@ public class ChemicalController {
     }
 
     @Operation(
-            summary = "(인증) 약품 삭제",
+            summary = "약품 삭제",
             description = "인증된 사용자의 약품 삭제",
             responses = {
                     @ApiResponse(responseCode = "204", description = "NO_CONTENT: 약품 삭제 성공"),
@@ -258,7 +258,7 @@ public class ChemicalController {
                     ),
                     @ApiResponse(
                             responseCode = "403",
-                            description = "NOT_YOUR_CHEMICAL",
+                            description = "FORBIDDEN: 요청자의 약품이 아님",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ErrorResponse.class),
                                     examples = @ExampleObject(
@@ -268,14 +268,14 @@ public class ChemicalController {
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "NO_SUCH_CHEMICAL",
+                            description = "NOT_FOUND: 해당 약품 없음",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ErrorResponse.class),
                                     examples = @ExampleObject(
                                             value = "{\"code\": \"NO_SUCH_CHEMICAL\", \"title\": \"해당 약품 없음\", \"message\": \"해당 약품을 찾을 수 없어요\"}"
                                     )
                             )
-                    )
+                    ),
             }
     )
     @DeleteMapping("/{id}")

@@ -1,14 +1,5 @@
-package xyz.notagardener.routine;
+package xyz.notagardener.place.controller;
 
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import xyz.notagardener.authentication.model.UserPrincipal;
-import xyz.notagardener.routine.dto.RoutineComplete;
-import xyz.notagardener.routine.dto.RoutineMain;
-import xyz.notagardener.routine.dto.RoutineRequest;
-import xyz.notagardener.routine.dto.RoutineResponse;
-import xyz.notagardener.common.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,27 +8,113 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import xyz.notagardener.authentication.model.UserPrincipal;
+import xyz.notagardener.common.ValidationUtils;
+import xyz.notagardener.common.error.ErrorResponse;
+import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.place.dto.PlaceCard;
+import xyz.notagardener.place.dto.PlaceDto;
+import xyz.notagardener.place.service.PlaceService;
+import xyz.notagardener.plant.plant.dto.PlantInPlace;
+
+import java.util.List;
 
 @Slf4j
 @RestController
+@RequestMapping("/api/place")
 @RequiredArgsConstructor
-@RequestMapping("/api/routine")
-@Tag(name = "Routines", description = "루틴 관련 API")
-public class RoutineController {
-    private final RoutineService routineService;
+@Tag(name = "Places", description = "장소 관련 API")
+public class PlaceController {
+    private final PlaceService placeService;
 
-    @Operation(summary = "한 회원의 전체 루틴 리스트")
+    @Operation(summary = "한 회원의 전체 장소 리스트")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "OK: 한 회원의 전체 루틴 리스트",
+                    description = "OK: 한 회원의 전체 장소 리스트",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            array = @ArraySchema(schema = @Schema(implementation = RoutineMain.class)))
+                            array = @ArraySchema(schema = @Schema(implementation = PlaceCard.class)))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "UNAUTHORIZED: PLEASE_LOGIN",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{\"code\": \"PLEASE_LOGIN\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
+                            )
+                    )
+            )
+    })
+    @GetMapping("")
+    public ResponseEntity<List<PlaceCard>> getAll(@AuthenticationPrincipal UserPrincipal user) {
+        return ResponseEntity.ok().body(placeService.getAll(user.getId()));
+    }
+
+    @Operation(summary = "한 장소의 상세 정보")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK: 한 장소의 상세 정보",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = PlaceDto.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "UNAUTHORIZED: PLEASE_LOGIN",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{\"code\": \"PLEASE_LOGIN\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "FORBIDDEN: 요청자의 장소가 아님",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{\"code\": \"NOT_YOUR_PLACE\", \"title\": \"요청자의 장소가 아님\", \"message\": \"당신의 장소가 아니에요\"}"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "NOT_FOUND: 해당 장소 없음",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{\"code\": \"NO_SUCH_PLACE\", \"title\": \"해당 장소 없음\", \"message\": \"해당 장소를 찾을 수 없어요\"}"
+                            )
+                    )
+            ),
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<PlaceDto> getDetail(@PathVariable Long id, @AuthenticationPrincipal UserPrincipal user) {
+        return ResponseEntity.ok().body(placeService.getDetail(id, user.getId()));
+    }
+
+    @Operation(
+            summary = "해당 장소에 속한 식물 정보",
+            description = "10개 단위 페이징"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK: 해당 장소에 속한 식물 정보",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            array = @ArraySchema(schema = @Schema(implementation = PlantInPlace.class)))
             ),
             @ApiResponse(
                     responseCode = "401",
@@ -50,18 +127,18 @@ public class RoutineController {
                     )
             ),
     })
-    @GetMapping("")
-    public ResponseEntity<RoutineMain> getAll(@AuthenticationPrincipal UserPrincipal user) {
-        return ResponseEntity.ok().body(routineService.getAll(user.getId()));
+    @GetMapping("/{id}/plant")
+    public List<PlantInPlace> getPlantsWithPaging(@PathVariable Long id, @PageableDefault(size = 10) Pageable pageable) {
+        return placeService.getPlantsWithPaging(id, pageable);
     }
 
-    @Operation(summary = "루틴 추가", description = "인증된 사용자의 루틴 추가")
+    @Operation(summary = "장소 추가", description = "인증된 사용자의 장소 추가")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
-                    description = "CREATED: 루틴 추가 성공",
+                    description = "CREATED: 장소 추가 성공",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = RoutineResponse.class)
+                            schema = @Schema(implementation = PlaceCard.class)
                     )
             ),
             @ApiResponse(
@@ -76,21 +153,21 @@ public class RoutineController {
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "FORBIDDEN: 요청자의 식물이 아님",
+                    description = "FORBIDDEN: 요청자의 장소가 아님",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"NOT_YOUR_PLANT\", \"title\": \"요청자의 식물이 아님\", \"message\": \"당신의 식물이 아니에요\"}"
+                                    value = "{\"code\": \"NOT_YOUR_PLACE\", \"title\": \"요청자의 장소가 아님\", \"message\": \"당신의 장소가 아니에요\"}"
                             )
                     )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "NOT_FOUND: 해당 식물 없음",
+                    description = "NOT_FOUND: 해당 장소 없음",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"NO_SUCH_PLANT\", \"title\": \"해당 식물 없음\", \"message\": \"해당 식물을 찾을 수 없어요\"}"
+                                    value = "{\"code\": \"NO_SUCH_PLACE\", \"title\": \"해당 장소 없음\", \"message\": \"해당 장소를 찾을 수 없어요\"}"
                             )
                     )
             ),
@@ -101,24 +178,28 @@ public class RoutineController {
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = {
                                     @ExampleObject(
-                                            value = "{\"code\": \"CONTENT_NOT_BLANK\", \"message\": \"루틴 내용은 비워둘 수 없어요.\"}"
+                                            value = "{\"code\": \"CONTENT_NOT_BLANK\", \"message\": \"목표 내용을 입력해주세요.\"}"
                                     ),
                             }
                     )
             ),
     })
     @PostMapping("")
-    public ResponseEntity<RoutineResponse> add(@AuthenticationPrincipal UserPrincipal user, @RequestBody @Valid RoutineRequest routineRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(routineService.add(routineRequest, user.getId()));
+    public ResponseEntity<PlaceCard> add(@RequestBody @Valid PlaceDto placeRequest, @AuthenticationPrincipal UserPrincipal user) {
+        if(!ValidationUtils.isValidForSavePlace(placeRequest.getOption(), placeRequest.getArtificialLight())) {
+            throw new IllegalArgumentException(ExceptionCode.INVALID_REQUEST_DATA.getCode());
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(placeService.add(user.getId(), placeRequest));
     }
 
-    @Operation(summary = "루틴 완료", description = "인증된 사용자의 루틴 완료 처리")
+    @Operation(summary = "장소 수정", description = "인증된 사용자의 장소 수정")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "OK: 루틴 완료 성공",
+                    description = "OK: 장소 수정 성공",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = RoutineResponse.class)
+                            schema = @Schema(implementation = PlaceDto.class)
                     )
             ),
             @ApiResponse(
@@ -133,21 +214,21 @@ public class RoutineController {
             ),
             @ApiResponse(
                     responseCode = "403",
-                    description = "FORBIDDEN: 요청자의 루틴이 아님",
+                    description = "FORBIDDEN: 요청자의 장소가 아님",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"NOT_YOUR_ROUTINE\", \"title\": \"요청자의 루틴이 아님\", \"message\": \"당신의 루틴이 아니에요\"}"
+                                    value = "{\"code\": \"NOT_YOUR_PLACE\", \"title\": \"요청자의 장소가 아님\", \"message\": \"당신의 장소가 아니에요\"}"
                             )
                     )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "NOT_FOUND: 해당 루틴 없음",
+                    description = "NOT_FOUND: 해당 장소 없음",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"NO_SUCH_ROUTINE\", \"title\": \"해당 루틴 없음\", \"message\": \"해당 루틴을 찾을 수 없어요\"}"
+                                    value = "{\"code\": \"NO_SUCH_PLACE\", \"title\": \"해당 장소 없음\", \"message\": \"해당 장소를 찾을 수 없어요\"}"
                             )
                     )
             ),
@@ -158,79 +239,26 @@ public class RoutineController {
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = {
                                     @ExampleObject(
-                                            value = "{\"code\": \"CONTENT_NOT_BLANK\", \"message\": \"루틴 내용은 비워둘 수 없어요.\"}"
-                                    ),
-                            }
-                    )
-            ),
-    })
-    @PutMapping("/{id}/complete")
-    public ResponseEntity<RoutineResponse> complete(@RequestBody @Valid RoutineComplete routineComplete, @AuthenticationPrincipal UserPrincipal user) {
-        return ResponseEntity.ok().body(routineService.complete(routineComplete, user.getId()));
-    }
-
-    @Operation(summary = "루틴 수정", description = "인증된 사용자의 루틴 수정")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "OK: 루틴 수정 성공",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = RoutineResponse.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "UNAUTHORIZED: PLEASE_LOGIN",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorResponse.class),
-                            examples = @ExampleObject(
-                                    value = "{\"code\": \"PLEASE_LOGIN\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "403",
-                    description = "FORBIDDEN: 요청자의 루틴, 식물이 아님",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorResponse.class),
-                            examples = @ExampleObject(
-                                    value = "{\"code\": \"NOT_YOUR_ROUTINE\", \"title\": \"요청자의 루틴이 아님\", \"message\": \"당신의 루틴이 아니에요\"}"
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "NOT_FOUND: 해당 루틴, 식물 없음",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorResponse.class),
-                            examples = @ExampleObject(
-                                    value = "{\"code\": \"NO_SUCH_ROUTINE\", \"title\": \"해당 루틴 없음\", \"message\": \"해당 루틴을 찾을 수 없어요\"}"
-                            )
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "BAD_REQUEST: 유효성 검사 실패",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorResponse.class),
-                            examples = {
-                                    @ExampleObject(
-                                            value = "{\"code\": \"CONTENT_NOT_BLANK\", \"message\": \"루틴 내용은 비워둘 수 없어요.\"}"
+                                            value = "{\"code\": \"CONTENT_NOT_BLANK\", \"message\": \"목표 내용을 입력해주세요.\"}"
                                     ),
                             }
                     )
             ),
     })
     @PutMapping("/{id}")
-    public ResponseEntity<RoutineResponse> update(@RequestBody @Valid RoutineRequest routineRequest, @AuthenticationPrincipal UserPrincipal user) {
-        return ResponseEntity.ok().body(routineService.update(routineRequest, user.getId()));
+    public ResponseEntity<PlaceDto> update(@RequestBody @Valid PlaceDto placeRequest, @AuthenticationPrincipal UserPrincipal user) {
+        if(!ValidationUtils.isValidForUpdatePlace(placeRequest)) {
+            throw new IllegalArgumentException(ExceptionCode.INVALID_REQUEST_DATA.getCode());
+        }
+
+        return ResponseEntity.ok().body(placeService.update(placeRequest, user.getId()));
     }
 
     @Operation(
-            summary = "루틴 삭제",
-            description = "인증된 사용자의 루틴 삭제",
+            summary = "장소 삭제",
+            description = "인증된 사용자의 장소 삭제",
             responses = {
-                    @ApiResponse(responseCode = "204", description = "Success: 루틴 삭제 성공"),
+                    @ApiResponse(responseCode = "204", description = "NO_CONTENT: 장소 삭제 성공"),
                     @ApiResponse(
                             responseCode = "401",
                             description = "UNAUTHORIZED: PLEASE_LOGIN",
@@ -243,30 +271,29 @@ public class RoutineController {
                     ),
                     @ApiResponse(
                             responseCode = "403",
-                            description = "FORBIDDEN: 요청자의 루틴이 아님",
+                            description = "FORBIDDEN: 요청자의 장소가 아님",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ErrorResponse.class),
                                     examples = @ExampleObject(
-                                            value = "{\"code\": \"NOT_YOUR_ROUTINE\", \"title\": \"요청자의 루틴이 아님\", \"message\": \"당신의 루틴이 아니에요\"}"
+                                            value = "{\"code\": \"NOT_YOUR_PLACE\", \"title\": \"요청자의 장소가 아님\", \"message\": \"당신의 장소가 아니에요\"}"
                                     )
                             )
                     ),
                     @ApiResponse(
                             responseCode = "404",
-                            description = "NOT_FOUND: 해당 루틴 없음",
+                            description = "NOT_FOUND: 해당 장소 없음",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ErrorResponse.class),
                                     examples = @ExampleObject(
-                                            value = "{\"code\": \"NO_SUCH_ROUTINE\", \"title\": \"해당 루틴 없음\", \"message\": \"해당 루틴을 찾을 수 없어요\"}"
+                                            value = "{\"code\": \"NO_SUCH_PLACE\", \"title\": \"해당 장소 없음\", \"message\": \"해당 장소를 찾을 수 없어요\"}"
                                     )
                             )
                     ),
             }
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRoutine(@PathVariable Long id, @AuthenticationPrincipal UserPrincipal user) {
-        routineService.delete(id, user.getId());
-
+    public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal UserPrincipal user) {
+        placeService.delete(id, user.getId());
         return ResponseEntity.noContent().build();
     }
 }

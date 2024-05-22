@@ -95,8 +95,8 @@ public class AuthenticationController {
                             )
                     ),
                     @ApiResponse(
-                            responseCode = "401",
-                            description = "UNAUTHORIZED: 유효하지 않은 리프레쉬 토큰",
+                            responseCode = "403",
+                            description = "FORBIDDEN: 유효하지 않은 리프레쉬 토큰",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ErrorResponse.class),

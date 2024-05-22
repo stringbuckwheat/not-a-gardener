@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import xyz.notagardener.authentication.dto.Info;
 import xyz.notagardener.common.error.ErrorResponse;
 import xyz.notagardener.common.error.code.ExceptionCode;
-import xyz.notagardener.gardener.GardenerUtils;
+import xyz.notagardener.common.ValidationUtils;
 import xyz.notagardener.gardener.dto.Register;
 import xyz.notagardener.gardener.service.GardenerService;
 
@@ -63,11 +63,11 @@ public class RegisterController {
             ),
     })
     @PostMapping("")
-    public Info add(@RequestBody @Valid Register register) {
-        if (!GardenerUtils.isPasswordValid(register.getPassword())) {
+    public ResponseEntity<Info> add(@RequestBody @Valid Register register) {
+        if (!ValidationUtils.isPasswordValid(register.getPassword())) {
             throw new IllegalArgumentException(ExceptionCode.INVALID_PASSWORD.getCode());
         }
 
-        return gardenerService.add(register);
+        return ResponseEntity.ok(gardenerService.add(register));
     }
 }

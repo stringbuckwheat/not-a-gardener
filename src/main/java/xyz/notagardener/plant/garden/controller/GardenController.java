@@ -1,6 +1,7 @@
-package xyz.notagardener.plant.garden;
+package xyz.notagardener.plant.garden.controller;
 
-import xyz.notagardener.common.auth.UserPrincipal;
+import org.springframework.http.ResponseEntity;
+import xyz.notagardener.authentication.model.UserPrincipal;
 import xyz.notagardener.plant.garden.dto.GardenMain;
 import xyz.notagardener.plant.garden.dto.GardenResponse;
 import xyz.notagardener.common.error.ErrorResponse;
@@ -31,7 +32,7 @@ import java.util.List;
 public class GardenController {
     private final GardenService gardenService;
 
-    @Operation(summary = "(인증) 오늘 할 일이 있는 식물, 물 주기 정보가 없는 식물, 나의 루틴",
+    @Operation(summary = "오늘 할 일이 있는 식물, 물 주기 정보가 없는 식물, 나의 루틴",
             description = "메인 페이지 용\n"
                     + "<div style=\"font-size: larger;\">"
                     + "<ul>"
@@ -63,27 +64,27 @@ public class GardenController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Success: 오늘 할 일이 있는 식물, 물 주기 정보가 없는 식물, 나의 루틴",
+                    description = "OK: 오늘 할 일이 있는 식물, 물 주기 정보가 없는 식물, 나의 루틴",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             array = @ArraySchema(schema = @Schema(implementation = GardenMain.class)))
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Unauthorized",
+                    description = "UNAUTHORIZED: PLEASE_LOGIN",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"B000\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
+                                    value = "{\"code\": \"PLEASE_LOGIN\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
                             )
                     )
-            )
+            ),
     })
     @GetMapping("")
-    public GardenMain getGardenMain(@AuthenticationPrincipal UserPrincipal user) {
-        return gardenService.getGarden(user.getId());
+    public ResponseEntity<GardenMain> getGardenMain(@AuthenticationPrincipal UserPrincipal user) {
+        return ResponseEntity.ok().body(gardenService.getGarden(user.getId()));
     }
 
-    @Operation(summary = "(인증) 전체 식물의 계산 정보, 상세 정보 리스트",
+    @Operation(summary = "전체 식물의 계산 정보, 상세 정보 리스트",
             description = "<div style=\"font-size: larger;\">"
                     + "     <ul style=\"font-size: larger;\">"
                     + "         <li>식물 상세 정보</li>"
@@ -109,23 +110,23 @@ public class GardenController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Success: 오늘 할 일이 있는 식물, 물 주기 정보가 없는 식물, 나의 루틴",
+                    description = "OK: 오늘 할 일이 있는 식물, 물 주기 정보가 없는 식물, 나의 루틴",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             array = @ArraySchema(schema = @Schema(implementation = GardenResponse.class)))
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Unauthorized",
+                    description = "UNAUTHORIZED: PLEASE_LOGIN",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"B000\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
+                                    value = "{\"code\": \"PLEASE_LOGIN\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
                             )
                     )
-            )
+            ),
     })
     @GetMapping("/plants")
-    public List<GardenResponse> getAll(@AuthenticationPrincipal UserPrincipal user) {
-        return gardenService.getAll(user.getId());
+    public ResponseEntity<List<GardenResponse>> getAll(@AuthenticationPrincipal UserPrincipal user) {
+        return ResponseEntity.ok().body(gardenService.getAll(user.getId()));
     }
 }

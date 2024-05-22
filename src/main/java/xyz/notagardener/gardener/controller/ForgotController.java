@@ -100,8 +100,8 @@ public class ForgotController {
     @Operation(summary = "비밀번호 재설정", hidden = true)
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
-                    description = "OK: 비밀번호 재설정 완료"
+                    responseCode = "204",
+                    description = "NO_CONTENT: 비밀번호 재설정 완료"
             ),
             @ApiResponse(
                     responseCode = "401",
@@ -115,7 +115,8 @@ public class ForgotController {
             )
     })
     @PutMapping("/{username}/password")
-    public void resetPassword(@RequestBody Login login) {
+    public ResponseEntity<Void> resetPassword(@RequestBody @Valid Login login) {
         forgotService.resetPassword(login);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,10 +1,5 @@
 package xyz.notagardener.gardener.controller;
 
-import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
-import xyz.notagardener.authentication.dto.Login;
-import xyz.notagardener.authentication.model.UserPrincipal;
-import xyz.notagardener.common.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -12,13 +7,18 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import xyz.notagardener.authentication.dto.Login;
+import xyz.notagardener.authentication.model.UserPrincipal;
+import xyz.notagardener.common.ValidationUtils;
+import xyz.notagardener.common.error.ErrorResponse;
 import xyz.notagardener.common.error.code.ExceptionCode;
-import xyz.notagardener.gardener.GardenerUtils;
 import xyz.notagardener.gardener.dto.GardenerDetail;
 import xyz.notagardener.gardener.dto.VerifyResponse;
 import xyz.notagardener.gardener.service.GardenerService;
@@ -31,7 +31,7 @@ import xyz.notagardener.gardener.service.GardenerService;
 public class GardenerController {
     private final GardenerService gardenerService;
 
-    @Operation(summary = "(인증) 본인의 회원 정보")
+    @Operation(summary = "본인의 회원 정보")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -51,11 +51,11 @@ public class GardenerController {
             )
     })
     @GetMapping("/{gardenerId}")
-    public GardenerDetail getOne(@AuthenticationPrincipal UserPrincipal user) {
-        return gardenerService.getOne(user.getId());
+    public ResponseEntity<GardenerDetail> getOne(@AuthenticationPrincipal UserPrincipal user) {
+        return ResponseEntity.ok(gardenerService.getOne(user.getId()));
     }
 
-    @Operation(summary = "(인증) 비밀번호 변경 전 한 번 입력받아서 확인")
+    @Operation(summary = "비밀번호 변경 전 한 번 입력받아서 확인")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -90,7 +90,7 @@ public class GardenerController {
         return ResponseEntity.ok().body(result);
     }
 
-    @Operation(summary = "(인증) 비밀번호 변경")
+    @Operation(summary = "비밀번호 변경")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "204",
@@ -129,7 +129,7 @@ public class GardenerController {
     })
     @PutMapping("/password")
     public ResponseEntity<Void> updatePassword(@RequestBody Login login, @AuthenticationPrincipal UserPrincipal user) {
-        if (!GardenerUtils.isPasswordValid(login.getPassword())) {
+        if (!ValidationUtils.isPasswordValid(login.getPassword())) {
             throw new IllegalArgumentException(ExceptionCode.INVALID_PASSWORD.getCode());
         }
 
@@ -138,7 +138,7 @@ public class GardenerController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "(인증) 회원 정보 변경")
+    @Operation(summary = "회원 정보 변경")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -183,7 +183,7 @@ public class GardenerController {
         return ResponseEntity.ok().body(gardenerDetail1);
     }
 
-    @Operation(summary = "(인증) 회원 탈퇴")
+    @Operation(summary = "회원 탈퇴")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",

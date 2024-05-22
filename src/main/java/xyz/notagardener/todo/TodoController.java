@@ -1,6 +1,9 @@
 package xyz.notagardener.todo;
 
-import xyz.notagardener.common.auth.UserPrincipal;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import xyz.notagardener.authentication.model.UserPrincipal;
 import xyz.notagardener.common.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -24,125 +27,165 @@ import java.util.List;
 public class TodoController {
     private final TodoService todoService;
 
-    @Operation(summary = "(인증) 한 회원의 할일 리스트")
+    @Operation(summary = "한 회원의 할일 리스트")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Success: 한 회원의 할일 리스트",
+                    description = "OK: 한 회원의 할일 리스트",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             array = @ArraySchema(schema = @Schema(implementation = TodoDto.class)))
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Unauthorized",
+                    description = "UNAUTHORIZED: PLEASE_LOGIN",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"B000\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
+                                    value = "{\"code\": \"PLEASE_LOGIN\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
                             )
                     )
-            )
+            ),
     })
     @GetMapping("")
-    public List<TodoDto> getAll(@AuthenticationPrincipal UserPrincipal userPrincipal){
-        return todoService.getAll(userPrincipal.getId());
+    public ResponseEntity<List<TodoDto>> getAll(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return ResponseEntity.ok().body(todoService.getAll(userPrincipal.getId()));
     }
 
-    @Operation(summary = "(인증) 할 일 추가", description = "인증된 사용자의 할 일 추가")
+    @Operation(summary = "할 일 추가", description = "인증된 사용자의 할 일 추가")
     @ApiResponses(value = {
             @ApiResponse(
-                    responseCode = "200",
-                    description = "Success: 할 일 추가 성공",
+                    responseCode = "201",
+                    description = "CREATED: 할 일 추가 성공",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = TodoDto.class)
                     )
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Unauthorized",
+                    description = "UNAUTHORIZED: PLEASE_LOGIN",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"B000\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
+                                    value = "{\"code\": \"PLEASE_LOGIN\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
                             )
                     )
             ),
             @ApiResponse(
-                    responseCode = "404",
-                    description = "No Such Item",
+                    responseCode = "400",
+                    description = "BAD_REQUEST: 유효성 검사 실패",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
-                            examples = @ExampleObject(
-                                    value = "{\"code\": \"B006\", \"title\": \"해당 아이템 없음\", \"message\": \"해당 아이템을 찾을 수 없어요\"}"
-                            )
+                            examples = {
+                                    @ExampleObject(
+                                            value = "{\"code\": \"TASK_NOT_BLANK\", \"message\": \"목표 내용은 비워둘 수 없어요.\"}"
+                                    ),
+                            }
                     )
-            )
+            ),
     })
     @PostMapping("")
-    public TodoDto add(@RequestBody TodoDto todoDto, @AuthenticationPrincipal UserPrincipal user){
-        return todoService.add(todoDto, user.getId());
+    public ResponseEntity<TodoDto> add(@RequestBody @Valid TodoDto todoDto, @AuthenticationPrincipal UserPrincipal user) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(todoService.add(todoDto, user.getId()));
     }
 
-    @Operation(summary = "(인증) 할 일 수정", description = "인증된 사용자의 할 일 수정")
+    @Operation(summary = "할 일 수정", description = "인증된 사용자의 할 일 수정")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Success: 할 일 수정 성공",
+                    description = "OK: 할 일 수정 성공",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = TodoDto.class)
                     )
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Unauthorized",
+                    description = "UNAUTHORIZED: PLEASE_LOGIN",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"B000\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
+                                    value = "{\"code\": \"PLEASE_LOGIN\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "FORBIDDEN: 요청자의 할 일이 아님",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{\"code\": \"NOT_YOUR_TODO\", \"title\": \"요청자의 할 일이 아님\", \"message\": \"당신의 할 일이 아니에요\"}"
                             )
                     )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "No Such Item",
+                    description = "NOT_FOUND: 해당 할 일 없음",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = @ExampleObject(
-                                    value = "{\"code\": \"B006\", \"title\": \"해당 아이템 없음\", \"message\": \"해당 아이템을 찾을 수 없어요\"}"
+                                    value = "{\"code\": \"NO_SUCH_TODO\", \"title\": \"해당 할 일 없음\", \"message\": \"해당 할 일을 찾을 수 없어요\"}"
                             )
                     )
-            )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "BAD_REQUEST: 유효성 검사 실패",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = {
+                                    @ExampleObject(
+                                            value = "{\"code\": \"TASK_NOT_BLANK\", \"message\": \"목표 내용은 비워둘 수 없어요.\"}"
+                                    ),
+                            }
+                    )
+            ),
     })
-    @PutMapping("/{todoId}")
-    public TodoDto update(@RequestBody TodoDto todoDto, @AuthenticationPrincipal UserPrincipal user){
-        return todoService.update(todoDto, user.getId());
+    @PutMapping("/{id}")
+    public ResponseEntity<TodoDto> update(@RequestBody @Valid TodoDto todoDto, @AuthenticationPrincipal UserPrincipal user) {
+        return ResponseEntity.ok().body(todoService.update(todoDto, user.getId()));
     }
 
     @Operation(
-            summary = "(인증) 할 일 삭제",
+            summary = "할 일 삭제",
             description = "인증된 사용자의 할 일 삭제",
             responses = {
-                    @ApiResponse(responseCode = "204", description = "Success: 할 일 삭제 성공"),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    @ApiResponse(responseCode = "204", description = "NO_CONTENT: 할 일 삭제 성공"),
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "UNAUTHORIZED: PLEASE_LOGIN",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ErrorResponse.class),
                                     examples = @ExampleObject(
-                                            value = "{\"code\": \"B000\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
+                                            value = "{\"code\": \"PLEASE_LOGIN\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
                                     )
                             )
                     ),
-                    @ApiResponse(responseCode = "404", description = "Not Found",
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "FORBIDDEN: 요청자의 할 일이 아님",
                             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
                                     schema = @Schema(implementation = ErrorResponse.class),
                                     examples = @ExampleObject(
-                                            value = "{\"code\": \"B006\", \"title\": \"해당 아이템 없음\", \"message\": \"해당 아이템을 찾을 수 없어요\"}"
+                                            value = "{\"code\": \"NOT_YOUR_TODO\", \"title\": \"요청자의 할 일이 아님\", \"message\": \"당신의 할 일이 아니에요\"}"
                                     )
                             )
-                    )
+                    ),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "NOT_FOUND: 해당 할 일 없음",
+                            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = ErrorResponse.class),
+                                    examples = @ExampleObject(
+                                            value = "{\"code\": \"NO_SUCH_TODO\", \"title\": \"해당 할 일 없음\", \"message\": \"해당 할 일을 찾을 수 없어요\"}"
+                                    )
+                            )
+                    ),
             }
     )
-    @DeleteMapping("/{todoId}")
-    public void delete(@PathVariable Long todoId, @AuthenticationPrincipal UserPrincipal user){
-        todoService.delete(todoId, user.getId());
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal UserPrincipal user) {
+        todoService.delete(id, user.getId());
+
+        return ResponseEntity.noContent().build();
     }
 }
