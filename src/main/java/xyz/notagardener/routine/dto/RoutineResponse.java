@@ -41,22 +41,20 @@ public class RoutineResponse {
     @Schema(description = "완료된 상태인지", example = "N")
     private String isCompleted;
 
-    public static RoutineResponse from(Routine routine) {
+    public RoutineResponse(Routine routine) {
         LocalDate today = LocalDateTime.now().toLocalDate();
 
-        return RoutineResponse.builder()
-                .id(routine.getRoutineId())
-                .content(routine.getContent())
-                .cycle(routine.getCycle())
-                .plantId(routine.getPlant().getPlantId())
-                .plantName(routine.getPlant().getName())
-                .lastCompleteDate(routine.getLastCompleteDate())
-                .hasToDoToday(hasToDoToday(routine.getLastCompleteDate(), routine.getCycle()) ? "Y" : "N")
-                .isCompleted(isCompleted(today, routine.getLastCompleteDate()))
-                .build();
+        this.id = routine.getRoutineId();
+        this.content = routine.getContent();
+        this.cycle = routine.getCycle();
+        this.plantId = routine.getPlant().getPlantId();
+        this.plantName = routine.getPlant().getName();
+        this.lastCompleteDate = routine.getLastCompleteDate();
+        this.hasToDoToday = hasToDoToday(routine.getLastCompleteDate(), routine.getCycle()) ? "Y" : "N";
+        this.isCompleted = isCompleted(today, routine.getLastCompleteDate());
     }
 
-    public static String isCompleted(LocalDate today, LocalDate lastCompleteDate) {
+    private String isCompleted(LocalDate today, LocalDate lastCompleteDate) {
         // 한 번도 완료한 적 없는 루틴
         if (lastCompleteDate == null) {
             return "N";
@@ -65,7 +63,7 @@ public class RoutineResponse {
         return lastCompleteDate.compareTo(today) == 0 ? "Y" : "N";
     }
 
-    public static boolean hasToDoToday(LocalDate lastCompleteDate, int cycle) {
+    private boolean hasToDoToday(LocalDate lastCompleteDate, int cycle) {
         // 한번도 완료하지 않은 루틴
         if (lastCompleteDate == null) {
             return true;

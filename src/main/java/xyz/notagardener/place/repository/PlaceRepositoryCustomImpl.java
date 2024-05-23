@@ -1,4 +1,4 @@
-package xyz.notagardener.place;
+package xyz.notagardener.place.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

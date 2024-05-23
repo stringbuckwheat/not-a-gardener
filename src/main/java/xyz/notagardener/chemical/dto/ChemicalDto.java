@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.common.validation.ChemicalTypeConstraints;
 import xyz.notagardener.gardener.Gardener;
 
 @Getter
@@ -23,6 +24,7 @@ public class ChemicalDto {
     private String name;
 
     @NotBlank(message = "약품 분류를 입력해주세요.")
+    @ChemicalTypeConstraints(message = "약품 분류를 확인해주세요.")
     @Schema(description = "약품 분류", example = "기본 NPK 비료")
     private String type;
 
@@ -31,7 +33,6 @@ public class ChemicalDto {
     @Schema(description = "시비 주기", example = "7")
     private Integer period;
 
-    @Builder
     @QueryProjection
     public ChemicalDto(Long id, String name, String type, int period) {
         this.id = id;

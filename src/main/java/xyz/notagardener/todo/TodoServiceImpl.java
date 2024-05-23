@@ -3,12 +3,13 @@ package xyz.notagardener.todo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.Gardener;
-import xyz.notagardener.gardener.gardener.GardenerRepository;
+import xyz.notagardener.gardener.repository.GardenerRepository;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -17,10 +18,11 @@ public class TodoServiceImpl implements TodoService {
     private final GardenerRepository gardenerRepository;
 
     private Todo getToDoByToDoIdAndGardenerId(Long todoId, Long gardenerId) {
-        Todo todo = todoRepository.findById(todoId).orElseThrow(NoSuchElementException::new);
+        Todo todo = todoRepository.findById(todoId)
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_SUCH_TODO));
 
         if (!todo.getGardener().getGardenerId().equals(gardenerId)) {
-            throw new UnauthorizedAccessException("TODO", gardenerId);
+            throw new UnauthorizedAccessException(ExceptionCode.NOT_YOUR_TODO);
         }
 
         return todo;

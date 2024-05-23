@@ -1,7 +1,8 @@
-package xyz.notagardener.goal;
+package xyz.notagardener.goal.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.Repository;
+import xyz.notagardener.goal.Goal;
 
 import java.util.List;
 import java.util.Optional;

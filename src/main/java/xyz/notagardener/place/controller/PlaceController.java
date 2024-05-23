@@ -19,9 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import xyz.notagardener.authentication.model.UserPrincipal;
-import xyz.notagardener.common.ValidationUtils;
 import xyz.notagardener.common.error.ErrorResponse;
-import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.place.dto.PlaceCard;
 import xyz.notagardener.place.dto.PlaceDto;
 import xyz.notagardener.place.service.PlaceService;
@@ -186,10 +184,6 @@ public class PlaceController {
     })
     @PostMapping("")
     public ResponseEntity<PlaceCard> add(@RequestBody @Valid PlaceDto placeRequest, @AuthenticationPrincipal UserPrincipal user) {
-        if(!ValidationUtils.isValidForSavePlace(placeRequest.getOption(), placeRequest.getArtificialLight())) {
-            throw new IllegalArgumentException(ExceptionCode.INVALID_REQUEST_DATA.getCode());
-        }
-
         return ResponseEntity.status(HttpStatus.CREATED).body(placeService.add(user.getId(), placeRequest));
     }
 
@@ -247,10 +241,6 @@ public class PlaceController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<PlaceDto> update(@RequestBody @Valid PlaceDto placeRequest, @AuthenticationPrincipal UserPrincipal user) {
-        if(!ValidationUtils.isValidForUpdatePlace(placeRequest)) {
-            throw new IllegalArgumentException(ExceptionCode.INVALID_REQUEST_DATA.getCode());
-        }
-
         return ResponseEntity.ok().body(placeService.update(placeRequest, user.getId()));
     }
 

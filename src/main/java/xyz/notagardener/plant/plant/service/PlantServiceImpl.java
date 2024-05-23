@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.place.Place;
 import xyz.notagardener.place.dto.ModifyPlace;
@@ -17,7 +18,6 @@ import xyz.notagardener.plant.plant.dto.PlantRequest;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,10 +30,10 @@ public class PlantServiceImpl implements PlantService {
 
     private Plant getPlantByPlantIdAndGardenerId(Long plantId, Long gardenerId) {
         Plant plant = plantRepository.findByPlantId(plantId)
-                .orElseThrow(() -> new NoSuchElementException(ExceptionCode.NO_SUCH_ITEM.getCode()));
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_SUCH_PLANT));
 
         if (!plant.getGardener().getGardenerId().equals(gardenerId)) {
-            throw new UnauthorizedAccessException("PLANT", gardenerId);
+            throw new UnauthorizedAccessException(ExceptionCode.NOT_YOUR_PLANT);
         }
 
         return plant;
@@ -43,7 +43,7 @@ public class PlantServiceImpl implements PlantService {
     @Transactional(readOnly = true)
     public List<PlantResponse> getAll(Long gardenerId) {
         return plantRepository.findByGardener_GardenerIdOrderByPlantIdDesc(gardenerId).stream()
-                .map(PlantResponse::from)
+                .map(PlantResponse::new)
                 .collect(Collectors.toList());
     }
 
@@ -51,36 +51,37 @@ public class PlantServiceImpl implements PlantService {
     @Transactional(readOnly = true)
     public PlantResponse getDetail(Long plantId, Long gardenerId) {
         return plantRepository.findPlantWithLatestWateringDate(plantId, gardenerId)
-                .orElseThrow(() -> new NoSuchElementException(ExceptionCode.NO_SUCH_ITEM.getCode()));
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_SUCH_PLANT));
     }
 
     @Override
     @Transactional
     public GardenResponse add(Long gardenerId, PlantRequest plantRequest) {
         Plant plant = plantCommandService.save(gardenerId, plantRequest);
-        return gardenResponseMapper.getGardenResponse(PlantResponse.from(plant), gardenerId);
+        return gardenResponseMapper.getGardenResponse(new PlantResponse(plant), gardenerId);
     }
 
     @Override
     @Transactional
     public GardenResponse update(Long gardenerId, PlantRequest plantRequest) {
         Plant plant = plantCommandService.update(plantRequest, gardenerId);
-        return gardenResponseMapper.getGardenResponse(PlantResponse.from(plant), gardenerId);
+        return gardenResponseMapper.getGardenResponse(new PlantResponse(plant), gardenerId);
     }
 
     @Override
     @Transactional
     public PlaceDto updatePlace(ModifyPlace modifyPlace, Long gardenerId) {
         Place place = plantCommandService.updatePlantPlace(modifyPlace, gardenerId);
-        return PlaceDto.from(place);
+        return new PlaceDto(place);
     }
 
     @Override
     public void delete(Long plantId, Long gardenerId) {
-        Plant plant = plantRepository.findByPlantId(plantId).orElseThrow(NoSuchElementException::new);
+        Plant plant = plantRepository.findByPlantId(plantId)
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_SUCH_PLANT));
 
         if (!plant.getGardener().getGardenerId().equals(gardenerId)) {
-            throw new UnauthorizedAccessException("PLANT", gardenerId);
+            throw new UnauthorizedAccessException(ExceptionCode.NOT_YOUR_PLANT);
         }
 
         plantRepository.delete(plant);

@@ -1,4 +1,4 @@
-package xyz.notagardener.place;
+package xyz.notagardener.place.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

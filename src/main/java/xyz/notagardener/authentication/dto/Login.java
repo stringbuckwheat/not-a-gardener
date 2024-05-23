@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import xyz.notagardener.common.validation.PasswordConstraints;
 
 /**
  * 로그인 요청
@@ -21,5 +22,6 @@ public class Login {
 
     @Schema(description = "비밀번호", example = "nowgardener")
     @NotBlank(message = "비밀번호는 필수 입력값입니다.")
+    @PasswordConstraints
     private String password;
 }

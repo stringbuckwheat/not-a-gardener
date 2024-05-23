@@ -1,10 +1,14 @@
 package xyz.notagardener.common.error.exception;
 
-public class ExpiredRefreshTokenException extends RuntimeException {
-    private String message;
+import lombok.Getter;
+import xyz.notagardener.common.error.code.ExceptionCode;
 
-    public ExpiredRefreshTokenException() {
-        super();
-        this.message = "로그인 시간이 만료되었습니다";
+@Getter
+public class ExpiredRefreshTokenException extends RuntimeException {
+    private ExceptionCode code;
+
+    public ExpiredRefreshTokenException(ExceptionCode code) {
+        super(code.getDescription());
+        this.code = code;
     }
 }

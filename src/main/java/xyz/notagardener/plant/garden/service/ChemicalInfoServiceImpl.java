@@ -3,8 +3,8 @@ package xyz.notagardener.plant.garden.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.notagardener.watering.dto.ChemicalUsage;
-import xyz.notagardener.watering.repository.WateringRepository;
+import xyz.notagardener.watering.watering.dto.ChemicalUsage;
+import xyz.notagardener.watering.watering.repository.WateringRepository;
 
 import java.util.List;
 

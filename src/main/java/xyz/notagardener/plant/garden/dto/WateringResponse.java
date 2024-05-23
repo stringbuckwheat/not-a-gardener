@@ -1,16 +1,19 @@
-package xyz.notagardener.domain.watering.dto;
+package xyz.notagardener.plant.garden.dto;
 
-import xyz.notagardener.domain.chemical.Chemical;
-import xyz.notagardener.domain.watering.Watering;
+import lombok.ToString;
+import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.watering.Watering;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import xyz.notagardener.watering.watering.dto.WateringMessage;
 
 import java.time.LocalDate;
 
 @AllArgsConstructor
 @Builder
 @Getter
+@ToString
 public class WateringResponse {
     private Long id;
     private String plantName;
@@ -35,7 +38,6 @@ public class WateringResponse {
                 .build();
     }
 
-    // TODO test 메소드
     public static WateringResponse from(LocalDate latestWateringDate) {
         return WateringResponse.builder().wateringDate(latestWateringDate).build();
     }

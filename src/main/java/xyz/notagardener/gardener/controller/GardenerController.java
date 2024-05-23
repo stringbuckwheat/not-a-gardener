@@ -16,9 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import xyz.notagardener.authentication.dto.Login;
 import xyz.notagardener.authentication.model.UserPrincipal;
-import xyz.notagardener.common.ValidationUtils;
 import xyz.notagardener.common.error.ErrorResponse;
-import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.gardener.dto.GardenerDetail;
 import xyz.notagardener.gardener.dto.VerifyResponse;
 import xyz.notagardener.gardener.service.GardenerService;
@@ -129,10 +127,6 @@ public class GardenerController {
     })
     @PutMapping("/password")
     public ResponseEntity<Void> updatePassword(@RequestBody Login login, @AuthenticationPrincipal UserPrincipal user) {
-        if (!ValidationUtils.isPasswordValid(login.getPassword())) {
-            throw new IllegalArgumentException(ExceptionCode.INVALID_PASSWORD.getCode());
-        }
-
         gardenerService.updatePassword(user.getId(), login);
 
         return ResponseEntity.noContent().build();

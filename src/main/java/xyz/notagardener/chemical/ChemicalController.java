@@ -18,13 +18,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import xyz.notagardener.authentication.model.UserPrincipal;
 import xyz.notagardener.chemical.dto.ChemicalDetail;
 import xyz.notagardener.chemical.dto.ChemicalDto;
 import xyz.notagardener.chemical.dto.WateringResponseInChemical;
 import xyz.notagardener.chemical.service.ChemicalService;
-import xyz.notagardener.authentication.model.UserPrincipal;
 import xyz.notagardener.common.error.ErrorResponse;
-import xyz.notagardener.common.error.code.ExceptionCode;
 
 import java.util.List;
 
@@ -171,11 +170,6 @@ public class ChemicalController {
     })
     @PostMapping("")
     public ResponseEntity<ChemicalDto> add(@AuthenticationPrincipal UserPrincipal user, @RequestBody @Valid ChemicalDto chemicalRequest) {
-        // 유효성 검사
-        if (!ChemicalType.isValid(chemicalRequest.getType())) {
-            throw new IllegalArgumentException(ExceptionCode.INVALID_CHEMICAL_TYPE.getCode());
-        }
-
         ChemicalDto chemicalDto = chemicalService.add(user.getId(), chemicalRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(chemicalDto);
     }

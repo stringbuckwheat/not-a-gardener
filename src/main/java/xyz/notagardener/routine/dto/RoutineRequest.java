@@ -1,9 +1,9 @@
 package xyz.notagardener.routine.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.*;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.routine.Routine;
@@ -12,31 +12,20 @@ import java.time.LocalDate;
 
 @Getter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class RoutineRequest {
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "루틴 내용은 비워둘 수 없어요")
     private String content;
 
-    @NotBlank
-    private int cycle;
+    @NotNull(message = "루틴 반복 주기는 비워둘 수 없어요")
+    @Positive(message = "루틴 반복 주기는 양수여야해요")
+    private Integer cycle;
 
     private Long plantId;
-
-    public boolean isValidForSave() {
-        return content != null
-                && content.length() > 0
-                && content.length() <= 50
-                && cycle > 0
-                && plantId != null
-                && plantId > 0;
-    }
-
-    public boolean isValidForUpdate() {
-        return isValidForSave() && id != null && id > 0;
-    }
-
     public Routine toEntityWith(Plant plant, Gardener gardener) {
         return Routine.builder()
                 .routineId(id)

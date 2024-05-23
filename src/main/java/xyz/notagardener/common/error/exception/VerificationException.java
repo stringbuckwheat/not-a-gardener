@@ -1,7 +1,14 @@
 package xyz.notagardener.common.error.exception;
 
+import lombok.Getter;
+import xyz.notagardener.common.error.code.ExceptionCode;
+
+@Getter
 public class VerificationException extends RuntimeException {
-    public VerificationException(String message) {
-        super(message);
+    private ExceptionCode code;
+
+    public VerificationException(ExceptionCode code) {
+        super(code.getDescription());
+        this.code = code;
     }
 }

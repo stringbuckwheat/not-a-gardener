@@ -1,6 +1,8 @@
 package xyz.notagardener.gardener.dto;
 
 import jakarta.validation.constraints.Size;
+import xyz.notagardener.common.validation.PasswordConstraints;
+import xyz.notagardener.common.validation.UsernameConstraints;
 import xyz.notagardener.gardener.Gardener;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -18,12 +20,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Register {
     @NotBlank(message = "아이디는 비워둘 수 없어요")
+    @UsernameConstraints
     private String username;
 
     @Email(message = "이메일 형식을 지켜주세요")
     private String email;
 
     @NotBlank(message = "비밀번호는 비워둘 수 없어요")
+    @PasswordConstraints
     private String password;
 
     @NotBlank(message = "이름은 비워둘 수 없어요")

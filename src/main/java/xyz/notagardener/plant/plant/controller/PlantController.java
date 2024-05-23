@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,12 +19,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import xyz.notagardener.authentication.model.UserPrincipal;
 import xyz.notagardener.common.error.ErrorResponse;
-import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.place.dto.ModifyPlace;
 import xyz.notagardener.place.dto.PlaceDto;
 import xyz.notagardener.plant.garden.dto.GardenResponse;
 import xyz.notagardener.plant.garden.dto.PlantResponse;
-import xyz.notagardener.plant.plant.dto.MediumType;
 import xyz.notagardener.plant.plant.dto.PlantRequest;
 import xyz.notagardener.plant.plant.service.PlantService;
 
@@ -101,7 +100,7 @@ public class PlantController {
             ),
     })
     @GetMapping("/{id}")
-    public ResponseEntity<PlantResponse> getDetail(@PathVariable Long id, @AuthenticationPrincipal UserPrincipal user) {
+    public ResponseEntity<PlantResponse> getDetail(@PathVariable @Min(1) Long id, @AuthenticationPrincipal UserPrincipal user) {
         return ResponseEntity.ok().body(plantService.getDetail(id, user.getId()));
     }
 
@@ -159,10 +158,6 @@ public class PlantController {
     })
     @PostMapping("")
     public ResponseEntity<GardenResponse> add(@AuthenticationPrincipal UserPrincipal user, @RequestBody @Valid PlantRequest plantRequest) {
-        if(!MediumType.isValid(plantRequest.getMedium())){
-            throw new IllegalArgumentException(ExceptionCode.INVALID_REQUEST_DATA.getCode());
-        }
-
         return ResponseEntity.status(HttpStatus.CREATED).body(plantService.add(user.getId(), plantRequest));
     }
 
@@ -221,10 +216,6 @@ public class PlantController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<GardenResponse> update(@RequestBody @Valid PlantRequest plantRequest, @AuthenticationPrincipal UserPrincipal user) {
-        if(!MediumType.isValid(plantRequest.getMedium())){
-            throw new IllegalArgumentException(ExceptionCode.INVALID_REQUEST_DATA.getCode());
-        }
-
         return ResponseEntity.ok().body(plantService.update(user.getId(), plantRequest));
     }
 
@@ -326,7 +317,7 @@ public class PlantController {
             }
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal UserPrincipal user) {
+    public ResponseEntity<Void> delete(@PathVariable @Min(value = 1, message = "식물 정보를 확인해주세요") Long id, @AuthenticationPrincipal UserPrincipal user) {
         plantService.delete(id, user.getId());
 
         return ResponseEntity.noContent().build();

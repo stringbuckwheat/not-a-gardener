@@ -36,7 +36,7 @@ public class PlantWateringServiceImpl implements PlantWateringService {
 
         List<WateringForOnePlant> waterings = getAll(wateringRequest.getPlantId(), pageable);
 
-        return PlantWateringResponse.from(PlantResponse.from(afterWatering.getPlant()), afterWatering.getWateringMessage(), waterings);
+        return PlantWateringResponse.from(new PlantResponse(afterWatering.getPlant()), afterWatering.getWateringMessage(), waterings);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class PlantWateringServiceImpl implements PlantWateringService {
         WateringMessage wateringMsg = afterWatering.getWateringMessage();
         List<WateringForOnePlant> waterings = getAll(plant.getPlantId(), pageable);
 
-        return PlantWateringResponse.from(PlantResponse.from(plant), wateringMsg, waterings);
+        return PlantWateringResponse.from(new PlantResponse(plant), wateringMsg, waterings);
     }
 
     @Override

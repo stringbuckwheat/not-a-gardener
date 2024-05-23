@@ -81,20 +81,15 @@ public class Plant {
         this.recentWateringPeriod = averageWateringPeriod;
     }
 
-    public void updateConditionDate() {
-        this.conditionDate = LocalDate.now();
+    public void updateConditionDate(LocalDate date) {
+        this.conditionDate = date;
     }
 
-    public void updatePostponeDate() {
-        this.postponeDate = LocalDate.now();
+    public void updatePostponeDate(LocalDate date) {
+        this.postponeDate = date;
     }
 
     public void initEarlyWateringPeriod(int period) {
         this.earlyWateringPeriod = period;
-    }
-
-    public void initConditionDateAndPostponeDate() {
-        this.conditionDate = null;
-        this.postponeDate = null;
     }
 }

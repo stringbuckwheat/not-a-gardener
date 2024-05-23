@@ -32,14 +32,12 @@ public class PlantInPlace {
     @Schema(description = "등록일", example = "2024-02-01")
     private LocalDate createDate;
 
-    public static PlantInPlace from(Plant plant) {
-        return PlantInPlace.builder()
-                .id(plant.getPlantId())
-                .name(plant.getName())
-                .species(plant.getSpecies())
-                .recentWateringPeriod(plant.getRecentWateringPeriod())
-                .medium(plant.getMedium())
-                .createDate(LocalDate.from(plant.getCreateDate()))
-                .build();
+    public PlantInPlace(Plant plant) {
+        this.id = plant.getPlantId();
+        this.name = plant.getName();
+        this.species = plant.getSpecies();
+        this.recentWateringPeriod = plant.getRecentWateringPeriod();
+        this.medium = plant.getMedium();
+        this.createDate = LocalDate.from(plant.getCreateDate());
     }
 }

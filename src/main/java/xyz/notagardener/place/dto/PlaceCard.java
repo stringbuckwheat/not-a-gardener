@@ -35,16 +35,12 @@ public class PlaceCard {
     @Schema(description = "등록일", example = "2024-02-01")
     private LocalDateTime createDate;
 
-    public static PlaceCard from(Place place) {
-        int plantListSize = place.getPlants() != null ? place.getPlants().size() : 0;
-
-        return PlaceCard.builder()
-                .id(place.getPlaceId())
-                .name(place.getName())
-                .artificialLight(place.getArtificialLight())
-                .option(place.getOption())
-                .plantListSize(plantListSize)
-                .createDate(place.getCreateDate())
-                .build();
+    public PlaceCard(Place place) {
+        this.id = place.getPlaceId();
+        this.name = place.getName();
+        this.artificialLight = place.getArtificialLight();
+        this.option = place.getOption();
+        this.createDate = place.getCreateDate();
+        this.plantListSize = place.getPlants() != null ? place.getPlants().size() : 0;
     }
 }

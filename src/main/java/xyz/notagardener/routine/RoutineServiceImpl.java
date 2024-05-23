@@ -5,9 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.Gardener;
-import xyz.notagardener.gardener.gardener.GardenerRepository;
+import xyz.notagardener.gardener.repository.GardenerRepository;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
 import xyz.notagardener.routine.dto.RoutineComplete;
@@ -16,7 +17,6 @@ import xyz.notagardener.routine.dto.RoutineRequest;
 import xyz.notagardener.routine.dto.RoutineResponse;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @Slf4j
@@ -28,10 +28,10 @@ public class RoutineServiceImpl implements RoutineService {
 
     private Plant getPlantByPlantIdAndGardenerId(Long plantId, Long gardenerId) {
         Plant plant = plantRepository.findById(plantId)
-                .orElseThrow(() -> new NoSuchElementException(ExceptionCode.NO_SUCH_ITEM.getCode()));
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_SUCH_PLANT));
 
         if (!plant.getGardener().getGardenerId().equals(gardenerId)) {
-            throw new UnauthorizedAccessException("PLANT", gardenerId);
+            throw new UnauthorizedAccessException(ExceptionCode.NOT_YOUR_PLANT);
         }
 
         return plant;
@@ -39,10 +39,10 @@ public class RoutineServiceImpl implements RoutineService {
 
     private Routine getRoutineByRoutineIdAndGardenerId(Long routineId, Long gardenerId) {
         Routine routine = routineRepository.findByRoutineId(routineId)
-                .orElseThrow(() -> new NoSuchElementException(ExceptionCode.NO_SUCH_ITEM.getCode()));
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_SUCH_ROUTINE));
 
         if (!routine.getGardener().getGardenerId().equals(gardenerId)) {
-            throw new UnauthorizedAccessException("ROUTINE", gardenerId);
+            throw new UnauthorizedAccessException(ExceptionCode.NOT_YOUR_ROUTINE);
         }
 
         return routine;
@@ -53,7 +53,7 @@ public class RoutineServiceImpl implements RoutineService {
     public RoutineMain getAll(Long gardenerId) {
         List<RoutineResponse> routines = routineRepository.findByGardener_GardenerId(gardenerId)
                 .stream()
-                .map(RoutineResponse::from)
+                .map(RoutineResponse::new)
                 .toList();
 
         List<RoutineResponse> toDoList = routines.stream()
@@ -70,29 +70,21 @@ public class RoutineServiceImpl implements RoutineService {
     @Override
     @Transactional
     public RoutineResponse add(RoutineRequest routineRequest, Long gardenerId) {
-        if (!routineRequest.isValidForSave()) {
-            throw new IllegalArgumentException(ExceptionCode.INVALID_REQUEST_DATA.getCode());
-        }
-
         Gardener gardener = gardenerRepository.getReferenceById(gardenerId);
         Plant plant = getPlantByPlantIdAndGardenerId(routineRequest.getPlantId(), gardenerId);
         Routine routine = routineRepository.save(routineRequest.toEntityWith(plant, gardener));
 
-        return RoutineResponse.from(routine);
+        return new RoutineResponse(routine);
     }
 
     @Override
     @Transactional
     public RoutineResponse update(RoutineRequest routineRequest, Long gardenerId) {
-        if (!routineRequest.isValidForUpdate()) {
-            throw new IllegalArgumentException(ExceptionCode.INVALID_REQUEST_DATA.getCode());
-        }
-
         Plant plant = getPlantByPlantIdAndGardenerId(routineRequest.getPlantId(), gardenerId);
         Routine routine = getRoutineByRoutineIdAndGardenerId(routineRequest.getId(), gardenerId);
         routine.update(routineRequest.getContent(), routineRequest.getCycle(), plant);
 
-        return RoutineResponse.from(routine);
+        return new RoutineResponse(routine);
     }
 
     @Override
@@ -101,7 +93,7 @@ public class RoutineServiceImpl implements RoutineService {
         Routine routine = getRoutineByRoutineIdAndGardenerId(routineComplete.getId(), gardenerId);
         routine.complete(routineComplete.getLastCompleteDate());
 
-        return RoutineResponse.from(routine);
+        return new RoutineResponse(routine);
     }
 
     @Override

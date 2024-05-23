@@ -1,17 +1,15 @@
 package xyz.notagardener.chemical.dto;
 
-import xyz.notagardener.watering.Watering;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
+import xyz.notagardener.watering.Watering;
 
 import java.time.LocalDate;
 
-@AllArgsConstructor
-@Builder
 @Getter
+@NoArgsConstructor
 @ToString
 public class WateringResponseInChemical {
     @Schema(description = "물 주기 id", example = "1")

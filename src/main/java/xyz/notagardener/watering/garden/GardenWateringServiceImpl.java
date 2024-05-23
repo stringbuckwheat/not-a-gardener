@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.garden.dto.GardenResponse;
@@ -21,7 +22,6 @@ import xyz.notagardener.watering.watering.service.WateringCommandService;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.NoSuchElementException;
 
 @Service
 @Slf4j
@@ -35,13 +35,14 @@ public class GardenWateringServiceImpl implements GardenWateringService {
     @Transactional
     public GardenWateringResponse add(Long gardenerId, WateringRequest wateringRequest) {
         AfterWatering afterWatering = wateringCommandService.add(wateringRequest, gardenerId);
-        GardenResponse gardenResponse = gardenResponseMapper.getGardenResponse(PlantResponse.from(afterWatering.getPlant()), gardenerId);
+        GardenResponse gardenResponse = gardenResponseMapper.getGardenResponse(new PlantResponse(afterWatering.getPlant()), gardenerId);
 
         return new GardenWateringResponse(gardenResponse, afterWatering.getWateringMessage());
     }
 
     private Plant getPlantByPlantIdAndGardenerId(Long plantId, Long gardenerId) {
-        Plant plant = plantRepository.findByPlantId(plantId).orElseThrow(NoSuchElementException::new);
+        Plant plant = plantRepository.findByPlantId(plantId)
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_SUCH_PLANT));
 
         if(!plant.getGardener().getGardenerId().equals(gardenerId)) {
             throw new UnauthorizedAccessException(ExceptionCode.NOT_YOUR_PLANT);
@@ -57,18 +58,17 @@ public class GardenWateringServiceImpl implements GardenWateringService {
 
         // 한 번도 물 준 적 없는 경우
         if (plant.getWaterings().size() == 0) {
-            plant.updateConditionDate();
+            plant.updateConditionDate(LocalDate.now());
             return new WateringMessage(AfterWateringCode.NO_RECORD.getCode(), 0);
         }
 
         // averageWateringPeriod 안 마른 날짜만큼 업데이트
         // 마지막으로 물 준 날짜와 오늘과의 날짜 사이를 계산함
         LocalDate lastDrinkingDay = plant.getWaterings().get(0).getWateringDate();
-        System.out.println(lastDrinkingDay);
         int period = (int) Duration.between(lastDrinkingDay.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays();
 
         // 오늘 한정 garden에 안 뜨게 해야함 => conditionDate 오늘 날짜 추가
-        plant.updateConditionDate();
+        plant.updateConditionDate(LocalDate.now());
 
         if (period + 1 == plant.getRecentWateringPeriod()) {
             System.out.println("NO CHANGE");
@@ -89,7 +89,7 @@ public class GardenWateringServiceImpl implements GardenWateringService {
         Plant plant = getPlantByPlantIdAndGardenerId(plantId, gardenerId);
         // 미룰래요(그냥 귀찮아서 물주기 미룬 경우) == averageWateringPeriod 업데이트 안함!!
         // postponeDate를 업데이트함
-        plant.updatePostponeDate();
+        plant.updatePostponeDate(LocalDate.now());
 
         // waitingList에서는 오늘 하루만 없애줌
         return WateringCode.YOU_ARE_LAZY.getCode();

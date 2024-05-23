@@ -1,18 +1,20 @@
 package xyz.notagardener.common.error;
 
-import xyz.notagardener.common.error.code.ExceptionCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import xyz.notagardener.common.error.code.ExceptionCode;
 
 
 @Getter
 @AllArgsConstructor
 public class ErrorResponse {
     private String code;
-    private String title;
+    private String description;
     private String message;
 
-    public static ErrorResponse from(ExceptionCode code) {
-        return new ErrorResponse(code.getCode(), code.getTitle(), code.getMessage());
+    public ErrorResponse (ExceptionCode code) {
+        this.code = code.getCode();
+        this.description = code.getDescription();
+        this.message = code.getMessage();
     }
 }

@@ -1,8 +1,7 @@
 package xyz.notagardener.plant.garden.dto;
 
 import lombok.*;
-import xyz.notagardener.watering.code.WateringCode;
-import xyz.notagardener.watering.dto.WateringResponse;
+import xyz.notagardener.plant.garden.service.WateringCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.Duration;
@@ -14,17 +13,17 @@ import java.time.LocalDate;
 @ToString
 @EqualsAndHashCode
 public class GardenDetail {
-    @Schema(description = "가장 최근 물 준 날짜", example = "2023-01-28")
+    @Schema(description = "가장 최근 물 준 날짜", example = "2024-05-22")
     private WateringResponse latestWateringDate;
 
     @Schema(description = "키운지 며칠 지났는지", example = "999")
     private String anniversary;
 
-    @Schema(description = "물 준지 며칠 지났는지", example = "2")
+    @Schema(description = "물 준지 며칠 지났는지, 음수 반환 시 물주기 놓친 날짜", example = "2")
     private int wateringDDay;
 
-    @Schema(description = "물 주기 코드", example = "2")
-    private int wateringCode;
+    @Schema(description = "물 주기 코드", example = "YOU_ARE_LAZY")
+    private String wateringCode;
 
     @Schema(description = "(오늘 비료를 줄 날이라면) 비료 정보")
     ChemicalInfo chemicalInfo;
@@ -40,7 +39,7 @@ public class GardenDetail {
                 .build();
     }
 
-    public static GardenDetail noRecord(LocalDate birthday) {
+    public static GardenDetail notEnoughRecord(LocalDate birthday) {
         return GardenDetail.builder()
                 .latestWateringDate(null)
                 .anniversary(getAnniversary(birthday))

@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 import xyz.notagardener.plant.garden.dto.PlantResponse;
-import xyz.notagardener.watering.dto.WateringForOnePlant;
+import xyz.notagardener.watering.plant.dto.WateringForOnePlant;
 
 import java.util.List;
 

@@ -1,4 +1,6 @@
-package xyz.notagardener.goal;
+package xyz.notagardener.goal.service;
+
+import xyz.notagardener.goal.dto.GoalDto;
 
 import java.util.List;
 

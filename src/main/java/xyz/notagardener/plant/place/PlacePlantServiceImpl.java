@@ -19,6 +19,6 @@ public class PlacePlantServiceImpl implements PlacePlantService {
     @Transactional
     public PlantInPlace addPlantInPlace(Long gardenerId, PlantRequest plantRequest) {
         Plant plant = plantCommandService.save(gardenerId, plantRequest);
-        return PlantInPlace.from(plant);
+        return new PlantInPlace(plant);
     }
 }

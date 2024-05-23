@@ -1,4 +1,4 @@
-package xyz.notagardener.place;
+package xyz.notagardener.place.repository;
 
 import org.springframework.data.domain.Pageable;
 import xyz.notagardener.plant.Plant;

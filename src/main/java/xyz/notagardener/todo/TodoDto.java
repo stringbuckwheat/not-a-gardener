@@ -1,5 +1,6 @@
 package xyz.notagardener.todo;
 
+import jakarta.validation.constraints.Size;
 import xyz.notagardener.gardener.Gardener;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -16,7 +17,8 @@ public class TodoDto {
     @Schema(description = "할일 id", example = "1")
     private Long todoId;
 
-    @NotBlank
+    @NotBlank(message = "할 일 내용은 비워둘 수 없어요")
+    @Size(min = 1, max = 100)
     @Schema(description = "할일 내용", example = "온시디움 분갈이")
     private String task;
 

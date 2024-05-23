@@ -1,11 +1,5 @@
 package xyz.notagardener.goal.controller;
 
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import xyz.notagardener.authentication.model.UserPrincipal;
-import xyz.notagardener.common.ValidationUtils;
-import xyz.notagardener.common.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,12 +8,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.authentication.model.UserPrincipal;
+import xyz.notagardener.common.error.ErrorResponse;
 import xyz.notagardener.goal.dto.GoalDto;
 import xyz.notagardener.goal.service.GoalService;
 
@@ -112,10 +110,6 @@ public class GoalController {
     })
     @PostMapping("")
     public ResponseEntity<GoalDto> add(@RequestBody @Valid GoalDto goalRequest, @AuthenticationPrincipal UserPrincipal user) {
-        if(!ValidationUtils.isYesOrNo(goalRequest.getComplete())) {
-            throw new IllegalArgumentException(ExceptionCode.INVALID_REQUEST_DATA.getCode());
-        }
-
         return ResponseEntity.status(HttpStatus.CREATED).body(goalService.add(user.getId(), goalRequest));
     }
 
@@ -173,10 +167,6 @@ public class GoalController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<GoalDto> modify(@RequestBody @Valid GoalDto goalRequest, @AuthenticationPrincipal UserPrincipal user) {
-        if(!ValidationUtils.isYesOrNo(goalRequest.getComplete())) {
-            throw new IllegalArgumentException(ExceptionCode.INVALID_REQUEST_DATA.getCode());
-        }
-
         return ResponseEntity.ok().body(goalService.update(user.getId(), goalRequest));
     }
 

@@ -18,11 +18,10 @@ import java.time.LocalDateTime;
 @ToString
 public class GardenerDetail {
     @Schema(description = "회원 id", example = "1")
-    @NotNull
+    @NotNull(message = "요청 데이터를 확인해주세요")
     private Long id;
 
     @Schema(description = "아이디", example = "perfectgardener")
-    @NotBlank
     private String username;
 
     @Schema(description = "이메일", example = "perfectgardener@gardener.com")
