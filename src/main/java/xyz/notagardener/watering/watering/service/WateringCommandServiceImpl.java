@@ -8,6 +8,7 @@ import xyz.notagardener.chemical.Chemical;
 import xyz.notagardener.chemical.repository.ChemicalRepository;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.AlreadyWateredException;
+import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
@@ -19,10 +20,10 @@ import xyz.notagardener.watering.watering.dto.WateringRequest;
 import xyz.notagardener.watering.watering.repository.WateringRepository;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -40,16 +41,14 @@ public class WateringCommandServiceImpl implements WateringCommandService {
 
     private void validateWatering(WateringRequest wateringRequest) {
         if (wateringRepository.existByWateringDateAndPlantId(wateringRequest.getWateringDate(), wateringRequest.getPlantId())) {
-            throw new AlreadyWateredException();
+            throw new AlreadyWateredException(ExceptionCode.ALREADY_WATERED);
         }
     }
 
     private Chemical getChemical(Long chemicalId, Long gardnerId) {
-        if (chemicalId == null) return null;
+        Chemical chemical = chemicalRepository.findById(chemicalId).orElse(null);
 
-        Chemical chemical = chemicalRepository.findById(chemicalId).orElseThrow(NoSuchElementException::new);
-
-        if(chemical != null && !chemical.getGardener().getGardenerId().equals(gardnerId)) {
+        if (chemical != null && !chemical.getGardener().getGardenerId().equals(gardnerId)) {
             throw new UnauthorizedAccessException(ExceptionCode.NOT_YOUR_CHEMICAL);
         }
 
@@ -57,13 +56,18 @@ public class WateringCommandServiceImpl implements WateringCommandService {
     }
 
     private Plant getPlant(Long plantId, Long gardenerId) {
-        Plant plant = plantRepository.findByPlantId(plantId).orElseThrow(NoSuchElementException::new);
+        Plant plant = plantRepository.findByPlantId(plantId)
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_SUCH_PLANT));
 
-        if(!plant.getGardener().getGardenerId().equals(gardenerId)) {
+        if (!plant.getGardener().getGardenerId().equals(gardenerId)) {
             throw new UnauthorizedAccessException(ExceptionCode.NOT_YOUR_PLANT);
         }
 
         return plant;
+    }
+
+    private boolean isEqualOrAfterDate(LocalDate after, LocalDate before) {
+        return before != null && (after.isEqual(before) || after.isAfter(before));
     }
 
     @Override
@@ -75,7 +79,15 @@ public class WateringCommandServiceImpl implements WateringCommandService {
         Chemical chemical = getChemical(wateringRequest.getChemicalId(), gardenerId);
         Plant plant = getPlant(wateringRequest.getPlantId(), gardenerId);
 
-        plant.initConditionDateAndPostponeDate(); // 물 안 마른 날, 물주기 미룬 날 초기화
+        // 물 준 날이 물 안 마른 날, 물주기 미룬 날 보다 미래면 초기화
+        if (isEqualOrAfterDate(wateringRequest.getWateringDate(), plant.getConditionDate())) {
+            plant.updateConditionDate(null);
+        }
+
+        if (isEqualOrAfterDate(wateringRequest.getWateringDate(), plant.getPostponeDate())) {
+            plant.updatePostponeDate(null);
+        }
+
         plant.getWaterings().add(wateringRequest.toEntityWithPlantAndChemical(plant, chemical));
         plantRepository.save(plant);
 
@@ -111,13 +123,14 @@ public class WateringCommandServiceImpl implements WateringCommandService {
         }
     }
 
-    private WateringMessage calculateWateringPeriod(List<Watering> waterings){
+    private WateringMessage calculateWateringPeriod(List<Watering> waterings) {
         if (waterings.isEmpty()) return new WateringMessage(AfterWateringCode.NO_RECORD.getCode(), 0);
 
         int prevPeriod = waterings.get(0).getPlant().getRecentWateringPeriod();
 
         if (waterings.size() == 1) return new WateringMessage(AfterWateringCode.FIRST_WATERING.getCode(), prevPeriod);
-        else if (waterings.size() == 2) return new WateringMessage(AfterWateringCode.SECOND_WATERING.getCode(), prevPeriod);
+        else if (waterings.size() == 2)
+            return new WateringMessage(AfterWateringCode.SECOND_WATERING.getCode(), prevPeriod);
 
         LocalDateTime latestWateringDate = waterings.get(0).getWateringDate().atStartOfDay();
         LocalDateTime prevWateringDate = waterings.get(1).getWateringDate().atStartOfDay();
@@ -132,15 +145,26 @@ public class WateringCommandServiceImpl implements WateringCommandService {
         return new WateringMessage(afterWateringCode, period);
     }
 
+    private Watering getWatering(Long wateringId, Long plantId, Long gardenerId) {
+        // 기존 watering 엔티티
+        Watering watering = wateringRepository.findByWateringIdAndPlant_PlantId(wateringId, plantId)
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_SUCH_WATERING));
+
+        if (!watering.getPlant().getGardener().getGardenerId().equals(gardenerId)) {
+            throw new UnauthorizedAccessException(ExceptionCode.NOT_YOUR_WATERING);
+        }
+
+        return watering;
+    }
+
     @Override
     @Transactional
     public AfterWatering update(WateringRequest wateringRequest, Long gardenerId) {
+        Watering watering = getWatering(wateringRequest.getId(), wateringRequest.getPlantId(), gardenerId); // 기존 물주기 기록
+
         Plant plant = getPlant(wateringRequest.getPlantId(), gardenerId);
         Chemical chemical = getChemical(wateringRequest.getChemicalId(), gardenerId);
 
-        // 기존 watering 엔티티
-        Watering watering = wateringRepository.findByWateringIdAndPlant_Gardener_GardenerId(wateringRequest.getId(), gardenerId)
-                .orElseThrow(NoSuchElementException::new);
         // watering 수정
         wateringRepository.save(watering.update(wateringRequest.getWateringDate(), plant, chemical));
 
@@ -154,7 +178,8 @@ public class WateringCommandServiceImpl implements WateringCommandService {
     @Transactional
     public WateringMessage deleteById(Long wateringId, Long plantId, Long gardenerId) {
         Watering watering = wateringRepository.findByWateringIdAndPlant_Gardener_GardenerId(wateringId, gardenerId)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_SUCH_WATERING));
+
         wateringRepository.delete(watering);
 
         Plant plant = getPlant(plantId, gardenerId);

@@ -11,7 +11,7 @@ import xyz.notagardener.plant.Plant;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "watering")
+@Table(name = "watering", uniqueConstraints = {@UniqueConstraint(columnNames = {"plant_id", "watering_date"})})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -23,12 +23,14 @@ public class Watering {
     private Long wateringId;
 
     @NotNull
+    @Column(name = "watering_date")
     private LocalDate wateringDate; // 물 준 날짜
 
     // FK
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "plant_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
     private Plant plant;
 
     @ManyToOne(fetch = FetchType.LAZY)
