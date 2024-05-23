@@ -22,4 +22,8 @@ public class GardenMain {
 
     @Schema(description = "루틴 리스트")
     private List<RoutineResponse> routineList;
+
+    public static GardenMain noPlant() {
+        return new GardenMain(false, null, null, null);
+    }
 }

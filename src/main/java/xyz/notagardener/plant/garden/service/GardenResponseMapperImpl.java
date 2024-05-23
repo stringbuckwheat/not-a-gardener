@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import xyz.notagardener.plant.garden.dto.*;
-import xyz.notagardener.watering.code.WateringCode;
-import xyz.notagardener.watering.dto.ChemicalUsage;
-import xyz.notagardener.watering.dto.WateringResponse;
+import xyz.notagardener.watering.watering.dto.ChemicalUsage;
+import xyz.notagardener.plant.garden.dto.WateringResponse;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -19,9 +18,8 @@ public class GardenResponseMapperImpl implements GardenResponseMapper {
     private final ChemicalInfoService chemicalInfoService;
 
     @Override
-    public GardenResponse getGardenResponse(RawGarden rawGarden, Long gardenerId) {
-        PlantResponse plantResponse = (PlantResponse) rawGarden;
-        GardenDetail gardenDetail = getGardenDetail(rawGarden, gardenerId);
+    public GardenResponse getGardenResponse(PlantResponse plantResponse, Long gardenerId) {
+        GardenDetail gardenDetail = getGardenDetail(plantResponse, gardenerId);
         return new GardenResponse(plantResponse, gardenDetail);
     }
 
@@ -29,34 +27,34 @@ public class GardenResponseMapperImpl implements GardenResponseMapper {
         return postponeDate != null && LocalDate.now().isEqual(postponeDate);
     }
 
-    private GardenDetail getGardenDetail(RawGarden rawGarden, Long gardenerId) {
-        LocalDate lastDrinkingDay = rawGarden.getLatestWateringDate();
-        int wateringPeriod = rawGarden.getRecentWateringPeriod();
+    private GardenDetail getGardenDetail(PlantResponse plantResponse, Long gardenerId) {
+        LocalDate lastDrinkingDay = plantResponse.getLatestWateringDate();
+        int wateringPeriod = plantResponse.getRecentWateringPeriod();
 
-        if (isPostponeDay(rawGarden.getPostponeDate())) {
+        if (isPostponeDay(plantResponse.getPostponeDate())) {
             // 오늘 물주기를 미뤘는지
-            return GardenDetail.lazy(lastDrinkingDay, rawGarden.getBirthday());
+            return GardenDetail.lazy(lastDrinkingDay, plantResponse.getBirthday());
         }
 
         if (lastDrinkingDay == null) {
             // 물주기 정보 부족
-            return GardenDetail.noRecord(rawGarden.getBirthday());
+            return GardenDetail.notEnoughRecord(plantResponse.getBirthday());
         }
 
         // 물 준지 며칠이나 지났는지
         int wateringDDay = getWateringDDay(wateringPeriod, lastDrinkingDay);
-        int wateringCode = getWateringCode(wateringPeriod, wateringDDay); // 코드 계산
+        String wateringCode = getWateringCode(wateringPeriod, wateringDDay); // 코드 계산
 
         // chemicalInfo: 맹물을 줄지 비료/약품 희석액을 줄지, 줘야한다면 어떤 비료를 줘야하는지
         ChemicalInfo chemicalInfo = null;
 
-        if (wateringCode == WateringCode.THIRSTY.getCode() || wateringCode == WateringCode.CHECK.getCode()) {
-            chemicalInfo = getChemicalInfo(rawGarden.getPlantId(), gardenerId);
+        if (WateringCode.THIRSTY.getCode().equals(wateringCode) || WateringCode.CHECK.getCode().equals(wateringCode)) {
+            chemicalInfo = getChemicalInfo(plantResponse.getId(), gardenerId);
         }
 
         return GardenDetail.builder()
                 .latestWateringDate(WateringResponse.from(lastDrinkingDay))
-                .anniversary(GardenDetail.getAnniversary(rawGarden.getBirthday()))
+                .anniversary(GardenDetail.getAnniversary(plantResponse.getBirthday()))
                 .wateringDDay(wateringDDay)
                 .wateringCode(wateringCode)
                 .chemicalInfo(chemicalInfo)
@@ -69,7 +67,7 @@ public class GardenResponseMapperImpl implements GardenResponseMapper {
         return recentWateringPeriod - period;
     }
 
-    private int getWateringCode(int recentWateringPeriod, int wateringDDay) {
+    private String getWateringCode(int recentWateringPeriod, int wateringDDay) {
         if (recentWateringPeriod == wateringDDay) {
             return WateringCode.WATERED_TODAY.getCode(); // 오늘 물 줌
         } else if (recentWateringPeriod == 0) {
@@ -81,7 +79,7 @@ public class GardenResponseMapperImpl implements GardenResponseMapper {
         } else if (wateringDDay >= 2) {
             return WateringCode.LEAVE_HER_ALONE.getCode(); // 물주기까지 이틀 이상 남음, 놔두세요
         } else {
-            return wateringDDay; // 음수가 나왔으면 물주기 놓침, 며칠 늦었는지 알려줌
+            return WateringCode.LATE_WATERING.getCode();
         }
     }
 

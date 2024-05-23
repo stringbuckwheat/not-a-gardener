@@ -6,15 +6,17 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import xyz.notagardener.plant.Plant;
+import xyz.notagardener.watering.Watering;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @ToString(of = {"plantId", "name", "latestWateringDate", "totalWatering"})
 @EqualsAndHashCode
-public class PlantResponse implements RawGarden {
-    private Long plantId;
+public class PlantResponse {
+    private Long id;
     private String name;
     private String species;
     private int recentWateringPeriod;
@@ -23,7 +25,7 @@ public class PlantResponse implements RawGarden {
     private LocalDate birthday;
     private LocalDate conditionDate;
     private LocalDate postponeDate;
-    private LocalDateTime createDate;
+    private LocalDate createDate;
     private Long placeId;
     private String placeName;
     private Long wateringId;
@@ -49,7 +51,7 @@ public class PlantResponse implements RawGarden {
             LocalDate latestWateringDate,
             Long totalWatering
     ) {
-        this.plantId = plantId;
+        this.id = plantId;
         this.name = name;
         this.species = species;
         this.recentWateringPeriod = recentWateringPeriod;
@@ -58,7 +60,7 @@ public class PlantResponse implements RawGarden {
         this.birthday = birthday;
         this.conditionDate = conditionDate;
         this.postponeDate = postponeDate;
-        this.createDate = createDate;
+        this.createDate = LocalDate.from(createDate);
         this.placeId = placeId;
         this.placeName = placeName;
         this.wateringId = wateringId;
@@ -66,43 +68,48 @@ public class PlantResponse implements RawGarden {
         this.totalWatering = totalWatering;
     }
 
-    public static PlantResponse from(Plant plant) {
-        return PlantResponse.builder()
-                .plantId(plant.getPlantId())
-                .name(plant.getName())
-                .species(plant.getSpecies())
-                .recentWateringPeriod(plant.getRecentWateringPeriod())
-                .earlyWateringPeriod(plant.getEarlyWateringPeriod())
-                .medium(plant.getMedium())
-                .placeId(plant.getPlace().getPlaceId())
-                .placeName(plant.getPlace().getName())
-                .createDate(plant.getCreateDate())
-                .birthday(plant.getBirthday())
-                .postponeDate(plant.getPostponeDate())
-                .conditionDate(plant.getConditionDate())
-                .wateringId(plant.getWaterings().size() > 0 ? plant.getWaterings().get(0).getWateringId() : null)
-                .latestWateringDate(plant.getWaterings().size() > 0 ? plant.getWaterings().get(0).getWateringDate() : null)
-                .totalWatering((long) plant.getWaterings().size())
-                .build();
+    // 첫 번째 생성자
+    public PlantResponse(Plant plant) {
+        this.id = plant.getPlantId();
+        this.name = plant.getName();
+        this.species = plant.getSpecies();
+        this.recentWateringPeriod = plant.getRecentWateringPeriod();
+        this.earlyWateringPeriod = plant.getEarlyWateringPeriod();
+        this.medium = plant.getMedium();
+        this.placeId = plant.getPlace().getPlaceId();
+        this.placeName = plant.getPlace().getName();
+        this.createDate = LocalDate.from(plant.getCreateDate());
+        this.birthday = plant.getBirthday();
+        this.postponeDate = plant.getPostponeDate();
+        this.conditionDate = plant.getConditionDate();
+
+        List<Watering> waterings = plant.getWaterings();
+
+        if (waterings != null && !waterings.isEmpty()) {
+            Watering latestWatering = waterings.get(0);
+            this.wateringId = latestWatering.getWateringId();
+            this.latestWateringDate = latestWatering.getWateringDate();
+            this.totalWatering = (long) waterings.size();
+        }
     }
 
-    public static PlantResponse from(Plant plant, Long totalWatering, LocalDate latestWateringDate) {
-        return PlantResponse.builder()
-                .plantId(plant.getPlantId())
-                .name(plant.getName())
-                .species(plant.getSpecies())
-                .recentWateringPeriod(plant.getRecentWateringPeriod())
-                .earlyWateringPeriod(plant.getEarlyWateringPeriod())
-                .medium(plant.getMedium())
-                .placeId(plant.getPlace().getPlaceId())
-                .placeName(plant.getPlace().getName())
-                .createDate(plant.getCreateDate())
-                .birthday(plant.getBirthday())
-                .postponeDate(plant.getPostponeDate())
-                .conditionDate(plant.getConditionDate())
-                .totalWatering(totalWatering)
-                .latestWateringDate(latestWateringDate)
-                .build();
+    // 두 번째 생성자
+    public PlantResponse(Plant plant, Long totalWatering, LocalDate latestWateringDate) {
+        this.id = plant.getPlantId();
+        this.name = plant.getName();
+        this.species = plant.getSpecies();
+        this.recentWateringPeriod = plant.getRecentWateringPeriod();
+        this.earlyWateringPeriod = plant.getEarlyWateringPeriod();
+        this.medium = plant.getMedium();
+        this.placeId = plant.getPlace().getPlaceId();
+        this.placeName = plant.getPlace().getName();
+        this.createDate = LocalDate.from(plant.getCreateDate());
+        this.birthday = plant.getBirthday();
+        this.postponeDate = plant.getPostponeDate();
+        this.conditionDate = plant.getConditionDate();
+
+        this.totalWatering = totalWatering;
+        this.latestWateringDate = latestWateringDate;
     }
 }
 

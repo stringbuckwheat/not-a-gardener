@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import xyz.notagardener.plant.Plant;
-import xyz.notagardener.plant.garden.dto.RawGarden;
+import xyz.notagardener.plant.garden.dto.PlantResponse;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,48 +21,31 @@ public interface PlantRepository extends Repository<Plant, Long>, PlantRepositor
 
     List<Plant> findByGardener_GardenerIdOrderByPlantIdDesc(Long gardenerId);
 
-    // 메인페이지 todolist 용 메소드
-    @Query(value = """
-            SELECT
-                p.plant_id plantId,
-                p.name name,
-                p.species,
-                p.recent_watering_period recentWateringPeriod,
-                p.early_watering_period earlyWateringPeriod,
-                p.medium,
-                p.birthday,
-                p.condition_date conditionDate,
-                p.create_date createDate,
-                max(watering_date) latestWateringDate,
-                p.postpone_date postponeDate,
-                pl.place_id placeId,
-                pl.name placeName
-            FROM
-                plant p
-            INNER JOIN
-                place pl 
-            ON 
-                p.place_id = pl.place_id
-            INNER JOIN
-                watering w 
-            ON 
-                p.plant_id = w.plant_id
-            WHERE
-                p.gardener_id = :gardenerId
-                AND (DATE_FORMAT(p.condition_date, '%Y-%m-%d') != CURDATE() OR condition_date IS NULL)
-                AND p.recent_watering_period != 0
-            GROUP BY
-                p.plant_id
-            HAVING
-                MAX(watering_date) != CURDATE()
-                AND DATEDIFF(CURDATE(), MAX(watering_date)) >= p.recent_watering_period - 1
-            ORDER BY
-                p.recent_watering_period DESC
-            """, nativeQuery = true)
-    List<RawGarden> findGardenByGardenerId(@Param("gardenerId") Long gardenerId);
+    @Query("""
+            SELECT 
+                new xyz.notagardener.plant.garden.dto.PlantResponse(
+                    p.plantId, p.name, p.species, p.recentWateringPeriod, p.earlyWateringPeriod, 
+                    p.medium, p.birthday, p.conditionDate, p.postponeDate, p.createDate, 
+                    pl.placeId, pl.name placeName, w.wateringId, 
+                    max(w.wateringDate) latestWateringDate, 
+                    count(w) totalWatering
+                ) 
+            FROM Plant p 
+            JOIN p.place pl 
+            JOIN p.waterings w 
+            WHERE p.gardener.gardenerId = :gardenerId 
+            AND (DATE_FORMAT(p.conditionDate, '%Y-%m-%d') != CURRENT_DATE OR p.conditionDate IS NULL) 
+            AND p.recentWateringPeriod != 0 
+            GROUP BY p.plantId 
+            HAVING max(w.wateringDate) != CURRENT_DATE 
+            AND DATEDIFF(CURRENT_DATE, max(w.wateringDate)) >= p.recentWateringPeriod - 1 
+            ORDER BY p.recentWateringPeriod DESC
+            """)
+    List<PlantResponse> findGardenByGardenerId(@Param("gardenerId") Long gardenerId);
 
     Plant save(Plant plant);
 
     void deleteById(Long plantId);
+
     void delete(Plant plant);
 }
