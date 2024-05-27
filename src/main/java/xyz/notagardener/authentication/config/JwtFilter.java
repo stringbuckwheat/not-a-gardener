@@ -48,7 +48,6 @@ public class JwtFilter extends OncePerRequestFilter {
             if (accessToken.validate()) {
                 Authentication authentication = tokenProvider.getAuthentication(accessToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                log.debug("인증 성공");
             }
         }
 

@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 @Getter
 public enum ExceptionCode {
     PLEASE_LOGIN("PLEASE_LOGIN", "인증이 필요한 엔드포인트", "로그인 해주세요"), // B000
-    HAS_SAME_USERNAME("HAS_SAME_USERNAME", "이이디 중복", ""),
+    HAS_SAME_USERNAME("HAS_SAME_USERNAME", "아이디 중복", ""),
     ACCESS_TOKEN_EXPIRED("ACCESS_TOKEN_EXPIRED", "액세스 토큰 만료", "액세스 토큰 만료"), // B001
     REFRESH_TOKEN_EXPIRED("REFRESH_TOKEN_EXPIRED", "리프레쉬 토큰 만료", "로그인 시간이 만료되었습니다"), // B002
     WRONG_ACCOUNT("WRONG_ACCOUNT", "아이디/비밀번호 오류", "아이디 또는 비밀번호를 다시 확인해주세요."), // B003
@@ -40,8 +40,8 @@ public enum ExceptionCode {
     NOT_YOUR_WATERING("NOT_YOUR_WATERING", "요청자의 물 주기 기록이 아님", "당신의 물 주기 기록이 아니에요"),
 
     INVALID_REQUEST_DATA("INVALID_REQUEST_DATA", "유효하지 않은 데이터", "입력 값을 확인해주세요"), // BE014
-    NO_IDENTIFICATION_INFO_IN_REDIS("NO_IDENTIFICATION_INFO_IN_REDIS", "레디스에 해당 확인코드 정보 없음", "본인 확인 코드를 확인해주세요"), // BE015
-    NOT_YOUR_IDENTIFICATION_CODE("NOT_YOUR_IDENTIFICATION_CODE", "본인 확인 코드 불일치", "본인 확인 코드를 확인해주세요"), // BE016
+    NO_IDENTIFICATION_INFO_IN_REDIS("NO_IDENTIFICATION_INFO_IN_REDIS", "레디스에 해당 확인코드 정보 없음", "본인 확인 코드가 일치하지 않아요"), // BE015
+    NOT_YOUR_IDENTIFICATION_CODE("NOT_YOUR_IDENTIFICATION_CODE", "본인 확인 코드 불일치", "본인 확인 코드가 일치하지 않아요"), // BE016
     UNEXPECTED_ERROR_OCCUR("UNEXPECTED_ERROR_OCCUR", "알 수 없는 오류 발생", "알 수 없는 오류 발생"),
 
     // 유효성 검사 관련

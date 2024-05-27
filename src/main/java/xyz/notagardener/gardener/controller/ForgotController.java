@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ import xyz.notagardener.gardener.service.ForgotService;
 @RequestMapping("/api/forgot")
 @Tag(name = "Forgots", description = "아이디/비밀번호 찾기")
 @Hidden
+@Slf4j
 public class ForgotController {
     private final ForgotService forgotService;
 
@@ -92,6 +94,7 @@ public class ForgotController {
                     )
             )
     })
+    @PostMapping("")
     public ResponseEntity<VerifyResponse> verifyIdentificationCode(@RequestBody @Valid VerifyRequest verifyRequest) {
         VerifyResponse result = forgotService.verifyIdentificationCode(verifyRequest);
         return ResponseEntity.ok().body(result);
