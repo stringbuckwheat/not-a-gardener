@@ -7,6 +7,7 @@ import getPlaceList from 'src/api/service/getPlaceList';
 import WateringList from './watering/WateringList';
 import getData from "../../../api/backend-api/common/getData";
 import {useDispatch} from "react-redux";
+import ExceptionCode from "../../../utils/code/exceptionCode";
 
 /**
  * 식물 상세 정보 페이지 (해당 식물의 물주기 기록 포함)
@@ -28,9 +29,9 @@ const PlantDetail = () => {
     try {
       const res = await getData(`/plant/${plantId}`);
       setPlant(res);
-      dispatch({type: 'setTotalWaterings', payload: res.totalWaterings});
+      dispatch({type: 'setTotalWaterings', payload: res.totalWatering});
     } catch (e) {
-      if (e.code === "B006") {
+      if (e.code === ExceptionCode.NO_SUCH_PLANT) {
         alert("해당 식물을 찾을 수 없어요");
         navigate("/plant");
       }

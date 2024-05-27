@@ -1,5 +1,5 @@
 import {ConfigProvider, Layout,} from 'antd';
-import React, {Suspense, useState} from "react";
+import React, {Suspense} from "react";
 import Sidebar from "./Sidebar";
 import Loading from "../data/Loading";
 import {Navigate, Route, Routes,} from "react-router-dom";
@@ -31,7 +31,6 @@ const GardenLayout = () => {
     >
       <Layout>
         <Sidebar/>
-
         <Layout>
           <GardenHeader/>
           <Content

@@ -7,6 +7,7 @@ import PlaceTableForPlant from 'src/pages/place/plant/PlaceTableForPlant';
 import DeletePlaceModal from "../../components/modal/DeletePlaceModal";
 import getData from "../../api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";
+import ExceptionCode from "../../utils/code/exceptionCode";
 
 /**
  * 장소 상세정보
@@ -36,7 +37,7 @@ const PlaceDetail = () => {
       setPlace({...res});
       setLoading(false);
     } catch (e) {
-      if (e.code === "B006") {
+      if (e.code === ExceptionCode.NO_SUCH_PLACE) {
         alert("해당 장소를 찾을 수 없어요");
         navigate("/place");
       }

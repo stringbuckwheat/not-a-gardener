@@ -19,6 +19,7 @@ const LoginForm = () => {
 
   // 입력 값 확인 및 submit
   const inputCheck = (e) => {
+    console.log("input check");
     e.preventDefault(); // reload 막기
 
     if (login.username === "") {
@@ -36,18 +37,18 @@ const LoginForm = () => {
   }
 
   const submit = async () => {
-    console.log("submit click");
+
     try {
       const res = await axios.post(`${process.env.REACT_APP_API_URL}/login`, login);
       console.log("res", res);
 
       await setLocalStorage(res.data);
-      dispatch({type: 'setName', payload: res.data.simpleInfo.name});
+      dispatch({type: 'setName', payload: res.data.info.name});
 
       // garden 페이지로 이동
       navigate('/', {replace: true});
     } catch (error) {
-      console.log("error", error);
+      console.log("error", error.response.data);
       setMsg(error.response.data.message);
     }
   }

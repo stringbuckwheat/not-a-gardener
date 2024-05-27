@@ -6,6 +6,7 @@ import Empty from "../../../components/empty/Empty";
 import {useNavigate} from "react-router-dom";
 import GButton from "../../../components/button/GButton";
 import ToDoCard from "./todo-card/ToDoCard";
+import Style from "../../../components/card/ItemCard.module.scss";
 
 /**
  *
@@ -16,6 +17,7 @@ import ToDoCard from "./todo-card/ToDoCard";
  */
 const GardenTodoList = ({openNotification}) => {
   const todoList = useSelector(state => state.gardens.todoList);
+  console.log("todoList", todoList);
   const navigate = useNavigate();
 
   const animation = {
@@ -33,7 +35,7 @@ const GardenTodoList = ({openNotification}) => {
       <Row>
         {
           trailSprings.map((spring, index) => (
-            <Col md={6} sm={8} xs={24} style={{marginBottom: "1rem"}}
+            <Col xs={24} sm={12} md={8} lg={6} style={{marginBottom: "1rem"}}
                  key={`${todoList[index].gardenDetail.wateringCode}-${index}`}>
               <animated.div style={{...spring}}>
                 <ToDoCard

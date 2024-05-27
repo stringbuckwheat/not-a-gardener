@@ -32,8 +32,6 @@ const GardenMain = () => {
     });
   };
 
-  // todo booped 고치기
-
   return (
     <div style={{marginTop: "1.5rem"}}>
       {contextHolder}

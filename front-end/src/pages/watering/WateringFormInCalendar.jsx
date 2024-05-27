@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import GButton from "../../components/button/GButton";
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 import postData from "../../api/backend-api/common/postData";
+import ExceptionCode from "../../utils/code/exceptionCode";
 
 // TODO WateringForm과 같음
 const WateringFormInCalendar = ({
@@ -38,7 +39,7 @@ const WateringFormInCalendar = ({
       onAdd(res);
       setIsWateringFormOpened(false);
     } catch (e) {
-      if (e.code == "B005") {
+      if (e.code == ExceptionCode.ALREADY_WATERED) {
         alert(e.message);
       }
     }

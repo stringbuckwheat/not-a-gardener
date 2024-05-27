@@ -5,9 +5,7 @@
  */
 const setLocalStorage = async (res) => {
   console.log("login 이후 gardener response", res);
-
-  const info = res.simpleInfo;
-  const token = res.token;
+  const {info, token} = res;
 
   // token
   localStorage.setItem("accessToken", token.accessToken);

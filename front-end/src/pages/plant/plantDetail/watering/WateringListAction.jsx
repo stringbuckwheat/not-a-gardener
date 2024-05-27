@@ -1,7 +1,6 @@
 import {Popconfirm, Space, Button} from "antd";
 import {CloseOutlined, DeleteOutlined, EditOutlined} from "@ant-design/icons";
 
-// TODO plantEditableCellAction과 같음
 const WateringListAction = ({record, editable, updateWatering, editingKey, cancel, edit, deleteWatering}) => {
   return editable ? (
     <Space className="justify-content-end">

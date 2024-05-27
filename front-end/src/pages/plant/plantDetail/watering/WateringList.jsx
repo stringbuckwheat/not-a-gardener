@@ -1,4 +1,4 @@
-import getWateringNotificationMsg from "src/utils/function/getWateringNotificationMsg";
+import getAfterWateringMsg from "src/utils/function/getAfterWateringMsg";
 import HandleWateringForm from "./HandleWateringForm";
 import deleteData from "src/api/backend-api/common/deleteData";
 import {useEffect, useState} from "react";
@@ -52,7 +52,7 @@ const WateringList = ({plantId, setPlant}) => {
   const [waterings, setWaterings] = useState([]);
   const [page, setPage] = useState(1);
 
-  const [editWatering, setEditWatering] = useState({});
+  const [editWatering, setEditWatering] = useState({plantId, chemicalId: 0});
   const [chemicalList, setChemicalList] = useState([]);
   const [isWateringFormOpen, setIsWateringFormOpen] = useState(false);
 
@@ -102,7 +102,7 @@ const WateringList = ({plantId, setPlant}) => {
     res.plant && setPlant(res.plant);
 
     if (res.wateringMsg) {
-      const msg = getWateringNotificationMsg(res.wateringMsg.afterWateringCode);
+      const msg = getAfterWateringMsg(res.wateringMsg.afterWateringCode);
       openNotification(msg);
     }
   }

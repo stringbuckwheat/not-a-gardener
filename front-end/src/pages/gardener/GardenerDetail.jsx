@@ -98,6 +98,7 @@ const GardenerDetail = ({gardener, setGardener}) => {
             onClickEdit={onClickEdit}
             isDisabled={isDisabled}
             isValidEmail={isValidEmail}
+            onSubmit={onSubmit}
           />}
         />
       </Col>

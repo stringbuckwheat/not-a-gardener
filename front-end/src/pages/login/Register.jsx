@@ -23,6 +23,7 @@ const Register = () => {
 
   // 상태
   const [usernameCheck, setUsernameCheck] = useState('rejected'); // success, error, validating
+  const [usernameCheckMsg, setUsernameCheckMsg] = useState("");
   const [repeatPw, setRepeatPw] = useState(false);
 
   // input 값의 변동이 있을 시 객체 데이터 setting
@@ -49,8 +50,12 @@ const Register = () => {
 
     setUsernameCheck('validating')
 
-    const res = await axios.get(`${process.env.REACT_APP_API_URL}/register/username/${username}`);
-    setUsernameCheck(res.data == "" ? "success" : "error");
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/register/username/${username}`);
+      setUsernameCheck("success");
+    } catch (e) {
+      setUsernameCheck("error");
+    }
   }
 
   const navigate = useNavigate();

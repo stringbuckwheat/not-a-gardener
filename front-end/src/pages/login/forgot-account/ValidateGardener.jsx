@@ -15,13 +15,12 @@ import {Card} from "antd";
  */
 
 const style = {minHeight: "40vh", height: "100%", justifyContent: "center", alignItems: "center", display: "flex",}
-const ValidateGardener = ({icon, title, setEmail, setGardenerList, successContent}) => {
+const ValidateGardener = ({icon, title, setGardenerList, successContent}) => {
   return (
     <>
       <div style={{fontSize: "2rem"}}>{icon} {title}</div>
       <Card style={style}>
         <VerifyAccountContent
-          setEmail={setEmail}
           setGardenerList={setGardenerList}
           successContent={successContent}/>
       </Card>

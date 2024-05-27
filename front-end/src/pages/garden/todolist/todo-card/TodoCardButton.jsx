@@ -3,7 +3,7 @@ import {Col, Row} from "antd";
 import {CaretRightOutlined, StepBackwardOutlined, StepForwardOutlined} from "@ant-design/icons";
 import {useDispatch} from "react-redux";
 import updateData from "../../../../api/backend-api/common/updateData";
-import getWateringNotificationMsg from "../../../../utils/function/getWateringNotificationMsg";
+import getAfterWateringMsg from "../../../../utils/function/getAfterWateringMsg";
 import {useState} from "react";
 
 /**
@@ -47,7 +47,7 @@ const TodoCardButton = ({
 
     // 물주기가 늘어났어요 메시지
     if (res) {
-      msg = getWateringNotificationMsg(res.afterWateringCode);
+      msg = getAfterWateringMsg(res.afterWateringCode);
     }
 
     openNotification(msg);

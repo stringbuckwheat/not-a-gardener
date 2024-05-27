@@ -22,14 +22,11 @@ const ForgotAccount = () => {
 
   // 찾을 회원정보 저장(username, password)
   const [forgot, setForgot] = useState("");
-  // 유저가 입력한 이메일
-  const [email, setEmail] = useState("");
   // 해당 이메일로 가입한 아이디 목록
   const [gardenerList, setGardenerList] = useState([]);
 
   // 공통 props
   let props = {
-    setEmail,
     setGardenerList
   }
 
@@ -39,14 +36,14 @@ const ForgotAccount = () => {
       ...props,
       icon: <UserOutlined style={{fontSize: "2rem"}}/>,
       title: "아이디 찾기",
-      successContent: <NotifyUsername email={email} gardenerList={gardenerList}/>
+      successContent: <NotifyUsername gardenerList={gardenerList}/>
     }
   } else if (forgot === "password") {
     props = {
       ...props,
       icon: <LockOutlined style={{fontSize: "2rem"}}/>,
       title: "비밀번호 찾기",
-      successContent: <SelectAccount email={email} gardenerList={gardenerList}/>
+      successContent: <SelectAccount gardenerList={gardenerList}/>
     }
   }
 

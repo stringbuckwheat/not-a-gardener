@@ -1,5 +1,6 @@
 import axios from "axios";
 import logOut from "../utils/function/logout";
+import ExceptionCode from "../utils/code/exceptionCode";
 
 // axios 인스턴스 생성
 const authAxios = axios.create({
@@ -54,7 +55,7 @@ authAxios.interceptors.response.use(
 
     const errorCode = error.response.data.code;
 
-    if (errorCode === "B001") {
+    if (errorCode === ExceptionCode.ACCESS_TOKEN_EXPIRED) {
       const originRequest = error?.config;
 
       // token 재발급
@@ -71,12 +72,16 @@ authAxios.interceptors.response.use(
         sent: true
       })
 
-    } else if (errorCode == "B002") { // Refresh Token 만료
+    } else if (errorCode == ExceptionCode.REFRESH_TOKEN_EXPIRED) { // Refresh Token 만료
       alert(error.response.data.message);
       logOut();
-    } else if (errorCode == "B009" || errorCode == "B011" || errorCode == "B010") {
+    } else if (errorCode == ExceptionCode.NO_TOKEN_IN_REDIS
+      || errorCode == ExceptionCode.INVALID_REFRESH_TOKEN
+      || errorCode == ExceptionCode.INVALID_JWT_TOKEN) {
       alert(errorCode + " : " + error.response.data.message);
       logOut();
+    } else {
+      alert(errorCode + " : " + error.response.data.message);
     }
 
     return Promise.reject(error.response.data);

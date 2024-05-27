@@ -19,6 +19,7 @@ const Gardener = () => {
 
   const onMountGardener = async () => {
     const data = await getData(`/gardener/${gardenerId}`);
+    console.log("onMountGardener", data);
     setGardener(data);
     setLoading(false);
   }

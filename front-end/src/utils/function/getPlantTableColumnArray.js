@@ -24,18 +24,21 @@ const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey
         dataIndex: 'name',
         key: 'name',
         editable: true,
-        render: (_, record) => (
-          <>
-            <Link
-              to={`/plant/${record.id}`}
-              className="no-text-decoration">
-              {record.name}
-            </Link>
-            {
-              record.species ? <p><small>({record.species})</small></p> : <></>
-            }
-          </>
-        )
+        render: (_, record) => {
+          console.log("record", record);
+          return (
+            <>
+              <Link
+                to={`/plant/${record.id}`}
+                className="no-text-decoration">
+                {record.name}
+              </Link>
+              {
+                record.species ? <p><small>({record.species})</small></p> : <></>
+              }
+            </>
+          )
+        }
         ,
         sorter: (a, b) => {
           if (a.name > b.name) return 1;
@@ -65,7 +68,7 @@ const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey
         onFilter: (value, record) => (record.placeId == value),
       },
       {
-        title: '물주기',
+        title: '관수 간격',
         dataIndex: 'recentWateringPeriod',
         key: 'recentWateringPeriod',
         sorter: (a, b) => {

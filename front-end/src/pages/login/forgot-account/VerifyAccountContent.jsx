@@ -2,24 +2,25 @@ import React, {useState} from "react";
 import verifyEmail from "../../../utils/function/verifyEmail";
 import axios from "axios";
 import VerifyAccountInput from "./VerifyAccountInput";
+import postData from "../../../api/backend-api/common/postData";
 
 /**
  * 아이디/비밀번호 찾기 전: 이메일 인증 후 이메일로 발송된 인증코드를 입력하는 페이지
  * @param successContent
- * @param setEmail
  * @param setGardenerList
  * @returns {JSX.Element}
  * @constructor
  */
-const VerifyAccountContent = ({successContent, setEmail, setGardenerList}) => {
+const VerifyAccountContent = ({successContent, setGardenerList}) => {
   // 이메일 input
-  const [input, setInput] = useState("");
+  const [inputEmail, setInputEmail] = useState("");
   // 백엔드에서 유저의 메일로 인증 코드를 보낼 동안 대기해달라는 알림을 띄워놓기 위해
   const [isWaiting, setIsWaiting] = useState(false);
   // 제출한 이메일이 유효하지 않을 시 에러 메시지
   const [errorMsg, setErrorMsg] = useState("");
-  // 유저의 이메일로 보낸 인증코드를 저장
-  const [identificationCode, setIdentification] = useState("");
+  // 이메일 확인 및 본인 확인 코드 전송 여부
+  const [isIdentificationCodeSent, setIsIdentificationCodeSent] = useState(false);
+
   // 유저에게 입력받은 인증코드를 저장
   const [inputIdCode, setInputIdCode] = useState("");
 
@@ -31,7 +32,7 @@ const VerifyAccountContent = ({successContent, setEmail, setGardenerList}) => {
 
   // 이메일 입력 onChange 함수
   const onChange = (e) => {
-    setInput(e.target.value);
+    setInputEmail(e.target.value);
 
     if (errorMsg !== "") {
       setErrorMsg("");
@@ -43,12 +44,12 @@ const VerifyAccountContent = ({successContent, setEmail, setGardenerList}) => {
     setIsWaiting(true);
 
     try {
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/forgot/email/${input}`);
-      console.log("res.data", res.data);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/forgot/email/${inputEmail}`);
+      console.log("res", res.data);
 
-      setIdentification(res.data.identificationCode); // 인증코드
-      setEmail(res.data.email); // 유저 이메일
+      setInputEmail(res.data.email); // 유저 이메일
       setGardenerList(res.data.usernames); // 회원목록
+      setIsIdentificationCodeSent(true);
     } catch (e) {
       // 이메일 인증 실패
       console.log("e", e);
@@ -62,11 +63,11 @@ const VerifyAccountContent = ({successContent, setEmail, setGardenerList}) => {
   const getFeedbackMsg = () => {
     if (errorMsg !== "") {
       return errorMsg;
-    } else if (input !== "" && !verifyEmail(input)) {
+    } else if (inputEmail !== "" && !verifyEmail(inputEmail)) {
       return "이메일 형식을 확인해주세요";
     } else if (isWaiting) {
       return "잠시만 기다려주세요";
-    } else if (identificationCode !== "") {
+    } else if (isIdentificationCodeSent) {
       return "본인 확인 이메일이 발송되었습니다."
     } else {
       return "";
@@ -74,14 +75,19 @@ const VerifyAccountContent = ({successContent, setEmail, setGardenerList}) => {
   }
 
   // 인증코드 입력 후 '인증' 버튼 클릭 시
-  const submitIdCode = () => {
-    // 백엔드에서 받은 인증코드와 유저가 입력한 인증코드의 일치여부 확인
-    if (inputIdCode === identificationCode) {
-      setIdentify("fulfilled");
-      return;
-    }
+  const submitIdCode = async () => {
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_API_URL}/forgot`, {
+        email: inputEmail,
+        identificationCode: inputIdCode
+      });
+      console.log("res.data", res.data);
 
-    setIdentify("rejected"); // 인증 실패
+      setIdentify(() => "fulfilled")
+    } catch (e) {
+      console.log("e", e);
+      alert(e.response.data.message);
+    }
   }
 
   ////// 렌더링 /////
@@ -91,33 +97,29 @@ const VerifyAccountContent = ({successContent, setEmail, setGardenerList}) => {
   if (identify === "fulfilled") {
     return (
       <>
-      {successContent}
+        {successContent}
       </>
     )
   }
 
   // 아직 인증 중일 경우 렌더링될 컴포넌트들
   return (
-      <div>
-        <VerifyAccountInput
-          label="가입 시 제출한 이메일을 입력해주세요"
-          handleInput={onChange}
-          defaultValue={input}
-          onClick={submitEmail}
-          buttonTitle="인증"
-          feedbackMsg={getFeedbackMsg()}/>
-        {
-          identificationCode !== ""
-            ?
-            <VerifyAccountInput
-              label="이메일로 전송된 본인확인 코드 여섯자리를 입력해주세요"
-              handleInput={(e) => setInputIdCode(e.target.value)}
-              onClick={submitIdCode}
-              buttonTitle="확인"
-              feedbackMsg={identify === "rejected" ? "본인확인 코드가 일치하지 않아요" : ""}/>
-            : <></>
-        }
-      </div>
+    <div>
+      <VerifyAccountInput
+        label="가입 시 제출한 이메일을 입력해주세요"
+        handleInput={onChange}
+        defaultValue={inputEmail}
+        onClick={submitEmail}
+        buttonTitle="인증"
+        feedbackMsg={getFeedbackMsg()}/>
+
+      <VerifyAccountInput
+        label="이메일로 전송된 본인확인 코드 여섯자리를 입력해주세요"
+        handleInput={(e) => setInputIdCode(e.target.value)}
+        onClick={submitIdCode}
+        buttonTitle="확인"
+        feedbackMsg={identify === "rejected" ? "본인확인 코드가 일치하지 않아요" : ""}/>
+    </div>
   )
 }
 

@@ -19,8 +19,6 @@ const Garden = () => {
     setLoading(false);
     setHasPlant(data.hasPlant);
 
-    data.todoList.sort((a, b) => (a.gardenDetail.wateringCode - b.gardenDetail.wateringCode));
-
     dispatch({type: 'setTodoList', payload: data.todoList});
     dispatch({type: 'setWaitingList', payload: data.waitingList});
     dispatch({type: 'setRoutineList', payload: data.routineList});

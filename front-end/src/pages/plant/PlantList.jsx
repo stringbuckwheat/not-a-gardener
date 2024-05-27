@@ -17,7 +17,6 @@ import {SearchOutlined} from "@ant-design/icons";
  * @constructor
  */
 const PlantList = () => {
-  // const [searchWord, setSearchWord] = useState("");
   const [isAddFormOpened, setIsAddFormOpened] = useState(false);
 
   const dispatch = useDispatch();

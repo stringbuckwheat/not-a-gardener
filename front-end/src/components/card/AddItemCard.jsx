@@ -12,7 +12,7 @@ import Style from './ItemCard.module.scss'
  */
 const AddItemCard = ({addMsg, onClick}) => {
   return (
-    <Col md={6} xs={24} className={Style.wrapper}>
+    <Col xs={24} sm={12} md={8} lg={6} className={Style.wrapper}>
       <Card className={Style.card} onClick={onClick}>
         <Row>
           <Col style={{alignItems: "center"}}>

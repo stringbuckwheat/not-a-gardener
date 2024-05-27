@@ -11,7 +11,7 @@ import Style from './ItemCard.module.scss'
  */
 const ListItemCard = ({color, icon, link, state, name, type, detail}) => {
   return (
-    <Col md={6} xs={24} className={Style.wrapper}>
+    <Col xs={24} sm={12} md={8} lg={6} className={Style.wrapper}>
       <Link
         to={link}
         state={state}

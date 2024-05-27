@@ -3,6 +3,7 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import Loading from "./components/data/Loading";
 import {ConfigProvider} from "antd";
 import themeOrange from "./theme/themeOrange";
+import IdleLogout from "./api/IdleLogout";
 
 // Pages
 const Login = React.lazy(() => import('./pages/login/Login'))
@@ -21,6 +22,7 @@ const App = () => {
   return (
     <ConfigProvider theme={themeOrange}>
       <BrowserRouter>
+        <IdleLogout />
         <Suspense fallback={<Loading/>}>
           <Routes>
             <Route path="/login" name="Login Page" element={<Login/>}/>

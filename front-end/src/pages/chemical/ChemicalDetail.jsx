@@ -10,6 +10,7 @@ import updateData from "../../api/backend-api/common/updateData";
 import TableWithPage from "../../components/data/TableWithPage";
 import wateringTableColumnArray from "../../utils/dataArray/wateringTableColumnInChemicalArray";
 import FormProvider from "../../components/form/FormProvider";
+import ExceptionCode from "../../utils/code/exceptionCode";
 
 const ChemicalDetail = () => {
   const chemicalId = useParams().chemicalId;
@@ -33,7 +34,7 @@ const ChemicalDetail = () => {
       setWateringSize(res.wateringSize);
       setModifyChemical(res.chemical);
     } catch (e) {
-      if (e.code === "B006") {
+      if (e.code === ExceptionCode.NO_SUCH_CHEMICAL) {
         alert("해당 약품/비료를 찾을 수 없어요");
         navigate("/chemical");
       }

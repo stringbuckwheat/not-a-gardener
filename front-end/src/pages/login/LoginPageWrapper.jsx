@@ -6,11 +6,11 @@ import Style from './LoginPageWrapper.module.scss'
 
 const LoginPageWrapper = ({children}) => {
   return (
-    <div className={Style.minHeightFull}>
+    <div className={Style.wrapper}>
       <Row className={Style.row}>
-        <Col sm={22} md={9}>
+        <Col sm={22} md={9} style={{margin: "0 1rem"}}>
           <Row className={Style.logo}>
-            <Logo className="float-end" width={"60vw"} height={"15vh"} fill={"#008000"}/>
+            <Logo className="float-end" width={"80vw"} height={"15vh"} fill={"#008000"}/>
           </Row>
           {children}
         </Col>

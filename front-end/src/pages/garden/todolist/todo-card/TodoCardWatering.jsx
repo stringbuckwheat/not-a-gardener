@@ -1,8 +1,9 @@
 import {Button, Select, Space} from "antd";
 import React, {useState} from "react";
 import postData from "../../../../api/backend-api/common/postData";
-import getWateringNotificationMsg from "../../../../utils/function/getWateringNotificationMsg";
+import getAfterWateringMsg from "../../../../utils/function/getAfterWateringMsg";
 import {useDispatch, useSelector} from "react-redux";
+import ExceptionCode from "../../../../utils/code/exceptionCode";
 
 const TodoCardWatering = ({plantId, openNotification, setSelected, flipCard}) => {
   // 약품 목록
@@ -27,14 +28,14 @@ const TodoCardWatering = ({plantId, openNotification, setSelected, flipCard}) =>
       dispatch({type: 'deleteInTodoList', payload: plantId});
 
       // 메시지 띄우기
-      const msg = getWateringNotificationMsg(res.wateringMsg.afterWateringCode);
+      const msg = getAfterWateringMsg(res.wateringMsg.afterWateringCode);
       openNotification(msg);
 
       // state 정리
       setSelected("");
       flipCard(0);
     } catch (e) {
-      if (e.code == "B005") {
+      if (e.code == ExceptionCode.ALREADY_WATERED) {
         alert(e.message);
       }
     }

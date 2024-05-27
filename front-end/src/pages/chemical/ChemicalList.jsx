@@ -66,25 +66,22 @@ const ChemicalList = () => {
   return isAddFormOpened ? (
     <AddChemical afterAdd={switchAddForm}/>
   ) : (
-    <>
-      <Row>
-        <AddItemCard onClick={switchAddForm} addMsg="비료/살충제 추가"/>
-        {
-          chemicals.map((chemical) => {
-            const chemicalForCard = getChemicalsForCard(chemical);
-            return <ListItemCard color={chemicalForCard.color}
-                                 icon={chemicalForCard.icon}
-                                 link={`/chemical/${chemical.id}`}
-                                 state={chemical}
-                                 name={chemical.name}
-                                 type={chemical.type}
-                                 detail={`${chemical.period}일에 한 번`}/>
-          })
-        }
-      </Row>
-    </>
+    <Row>
+      <AddItemCard onClick={switchAddForm} addMsg="비료/살충제 추가"/>
+      {
+        chemicals.map((chemical) => {
+          const chemicalForCard = getChemicalsForCard(chemical);
+          return <ListItemCard color={chemicalForCard.color}
+                               icon={chemicalForCard.icon}
+                               link={`/chemical/${chemical.id}`}
+                               state={chemical}
+                               name={chemical.name}
+                               type={chemical.type}
+                               detail={`${chemical.period}일에 한 번`}/>
+        })
+      }
+    </Row>
   )
-
 }
 
 export default ChemicalList

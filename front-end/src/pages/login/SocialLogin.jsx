@@ -25,7 +25,7 @@ const SocialLogin = () => {
       <Row justify={"space-between"} style={{marginTop: "1rem"}}>
         {
           providers.map((provider, index) => {
-              return (<Col md={7} className={"text-center"}>
+              return (<Col xs={7} className={"text-center"}>
                 <a
                   href={provider !== "naver" ? `${authorizationUrl}/${provider}` : "javascript:alert('검수 승인 대기중입니다')"}
                   className="social-button"

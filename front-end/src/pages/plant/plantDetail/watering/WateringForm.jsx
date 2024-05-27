@@ -6,8 +6,8 @@ import {useState} from 'react';
 import postData from 'src/api/backend-api/common/postData';
 import getDisabledDate from 'src/utils/function/getDisabledDate';
 import {useDispatch} from "react-redux";
+import ExceptionCode from "../../../../utils/code/exceptionCode";
 
-// TODO WateringFormInCalendar와 같음
 /**
  * 물주기 폼
  * @param plantId
@@ -31,7 +31,7 @@ const WateringForm = ({plantId, closeForm, chemicalList, wateringCallBack, page}
 
       wateringCallBack(res);
     } catch (e) {
-      if (e.code == "B005") {
+      if (e.code == ExceptionCode.ALREADY_WATERED) {
         alert(e.message);
       }
     } finally {
