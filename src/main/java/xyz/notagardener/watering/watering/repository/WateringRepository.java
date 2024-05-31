@@ -16,6 +16,7 @@ public interface WateringRepository extends Repository<Watering, Long>, Watering
     @EntityGraph(attributePaths = {"chemical"})
     Optional<Watering> findByWateringDateAndPlant_PlantId(LocalDate wateringDate, Long plantId);
     Optional<Watering> findByWateringDateAndPlant_Gardener_GardenerId(LocalDate wateringDate, Long plantId);
+    boolean existsByPlant_PlantIdAndWateringDateAfter(Long plantId, LocalDate date);
     Watering save(Watering watering);
     void deleteById(Long wateringId);
     void delete(Watering watering);

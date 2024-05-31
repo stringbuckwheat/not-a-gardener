@@ -64,6 +64,11 @@ public class GardenExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(e.getCode()));
     }
 
+    @ExceptionHandler(AlreadyRepottedException.class)
+    public HttpEntity<ErrorResponse> handleAlreadyRepottedException(AlreadyRepottedException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(e.getCode()));
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public HttpEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException e) {
         log.debug("IllegalArgumentException: " + e.getMessage());

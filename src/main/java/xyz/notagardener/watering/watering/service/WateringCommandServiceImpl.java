@@ -102,8 +102,6 @@ public class WateringCommandServiceImpl implements WateringCommandService {
         List<Watering> waterings = wateringRepository.findLatestFourWateringDate(plant.getPlantId());
         WateringMessage afterWatering = calculateWateringPeriod(waterings);
 
-        log.debug("{}의 이전 관수주기: {}, 현재 관수주기: {}", plant.getName(), plant.getRecentWateringPeriod(), afterWatering.getRecentWateringPeriod());
-
         updatePlantWateringPeriod(plant, afterWatering);
 
         return afterWatering;
@@ -162,8 +160,8 @@ public class WateringCommandServiceImpl implements WateringCommandService {
     public AfterWatering update(WateringRequest wateringRequest, Long gardenerId) {
         Watering watering = getWatering(wateringRequest.getId(), wateringRequest.getPlantId(), gardenerId); // 기존 물주기 기록
 
-        Plant plant = getPlant(wateringRequest.getPlantId(), gardenerId);
         Chemical chemical = getChemical(wateringRequest.getChemicalId(), gardenerId);
+        Plant plant = getPlant(wateringRequest.getPlantId(), gardenerId);
 
         // watering 수정
         wateringRepository.save(watering.update(wateringRequest.getWateringDate(), plant, chemical));
