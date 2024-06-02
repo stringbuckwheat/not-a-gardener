@@ -2,12 +2,14 @@ package xyz.notagardener.repot.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.plant.dto.RepotList;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
 import xyz.notagardener.repot.Repot;
 import xyz.notagardener.repot.dto.RepotRequest;
@@ -16,7 +18,6 @@ import xyz.notagardener.repot.repository.RepotRepository;
 import xyz.notagardener.status.PlantStatusResponse;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -55,11 +56,12 @@ public class RepotServiceImpl implements RepotService {
     @Transactional
     public RepotResponse addOne(RepotRequest repotRequest, Long gardenerId) {
         Plant plant = getPlantByPlantIdAndGardenerId(repotRequest.getPlantId(), gardenerId);
-        Repot repot = repotRepository.save(new Repot(repotRequest.getRepotDate(), plant));
+        Repot repot = repotRepository.save(new Repot(repotRequest.getRepotDate(), plant, repotRequest.getHaveToInitPeriod()));
 
         // 물주기 기록 초기화 or 유지
         if ("Y".equals(repotRequest.getHaveToInitPeriod())) {
             plant.updateRecentWateringPeriod(0);
+            plant.updateEarlyWateringPeriod(0);
         }
 
         PlantStatusResponse status = repotStatusService.handleRepotStatus(repotRequest, plant);
@@ -73,7 +75,12 @@ public class RepotServiceImpl implements RepotService {
     public List<RepotResponse> addAll(List<RepotRequest> requests, Long gardenerId) {
         return requests.stream()
                 .map((request) -> addOne(request, gardenerId))
-                .collect(Collectors.toList());
+                .toList();
+    }
+
+    @Override
+    public List<RepotList> getAll(Long gardenerId, Pageable pageable) {
+        return repotRepository.findAll(gardenerId, pageable);
     }
 
     // TODO *** 분갈이 필요 알림 ***

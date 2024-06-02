@@ -23,14 +23,18 @@ public class Repot {
     @NotNull
     private LocalDate repotDate;
 
+    @NotNull
+    private String initPeriod;
+
     @ManyToOne
     @JoinColumn(name = "plant_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Plant plant;
 
-    public Repot(LocalDate repotDate, Plant plant) {
+    public Repot(LocalDate repotDate, Plant plant, String initPeriod) {
         this.repotDate = repotDate;
         this.plant = plant;
+        this.initPeriod = initPeriod;
     }
 
     public void update(LocalDate repotDate) {

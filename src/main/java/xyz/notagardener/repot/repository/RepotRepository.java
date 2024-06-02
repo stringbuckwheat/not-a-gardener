@@ -6,7 +6,7 @@ import xyz.notagardener.repot.Repot;
 
 import java.util.Optional;
 
-public interface RepotRepository extends Repository<Repot, Long> {
+public interface RepotRepository extends Repository<Repot, Long>, RepotRepositoryCustom {
     @EntityGraph(attributePaths = {"plant", "plant.gardener"}, type = EntityGraph.EntityGraphType.FETCH)
     Optional<Repot> findByRepotId(Long repotId);
 

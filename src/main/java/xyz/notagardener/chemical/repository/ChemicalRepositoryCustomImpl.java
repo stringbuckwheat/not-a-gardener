@@ -5,16 +5,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.notagardener.chemical.QChemical;
 import xyz.notagardener.chemical.dto.ChemicalDto;
 import xyz.notagardener.chemical.dto.QChemicalDto;
 import xyz.notagardener.place.QPlace;
 import xyz.notagardener.plant.QPlant;
-import xyz.notagardener.watering.QWatering;
 import xyz.notagardener.watering.Watering;
 
 import java.util.List;
 import java.util.Optional;
+
+import static xyz.notagardener.chemical.QChemical.chemical;
+import static xyz.notagardener.watering.QWatering.watering;
 
 @RequiredArgsConstructor
 @Repository
@@ -26,15 +27,15 @@ public class ChemicalRepositoryCustomImpl implements ChemicalRepositoryCustom {
     public List<ChemicalDto> findAllChemicals(Long gardenerId) {
         return queryFactory.select(
                         new QChemicalDto(
-                                QChemical.chemical.chemicalId,
-                                QChemical.chemical.name,
-                                QChemical.chemical.type,
-                                QChemical.chemical.period
+                                chemical.chemicalId,
+                                chemical.name,
+                                chemical.type,
+                                chemical.period
                         )
                 )
-                .from(QChemical.chemical)
-                .where(QChemical.chemical.active.eq("Y")
-                        .and(QChemical.chemical.gardener.gardenerId.eq(gardenerId)))
+                .from(chemical)
+                .where(chemical.active.eq("Y")
+                        .and(chemical.gardener.gardenerId.eq(gardenerId)))
                 .fetch();
     }
 
@@ -42,16 +43,16 @@ public class ChemicalRepositoryCustomImpl implements ChemicalRepositoryCustom {
     public Optional<ChemicalDto> findByChemicalIdAndGardenerId(Long chemicalId, Long gardenerId) {
         ChemicalDto result = queryFactory.select(
                         new QChemicalDto(
-                                QChemical.chemical.chemicalId,
-                                QChemical.chemical.name,
-                                QChemical.chemical.type,
-                                QChemical.chemical.period
+                                chemical.chemicalId,
+                                chemical.name,
+                                chemical.type,
+                                chemical.period
                         )
                 )
-                .from(QChemical.chemical)
-                .where(QChemical.chemical.active.eq("Y")
-                        .and(QChemical.chemical.gardener.gardenerId.eq(gardenerId))
-                        .and(QChemical.chemical.chemicalId.eq(chemicalId))
+                .from(chemical)
+                .where(chemical.active.eq("Y")
+                        .and(chemical.gardener.gardenerId.eq(gardenerId))
+                        .and(chemical.chemicalId.eq(chemicalId))
                 )
                 .fetchOne();
 
@@ -61,26 +62,26 @@ public class ChemicalRepositoryCustomImpl implements ChemicalRepositoryCustom {
     @Override
     public Long countWateringByChemicalId(Long chemicalId) {
         return queryFactory
-                .select(QWatering.watering.count())
-                .from(QWatering.watering)
-                .where(QWatering.watering.chemical.chemicalId.eq(chemicalId))
+                .select(watering.count())
+                .from(watering)
+                .where(watering.chemical.chemicalId.eq(chemicalId))
                 .fetchFirst();
     }
 
     @Override
     public List<Watering> findWateringsByChemicalIdWithPage(Long chemicalId, Pageable pageable) {
         return queryFactory
-                .selectFrom(QWatering.watering)
-                .join(QWatering.watering.plant, QPlant.plant)
+                .selectFrom(watering)
+                .join(watering.plant, QPlant.plant)
                 .fetchJoin()
-                .join(QWatering.watering.plant.place, QPlace.place)
+                .join(watering.plant.place, QPlace.place)
                 .fetchJoin()
-                .join(QWatering.watering.chemical, QChemical.chemical)
+                .join(watering.chemical, chemical)
                 .fetchJoin()
-                .where(QWatering.watering.chemical.chemicalId.eq(chemicalId))
+                .where(watering.chemical.chemicalId.eq(chemicalId))
                 .offset(pageable.getOffset()) // 시작지점
                 .limit(pageable.getPageSize()) // 페이지 사이즈
-                .orderBy(QWatering.watering.wateringDate.desc())
+                .orderBy(watering.wateringDate.desc())
                 .fetch();
     }
 }

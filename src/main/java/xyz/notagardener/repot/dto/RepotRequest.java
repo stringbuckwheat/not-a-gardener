@@ -2,10 +2,7 @@ package xyz.notagardener.repot.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import xyz.notagardener.common.validation.NotFuture;
 import xyz.notagardener.common.validation.YesOrNo;
 import xyz.notagardener.plant.Plant;
@@ -18,6 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Getter
 @Builder
+@ToString
 public class RepotRequest {
     private Long repotId;
 

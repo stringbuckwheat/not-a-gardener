@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +18,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import xyz.notagardener.authentication.model.UserPrincipal;
 import xyz.notagardener.common.error.ErrorResponse;
+import xyz.notagardener.plant.plant.dto.RepotList;
 import xyz.notagardener.repot.dto.RepotRequest;
 import xyz.notagardener.repot.dto.RepotResponse;
 import xyz.notagardener.repot.service.RepotService;
 
 import java.util.List;
 
-@RequestMapping("/api/plant")
+@RequestMapping("/api")
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -83,7 +85,7 @@ public class RepotController {
                     )
             ),
     })
-    @PostMapping("/{id}/repot")
+    @PostMapping("/plant/{plantId}/repot")
     public ResponseEntity<RepotResponse> addOne(@RequestBody @Valid RepotRequest repotRequest, @AuthenticationPrincipal UserPrincipal user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(repotService.addOne(repotRequest, user.getId()));
     }
@@ -145,6 +147,11 @@ public class RepotController {
         return ResponseEntity.status(HttpStatus.CREATED).body(repotService.addAll(requests, user.getId()));
     }
 
+    @GetMapping("/repot")
+    public ResponseEntity<List<RepotList>> getAll(@AuthenticationPrincipal UserPrincipal user, Pageable pageable) {
+        return ResponseEntity.ok(repotService.getAll(user.getId(), pageable));
+    }
+
     @Operation(summary = "분갈이 기록 수정", description = "인증된 사용자의 분갈이 기록 수정")
     @ApiResponses(value = {
             @ApiResponse(
@@ -198,7 +205,7 @@ public class RepotController {
                     )
             ),
     })
-    @PutMapping("/{plantId}/repot/{repotId}")
+    @PutMapping("/plant/{plantId}/repot/{repotId}")
     public ResponseEntity<RepotResponse> update(@RequestBody @Valid RepotRequest request, @AuthenticationPrincipal UserPrincipal user) {
         return ResponseEntity.ok(repotService.update(request, user.getId()));
     }
@@ -298,7 +305,7 @@ public class RepotController {
                     ),
             }
     )
-    @DeleteMapping("/{plantId}/repot/{repotId}")
+    @DeleteMapping("/repot/{repotId}")
     public ResponseEntity<Void> delete(@PathVariable Long repotId, @AuthenticationPrincipal UserPrincipal user) {
         repotService.delete(repotId, user.getId());
         return ResponseEntity.noContent().build();

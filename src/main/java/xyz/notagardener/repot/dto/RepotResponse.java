@@ -22,6 +22,9 @@ public class RepotResponse {
     @Schema(description = "분갈이 날짜", example = "2024-05-31")
     private LocalDate repotDate;
 
+    @Schema(description = "물주기 간격 초기화 여부", example = "Y")
+    private String initPeriod;
+
     @Schema(description = "변화된 식물 상태 정보")
     private PlantStatusResponse status;
 
@@ -29,6 +32,15 @@ public class RepotResponse {
         this.repotId = repot.getRepotId();
         this.plantId = repot.getPlant().getPlantId();
         this.repotDate = repot.getRepotDate();
+        this.initPeriod = repot.getInitPeriod();
         this.status = status;
+    }
+
+    public RepotResponse(Repot repot) {
+        this.repotId = repot.getRepotId();
+        this.plantId = repot.getPlant().getPlantId();
+        this.repotDate = repot.getRepotDate();
+        this.initPeriod = repot.getInitPeriod();
+        this.status = new PlantStatusResponse(repot.getPlant().getStatus().get(0));
     }
 }
