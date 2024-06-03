@@ -10,8 +10,7 @@ import xyz.notagardener.plant.garden.dto.*;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
 import xyz.notagardener.routine.Routine;
 import xyz.notagardener.routine.RoutineRepository;
-import xyz.notagardener.watering.code.WateringCode;
-import xyz.notagardener.watering.dto.ChemicalUsage;
+import xyz.notagardener.watering.watering.dto.ChemicalUsage;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,6 +23,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
+@DisplayName("계산된 식물 컴포넌트 테스트")
 class GardenServiceImplTest {
     @Autowired
     private GardenResponseMapper gardenResponseMapper;
@@ -40,7 +40,7 @@ class GardenServiceImplTest {
     @MockBean
     private ChemicalInfoServiceImpl chemicalInfoService;
 
-    private RawGardenFactory rawGardenFactory = new RawGardenFactory();
+    private PlantResponseFactory plantResponseFactory = new PlantResponseFactory();
 
     @Test
     @DisplayName("메인 페이지(물 주기, 기록 없는 식물, 루틴): 성공")
@@ -49,11 +49,11 @@ class GardenServiceImplTest {
         Long gardenerId = 1L;
 
         int missedDay = 6;
-        List<RawGarden> rawGardens = Arrays.asList(
-                rawGardenFactory.getPostponedPlant(),
-                rawGardenFactory.getThirstyPlant(3),
-                rawGardenFactory.getCheckingPlant(3),
-                rawGardenFactory.getDryOutPlant(3, missedDay)
+        List<PlantResponse> plantResponses = Arrays.asList(
+                plantResponseFactory.getPostponedPlant(),
+                plantResponseFactory.getThirstyPlant(3),
+                plantResponseFactory.getCheckingPlant(3),
+                plantResponseFactory.getDryOutPlant(3, missedDay)
         );
 
         Plant p = Plant.builder().build();
@@ -71,7 +71,7 @@ class GardenServiceImplTest {
 
         when(plantRepository.existByGardenerId(gardenerId)).thenReturn(true);
         when(plantRepository.findWaitingForWateringList(gardenerId)).thenReturn(waitings);
-        when(plantRepository.findGardenByGardenerId(gardenerId)).thenReturn(rawGardens);
+        when(plantRepository.findGardenByGardenerId(gardenerId)).thenReturn(plantResponses);
         when(routineRepository.findByGardener_GardenerId(gardenerId)).thenReturn(routines);
 
         // when
@@ -87,11 +87,11 @@ class GardenServiceImplTest {
         assertFalse(result.getWaitingList().isEmpty());
         assertFalse(result.getRoutineList().isEmpty());
 
-        List<Integer> expectedWateringCodes = Arrays.asList(
+        List<String> expectedWateringCodes = Arrays.asList(
                 WateringCode.YOU_ARE_LAZY.getCode(),
                 WateringCode.THIRSTY.getCode(),
                 WateringCode.CHECK.getCode(),
-                -1 * missedDay
+                WateringCode.LATE_WATERING.getCode()
         );
 
         IntStream.range(0, expectedWateringCodes.size())
@@ -127,14 +127,14 @@ class GardenServiceImplTest {
         int missedDay = 5;
 
         List<PlantResponse> rawGardens = Arrays.asList(
-                (PlantResponse) rawGardenFactory.getPostponedPlant(),
-                (PlantResponse) rawGardenFactory.getPlantWithNoWateringRecord(),
-                (PlantResponse) rawGardenFactory.getPlantWithOneWateringRecord(),
-                (PlantResponse) rawGardenFactory.getWateredTodayPlant(),
-                (PlantResponse) rawGardenFactory.getThirstyPlant(3),
-                (PlantResponse) rawGardenFactory.getCheckingPlant(3),
-                (PlantResponse) rawGardenFactory.getLeaveHerAlonePlant(3),
-                (PlantResponse) rawGardenFactory.getDryOutPlant(3, missedDay)
+                (PlantResponse) plantResponseFactory.getPostponedPlant(),
+                (PlantResponse) plantResponseFactory.getPlantWithNoWateringRecord(),
+                (PlantResponse) plantResponseFactory.getPlantWithOneWateringRecord(),
+                (PlantResponse) plantResponseFactory.getWateredTodayPlant(),
+                (PlantResponse) plantResponseFactory.getThirstyPlant(3),
+                (PlantResponse) plantResponseFactory.getCheckingPlant(3),
+                (PlantResponse) plantResponseFactory.getLeaveHerAlonePlant(3),
+                (PlantResponse) plantResponseFactory.getDryOutPlant(3, missedDay)
         );
 
         when(plantRepository.findAllPlantsWithLatestWateringDate(gardenerId)).thenReturn(rawGardens);
@@ -146,7 +146,7 @@ class GardenServiceImplTest {
         assertNotNull(result);
         assertEquals(rawGardens.size(), result.size());
 
-        List<Integer> expectedWateringCodes = Arrays.asList(
+        List<String> expectedWateringCodes = Arrays.asList(
                 WateringCode.YOU_ARE_LAZY.getCode(),
                 WateringCode.NOT_ENOUGH_RECORD.getCode(),
                 WateringCode.NOT_ENOUGH_RECORD.getCode(),
@@ -154,7 +154,7 @@ class GardenServiceImplTest {
                 WateringCode.THIRSTY.getCode(),
                 WateringCode.CHECK.getCode(),
                 WateringCode.LEAVE_HER_ALONE.getCode(),
-                -1 * missedDay
+                WateringCode.LATE_WATERING.getCode()
         );
 
         IntStream.range(0, expectedWateringCodes.size())
@@ -168,14 +168,14 @@ class GardenServiceImplTest {
         int missedDay = 5;
 
         List<PlantResponse> rawGardens = Arrays.asList(
-                (PlantResponse) rawGardenFactory.getPostponedPlant(),
-                (PlantResponse) rawGardenFactory.getPlantWithNoWateringRecord(),
-                (PlantResponse) rawGardenFactory.getPlantWithOneWateringRecord(),
-                (PlantResponse) rawGardenFactory.getWateredTodayPlant(),
-                (PlantResponse) rawGardenFactory.getThirstyPlant(3),
-                (PlantResponse) rawGardenFactory.getCheckingPlant(3),
-                (PlantResponse) rawGardenFactory.getLeaveHerAlonePlant(3),
-                (PlantResponse) rawGardenFactory.getDryOutPlant(3, missedDay)
+                (PlantResponse) plantResponseFactory.getPostponedPlant(),
+                (PlantResponse) plantResponseFactory.getPlantWithNoWateringRecord(),
+                (PlantResponse) plantResponseFactory.getPlantWithOneWateringRecord(),
+                (PlantResponse) plantResponseFactory.getWateredTodayPlant(),
+                (PlantResponse) plantResponseFactory.getThirstyPlant(3),
+                (PlantResponse) plantResponseFactory.getCheckingPlant(3),
+                (PlantResponse) plantResponseFactory.getLeaveHerAlonePlant(3),
+                (PlantResponse) plantResponseFactory.getDryOutPlant(3, missedDay)
         );
 
 
@@ -197,7 +197,7 @@ class GardenServiceImplTest {
         assertEquals(rawGardens.size(), result.size());
 
         // 물주기 코드 검증
-        List<Integer> expectedWateringCodes = Arrays.asList(
+        List<String> expectedWateringCodes = Arrays.asList(
                 WateringCode.YOU_ARE_LAZY.getCode(),
                 WateringCode.NOT_ENOUGH_RECORD.getCode(),
                 WateringCode.NOT_ENOUGH_RECORD.getCode(),
@@ -205,7 +205,7 @@ class GardenServiceImplTest {
                 WateringCode.THIRSTY.getCode(), // 약품 정보 필요
                 WateringCode.CHECK.getCode(),
                 WateringCode.LEAVE_HER_ALONE.getCode(),
-                -1 * missedDay
+                WateringCode.LATE_WATERING.getCode()
         );
 
         IntStream.range(0, expectedWateringCodes.size())
@@ -213,9 +213,9 @@ class GardenServiceImplTest {
 
         // 약품 정보 검증
         for(GardenResponse gardenResponse : result) {
-            int wateringCode = gardenResponse.getGardenDetail().getWateringCode();
+            String wateringCode = gardenResponse.getGardenDetail().getWateringCode();
 
-            if(wateringCode == WateringCode.CHECK.getCode() || wateringCode == WateringCode.THIRSTY.getCode()){
+            if(WateringCode.CHECK.getCode().equals(wateringCode) || WateringCode.THIRSTY.getCode().equals(wateringCode)){
                 assertEquals(chemicalUsages.get(1).getChemicalId(), gardenResponse.getGardenDetail().getChemicalInfo().getChemicalId());
             }
         }

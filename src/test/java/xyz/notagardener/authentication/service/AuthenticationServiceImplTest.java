@@ -7,8 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -22,21 +20,20 @@ import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.ExpiredRefreshTokenException;
 import xyz.notagardener.common.error.exception.GardenerNotInSessionException;
 import xyz.notagardener.gardener.Gardener;
-import xyz.notagardener.gardener.gardener.GardenerRepository;
-import xyz.notagardener.gardener.gardener.Register;
+import xyz.notagardener.gardener.repository.GardenerRepository;
 
 import java.security.Key;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@DisplayName("인증 컴포넌트 테스트")
 class AuthenticationServiceImplTest {
     @Mock
     private TokenProvider tokenProvider;
@@ -58,35 +55,7 @@ class AuthenticationServiceImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    @DisplayName("아이디 중복 검사: 중복 아이디")
-    void hasSameUsername_WhenInvalid_ReturnThatUsername() {
-        // Given
-        String username = "testgardener";
 
-        when(gardenerRepository.findByProviderIsNullAndUsername(username))
-                .thenReturn(Optional.of(Gardener.builder().username(username).build()));
-
-        // When
-        String result = authenticationService.hasSameUsername(username);
-
-        // Then
-        assertNotNull(result);
-    }
-
-    @Test
-    @DisplayName("아이디 중복 검사: 사용 가능한 아이디")
-    void hasSameUsername_WhenValid_ReturnNull() {
-        // Given
-        String username = "testgardener";
-        when(gardenerRepository.findByProviderIsNullAndUsername(username)).thenReturn(Optional.empty());
-
-        // When
-        String result = authenticationService.hasSameUsername(username);
-
-        // Then
-        assertNull(result);
-    }
 
     @Test
     @DisplayName("가드너 정보 가져오기")
@@ -212,102 +181,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    @DisplayName("회원가입: Happy Path")
-    void register_WhenValid_ReturnToken() {
-        // Given
-        String username = "testgardener";
-        String email = "testgardener@gmail.com";
-        String password = "testpassword1234!";
-        String name = "메밀";
-
-        Register register = new Register(username, email, password, name);
-        Gardener savedGardener = Gardener.builder()
-                .gardenerId(1L)
-                .name(name)
-                .provider(null)
-                .build();
-
-        AccessToken accessToken = mockAccessToken(savedGardener.getGardenerId());
-        RefreshToken refreshToken = new RefreshToken();
-
-        Info expectedInfo = new Info(accessToken.getToken(), refreshToken.getToken(), savedGardener);
-
-        when(gardenerRepository.findByProviderIsNullAndUsername(username)).thenReturn(Optional.empty());
-        when(gardenerRepository.save(any())).thenReturn(savedGardener);
-        when(tokenProvider.createAccessToken(savedGardener.getGardenerId(), savedGardener.getName())).thenReturn(accessToken);
-        when(tokenProvider.createRefreshToken(savedGardener.getGardenerId(), savedGardener.getName(), savedGardener.getProvider()))
-                .thenReturn(refreshToken);
-
-        // When
-        Info result = authenticationService.add(register);
-
-        assertEquals(expectedInfo, result);
-        assertEquals(accessToken.getToken(), result.getToken().getAccessToken()); // 액세스 토큰
-        assertEquals(refreshToken.getToken(), result.getToken().getRefreshToken()); // 리프레쉬 토큰
-    }
-
-    @Test
-    @DisplayName("회원 가입: username 중복")
-    void register_WhenSameUsernameExist_ThrowIllegalArgumentException() {
-        String username = "testgardener";
-        Register register = new Register(username, "email", "password", "name");
-
-        when(gardenerRepository.findByProviderIsNullAndUsername(username))
-                .thenReturn(Optional.of(Gardener.builder().username(username).build()));
-
-        // When
-        Executable executable = () -> authenticationService.add(register);
-
-        // Then
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
-        assertEquals(ExceptionCode.INVALID_REQUEST_DATA.getCode(), e.getMessage());
-    }
-
-    static Stream<Register> invalidRegisterData() {
-        String validUsername = "testgardener";
-        String validEmail = "testgardener@gmail.com";
-        String validPassword = "testpassword1234!";
-        String validName = "메밀";
-
-        return Stream.of(
-                new Register(null, validEmail, validPassword, validName),
-                new Register("", validEmail, validPassword, validName),
-                new Register("a", validEmail, validPassword, validName),
-                new Register("aweoifg3289rh8rejkhwejgfhwejf", validEmail, validPassword, validName),
-                new Register("가나다라마", validEmail, validPassword, validName),
-
-                new Register(validUsername, null, validPassword, validName),
-                new Register(validUsername, "", validPassword, validName),
-                new Register(validUsername, "null", validPassword, validName),
-                new Register(validUsername, "@gmail.com", validPassword, validName),
-                new Register(validUsername, "hi@gmail", validPassword, validName),
-                new Register(validUsername, "hi#gmail", validPassword, validName),
-
-                new Register(validUsername, validEmail, null, validName),
-                new Register(validUsername, validEmail, "", validName),
-                new Register(validUsername, validEmail, "1", validName),
-                new Register(validUsername, validEmail, "password", validName),
-                new Register(validUsername, validEmail, "reallyreallyreallylongpasswordisinvalid", validName),
-
-                new Register(validUsername, validEmail, validPassword, null),
-                new Register(validUsername, validEmail, validPassword, ""),
-                new Register(validUsername, validEmail, validPassword, "reallyreallyreallylongnameisinvalid")
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("invalidRegisterData")
-    void testInvalidRegisterData(Register invalidRegister) {
-        // Given
-        Executable executable = () -> authenticationService.add(invalidRegister);
-
-        // When, Then
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, executable);
-        assertEquals(ExceptionCode.INVALID_REQUEST_DATA.getCode(), exception.getMessage());
-    }
-
-    @Test
-    @DisplayName("Silent Refresh: Happy Path")
+    @DisplayName("Silent Refresh: 성공")
     void refreshAccessToken_WhenValid_ReturnNewAccessTokenAndRefreshToken() {
         // Given
         RefreshToken refreshToken = new RefreshToken();

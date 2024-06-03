@@ -7,6 +7,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.place.Place;
@@ -15,14 +16,18 @@ import xyz.notagardener.plant.garden.dto.GardenDetail;
 import xyz.notagardener.plant.garden.dto.GardenResponse;
 import xyz.notagardener.plant.garden.dto.PlantResponse;
 import xyz.notagardener.plant.garden.service.GardenResponseMapper;
-import xyz.notagardener.plant.garden.service.RawGardenFactory;
+import xyz.notagardener.plant.garden.service.PlantResponseFactory;
+import xyz.notagardener.plant.garden.service.WateringCode;
 import xyz.notagardener.plant.plant.dto.PlantRequest;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
 import xyz.notagardener.watering.Watering;
-import xyz.notagardener.watering.code.WateringCode;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
@@ -43,7 +48,7 @@ class PlantServiceImplTest {
     @Autowired
     private PlantService plantService;
 
-    private RawGardenFactory rawGardenFactory = new RawGardenFactory();
+    private PlantResponseFactory rawGardenFactory = new PlantResponseFactory();
 
     @BeforeEach
     void setUp() {
@@ -65,8 +70,8 @@ class PlantServiceImplTest {
         );
 
         List<Plant> plants = Arrays.asList(
-                Plant.builder().plantId(1L).name("Plant 1").gardener(gardener).waterings(new ArrayList<>()).place(place).build(),
-                Plant.builder().plantId(2L).name("Plant 2").gardener(gardener).waterings(waterings).place(place).build()
+                Plant.builder().plantId(1L).name("Plant 1").gardener(gardener).waterings(new ArrayList<>()).place(place).createDate(LocalDateTime.now()).build(),
+                Plant.builder().plantId(2L).name("Plant 2").gardener(gardener).waterings(waterings).place(place).createDate(LocalDateTime.now()).build()
         );
 
         when(plantRepository.findByGardener_GardenerIdOrderByPlantIdDesc(gardenerId)).thenReturn(plants);
@@ -76,9 +81,9 @@ class PlantServiceImplTest {
 
         // Then
         assertEquals(plants.size(), plantResponses.size());
-        assertEquals(plants.get(0).getPlantId(), plantResponses.get(0).getPlantId());
+        assertEquals(plants.get(0).getPlantId(), plantResponses.get(0).getId());
         assertEquals(plants.get(0).getName(), plantResponses.get(0).getName());
-        assertEquals(plants.get(1).getPlantId(), plantResponses.get(1).getPlantId());
+        assertEquals(plants.get(1).getPlantId(), plantResponses.get(1).getId());
         assertEquals(plants.get(1).getName(), plantResponses.get(1).getName());
     }
 
@@ -103,7 +108,7 @@ class PlantServiceImplTest {
 
     @Test
     @DisplayName("한 식물의 세부 정보: 그런 식물 없음 - 실패")
-    void getDetail_WhenPlantNotExist_ThrowNoSuchElementException() {
+    void getDetail_WhenPlantNotExist_ThrowResourceNotFoundException() {
         // Given
         Long plantId = 1L;
         Long gardenerId = 1L;
@@ -111,12 +116,12 @@ class PlantServiceImplTest {
         when(plantRepository.findPlantWithLatestWateringDate(plantId, gardenerId)).thenReturn(Optional.empty());
 
         // When, Then
-        assertThrows(NoSuchElementException.class, () -> plantService.getDetail(plantId, gardenerId));
+        assertThrows(ResourceNotFoundException.class, () -> plantService.getDetail(plantId, gardenerId));
     }
 
     @Test
     @DisplayName("한 식물의 세부 정보: 내 식물 아님 - 실패")
-    void getDetail_WhenPlantNotMine_ThrowNoSuchElementException() {
+    void getDetail_WhenPlantNotMine_ThrowResourceNotFoundException() {
         // Given
         Long plantId = 1L;
         Long gardenerId = 1L;
@@ -124,7 +129,7 @@ class PlantServiceImplTest {
         when(plantRepository.findPlantWithLatestWateringDate(plantId, gardenerId)).thenReturn(Optional.empty());
 
         // When, Then
-        assertThrows(NoSuchElementException.class, () -> plantService.getDetail(plantId, gardenerId));
+        assertThrows(ResourceNotFoundException.class, () -> plantService.getDetail(plantId, gardenerId));
     }
 
     @Test
@@ -138,7 +143,7 @@ class PlantServiceImplTest {
 
         Gardener gardener = Gardener.builder().gardenerId(gardenerId).name("메밀").build();
         Place place = Place.builder().placeId(placeId).build();
-        Plant savedPlant = Plant.builder().plantId(3L).name(request.getName()).gardener(gardener).waterings(new ArrayList<>()).place(place).build();
+        Plant savedPlant = Plant.builder().plantId(3L).name(request.getName()).gardener(gardener).waterings(new ArrayList<>()).place(place).createDate(LocalDateTime.now()).build();
 
         when(plantCommandService.save(gardenerId, request)).thenReturn(savedPlant);
 
@@ -147,8 +152,8 @@ class PlantServiceImplTest {
 
         // Then
         assertNotNull(result);
-        assertEquals(GardenDetail.noRecord(savedPlant.getBirthday()), result.getGardenDetail());
-        assertEquals(PlantResponse.from(savedPlant), result.getPlant());
+        assertEquals(GardenDetail.notEnoughRecord(savedPlant.getBirthday()), result.getGardenDetail());
+        assertEquals(new PlantResponse(savedPlant), result.getPlant());
     }
 
     @Test
@@ -170,21 +175,19 @@ class PlantServiceImplTest {
 
         Gardener gardener = Gardener.builder().gardenerId(gardenerId).name("메밀").build();
         Place place = Place.builder().placeId(newPlaceId).build();
-        Plant updatedPlant = Plant.builder().plantId(plantId).name(request.getName()).recentWateringPeriod(3).gardener(gardener).waterings(waterings).place(place).build();
+        Plant updatedPlant = Plant.builder().plantId(plantId).name(request.getName()).recentWateringPeriod(3).gardener(gardener).waterings(waterings).place(place).createDate(LocalDateTime.now()).build();
 
         when(plantCommandService.update(request, gardenerId)).thenReturn(updatedPlant);
 
         // When
         GardenResponse result = plantService.update(gardenerId, request);
 
-        System.out.println(result);
-
         // Then
         assertNotNull(result);
         assertEquals(request.getName(), result.getPlant().getName());
         assertEquals(request.getPlaceId(), result.getPlant().getPlaceId());
 
-        assertEquals(PlantResponse.from(updatedPlant), result.getPlant());
+        assertEquals(new PlantResponse(updatedPlant), result.getPlant());
         assertEquals(WateringCode.CHECK.getCode(), result.getGardenDetail().getWateringCode());
     }
 
@@ -206,14 +209,14 @@ class PlantServiceImplTest {
 
     @Test
     @DisplayName("식물 삭제: 그런 식물 없음 - 실패")
-    void delete_WhenPlantNotFound_ShouldThrowNoSuchElementException() {
+    void delete_WhenPlantNotFound_ShouldThrowResourceNotFoundException() {
         // Given
         Long gardenerId = 1L;
         Long plantId = 2L;
         when(plantRepository.findByPlantId(1L)).thenReturn(Optional.empty());
 
         // When, then
-        assertThrows(NoSuchElementException.class, () -> plantService.delete(plantId, gardenerId));
+        assertThrows(ResourceNotFoundException.class, () -> plantService.delete(plantId, gardenerId));
     }
 
     @Test

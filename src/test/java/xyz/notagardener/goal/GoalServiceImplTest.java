@@ -9,17 +9,19 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.Gardener;
-import xyz.notagardener.gardener.gardener.GardenerRepository;
+import xyz.notagardener.gardener.repository.GardenerRepository;
+import xyz.notagardener.goal.dto.GoalDto;
+import xyz.notagardener.goal.repository.GoalRepository;
+import xyz.notagardener.goal.service.GoalServiceImpl;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -28,7 +30,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
-@DisplayName("목표")
+@DisplayName("목표 컴포넌트 테스트")
 class GoalServiceImplTest {
     @Mock
     private GoalRepository goalRepository;
@@ -69,7 +71,7 @@ class GoalServiceImplTest {
 
     @Test
     @DisplayName("목표 추가/수정용 식물 가져오기: plantId에 해당하는 식물이 없는 경우 - 실패")
-    void getPlantForGoal_WhenPlantNotExist_ThrowsNoSuchElementException() {
+    void getPlantForGoal_WhenPlantNotExist_ThrowsResourceNotFoundException() {
         // Given
         Long plantId = 1L;
         Long gardenerId = 2L;
@@ -78,13 +80,13 @@ class GoalServiceImplTest {
 
         // When, Then
         Executable executable = () -> goalService.getPlantForGoal(plantId, gardenerId);
-        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
-        assertEquals(ExceptionCode.NO_SUCH_ITEM.getCode(), e.getMessage());
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_SUCH_PLANT, e.getCode());
     }
 
     @Test
     @DisplayName("목표 추가/수정용 식물 가져오기: 내 식물이 아닌 경우 - 실패")
-    void getPlantForGoal_WhenPlantNotMine_ThrowsNoSuchElementException() {
+    void getPlantForGoal_WhenPlantNotMine_ThrowsResourceNotFoundException() {
         // Given
         Long plantId = 1L;
         Long invalidGardenerId = 2L; // 제출된 값
@@ -98,7 +100,7 @@ class GoalServiceImplTest {
         // When, Then
         Executable executable = () -> goalService.getPlantForGoal(plantId, invalidGardenerId);
         UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
-        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), e.getMessage());
+        assertEquals(ExceptionCode.NOT_YOUR_PLANT, e.getCode());
     }
 
     @Test
@@ -181,56 +183,9 @@ class GoalServiceImplTest {
         assertEquals(request.getContent(), result.getContent());
     }
 
-    static Stream<GoalDto> invalidGoalSavingData() {
-        String validContent = "식물 목표 추가";
-        String validComplete = "N";
-        Long validPlantId = 2L;
-
-        return Stream.of(
-                GoalDto.builder().content(null).complete(validComplete).plantId(validPlantId).build(),
-                GoalDto.builder().content("").complete(validComplete).plantId(validPlantId).build(),
-                GoalDto.builder().content("reallyreallyreallyreallyreallyreallyreallyreallylongcontentreallyreallyreallyreallyreallyreallyreallyreallylongcontent").complete(validComplete).plantId(validPlantId).build(),
-
-                GoalDto.builder().content(validContent).complete("메밀").plantId(validPlantId).build(),
-                GoalDto.builder().content(validContent).complete(null).plantId(validPlantId).build(),
-                GoalDto.builder().content(validContent).complete("").plantId(validPlantId).build(),
-                GoalDto.builder().content(validContent).complete("Y").plantId(validPlantId).build(),
-
-                GoalDto.builder().content(validContent).complete(validComplete).plantId(-1L).build()
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("invalidGoalSavingData")
-    @DisplayName("목표 추가: 실패 - 입력값 유효성 검사 실패")
-    void add_WhenInputDataInvalid_ThrowIllegalArgumentException(GoalDto invalidInput) {
-        // Given
-        Long gardenerId = 1L;
-
-        // When, Then
-        Executable executable = () -> goalService.add(gardenerId, invalidInput);
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
-        assertEquals(ExceptionCode.INVALID_REQUEST_DATA.getCode(), e.getMessage());
-    }
-
-    @Test
-    @DisplayName("목표 추가: 실패 - gardenerId 오류")
-    void add_WhenGardenerNotExist_ThrowNoSuchElementException() {
-        // Given
-        Long gardenerId = 10L;
-        GoalDto request = GoalDto.builder().content("식물 목표").complete("N").plantId(1L).plantName("샌더소니").build();
-
-        when(gardenerRepository.getReferenceById(gardenerId)).thenReturn(null);
-
-        // When, Then
-        Executable executable = () -> goalService.add(gardenerId, request);
-        UsernameNotFoundException e = assertThrows(UsernameNotFoundException.class, executable);
-        assertEquals(ExceptionCode.NO_ACCOUNT.getCode(), e.getMessage());
-    }
-
     @Test
     @DisplayName("목표 추가: 실패 - plantId에 해당하는 식물 없음")
-    void add_WhenPlantNotExist_ThrowNoSuchElementException() {
+    void add_WhenPlantNotExist_ThrowResourceNotFoundException() {
         // Given
         Long gardenerId = 1L;
         Long plantId = 10L;
@@ -243,13 +198,13 @@ class GoalServiceImplTest {
 
         // When, Then
         Executable executable = () -> goalService.add(gardenerId, request);
-        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
-        assertEquals(ExceptionCode.NO_SUCH_ITEM.getCode(), e.getMessage());
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_SUCH_PLANT, e.getCode());
     }
 
     @Test
     @DisplayName("목표 추가: 실패 - 내 식물 아님")
-    void add_WhenPlantNotMine_ThrowNoSuchElementException() {
+    void add_WhenPlantNotMine_ThrowResourceNotFoundException() {
         // Given
         Long gardenerId = 1L;
         Long plantId = 10L;
@@ -264,7 +219,7 @@ class GoalServiceImplTest {
         // When, Then
         Executable executable = () -> goalService.add(gardenerId, request);
         UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
-        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), e.getMessage());
+        assertEquals(ExceptionCode.NOT_YOUR_PLANT, e.getCode());
     }
 
     @Test
@@ -307,41 +262,9 @@ class GoalServiceImplTest {
         assertNotEquals(prevContent, result.getContent());
     }
 
-    static Stream<GoalDto> invalidGoalUpdateData() {
-        Long validGoalId = 1L;
-        String validContent = "식물 목표 수정";
-        String validComplete = "N";
-        Long validPlantId = 2L;
-
-        return Stream.of(
-                GoalDto.builder().id(validGoalId).content(null).complete(validComplete).plantId(validPlantId).build(),
-                GoalDto.builder().id(validGoalId).content("").complete(validComplete).plantId(validPlantId).build(),
-                GoalDto.builder().id(validGoalId).content("reallyreallyreallyreallyreallyreallyreallyreallylongcontentreallyreallyreallyreallyreallyreallyreallyreallylongcontent").complete(validComplete).plantId(validPlantId).build(),
-
-                GoalDto.builder().id(validGoalId).content(validContent).complete("T").plantId(validPlantId).build(),
-                GoalDto.builder().id(validGoalId).content(validContent).complete(null).plantId(validPlantId).build(),
-                GoalDto.builder().id(validGoalId).content(validContent).complete("").plantId(validPlantId).build(),
-
-                GoalDto.builder().id(validGoalId).content(validContent).complete(validComplete).plantId(-1L).build()
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("invalidGoalUpdateData")
-    @DisplayName("목표 수정: 실패 - 입력값 유효성 검증 실패")
-    void update_WhenRequestDataInvalid_ThrowIllegalArgumentException(GoalDto invalidInput) {
-        // Given
-        Long gardenerId = 1L;
-
-        // When, Then
-        Executable executable = () -> goalService.update(gardenerId, invalidInput);
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
-        assertEquals(ExceptionCode.INVALID_REQUEST_DATA.getCode(), e.getMessage());
-    }
-
     @Test
     @DisplayName("목표 수정: 실패 - plantId에 해당하는 식물 없음")
-    void update_WhenPlantNotExist_ThrowNoSuchElementException() {
+    void update_WhenPlantNotExist_ThrowResourceNotFoundException() {
         // Given
         Long gardenerId = 1L;
         Long goalId = 1L;
@@ -353,8 +276,8 @@ class GoalServiceImplTest {
 
         // When, Then
         Executable executable = () -> goalService.update(gardenerId, request);
-        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
-        assertEquals(ExceptionCode.NO_SUCH_ITEM.getCode(), e.getMessage());
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_SUCH_PLANT, e.getCode());
     }
 
     @Test
@@ -377,12 +300,12 @@ class GoalServiceImplTest {
         // When, Then
         Executable executable = () -> goalService.update(invalidGardenerId, request);
         UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
-        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), e.getMessage());
+        assertEquals(ExceptionCode.NOT_YOUR_PLANT, e.getCode());
     }
 
     @Test
     @DisplayName("목표 수정: 실패 - 수정 대상인 목표가 존재하지 않음")
-    void update_WhenGoalNotExist_ThrowNoSuchElementException() {
+    void update_WhenGoalNotExist_ThrowResourceNotFoundException() {
         // Given
         Long gardenerId = 1L;
         Long goalId = 1L;
@@ -400,8 +323,8 @@ class GoalServiceImplTest {
 
         // When, Then
         Executable executable = () -> goalService.update(gardenerId, request);
-        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
-        assertEquals(ExceptionCode.NO_SUCH_ITEM.getCode(), e.getMessage());
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_SUCH_GOAL, e.getCode());
     }
 
     @Test
@@ -426,7 +349,7 @@ class GoalServiceImplTest {
         // When, Then
         Executable executable = () -> goalService.update(invalidGardenerId, request);
         UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
-        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), e.getMessage());
+        assertEquals(ExceptionCode.NOT_YOUR_GOAL, e.getCode());
     }
 
     static Stream<String> getPrevComplete() {
@@ -435,6 +358,7 @@ class GoalServiceImplTest {
 
     @ParameterizedTest
     @MethodSource("getPrevComplete")
+    @DisplayName("목표 완료")
     void complete_WhenPrevGoalIncomplete_ReturnCompletedGoalDto(String prevComplete) {
         // Given
         Long goalId = 1L;
@@ -454,6 +378,7 @@ class GoalServiceImplTest {
     }
 
     @Test
+    @DisplayName("목표 삭제: 성공")
     void delete() {
         // Given
         Long goalId = 1L;

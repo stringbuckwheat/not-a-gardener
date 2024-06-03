@@ -11,18 +11,21 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.VerificationException;
 import xyz.notagardener.gardener.Gardener;
-import xyz.notagardener.gardener.authentication.dto.Login;
-import xyz.notagardener.gardener.gardener.GardenerRepository;
+import xyz.notagardener.authentication.dto.Login;
+import xyz.notagardener.gardener.dto.*;
+import xyz.notagardener.gardener.repository.GardenerRepository;
+import xyz.notagardener.gardener.repository.LostGardenerRepository;
+import xyz.notagardener.gardener.service.ForgotServiceImpl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @DisplayName("계정 찾기")
@@ -96,7 +99,7 @@ class ForgotServiceImplTest {
     }
 
     @Test
-    @DisplayName("확인 코드 검증: Happy Path")
+    @DisplayName("확인 코드 검증: Success")
     void verifyIdentificationCode_WhenSuccess_ReturnVerifyResponse() {
         // Given
         String email = "testgardener@notagardener.xyz";
@@ -106,10 +109,12 @@ class ForgotServiceImplTest {
         when(lostGardenerRepository.findById(identificationCode)).thenReturn(Optional.of(lostGardener));
 
         // When
-        VerifyRequest result = forgotService.verifyIdentificationCode(verifyRequest);
+        VerifyResponse result = forgotService.verifyIdentificationCode(verifyRequest);
 
         // Then
-        assertEquals(email, result.getEmail());
+        assertNotNull(result);
+        assertTrue(result.getVerified());
+        assertEquals("본인 확인 코드", result.getSubject());
     }
 
     @Test
@@ -124,8 +129,8 @@ class ForgotServiceImplTest {
 
         // When, Then
         Executable executable = () -> forgotService.verifyIdentificationCode(verifyRequest);
-        VerificationException e = assertThrows(VerificationException.class, executable);
-        assertEquals(ExceptionCode.NO_IDENTIFICATION_INFO_IN_REDIS.getCode(), e.getMessage());
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_IDENTIFICATION_INFO_IN_REDIS, e.getCode());
     }
 
     @Test
@@ -143,7 +148,7 @@ class ForgotServiceImplTest {
         // When, Then
         Executable executable = () -> forgotService.verifyIdentificationCode(verifyRequest);
         VerificationException e = assertThrows(VerificationException.class, executable);
-        assertEquals(ExceptionCode.NOT_YOUR_IDENTIFICATION_CODE.getCode(), e.getMessage());
+        assertEquals(ExceptionCode.NOT_YOUR_IDENTIFICATION_CODE, e.getCode());
     }
 
     @Test

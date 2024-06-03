@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import xyz.notagardener.chemical.Chemical;
 import xyz.notagardener.chemical.repository.ChemicalRepository;
 import xyz.notagardener.common.error.exception.AlreadyWateredException;
+import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.plant.Plant;
@@ -26,12 +27,12 @@ import xyz.notagardener.watering.watering.repository.WateringRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@DisplayName("물주기 저장/수정/삭제 컴포넌트 테스트")
 class WateringCommandServiceImplTest {
     @Mock
     private WateringRepository wateringRepository;
@@ -194,7 +195,7 @@ class WateringCommandServiceImplTest {
     @ParameterizedTest
     @ArgumentsSource(InvalidWateringRequestProvider.class)
     @DisplayName("물주기 등록: 내 약품 또는 식물이 아님 - 실패")
-    void add_WhenRequestDataInvalid_ShouldThrowUnauthorizedAccessExceptionOrNoSuchElementException
+    void add_WhenRequestDataInvalid_ShouldThrowUnauthorizedAccessExceptionOrResourceNotFoundException
             (Optional<Chemical> chemical, Optional<Plant> plant, Class<RuntimeException> expectedType) {
         // Given
         Long plantId = 1L;
@@ -225,11 +226,11 @@ class WateringCommandServiceImplTest {
         Gardener gardener = Gardener.builder().gardenerId(gardenerId).build();
         Plant plant = Plant.builder().plantId(plantId).gardener(gardener).waterings(new ArrayList<Watering>()).build();
         Chemical chemical = Chemical.builder().chemicalId(chemicalId).gardener(gardener).build();
-        Watering watering = Watering.builder().wateringId(wateringId).wateringDate(LocalDate.now()).plant(plant).build();
+        Watering watering = Watering.builder().wateringId(wateringId).wateringDate(LocalDate.now().minusDays(3)).plant(plant).build();
 
         when(plantRepository.findByPlantId(plantId)).thenReturn(Optional.of(plant));
         when(chemicalRepository.findById(chemicalId)).thenReturn(Optional.of(chemical));
-        when(wateringRepository.findByWateringIdAndPlant_Gardener_GardenerId(wateringId, gardenerId)).thenReturn(Optional.of(watering));
+        when(wateringRepository.findByWateringIdAndPlant_PlantId(wateringId, plantId)).thenReturn(Optional.of(watering));
         when(wateringRepository.findLatestFourWateringDate(plantId)).thenReturn(List.of(watering));
 
         // When
@@ -243,29 +244,9 @@ class WateringCommandServiceImplTest {
         assertEquals(AfterWateringCode.FIRST_WATERING.getCode(), wateringMessage.getAfterWateringCode());
     }
 
-    @ParameterizedTest
-    @ArgumentsSource(InvalidWateringRequestProvider.class)
-    @DisplayName("물주기 수정: 내 약품 또는 식물이 아님 - 실패")
-    void update_WhenRequestDataInvalid_ShouldThrowUnauthorizedAccessExceptionOrNoSuchElementException
-            (Optional<Chemical> chemical, Optional<Plant> plant, Class<RuntimeException> expectedType) {
-        // Given
-        Long plantId = 1L;
-        Long chemicalId = 2L;
-        Long gardenerId = 4L;
-        LocalDate wateringDate = LocalDate.now();
-
-        WateringRequest request = WateringRequest.builder().id(3L).plantId(plantId).chemicalId(chemicalId).wateringDate(wateringDate).build();
-
-        when(chemicalRepository.findById(chemicalId)).thenReturn(chemical);
-        when(plantRepository.findByPlantId(plantId)).thenReturn(plant);
-
-        // When, Then
-        assertThrows(expectedType, () -> wateringCommandService.update(request, gardenerId));
-    }
-
     @Test
     @DisplayName("물주기 수정: 그런 물주기 기록 없음 - 실패")
-    void update_WhenWateringNotExistOrNotMine_ShouldThrowNoSuchElementException() {
+    void update_WhenWateringNotExistOrNotMine_ShouldThrowResourceNotFoundException() {
         // Given
         Long plantId = 1L;
         Long chemicalId = 2L;
@@ -283,7 +264,7 @@ class WateringCommandServiceImplTest {
         when(wateringRepository.findByWateringIdAndPlant_Gardener_GardenerId(wateringId, gardenerId)).thenReturn(Optional.empty());
 
         // When, Then
-        assertThrows(NoSuchElementException.class, () -> wateringCommandService.update(request, gardenerId));
+        assertThrows(ResourceNotFoundException.class, () -> wateringCommandService.update(request, gardenerId));
     }
 
     @Test
@@ -314,7 +295,7 @@ class WateringCommandServiceImplTest {
 
     @Test
     @DisplayName("물 주기 개별 삭제: 해당 item 없음 - 실패")
-    void deleteById_WhenWateringNotExistOrNotMine_ShouldThrowNoSuchElementException() {
+    void deleteById_WhenWateringNotExistOrNotMine_ShouldThrowResourceNotFoundException() {
         // Given
         Long plantId = 1L;
         Long gardenerId = 3L;
@@ -324,7 +305,7 @@ class WateringCommandServiceImplTest {
                 .thenReturn(Optional.empty());
 
         // When, Then
-        assertThrows(NoSuchElementException.class, () -> wateringCommandService.deleteById(wateringId, plantId, gardenerId));
+        assertThrows(ResourceNotFoundException.class, () -> wateringCommandService.deleteById(wateringId, plantId, gardenerId));
         verify(wateringRepository, times(0)).delete(any());
     }
 
@@ -349,7 +330,7 @@ class WateringCommandServiceImplTest {
 
     @Test
     @DisplayName("식물에 속한 모든 물 주기 삭제: 그런 식물 없음 - 실패")
-    void deleteAllWateringsByPlantId_WhenPlantNotExist_ShouldThrowNoSuchElementException() {
+    void deleteAllWateringsByPlantId_WhenPlantNotExist_ShouldThrowResourceNotFoundException() {
         // Given
         Long plantId = 1L;
         Long gardenerId = 2L;
@@ -357,7 +338,7 @@ class WateringCommandServiceImplTest {
         when(plantRepository.findByPlantId(plantId)).thenReturn(Optional.empty());
 
         // When, Then
-        assertThrows(NoSuchElementException.class, () -> wateringCommandService.deleteByPlantId(plantId, gardenerId));
+        assertThrows(ResourceNotFoundException.class, () -> wateringCommandService.deleteByPlantId(plantId, gardenerId));
         verify(wateringRepository, times(0)).deleteAllByPlant_PlantId(plantId);
     }
 

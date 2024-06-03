@@ -7,10 +7,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import xyz.notagardener.plant.garden.dto.GardenResponse;
-import xyz.notagardener.plant.garden.dto.RawGarden;
-import xyz.notagardener.watering.code.WateringCode;
-import xyz.notagardener.watering.dto.ChemicalUsage;
-import xyz.notagardener.watering.repository.WateringRepository;
+import xyz.notagardener.plant.garden.dto.PlantResponse;
+import xyz.notagardener.repot.service.RepotAlarmUtils;
+import xyz.notagardener.watering.watering.dto.ChemicalUsage;
+import xyz.notagardener.watering.watering.repository.WateringRepository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
+@DisplayName("식물 계산 컴포넌트 테스트")
 class GardenResponseMapperImplTest {
     @Mock
     private WateringRepository wateringRepository;
@@ -28,10 +29,13 @@ class GardenResponseMapperImplTest {
     @Mock
     private ChemicalInfoServiceImpl chemicalInfoService;
 
+    @Mock
+    private RepotAlarmUtils repotAlarmUtils;
+
     @InjectMocks
     private GardenResponseMapperImpl gardenResponseMapper;
 
-    private RawGardenFactory rawGardenFactory = new RawGardenFactory();
+    private PlantResponseFactory plantResponseFactory = new PlantResponseFactory();
 
     @BeforeEach
     void setUp() {
@@ -43,10 +47,10 @@ class GardenResponseMapperImplTest {
     void getGardenDetail_WhenPostponed_ShouldReturnCodeYouAreLazy() {
         // Given
         Long gardenerId = 1L;
-        RawGarden rawGarden = rawGardenFactory.getPostponedPlant();
+        PlantResponse plantResponse = plantResponseFactory.getPostponedPlant();
 
         // When
-        GardenResponse result = gardenResponseMapper.getGardenResponse(rawGarden, gardenerId);
+        GardenResponse result = gardenResponseMapper.getGardenResponse(plantResponse, gardenerId);
 
         // Then
         assertNotNull(result);
@@ -58,10 +62,10 @@ class GardenResponseMapperImplTest {
     void getGardenDetail_WhenNoWateringRecord_ShouldReturnCodeNoRecord() {
         // Given
         Long gardenerId = 1L;
-        RawGarden rawGarden = rawGardenFactory.getPlantWithNoWateringRecord();
+        PlantResponse plantResponse = plantResponseFactory.getPlantWithNoWateringRecord();
 
         // When
-        GardenResponse result = gardenResponseMapper.getGardenResponse(rawGarden, gardenerId);
+        GardenResponse result = gardenResponseMapper.getGardenResponse(plantResponse, gardenerId);
 
         // Then
         assertNotNull(result);
@@ -73,13 +77,13 @@ class GardenResponseMapperImplTest {
     void getGardenDetail_WhenWateredToday_ShouldReturnCodeWateredToday() {
         // Given
         Long gardenerId = 1L;
-        RawGarden rawGarden = rawGardenFactory.getWateredTodayPlant();
+        PlantResponse plantResponse = plantResponseFactory.getWateredTodayPlant();
 
         // When
-        GardenResponse result = gardenResponseMapper.getGardenResponse(rawGarden, gardenerId);
+        GardenResponse result = gardenResponseMapper.getGardenResponse(plantResponse, gardenerId);
 
         // Then
-        int calculatedWateringCode = result.getGardenDetail().getWateringCode();
+        String calculatedWateringCode = result.getGardenDetail().getWateringCode();
 
         assertNotNull(result);
         assertEquals(WateringCode.WATERED_TODAY.getCode(), calculatedWateringCode);
@@ -90,13 +94,13 @@ class GardenResponseMapperImplTest {
     void getGardenDetail_WhenHasOneRecord_ShouldReturnCodeNotEnoughRecord() {
         // Given
         Long gardenerId = 1L;
-        RawGarden rawGarden = rawGardenFactory.getPlantWithOneWateringRecord();
+        PlantResponse plantResponse = plantResponseFactory.getPlantWithOneWateringRecord();
 
         // When
-        GardenResponse result = gardenResponseMapper.getGardenResponse(rawGarden, gardenerId);
+        GardenResponse result = gardenResponseMapper.getGardenResponse(plantResponse, gardenerId);
 
         // Then
-        int calculatedWateringCode = result.getGardenDetail().getWateringCode();
+        String calculatedWateringCode = result.getGardenDetail().getWateringCode();
 
         assertNotNull(result);
         assertEquals(WateringCode.NOT_ENOUGH_RECORD.getCode(), calculatedWateringCode);
@@ -119,13 +123,13 @@ class GardenResponseMapperImplTest {
 
         when(chemicalInfoService.getChemicalUsagesByPlantId(plantId, gardenerId)).thenReturn(chemicalUsages);
 
-        RawGarden rawGarden = rawGardenFactory.getThirstyPlant(wateringPeriod);
+        PlantResponse plantResponse = plantResponseFactory.getThirstyPlant(wateringPeriod);
 
         // When
-        GardenResponse result = gardenResponseMapper.getGardenResponse(rawGarden, gardenerId);
+        GardenResponse result = gardenResponseMapper.getGardenResponse(plantResponse, gardenerId);
 
         // Then
-        int calculatedWateringCode = result.getGardenDetail().getWateringCode();
+        String calculatedWateringCode = result.getGardenDetail().getWateringCode();
 
         assertNotNull(result);
         assertEquals(WateringCode.THIRSTY.getCode(), calculatedWateringCode);
@@ -148,13 +152,13 @@ class GardenResponseMapperImplTest {
 
         when(chemicalInfoService.getChemicalUsagesByPlantId(anyLong(), anyLong())).thenReturn(chemicalUsages);
 
-        RawGarden rawGarden = rawGardenFactory.getThirstyPlant(wateringPeriod);
+        PlantResponse plantResponse = plantResponseFactory.getThirstyPlant(wateringPeriod);
 
         // When
-        GardenResponse result = gardenResponseMapper.getGardenResponse(rawGarden, gardenerId);
+        GardenResponse result = gardenResponseMapper.getGardenResponse(plantResponse, gardenerId);
 
         // Then
-        int calculatedWateringCode = result.getGardenDetail().getWateringCode();
+        String calculatedWateringCode = result.getGardenDetail().getWateringCode();
         Long expectedChemicalId = chemicalUsages.get(1).getChemicalId();
         Long actualChemicalId = result.getGardenDetail().getChemicalInfo().getChemicalId();
 
@@ -170,7 +174,7 @@ class GardenResponseMapperImplTest {
         Long gardenerId = 1L;
         int wateringPeriod = 3;
         Long plantId = 2L;
-        RawGarden rawGarden = rawGardenFactory.getThirstyPlant(wateringPeriod);
+        PlantResponse plantResponse = plantResponseFactory.getThirstyPlant(wateringPeriod);
 
         // 약품 정보
         List<ChemicalUsage> chemicalUsages = Arrays.asList(
@@ -181,12 +185,10 @@ class GardenResponseMapperImplTest {
         when(chemicalInfoService.getChemicalUsagesByPlantId(anyLong(), anyLong())).thenReturn(chemicalUsages);
 
         // When
-        GardenResponse result = gardenResponseMapper.getGardenResponse(rawGarden, gardenerId);
-
-        System.out.println("Garden Response: " + result);
+        GardenResponse result = gardenResponseMapper.getGardenResponse(plantResponse, gardenerId);
 
         // Then
-        int calculatedWateringCode = result.getGardenDetail().getWateringCode();
+        String calculatedWateringCode = result.getGardenDetail().getWateringCode();
         Long expectedChemicalId = chemicalUsages.get(0).getChemicalId();
         Long actualChemicalId = result.getGardenDetail().getChemicalInfo().getChemicalId();
 
@@ -206,13 +208,13 @@ class GardenResponseMapperImplTest {
         // 약품 정보
         when(chemicalInfoService.getChemicalUsagesByPlantId(plantId, gardenerId)).thenReturn(new ArrayList<>());
 
-        RawGarden rawGarden = rawGardenFactory.getThirstyPlant(wateringPeriod);
+        PlantResponse plantResponse = plantResponseFactory.getThirstyPlant(wateringPeriod);
 
         // When
-        GardenResponse result = gardenResponseMapper.getGardenResponse(rawGarden, gardenerId);
+        GardenResponse result = gardenResponseMapper.getGardenResponse(plantResponse, gardenerId);
 
         // Then
-        int calculatedWateringCode = result.getGardenDetail().getWateringCode();
+        String calculatedWateringCode = result.getGardenDetail().getWateringCode();
 
         assertNotNull(result);
         assertEquals(WateringCode.THIRSTY.getCode(), calculatedWateringCode);
@@ -225,8 +227,8 @@ class GardenResponseMapperImplTest {
         Long gardenerId = 1L;
         int wateringPeriod = 3;
         Long plantId = 2L;
-        RawGarden rawGarden = rawGardenFactory.getCheckingPlant(wateringPeriod);
-        LocalDate lastDrinkingDay = rawGarden.getLatestWateringDate();
+        PlantResponse plantResponse = plantResponseFactory.getCheckingPlant(wateringPeriod);
+        LocalDate lastDrinkingDay = plantResponse.getLatestWateringDate();
 
         // 약품 정보
         List<ChemicalUsage> chemicalUsages = Arrays.asList(
@@ -238,10 +240,10 @@ class GardenResponseMapperImplTest {
 
 
         // When
-        GardenResponse result = gardenResponseMapper.getGardenResponse(rawGarden, gardenerId);
+        GardenResponse result = gardenResponseMapper.getGardenResponse(plantResponse, gardenerId);
 
         // Then
-        int calculatedWateringCode = result.getGardenDetail().getWateringCode();
+        String calculatedWateringCode = result.getGardenDetail().getWateringCode();
 
         assertNotNull(result);
         assertEquals(WateringCode.CHECK.getCode(), calculatedWateringCode);
@@ -255,8 +257,8 @@ class GardenResponseMapperImplTest {
         Long gardenerId = 1L;
         int wateringPeriod = 3;
         Long plantId = 2L;
-        RawGarden rawGarden = rawGardenFactory.getCheckingPlant(wateringPeriod);
-        LocalDate lastDrinkingDay = rawGarden.getLatestWateringDate();
+        PlantResponse plantResponse = plantResponseFactory.getCheckingPlant(wateringPeriod);
+        LocalDate lastDrinkingDay = plantResponse.getLatestWateringDate();
 
         // 약품 정보
         // 줘야할 비료가 하나인 경우
@@ -269,10 +271,10 @@ class GardenResponseMapperImplTest {
 
 
         // When
-        GardenResponse result = gardenResponseMapper.getGardenResponse(rawGarden, gardenerId);
+        GardenResponse result = gardenResponseMapper.getGardenResponse(plantResponse, gardenerId);
 
         // Then
-        int calculatedWateringCode = result.getGardenDetail().getWateringCode();
+        String calculatedWateringCode = result.getGardenDetail().getWateringCode();
         Long expectedChemicalId = chemicalUsages.get(1).getChemicalId();
 
         Long actualChemicalId = result.getGardenDetail().getChemicalInfo().getChemicalId();
@@ -288,13 +290,13 @@ class GardenResponseMapperImplTest {
         // Given
         Long gardenerId = 1L;
         int wateringPeriod = 10;
-        RawGarden rawGarden = rawGardenFactory.getLeaveHerAlonePlant(wateringPeriod);
+        PlantResponse plantResponse = plantResponseFactory.getLeaveHerAlonePlant(wateringPeriod);
 
         // When
-        GardenResponse result = gardenResponseMapper.getGardenResponse(rawGarden, gardenerId);
+        GardenResponse result = gardenResponseMapper.getGardenResponse(plantResponse, gardenerId);
 
         // Then
-        int calculatedWateringCode = result.getGardenDetail().getWateringCode();
+        String calculatedWateringCode = result.getGardenDetail().getWateringCode();
 
         assertNotNull(result);
         assertEquals(WateringCode.LEAVE_HER_ALONE.getCode(), calculatedWateringCode);
@@ -309,17 +311,17 @@ class GardenResponseMapperImplTest {
         int wateringPeriod = 5;
         int missedDay = 1; // 늦은 날
 
-        RawGarden rawGarden = rawGardenFactory.getDryOutPlant(wateringPeriod, missedDay);
+        PlantResponse plantResponse = plantResponseFactory.getDryOutPlant(wateringPeriod, missedDay);
 
         // When
-        GardenResponse result = gardenResponseMapper.getGardenResponse(rawGarden, gardenerId);
+        GardenResponse result = gardenResponseMapper.getGardenResponse(plantResponse, gardenerId);
 
         // Then
-        int calculatedWateringCode = result.getGardenDetail().getWateringCode();
+        String calculatedWateringCode = result.getGardenDetail().getWateringCode();
 
         assertNotNull(result);
         assertNull(result.getGardenDetail().getChemicalInfo());
-        assertTrue(calculatedWateringCode < 0);
-        assertEquals(missedDay, calculatedWateringCode * -1);
+        assertEquals(WateringCode.LATE_WATERING.getCode(), calculatedWateringCode);
+        assertEquals(missedDay, result.getGardenDetail().getWateringDDay() * -1);
     }
 }

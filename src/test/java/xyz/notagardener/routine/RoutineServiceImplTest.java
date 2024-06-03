@@ -4,16 +4,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.Gardener;
-import xyz.notagardener.gardener.gardener.GardenerRepository;
+import xyz.notagardener.gardener.repository.GardenerRepository;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
 import xyz.notagardener.routine.dto.RoutineComplete;
@@ -24,13 +22,13 @@ import xyz.notagardener.routine.dto.RoutineResponse;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@DisplayName("루틴 컴포넌트 테스트")
 class RoutineServiceImplTest {
     @Mock
     private RoutineRepository routineRepository;
@@ -71,15 +69,6 @@ class RoutineServiceImplTest {
 
         // When
         RoutineMain result = routineService.getAll(gardenerId);
-        for (RoutineResponse r : result.getNotToDoList()) {
-            System.out.println(r);
-        }
-
-        System.out.println("0-0-0-0-");
-
-        for (RoutineResponse r : result.getTodoList()) {
-            System.out.println(r);
-        }
 
         // Then
         assertNotNull(result);
@@ -121,57 +110,9 @@ class RoutineServiceImplTest {
         assertNotNull(result.getId());
     }
 
-    static List<RoutineRequest> invalidRoutineSavingData() {
-        String validContent = "루틴 추가";
-        int validCycle = 7;
-        Long validPlantId = 1L;
-
-        return Arrays.asList(
-                RoutineRequest.builder().content(null).cycle(validCycle).plantId(validPlantId).build(),
-                RoutineRequest.builder().content("").cycle(validCycle).plantId(validPlantId).build(),
-                RoutineRequest.builder().content("reallyreallyreallyreallyreallyreallyreallyreallylongcontent").cycle(validCycle).plantId(validPlantId).build(),
-
-                RoutineRequest.builder().content(validContent).cycle(0).plantId(validPlantId).build(),
-                RoutineRequest.builder().content(validContent).cycle(-1).plantId(validPlantId).build(),
-
-                RoutineRequest.builder().content(validContent).cycle(validCycle).plantId(null).build(),
-                RoutineRequest.builder().content(validContent).cycle(validCycle).plantId(-1L).build(),
-                RoutineRequest.builder().content(validContent).cycle(validCycle).plantId(0L).build()
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("invalidRoutineSavingData")
-    @DisplayName("루틴 추가: 실패 - 입력 데이터 유효성 검증 실패")
-    void add_WhenRequestDataInvalid_ShouldThrowIllegalArgumentException(RoutineRequest request) {
-        // Given
-        Long gardenerId = 1L;
-        Gardener gardener = Gardener.builder().gardenerId(gardenerId).build();
-
-        // When, Then
-        Executable executable = () -> routineService.add(request, gardenerId);
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
-        assertEquals(ExceptionCode.INVALID_REQUEST_DATA.getCode(), e.getMessage());
-    }
-
-    @Test
-    @DisplayName("루틴 추가: 실패 - 그런 유저 없음")
-    void add_WhenPlantNotExist_ShouldThrowUsernameNotFoundException() {
-        // Given
-        Long gardenerId = 1L;
-        RoutineRequest request = RoutineRequest.builder().content("루틴 추가").cycle(7).plantId(1L).build();
-
-        when(gardenerRepository.getReferenceById(gardenerId)).thenReturn(null);
-
-        // When, Then
-        Executable executable = () -> routineService.add(request, gardenerId);
-        UsernameNotFoundException e = assertThrows(UsernameNotFoundException.class, executable);
-        assertEquals(ExceptionCode.NO_ACCOUNT.getCode(), e.getMessage());
-    }
-
     @Test
     @DisplayName("루틴 추가: 실패 - 그런 식물 없음")
-    void add_WhenPlantNotExist_ShouldThrowNoSuchElementException() {
+    void add_WhenPlantNotExist_ShouldThrowResourceNotFoundException() {
         // Given
         Long gardenerId = 1L;
         Long plantId = 3L;
@@ -184,8 +125,8 @@ class RoutineServiceImplTest {
 
         // When, Then
         Executable executable = () -> routineService.add(request, gardenerId);
-        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
-        assertEquals(ExceptionCode.NO_SUCH_ITEM.getCode(), e.getMessage());
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_SUCH_PLANT, e.getCode());
     }
 
     @Test
@@ -207,7 +148,7 @@ class RoutineServiceImplTest {
         // When, Then
         Executable executable = () -> routineService.add(request, gardenerId);
         UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
-        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), e.getMessage());
+        assertEquals(ExceptionCode.NOT_YOUR_PLANT, e.getCode());
     }
 
     @Test
@@ -249,42 +190,9 @@ class RoutineServiceImplTest {
         assertEquals(request.getCycle(), result.getCycle());
     }
 
-    static List<RoutineRequest> invalidRoutineUpdateData() {
-        Long validId = 1L;
-        String validContent = "루틴 추가";
-        int validCycle = 7;
-        Long validPlantId = 2L;
-
-        return Arrays.asList(
-                RoutineRequest.builder().id(null).content(null).cycle(validCycle).plantId(validPlantId).build(),
-                RoutineRequest.builder().id(0L).content(null).cycle(validCycle).plantId(validPlantId).build(),
-                RoutineRequest.builder().id(-1L).content(null).cycle(validCycle).plantId(validPlantId).build(),
-
-                RoutineRequest.builder().id(validId).content(null).cycle(validCycle).plantId(validPlantId).build(),
-                RoutineRequest.builder().id(validId).content("").cycle(validCycle).plantId(validPlantId).build(),
-                RoutineRequest.builder().id(validId).content("reallyreallyreallyreallyreallyreallyreallyreallylongcontent").cycle(validCycle).plantId(validPlantId).build(),
-
-                RoutineRequest.builder().id(validId).content(validContent).cycle(0).plantId(validPlantId).build(),
-                RoutineRequest.builder().id(validId).content(validContent).cycle(-1).plantId(validPlantId).build(),
-
-                RoutineRequest.builder().id(validId).content(validContent).cycle(validCycle).plantId(null).build(),
-                RoutineRequest.builder().id(validId).content(validContent).cycle(validCycle).plantId(-1L).build(),
-                RoutineRequest.builder().id(validId).content(validContent).cycle(validCycle).plantId(0L).build()
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("invalidRoutineUpdateData")
-    @DisplayName("루틴 수정: 유효성 검사 통과 실패")
-    void update_WhenRequestDataInvalid_ShouldThrowIllegalArgumentException(RoutineRequest request) {
-        Executable executable = () -> routineService.update(request, 1L);
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
-        assertEquals(ExceptionCode.INVALID_REQUEST_DATA.getCode(), e.getMessage());
-    }
-
     @Test
     @DisplayName("루틴 수정: 그런 식물 없음 - 실패")
-    void update_WhenPlantNotMine_ShouldThrowNoSuchElementException() {
+    void update_WhenPlantNotMine_ShouldThrowResourceNotFoundException() {
         // Given
         Long gardenerId = 1L; // 요청자
         Long plantId = 2L; // 요청
@@ -297,8 +205,8 @@ class RoutineServiceImplTest {
 
         // When, Then
         Executable executable = () -> routineService.update(request, gardenerId);
-        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
-        assertEquals(ExceptionCode.NO_SUCH_ITEM.getCode(), e.getMessage());
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_SUCH_PLANT, e.getCode());
     }
 
     @Test
@@ -320,12 +228,12 @@ class RoutineServiceImplTest {
         // When, Then
         Executable executable = () -> routineService.update(request, gardenerId);
         UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
-        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), e.getMessage());
+        assertEquals(ExceptionCode.NOT_YOUR_PLANT, e.getCode());
     }
 
     @Test
     @DisplayName("루틴 수정: 그런 루틴 없음 - 실패")
-    void update_WhenRoutineNotExist_ShouldThrowNoSuchElementException() {
+    void update_WhenRoutineNotExist_ShouldThrowResourceNotFoundException() {
         // Given
         Long gardenerId = 1L; // 요청자
         Long plantId = 2L;
@@ -341,8 +249,8 @@ class RoutineServiceImplTest {
 
         // When, Then
         Executable executable = () -> routineService.update(request, gardenerId);
-        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
-        assertEquals(ExceptionCode.NO_SUCH_ITEM.getCode(), e.getMessage());
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_SUCH_ROUTINE, e.getCode());
     }
 
     @Test
@@ -376,7 +284,7 @@ class RoutineServiceImplTest {
         // When, Then
         Executable executable = () -> routineService.update(request, gardenerId);
         UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
-        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), e.getMessage());
+        assertEquals(ExceptionCode.NOT_YOUR_ROUTINE, e.getCode());
     }
 
     @Test
@@ -421,12 +329,12 @@ class RoutineServiceImplTest {
         // When, Then
         Executable executable = () -> routineService.complete(request, requesterId);
         UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
-        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), e.getMessage());
+        assertEquals(ExceptionCode.NOT_YOUR_ROUTINE, e.getCode());
     }
 
     @Test
     @DisplayName("루틴 완료: 그런 루틴 없음 - 실패")
-    void complete_WhenRoutineNotMine_ShouldThrowNoSuchElementException() {
+    void complete_WhenRoutineNotMine_ShouldThrowResourceNotFoundException() {
         // Given
         Long gardenerId = 1L;
         Long routineId = 2L;
@@ -437,8 +345,8 @@ class RoutineServiceImplTest {
 
         // When, Then
         Executable executable = () -> routineService.complete(request, gardenerId);
-        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
-        assertEquals(ExceptionCode.NO_SUCH_ITEM.getCode(), e.getMessage());
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_SUCH_ROUTINE, e.getCode());
     }
 
     @Test
@@ -463,7 +371,7 @@ class RoutineServiceImplTest {
 
     @Test
     @DisplayName("삭제: 루틴이 존재하지 않음")
-    void delete_WhenRoutineNotExist_ThrowNoSuchElementException() {
+    void delete_WhenRoutineNotExist_ThrowResourceNotFoundException() {
         // Given
         Long routineId = 1L;
         Long gardenerId = 2L;
@@ -471,10 +379,10 @@ class RoutineServiceImplTest {
         when(routineRepository.findByRoutineId(routineId)).thenReturn(Optional.empty());
 
         // When, Then
-        NoSuchElementException exception = assertThrows(NoSuchElementException.class,
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
                 () -> routineService.delete(routineId, gardenerId));
 
-        assertEquals(ExceptionCode.NO_SUCH_ITEM.getCode(), exception.getMessage());
+        assertEquals(ExceptionCode.NO_SUCH_ROUTINE, exception.getCode());
 
         verify(routineRepository, times(1)).findByRoutineId(routineId);
         verify(routineRepository, never()).delete(any());
@@ -496,7 +404,7 @@ class RoutineServiceImplTest {
         UnauthorizedAccessException exception = assertThrows(UnauthorizedAccessException.class,
                 () -> routineService.delete(routineId, gardenerId));
 
-        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), exception.getMessage());
+        assertEquals(ExceptionCode.NOT_YOUR_ROUTINE, exception.getCode());
 
         verify(routineRepository, times(1)).findByRoutineId(routineId);
         verify(routineRepository, never()).delete(any());

@@ -7,11 +7,13 @@ import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.Gardener;
-import xyz.notagardener.gardener.gardener.GardenerRepository;
+import xyz.notagardener.gardener.repository.GardenerRepository;
 import xyz.notagardener.place.Place;
-import xyz.notagardener.place.PlaceRepository;
+import xyz.notagardener.place.repository.PlaceRepository;
 import xyz.notagardener.place.dto.ModifyPlace;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.plant.dto.MediumType;
@@ -22,13 +24,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+@DisplayName("식물 수정 컴포넌트 테스트")
 class PlantCommandServiceImplTest {
     @Mock
     private PlantRepository plantRepository;
@@ -101,6 +103,7 @@ class PlantCommandServiceImplTest {
     }
 
     @Test
+    @DisplayName("식물 수정: 성공")
     void update_ShouldReturnUpdatedPlant() {
         // Given
         Long gardenerId = 1L;
@@ -196,12 +199,12 @@ class PlantCommandServiceImplTest {
         // When
         Executable executable = () -> plantCommandService.update(request, requesterId);
         UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
-        assertEquals("NOT_YOUR_PLANT", e.getMessage());
+        assertEquals(ExceptionCode.NOT_YOUR_PLANT, e.getCode());
     }
 
     @Test
     @DisplayName("식물 수정: 그런 식물 없음 - 실패")
-    void update_WhenPlantNotExist_ShouldThrowNoSuchElementException() {
+    void update_WhenPlantNotExist_ShouldThrowResourceNotFoundException() {
         // Given
         Long gardenerId = 1L;
         Long placeId = 2L;
@@ -222,7 +225,7 @@ class PlantCommandServiceImplTest {
 
         // When
         Executable executable = () -> plantCommandService.update(request, gardenerId);
-        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
     }
 
     @Test
@@ -251,12 +254,12 @@ class PlantCommandServiceImplTest {
         // When
         Executable executable = () -> plantCommandService.update(request, requesterId);
         UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
-        assertEquals("NOT_YOUR_PLACE", e.getMessage());
+        assertEquals(ExceptionCode.NOT_YOUR_PLACE, e.getCode());
     }
 
     @Test
     @DisplayName("식물 수정: 그런 장소 없음 - 실패")
-    void update_WhenPlaceNotExist_ShouldThrowNoSuchElementException() {
+    void update_WhenPlaceNotExist_ShouldThrowResourceNotFoundException() {
         // Given
         Long gardenerId = 1L;
         Long placeId = 2L;
@@ -273,7 +276,7 @@ class PlantCommandServiceImplTest {
 
         // When
         Executable executable = () -> plantCommandService.update(request, gardenerId);
-        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
     }
 
     @Test
@@ -331,12 +334,12 @@ class PlantCommandServiceImplTest {
         // When
         Executable executable = () -> plantCommandService.updatePlantPlace(request, gardenerId);
         UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
-        assertEquals("NOT_YOUR_PLANT", e.getMessage());
+        assertEquals(ExceptionCode.NOT_YOUR_PLANT, e.getCode());
     }
 
     @Test
     @DisplayName("여러 식물 한 장소로 한 번에 수정하기: 그런 식물 없음 - 실패")
-    void updatePlantPlace_WhenPlantNotExist_ShouldThrowNoSuchElementException() {
+    void updatePlantPlace_WhenPlantNotExist_ShouldThrowResourceNotFoundException() {
         // Given
         Long gardenerId = 1L;
         Long prevPlaceId = 2L;
@@ -360,7 +363,7 @@ class PlantCommandServiceImplTest {
 
         // When
         Executable executable = () -> plantCommandService.updatePlantPlace(request, gardenerId);
-        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
     }
 
     @Test
@@ -385,12 +388,12 @@ class PlantCommandServiceImplTest {
         // When
         Executable executable = () -> plantCommandService.updatePlantPlace(request, gardenerId);
         UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
-        assertEquals("NOT_YOUR_PLACE", e.getMessage());
+        assertEquals(ExceptionCode.NOT_YOUR_PLACE, e.getCode());
     }
 
     @Test
     @DisplayName("여러 식물 한 장소로 한 번에 수정하기: 그런 장소 없음 - 실패")
-    void updatePlantPlace_WhenPlaceNotExist_ShouldThrowNoSuchElementException() {
+    void updatePlantPlace_WhenPlaceNotExist_ShouldThrowResourceNotFoundException() {
         // Given
         Long gardenerId = 1L;
         Long newPlaceId = 3L;
@@ -402,6 +405,6 @@ class PlantCommandServiceImplTest {
 
         // When
         Executable executable = () -> plantCommandService.updatePlantPlace(request, gardenerId);
-        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
     }
 }

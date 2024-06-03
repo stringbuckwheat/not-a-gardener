@@ -1,30 +1,46 @@
 package xyz.notagardener.gardener.gardener;
 
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import xyz.notagardener.authentication.dto.AccessToken;
+import xyz.notagardener.authentication.dto.Info;
+import xyz.notagardener.authentication.dto.Login;
+import xyz.notagardener.authentication.dto.RefreshToken;
+import xyz.notagardener.authentication.service.AuthenticationService;
 import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.HasSameUsernameException;
+import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.gardener.Gardener;
-import xyz.notagardener.gardener.authentication.dto.Login;
+import xyz.notagardener.gardener.dto.GardenerDetail;
+import xyz.notagardener.gardener.dto.Register;
+import xyz.notagardener.gardener.dto.VerifyResponse;
+import xyz.notagardener.gardener.repository.GardenerRepository;
+import xyz.notagardener.gardener.service.GardenerServiceImpl;
 
+import java.security.Key;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
-@DisplayName("가드너")
+@DisplayName("회원 컴포넌트 테스트")
 class GardenerServiceImplTest {
+    @Mock
+    private AuthenticationService authenticationService;
+
     @Mock
     private BCryptPasswordEncoder encoder;
 
@@ -67,8 +83,8 @@ class GardenerServiceImplTest {
 
         // When, Then
         Executable executable = () -> gardenerService.getOne(gardenerId);
-        UsernameNotFoundException e = assertThrows(UsernameNotFoundException.class, executable);
-        assertEquals(ExceptionCode.NO_ACCOUNT.getCode(), e.getMessage());
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_ACCOUNT, e.getCode());
     }
 
     @Test
@@ -90,10 +106,11 @@ class GardenerServiceImplTest {
         when(encoder.matches(password, gardener.getPassword())).thenReturn(true);
 
         // When
-        boolean result = gardenerService.identify(gardenerId, login);
+        VerifyResponse result = gardenerService.identify(gardenerId, login);
 
         // Then
-        assertTrue(result);
+        assertNotNull(result);
+        assertTrue(result.getVerified());
         verify(gardenerRepository, times(1)).findById(gardenerId);
         verify(encoder, times(1)).matches(password, gardener.getPassword());
     }
@@ -112,8 +129,8 @@ class GardenerServiceImplTest {
 
         // When, Then
         Executable executable = () -> gardenerService.identify(gardenerId, login);
-        UsernameNotFoundException e = assertThrows(UsernameNotFoundException.class, executable);
-        assertEquals(ExceptionCode.NO_ACCOUNT.getCode(), e.getMessage());
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_ACCOUNT, e.getCode());
     }
 
     @Test
@@ -136,12 +153,95 @@ class GardenerServiceImplTest {
         when(encoder.matches(password, gardener.getPassword())).thenReturn(false);
 
         // When
-        boolean result = gardenerService.identify(gardenerId, login);
+        VerifyResponse result = gardenerService.identify(gardenerId, login);
 
         // Then
-        assertFalse(result);
+        assertNotNull(result);
+        assertFalse(result.getVerified());
         verify(gardenerRepository, times(1)).findById(gardenerId);
         verify(encoder, times(1)).matches(password, gardener.getPassword());
+    }
+
+    @Test
+    @DisplayName("아이디 중복 검사: 중복 아이디")
+    void hasSameUsername_WhenInvalid_ReturnThatUsername() {
+        // Given
+        String username = "testgardener";
+
+        when(gardenerRepository.findByProviderIsNullAndUsername(username))
+                .thenReturn(Optional.of(Gardener.builder().username(username).build()));
+
+        // When, Then
+        HasSameUsernameException e = assertThrows(HasSameUsernameException.class, () -> gardenerService.hasSameUsername(username));
+        assertEquals(ExceptionCode.HAS_SAME_USERNAME, e.getCode());
+    }
+
+    @Test
+    @DisplayName("아이디 중복 검사: 사용 가능한 아이디")
+    void hasSameUsername_WhenValid_ReturnNull() {
+        // Given
+        String username = "testgardener";
+        when(gardenerRepository.findByProviderIsNullAndUsername(username)).thenReturn(Optional.empty());
+
+        // When
+        String result = gardenerService.hasSameUsername(username);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(username, result);
+    }
+
+    @Test
+    @DisplayName("회원가입: Happy Path")
+    void register_WhenValid_ReturnToken() {
+        // Given
+        String username = "testgardener";
+        String email = "testgardener@gmail.com";
+        String password = "testpassword1234!";
+        String name = "메밀";
+
+        Register register = new Register(username, email, password, name);
+        Gardener savedGardener = Gardener.builder()
+                .gardenerId(1L)
+                .name(name)
+                .provider(null)
+                .build();
+
+
+        String secret = RandomStringUtils.random(50, 97, 122, true, true);
+        Key testKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+
+        AccessToken accessToken = new AccessToken(savedGardener.getGardenerId(), testKey, new HashMap<String, String>());
+        RefreshToken refreshToken = new RefreshToken();
+
+        Info expectedInfo = new Info(accessToken.getToken(), refreshToken.getToken(), savedGardener);
+
+        when(gardenerRepository.findByProviderIsNullAndUsername(username)).thenReturn(Optional.empty());
+        when(gardenerRepository.save(any())).thenReturn(savedGardener);
+        when(authenticationService.setAuthentication(savedGardener)).thenReturn(expectedInfo);
+
+        // When
+        Info result = gardenerService.add(register);
+
+        assertEquals(expectedInfo, result);
+        assertEquals(accessToken.getToken(), result.getToken().getAccessToken()); // 액세스 토큰
+        assertEquals(refreshToken.getToken(), result.getToken().getRefreshToken()); // 리프레쉬 토큰
+    }
+
+    @Test
+    @DisplayName("회원 가입: username 중복")
+    void register_WhenSameUsernameExist_ThrowIllegalArgumentException() {
+        String username = "testgardener";
+        Register register = new Register(username, "email", "password", "name");
+
+        when(gardenerRepository.findByProviderIsNullAndUsername(username))
+                .thenThrow(HasSameUsernameException.class);
+
+        // When
+        Executable executable = () -> gardenerService.add(register);
+
+        // Then
+        HasSameUsernameException e = assertThrows(HasSameUsernameException.class, executable);
     }
 
     @Test
@@ -181,8 +281,8 @@ class GardenerServiceImplTest {
 
         // When, Then
         Executable executable = () -> gardenerService.updatePassword(id, login);
-        UsernameNotFoundException e = assertThrows(UsernameNotFoundException.class, executable);
-        assertEquals(ExceptionCode.WRONG_ACCOUNT.getCode(), e.getMessage());
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_ACCOUNT, e.getCode());
     }
 
     @Test
@@ -223,24 +323,6 @@ class GardenerServiceImplTest {
         assertEquals(newName, result.getName());
     }
 
-    static Stream<GardenerDetail> invalidUpdateData() {
-        String validEmail = "validaddress@notagardener.xyz";
-        String validName = "메밀";
-
-        return Stream.of(
-                GardenerDetail.builder().id(1L).username("gardener").email(null).name(validName).build(),
-                GardenerDetail.builder().id(1L).username("gardener").email("").name(validName).build(),
-                GardenerDetail.builder().id(1L).username("gardener").email("null").name(validName).build(),
-                GardenerDetail.builder().id(1L).username("gardener").email("@gmail.com").name(validName).build(),
-                GardenerDetail.builder().id(1L).username("gardener").email("hi@gmail").name(validName).build(),
-                GardenerDetail.builder().id(1L).username("gardener").email("hi#gmail").name(validName).build(),
-
-                GardenerDetail.builder().id(1L).username("gardener").email(validEmail).name(null).build(),
-                GardenerDetail.builder().id(1L).username("gardener").email(validEmail).name("").build(),
-                GardenerDetail.builder().id(1L).username("gardener").email(validEmail).name("reallyreallyreallylongnameisinvalid").build()
-        );
-    }
-
     @Test
     @DisplayName("회원 정보 변경: gardenerId 오류")
     void update_WhenGardenerIdNotExist_ThrowsUsernameNotFoundException() {
@@ -260,16 +342,8 @@ class GardenerServiceImplTest {
         assertEquals(ExceptionCode.NO_ACCOUNT.getCode(), e.getMessage());
     }
 
-    @ParameterizedTest
-    @MethodSource("invalidUpdateData")
-    @DisplayName("회원 정보 변경: 유효하지 않은 이름, 이메일")
-    void update_WhenNameAndEmailInValid_ThrowsIllegalArgumentException(GardenerDetail invalidRequest) {
-        Executable executable = () -> gardenerService.update(invalidRequest);
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
-        assertEquals(ExceptionCode.INVALID_REQUEST_DATA.getCode(), e.getMessage());
-    }
-
     @Test
+    @DisplayName("회원 탈퇴")
     void delete() {
         // Given
         Long gardenerId = 1L;

@@ -27,6 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
+@DisplayName("물주기(캘린더) 컴포넌트 테스트")
 class WateringServiceImplTest {
     @Mock
     private WateringCommandService wateringCommandService;
@@ -44,7 +45,7 @@ class WateringServiceImplTest {
 
     @ParameterizedTest
     @ArgumentsSource(WateringListProvider.class)
-    @DisplayName("물주기(캘린더) 데이터: 성공")
+    @DisplayName("물주기(캘린더) 데이터 한달 + a 단위로 가져오기: 성공")
     void getAll(List<Watering> waterings, int expected) {
         // Given
         Long gardenerId = 5L;
@@ -62,6 +63,7 @@ class WateringServiceImplTest {
     }
 
     @Test
+    @DisplayName("물주기(캘린더) 기록 추가")
     void add() {
         // Given
         Long gardenerId = 1L;

@@ -17,7 +17,7 @@ import xyz.notagardener.chemical.repository.ChemicalRepository;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.Gardener;
-import xyz.notagardener.gardener.gardener.GardenerRepository;
+import xyz.notagardener.gardener.repository.GardenerRepository;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -26,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+@DisplayName("약품 저장/수정/삭제 컴포넌트 테스트")
 class ChemicalCommandServiceImplTest {
     @Mock
     private GardenerRepository gardenerRepository;

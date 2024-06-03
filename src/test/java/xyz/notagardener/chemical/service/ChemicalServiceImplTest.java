@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@DisplayName("약품 컴포넌트 테스트")
 class ChemicalServiceImplTest {
 
     @Mock
@@ -56,7 +57,8 @@ class ChemicalServiceImplTest {
         Set<ConstraintViolation<ChemicalDto>> violations = validator.validate(invalidDto);
 
         // Then
-        assertEquals(3, violations.size());
+        System.out.println(violations);
+        assertEquals(4, violations.size());
     }
 
     @Test

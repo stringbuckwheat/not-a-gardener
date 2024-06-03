@@ -31,6 +31,7 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@DisplayName("토큰 컴포넌트 테스트")
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TokenProviderImplTest {
@@ -72,6 +73,7 @@ class TokenProviderImplTest {
     }
 
     @Test
+    @DisplayName("bearer 토큰 -> Access Token 객체")
     void convertAccessToken_WhenValid_ReturnAccessTokenObject() {
         // Given
         String token = tokenProvider.createAccessToken(1L, "메밀").getToken();
@@ -85,6 +87,7 @@ class TokenProviderImplTest {
     }
 
     @Test
+    @DisplayName("유효한 토큰일 시 Authentication 객체 생성")
     public void getAuthentication_WhenTokenIsValid_ShouldReturnAuthentication() {
         AccessToken token = tokenProvider.createAccessToken(1L, "메밀");
         Authentication authentication = tokenProvider.getAuthentication(token);
@@ -122,6 +125,7 @@ class TokenProviderImplTest {
     }
 
     @Test
+    @DisplayName("새로운 리프레쉬 토큰 만들기: 성공")
     void createRefreshToken_ValidInput_Success() {
         // Given
         Long gardenerId = 1L;

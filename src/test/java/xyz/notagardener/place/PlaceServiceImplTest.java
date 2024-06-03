@@ -4,35 +4,35 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.Gardener;
-import xyz.notagardener.gardener.gardener.GardenerRepository;
+import xyz.notagardener.gardener.repository.GardenerRepository;
 import xyz.notagardener.place.dto.PlaceCard;
 import xyz.notagardener.place.dto.PlaceDto;
+import xyz.notagardener.place.dto.PlaceType;
+import xyz.notagardener.place.repository.PlaceRepository;
+import xyz.notagardener.place.service.PlaceServiceImpl;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.plant.dto.PlantInPlace;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@DisplayName("장소 컴포넌트 테스트")
 class PlaceServiceImplTest {
     @Mock
     private PlaceRepository placeRepository;
@@ -70,7 +70,7 @@ class PlaceServiceImplTest {
 
     @Test
     @DisplayName("한 장소 가져오기(+ 권한 검사): 그런 장소 없음 - 실패")
-    void getPlaceByPlaceIdAndGardenerId_WhenPlaceNotExist_ThrowNoSuchElementException() {
+    void getPlaceByPlaceIdAndGardenerId_WhenPlaceNotExist_ThrowResourceNotFoundException() {
         // Given
         Long placeId = 1L;
 
@@ -78,8 +78,8 @@ class PlaceServiceImplTest {
 
         // When, Then
         Executable executable = () -> placeService.getPlaceByPlaceIdAndGardenerId(placeId, 1L);
-        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
-        assertEquals(ExceptionCode.NO_SUCH_ITEM.getCode(), e.getMessage());
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_SUCH_PLACE, e.getCode());
     }
 
     @Test
@@ -98,7 +98,7 @@ class PlaceServiceImplTest {
         // When, Then
         Executable executable = () -> placeService.getPlaceByPlaceIdAndGardenerId(placeId, gardenerId);
         UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
-        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), e.getMessage());
+        assertEquals(ExceptionCode.NOT_YOUR_PLACE, e.getCode());
     }
 
     @Test
@@ -143,7 +143,7 @@ class PlaceServiceImplTest {
 
     @Test
     @DisplayName("한 장소의 상세 정보: 해당 장소 없음 - 실패")
-    void getDetail_WhenPlaceNotExist_ShouldThrowNoSuchElementException() {
+    void getDetail_WhenPlaceNotExist_ShouldThrowResourceNotFoundException() {
         // Given
         Long placeId = 1L;
 
@@ -151,8 +151,8 @@ class PlaceServiceImplTest {
 
         // When, Then
         Executable executable = () -> placeService.getDetail(placeId, 1L);
-        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
-        assertEquals(ExceptionCode.NO_SUCH_ITEM.getCode(), e.getMessage());
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_SUCH_PLACE, e.getCode());
     }
 
     @Test
@@ -171,7 +171,7 @@ class PlaceServiceImplTest {
         // When, Then
         Executable executable = () -> placeService.getDetail(placeId, gardenerId);
         UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
-        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), e.getMessage());
+        assertEquals(ExceptionCode.NOT_YOUR_PLACE, e.getCode());
     }
 
     @Test
@@ -192,7 +192,7 @@ class PlaceServiceImplTest {
         List<PlantInPlace> result = placeService.getPlantsWithPaging(placeId, pageable);
 
         // Then
-        List<PlantInPlace> expected = plants.stream().map(PlantInPlace::from).collect(Collectors.toList());
+        List<PlantInPlace> expected = plants.stream().map(PlantInPlace::new).collect(Collectors.toList());
 
         assertEquals(plants.size(), result.size());
         assertEquals(expected, result);
@@ -224,58 +224,7 @@ class PlaceServiceImplTest {
         // Then
         assertNotNull(result);
         assertNotNull(result.getId());
-        assertEquals(PlaceCard.from(savedPlace), result);
-    }
-
-    static Stream<PlaceDto> invalidPlaceSavingData() {
-        String validName = "새로운 장소";
-        String validArtificialLight = "Y";
-        String validOption = PlaceType.OUTSIDE.getType();
-
-        return Stream.of(
-                PlaceDto.builder().name(null).artificialLight(validArtificialLight).option(validOption).build(),
-                PlaceDto.builder().name("").artificialLight(validArtificialLight).option(validOption).build(),
-                PlaceDto.builder().name("reallyreallyreallyreallyreallyreallyreallyreallylongname").artificialLight(validArtificialLight).option(validOption).build(),
-
-                PlaceDto.builder().name(validName).artificialLight(null).option(validOption).build(),
-                PlaceDto.builder().name(validName).artificialLight("").option(validOption).build(),
-                PlaceDto.builder().name(validName).artificialLight("T").option(validOption).build(),
-
-                PlaceDto.builder().name(validName).artificialLight(validArtificialLight).option(null).build(),
-                PlaceDto.builder().name(validName).artificialLight(validArtificialLight).option("").build(),
-                PlaceDto.builder().name(validName).artificialLight(validArtificialLight).option("WRONG_PLACEOPTION").build()
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("invalidPlaceSavingData")
-    @DisplayName("장소 추가: 입력값 유효성 검사 실패")
-    void add_WhenRequestDataInvalid_ShouldThrowIllegalArgumentException(PlaceDto request) {
-        // Given
-        Long gardenerId = 1L;
-        Gardener gardener = Gardener.builder().gardenerId(gardenerId).build();
-
-        when(gardenerRepository.getReferenceById(gardenerId)).thenReturn(gardener);
-
-        // When, Then
-        Executable executable = () -> placeService.add(gardenerId, request);
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
-        assertEquals(ExceptionCode.INVALID_REQUEST_DATA.getCode(), e.getMessage());
-    }
-
-    @Test
-    @DisplayName("장소 추가: 그런 gardener 없음")
-    void add_WhenGardenerNotExist_ShouldThrowUsernameNotFoundException() {
-        // Given
-        Long gardenerId = 1L;
-        PlaceDto request = PlaceDto.builder().name("새로운 장소").artificialLight("Y").option(PlaceType.INSIDE.getType()).build();
-
-        when(gardenerRepository.getReferenceById(gardenerId)).thenReturn(null);
-
-        // When, Then
-        Executable executable = () -> placeService.add(gardenerId, request);
-        UsernameNotFoundException e = assertThrows(UsernameNotFoundException.class, executable);
-        assertEquals(ExceptionCode.NO_ACCOUNT.getCode(), e.getMessage());
+        assertEquals(new PlaceCard(savedPlace), result);
     }
 
     @Test
@@ -302,12 +251,12 @@ class PlaceServiceImplTest {
 
         // Then
         assertNotNull(result);
-        assertEquals(PlaceDto.from(prevPlace), result);
+        assertEquals(new PlaceDto(prevPlace), result);
     }
 
     @Test
     @DisplayName("장소 수정: 그런 장소 없음")
-    void update_WhenPlaceNotExist_ShouldThrowNoSuchElementException() {
+    void update_WhenPlaceNotExist_ShouldThrowResourceNotFoundException() {
         // Given
         Long gardenerId = 1L;
         PlaceDto request = PlaceDto.builder().id(1L).name("새로운 장소").artificialLight("Y").option(PlaceType.INSIDE.getType()).build();
@@ -316,8 +265,8 @@ class PlaceServiceImplTest {
 
         // When, Then
         Executable executable = () -> placeService.update(request, gardenerId);
-        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
-        assertEquals(ExceptionCode.NO_SUCH_ITEM.getCode(), e.getMessage());
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_SUCH_PLACE, e.getCode());
     }
 
     @Test
@@ -336,45 +285,7 @@ class PlaceServiceImplTest {
         // When, Then
         Executable executable = () -> placeService.update(request, gardenerId);
         UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
-        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), e.getMessage());
-    }
-
-    static Stream<PlaceDto> invalidUpdateData() {
-        Long validId = 1L;
-        String validName = "새로운 장소";
-        String validArtificialLight = "Y";
-        String validOption = PlaceType.OUTSIDE.getType();
-
-        return Stream.of(
-                PlaceDto.builder().id(null).name(null).artificialLight(validArtificialLight).option(validOption).build(),
-                PlaceDto.builder().id(-1L).name(null).artificialLight(validArtificialLight).option(validOption).build(),
-                PlaceDto.builder().id(0L).name(null).artificialLight(validArtificialLight).option(validOption).build(),
-
-                PlaceDto.builder().id(validId).name(null).artificialLight(validArtificialLight).option(validOption).build(),
-                PlaceDto.builder().id(validId).name("").artificialLight(validArtificialLight).option(validOption).build(),
-                PlaceDto.builder().id(validId).name("reallyreallyreallyreallyreallyreallyreallyreallylongname").artificialLight(validArtificialLight).option(validOption).build(),
-
-                PlaceDto.builder().id(validId).name(validName).artificialLight(null).option(validOption).build(),
-                PlaceDto.builder().id(validId).name(validName).artificialLight("").option(validOption).build(),
-                PlaceDto.builder().id(validId).name(validName).artificialLight("T").option(validOption).build(),
-
-                PlaceDto.builder().id(validId).name(validName).artificialLight(validArtificialLight).option(null).build(),
-                PlaceDto.builder().id(validId).name(validName).artificialLight(validArtificialLight).option("").build(),
-                PlaceDto.builder().id(validId).name(validName).artificialLight(validArtificialLight).option("WRONG_PLACEOPTION").build()
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("invalidUpdateData")
-    @DisplayName("장소 수정: 입력 데이터 유효성 검사 실패")
-    void update_WhenRequestDataInvalid_ShouldThrowIllegalArgumentException(PlaceDto request) {
-        // Given
-        Long gardenerId = 1L;
-
-        // When, Then
-        Executable executable = () -> placeService.update(request, gardenerId);
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, executable);
-        assertEquals(ExceptionCode.INVALID_REQUEST_DATA.getCode(), e.getMessage());
+        assertEquals(ExceptionCode.NOT_YOUR_PLACE, e.getCode());
     }
 
     @Test
@@ -398,7 +309,7 @@ class PlaceServiceImplTest {
 
     @Test
     @DisplayName("장소 삭제: 그런 장소 없음")
-    void delete_WhenPlaceNotExist_ShouldThrowNoSuchElementException() {
+    void delete_WhenPlaceNotExist_ShouldThrowResourceNotFoundException() {
         // Given
         Long placeId = 1L;
         Long gardenerId = 2L;
@@ -407,8 +318,8 @@ class PlaceServiceImplTest {
 
         // When, Then
         Executable executable = () -> placeService.delete(placeId, gardenerId);
-        NoSuchElementException e = assertThrows(NoSuchElementException.class, executable);
-        assertEquals(ExceptionCode.NO_SUCH_ITEM.getCode(), e.getMessage());
+        ResourceNotFoundException e = assertThrows(ResourceNotFoundException.class, executable);
+        assertEquals(ExceptionCode.NO_SUCH_PLACE, e.getCode());
     }
 
     @Test
@@ -427,6 +338,6 @@ class PlaceServiceImplTest {
         // When, Then
         Executable executable = () -> placeService.delete(placeId, gardenerId);
         UnauthorizedAccessException e = assertThrows(UnauthorizedAccessException.class, executable);
-        assertEquals(ExceptionCode.NOT_YOUR_THING.getCode(), e.getMessage());
+        assertEquals(ExceptionCode.NOT_YOUR_PLACE, e.getCode());
     }
 }

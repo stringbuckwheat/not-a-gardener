@@ -1,13 +1,12 @@
 package xyz.notagardener.plant.garden.service;
 
 import xyz.notagardener.plant.garden.dto.PlantResponse;
-import xyz.notagardener.plant.garden.dto.RawGarden;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class RawGardenFactory {
-    public RawGarden getPostponedPlant() {
+public class PlantResponseFactory {
+    public PlantResponse getPostponedPlant() {
         return PlantResponse.builder()
                 .plantId(2L)
                 .postponeDate(LocalDate.now())
@@ -15,7 +14,7 @@ public class RawGardenFactory {
                 .build();
     }
 
-    public RawGarden getPlantWithNoWateringRecord() {
+    public PlantResponse getPlantWithNoWateringRecord() {
         return PlantResponse.builder()
                 .plantId(3L)
                 .postponeDate(null)
@@ -23,7 +22,7 @@ public class RawGardenFactory {
                 .build();
     }
 
-    public RawGarden getWateredTodayPlant() {
+    public PlantResponse getWateredTodayPlant() {
         return PlantResponse.builder()
                 .plantId(4L)
                 .postponeDate(null)
@@ -33,7 +32,7 @@ public class RawGardenFactory {
                 .build();
     }
 
-    public RawGarden getPlantWithOneWateringRecord() {
+    public PlantResponse getPlantWithOneWateringRecord() {
         return PlantResponse.builder()
                 .plantId(5L)
                 .postponeDate(null)
@@ -43,7 +42,7 @@ public class RawGardenFactory {
                 .build();
     }
 
-    public RawGarden getThirstyPlant(int wateringPeriod) {
+    public PlantResponse getThirstyPlant(int wateringPeriod) {
         return PlantResponse.builder()
                 .plantId(6L)
                 .postponeDate(null)
@@ -53,7 +52,7 @@ public class RawGardenFactory {
                 .build();
     }
 
-    public RawGarden getCheckingPlant(int wateringPeriod) {
+    public PlantResponse getCheckingPlant(int wateringPeriod) {
         return PlantResponse.builder()
                 .plantId(7L)
                 .postponeDate(null)
@@ -63,7 +62,7 @@ public class RawGardenFactory {
                 .build();
     }
 
-    public RawGarden getLeaveHerAlonePlant(int wateringPeriod) {
+    public PlantResponse getLeaveHerAlonePlant(int wateringPeriod) {
         return PlantResponse.builder()
                 .plantId(8L)
                 .postponeDate(null)
@@ -73,7 +72,7 @@ public class RawGardenFactory {
                 .build();
     }
 
-    public RawGarden getDryOutPlant(int wateringPeriod, int missedDay) {
+    public PlantResponse getDryOutPlant(int wateringPeriod, int missedDay) {
         return PlantResponse.builder()
                 .plantId(9L)
                 .postponeDate(null)

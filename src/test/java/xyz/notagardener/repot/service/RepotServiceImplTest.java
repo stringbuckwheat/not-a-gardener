@@ -76,7 +76,7 @@ class RepotServiceImplTest {
                 .build();
 
         when(plantRepository.findByPlantId(plantId)).thenReturn(Optional.of(plant));
-        when(repotRepository.save(any())).thenReturn(new Repot(3L, request.getRepotDate(), plant));
+        when(repotRepository.save(any())).thenReturn(new Repot(3L, request.getRepotDate(), "Y" ,plant));
         when(repotStatusService.handleRepotStatus(request, plant)).thenReturn(new PlantStatusResponse(status));
 
         // When
@@ -147,7 +147,7 @@ class RepotServiceImplTest {
         Plant plant = Plant.builder().gardener(gardener).plantId(3L).build();
 
         // 기존 분갈이 기록
-        Repot repot = new Repot(repotId, LocalDate.now().minusDays(7), plant);
+        Repot repot = new Repot(repotId, LocalDate.now().minusDays(7), "N", plant);
 
         when(repotRepository.findByRepotId(repotId)).thenReturn(Optional.of(repot));
 
@@ -195,7 +195,7 @@ class RepotServiceImplTest {
         Gardener owner = Gardener.builder().gardenerId(99L).build();
         Plant plant = Plant.builder().gardener(owner).plantId(3L).build();
 
-        Repot repot = new Repot(repotId, LocalDate.now().minusDays(7), plant);
+        Repot repot = new Repot(repotId, LocalDate.now().minusDays(7), "Y", plant);
 
         when(repotRepository.findByRepotId(repotId)).thenReturn(Optional.of(repot));
 

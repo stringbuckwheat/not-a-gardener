@@ -26,12 +26,14 @@ import xyz.notagardener.watering.watering.dto.WateringRequest;
 import xyz.notagardener.watering.watering.service.WateringCommandService;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
+@DisplayName("메인 페이지 물주기 컴포넌트 테스트")
 class GardenWateringServiceImplTest {
     @Mock
     private WateringCommandService wateringCommandService;
@@ -51,6 +53,7 @@ class GardenWateringServiceImplTest {
     }
 
     @Test
+    @DisplayName("메인 페이지 물주기 추가: 성공")
     void add_ShouldReturnGardenWateringResponse() {
         // Given
         Long gardenerId = 1L;
@@ -61,14 +64,14 @@ class GardenWateringServiceImplTest {
         Watering watering = Watering.builder().wateringId(1L).wateringDate(request.getWateringDate()).build();
         Place place = Place.builder().placeId(3L).build();
 
-        Plant plant = Plant.builder().plantId(plantId).place(place).waterings(List.of(watering)).build();
+        Plant plant = Plant.builder().plantId(plantId).place(place).waterings(List.of(watering)).createDate(LocalDateTime.now()).build();
         WateringMessage wateringMessage = new WateringMessage(AfterWateringCode.FIRST_WATERING.getCode(), 0);
 
         AfterWatering afterWatering = new AfterWatering(plant, wateringMessage);
-        GardenResponse gardenResponse = new GardenResponse(PlantResponse.from(plant), GardenDetail.notEnoughRecord(null));
+        GardenResponse gardenResponse = new GardenResponse(new PlantResponse(plant), GardenDetail.notEnoughRecord(null), false);
 
         when(wateringCommandService.add(request, gardenerId)).thenReturn(afterWatering);
-        when(gardenResponseMapper.getGardenResponse(PlantResponse.from(plant), gardenerId)).thenReturn(gardenResponse);
+        when(gardenResponseMapper.getGardenResponse(new PlantResponse(plant), gardenerId)).thenReturn(gardenResponse);
 
         // When
         GardenWateringResponse result = gardenWateringService.add(gardenerId, request);
@@ -80,7 +83,7 @@ class GardenWateringServiceImplTest {
     @ParameterizedTest
     @ArgumentsSource(PlantProvider.class)
     @DisplayName("안 말랐어요: 성공")
-    void notDry_WhenPlantExistAndMine_ShouldReturnWateringMessage(Plant plant, int expectedAfterWateringCode, int expectedWateringPeriod) {
+    void notDry_WhenPlantExistAndMine_ShouldReturnWateringMessage(Plant plant, String expectedAfterWateringCode, int expectedWateringPeriod) {
         // Given
         Long plantId = 1L;
         Long gardenerId = 2L;
@@ -92,7 +95,6 @@ class GardenWateringServiceImplTest {
 
         // Then
         System.out.println("***" + result.getRecentWateringPeriod());
-
 
         assertNotNull(result);
         assertEquals(LocalDate.now(), plant.getConditionDate());

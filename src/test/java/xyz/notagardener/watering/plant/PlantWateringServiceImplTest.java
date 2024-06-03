@@ -1,6 +1,7 @@
 package xyz.notagardener.watering.plant;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -19,12 +20,14 @@ import xyz.notagardener.watering.watering.repository.WateringRepository;
 import xyz.notagardener.watering.watering.service.WateringCommandService;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
+@DisplayName("식물 페이지 물주기 컴포넌트 테스트")
 class PlantWateringServiceImplTest {
     @Mock
     private WateringCommandService wateringCommandService;
@@ -51,6 +54,7 @@ class PlantWateringServiceImplTest {
     }
 
     @Test
+    @DisplayName("식물 페이지 물주기: 성공")
     void add_ShouldReturnPlantWateringResponse() {
         // Given
         Long gardenerId = 1L;
@@ -59,7 +63,7 @@ class PlantWateringServiceImplTest {
         WateringRequest request = WateringRequest.builder().plantId(plantId).wateringDate(LocalDate.now()).build();
 
         Place place = Place.builder().placeId(4L).build();
-        Plant plant = Plant.builder().plantId(plantId).recentWateringPeriod(period).place(place).waterings(waterings).build();
+        Plant plant = Plant.builder().plantId(plantId).recentWateringPeriod(period).place(place).waterings(waterings).createDate(LocalDateTime.now()).build();
         WateringMessage wateringMessage = new WateringMessage(AfterWateringCode.NO_CHANGE.getCode(), period);
         AfterWatering afterWatering = new AfterWatering(plant, wateringMessage);
 
@@ -79,6 +83,7 @@ class PlantWateringServiceImplTest {
     }
 
     @Test
+    @DisplayName("물 주기 기록이 두 개 이상일 시, 각 물주기 간 간격도 함께 리턴")
     void getAll_WhenWateringSizeMoreThanTwo_ShouldReturnWithPeriodList() {
         // Given
         Long plantId = 1L;
@@ -100,6 +105,7 @@ class PlantWateringServiceImplTest {
     }
 
     @Test
+    @DisplayName("물 주기 기록 두 개 미만일 시 물주기간 간격 계산 X")
     void getAll_WhenWateringsSizeLessThanTwo_ShouldReturnWithoutPeriod() {
         // Given
         Long plantId = 1L;

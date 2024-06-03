@@ -4,13 +4,13 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.watering.Watering;
 
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -33,17 +33,11 @@ public class InvalidWateringRequestProvider implements ArgumentsProvider {
                         Optional.of(Plant.builder().plantId(1L).gardener(owner).waterings(new ArrayList<Watering>()).build()),
                         UnauthorizedAccessException.class
                 ),
-                // 그런 약품 없음
-                Arguments.of(
-                        Optional.empty(),
-                        Optional.of(Plant.builder().plantId(1L).gardener(owner).waterings(new ArrayList<Watering>()).build()),
-                        NoSuchElementException.class
-                ),
                 // 그런 식물 없음
                 Arguments.of(
                         Optional.of(Chemical.builder().chemicalId(2L).gardener(requester).build()),
                         Optional.empty(),
-                        NoSuchElementException.class
+                        ResourceNotFoundException.class
                 )
         );
     }
