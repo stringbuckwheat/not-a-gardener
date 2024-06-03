@@ -7,7 +7,7 @@ import xyz.notagardener.common.validation.NotFuture;
 import xyz.notagardener.common.validation.YesOrNo;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.status.PlantStatus;
-import xyz.notagardener.status.PlantStatusType;
+import xyz.notagardener.status.dto.PlantStatusType;
 
 import java.time.LocalDate;
 

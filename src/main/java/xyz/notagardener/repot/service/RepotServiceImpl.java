@@ -15,7 +15,7 @@ import xyz.notagardener.repot.Repot;
 import xyz.notagardener.repot.dto.RepotRequest;
 import xyz.notagardener.repot.dto.RepotResponse;
 import xyz.notagardener.repot.repository.RepotRepository;
-import xyz.notagardener.status.PlantStatusResponse;
+import xyz.notagardener.status.dto.PlantStatusResponse;
 
 import java.util.List;
 
@@ -83,7 +83,6 @@ public class RepotServiceImpl implements RepotService {
         return repotRepository.findAll(gardenerId, pageable);
     }
 
-    // TODO *** 분갈이 필요 알림 ***
     // TODO 물주기 캘린더 -> 정원기록 모듈
     // TODO 식물별 기록은 식물 서비스로 보내기 -> 식물 로그
 

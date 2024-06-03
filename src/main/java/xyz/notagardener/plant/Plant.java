@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.plant.plant.dto.PlantRequest;
 import xyz.notagardener.place.Place;
+import xyz.notagardener.status.PlantStatus;
 import xyz.notagardener.watering.Watering;
 
 import java.time.LocalDate;
@@ -17,7 +18,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @Table(name = "plant")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -64,6 +64,10 @@ public class Plant {
     @OrderBy("watering_date desc")
     private List<Watering> waterings = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "plant", cascade = CascadeType.MERGE)
+    @OrderBy("recorded_date desc")
+    private List<PlantStatus> status = new ArrayList<>();
+
     public void update(PlantRequest plantRequest, Place place) {
         this.name = plantRequest.getName();
         this.medium = plantRequest.getMedium();
@@ -77,8 +81,8 @@ public class Plant {
         this.place = place;
     }
 
-    public void updateRecentWateringPeriod(int averageWateringPeriod) {
-        this.recentWateringPeriod = averageWateringPeriod;
+    public void updateRecentWateringPeriod(int recentWateringPeriod) {
+        this.recentWateringPeriod = recentWateringPeriod;
     }
 
     public void updateConditionDate(LocalDate date) {
@@ -89,7 +93,7 @@ public class Plant {
         this.postponeDate = date;
     }
 
-    public void initEarlyWateringPeriod(int period) {
+    public void updateEarlyWateringPeriod(int period) {
         this.earlyWateringPeriod = period;
     }
 }

@@ -16,6 +16,9 @@ import xyz.notagardener.plant.garden.dto.PlantResponse;
 import xyz.notagardener.plant.garden.service.GardenResponseMapperImpl;
 import xyz.notagardener.plant.plant.dto.PlantRequest;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
+import xyz.notagardener.status.dto.PlantStatusType;
+import xyz.notagardener.status.dto.SimplePlantStatus;
+import xyz.notagardener.status.repository.PlantStatusRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +29,7 @@ import java.util.stream.Collectors;
 public class PlantServiceImpl implements PlantService {
     private final PlantCommandService plantCommandService;
     private final PlantRepository plantRepository;
+    private final PlantStatusRepository plantStatusRepository;
     private final GardenResponseMapperImpl gardenResponseMapper;
 
     private Plant getPlantByPlantIdAndGardenerId(Long plantId, Long gardenerId) {
@@ -39,6 +43,10 @@ public class PlantServiceImpl implements PlantService {
         return plant;
     }
 
+    private List<SimplePlantStatus> getStatus(Long plantId, Long gardenerId) {
+        return plantStatusRepository.findByPlantId(plantId, gardenerId, PlantStatusType.getList());
+    }
+
     @Override
     @Transactional(readOnly = true)
     public List<PlantResponse> getAll(Long gardenerId) {
@@ -50,22 +58,27 @@ public class PlantServiceImpl implements PlantService {
     @Override
     @Transactional(readOnly = true)
     public PlantResponse getDetail(Long plantId, Long gardenerId) {
-        return plantRepository.findPlantWithLatestWateringDate(plantId, gardenerId)
+        PlantResponse plant = plantRepository.findPlantWithLatestWateringDate(plantId, gardenerId)
                 .orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_SUCH_PLANT));
+        plant.setStatus(getStatus(plantId, gardenerId));
+
+        return plant;
     }
 
     @Override
     @Transactional
     public GardenResponse add(Long gardenerId, PlantRequest plantRequest) {
         Plant plant = plantCommandService.save(gardenerId, plantRequest);
-        return gardenResponseMapper.getGardenResponse(new PlantResponse(plant), gardenerId);
+        List<SimplePlantStatus> status = getStatus(plantRequest.getId(), gardenerId);
+        return gardenResponseMapper.getGardenResponse(new PlantResponse(plant, status), gardenerId);
     }
 
     @Override
     @Transactional
     public GardenResponse update(Long gardenerId, PlantRequest plantRequest) {
         Plant plant = plantCommandService.update(plantRequest, gardenerId);
-        return gardenResponseMapper.getGardenResponse(new PlantResponse(plant), gardenerId);
+        List<SimplePlantStatus> status = getStatus(plantRequest.getId(), gardenerId);
+        return gardenResponseMapper.getGardenResponse(new PlantResponse(plant, status), gardenerId);
     }
 
     @Override

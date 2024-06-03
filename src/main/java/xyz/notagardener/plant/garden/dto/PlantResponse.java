@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import xyz.notagardener.plant.Plant;
+import xyz.notagardener.status.dto.SimplePlantStatus;
 import xyz.notagardener.watering.Watering;
 
 import java.time.LocalDate;
@@ -31,6 +32,7 @@ public class PlantResponse {
     private Long wateringId;
     private LocalDate latestWateringDate;
     private Long totalWatering;
+    private List<SimplePlantStatus> status;
 
     @QueryProjection
     @Builder
@@ -68,33 +70,7 @@ public class PlantResponse {
         this.totalWatering = totalWatering;
     }
 
-    // 첫 번째 생성자
-    public PlantResponse(Plant plant) {
-        this.id = plant.getPlantId();
-        this.name = plant.getName();
-        this.species = plant.getSpecies();
-        this.recentWateringPeriod = plant.getRecentWateringPeriod();
-        this.earlyWateringPeriod = plant.getEarlyWateringPeriod();
-        this.medium = plant.getMedium();
-        this.placeId = plant.getPlace().getPlaceId();
-        this.placeName = plant.getPlace().getName();
-        this.createDate = LocalDate.from(plant.getCreateDate());
-        this.birthday = plant.getBirthday();
-        this.postponeDate = plant.getPostponeDate();
-        this.conditionDate = plant.getConditionDate();
-
-        List<Watering> waterings = plant.getWaterings();
-
-        if (waterings != null && !waterings.isEmpty()) {
-            Watering latestWatering = waterings.get(0);
-            this.wateringId = latestWatering.getWateringId();
-            this.latestWateringDate = latestWatering.getWateringDate();
-            this.totalWatering = (long) waterings.size();
-        }
-    }
-
-    // 두 번째 생성자
-    public PlantResponse(Plant plant, Long totalWatering, LocalDate latestWateringDate) {
+    public PlantResponse(Plant plant, Long totalWatering, LocalDate latestWateringDate, List<SimplePlantStatus> status) {
         this.id = plant.getPlantId();
         this.name = plant.getName();
         this.species = plant.getSpecies();
@@ -110,6 +86,31 @@ public class PlantResponse {
 
         this.totalWatering = totalWatering;
         this.latestWateringDate = latestWateringDate;
+        this.status = status;
+    }
+
+     // Without Status
+    public PlantResponse(Plant plant) {
+        this(plant, null, null, null);
+
+        List<Watering> waterings = plant.getWaterings();
+
+        if (waterings != null && !waterings.isEmpty()) {
+            Watering latestWatering = waterings.get(0);
+
+            this.wateringId = latestWatering.getWateringId();
+            this.latestWateringDate = latestWatering.getWateringDate();
+            this.totalWatering = (long) waterings.size();
+        }
+    }
+
+    public PlantResponse(Plant plant, List<SimplePlantStatus> status) {
+        this(plant);
+        this.status = status;
+    }
+
+    public void setStatus(List<SimplePlantStatus> status) {
+        this.status = status;
     }
 }
 

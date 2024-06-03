@@ -13,4 +13,7 @@ public class GardenResponse {
 
     @Schema(description = "식물 계산 정보")
     private GardenDetail gardenDetail;
+
+    @Schema(description = "분갈이 필요 여부")
+    private boolean isRepotNeeded;
 }

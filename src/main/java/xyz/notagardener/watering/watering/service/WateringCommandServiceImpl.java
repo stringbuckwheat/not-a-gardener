@@ -12,6 +12,7 @@ import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
+import xyz.notagardener.status.repository.PlantStatusRepository;
 import xyz.notagardener.watering.Watering;
 import xyz.notagardener.watering.watering.AfterWateringCode;
 import xyz.notagardener.watering.watering.dto.AfterWatering;
@@ -32,6 +33,7 @@ public class WateringCommandServiceImpl implements WateringCommandService {
     private final WateringRepository wateringRepository;
     private final ChemicalRepository chemicalRepository;
     private final PlantRepository plantRepository;
+    private final PlantStatusRepository plantStatusRepository;
 
     private static final Map<Integer, String> WATERING_CODE_MAP = Map.of(
             -1, AfterWateringCode.SCHEDULE_SHORTEN.getCode(),
@@ -115,7 +117,7 @@ public class WateringCommandServiceImpl implements WateringCommandService {
         if (AfterWateringCode.INIT_WATERING_PERIOD.getCode().equals(afterWateringCode)) {
             // 초기 관수 주기 저장
             plant.updateRecentWateringPeriod(recentWateringPeriod);
-            plant.initEarlyWateringPeriod(recentWateringPeriod);
+            plant.updateEarlyWateringPeriod(recentWateringPeriod);
         } else if (recentWateringPeriod != plant.getRecentWateringPeriod()) {
             plant.updateRecentWateringPeriod(recentWateringPeriod);
         }
@@ -134,7 +136,13 @@ public class WateringCommandServiceImpl implements WateringCommandService {
         LocalDateTime prevWateringDate = waterings.get(1).getWateringDate().atStartOfDay();
         int period = (int) Duration.between(prevWateringDate, latestWateringDate).toDays();
 
-        if (waterings.size() == 3) return new WateringMessage(AfterWateringCode.INIT_WATERING_PERIOD.getCode(), period);
+        if (waterings.size() == 3) {
+            if (period <= 3) {
+                return new WateringMessage(AfterWateringCode.POSSIBLE_HEAVY_DRINKER.getCode(), period);
+            }
+
+            return new WateringMessage(AfterWateringCode.INIT_WATERING_PERIOD.getCode(), period);
+        }
 
         // 물주기 짧아짐: -1, 물주기 똑같음: 0, 물주기 길어짐: 1
         int comparisonResult = Integer.compare(period, prevPeriod);
@@ -192,6 +200,6 @@ public class WateringCommandServiceImpl implements WateringCommandService {
 
         // 물주기 Period 초기화
         plant.updateRecentWateringPeriod(0);
-        plant.initEarlyWateringPeriod(0);
+        plant.updateEarlyWateringPeriod(0);
     }
 }
