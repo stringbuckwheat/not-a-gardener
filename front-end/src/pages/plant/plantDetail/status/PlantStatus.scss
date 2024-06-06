@@ -1,0 +1,27 @@
+.space-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  .content-container {
+    display: flex;
+    align-items: center;
+
+    .tag {
+      font-weight: bold;
+    }
+
+    .status-text {
+      flex-grow: 1;
+    }
+  }
+
+  .close-icon {
+    font-size: 0.7rem;
+  }
+
+  .close-icon:hover {
+    color: orangered;
+  }
+}

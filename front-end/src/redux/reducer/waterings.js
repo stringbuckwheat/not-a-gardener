@@ -3,9 +3,9 @@ const waterings = (state = {}, {type, payload}) => {
     case 'setTotalWaterings':
       return {...state, totalWaterings: payload}
     case 'addWatering' :
-      return {...state, totalWaterings: state.totalWaterings + 1}
+      return {...state, totalWaterings: state.totalWaterings++}
     case 'deleteWatering':
-      return {...state, totalWaterings: state.totalWaterings - 1}
+      return {...state, totalWaterings: state.totalWaterings--}
     case 'deleteAllWaterings':
       return {...state, totalWaterings: 0}
     default:

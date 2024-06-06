@@ -6,7 +6,8 @@ import waterings from "./reducer/waterings";
 import gardens from "./reducer/gardens";
 
 import {combineReducers} from "redux";
+import plantDetail from "./reducer/plant_detail";
 
-const rootReducer = combineReducers({sidebar, places, chemicals, plants, waterings, gardens});
+const rootReducer = combineReducers({sidebar, places, chemicals, plants, plantDetail, waterings, gardens});
 
 export default rootReducer;

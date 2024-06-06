@@ -58,7 +58,7 @@ const PlantList = () => {
                 size="sm"
                 variant="outline"
                 shape="rounded-pill">
-                식물 추가하기
+                식물 추가
               </Button>
             </Space>
           </div>

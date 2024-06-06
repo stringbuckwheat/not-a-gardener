@@ -1,0 +1,13 @@
+.watering-form-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+
+  .watering-form-card {
+    width: 70%; // 기본 가로 길이 70%
+
+    @media (max-width: 768px) {
+      width: 100%; // 모바일에서 가로 길이 100%
+    }
+  }
+}

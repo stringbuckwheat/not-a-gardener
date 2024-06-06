@@ -1,0 +1,31 @@
+.plantInfoRow {
+  color: grey;
+}
+
+.plantInfoCol {
+  margin-bottom: 1rem;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.label {
+  flex: 1;
+  text-align: left;
+  font-weight: bold;
+  min-width: 6rem;
+}
+
+.separator {
+  color: gray;
+  font-weight: bold;
+  margin: 0rem 0.5rem;
+}
+
+.value {
+  flex: 3;
+  color: black;
+}

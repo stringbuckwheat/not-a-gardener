@@ -1,12 +1,16 @@
 import mediumArray from "src/utils/dataArray/mediumArray";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import ValidationSubmitButton from "../../components/button/ValidationSubmitButton";
 import updateData from "../../api/backend-api/common/updateData";
 import {useNavigate} from "react-router-dom";
 import FormProvider from "../../components/form/FormProvider";
+import {useSelector} from "react-redux";
 
-const ModifyPlant = ({changeModifyState, placeList, plant}) => {
+const ModifyPlant = ({changeModifyState}) => {
   const navigate = useNavigate();
+  const plant = useSelector(state => state.plantDetail.detail);
+  const places = useSelector(state => state.places.places);
+
   const [updatedPlant, setUpdatedPlant] = useState(plant);
 
   const onChange = (e) => {
@@ -34,7 +38,7 @@ const ModifyPlant = ({changeModifyState, placeList, plant}) => {
       label: "장소",
       name: "placeId",
       defaultValue: plant.placeId,
-      optionArray: placeList,
+      optionArray: places.map((p) => ({key: p.id, value: p.name})),
       required: true
     },
     {

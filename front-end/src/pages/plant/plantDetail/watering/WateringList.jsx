@@ -1,9 +1,8 @@
 import getAfterWateringMsg from "src/utils/function/getAfterWateringMsg";
-import HandleWateringForm from "./HandleWateringForm";
 import deleteData from "src/api/backend-api/common/deleteData";
 import {useEffect, useState} from "react";
 import 'dayjs/locale/ko';
-import {Form, Table, notification} from "antd";
+import {Form, Table} from "antd";
 import dayjs from "dayjs";
 import advancedFormat from 'dayjs/plugin/advancedFormat'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
@@ -13,26 +12,25 @@ import weekOfYear from 'dayjs/plugin/weekOfYear'
 import weekYear from 'dayjs/plugin/weekYear'
 import updateData from "src/api/backend-api/common/updateData";
 import WateringEditableCell from "./WateringEditableCell";
-import getChemicalListForSelect from "../../../../api/service/getChemicalListForSelect";
 import getWateringTableColumnArray from "../../../../utils/function/getWateringTableColumnArray";
 import getMergedColumns from "../../../../utils/function/getMergedColumns";
 import getData from "../../../../api/backend-api/common/getData";
 import {useDispatch, useSelector} from "react-redux";
+import AfterWateringCode from "../../../../utils/code/afterWateringCode";
+import {useParams} from "react-router-dom";
 
 const getWateringListForTable = (wateringList) => {
-  return wateringList.map((watering) => {
+  return wateringList?.map((watering) => {
       return (
         {
           ...watering,
           period: watering.period == 0
-            ? "첫 관수 기록일!"
-            : `${watering.period}일만에`
+            ? "첫 기록!"
+            : `${watering.period}일`
         }
       )
     }
   )
-
-  return wateringList;
 }
 
 /**
@@ -40,7 +38,7 @@ const getWateringListForTable = (wateringList) => {
  * @param {*} props
  * @returns
  */
-const WateringList = ({plantId, setPlant}) => {
+const WateringList = ({openNotification, wateringCallBack}) => {
   dayjs.extend(customParseFormat)
   dayjs.extend(advancedFormat)
   dayjs.extend(weekday)
@@ -48,18 +46,17 @@ const WateringList = ({plantId, setPlant}) => {
   dayjs.extend(weekOfYear)
   dayjs.extend(weekYear)
 
+  const dispatch = useDispatch();
+  const plantId = useParams().plantId;
+
+  const waterings = useSelector(state => state.plantDetail.waterings);
+  const totalWaterings = useSelector(state => state.waterings.totalWaterings);
+
   // 테이블에 넣을 물주기 데이터
-  const [waterings, setWaterings] = useState([]);
   const [page, setPage] = useState(1);
-
   const [editWatering, setEditWatering] = useState({plantId, chemicalId: 0});
-  const [chemicalList, setChemicalList] = useState([]);
-  const [isWateringFormOpen, setIsWateringFormOpen] = useState(false);
-
-  // 해당 유저의 chemical list
-  useEffect(() => {
-    getChemicalListForSelect(setChemicalList);
-  }, [])
+  const [form] = Form.useForm();
+  const [editingKey, setEditingKey] = useState('');
 
   useEffect(() => {
     onMountWateringList();
@@ -67,17 +64,16 @@ const WateringList = ({plantId, setPlant}) => {
 
   const onMountWateringList = async () => {
     const res = await getData(`/plant/${plantId}/watering?page=${page - 1}`);
-    setWaterings(() => res);
+    dispatch({type: "setWateringsForPlantDetail", payload: res});
+
+    const chemicals = await getData("/chemical");
+    dispatch({type: "setChemicalsForSelect", payload: chemicals});
   }
 
   // editable rows
-  const [form] = Form.useForm();
-  const [editingKey, setEditingKey] = useState('');
   const isEditing = (record) => record.id === editingKey;
 
   const edit = (record) => {
-    console.log("edit record === ", record);
-
     form.setFieldsValue({
       ...record,
       wateringDate: dayjs(new Date(record.wateringDate)),
@@ -87,34 +83,22 @@ const WateringList = ({plantId, setPlant}) => {
       plantId: plantId,
       id: record.id,
       wateringDate: record.wateringDate,
-      chemicalId: record.chemicalId,
+      chemicalId: record.chemicalId ?? 0,
     });
 
     setEditingKey(record.id);
-    setIsWateringFormOpen(false);
+    dispatch({type: "setWateringFormOpen", payload: false});
   };
 
   const cancel = () => setEditingKey('');
 
-  const wateringCallBack = (res) => {
-    console.log("wateringCallBack res", res);
-    setWaterings(res.waterings);
-    res.plant && setPlant(res.plant);
-
-    if (res.wateringMsg) {
-      const msg = getAfterWateringMsg(res.wateringMsg.afterWateringCode);
-      openNotification(msg);
-    }
-  }
-
   const updateWatering = async () => {
-    console.log("update watering === editWatering", editWatering);
+    console.log("update watering", editWatering);
+
     const res = await updateData(`/plant/${plantId}/watering/${editWatering.id}?page=${page - 1}`, editWatering);
     wateringCallBack(res);
     setEditingKey('');
   };
-
-  const dispatch = useDispatch();
 
   const deleteWatering = async (wateringId) => {
     await deleteData(`/plant/${plantId}/watering/${wateringId}`);
@@ -124,53 +108,25 @@ const WateringList = ({plantId, setPlant}) => {
       setPage(() => page - 1);
     }
 
-    setWaterings(waterings.filter(watering => watering.id !== wateringId));
     dispatch({type: 'deleteWatering', payload: null});
+    dispatch({type: 'deletePlantDetailWatering', payload: wateringId});
   };
 
   const wateringTableColumnArray = getWateringTableColumnArray(isEditing, updateWatering, editingKey, cancel, edit, deleteWatering);
   const mergedColumns = getMergedColumns(wateringTableColumnArray, "wateringDate", 'date', 'select', isEditing);
 
-  // 물주기 추가/수정/삭제 후 메시지
-  const [api, contextHolder] = notification.useNotification();
-  const openNotification = (msg) => {
 
-    api.open({
-      message: msg.title,
-      description: msg.content,
-      duration: 4,
-    });
-  };
 
   const tableBody = {
     body: {
       cell: (props) => <WateringEditableCell editWatering={editWatering}
                                              setEditWatering={setEditWatering}
-                                             chemicalList={chemicalList}
-                                             setPlant={setPlant}
                                              {...props} />
     }
   }
 
-  const totalWaterings = useSelector(state => state.waterings.totalWaterings);
-  console.log("totalWaterings", totalWaterings);
-
   return (
     <>
-      {contextHolder}
-
-      <div style={{margin: "1rem 0"}}>
-        <HandleWateringForm
-          plantId={plantId}
-          page={page}
-          setWateringList={setWaterings}
-          chemicalList={chemicalList}
-          isWateringFormOpen={isWateringFormOpen}
-          setIsWateringFormOpen={setIsWateringFormOpen}
-          setEditingKey={setEditingKey}
-          wateringCallBack={wateringCallBack}
-        />
-      </div>
       <Form form={form} component={false}>
         <Table
           components={tableBody}

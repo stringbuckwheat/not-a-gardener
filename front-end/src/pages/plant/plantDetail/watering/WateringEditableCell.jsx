@@ -1,10 +1,12 @@
 import {DatePicker, Form, Select} from "antd";
 import locale from 'antd/es/date-picker/locale/ko_KR';
 import getDisabledDate from "../../../../utils/function/getDisabledDate";
+import {useSelector} from "react-redux";
 
 const WateringEditableCell = ({
                                 editWatering,
                                 setEditWatering,
+
                                 editing,
                                 dataIndex,
                                 title,
@@ -12,10 +14,9 @@ const WateringEditableCell = ({
                                 record,
                                 index,
                                 children,
-                                chemicalList,
                                 ...restProps
                               }) => {
-
+  const chemicalList = useSelector(state => state.plantDetail.chemicals);
   const inputNode = inputType === 'date'
     ? <DatePicker
       locale={locale}
@@ -23,6 +24,7 @@ const WateringEditableCell = ({
       onChange={(date, dateString) => setEditWatering({...editWatering, wateringDate: dateString})}/>
     : <Select
       options={chemicalList}
+      initialValue={0}
       onChange={(value) => setEditWatering({...editWatering, chemicalId: value})}/>;
 
   return (
