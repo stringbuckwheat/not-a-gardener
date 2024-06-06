@@ -23,13 +23,15 @@ const AddGoal = ({onClickGoalFormButton, addGoal}) => {
     onClickGoalFormButton();
   }
 
+  const mb = {marginBottom: "1rem"}
+
   return (
-    <Card style={{marginBottom: "1rem"}}>
-      <div style={{marginBottom: "1rem"}}>
+    <Card style={mb}>
+      <div style={mb}>
         <span style={{fontSize: "1rem"}} className="text-orange">목표 추가</span>
         <CloseOutlined className="float-end" style={{color: "grey"}} onClick={onClickGoalFormButton}/>
       </div>
-      <div style={{marginBottom: "1rem"}}>
+      <div style={mb}>
         <InputWithFeedback
           label="목표"
           labelColor={formLabelColor}
@@ -37,7 +39,7 @@ const AddGoal = ({onClickGoalFormButton, addGoal}) => {
           onChange={(e) => setGoal(() => ({...goal, content: e.target.value}))}
           feedbackMsg={goal.content == "" ? "목표를 입력해주세요" : ""}/>
       </div>
-      <div style={{marginBottom: "1rem"}}>
+      <div style={mb}>
         <span className={`text-${formLabelColor}`} style={style}>식물</span>
         <SelectPlant
           onChange={(plantId) => setGoal(() => ({...goal, plantId: plantId}))}

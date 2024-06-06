@@ -11,7 +11,7 @@ import Style from "./NoSchedule.module.scss"
  * @returns {JSX.Element}
  * @constructor
  */
-const NoSchedule = ({isAddFormOpened, title, onClickShowAddForm, children}) => {
+const NoContent = ({isAddFormOpened, title, onClickShowAddForm, children}) => {
   const msg = title === "목표" ? `저장된 ${title}가 없어요.` : `저장된 ${title}이 없어요.`
 
   return (
@@ -30,4 +30,4 @@ const NoSchedule = ({isAddFormOpened, title, onClickShowAddForm, children}) => {
   )
 }
 
-export default NoSchedule
+export default NoContent

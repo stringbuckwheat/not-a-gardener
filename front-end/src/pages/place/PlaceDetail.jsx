@@ -79,7 +79,7 @@ const PlaceDetail = () => {
           <DeletePlaceModal
             placeId={place.id}
             plantListSize={place.plantListSize}/>}
-        bottomData={
+        children={
           <PlaceTableForPlant
             placeId={placeId}
             plantListSize={place.plantListSize}

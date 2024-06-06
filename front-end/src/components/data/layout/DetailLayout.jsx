@@ -10,7 +10,7 @@ import {Card, Col, Row, Space} from 'antd';
  * @param deleteTitle
  * @param tags
  * @param onClickModifyBtn
- * @param bottomData
+ * @param children
  * @param deleteTooltipMsg
  * @param deleteCallBackFunction
  * @param deleteModal
@@ -24,7 +24,7 @@ const DetailLayout = ({
                         deleteTitle,
                         tags,
                         onClickModifyBtn,
-                        bottomData,
+                        children,
                         deleteTooltipMsg,
                         deleteCallBackFunction,
                         deleteModal,
@@ -56,7 +56,7 @@ const DetailLayout = ({
           </Row>
           {tags}
           <div>
-            {bottomData}
+            {children}
           </div>
         </Card>
       </Col>

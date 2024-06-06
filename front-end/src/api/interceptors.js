@@ -8,7 +8,20 @@ const authAxios = axios.create({
   headers: {
     Authorization: `Bearer ${localStorage.getItem("accessToken")}`
   }
-})
+});
+
+let isTokenRefreshing = false;
+let refreshSubscribers = [];
+
+// Token 재발급 시 새로운 요청 대기
+const onRrefreshed = (accessToken) => {
+  refreshSubscribers.forEach((callback) => callback(accessToken));
+  refreshSubscribers = []; // 콜백 실행 후 배열 초기화
+};
+
+const addRefreshSubscriber = (callback) => {
+  refreshSubscribers.push(callback);
+};
 
 const reissueAccessToken = async () => {
   const data = {
@@ -16,13 +29,9 @@ const reissueAccessToken = async () => {
     refreshToken: localStorage.getItem("refreshToken")
   };
 
-  const response = await axios.post(`${process.env.REACT_APP_API_URL}/token`, data)
-    .catch((e) => {
-      alert(e.response.data.message);
-      logOut();
-    });
+  const response = await axios.post(`${process.env.REACT_APP_API_URL}/token`, data);
   return response.data;
-}
+};
 
 /**
  * Request Interceptor
@@ -56,30 +65,48 @@ authAxios.interceptors.response.use(
     const errorCode = error.response.data.code;
 
     if (errorCode === ExceptionCode.ACCESS_TOKEN_EXPIRED) {
-      const originRequest = error?.config;
+      const originRequest = error.config;
 
-      // token 재발급
-      console.log("토큰 만료 -> reissue access token");
-      const res = await reissueAccessToken(); // Token 클래스 받아와야함
+      if (!isTokenRefreshing) {
+        isTokenRefreshing = true;
 
-      localStorage.setItem("accessToken", res.accessToken);
-      localStorage.setItem("refreshToken", res.refreshToken); //RTR
+        // token 재발급
+        console.log("토큰 만료 -> reissue access token");
+        const res = await reissueAccessToken().catch((err) => {
+          isTokenRefreshing = false;
 
-      // 진행 중인 요청 이어하기
-      return authAxios({
-        ...originRequest,
-        headers: {...originRequest.headers, Authorization: `Bearer ${res.accessToken}`},
-        sent: true
-      })
+          if (err.response.data.code === ExceptionCode.REFRESH_TOKEN_EXPIRED) { // Refresh Token 만료
+            console.log("REFRESH_TOKEN_EXPIRED - AUTH AXIOS");
+            logOut();
+          } else if (err.response.data.code === ExceptionCode.NO_TOKEN_IN_REDIS
+            || err.response.data.code === ExceptionCode.INVALID_REFRESH_TOKEN
+            || err.response.data.code === ExceptionCode.INVALID_JWT_TOKEN) {
+            console.log("NO_TOKEN_IN_REDIS / INVALID_REFRESH_TOKEN / INVALID_JWT_TOKEN");
 
-    } else if (errorCode == ExceptionCode.REFRESH_TOKEN_EXPIRED) { // Refresh Token 만료
-      alert(error.response.data.message);
-      logOut();
-    } else if (errorCode == ExceptionCode.NO_TOKEN_IN_REDIS
-      || errorCode == ExceptionCode.INVALID_REFRESH_TOKEN
-      || errorCode == ExceptionCode.INVALID_JWT_TOKEN) {
-      alert(errorCode + " : " + error.response.data.message);
-      logOut();
+            alert(err.response.data.code + " : " + err.response.data.message);
+            logOut();
+          }
+
+          return Promise.reject(err);
+        });
+
+        if (res) {
+          console.log("Silent Refresh 성공");
+
+          localStorage.setItem("accessToken", res.accessToken);
+          localStorage.setItem("refreshToken", res.refreshToken); //RTR
+          isTokenRefreshing = false;
+          onRrefreshed(res.accessToken);
+        }
+      }
+
+      return new Promise((resolve) => {
+        addRefreshSubscriber((accessToken) => {
+          originRequest.headers.Authorization = `Bearer ${accessToken}`;
+          resolve(authAxios(originRequest));
+        });
+      });
+
     } else {
       alert(errorCode + " : " + error.response.data.message);
     }

@@ -1,4 +1,4 @@
-import NoSchedule from "../../../components/empty/NoSchedule";
+import NoContent from "../../../components/empty/NoContent";
 import AddGoal from "./AddGoal";
 import {useState} from "react";
 import GoalContent from "./GoalContent";
@@ -14,14 +14,14 @@ const Goal = ({goals, addGoal, completeGoal, deleteGoal}) => {
         goals.length == 0
           ?
           <>
-            <NoSchedule
+            <NoContent
               isAddFormOpened={isAddFormOpened}
               title="목표"
               onClickShowAddForm={changeFormOpen}>
               <AddGoal
                 onClickGoalFormButton={changeFormOpen}
                 addGoal={addGoal}/>
-            </NoSchedule>
+            </NoContent>
           </>
           :
           <GoalContent

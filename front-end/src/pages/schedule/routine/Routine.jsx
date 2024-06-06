@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import RoutineContent from "./RoutineContent";
-import NoSchedule from "../../../components/empty/NoSchedule";
+import NoContent from "../../../components/empty/NoContent";
 import AddRoutine from "./AddRoutine";
 import {Card} from "antd";
 
@@ -40,7 +40,7 @@ const Routine = ({routines}) => {
       {
         toDoList.length == 0 && notToDoList.length == 0
           ?
-          <NoSchedule
+          <NoContent
             isAddFormOpened={isRoutineFormOpened}
             title="루틴"
             onClickShowAddForm={onClickRoutineFormButton}
@@ -49,7 +49,7 @@ const Routine = ({routines}) => {
               onClickRoutineFormButton={onClickRoutineFormButton}
               addRoutine={addRoutine}
             />
-          </NoSchedule>
+          </NoContent>
           :
           <RoutineContent
             isRoutineFormOpened={isRoutineFormOpened}

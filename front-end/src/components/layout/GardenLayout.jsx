@@ -3,7 +3,7 @@ import React, {Suspense} from "react";
 import Sidebar from "./Sidebar";
 import Loading from "../data/Loading";
 import {Navigate, Route, Routes,} from "react-router-dom";
-import routes from "../../utils/routes";
+import routes from "./routes";
 import {useDispatch} from "react-redux";
 import GardenHeader from "./GardenHeader";
 

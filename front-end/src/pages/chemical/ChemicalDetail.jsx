@@ -87,7 +87,7 @@ const ChemicalDetail = () => {
         deleteTitle="비료/살균/살충제"
         tags={<ChemicalTag chemical={chemical} wateringListSize={wateringSize}/>}
         onClickModifyBtn={() => setOnModify(!onModify)}
-        bottomData={<TableWithPage columns={wateringTableColumnArray}
+        children={<TableWithPage columns={wateringTableColumnArray}
                                    getDataSource={getChemicalUsage}
                                    total={wateringSize}/>}
         detailMsg={"단, 물주기 기록은 보존됩니다."}

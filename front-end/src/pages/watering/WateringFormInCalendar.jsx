@@ -65,7 +65,7 @@ const WateringFormInCalendar = ({
                 style={{width: "90%",}}
                 onChange={(value) => setWatering({...watering, plantId: value})}
                 options={plantList}
-                name="chemicalNo"
+                name="plantIds"
               />
             </Col>
             <Col md={12} xs={24}>
@@ -76,7 +76,7 @@ const WateringFormInCalendar = ({
                 style={{width: "90%",}}
                 onChange={onChangeChemical}
                 options={chemicalList}
-                name="chemicalNo"
+                name="chemicalId"
               />
             </Col>
           </Row>

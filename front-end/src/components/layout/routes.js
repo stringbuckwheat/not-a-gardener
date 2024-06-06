@@ -1,7 +1,7 @@
 import React from 'react'
 
-const Garden = React.lazy(() => import('../../../../../../Desktop/React branch/src/pages/garden/Garden'))
-const Gardener = React.lazy(() => import('../../../../../../Desktop/React branch/src/pages/gardener/Gardener'))
+const Garden = React.lazy(() => import('../../pages/garden/Garden'))
+const Gardener = React.lazy(() => import('../../pages/gardener/Gardener'))
 
 const Place = React.lazy(() => import('../../pages/place/Place'))
 const PlaceDetail = React.lazy(() => import('../../pages/place/PlaceDetail'))
@@ -9,12 +9,14 @@ const PlaceDetail = React.lazy(() => import('../../pages/place/PlaceDetail'))
 const Chemical = React.lazy(() => import('../../pages/chemical/Chemical'))
 const ChemicalDetail = React.lazy(() => import('../../pages/chemical/ChemicalDetail'))
 
-const Plant = React.lazy(() => import('../../../../../../Desktop/React branch/src/pages/plant/Plant'))
-const PlantDetail = React.lazy(() => import('../../../../../../Desktop/React branch/src/pages/plant/plantDetail/PlantDetail'))
+const Plant = React.lazy(() => import('../../pages/plant/Plant'))
+const PlantDetail = React.lazy(() => import('../../pages/plant/plantDetail/PlantDetail'))
 
-const Schedule = React.lazy(() => import('../../../../../../Desktop/React branch/src/pages/schedule/Schedule'))
+const Schedule = React.lazy(() => import('../..//pages/schedule/Schedule'))
 
-const Watering = React.lazy(() => import('../../../../../../Desktop/React branch/src/pages/watering/Watering'))
+const Watering = React.lazy(() => import('../../pages/watering/Watering'))
+
+const Log = React.lazy(() => import('../../pages/log/Log'))
 
 const routes = [
   {path: '/', exact: true, name: 'Garden', element: Garden},
@@ -33,6 +35,7 @@ const routes = [
   {path: '/schedule', exact: true, name: 'routine', element: Schedule},
 
   {path: '/watering', exact: true, name: 'watering', element: Watering},
+  {path: '/log', exact: true, name: 'log', element: Log},
 ]
 
 export default routes

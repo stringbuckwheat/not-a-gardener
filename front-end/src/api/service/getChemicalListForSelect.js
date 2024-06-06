@@ -1,6 +1,7 @@
 import authAxios from "../interceptors";
 
 /**
+ * TODO 제거 대상
  * 비료/살충/살균제 목록을 받아온 뒤 '맹물'을 넣어 가공한 뒤 반환
  * @param setChemicalList
  * @returns {Promise<void>}

@@ -15,6 +15,7 @@ const getWateringTableColumnArray = (isEditing, updateWatering, editingKey, canc
         dataIndex: 'chemicalName',
         key: 'chemicalName',
         editable: true,
+        width: "10rem"
       },
       {
         title: '관수 간격',

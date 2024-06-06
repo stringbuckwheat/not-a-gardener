@@ -19,8 +19,11 @@ const RoutineContent = ({
     <>
       <div>
         <span style={{fontSize: "1.25rem", fontWeight: "bold"}} className={"text-garden"}>나의 루틴</span>
-        {!isRoutineFormOpened
-          ? <GButton color="garden" className="float-end" onClick={onClickRoutineFormButton}>추가</GButton> : <></>}
+        {
+          !isRoutineFormOpened
+            ? <GButton color="garden" className="float-end" onClick={onClickRoutineFormButton}>추가</GButton>
+            : <></>
+        }
       </div>
       {/* 루틴 추가 */}
       <div style={{marginBottom: "1.5rem"}}>
