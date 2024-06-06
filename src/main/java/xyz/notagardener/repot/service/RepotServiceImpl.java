@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
+import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.plant.dto.RepotList;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
@@ -59,7 +60,7 @@ public class RepotServiceImpl implements RepotService {
         Repot repot = repotRepository.save(new Repot(repotRequest.getRepotDate(), plant, repotRequest.getHaveToInitPeriod()));
 
         // 물주기 기록 초기화 or 유지
-        if ("Y".equals(repotRequest.getHaveToInitPeriod())) {
+        if (YesOrNoType.Y.equals(repotRequest.getHaveToInitPeriod())) {
             plant.updateRecentWateringPeriod(0);
             plant.updateEarlyWateringPeriod(0);
         }

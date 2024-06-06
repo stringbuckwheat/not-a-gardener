@@ -3,13 +3,14 @@ package xyz.notagardener.status.service;
 import xyz.notagardener.status.dto.PlantStatusRequest;
 import xyz.notagardener.status.dto.PlantStatusResponse;
 
+import java.util.List;
+
 public interface PlantStatusService {
-    // CREATE
     PlantStatusResponse add(PlantStatusRequest request, Long gardenerId);
 
-    // UPDATE
+    List<PlantStatusResponse> getAll(Long plantId, Long gardenerId);
+
     PlantStatusResponse update(PlantStatusRequest request, Long gardenerId);
 
-    // DELETE
-    void delete(Long plantStatusId, Long gardenerId);
+    List<PlantStatusResponse> delete(Long plantId, Long plantStatusId, Long gardenerId);
 }

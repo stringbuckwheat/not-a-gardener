@@ -7,9 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.garden.dto.PlantResponse;
-import xyz.notagardener.status.dto.PlantStatusType;
-import xyz.notagardener.status.dto.SimplePlantStatus;
-import xyz.notagardener.status.repository.PlantStatusRepository;
+import xyz.notagardener.status.dto.PlantStatusResponse;
+import xyz.notagardener.status.service.PlantStatusQueryService;
 import xyz.notagardener.watering.Watering;
 import xyz.notagardener.watering.plant.dto.PlantWateringResponse;
 import xyz.notagardener.watering.plant.dto.WateringForOnePlant;
@@ -31,11 +30,7 @@ import java.util.stream.Collectors;
 public class PlantWateringServiceImpl implements PlantWateringService {
     private final WateringCommandService wateringCommandService;
     private final WateringRepository wateringQueryRepository;
-    private final PlantStatusRepository plantStatusRepository;
-
-    private List<SimplePlantStatus> getStatus(Long plantId, Long gardenerId) {
-        return plantStatusRepository.findByPlantId(plantId, gardenerId, PlantStatusType.getList());
-    }
+    private final PlantStatusQueryService plantStatusQueryService;
 
     @Override
     @Transactional
@@ -43,7 +38,7 @@ public class PlantWateringServiceImpl implements PlantWateringService {
         AfterWatering afterWatering = wateringCommandService.add(wateringRequest, gardenerId);
 
         List<WateringForOnePlant> waterings = getAll(wateringRequest.getPlantId(), pageable);
-        List<SimplePlantStatus> status = getStatus(wateringRequest.getPlantId(), gardenerId);
+        List<PlantStatusResponse> status = plantStatusQueryService.getRecentStatusByPlantId(wateringRequest.getPlantId(), gardenerId);
 
         return PlantWateringResponse.from(new PlantResponse(afterWatering.getPlant(), status), afterWatering.getWateringMessage(), waterings);
     }

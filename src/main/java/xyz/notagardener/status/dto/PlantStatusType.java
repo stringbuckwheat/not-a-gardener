@@ -3,9 +3,6 @@ package xyz.notagardener.status.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Getter
 @AllArgsConstructor
 public enum PlantStatusType {
@@ -26,7 +23,13 @@ public enum PlantStatusType {
         return false;
     }
 
-    public static List<String> getList() {
-        return Arrays.stream(values()).map(PlantStatusType::getType).toList();
+    public static boolean isValid(PlantStatusType type) {
+        for(PlantStatusType statusType : values()) {
+            if(statusType.equals(type)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

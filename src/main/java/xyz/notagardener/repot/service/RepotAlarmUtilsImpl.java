@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import xyz.notagardener.plant.garden.dto.PlantResponse;
+import xyz.notagardener.status.dto.PlantStatusResponse;
 import xyz.notagardener.status.dto.PlantStatusType;
-import xyz.notagardener.status.dto.SimplePlantStatus;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,7 +21,7 @@ public class RepotAlarmUtilsImpl implements RepotAlarmUtils {
     }
 
     @Override
-    public boolean isRepotNeeded(int recentWateringPeriod, int earlyWateringPeriod, List<SimplePlantStatus> status, LocalDate lastRepottedDate) {
+    public boolean isRepotNeeded(int recentWateringPeriod, int earlyWateringPeriod, List<PlantStatusResponse> status, LocalDate lastRepottedDate) {
         // 11월 ~ 3월이거나, 물 주기 간격 확보 안 됐거나, 최근 분갈이한 식물
         if (isTooColdToRepot() || isNotEnoughRecord(recentWateringPeriod, earlyWateringPeriod) || isRepottedRecently(status)) {
             return false;
@@ -30,7 +30,7 @@ public class RepotAlarmUtilsImpl implements RepotAlarmUtils {
         return needsRepotting(recentWateringPeriod, earlyWateringPeriod, status, lastRepottedDate);
     }
 
-    private boolean needsRepotting(int recentWateringPeriod, int earlyWateringPeriod, List<SimplePlantStatus> status, LocalDate lastRepottedDate) {
+    private boolean needsRepotting(int recentWateringPeriod, int earlyWateringPeriod, List<PlantStatusResponse> status, LocalDate lastRepottedDate) {
         if (isHeavyDrinker(status)) {
             return isPastOneYear(lastRepottedDate);
         }
@@ -44,12 +44,12 @@ public class RepotAlarmUtilsImpl implements RepotAlarmUtils {
         return isWateringPeriodReduced(earlyWateringPeriod, recentWateringPeriod);
     }
 
-    private boolean isHeavyDrinker(List<SimplePlantStatus> statusList) {
+    private boolean isHeavyDrinker(List<PlantStatusResponse> statusList) {
         if (statusList == null) {
             return false;
         }
 
-        for (SimplePlantStatus status : statusList) {
+        for (PlantStatusResponse status : statusList) {
             if (PlantStatusType.HEAVY_DRINKER.getType().equals(status.getStatus())) {
                 return true;
             }
@@ -82,12 +82,12 @@ public class RepotAlarmUtilsImpl implements RepotAlarmUtils {
         return recentWateringPeriod == 0 || earlyWateringPeriod == 0;
     }
 
-    private boolean isRepottedRecently(List<SimplePlantStatus> statusList) {
+    private boolean isRepottedRecently(List<PlantStatusResponse> statusList) {
         if (statusList == null) {
             return false;
         }
 
-        for (SimplePlantStatus status : statusList) {
+        for (PlantStatusResponse status : statusList) {
             if (PlantStatusType.JUST_REPOTTED.getType().equals(status.getStatus())) {
                 return true;
             }

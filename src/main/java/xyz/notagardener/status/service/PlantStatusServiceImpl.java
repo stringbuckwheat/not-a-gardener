@@ -14,10 +14,13 @@ import xyz.notagardener.status.dto.PlantStatusRequest;
 import xyz.notagardener.status.dto.PlantStatusResponse;
 import xyz.notagardener.status.repository.PlantStatusRepository;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class PlantStatusServiceImpl implements PlantStatusService {
+    private final PlantStatusQueryService plantStatusQueryService;
     private final PlantStatusRepository plantStatusRepository;
     private final PlantRepository plantRepository;
 
@@ -45,7 +48,6 @@ public class PlantStatusServiceImpl implements PlantStatusService {
         return status;
     }
 
-    // CREATE
     @Override
     public PlantStatusResponse add(PlantStatusRequest request, Long gardenerId) {
         Plant plant = getPlantByPlantIdAndGardenerId(request.getPlantId(), gardenerId);
@@ -54,15 +56,14 @@ public class PlantStatusServiceImpl implements PlantStatusService {
         return new PlantStatusResponse(status);
     }
 
-    // READ
+    @Override
+    public List<PlantStatusResponse> getAll(Long plantId, Long gardenerId) {
+        return plantStatusRepository.findAllStatusByPlant_PlantIdAndPlant_Gardener_GardenerIdOrderByRecordedDateDescCreateDateDesc(plantId, gardenerId)
+                .stream().map(PlantStatusResponse::new).toList();
+    }
 
-    // UPDATE
     @Override
     public PlantStatusResponse update(PlantStatusRequest request, Long gardenerId) {
-        // TODO 유니크 제약조건 위배시 처리 고민
-        //// 1) UPDATE 불가 엔티티로 만들기
-        //// 2) AOP 추가하기
-
         PlantStatus status = getPlantStatusByPlantStatusIdAndGardenerId(request.getPlantStatusId(), gardenerId);
         Plant plant = getPlantByPlantIdAndGardenerId(request.getPlantId(), gardenerId);
 
@@ -71,10 +72,11 @@ public class PlantStatusServiceImpl implements PlantStatusService {
         return new PlantStatusResponse(status);
     }
 
-    // DELETE
     @Override
-    public void delete(Long plantStatusId, Long gardenerId) {
+    public List<PlantStatusResponse> delete(Long plantId, Long plantStatusId, Long gardenerId) {
         PlantStatus status = getPlantStatusByPlantStatusIdAndGardenerId(plantStatusId, gardenerId);
         plantStatusRepository.delete(status);
+
+        return plantStatusQueryService.getRecentStatusByPlantId(plantId, gardenerId);
     }
 }

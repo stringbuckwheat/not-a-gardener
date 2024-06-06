@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import xyz.notagardener.common.validation.YesOrNoType;
+import xyz.notagardener.status.dto.PlantStatusType;
 
 import java.time.LocalDate;
 
@@ -19,7 +21,7 @@ public class RepotList {
     private LocalDate repotDate;
 
     @Schema(description = "물주기 간격 초기화 여부", example = "Y")
-    private String initPeriod;
+    private YesOrNoType initPeriod;
 
     @Schema(description = "식물 id", example = "2")
     private Long plantId;
@@ -31,10 +33,10 @@ public class RepotList {
     private Long plantStatusId;
 
     @Schema(description = "식물 상태", example = "요주의 식물")
-    private String status;
+    private PlantStatusType status;
 
     @QueryProjection
-    public RepotList(Long repotId, LocalDate repotDate, String initPeriod, Long plantId, String plantName, Long plantStatusId, String status) {
+    public RepotList(Long repotId, LocalDate repotDate, YesOrNoType initPeriod, Long plantId, String plantName, Long plantStatusId, PlantStatusType status) {
         this.repotId = repotId;
         this.repotDate = repotDate;
         this.initPeriod = initPeriod;

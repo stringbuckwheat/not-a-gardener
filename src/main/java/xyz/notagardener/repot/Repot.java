@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.plant.Plant;
 
 import java.time.LocalDate;
@@ -24,14 +25,15 @@ public class Repot {
     private LocalDate repotDate;
 
     @NotNull
-    private String initPeriod;
+    @Enumerated(EnumType.STRING)
+    private YesOrNoType initPeriod;
 
     @ManyToOne
     @JoinColumn(name = "plant_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Plant plant;
 
-    public Repot(LocalDate repotDate, Plant plant, String initPeriod) {
+    public Repot(LocalDate repotDate, Plant plant, YesOrNoType initPeriod) {
         this.repotDate = repotDate;
         this.plant = plant;
         this.initPeriod = initPeriod;

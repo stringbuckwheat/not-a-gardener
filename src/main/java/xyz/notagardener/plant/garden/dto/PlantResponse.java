@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import xyz.notagardener.plant.Plant;
-import xyz.notagardener.status.dto.SimplePlantStatus;
+import xyz.notagardener.status.dto.PlantStatusResponse;
 import xyz.notagardener.watering.Watering;
 
 import java.time.LocalDate;
@@ -32,7 +32,7 @@ public class PlantResponse {
     private Long wateringId;
     private LocalDate latestWateringDate;
     private Long totalWatering;
-    private List<SimplePlantStatus> status;
+    private List<PlantStatusResponse> status;
 
     @QueryProjection
     @Builder
@@ -70,7 +70,7 @@ public class PlantResponse {
         this.totalWatering = totalWatering;
     }
 
-    public PlantResponse(Plant plant, Long totalWatering, LocalDate latestWateringDate, List<SimplePlantStatus> status) {
+    public PlantResponse(Plant plant, Long totalWatering, LocalDate latestWateringDate, List<PlantStatusResponse> status) {
         this.id = plant.getPlantId();
         this.name = plant.getName();
         this.species = plant.getSpecies();
@@ -104,12 +104,12 @@ public class PlantResponse {
         }
     }
 
-    public PlantResponse(Plant plant, List<SimplePlantStatus> status) {
+    public PlantResponse(Plant plant, List<PlantStatusResponse> status) {
         this(plant);
         this.status = status;
     }
 
-    public void setStatus(List<SimplePlantStatus> status) {
+    public void setStatus(List<PlantStatusResponse> status) {
         this.status = status;
     }
 }

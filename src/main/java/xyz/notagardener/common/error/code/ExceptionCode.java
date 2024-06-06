@@ -19,6 +19,7 @@ public enum ExceptionCode {
     //////////////////// For DataIntegrityViolationException
     ALREADY_WATERED("ALREADY_WATERED", "이미 물 준 날짜", "이 날짜엔 이미 물을 줬어요"), // B005
     ALREADY_REPOTTED("ALREADY_REPOTTED", "이미 분갈이 한 날짜", "이 날짜엔 이미 분갈이 기록을 추가했어요"),
+    ALREADY_RECORDED_STATUS("ALREADY_RECORDED_STATUS", "이미 상태를 추가한 상황", "이미 동일한 식물 상태 기록이 있어요"),
 
     //////////////////// For ResourceNotFoundException
     NO_SUCH_CHEMICAL("NO_SUCH_CHEMICAL", "해당 약품 없음", "해당 약품을 찾을 수 없어요"),

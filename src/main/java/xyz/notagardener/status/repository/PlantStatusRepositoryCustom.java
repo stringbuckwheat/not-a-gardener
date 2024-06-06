@@ -1,9 +1,11 @@
 package xyz.notagardener.status.repository;
 
-import xyz.notagardener.status.dto.SimplePlantStatus;
+import xyz.notagardener.status.dto.PlantStatusResponse;
+import xyz.notagardener.status.dto.PlantStatusType;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface PlantStatusRepositoryCustom {
-    List<SimplePlantStatus> findByPlantId(Long plantId, Long gardenerId, List<String> statusList);
+    Long deactivateStatusByPlantIdAndStatus(Long plantId, PlantStatusType status);
+    Optional<PlantStatusResponse> findByPlantIdAndStatus(Long plantId, PlantStatusType status);
 }

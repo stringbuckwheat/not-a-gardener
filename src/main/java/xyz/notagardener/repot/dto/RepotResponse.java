@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.repot.Repot;
 import xyz.notagardener.status.dto.PlantStatusResponse;
 
@@ -23,7 +24,7 @@ public class RepotResponse {
     private LocalDate repotDate;
 
     @Schema(description = "물주기 간격 초기화 여부", example = "Y")
-    private String initPeriod;
+    private YesOrNoType initPeriod;
 
     @Schema(description = "변화된 식물 상태 정보")
     private PlantStatusResponse status;

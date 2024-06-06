@@ -1,20 +1,21 @@
 package xyz.notagardener.status;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.plant.Plant;
+import xyz.notagardener.status.dto.PlantStatusType;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "plant_status",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"plant_id", "recorded_date"})}
-)
+@Table(name = "plant_status")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -24,8 +25,13 @@ public class PlantStatus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long plantStatusId;
 
-    @NotBlank
-    private String status;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private PlantStatusType status;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private YesOrNoType active;
 
     @NotNull
     @Column(name = "recorded_date")
@@ -35,7 +41,10 @@ public class PlantStatus {
     @JoinColumn(name = "plant_id")
     private Plant plant;
 
-    public void update(String status, LocalDate recordedDate, Plant plant) {
+    @CreatedDate
+    private LocalDateTime createDate;
+
+    public void update(PlantStatusType status, LocalDate recordedDate, Plant plant) {
         this.status = status;
         this.recordedDate = recordedDate;
         this.plant = plant;

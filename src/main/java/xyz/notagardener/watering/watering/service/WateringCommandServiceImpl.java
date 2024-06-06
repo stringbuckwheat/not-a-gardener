@@ -10,8 +10,11 @@ import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.AlreadyWateredException;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
+import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
+import xyz.notagardener.status.dto.PlantStatusResponse;
+import xyz.notagardener.status.dto.PlantStatusType;
 import xyz.notagardener.status.repository.PlantStatusRepository;
 import xyz.notagardener.watering.Watering;
 import xyz.notagardener.watering.watering.AfterWateringCode;
@@ -25,6 +28,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -137,7 +141,11 @@ public class WateringCommandServiceImpl implements WateringCommandService {
         int period = (int) Duration.between(prevWateringDate, latestWateringDate).toDays();
 
         if (waterings.size() == 3) {
-            if (period <= 3) {
+            Long plantId = waterings.get(0).getPlant().getPlantId();
+            Optional<PlantStatusResponse> status = plantStatusRepository.findByPlantIdAndStatus(plantId, PlantStatusType.HEAVY_DRINKER);
+            boolean isHeavyDrinker = status.isPresent() && YesOrNoType.Y.equals(status.get().getActive()); // 이미 헤비 드링커 상태인지
+
+            if (period <= 3 && !isHeavyDrinker) {
                 return new WateringMessage(AfterWateringCode.POSSIBLE_HEAVY_DRINKER.getCode(), period);
             }
 
@@ -201,5 +209,8 @@ public class WateringCommandServiceImpl implements WateringCommandService {
         // 물주기 Period 초기화
         plant.updateRecentWateringPeriod(0);
         plant.updateEarlyWateringPeriod(0);
+
+        // HEAVY_DRINKER 상태 삭제
+        plantStatusRepository.deactivateStatusByPlantIdAndStatus(plantId, PlantStatusType.HEAVY_DRINKER);
     }
 }

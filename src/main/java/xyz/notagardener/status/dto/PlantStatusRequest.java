@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import xyz.notagardener.common.validation.NotFuture;
 import xyz.notagardener.common.validation.PlantStatusConstraints;
+import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.status.PlantStatus;
 
@@ -23,17 +24,20 @@ public class PlantStatusRequest {
     private Long plantId;
 
     @PlantStatusConstraints
-    private String status;
+    private PlantStatusType status;
 
     @NotNull(message = "식물 상태 기록일은 비워둘 수 없어요")
     @NotFuture(message = "식물 상태 기록일은 미래가 될 수 없어요")
     private LocalDate recordedDate;
+
+    private YesOrNoType active;
 
     public PlantStatus toEntityWith(Plant plant) {
         return PlantStatus.builder()
                 .status(status)
                 .recordedDate(recordedDate)
                 .plant(plant)
+                .active(active)
                 .build();
     }
 }

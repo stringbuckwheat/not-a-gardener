@@ -7,6 +7,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.AlreadyRecordedStatusException;
 import xyz.notagardener.common.error.exception.AlreadyRepottedException;
 import xyz.notagardener.common.error.exception.AlreadyWateredException;
 
@@ -23,5 +24,10 @@ public class ConstraintViolationAspect {
     @AfterThrowing(pointcut = "execution(* xyz.notagardener.repot..*(..))", throwing = "ex")
     public void handleRepotConstraintViolationException(DataIntegrityViolationException ex) {
         throw new AlreadyRepottedException(ExceptionCode.ALREADY_REPOTTED);
+    }
+
+    @AfterThrowing(pointcut = "execution(* xyz.notagardener.status..*(..))", throwing = "ex")
+    public void handleStatusConstraintViolationException(DataIntegrityViolationException ex) {
+        throw new AlreadyRecordedStatusException(ExceptionCode.ALREADY_RECORDED_STATUS);
     }
 }
