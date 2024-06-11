@@ -1,4 +1,4 @@
-package xyz.notagardener.routine;
+package xyz.notagardener.routine.service;
 
 import xyz.notagardener.routine.dto.RoutineComplete;
 import xyz.notagardener.routine.dto.RoutineMain;

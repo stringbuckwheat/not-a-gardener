@@ -1,4 +1,4 @@
-package xyz.notagardener.todo;
+package xyz.notagardener.todo.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import xyz.notagardener.todo.dto.TodoDto;
+import xyz.notagardener.todo.service.TodoService;
 
 import java.util.List;
 

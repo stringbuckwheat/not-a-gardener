@@ -1,4 +1,4 @@
-package xyz.notagardener.routine;
+package xyz.notagardener.routine.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +11,8 @@ import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.gardener.repository.GardenerRepository;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
+import xyz.notagardener.routine.Routine;
+import xyz.notagardener.routine.repository.RoutineRepository;
 import xyz.notagardener.routine.dto.RoutineComplete;
 import xyz.notagardener.routine.dto.RoutineMain;
 import xyz.notagardener.routine.dto.RoutineRequest;

@@ -1,4 +1,4 @@
-package xyz.notagardener.todo;
+package xyz.notagardener.todo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,6 +8,9 @@ import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.gardener.repository.GardenerRepository;
+import xyz.notagardener.todo.Todo;
+import xyz.notagardener.todo.repository.TodoRepository;
+import xyz.notagardener.todo.dto.TodoDto;
 
 import java.util.List;
 

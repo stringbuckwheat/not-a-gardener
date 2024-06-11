@@ -2,7 +2,7 @@ package xyz.notagardener.common.validation.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import xyz.notagardener.chemical.ChemicalType;
+import xyz.notagardener.chemical.dto.ChemicalType;
 import xyz.notagardener.common.validation.ChemicalTypeConstraints;
 
 public class NotChemicalTypeValidator implements ConstraintValidator<ChemicalTypeConstraints, String> {

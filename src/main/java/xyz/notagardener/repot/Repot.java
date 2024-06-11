@@ -11,10 +11,8 @@ import xyz.notagardener.plant.Plant;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "repot")
+@Table(name = "repot", uniqueConstraints = {@UniqueConstraint(columnNames = {"repot_date", "plant_id"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @Getter
 public class Repot {
     @Id
@@ -22,6 +20,7 @@ public class Repot {
     private Long repotId;
 
     @NotNull
+    @Column(name = "repot_date")
     private LocalDate repotDate;
 
     @NotNull
@@ -32,6 +31,14 @@ public class Repot {
     @JoinColumn(name = "plant_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Plant plant;
+
+    @Builder
+    public Repot(Long repotId, LocalDate repotDate, YesOrNoType initPeriod, Plant plant) {
+        this.repotId = repotId;
+        this.repotDate = repotDate;
+        this.initPeriod = initPeriod;
+        this.plant = plant;
+    }
 
     public Repot(LocalDate repotDate, Plant plant, YesOrNoType initPeriod) {
         this.repotDate = repotDate;

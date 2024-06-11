@@ -1,4 +1,6 @@
-package xyz.notagardener.todo;
+package xyz.notagardener.todo.service;
+
+import xyz.notagardener.todo.dto.TodoDto;
 
 import java.util.List;
 

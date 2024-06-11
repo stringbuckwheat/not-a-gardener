@@ -1,4 +1,4 @@
-package xyz.notagardener.plant.place;
+package xyz.notagardener.plant.place.service;
 
 import xyz.notagardener.plant.plant.dto.PlantInPlace;
 import xyz.notagardener.plant.plant.dto.PlantRequest;

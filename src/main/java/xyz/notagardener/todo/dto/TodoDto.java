@@ -1,10 +1,11 @@
-package xyz.notagardener.todo;
+package xyz.notagardener.todo.dto;
 
 import jakarta.validation.constraints.Size;
 import xyz.notagardener.gardener.Gardener;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import xyz.notagardener.todo.Todo;
 
 import java.time.LocalDate;
 

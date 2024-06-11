@@ -35,6 +35,23 @@ public interface PlantStatusRepository extends Repository<PlantStatus, Long>, Pl
             """, nativeQuery = true)
     List<PlantStatus> findCurrentStatusByPlantId(@Param("plantId") Long plantId);
 
+    @Query(value = """
+            SELECT ps.*
+            FROM plant_status ps
+            JOIN (
+                SELECT plant_id, MAX(recorded_date) AS max_recorded_date
+                FROM plant_status
+                WHERE status = 'ATTENTION_PLEASE'
+                GROUP BY plant_id
+            ) AS sub
+            ON ps.plant_id = sub.plant_id AND ps.recorded_date = sub.max_recorded_date
+            JOIN plant p ON ps.plant_id = p.plant_id
+            JOIN gardener g ON p.gardener_id = g.gardener_id
+            WHERE ps.status = 'ATTENTION_PLEASE' AND g.gardener_id = :gardenerId
+            GROUP BY ps.plant_id
+             """, nativeQuery = true)
+    List<PlantStatus> findAttentionRequiredPlants(@Param("gardenerId") Long gardenerId);
+
     @EntityGraph(attributePaths = {"plant", "plant.gardener"})
     Optional<PlantStatus> findByPlantStatusId(Long plantStatusId);
 

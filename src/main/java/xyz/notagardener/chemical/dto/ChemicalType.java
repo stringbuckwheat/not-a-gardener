@@ -1,4 +1,4 @@
-package xyz.notagardener.chemical;
+package xyz.notagardener.chemical.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

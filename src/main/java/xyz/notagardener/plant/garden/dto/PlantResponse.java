@@ -15,7 +15,7 @@ import java.util.List;
 
 @Getter
 @ToString(of = {"plantId", "name", "latestWateringDate", "totalWatering"})
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"plantId", "name", "latestWateringDate", "totalWatering"})
 public class PlantResponse {
     private Long id;
     private String name;

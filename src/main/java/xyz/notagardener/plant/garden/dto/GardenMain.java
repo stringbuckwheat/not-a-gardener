@@ -3,11 +3,13 @@ package xyz.notagardener.plant.garden.dto;
 import xyz.notagardener.routine.dto.RoutineResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import xyz.notagardener.status.dto.PlantStatusResponse;
 
 import java.util.List;
 
 @Getter
 @AllArgsConstructor
+@Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
 public class GardenMain {
@@ -23,7 +25,10 @@ public class GardenMain {
     @Schema(description = "루틴 리스트")
     private List<RoutineResponse> routineList;
 
+    @Schema(description = "요주의 식물 리스트")
+    private List<PlantStatusResponse> attentions;
+
     public static GardenMain noPlant() {
-        return new GardenMain(false, null, null, null);
+        return new GardenMain(false, null, null, null, null);
     }
 }

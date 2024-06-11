@@ -9,9 +9,9 @@ import org.mockito.MockitoAnnotations;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.repot.dto.RepotRequest;
 import xyz.notagardener.status.PlantStatus;
-import xyz.notagardener.status.PlantStatusRepository;
-import xyz.notagardener.status.PlantStatusResponse;
-import xyz.notagardener.status.PlantStatusType;
+import xyz.notagardener.status.repository.PlantStatusRepository;
+import xyz.notagardener.status.dto.PlantStatusResponse;
+import xyz.notagardener.status.dto.PlantStatusType;
 import xyz.notagardener.watering.watering.repository.WateringRepository;
 
 import java.time.LocalDate;
@@ -51,7 +51,7 @@ class RepotStatusServiceImplTest {
 
         // Then
         assertNotNull(result);
-        assertNull(result.getPlantStatusId());
+        assertNull(result.getStatusId());
         assertNull(result.getStatus());
     }
 
@@ -64,7 +64,7 @@ class RepotStatusServiceImplTest {
 
         PlantStatus status = PlantStatus.builder()
                 .plantStatusId(2L)
-                .status(PlantStatusType.JUST_REPOTTED.getType())
+                .status(PlantStatusType.JUST_REPOTTED)
                 .recordedDate(request.getRepotDate())
                 .plant(plant)
                 .build();
@@ -78,9 +78,8 @@ class RepotStatusServiceImplTest {
 
         // Then
         assertNotNull(result);
-        assertNotNull(result.getPlantStatusId());
-        assertEquals(PlantStatusType.JUST_REPOTTED.getType(), result.getStatus());
+        assertNotNull(result.getStatusId());
+        assertEquals(PlantStatusType.JUST_REPOTTED, result.getStatus());
         assertEquals(request.getRepotDate(), result.getRecordedDate());
-        assertEquals(plant.getPlantId(), result.getPlantId());
     }
 }

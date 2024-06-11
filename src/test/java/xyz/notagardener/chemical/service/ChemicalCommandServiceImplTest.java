@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import xyz.notagardener.chemical.Chemical;
-import xyz.notagardener.chemical.ChemicalType;
+import xyz.notagardener.chemical.dto.ChemicalType;
 import xyz.notagardener.chemical.dto.ChemicalDto;
 import xyz.notagardener.chemical.repository.ChemicalRepository;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;

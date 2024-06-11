@@ -1,9 +1,10 @@
-package xyz.notagardener.routine;
+package xyz.notagardener.routine.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import xyz.notagardener.authentication.model.UserPrincipal;
+import xyz.notagardener.routine.service.RoutineService;
 import xyz.notagardener.routine.dto.RoutineComplete;
 import xyz.notagardener.routine.dto.RoutineMain;
 import xyz.notagardener.routine.dto.RoutineRequest;

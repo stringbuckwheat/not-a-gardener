@@ -1,4 +1,4 @@
-package xyz.notagardener.chemical;
+package xyz.notagardener.chemical.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

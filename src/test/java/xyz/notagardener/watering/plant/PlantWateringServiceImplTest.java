@@ -9,6 +9,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Pageable;
 import xyz.notagardener.place.Place;
 import xyz.notagardener.plant.Plant;
+import xyz.notagardener.status.service.PlantStatusQueryService;
 import xyz.notagardener.watering.Watering;
 import xyz.notagardener.watering.plant.dto.PlantWateringResponse;
 import xyz.notagardener.watering.plant.dto.WateringForOnePlant;
@@ -21,6 +22,7 @@ import xyz.notagardener.watering.watering.service.WateringCommandService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,6 +36,9 @@ class PlantWateringServiceImplTest {
 
     @Mock
     private WateringRepository wateringQueryRepository;
+
+    @Mock
+    private PlantStatusQueryService plantStatusQueryService;
 
     @InjectMocks
     private PlantWateringServiceImpl plantWateringService;
@@ -71,6 +76,7 @@ class PlantWateringServiceImplTest {
 
         when(wateringCommandService.add(request, gardenerId)).thenReturn(afterWatering);
         when(wateringQueryRepository.findWateringsByPlantIdWithPage(plantId, pageable)).thenReturn(waterings);
+        when(plantStatusQueryService.getRecentStatusByPlantId(plantId, gardenerId)).thenReturn(new ArrayList<>());
 
         // When
         PlantWateringResponse result = plantWateringService.add(request, pageable, gardenerId);

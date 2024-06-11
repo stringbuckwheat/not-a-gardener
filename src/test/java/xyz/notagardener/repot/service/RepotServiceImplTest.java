@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
+import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
@@ -20,8 +21,8 @@ import xyz.notagardener.repot.dto.RepotRequest;
 import xyz.notagardener.repot.dto.RepotResponse;
 import xyz.notagardener.repot.repository.RepotRepository;
 import xyz.notagardener.status.PlantStatus;
-import xyz.notagardener.status.PlantStatusResponse;
-import xyz.notagardener.status.PlantStatusType;
+import xyz.notagardener.status.dto.PlantStatusResponse;
+import xyz.notagardener.status.dto.PlantStatusType;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -51,17 +52,17 @@ class RepotServiceImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    static Stream<String> provideInitPeriodCondition() {
+    static Stream<YesOrNoType> provideInitPeriodCondition() {
         Gardener owner = Gardener.builder().gardenerId(99L).build();
         Plant plant = Plant.builder().gardener(owner).build();
 
-        return Stream.of("Y", "N");
+        return Stream.of(YesOrNoType.Y, YesOrNoType.N);
     }
 
     @ParameterizedTest
     @MethodSource("provideInitPeriodCondition")
     @DisplayName("분갈이 기록 추가: 성공 - 물주기 간격 초기화")
-    void addOne_WhenInitPeriod_ShouldReturnRepotResponse(String initCondition) {
+    void addOne_WhenInitPeriod_ShouldReturnRepotResponse(YesOrNoType initCondition) {
         // Given
         Long plantId = 1L;
         Long gardenerId = 2L;
@@ -70,13 +71,13 @@ class RepotServiceImplTest {
         Gardener gardener = Gardener.builder().gardenerId(gardenerId).build();
         Plant plant = Plant.builder().plantId(plantId).recentWateringPeriod(7).gardener(gardener).build();
         PlantStatus status = PlantStatus.builder()
-                .status(PlantStatusType.JUST_REPOTTED.getType())
+                .status(PlantStatusType.JUST_REPOTTED)
                 .recordedDate(request.getRepotDate())
                 .plant(plant)
                 .build();
 
         when(plantRepository.findByPlantId(plantId)).thenReturn(Optional.of(plant));
-        when(repotRepository.save(any())).thenReturn(new Repot(3L, request.getRepotDate(), "Y" ,plant));
+        when(repotRepository.save(any())).thenReturn(new Repot(3L, request.getRepotDate(), YesOrNoType.Y ,plant));
         when(repotStatusService.handleRepotStatus(request, plant)).thenReturn(new PlantStatusResponse(status));
 
         // When
@@ -85,8 +86,8 @@ class RepotServiceImplTest {
         // Then
         assertNotNull(result);
         assertEquals(plantId, request.getPlantId());
-        assertEquals(PlantStatusType.JUST_REPOTTED.getType(), result.getStatus().getStatus());
-        assertEquals("Y".equals(initCondition) ? 0 : plant.getRecentWateringPeriod(), plant.getRecentWateringPeriod());
+        assertEquals(PlantStatusType.JUST_REPOTTED, result.getStatus().getStatus());
+        assertEquals(YesOrNoType.Y.equals(initCondition) ? 0 : plant.getRecentWateringPeriod(), plant.getRecentWateringPeriod());
     }
 
     static Stream<Arguments> provideSaveFailureScenarios() {
@@ -147,7 +148,7 @@ class RepotServiceImplTest {
         Plant plant = Plant.builder().gardener(gardener).plantId(3L).build();
 
         // 기존 분갈이 기록
-        Repot repot = new Repot(repotId, LocalDate.now().minusDays(7), "N", plant);
+        Repot repot = new Repot(repotId, LocalDate.now().minusDays(7), YesOrNoType.N, plant);
 
         when(repotRepository.findByRepotId(repotId)).thenReturn(Optional.of(repot));
 
@@ -195,7 +196,7 @@ class RepotServiceImplTest {
         Gardener owner = Gardener.builder().gardenerId(99L).build();
         Plant plant = Plant.builder().gardener(owner).plantId(3L).build();
 
-        Repot repot = new Repot(repotId, LocalDate.now().minusDays(7), "Y", plant);
+        Repot repot = new Repot(repotId, LocalDate.now().minusDays(7), YesOrNoType.Y, plant);
 
         when(repotRepository.findByRepotId(repotId)).thenReturn(Optional.of(repot));
 

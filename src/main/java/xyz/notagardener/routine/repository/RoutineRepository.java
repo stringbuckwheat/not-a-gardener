@@ -1,7 +1,8 @@
-package xyz.notagardener.routine;
+package xyz.notagardener.routine.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.Repository;
+import xyz.notagardener.routine.Routine;
 
 import java.util.List;
 import java.util.Optional;

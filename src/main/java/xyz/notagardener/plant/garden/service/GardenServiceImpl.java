@@ -8,11 +8,12 @@ import xyz.notagardener.plant.garden.dto.GardenMain;
 import xyz.notagardener.plant.garden.dto.GardenResponse;
 import xyz.notagardener.plant.garden.dto.WaitingForWatering;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
-import xyz.notagardener.routine.RoutineRepository;
 import xyz.notagardener.routine.dto.RoutineResponse;
+import xyz.notagardener.routine.repository.RoutineRepository;
+import xyz.notagardener.status.dto.PlantStatusResponse;
+import xyz.notagardener.status.repository.PlantStatusRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -21,6 +22,7 @@ public class GardenServiceImpl implements GardenService {
     private final GardenResponseMapper gardenResponseMapper;
     private final PlantRepository plantRepository;
     private final RoutineRepository routineRepository;
+    private final PlantStatusRepository plantStatusRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -30,20 +32,30 @@ public class GardenServiceImpl implements GardenService {
         }
 
         // 오늘 할 일
-        List<GardenResponse> plantsToDo = plantRepository.findGardenByGardenerId(gardenerId).stream()
+        List<GardenResponse> todoList = plantRepository.findGardenByGardenerId(gardenerId).stream()
                 .map(plantResponse -> gardenResponseMapper.getGardenResponse(plantResponse, gardenerId))
-                .collect(Collectors.toList());
+                .toList();
 
         // 물주기 기록을 기다리는 식물
-        List<WaitingForWatering> waitingForWatering = plantRepository.findWaitingForWateringList(gardenerId);
+        List<WaitingForWatering> waitingList = plantRepository.findWaitingForWateringList(gardenerId);
 
         // 오늘 루틴 리스트
-        List<RoutineResponse> routines = routineRepository.findByGardener_GardenerId(gardenerId).stream()
+        List<RoutineResponse> routineList = routineRepository.findByGardener_GardenerId(gardenerId).stream()
                 .map(RoutineResponse::new)
                 .filter(r -> !"N".equals(r.getHasToDoToday()))
-                .collect(Collectors.toList());
+                .toList();
 
-        return new GardenMain(true, plantsToDo, waitingForWatering, routines);
+        // 요주의 식물
+        List<PlantStatusResponse> attentions = plantStatusRepository.findAttentionRequiredPlants(gardenerId).stream()
+                .map(PlantStatusResponse::new).toList();
+
+        return GardenMain.builder()
+                .hasPlant(true)
+                .todoList(todoList)
+                .waitingList(waitingList)
+                .routineList(routineList)
+                .attentions(attentions)
+                .build();
     }
 
     @Override
@@ -51,6 +63,6 @@ public class GardenServiceImpl implements GardenService {
     public List<GardenResponse> getAll(Long gardenerId) {
         return plantRepository.findAllPlantsWithLatestWateringDate(gardenerId).stream()
                 .map(plantResponse -> gardenResponseMapper.getGardenResponse(plantResponse, gardenerId))
-                .collect(Collectors.toList());
+                .toList();
     }
 }

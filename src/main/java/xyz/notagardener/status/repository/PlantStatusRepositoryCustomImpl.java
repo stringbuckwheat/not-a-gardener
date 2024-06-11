@@ -1,6 +1,5 @@
 package xyz.notagardener.status.repository;
 
-import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +10,6 @@ import xyz.notagardener.status.dto.QPlantStatusResponse;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static xyz.notagardener.status.QPlantStatus.plantStatus;
 
@@ -27,7 +25,8 @@ public class PlantStatusRepositoryCustomImpl implements PlantStatusRepositoryCus
                                 plantStatus.plantStatusId,
                                 plantStatus.status,
                                 plantStatus.active,
-                                plantStatus.recordedDate
+                                plantStatus.recordedDate,
+                                plantStatus.createDate
                         )
                 )
                 .from(plantStatus)

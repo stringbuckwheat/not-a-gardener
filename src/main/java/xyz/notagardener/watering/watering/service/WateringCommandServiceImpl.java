@@ -118,7 +118,7 @@ public class WateringCommandServiceImpl implements WateringCommandService {
         int recentWateringPeriod = afterWatering.getRecentWateringPeriod();
 
         // 첫 recent watering period 기록
-        if (AfterWateringCode.INIT_WATERING_PERIOD.getCode().equals(afterWateringCode)) {
+        if (AfterWateringCode.INIT_WATERING_PERIOD.getCode().equals(afterWateringCode) || AfterWateringCode.POSSIBLE_HEAVY_DRINKER.getCode().equals(afterWateringCode)) {
             // 초기 관수 주기 저장
             plant.updateRecentWateringPeriod(recentWateringPeriod);
             plant.updateEarlyWateringPeriod(recentWateringPeriod);

@@ -1,4 +1,4 @@
-package xyz.notagardener.plant.place;
+package xyz.notagardener.plant.place.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import xyz.notagardener.authentication.model.UserPrincipal;
 import xyz.notagardener.common.error.ErrorResponse;
+import xyz.notagardener.plant.place.service.PlacePlantService;
 import xyz.notagardener.plant.plant.dto.PlantInPlace;
 import xyz.notagardener.plant.plant.dto.PlantRequest;
 
