@@ -6,9 +6,9 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import xyz.notagardener.gardener.Gardener;
-import xyz.notagardener.plant.plant.dto.PlantRequest;
 import xyz.notagardener.place.Place;
-import xyz.notagardener.status.PlantStatus;
+import xyz.notagardener.plant.plant.dto.PlantRequest;
+import xyz.notagardener.status.model.Status;
 import xyz.notagardener.watering.Watering;
 
 import java.time.LocalDate;
@@ -19,9 +19,7 @@ import java.util.List;
 @Entity
 @Getter
 @Table(name = "plant")
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @ToString(of = {"plantId", "name", "recentWateringPeriod"})
 public class Plant {
     @Id
@@ -64,9 +62,27 @@ public class Plant {
     @OrderBy("watering_date desc")
     private List<Watering> waterings = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "plant", cascade = CascadeType.MERGE)
-    @OrderBy("recorded_date desc")
-    private List<PlantStatus> status = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "plant")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Status status;
+
+    @Builder
+    public Plant(Long plantId, String name, String species, int recentWateringPeriod, int earlyWateringPeriod, String medium, LocalDate birthday, LocalDate conditionDate, LocalDate postponeDate, LocalDateTime createDate, Gardener gardener, Place place, List<Watering> waterings, Status status) {
+        this.plantId = plantId;
+        this.name = name;
+        this.species = species;
+        this.recentWateringPeriod = recentWateringPeriod;
+        this.earlyWateringPeriod = earlyWateringPeriod;
+        this.medium = medium;
+        this.birthday = birthday;
+        this.conditionDate = conditionDate;
+        this.postponeDate = postponeDate;
+        this.createDate = createDate;
+        this.gardener = gardener;
+        this.place = place;
+        this.waterings = waterings;
+        this.status = status;
+    }
 
     public void update(PlantRequest plantRequest, Place place) {
         this.name = plantRequest.getName();

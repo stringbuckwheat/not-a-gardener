@@ -9,7 +9,9 @@ import xyz.notagardener.common.validation.NotFuture;
 import xyz.notagardener.common.validation.PlantStatusConstraints;
 import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.plant.Plant;
-import xyz.notagardener.status.PlantStatus;
+import xyz.notagardener.status.model.Status;
+import xyz.notagardener.status.model.StatusLog;
+import xyz.notagardener.status.model.StatusType;
 
 import java.time.LocalDate;
 
@@ -24,7 +26,7 @@ public class PlantStatusRequest {
     private Long plantId;
 
     @PlantStatusConstraints
-    private PlantStatusType status;
+    private StatusType statusType;
 
     @NotNull(message = "식물 상태 기록일은 비워둘 수 없어요")
     @NotFuture(message = "식물 상태 기록일은 미래가 될 수 없어요")
@@ -32,12 +34,27 @@ public class PlantStatusRequest {
 
     private YesOrNoType active;
 
-    public PlantStatus toEntityWith(Plant plant) {
-        return PlantStatus.builder()
-                .status(status)
+    public StatusLog toStatusLogWith(Status status) {
+        return StatusLog.builder()
+                .statusType(statusType)
                 .recordedDate(recordedDate)
-                .plant(plant)
+                .status(status)
                 .active(active)
                 .build();
+    }
+
+    public Status toStatusWith(Plant plant) {
+        Status.StatusBuilder builder = Status.builder()
+                .plant(plant)
+                .attention(YesOrNoType.N)
+                .heavyDrinker(YesOrNoType.N);
+
+        if (StatusType.HEAVY_DRINKER.equals(statusType)) {
+            builder.heavyDrinker(YesOrNoType.Y);
+        } else if (StatusType.ATTENTION_PLEASE.equals(statusType)) {
+            builder.attention(YesOrNoType.Y);
+        }
+
+        return builder.build();
     }
 }

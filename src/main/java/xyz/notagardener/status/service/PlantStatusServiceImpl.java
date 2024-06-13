@@ -9,19 +9,22 @@ import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
-import xyz.notagardener.status.PlantStatus;
+import xyz.notagardener.status.dto.AddStatusResponse;
 import xyz.notagardener.status.dto.PlantStatusRequest;
 import xyz.notagardener.status.dto.PlantStatusResponse;
-import xyz.notagardener.status.repository.PlantStatusRepository;
+import xyz.notagardener.status.model.Status;
+import xyz.notagardener.status.model.StatusLog;
+import xyz.notagardener.status.repository.StatusLogRepository;
+import xyz.notagardener.status.repository.StatusRepository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class PlantStatusServiceImpl implements PlantStatusService {
-    private final PlantStatusQueryService plantStatusQueryService;
-    private final PlantStatusRepository plantStatusRepository;
+    private final StatusRepository statusRepository;
+    private final StatusLogRepository statusLogRepository;
     private final PlantRepository plantRepository;
 
     @Transactional(readOnly = true)
@@ -37,8 +40,8 @@ public class PlantStatusServiceImpl implements PlantStatusService {
     }
 
     @Transactional(readOnly = true)
-    private PlantStatus getPlantStatusByPlantStatusIdAndGardenerId(Long plantStatusId, Long gardenerId) {
-        PlantStatus status = plantStatusRepository.findByPlantStatusId(plantStatusId)
+    private Status getStatusByIdAndGardenerId(Long plantStatusId, Long gardenerId) {
+        Status status = statusRepository.findByStatusId(plantStatusId)
                 .orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_SUCH_PLANT_STATUS));
 
         if (!status.getPlant().getGardener().getGardenerId().equals(gardenerId)) {
@@ -49,34 +52,50 @@ public class PlantStatusServiceImpl implements PlantStatusService {
     }
 
     @Override
-    public PlantStatusResponse add(PlantStatusRequest request, Long gardenerId) {
+    @Transactional
+    public AddStatusResponse add(PlantStatusRequest request, Long gardenerId) {
         Plant plant = getPlantByPlantIdAndGardenerId(request.getPlantId(), gardenerId);
-        PlantStatus status = plantStatusRepository.save(request.toEntityWith(plant));
+        Optional<Status> prevStatus = statusRepository.findByPlant_PlantId(request.getPlantId());
 
-        return new PlantStatusResponse(status);
+        if (prevStatus.isEmpty()) {
+            Status savedStatus = statusRepository.save(request.toStatusWith(plant));
+            StatusLog statusLog = statusLogRepository.save(request.toStatusLogWith(savedStatus)); // update log table
+            return new AddStatusResponse(savedStatus, statusLog);
+        }
+
+        // 있는 거 수정
+        Status status = prevStatus.get();
+        status.update(request.getStatusType(), request.getActive());
+        StatusLog statusLog = statusLogRepository.save(request.toStatusLogWith(status)); // update log table
+
+        return new AddStatusResponse(status, statusLog);
     }
 
     @Override
-    public List<PlantStatusResponse> getAll(Long plantId, Long gardenerId) {
-        return plantStatusRepository.findAllStatusByPlant_PlantIdAndPlant_Gardener_GardenerIdOrderByRecordedDateDescCreateDateDesc(plantId, gardenerId)
-                .stream().map(PlantStatusResponse::new).toList();
-    }
-
-    @Override
+    @Transactional
     public PlantStatusResponse update(PlantStatusRequest request, Long gardenerId) {
-        PlantStatus status = getPlantStatusByPlantStatusIdAndGardenerId(request.getPlantStatusId(), gardenerId);
+        Status status = getStatusByIdAndGardenerId(request.getPlantStatusId(), gardenerId);
         Plant plant = getPlantByPlantIdAndGardenerId(request.getPlantId(), gardenerId);
 
-        status.update(request.getStatus(), request.getRecordedDate(), plant);
+        status.update(request.getStatusType(), request.getActive(), plant);
+
+        // 로그 테이블 업데이트
+        statusLogRepository.save(request.toStatusLogWith(status));
 
         return new PlantStatusResponse(status);
     }
 
     @Override
-    public List<PlantStatusResponse> delete(Long plantId, Long plantStatusId, Long gardenerId) {
-        PlantStatus status = getPlantStatusByPlantStatusIdAndGardenerId(plantStatusId, gardenerId);
-        plantStatusRepository.delete(status);
+    @Transactional
+    public PlantStatusResponse delete(Long plantId, Long statusId, Long gardenerId) {
+        Status status = getStatusByIdAndGardenerId(statusId, gardenerId);
 
-        return plantStatusQueryService.getRecentStatusByPlantId(plantId, gardenerId);
+        // 로그 다 지우기
+        statusLogRepository.deleteByStatus_StatusId(statusId);
+
+        // 식물 상태 초기화
+        status.init();
+
+        return new PlantStatusResponse(status);
     }
 }

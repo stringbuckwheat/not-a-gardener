@@ -4,13 +4,14 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
-import xyz.notagardener.status.PlantStatus;
+import xyz.notagardener.status.model.StatusLog;
+import xyz.notagardener.status.model.StatusType;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface PlantStatusRepository extends Repository<PlantStatus, Long>, PlantStatusRepositoryCustom {
-    PlantStatus save(PlantStatus plantStatus);
+public interface StatusLogRepository extends Repository<StatusLog, Long> {
+    StatusLog save(StatusLog statusLog);
 
     @Query(value = """
                 SELECT ps.*
@@ -33,7 +34,7 @@ public interface PlantStatusRepository extends Repository<PlantStatus, Long>, Pl
                     )
                 )
             """, nativeQuery = true)
-    List<PlantStatus> findCurrentStatusByPlantId(@Param("plantId") Long plantId);
+    List<StatusLog> findCurrentStatusByPlantId(@Param("plantId") Long plantId);
 
     @Query(value = """
             SELECT ps.*
@@ -50,12 +51,16 @@ public interface PlantStatusRepository extends Repository<PlantStatus, Long>, Pl
             WHERE ps.status = 'ATTENTION_PLEASE' AND g.gardener_id = :gardenerId
             GROUP BY ps.plant_id
              """, nativeQuery = true)
-    List<PlantStatus> findAttentionRequiredPlants(@Param("gardenerId") Long gardenerId);
+    List<StatusLog> findAttentionRequiredPlants(@Param("gardenerId") Long gardenerId);
 
-    @EntityGraph(attributePaths = {"plant", "plant.gardener"})
-    Optional<PlantStatus> findByPlantStatusId(Long plantStatusId);
+    @EntityGraph(attributePaths = {"status", "status.plant", "status.plant.gardener"})
+    Optional<StatusLog> findByStatusLogId(Long statusLogId);
 
-    List<PlantStatus> findAllStatusByPlant_PlantIdAndPlant_Gardener_GardenerIdOrderByRecordedDateDescCreateDateDesc(Long plantId, Long gardenerId);
+    @EntityGraph(attributePaths = {"status", "status.plant"})
+    List<StatusLog> findAllStatusLogByStatus_Plant_PlantIdAndStatus_Plant_Gardener_GardenerIdOrderByRecordedDateDescCreateDateDesc(Long plantId, Long gardenerId);
 
-    void delete(PlantStatus plantStatus);
+    Optional<StatusLog> findTopByStatus_Plant_PlantIdAndStatusTypeOrderByRecordedDateDescCreateDateDesc(Long plantId, StatusType statusType);
+
+    void delete(StatusLog statusLog);
+    void deleteByStatus_StatusId(Long statusLogId);
 }
