@@ -4,18 +4,17 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
+import xyz.notagardener.place.Place;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.status.dto.PlantStatusResponse;
+import xyz.notagardener.status.model.Status;
 import xyz.notagardener.watering.Watering;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-@ToString(of = {"plantId", "name", "latestWateringDate", "totalWatering"})
-@EqualsAndHashCode(of = {"plantId", "name", "latestWateringDate", "totalWatering"})
+@EqualsAndHashCode(of = {"id", "name", "latestWateringDate", "totalWatering"})
 public class PlantResponse {
     private Long id;
     private String name;
@@ -32,45 +31,28 @@ public class PlantResponse {
     private Long wateringId;
     private LocalDate latestWateringDate;
     private Long totalWatering;
-    private List<PlantStatusResponse> status;
+    private PlantStatusResponse status;
 
     @QueryProjection
-    @Builder
-    public PlantResponse(
-            Long plantId,
-            String name,
-            String species,
-            int recentWateringPeriod,
-            int earlyWateringPeriod,
-            String medium,
-            LocalDate birthday,
-            LocalDate conditionDate,
-            LocalDate postponeDate,
-            LocalDateTime createDate,
-            Long placeId,
-            String placeName,
-            Long wateringId,
-            LocalDate latestWateringDate,
-            Long totalWatering
-    ) {
-        this.id = plantId;
-        this.name = name;
-        this.species = species;
-        this.recentWateringPeriod = recentWateringPeriod;
-        this.earlyWateringPeriod = earlyWateringPeriod;
-        this.medium = medium;
-        this.birthday = birthday;
-        this.conditionDate = conditionDate;
-        this.postponeDate = postponeDate;
-        this.createDate = LocalDate.from(createDate);
-        this.placeId = placeId;
-        this.placeName = placeName;
+    public PlantResponse(Plant plant, Place place, Long wateringId, LocalDate latestWateringDate, Long totalWatering, Status status) {
+        this.id = plant.getPlantId();
+        this.name = plant.getName();
+        this.species = plant.getSpecies();
+        this.recentWateringPeriod = plant.getRecentWateringPeriod();
+        this.earlyWateringPeriod = plant.getEarlyWateringPeriod();
+        this.medium = plant.getMedium();
+        this.birthday = plant.getBirthday();
+        this.conditionDate = plant.getConditionDate();
+        this.postponeDate = plant.getPostponeDate();
+        this.createDate = LocalDate.from(plant.getCreateDate());
+        this.placeId = place.getPlaceId();
+        this.placeName = place.getName();
         this.wateringId = wateringId;
         this.latestWateringDate = latestWateringDate;
         this.totalWatering = totalWatering;
+        this.status = new PlantStatusResponse(status);
     }
-
-    public PlantResponse(Plant plant, Long totalWatering, LocalDate latestWateringDate, List<PlantStatusResponse> status) {
+    public PlantResponse(Plant plant, Long totalWatering, LocalDate latestWateringDate, PlantStatusResponse status) {
         this.id = plant.getPlantId();
         this.name = plant.getName();
         this.species = plant.getSpecies();
@@ -102,14 +84,23 @@ public class PlantResponse {
             this.latestWateringDate = latestWatering.getWateringDate();
             this.totalWatering = (long) waterings.size();
         }
+
+        this.status = new PlantStatusResponse(plant.getStatus());
     }
 
-    public PlantResponse(Plant plant, List<PlantStatusResponse> status) {
+    public PlantResponse(Plant plant, PlantStatusResponse status) {
         this(plant);
         this.status = status;
     }
 
-    public void setStatus(List<PlantStatusResponse> status) {
+    // 테스트코드 용
+    @Builder
+    public PlantResponse(Long plantId, int recentWateringPeriod, LocalDate latestWateringDate, LocalDate postponeDate, LocalDate createDate, PlantStatusResponse status) {
+        this.id = plantId;
+        this.recentWateringPeriod = recentWateringPeriod;
+        this.postponeDate = postponeDate;
+        this.latestWateringDate = latestWateringDate;
+        this.createDate = createDate;
         this.status = status;
     }
 }

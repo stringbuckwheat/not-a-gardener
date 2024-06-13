@@ -4,14 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.notagardener.common.validation.YesOrNoType;
+import xyz.notagardener.plant.garden.dto.AttentionRequiredPlant;
 import xyz.notagardener.plant.garden.dto.GardenMain;
 import xyz.notagardener.plant.garden.dto.GardenResponse;
 import xyz.notagardener.plant.garden.dto.WaitingForWatering;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
 import xyz.notagardener.routine.dto.RoutineResponse;
 import xyz.notagardener.routine.repository.RoutineRepository;
-import xyz.notagardener.status.dto.PlantStatusResponse;
-import xyz.notagardener.status.repository.PlantStatusRepository;
 
 import java.util.List;
 
@@ -22,7 +22,6 @@ public class GardenServiceImpl implements GardenService {
     private final GardenResponseMapper gardenResponseMapper;
     private final PlantRepository plantRepository;
     private final RoutineRepository routineRepository;
-    private final PlantStatusRepository plantStatusRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -46,8 +45,8 @@ public class GardenServiceImpl implements GardenService {
                 .toList();
 
         // 요주의 식물
-        List<PlantStatusResponse> attentions = plantStatusRepository.findAttentionRequiredPlants(gardenerId).stream()
-                .map(PlantStatusResponse::new).toList();
+        List<AttentionRequiredPlant> attentions = plantRepository.findByGardener_GardenerIdAndStatus_Attention(gardenerId, YesOrNoType.Y).stream()
+                .map(AttentionRequiredPlant::new).toList();
 
         return GardenMain.builder()
                 .hasPlant(true)

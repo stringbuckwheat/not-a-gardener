@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import xyz.notagardener.plant.garden.dto.*;
-import xyz.notagardener.repot.service.RepotAlarmUtils;
+import xyz.notagardener.repot.repot.service.RepotAlarmService;
 import xyz.notagardener.watering.watering.dto.ChemicalUsage;
 import xyz.notagardener.plant.garden.dto.WateringResponse;
 
@@ -17,12 +17,12 @@ import java.util.List;
 @Slf4j
 public class GardenResponseMapperImpl implements GardenResponseMapper {
     private final ChemicalInfoService chemicalInfoService;
-    private final RepotAlarmUtils repotAlarmUtils;
+    private final RepotAlarmService repotAlarmService;
 
     @Override
     public GardenResponse getGardenResponse(PlantResponse plantResponse, Long gardenerId) {
         GardenDetail gardenDetail = getGardenDetail(plantResponse, gardenerId);
-        boolean isRepotNeeded = repotAlarmUtils.isRepotNeeded(plantResponse);
+        boolean isRepotNeeded = repotAlarmService.isRepotNeeded(plantResponse);
 
         return new GardenResponse(plantResponse, gardenDetail, isRepotNeeded);
     }
