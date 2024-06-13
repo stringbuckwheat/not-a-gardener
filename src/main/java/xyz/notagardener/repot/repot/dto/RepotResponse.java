@@ -1,4 +1,4 @@
-package xyz.notagardener.repot.dto;
+package xyz.notagardener.repot.repot.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -42,6 +42,6 @@ public class RepotResponse {
         this.plantId = repot.getPlant().getPlantId();
         this.repotDate = repot.getRepotDate();
         this.initPeriod = repot.getInitPeriod();
-        this.status = new PlantStatusResponse(repot.getPlant().getStatus().get(0));
+        this.status = new PlantStatusResponse(repot.getPlant().getStatus());
     }
 }

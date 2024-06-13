@@ -1,4 +1,4 @@
-package xyz.notagardener.repot.controller;
+package xyz.notagardener.repot.repot.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,14 +18,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import xyz.notagardener.authentication.model.UserPrincipal;
 import xyz.notagardener.common.error.ErrorResponse;
-import xyz.notagardener.plant.plant.dto.RepotList;
-import xyz.notagardener.repot.dto.RepotRequest;
-import xyz.notagardener.repot.dto.RepotResponse;
-import xyz.notagardener.repot.service.RepotService;
+import xyz.notagardener.repot.plant.dto.RepotList;
+import xyz.notagardener.repot.repot.dto.RepotRequest;
+import xyz.notagardener.repot.repot.dto.RepotResponse;
+import xyz.notagardener.repot.repot.service.RepotService;
 
 import java.util.List;
 
-@RequestMapping("/api")
+@RequestMapping("/api/repot")
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -85,7 +85,7 @@ public class RepotController {
                     )
             ),
     })
-    @PostMapping("/plant/{plantId}/repot")
+    @PostMapping("")
     public ResponseEntity<RepotResponse> addOne(@RequestBody @Valid RepotRequest repotRequest, @AuthenticationPrincipal UserPrincipal user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(repotService.addOne(repotRequest, user.getId()));
     }
@@ -142,12 +142,12 @@ public class RepotController {
                     )
             ),
     })
-    @PostMapping("/repot")
+    @PostMapping("/bulk")
     public ResponseEntity<List<RepotResponse>> addAll(@RequestBody @Valid List<RepotRequest> requests, @AuthenticationPrincipal UserPrincipal user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(repotService.addAll(requests, user.getId()));
     }
 
-    @GetMapping("/repot")
+    @GetMapping("")
     public ResponseEntity<List<RepotList>> getAll(@AuthenticationPrincipal UserPrincipal user, Pageable pageable) {
         return ResponseEntity.ok(repotService.getAll(user.getId(), pageable));
     }
@@ -205,7 +205,7 @@ public class RepotController {
                     )
             ),
     })
-    @PutMapping("/plant/{plantId}/repot/{repotId}")
+    @PutMapping("/{id}")
     public ResponseEntity<RepotResponse> update(@RequestBody @Valid RepotRequest request, @AuthenticationPrincipal UserPrincipal user) {
         return ResponseEntity.ok(repotService.update(request, user.getId()));
     }
@@ -263,7 +263,7 @@ public class RepotController {
                     )
             ),
     })
-    @PutMapping("/repot")
+    @PutMapping("/repot/bulk")
     public ResponseEntity<List<RepotResponse>> updateAll(@RequestBody @Valid List<RepotRequest> requests, @AuthenticationPrincipal UserPrincipal user) {
         return ResponseEntity.ok(repotService.updateAll(requests, user.getId()));
     }
@@ -305,7 +305,7 @@ public class RepotController {
                     ),
             }
     )
-    @DeleteMapping("/repot/{repotId}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long repotId, @AuthenticationPrincipal UserPrincipal user) {
         repotService.delete(repotId, user.getId());
         return ResponseEntity.noContent().build();

@@ -1,4 +1,4 @@
-package xyz.notagardener.plant.plant.dto;
+package xyz.notagardener.repot.plant.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import xyz.notagardener.common.validation.YesOrNoType;
-import xyz.notagardener.status.dto.PlantStatusType;
+import xyz.notagardener.repot.Repot;
 
 import java.time.LocalDate;
 
@@ -29,20 +29,18 @@ public class RepotList {
     @Schema(description = "식물 이름", example = "벌레잡이 제비꽃")
     private String plantName;
 
-    @Schema(description = "식물 상태 id", example = "1")
-    private Long plantStatusId;
-
-    @Schema(description = "식물 상태", example = "요주의 식물")
-    private PlantStatusType status;
-
     @QueryProjection
-    public RepotList(Long repotId, LocalDate repotDate, YesOrNoType initPeriod, Long plantId, String plantName, Long plantStatusId, PlantStatusType status) {
+    public RepotList(Long repotId, LocalDate repotDate, YesOrNoType initPeriod, Long plantId, String plantName) {
         this.repotId = repotId;
         this.repotDate = repotDate;
         this.initPeriod = initPeriod;
         this.plantId = plantId;
         this.plantName = plantName;
-        this.plantStatusId = plantStatusId;
-        this.status = status;
+    }
+
+    public RepotList(Repot repot) {
+        this.repotId = repot.getRepotId();
+        this.repotDate = repot.getRepotDate();
+        this.initPeriod = repot.getInitPeriod();
     }
 }

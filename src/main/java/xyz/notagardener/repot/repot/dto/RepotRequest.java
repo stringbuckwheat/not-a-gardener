@@ -1,4 +1,4 @@
-package xyz.notagardener.repot.dto;
+package xyz.notagardener.repot.repot.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -6,9 +6,6 @@ import lombok.*;
 import xyz.notagardener.common.validation.NotFuture;
 import xyz.notagardener.common.validation.YesOrNo;
 import xyz.notagardener.common.validation.YesOrNoType;
-import xyz.notagardener.plant.Plant;
-import xyz.notagardener.status.PlantStatus;
-import xyz.notagardener.status.dto.PlantStatusType;
 
 import java.time.LocalDate;
 
@@ -33,13 +30,4 @@ public class RepotRequest {
 
     @YesOrNo
     private YesOrNoType active;
-
-    public PlantStatus toPlantStatusWith(Plant plant) {
-        return PlantStatus.builder()
-                .status(PlantStatusType.JUST_REPOTTED)
-                .active(active)
-                .recordedDate(repotDate)
-                .plant(plant)
-                .build();
-    }
 }

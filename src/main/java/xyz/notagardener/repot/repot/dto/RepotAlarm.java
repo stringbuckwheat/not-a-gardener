@@ -1,4 +1,4 @@
-package xyz.notagardener.repot.dto;
+package xyz.notagardener.repot.repot.dto;
 
 import lombok.NoArgsConstructor;
 
