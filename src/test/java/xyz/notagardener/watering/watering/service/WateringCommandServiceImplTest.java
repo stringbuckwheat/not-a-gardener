@@ -13,12 +13,12 @@ import xyz.notagardener.chemical.repository.ChemicalRepository;
 import xyz.notagardener.common.error.exception.AlreadyWateredException;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
+import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
-import xyz.notagardener.status.dto.PlantStatusResponse;
-import xyz.notagardener.status.dto.PlantStatusType;
-import xyz.notagardener.status.repository.PlantStatusRepository;
+import xyz.notagardener.status.model.Status;
+import xyz.notagardener.status.repository.StatusLogRepository;
 import xyz.notagardener.watering.Watering;
 import xyz.notagardener.watering.watering.AfterWateringCode;
 import xyz.notagardener.watering.watering.dto.AfterWatering;
@@ -46,7 +46,7 @@ class WateringCommandServiceImplTest {
     private PlantRepository plantRepository;
 
     @Mock
-    private PlantStatusRepository plantStatusRepository;
+    private StatusLogRepository statusLogRepository;
 
     @InjectMocks
     private WateringCommandServiceImpl wateringCommandService;
@@ -56,53 +56,10 @@ class WateringCommandServiceImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
-//    static List<List<Watering>> getLatestFourWaterings() {
-//        Gardener gardener = Gardener.builder().gardenerId(1L).build();
-//        Plant plant = Plant.builder().plantId(2L).gardener(gardener).build();
-//        Plant plantWithPeriod = Plant.builder().plantId(2L).gardener(gardener).recentWateringPeriod(3).build();
-//
-//        return List.of(
-//                new ArrayList<Watering>(), // NO_RECORD
-//                List.of( // FIRST_WATERING
-//                        Watering.builder().wateringId(1L).wateringDate(LocalDate.now()).plant(plant).build()
-//                ),
-//                List.of( // SECOND_WATERING
-//                        Watering.builder().wateringId(2L).wateringDate(LocalDate.now()).plant(plant).build(),
-//                        Watering.builder().wateringId(1L).wateringDate(LocalDate.now().minusDays(3)).plant(plant).build()
-//                ),
-//                List.of( // INIT_WATERING_PERIOD
-//                        Watering.builder().wateringId(3L).wateringDate(LocalDate.now()).plant(plant).build(),
-//                        Watering.builder().wateringId(2L).wateringDate(LocalDate.now().minusDays(3)).plant(plant).build(),
-//                        Watering.builder().wateringId(1L).wateringDate(LocalDate.now().minusDays(6)).plant(plant).build()
-//                ),
-//                List.of( // SCHEDULE_SHORTEN
-//                        Watering.builder().wateringId(4L).wateringDate(LocalDate.now().minusDays(1)).plant(plantWithPeriod).build(),
-//                        Watering.builder().wateringId(3L).wateringDate(LocalDate.now().minusDays(3)).plant(plantWithPeriod).build(),
-//                        Watering.builder().wateringId(2L).wateringDate(LocalDate.now().minusDays(6)).plant(plantWithPeriod).build(),
-//                        Watering.builder().wateringId(1L).wateringDate(LocalDate.now().minusDays(9)).plant(plantWithPeriod).build()
-//                ),
-//                List.of( // NO_CHANGE
-//                        Watering.builder().wateringId(4L).wateringDate(LocalDate.now()).plant(plantWithPeriod).build(),
-//                        Watering.builder().wateringId(3L).wateringDate(LocalDate.now().minusDays(3)).plant(plantWithPeriod).build(),
-//                        Watering.builder().wateringId(2L).wateringDate(LocalDate.now().minusDays(6)).plant(plantWithPeriod).build(),
-//                        Watering.builder().wateringId(1L).wateringDate(LocalDate.now().minusDays(9)).plant(plantWithPeriod).build()
-//                ),
-//                List.of( // SCHEDULE_LENGTHEN
-//                        Watering.builder().wateringId(4L).wateringDate(LocalDate.now().plusDays(1)).plant(plantWithPeriod).build(),
-//                        Watering.builder().wateringId(3L).wateringDate(LocalDate.now().minusDays(3)).plant(plantWithPeriod).build(),
-//                        Watering.builder().wateringId(2L).wateringDate(LocalDate.now().minusDays(6)).plant(plantWithPeriod).build(),
-//                        Watering.builder().wateringId(1L).wateringDate(LocalDate.now().minusDays(9)).plant(plantWithPeriod).build()
-//                )
-//        );
-//    }
-
-
-
-
     @ParameterizedTest
     @ArgumentsSource(WateringSavingProvider.class)
     @DisplayName("물주기 기록 추가 (with chemical): 성공")
-    void add_WithChemicalId_ShouldReturnWateringAndAfterWateringDto(List<Watering> latestFourWaterings, Optional<PlantStatusResponse> status, String code) {
+    void add_WithChemicalId_ShouldReturnWateringAndAfterWateringDto(List<Watering> latestFourWaterings, Status status, String code) {
         // Given
         Long gardenerId = 1L;
         Long plantId = 2L;
@@ -112,13 +69,12 @@ class WateringCommandServiceImplTest {
         WateringRequest request = WateringRequest.builder().plantId(plantId).chemicalId(chemicalId).wateringDate(wateringDate).build();
         Gardener gardener = Gardener.builder().gardenerId(gardenerId).build();
         Chemical chemical = Chemical.builder().chemicalId(chemicalId).gardener(gardener).build();
-        Plant plant = Plant.builder().plantId(plantId).gardener(gardener).waterings(new ArrayList<Watering>()).build();
+        Plant plant = Plant.builder().plantId(plantId).gardener(gardener).status(status).waterings(new ArrayList<Watering>()).build();
 
         when(wateringRepository.existByWateringDateAndPlantId(wateringDate, chemicalId)).thenReturn(false);
         when(chemicalRepository.findById(chemicalId)).thenReturn(Optional.of(chemical));
         when(plantRepository.findByPlantId(plantId)).thenReturn(Optional.of(plant));
         when(wateringRepository.findLatestFourWateringDate(plantId)).thenReturn(latestFourWaterings);
-        when(plantStatusRepository.findByPlantIdAndStatus(plantId, PlantStatusType.HEAVY_DRINKER)).thenReturn(status);
 
         // When
         AfterWatering result = wateringCommandService.add(request, gardenerId);
@@ -314,7 +270,8 @@ class WateringCommandServiceImplTest {
         Long gardenerId = 2L;
 
         Gardener gardener = Gardener.builder().gardenerId(gardenerId).build();
-        Plant plant = Plant.builder().plantId(plantId).gardener(gardener).build();
+        Status status = Status.builder().heavyDrinker(YesOrNoType.Y).attention(YesOrNoType.Y).build();
+        Plant plant = Plant.builder().plantId(plantId).gardener(gardener).status(status).build();
 
         when(plantRepository.findByPlantId(plantId)).thenReturn(Optional.of(plant));
 
@@ -323,6 +280,12 @@ class WateringCommandServiceImplTest {
 
         // Then
         verify(wateringRepository).deleteAllByPlant_PlantId(plantId);
+
+        // Plant 상태 업데이트 검증
+        assertEquals(0, plant.getRecentWateringPeriod());
+        assertEquals(0, plant.getEarlyWateringPeriod());
+        assertEquals(YesOrNoType.N, plant.getStatus().getHeavyDrinker());
+        assertEquals(YesOrNoType.Y, plant.getStatus().getAttention());
     }
 
     @Test

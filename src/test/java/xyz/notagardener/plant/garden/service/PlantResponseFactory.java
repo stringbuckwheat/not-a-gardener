@@ -1,16 +1,21 @@
 package xyz.notagardener.plant.garden.service;
 
+import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.plant.garden.dto.PlantResponse;
+import xyz.notagardener.status.dto.PlantStatusResponse;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class PlantResponseFactory {
+    private PlantStatusResponse status = PlantStatusResponse.builder().attention(YesOrNoType.Y).heavyDrinker(YesOrNoType.N).build();
+
     public PlantResponse getPostponedPlant() {
+
         return PlantResponse.builder()
                 .plantId(2L)
                 .postponeDate(LocalDate.now())
-                .createDate(LocalDateTime.now())
+                .createDate(LocalDate.now())
+                .status(status)
                 .build();
     }
 
@@ -18,7 +23,8 @@ public class PlantResponseFactory {
         return PlantResponse.builder()
                 .plantId(3L)
                 .postponeDate(null)
-                .createDate(LocalDateTime.now())
+                .createDate(LocalDate.now())
+                .status(status)
                 .build();
     }
 
@@ -28,7 +34,8 @@ public class PlantResponseFactory {
                 .postponeDate(null)
                 .recentWateringPeriod(3)
                 .latestWateringDate(LocalDate.now())
-                .createDate(LocalDateTime.now())
+                .status(status)
+                .createDate(LocalDate.now())
                 .build();
     }
 
@@ -38,7 +45,8 @@ public class PlantResponseFactory {
                 .postponeDate(null)
                 .recentWateringPeriod(0)
                 .latestWateringDate(LocalDate.now().minusDays(1))
-                .createDate(LocalDateTime.now())
+                .status(status)
+                .createDate(LocalDate.now())
                 .build();
     }
 
@@ -48,7 +56,8 @@ public class PlantResponseFactory {
                 .postponeDate(null)
                 .recentWateringPeriod(wateringPeriod)
                 .latestWateringDate(LocalDate.now().minusDays(wateringPeriod))
-                .createDate(LocalDateTime.now())
+                .status(status)
+                .createDate(LocalDate.now())
                 .build();
     }
 
@@ -58,7 +67,8 @@ public class PlantResponseFactory {
                 .postponeDate(null)
                 .recentWateringPeriod(wateringPeriod)
                 .latestWateringDate(LocalDate.now().minusDays(wateringPeriod - 1))
-                .createDate(LocalDateTime.now())
+                .createDate(LocalDate.now())
+                .status(status)
                 .build();
     }
 
@@ -68,7 +78,8 @@ public class PlantResponseFactory {
                 .postponeDate(null)
                 .recentWateringPeriod(wateringPeriod)
                 .latestWateringDate(LocalDate.now().minusDays(wateringPeriod - 5))
-                .createDate(LocalDateTime.now())
+                .createDate(LocalDate.now())
+                .status(status)
                 .build();
     }
 
@@ -78,7 +89,8 @@ public class PlantResponseFactory {
                 .postponeDate(null)
                 .recentWateringPeriod(wateringPeriod)
                 .latestWateringDate(LocalDate.now().minusDays(wateringPeriod + missedDay))
-                .createDate(LocalDateTime.now())
+                .createDate(LocalDate.now())
+                .status(status)
                 .build();
     }
 }

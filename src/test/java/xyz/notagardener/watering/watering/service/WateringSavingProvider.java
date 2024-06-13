@@ -6,49 +6,52 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.plant.Plant;
-import xyz.notagardener.status.dto.PlantStatusResponse;
-import xyz.notagardener.status.dto.PlantStatusType;
+import xyz.notagardener.status.model.Status;
 import xyz.notagardener.watering.Watering;
 import xyz.notagardener.watering.watering.AfterWateringCode;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 public class WateringSavingProvider implements ArgumentsProvider {
     @Override
     public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
         Gardener gardener = Gardener.builder().gardenerId(1L).build();
-        Plant plant = Plant.builder().plantId(2L).gardener(gardener).build();
-        Plant plantWithPeriod = Plant.builder().plantId(2L).gardener(gardener).recentWateringPeriod(3).build();
+
+        Status heavyDrinker = Status.builder().attention(YesOrNoType.Y).heavyDrinker(YesOrNoType.Y).build();
+        Status notHeavyDrinker = Status.builder().attention(YesOrNoType.Y).heavyDrinker(YesOrNoType.N).build();
+
+        Plant plant = Plant.builder().plantId(2L).status(notHeavyDrinker).gardener(gardener).build();
+        Plant heavyDrinkingPlant = Plant.builder().plantId(2L).status(heavyDrinker).gardener(gardener).build();
+        Plant plantWithPeriod = Plant.builder().plantId(2L).gardener(gardener).status(notHeavyDrinker).recentWateringPeriod(3).build();
 
         return Stream.of(
                 Arguments.of(
                         createWateringList(), // NO_RECORD
-                        Optional.empty(), // status
+                        notHeavyDrinker,
                         AfterWateringCode.NO_RECORD.getCode()
                 ),
                 Arguments.of(
                         createWateringList(plant), // FIRST_WATERING
-                        Optional.empty(),
+                        notHeavyDrinker,
                         AfterWateringCode.FIRST_WATERING.getCode()
                 ),
                 Arguments.of(
                         createWateringList(plant, plant), // SECOND_WATERING
-                        Optional.empty(), // status
+                        notHeavyDrinker,
                         AfterWateringCode.SECOND_WATERING.getCode()
                 ),
                 Arguments.of(
                         createWateringList(plant, plant, plant), // INIT_WATERING_PERIOD
-                        Optional.empty(), // 헤비드링커 X
+                        notHeavyDrinker,
                         AfterWateringCode.POSSIBLE_HEAVY_DRINKER.getCode()
                 ),
                 Arguments.of(
-                        createWateringList(plant, plant, plant), // INIT_WATERING_PERIOD
+                        createWateringList(heavyDrinkingPlant, heavyDrinkingPlant, heavyDrinkingPlant), // INIT_WATERING_PERIOD
                         // 이미 헤비 드링커 설정
-                        Optional.of(PlantStatusResponse.builder().status(PlantStatusType.HEAVY_DRINKER).active(YesOrNoType.Y).build()),
+                        heavyDrinker,
                         AfterWateringCode.INIT_WATERING_PERIOD.getCode()
                 ),
                 Arguments.of(
@@ -58,12 +61,12 @@ public class WateringSavingProvider implements ArgumentsProvider {
                                 Watering.builder().wateringId(2L).wateringDate(LocalDate.now().minusDays(6)).plant(plantWithPeriod).build(),
                                 Watering.builder().wateringId(1L).wateringDate(LocalDate.now().minusDays(9)).plant(plantWithPeriod).build()
                         ),
-                        Optional.empty(),
+                        notHeavyDrinker,
                         AfterWateringCode.SCHEDULE_SHORTEN.getCode()
                 ),
                 Arguments.of(
                         createWateringList(plantWithPeriod, plantWithPeriod, plantWithPeriod, plantWithPeriod), // NO_CHANGE
-                        Optional.empty(),
+                        notHeavyDrinker,
                         AfterWateringCode.NO_CHANGE.getCode()
                 ),
                 Arguments.of(
@@ -73,7 +76,7 @@ public class WateringSavingProvider implements ArgumentsProvider {
                                 Watering.builder().wateringId(2L).wateringDate(LocalDate.now().minusDays(6)).plant(plantWithPeriod).build(),
                                 Watering.builder().wateringId(1L).wateringDate(LocalDate.now().minusDays(9)).plant(plantWithPeriod).build()
                         ),
-                        Optional.empty(),
+                        notHeavyDrinker,
                         AfterWateringCode.SCHEDULE_LENGTHEN.getCode()
                 )
         );
@@ -82,14 +85,7 @@ public class WateringSavingProvider implements ArgumentsProvider {
     private static List<Watering> createWateringList(Plant... plants) {
         List<Watering> waterings = new ArrayList<>();
 
-        /**
-         * Watering.builder().wateringId(3L).wateringDate(LocalDate.now()).plant(plant).build(), 0 3 6
-         * Watering.builder().wateringId(2L).wateringDate(LocalDate.now().minusDays(3)).plant(plant).build(),
-         * Watering.builder().wateringId(1L).wateringDate(LocalDate.now().minusDays(6)).plant(plant).build()
-         */
-
         for (int i = 0; i < plants.length; i++) {
-            System.out.println("plusDay: " + 3L * i);
             Watering watering = Watering.builder().wateringId((long) (i + 1))
                     .wateringDate(LocalDate.now().minusDays(3L * i))
                     .plant(plants[i])
@@ -97,8 +93,6 @@ public class WateringSavingProvider implements ArgumentsProvider {
 
             waterings.add(watering);
         }
-
-        System.out.println("--------");
 
         return waterings;
     }

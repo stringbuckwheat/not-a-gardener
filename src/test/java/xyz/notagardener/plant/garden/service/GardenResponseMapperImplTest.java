@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import xyz.notagardener.plant.garden.dto.GardenResponse;
 import xyz.notagardener.plant.garden.dto.PlantResponse;
-import xyz.notagardener.repot.service.RepotAlarmUtils;
+import xyz.notagardener.repot.repot.service.RepotAlarmService;
 import xyz.notagardener.watering.watering.dto.ChemicalUsage;
 import xyz.notagardener.watering.watering.repository.WateringRepository;
 
@@ -30,7 +30,7 @@ class GardenResponseMapperImplTest {
     private ChemicalInfoServiceImpl chemicalInfoService;
 
     @Mock
-    private RepotAlarmUtils repotAlarmUtils;
+    private RepotAlarmService repotAlarmService;
 
     @InjectMocks
     private GardenResponseMapperImpl gardenResponseMapper;
