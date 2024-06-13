@@ -15,9 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "place")
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class Place {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,6 +46,17 @@ public class Place {
     @OneToMany(mappedBy = "place")
     @OrderBy("create_date DESC")
     private List<Plant> plants = new ArrayList<>();
+
+    @Builder
+    public Place(Long placeId, String name, String option, String artificialLight, LocalDateTime createDate, Gardener gardener, List<Plant> plants) {
+        this.placeId = placeId;
+        this.name = name;
+        this.option = option;
+        this.artificialLight = artificialLight;
+        this.createDate = createDate;
+        this.gardener = gardener;
+        this.plants = plants;
+    }
 
     public void update(String name, String option, String artificialLight) {
         this.name = name;

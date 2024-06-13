@@ -1,4 +1,4 @@
-package xyz.notagardener.watering.garden;
+package xyz.notagardener.watering.garden.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

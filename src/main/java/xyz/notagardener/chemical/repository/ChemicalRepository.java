@@ -12,7 +12,5 @@ public interface ChemicalRepository extends Repository<Chemical, Long>, Chemical
     @EntityGraph(attributePaths = {"gardener"}, type = EntityGraph.EntityGraphType.FETCH)
     Optional<Chemical> findByChemicalId(Long chemicalId);
 
-    Optional<Chemical> findByChemicalIdAndGardener_GardenerId(Long chemicalId, Long gardenerId);
-
     Chemical save(Chemical chemical);
 }

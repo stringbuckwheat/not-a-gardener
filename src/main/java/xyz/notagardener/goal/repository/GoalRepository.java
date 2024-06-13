@@ -11,14 +11,9 @@ public interface GoalRepository extends Repository<Goal, Long> {
     @EntityGraph(attributePaths = {"plant", "gardener"}, type = EntityGraph.EntityGraphType.FETCH)
     Optional<Goal> findByGoalId(Long goalId);
 
-    Optional<Goal> findById(Long goalId);
-    Optional<Goal> findByGoalIdAndGardener_GardenerId(Long goalId, Long gardenerId);
     List<Goal> findByGardener_GardenerId(Long gardenerId);
 
     Goal save(Goal goal);
-
-    void deleteById(Long goalId);
-    void deleteByGoalIdAndGardener_gardenerId(Long id, Long gardenerId);
 
     void delete(Goal goal);
 }

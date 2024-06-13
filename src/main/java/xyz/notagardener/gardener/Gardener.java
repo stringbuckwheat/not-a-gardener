@@ -9,9 +9,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @Table(name = "gardener")
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 public class Gardener {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +31,18 @@ public class Gardener {
     private LocalDateTime recentLogin;
 
     private String provider;
+
+    @Builder
+    public Gardener(Long gardenerId, String username, String password, String email, String name, LocalDateTime createDate, LocalDateTime recentLogin, String provider) {
+        this.gardenerId = gardenerId;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.name = name;
+        this.createDate = createDate;
+        this.recentLogin = recentLogin;
+        this.provider = provider;
+    }
 
     public void changePassword(String encryptPassword) {
         this.password = encryptPassword;

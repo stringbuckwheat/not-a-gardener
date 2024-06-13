@@ -14,9 +14,6 @@ import java.time.LocalDate;
 @Table(name = "watering", uniqueConstraints = {@UniqueConstraint(columnNames = {"plant_id", "watering_date"})})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
-@ToString(of={"wateringId", "wateringDate", "chemical.name"})
 public class Watering {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +33,14 @@ public class Watering {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chemical_id")
     private Chemical chemical;
+
+    @Builder
+    public Watering(Long wateringId, LocalDate wateringDate, Plant plant, Chemical chemical) {
+        this.wateringId = wateringId;
+        this.wateringDate = wateringDate;
+        this.plant = plant;
+        this.chemical = chemical;
+    }
 
     public Watering update(LocalDate wateringDate, Plant plant, Chemical chemical) {
         this.wateringDate = wateringDate;

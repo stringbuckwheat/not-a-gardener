@@ -10,9 +10,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Table(name = "chemical")
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @ToString(of = {"chemicalId", "name", "period"})
 public class Chemical {
     @Id
@@ -39,8 +37,18 @@ public class Chemical {
     // 그러나 Gardener는 Chemical를 몰라도 상관없으므로 단방향 매핑
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gardener_id")
-    @OnDelete(action = OnDeleteAction.CASCADE) // ddl: on delete cascade
+    @OnDelete(action = OnDeleteAction.CASCADE) // ddl: on deleteOne cascade
     private Gardener gardener;
+
+    @Builder
+    public Chemical(Long chemicalId, String name, String type, int period, String active, Gardener gardener) {
+        this.chemicalId = chemicalId;
+        this.name = name;
+        this.type = type;
+        this.period = period;
+        this.active = active;
+        this.gardener = gardener;
+    }
 
     public void deactivate() {
         this.active = "N";

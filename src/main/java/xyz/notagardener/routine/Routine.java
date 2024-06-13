@@ -13,8 +13,6 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "routine")
 @Getter
-@AllArgsConstructor
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Routine {
     @Id
@@ -44,6 +42,17 @@ public class Routine {
     @JoinColumn(name = "plant_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Plant plant;
+
+    @Builder
+    public Routine(Long routineId, String content, int cycle, LocalDate lastCompleteDate, LocalDate createDate, Gardener gardener, Plant plant) {
+        this.routineId = routineId;
+        this.content = content;
+        this.cycle = cycle;
+        this.lastCompleteDate = lastCompleteDate;
+        this.createDate = createDate;
+        this.gardener = gardener;
+        this.plant = plant;
+    }
 
     public void update(String content, int cycle, Plant plant) {
         this.content = content;

@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
+import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.garden.dto.PlantResponse;
 
@@ -21,18 +22,18 @@ public interface PlantRepository extends Repository<Plant, Long>, PlantRepositor
 
     List<Plant> findByGardener_GardenerIdOrderByPlantIdDesc(Long gardenerId);
 
+    @EntityGraph(attributePaths = {"status"}, type = EntityGraph.EntityGraphType.FETCH)
+    List<Plant> findByGardener_GardenerIdAndStatus_Attention(Long gardenerId, YesOrNoType active);
+
     @Query("""
             SELECT 
                 new xyz.notagardener.plant.garden.dto.PlantResponse(
-                    p.plantId, p.name, p.species, p.recentWateringPeriod, p.earlyWateringPeriod, 
-                    p.medium, p.birthday, p.conditionDate, p.postponeDate, p.createDate, 
-                    pl.placeId, pl.name placeName, w.wateringId, 
-                    max(w.wateringDate) latestWateringDate, 
-                    count(w) totalWatering
+                    p, pl, w.wateringId, max(w.wateringDate), count(w), ps
                 ) 
             FROM Plant p 
             JOIN p.place pl 
             JOIN p.waterings w 
+            LEFT JOIN p.status ps
             WHERE p.gardener.gardenerId = :gardenerId 
             AND (DATE_FORMAT(p.conditionDate, '%Y-%m-%d') != CURRENT_DATE OR p.conditionDate IS NULL) 
             AND p.recentWateringPeriod != 0 
@@ -44,8 +45,6 @@ public interface PlantRepository extends Repository<Plant, Long>, PlantRepositor
     List<PlantResponse> findGardenByGardenerId(@Param("gardenerId") Long gardenerId);
 
     Plant save(Plant plant);
-
-    void deleteById(Long plantId);
 
     void delete(Plant plant);
 }

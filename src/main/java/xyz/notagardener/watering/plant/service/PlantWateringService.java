@@ -1,4 +1,4 @@
-package xyz.notagardener.watering.plant;
+package xyz.notagardener.watering.plant.service;
 
 import org.springframework.data.domain.Pageable;
 import xyz.notagardener.watering.watering.dto.WateringRequest;

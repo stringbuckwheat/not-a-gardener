@@ -1,4 +1,4 @@
-package xyz.notagardener.watering.garden;
+package xyz.notagardener.watering.garden.service;
 
 import xyz.notagardener.watering.garden.dto.GardenWateringResponse;
 import xyz.notagardener.watering.watering.dto.WateringMessage;

@@ -15,7 +15,5 @@ public interface RoutineRepository extends Repository<Routine, Long> {
     List<Routine> findByGardener_GardenerId(Long gardenerId);
 
     Routine save(Routine routine);
-
-    void deleteById(Long routineId);
     void delete(Routine routine);
 }

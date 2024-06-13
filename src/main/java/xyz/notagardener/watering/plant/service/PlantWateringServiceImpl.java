@@ -1,4 +1,4 @@
-package xyz.notagardener.watering.plant;
+package xyz.notagardener.watering.plant.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.garden.dto.PlantResponse;
-import xyz.notagardener.status.dto.PlantStatusResponse;
-import xyz.notagardener.status.service.PlantStatusQueryService;
 import xyz.notagardener.watering.Watering;
 import xyz.notagardener.watering.plant.dto.PlantWateringResponse;
 import xyz.notagardener.watering.plant.dto.WateringForOnePlant;
@@ -30,7 +28,6 @@ import java.util.stream.Collectors;
 public class PlantWateringServiceImpl implements PlantWateringService {
     private final WateringCommandService wateringCommandService;
     private final WateringRepository wateringQueryRepository;
-    private final PlantStatusQueryService plantStatusQueryService;
 
     @Override
     @Transactional
@@ -38,9 +35,8 @@ public class PlantWateringServiceImpl implements PlantWateringService {
         AfterWatering afterWatering = wateringCommandService.add(wateringRequest, gardenerId);
 
         List<WateringForOnePlant> waterings = getAll(wateringRequest.getPlantId(), pageable);
-        List<PlantStatusResponse> status = plantStatusQueryService.getRecentStatusByPlantId(wateringRequest.getPlantId(), gardenerId);
 
-        return PlantWateringResponse.from(new PlantResponse(afterWatering.getPlant(), status), afterWatering.getWateringMessage(), waterings);
+        return PlantWateringResponse.from(new PlantResponse(afterWatering.getPlant()), afterWatering.getWateringMessage(), waterings);
     }
 
     @Override

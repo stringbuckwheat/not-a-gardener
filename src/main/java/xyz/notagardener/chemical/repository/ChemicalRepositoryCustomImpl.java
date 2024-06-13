@@ -12,7 +12,6 @@ import xyz.notagardener.plant.QPlant;
 import xyz.notagardener.watering.Watering;
 
 import java.util.List;
-import java.util.Optional;
 
 import static xyz.notagardener.chemical.QChemical.chemical;
 import static xyz.notagardener.watering.QWatering.watering;
@@ -37,26 +36,6 @@ public class ChemicalRepositoryCustomImpl implements ChemicalRepositoryCustom {
                 .where(chemical.active.eq("Y")
                         .and(chemical.gardener.gardenerId.eq(gardenerId)))
                 .fetch();
-    }
-
-    @Override
-    public Optional<ChemicalDto> findByChemicalIdAndGardenerId(Long chemicalId, Long gardenerId) {
-        ChemicalDto result = queryFactory.select(
-                        new QChemicalDto(
-                                chemical.chemicalId,
-                                chemical.name,
-                                chemical.type,
-                                chemical.period
-                        )
-                )
-                .from(chemical)
-                .where(chemical.active.eq("Y")
-                        .and(chemical.gardener.gardenerId.eq(gardenerId))
-                        .and(chemical.chemicalId.eq(chemicalId))
-                )
-                .fetchOne();
-
-        return Optional.ofNullable(result);
     }
 
     @Override

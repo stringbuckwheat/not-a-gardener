@@ -1,4 +1,4 @@
-package xyz.notagardener.watering.plant;
+package xyz.notagardener.watering.plant.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -20,6 +20,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import xyz.notagardener.authentication.model.UserPrincipal;
 import xyz.notagardener.common.error.ErrorResponse;
+import xyz.notagardener.watering.plant.service.PlantWateringService;
 import xyz.notagardener.watering.plant.dto.PlantWateringResponse;
 import xyz.notagardener.watering.plant.dto.WateringForOnePlant;
 import xyz.notagardener.watering.watering.dto.WateringRequest;

@@ -1,4 +1,4 @@
-package xyz.notagardener.watering.watering;
+package xyz.notagardener.watering.watering.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
