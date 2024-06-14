@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 import {Tag} from "antd";
-import PlantEditableCellAction from "../../pages/plant/plantDetail/PlantEditableCellAction";
 import WateringCodeIcon from "../../components/etc/WateringCodeIcon";
+import PlantEditableCellAction from "../../pages/plant_detail/PlantEditableCellAction";
 
 const getPlantTableColumnArray = (placeList, isEditing, cancel, edit, editingKey, updatePlant, deletePlant) => {
 

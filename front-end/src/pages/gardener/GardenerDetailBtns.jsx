@@ -1,6 +1,6 @@
 import ChangePasswordModal from "../../components/modal/ChangePassWordModal";
 import DeleteModal from "../../components/modal/DeleteModal";
-import {Button, ConfigProvider} from "antd";
+import {Button, ConfigProvider, Space} from "antd";
 
 const GardenerDetailBtns = ({gardenerId, isBasicLogin, onClickEdit, isDisabled, isValidEmail, onSubmit}) => {
   const deleteCallback = () => {
@@ -25,18 +25,19 @@ const GardenerDetailBtns = ({gardenerId, isBasicLogin, onClickEdit, isDisabled, 
           onClick={onClickEdit}>
           {isDisabled ? "회원정보 수정" : "돌아가기"}
         </Button>
-        {isDisabled
-          ?
-          <ChangePasswordModal/>
-          :
-          <Button
-            type="primary"
-            color={isValidEmail ? "success" : "secondary"}
-            disabled={!isValidEmail}
-            onClick={onSubmit}>
-            수정하기
-          </Button>
-        }
+          {isDisabled
+            ?
+            <ChangePasswordModal/>
+            :
+            <Button
+              type="primary"
+              color={isValidEmail ? "success" : "secondary"}
+              style={{marginLeft: "0.5rem"}}
+              disabled={!isValidEmail}
+              onClick={onSubmit}>
+              수정하기
+            </Button>
+          }
       </div>
       <div style={{display: "flex", justifyContent: "flex-end", marginTop: "1rem"}}>
         <DeleteModal

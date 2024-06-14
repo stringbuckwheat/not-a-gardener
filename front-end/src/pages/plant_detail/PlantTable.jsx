@@ -1,12 +1,13 @@
 import {Table, Form} from 'antd';
 import getPlantListForPlantTable from 'src/api/service/getPlantListForPlantTable';
 import deleteData from 'src/api/backend-api/common/deleteData';
-import getPlantTableColumnArray from "../../../utils/function/getPlantTableColumnArray";
+import getPlantTableColumnArray from "../../utils/function/getPlantTableColumnArray";
 import PlantEditableCell from "./PlantEditableCell";
 import React, {useState} from "react";
-import getMergedColumns from "../../../utils/function/getMergedColumns";
-import updateData from "../../../api/backend-api/common/updateData";
+import getMergedColumns from "../../utils/function/getMergedColumns";
+import updateData from "../../api/backend-api/common/updateData";
 import {useDispatch, useSelector} from "react-redux";
+import PlantAction from "../../redux/reducer/plants/plantAction";
 
 const EditableContext = React.createContext(null);
 const EditableRow = ({index, form, ...props}) => {
@@ -37,7 +38,7 @@ const PlantTable = ({search}) => {
 
   const deletePlant = async (plantId) => {
     await deleteData(`/plant/${plantId}`);
-    dispatch({type: 'deletePlant', payload: plantId});
+    dispatch({type: PlantAction.DELETE_PLANT, payload: plantId});
   };
 
   const locale = {
@@ -75,7 +76,7 @@ const PlantTable = ({search}) => {
     const values = await form.validateFields();
 
     const res = await updateData(`/plant/${editingKey}`, {...values, ...modifyPlant, id: editingKey});
-    dispatch({type: 'updatePlant', payload: res})
+    dispatch({type: PlantAction.UPDATE_PLANT, payload: res})
 
     setEditingKey(0);
   }

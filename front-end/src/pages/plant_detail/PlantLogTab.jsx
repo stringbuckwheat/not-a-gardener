@@ -1,7 +1,8 @@
 import {ConfigProvider, Tabs} from "antd";
 import WateringList from "./watering/WateringList";
-import themeGreen from "../../../theme/themeGreen";
-import PlantStatus from "./status/PlantStatus";
+import themeGreen from "../../theme/themeGreen";
+import PlantStatusLog from "./status/PlantStatusLog";
+import RepotLog from "./repot/RepotLog";
 
 const PlantLogTab = ({wateringCallBack, openNotification}) => {
   const items = [
@@ -13,7 +14,12 @@ const PlantLogTab = ({wateringCallBack, openNotification}) => {
     {
       key: "status",
       label: "식물 상태",
-      children: <PlantStatus/>
+      children: <PlantStatusLog/>
+    },
+    {
+      key: "repot",
+      label: "분갈이",
+      children: <RepotLog/>
     }
   ]
 

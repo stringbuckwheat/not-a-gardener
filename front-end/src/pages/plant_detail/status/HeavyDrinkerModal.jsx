@@ -1,28 +1,28 @@
 import {Button, Modal} from "antd";
 import React from "react";
-import PlantStatusCode from "../../../../utils/code/plantStatusCode";
-import postData from "../../../../api/backend-api/common/postData";
+import PlantStatusCode from "../../../utils/code/plantStatusCode";
+import postData from "../../../api/backend-api/common/postData";
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
+import PlantDetailAction from "../../../redux/reducer/plant_detail/plantDetailAction";
 
 const HeavyDrinkerModal = ({hideModal}) => {
   const plantId = useParams().plantId;
   const open = useSelector(state => state.plantDetail.etc.heavyDrinkerCheck);
-
   const dispatch = useDispatch();
+
   const submit = async () => {
     const data = {
       plantId,
-      status: PlantStatusCode.HEAVY_DRINKER.code,
+      statusType: PlantStatusCode.HEAVY_DRINKER.code,
       active: "Y",
       recordedDate: new Date().toISOString().split("T")[0]
     }
 
-    console.log("submit", data);
     const res = await postData(`/plant/${plantId}/status`, data);
-    hideModal();
     console.log("res", res);
-    dispatch({type: "addStatus", payload: res});
+    hideModal();
+    dispatch({type: PlantDetailAction.ADD_ACTIVE_STATUS, payload: res.status});
   }
 
   return (

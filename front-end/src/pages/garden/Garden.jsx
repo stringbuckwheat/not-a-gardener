@@ -4,6 +4,7 @@ import Loading from "../../components/data/Loading";
 import GardenMain from "./GardenMain";
 import NoItemForPlant from "../../components/empty/NoItemForPlant";
 import {useDispatch} from "react-redux";
+import GardenAction from "../../redux/reducer/garden/gardenAction";
 
 const Garden = () => {
   const [isLoading, setLoading] = useState(true);
@@ -13,15 +14,13 @@ const Garden = () => {
 
   const onMountGarden = async () => {
     console.log("onMountGarden");
-    const data = await getData("/garden"); // todoList, waitingList
-    console.log("garden data", data);
+    const res = await getData("/garden"); // todoList, waitingList
+    console.log("garden data", res);
 
     setLoading(false);
-    setHasPlant(data.hasPlant);
+    setHasPlant(res.hasPlant);
 
-    dispatch({type: 'setTodoList', payload: data.todoList});
-    dispatch({type: 'setWaitingList', payload: data.waitingList});
-    dispatch({type: 'setRoutineList', payload: data.routineList});
+    dispatch({type: GardenAction.FETCH_GARDEN, payload: res});
   }
 
   useEffect(() => {

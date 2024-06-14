@@ -5,6 +5,7 @@ import {useDispatch} from "react-redux";
 import updateData from "../../../../api/backend-api/common/updateData";
 import getAfterWateringMsg from "../../../../utils/function/getAfterWateringMsg";
 import {useState} from "react";
+import GardenAction from "../../../../redux/reducer/garden/gardenAction";
 
 /**
  * 메인 페이지 할일 카드에 클릭시 시 나타날 버튼 세가지
@@ -37,7 +38,7 @@ const TodoCardButton = ({
     console.log("not-dry res", res);
 
     // 현재 todoList에서 삭제
-    dispatch({type: 'deleteInTodoList', payload: plantId});
+    dispatch({type: GardenAction.DELETE_TODOLIST, payload: plantId});
 
     // res가 없는 경우 -> 한 번도 물 준 적 없는 경우
     let msg = {
@@ -55,7 +56,7 @@ const TodoCardButton = ({
 
   const onClickPostpone = async () => {
     const res = await updateData(`/garden/${plantId}/watering/postpone`, null);
-    dispatch({type: 'updateTodoList', payload: {index, res}});
+    dispatch({type: GardenAction.UPDATE_TODOLIST, payload: {index, res}});
   }
 
   const icon = {fontSize: "2rem"}

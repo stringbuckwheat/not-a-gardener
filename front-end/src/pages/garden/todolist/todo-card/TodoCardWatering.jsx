@@ -4,6 +4,7 @@ import postData from "../../../../api/backend-api/common/postData";
 import getAfterWateringMsg from "../../../../utils/function/getAfterWateringMsg";
 import {useDispatch, useSelector} from "react-redux";
 import ExceptionCode from "../../../../utils/code/exceptionCode";
+import GardenAction from "../../../../redux/reducer/garden/gardenAction";
 
 const TodoCardWatering = ({plantId, openNotification, setSelected, flipCard}) => {
   // 약품 목록
@@ -25,7 +26,7 @@ const TodoCardWatering = ({plantId, openNotification, setSelected, flipCard}) =>
       console.log("submit watering", res);
 
       // waitinglist에서의 action 후 콜백 함수. todolist, waitinglist에서 삭제한 후 모달 닫기
-      dispatch({type: 'deleteInTodoList', payload: plantId});
+      dispatch({type: GardenAction.DELETE_TODOLIST, payload: plantId});
 
       // 메시지 띄우기
       const msg = getAfterWateringMsg(res.wateringMsg.afterWateringCode);

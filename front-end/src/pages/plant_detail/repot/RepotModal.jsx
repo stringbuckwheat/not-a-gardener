@@ -1,11 +1,12 @@
 import {Button, DatePicker, Modal, Radio, Space} from "antd";
-import getDisabledDate from "../../../../utils/function/getDisabledDate";
+import getDisabledDate from "../../../utils/function/getDisabledDate";
 import locale from "antd/es/date-picker/locale/ko_KR";
 import React, {useState} from "react";
 import dayjs from "dayjs";
-import postData from "../../../../api/backend-api/common/postData";
+import postData from "../../../api/backend-api/common/postData";
 import {useParams} from "react-router-dom";
 import {useDispatch} from "react-redux";
+import PlantDetailAction from "../../../redux/reducer/plant_detail/plantDetailAction";
 
 const RepotModal = ({open, hideModal}) => {
   const dispatch = useDispatch();
@@ -24,7 +25,8 @@ const RepotModal = ({open, hideModal}) => {
     const res = await postData(`/plant/${plantId}/repot`, repot);
     console.log("res", res);
     hideModal();
-    dispatch({type: "addStatus", payload: res.status});
+    dispatch({type: PlantDetailAction.ADD_REPOT, payload: res});
+
   }
 
   return (

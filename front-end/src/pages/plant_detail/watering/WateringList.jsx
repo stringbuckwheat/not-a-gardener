@@ -1,4 +1,3 @@
-import getAfterWateringMsg from "src/utils/function/getAfterWateringMsg";
 import deleteData from "src/api/backend-api/common/deleteData";
 import {useEffect, useState} from "react";
 import 'dayjs/locale/ko';
@@ -12,12 +11,13 @@ import weekOfYear from 'dayjs/plugin/weekOfYear'
 import weekYear from 'dayjs/plugin/weekYear'
 import updateData from "src/api/backend-api/common/updateData";
 import WateringEditableCell from "./WateringEditableCell";
-import getWateringTableColumnArray from "../../../../utils/function/getWateringTableColumnArray";
-import getMergedColumns from "../../../../utils/function/getMergedColumns";
-import getData from "../../../../api/backend-api/common/getData";
+import getWateringTableColumnArray from "../../../utils/function/getWateringTableColumnArray";
+import getMergedColumns from "../../../utils/function/getMergedColumns";
+import getData from "../../../api/backend-api/common/getData";
 import {useDispatch, useSelector} from "react-redux";
-import AfterWateringCode from "../../../../utils/code/afterWateringCode";
 import {useParams} from "react-router-dom";
+import PlantDetailAction from "../../../redux/reducer/plant_detail/plantDetailAction";
+import WateringAction from "../../../redux/reducer/waterings/wateringAction";
 
 const getWateringListForTable = (wateringList) => {
   return wateringList?.map((watering) => {
@@ -34,7 +34,7 @@ const getWateringListForTable = (wateringList) => {
 }
 
 /**
- * 한 식물의 물주기 정보 plant detail 아래쪽 table
+ * 한 식물의 물주기 정보 plant plant_detail 아래쪽 table
  * @param {*} props
  * @returns
  */
@@ -64,10 +64,10 @@ const WateringList = ({openNotification, wateringCallBack}) => {
 
   const onMountWateringList = async () => {
     const res = await getData(`/plant/${plantId}/watering?page=${page - 1}`);
-    dispatch({type: "setWateringsForPlantDetail", payload: res});
+    dispatch({type: PlantDetailAction.FETCH_WATERING, payload: res});
 
     const chemicals = await getData("/chemical");
-    dispatch({type: "setChemicalsForSelect", payload: chemicals});
+    dispatch({type: PlantDetailAction.SET_CHEMICALS_FOR_SELECT, payload: chemicals});
   }
 
   // editable rows
@@ -87,7 +87,7 @@ const WateringList = ({openNotification, wateringCallBack}) => {
     });
 
     setEditingKey(record.id);
-    dispatch({type: "setWateringFormOpen", payload: false});
+    dispatch({type: PlantDetailAction.SET_WATERING_FORM_OPENED, payload: false});
   };
 
   const cancel = () => setEditingKey('');
@@ -108,13 +108,12 @@ const WateringList = ({openNotification, wateringCallBack}) => {
       setPage(() => page - 1);
     }
 
-    dispatch({type: 'deleteWatering', payload: null});
-    dispatch({type: 'deletePlantDetailWatering', payload: wateringId});
+    dispatch({type: WateringAction.DELETE_ONE_IN_TOTAL_WATERING, payload: null});
+    dispatch({type: PlantDetailAction.DELETE_WATERING, payload: wateringId});
   };
 
   const wateringTableColumnArray = getWateringTableColumnArray(isEditing, updateWatering, editingKey, cancel, edit, deleteWatering);
   const mergedColumns = getMergedColumns(wateringTableColumnArray, "wateringDate", 'date', 'select', isEditing);
-
 
 
   const tableBody = {

@@ -13,6 +13,7 @@ import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
+import xyz.notagardener.status.common.model.Status;
 import xyz.notagardener.status.common.model.StatusType;
 import xyz.notagardener.status.common.repository.StatusRepository;
 import xyz.notagardener.watering.Watering;
@@ -140,7 +141,8 @@ public class WateringCommandServiceImpl implements WateringCommandService {
 
         if (waterings.size() == 3) {
             Plant plant = waterings.get(0).getPlant();
-            boolean isHeavyDrinker = YesOrNoType.Y.equals(plant.getStatus().getHeavyDrinker()); // 이미 헤비 드링커 상태인지
+            Status status = plant.getStatus();
+            boolean isHeavyDrinker = status != null && YesOrNoType.Y.equals(status.getHeavyDrinker()); // 이미 헤비 드링커 상태인지
 
             if (period <= 3 && !isHeavyDrinker) {
                 return new WateringMessage(AfterWateringCode.POSSIBLE_HEAVY_DRINKER.getCode(), period);

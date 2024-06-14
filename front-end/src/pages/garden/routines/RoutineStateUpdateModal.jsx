@@ -1,10 +1,11 @@
-import updateRoutineState from "../../api/backend-api/updateRoutineState";
-import isEndWithVowel from "../../utils/function/isEndWithVowel";
+import updateRoutineState from "../../../api/backend-api/updateRoutineState";
+import isEndWithVowel from "../../../utils/function/isEndWithVowel";
 import React from "react";
-import GButton from "../button/GButton";
+import GButton from "../../../components/button/GButton";
 import {Button, Modal} from "antd";
-import LinkHoverTag from "../tag/basic/LinkHoverTag";
+import LinkHoverTag from "../../../components/tag/basic/LinkHoverTag";
 import {useDispatch} from "react-redux";
+import GardenAction from "../../../redux/reducer/garden/gardenAction";
 
 const RoutineStateUpdateModal = ({visible, closeModal, routineForModal,}) => {
   if (!routineForModal.content) {
@@ -15,7 +16,7 @@ const RoutineStateUpdateModal = ({visible, closeModal, routineForModal,}) => {
 
   const confirm = async () => {
     const res = await updateRoutineState(routineForModal.routineId, !routineForModal.isCompleted);
-    dispatch({type: 'updateRoutine', payload: res})
+    dispatch({type: GardenAction.UPDATE_ROUTINES, payload: res})
     closeModal();
   }
 

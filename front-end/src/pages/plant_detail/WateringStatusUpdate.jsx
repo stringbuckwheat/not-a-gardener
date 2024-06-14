@@ -1,14 +1,15 @@
 import {Button, ConfigProvider, Dropdown, Popconfirm, Space} from "antd";
 import WateringForm from "./watering/WateringForm";
-import deleteData from "../../../api/backend-api/common/deleteData";
+import deleteData from "../../api/backend-api/common/deleteData";
 import {useDispatch, useSelector} from "react-redux";
-import GButton from "../../../components/button/GButton";
+import GButton from "../../components/button/GButton";
 import React, {useState} from "react";
-import themeGreen from "../../../theme/themeGreen";
-import RepotModal from "./watering/RepotModal";
-import HeavyDrinkerModal from "./watering/HeavyDrinkerModal";
-import StatusModal from "./watering/StatusModal";
+import themeGreen from "../../theme/themeGreen";
+import RepotModal from "./repot/RepotModal";
+import HeavyDrinkerModal from "./status/HeavyDrinkerModal";
+import StatusModal from "./status/StatusModal";
 import {useParams} from "react-router-dom";
+import PlantDetailAction from "../../redux/reducer/plant_detail/plantDetailAction";
 
 
 const WateringStatusUpdate = ({wateringCallBack}) => {
@@ -20,17 +21,17 @@ const WateringStatusUpdate = ({wateringCallBack}) => {
 
   const deleteAllWatering = async () => {
     await deleteData(`/plant/${plantId}/watering`);
-    dispatch({type: "setWateringsForPlantDetail", payload: res});
-    dispatch({type: 'deleteAllWaterings', payload: null})
+    dispatch({type: PlantDetailAction.FETCH_WATERING, payload: res});
+    dispatch({type: WateringAction.DELETE_ALL_WATERING, payload: null})
   }
 
   const onClickWateringFormBtn = () => {
-    dispatch({type: "setWateringFormOpen", payload: true});
-    dispatch({type: "setEditingKey", payload: ""});
+    dispatch({type: PlantDetailAction.SET_WATERING_FORM_OPENED, payload: true});
+    dispatch({type: PlantDetailAction.SET_EDITING_KEY, payload: ""});
   }
 
   const hideModal = () => {
-    dispatch({type: "setHeavyDrinkerCheck", payload: false});
+    dispatch({type: PlantDetailAction.SET_HEAVY_DRINKER_CHECK, payload: false});
     setOpenRepotModal(false);
     setOpenStatusModal(false);
   };

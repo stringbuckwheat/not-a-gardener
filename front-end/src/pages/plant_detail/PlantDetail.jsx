@@ -2,17 +2,19 @@ import {useLocation, useNavigate, useParams} from 'react-router-dom'
 import PlantInfo from './PlantInfo';
 import DetailLayout from 'src/components/data/layout/DetailLayout';
 import {useState, useEffect} from 'react';
-import ModifyPlant from '../ModifyPlant';
+import ModifyPlant from '../plant/ModifyPlant';
 import getPlaceList from 'src/api/service/getPlaceList';
-import getData from "../../../api/backend-api/common/getData";
+import getData from "../../api/backend-api/common/getData";
 import {useDispatch, useSelector} from "react-redux";
-import ExceptionCode from "../../../utils/code/exceptionCode";
-import PlantTitle from "../../../components/etc/PlantTitle";
+import ExceptionCode from "../../utils/code/exceptionCode";
+import PlantTitle from "../../components/etc/PlantTitle";
 import PlantLogTab from "./PlantLogTab";
 import WateringStatusUpdate from "./WateringStatusUpdate";
 import {notification} from "antd";
-import AfterWateringCode from "../../../utils/code/afterWateringCode";
-import getAfterWateringMsg from "../../../utils/function/getAfterWateringMsg";
+import AfterWateringCode from "../../utils/code/afterWateringCode";
+import getAfterWateringMsg from "../../utils/function/getAfterWateringMsg";
+import PlantDetailAction from "../../redux/reducer/plant_detail/plantDetailAction";
+import WateringAction from "../../redux/reducer/waterings/wateringAction";
 
 /**
  * 식물 상세 정보 페이지 (해당 식물의 물주기 기록 포함)
@@ -32,13 +34,9 @@ const PlantDetail = () => {
   const onMount = async () => {
     try {
       const res = await getData(`/plant/${plantId}`);
-      console.log("res", res);
-      dispatch({type: 'setPlantDetail', payload: res});
-      dispatch({type: 'setTotalWaterings', payload: res.totalWatering});
-
-      const places = await getData("/place");
-      dispatch({type: 'setPlaces', payload: places});
-
+      console.log("---------- res", res);
+      dispatch({type: PlantDetailAction.FETCH_PLANT_DETAIL, payload: res});
+      dispatch({type: WateringAction.FETCH_TOTAL_WATERING, payload: res.totalWatering});
     } catch (e) {
       if (e.code === ExceptionCode.NO_SUCH_PLANT) {
         alert("해당 식물을 찾을 수 없어요");
@@ -52,12 +50,12 @@ const PlantDetail = () => {
   }, [])
 
   useEffect(() => {
-    state && dispatch({type: "setPlantDetail", payload: state.plant});
+    state && dispatch({type: PlantDetailAction.FETCH_PLANT_DETAIL, payload: state.plant});
   }, [state])
 
   const onClickModifyBtn = async () => {
     const places = await getPlaceList();
-    dispatch({type: 'setPlaceListForSelect', payload: places});
+    dispatch({type: PlantDetailAction.SET_PLACES_FOR_SELECT, payload: places});
     setOnModify(!onModify);
   }
 
@@ -75,12 +73,11 @@ const PlantDetail = () => {
   };
 
   const wateringCallBack = (res) => {
-    dispatch({type: "setWateringsForPlantDetail", payload: res.waterings});
-    res.plant && dispatch({type: "setPlantDetail", payload: res.plant});
+    dispatch({type: PlantDetailAction.FETCH_WATERING, payload: res.waterings});
+    res.plant && dispatch({type: PlantDetailAction.FETCH_PLANT_DETAIL, payload: res.plant});
 
     if (AfterWateringCode.POSSIBLE_HEAVY_DRINKER == res.wateringMsg?.afterWateringCode) {
-      console.log("heavy drinker");
-      dispatch({type: "setHeavyDrinkerCheck", payload: true});
+      dispatch({type: PlantDetailAction.SET_HEAVY_DRINKER_CHECK, payload: true});
     } else if (res.wateringMsg) {
       const msg = getAfterWateringMsg(res.wateringMsg.afterWateringCode);
       openNotification(msg);
@@ -99,7 +96,7 @@ const PlantDetail = () => {
             url="/plant"
             path={plant.id}
             deleteTitle="식물"
-            tags={<PlantInfo/>}
+            info={<PlantInfo/>}
             onClickModifyBtn={onClickModifyBtn}
           >
             <WateringStatusUpdate wateringCallBack={wateringCallBack} openNotification={openNotification}/>

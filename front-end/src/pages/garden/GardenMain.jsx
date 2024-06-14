@@ -1,20 +1,21 @@
 import GardenTodoList from "./todolist/GardenTodoList";
 import React, {useEffect} from "react";
 import WaitingForWateringList from "./WaitingForWateringList";
-import RoutineList from "./RoutineList";
-import {notification, Row, Space} from "antd";
+import RoutineList from "./routines/RoutineList";
+import {Col, notification, Row, Space} from "antd";
 import Booped from "../../components/animation/Booped";
 import getData from "../../api/backend-api/common/getData";
 import {useDispatch, useSelector} from "react-redux";
 import {SmileOutlined} from "@ant-design/icons";
-
+import ChemicalAction from "../../redux/reducer/chemicals/chemicalAction";
+import AttentionList from "./attention/AttentionList";
 
 const GardenMain = () => {
   const dispatch = useDispatch();
 
   const setChemicalList = async () => {
     const data = await getData("/chemical");
-    dispatch({type: 'setChemicals', payload: data});
+    dispatch({type: ChemicalAction.FETCH_CHEMICAL, payload: data});
   }
 
   useEffect(() => {
@@ -45,8 +46,15 @@ const GardenMain = () => {
         </Booped>
       </Space>
       <Row style={{marginTop: "1rem"}}>
-        <RoutineList/>
-        <WaitingForWateringList/>
+        <Col md={8} xs={24} style={{margin: "0.5rem 0"}}>
+          <AttentionList/>
+        </Col>
+        <Col md={8} xs={24} style={{margin: "0.5rem 0"}}>
+          <RoutineList/>
+        </Col>
+        <Col md={8} xs={24} style={{margin: "0.5rem 0"}}>
+          <WaitingForWateringList/>
+        </Col>
       </Row>
       <GardenTodoList openNotification={openNotification}/>
     </div>

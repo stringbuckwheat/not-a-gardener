@@ -1,19 +1,9 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import TodoCardFront from "./TodoCardFront";
 import TodoCardBehind from "./TodoCardBehind";
-import {Card} from "antd";
-import Style from "./TodoCard.module.scss"
+import { Card } from "antd";
+import Style from "./TodoCard.module.scss";
 import WateringCode from "../../../../utils/code/wateringCode";
-
-/**
- * 메인페이지 할 일 카드
- * @param index
- * @param deleteInTodoList
- * @param garden
- * @param openNotification
- * @returns {JSX.Element}
- * @constructor
- */
 
 function getWateringColor(wateringCode) {
   switch (wateringCode) {
@@ -30,39 +20,31 @@ function getWateringColor(wateringCode) {
     case WateringCode.YOU_ARE_LAZY:
       return "grey";
     default:
-      return "black"; // 기본값 설정
+      return "black";
   }
 }
 
-const ToDoCardInfo = ({
-                        index,
-                        garden,
-                        openNotification,
-                      }) => {
+const ToDoCardInfo = ({ index, garden, openNotification }) => {
   const wateringCode = garden.gardenDetail.wateringCode;
-  console.log(garden.plant.name , " - ",wateringCode, " - ", getWateringColor(wateringCode));
+  console.log(garden.plant.name, " - ", wateringCode, " - ", getWateringColor(wateringCode));
 
   const [clickedPlant, setClickedPlant] = useState(0);
 
   const flipCard = (plantId) => {
     setClickedPlant(() => plantId);
-  }
+  };
 
-  const props = {garden, flipCard, color: getWateringColor(wateringCode)};
+  const props = { garden, flipCard, color: getWateringColor(wateringCode) };
 
   return (
-    <Card bodyStyle={{width: "100%"}} className={Style.card}>
-      {
-        clickedPlant !== 0 ?
-          <TodoCardBehind
-            {...props}
-            openNotification={openNotification}
-            index={index}
-          />
-          : <TodoCardFront {...props} />
-      }
+    <Card bodyStyle={{ width: "100%" }} className={Style.card}>
+      {clickedPlant !== 0 ? (
+        <TodoCardBehind {...props} openNotification={openNotification} index={index} />
+      ) : (
+        <TodoCardFront {...props} />
+      )}
     </Card>
-  )
-}
+  );
+};
 
 export default ToDoCardInfo;

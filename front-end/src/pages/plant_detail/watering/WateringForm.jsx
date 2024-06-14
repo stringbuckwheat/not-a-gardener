@@ -2,10 +2,12 @@ import React, {useState} from 'react';
 import {Button, Card, Select, Space} from "antd";
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
-import DateSelector from "../../../../components/form/input/DateSelector";
+import DateSelector from "../../../components/form/input/DateSelector";
 import postData from 'src/api/backend-api/common/postData';
-import ExceptionCode from "../../../../utils/code/exceptionCode";
+import ExceptionCode from "../../../utils/code/exceptionCode";
 import './WateringForm.scss';
+import PlantDetailAction from "../../../redux/reducer/plant_detail/plantDetailAction";
+import WateringAction from "../../../redux/reducer/waterings/wateringAction";
 
 const WateringForm = ({wateringCallBack}) => {
   const plantId = useParams().plantId;
@@ -18,7 +20,7 @@ const WateringForm = ({wateringCallBack}) => {
     wateringDate: new Date().toISOString().split("T")[0]
   });
   const dispatch = useDispatch();
-  const closeForm = () => dispatch({type: "setWateringFormOpen", payload: false});
+  const closeForm = () => dispatch({type: PlantDetailAction.SET_WATERING_FORM_OPENED, payload: false});
 
   const onSubmit = async () => {
     console.log("submit data", watering);
@@ -27,7 +29,7 @@ const WateringForm = ({wateringCallBack}) => {
     try {
       const res = await postData(`/plant/${plantId}/watering?page=${page - 1}`, watering);
       console.log("watering form add res", res);
-      dispatch({type: 'addWatering', payload: null});
+      dispatch({type: WateringAction.ADD_TOTAL_WATERING, payload: null});
       wateringCallBack(res);
     } catch (e) {
       if (e.code == ExceptionCode.ALREADY_WATERED) {

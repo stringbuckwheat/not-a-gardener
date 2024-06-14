@@ -32,7 +32,7 @@ const GardenerDetail = ({gardener, setGardener}) => {
 
     // header 업데이트
     localStorage.setItem("name", updatedGardener.name);
-    dispatch({type: 'setName', payload: updatedGardener.name});
+    dispatch({type: 'SET_NAME', payload: updatedGardener.name});
 
     setIsDisabled(true);
   }
@@ -55,6 +55,9 @@ const GardenerDetail = ({gardener, setGardener}) => {
       required: true,
       onChange: onChange,
       disabled: isDisabled,
+      valid: modifyGardener.name != "",
+      invalid: modifyGardener.name == "",
+      feedbackInvalid: "이름은 비워둘 수 없어요"
     },
     {
       label: isBasicLogin ? "아이디" : "소셜 로그인",

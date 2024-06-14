@@ -6,7 +6,6 @@ import {LeftOutlined} from "@ant-design/icons";
 import Style from "./TodoCard.module.scss"
 import {Button, ConfigProvider} from "antd";
 import themeGreen from "../../../../theme/themeGreen";
-import GButton from "../../../../components/button/GButton";
 import {useNavigate} from "react-router-dom";
 
 const TodoCardBehind = ({openNotification, index, flipCard, garden, color}) => {
