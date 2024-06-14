@@ -22,7 +22,7 @@ const DetailLayout = ({
                         path,
                         title,
                         deleteTitle,
-                        tags,
+                        info,
                         onClickModifyBtn,
                         children,
                         deleteTooltipMsg,
@@ -54,7 +54,7 @@ const DetailLayout = ({
               {deleteModal}
             </Space>
           </Row>
-          {tags}
+          {info}
           <div>
             {children}
           </div>

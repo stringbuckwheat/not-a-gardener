@@ -5,6 +5,7 @@ import getData from "src/api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";
 import AddPlace from "./AddPlace";
 import {useDispatch} from "react-redux";
+import {PlaceAction} from "../../redux/reducer/places/placeAction";
 
 /**
  * 장소 메인 페이지
@@ -20,7 +21,7 @@ const Place = () => {
   const onMount = async () => {
     const data = await getData("/place");
 
-    dispatch({type: 'setPlaces', payload: data});
+    dispatch({type: PlaceAction.FETCH_PLACES, payload: data});
 
     setLoading(false);
     setHasPlace(data.length > 0);

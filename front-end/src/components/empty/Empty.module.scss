@@ -1,3 +1,5 @@
+/* Empty.module.scss */
+
 .center {
   display: flex;
   text-align: center;
@@ -22,8 +24,15 @@
   height: 2.5rem;
   font-size: 1.1rem;
   margin-top: 0.5rem;
+  border: none;
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+.button:hover {
+  transform: scale(1.02);
+  color: white;
 }
 
 img {
-  width: 95%
+  width: 95%;
 }

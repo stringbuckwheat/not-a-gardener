@@ -5,6 +5,7 @@ import Loading from "../../components/data/Loading";
 import Goal from "./goal/Goal";
 import {useDispatch} from "react-redux";
 import {Col, Row} from "antd";
+import PlantAction from "../../redux/reducer/plants/plantAction";
 
 const Schedule = () => {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ const Schedule = () => {
 
     // 식물 리스트
     const data = await getData("/plant");
-    dispatch({type: 'setPlants', payload: data});
+    dispatch({type: PlantAction.FETCH_PLANT, payload: data});
 
     setLoading(false);
   }

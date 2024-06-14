@@ -73,7 +73,7 @@ const PlaceDetail = () => {
         url="/place"
         path={placeId}
         deleteTitle="장소"
-        tags={<PlaceTag place={place} howManyPlant={place.plantListSize}/>}
+        info={<PlaceTag place={place} howManyPlant={place.plantListSize}/>}
         onClickModifyBtn={onClickModifyBtn}
         deleteModal={
           <DeletePlaceModal

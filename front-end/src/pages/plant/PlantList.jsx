@@ -1,4 +1,4 @@
-import PlantTable from "./plantDetail/PlantTable";
+import PlantTable from "../plant_detail/PlantTable";
 import PlantListTag from "./PlantListTag";
 import {useEffect, useState} from "react";
 import AddPlant from "./AddPlant";
@@ -6,6 +6,7 @@ import getData from "../../api/backend-api/common/getData";
 import {useDispatch} from "react-redux";
 import {Button, Card, Col, Input, Space} from "antd";
 import {SearchOutlined} from "@ant-design/icons";
+import {PlaceAction} from "../../redux/reducer/places/placeAction";
 
 /**
  * 식물 리스트 메인 페이지
@@ -23,7 +24,7 @@ const PlantList = () => {
 
   const onMountPlantList = async () => {
     const rawPlace = await getData("/place");
-    dispatch({type: "setPlaces", payload: rawPlace});
+    dispatch({type: PlaceAction.FETCH_PLACES, payload: rawPlace});
   }
 
   useEffect(() => {

@@ -23,12 +23,12 @@ const NoItem = ({title, buttonSize, buttonTitle, addForm}) => {
     <div style={{textAlign: "center"}}>
       <h2 className={Style.title}>{title}</h2>
       <div className={Style.long}>
-        <Button
+        <button
           className={Style.button}
           onClick={() => setIsAddFormOpened(true)}
           size={buttonSize}>
           {buttonTitle}
-        </Button>
+        </button>
       </div>
       <img src={forNoPlant}/>
     </div>

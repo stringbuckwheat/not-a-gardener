@@ -5,6 +5,7 @@ import Loading from "../../components/data/Loading";
 import getData from "../../api/backend-api/common/getData";
 import AddChemical from "./AddChemical";
 import {useDispatch} from "react-redux";
+import ChemicalAction from "../../redux/reducer/chemicals/chemicalAction";
 
 const Chemical = () => {
   const [isLoading, setLoading] = useState(true);
@@ -15,7 +16,7 @@ const Chemical = () => {
   const onMountChemical = async () => {
     const data = await getData("/chemical");
 
-    dispatch({type: 'setChemicals', payload: data});
+    dispatch({type: ChemicalAction.FETCH_CHEMICAL, payload: data});
 
     setLoading(false);
     setHasChemical(data.length > 0);

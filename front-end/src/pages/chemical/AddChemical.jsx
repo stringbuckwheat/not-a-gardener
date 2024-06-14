@@ -5,6 +5,7 @@ import postData from "../../api/backend-api/common/postData";
 import getChemicalFormArray from "../../utils/function/getChemicalFormArray";
 import {useDispatch} from "react-redux";
 import FormProvider from "../../components/form/FormProvider";
+import ChemicalAction from "../../redux/reducer/chemicals/chemicalAction";
 
 const AddChemical = ({afterAdd}) => {
   const [chemical, setChemical] = useState({
@@ -30,7 +31,7 @@ const AddChemical = ({afterAdd}) => {
     console.log("add chemical res", res);
 
     // redux 업데이트
-    dispatch({type: 'addChemicals', payload: res});
+    dispatch({type: ChemicalAction.ADD_CHEMICAL, payload: res});
 
     afterAdd && afterAdd();
   }

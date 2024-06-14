@@ -10,7 +10,7 @@ const Chemical = React.lazy(() => import('../../pages/chemical/Chemical'))
 const ChemicalDetail = React.lazy(() => import('../../pages/chemical/ChemicalDetail'))
 
 const Plant = React.lazy(() => import('../../pages/plant/Plant'))
-const PlantDetail = React.lazy(() => import('../../pages/plant/plantDetail/PlantDetail'))
+const PlantDetail = React.lazy(() => import('../../pages/plant_detail/PlantDetail'))
 
 const Schedule = React.lazy(() => import('../..//pages/schedule/Schedule'))
 
@@ -21,7 +21,7 @@ const Log = React.lazy(() => import('../../pages/log/Log'))
 const routes = [
   {path: '/', exact: true, name: 'Garden', element: Garden},
 
-  {path: '/gardener', exact: true, name: 'gardener',element: Gardener},
+  {path: '/me', exact: true, name: 'gardener',element: Gardener},
 
   {path: '/place', name: 'place', element: Place},
   {path: '/place/:placeId', name: 'place detail', element: PlaceDetail},
@@ -35,7 +35,7 @@ const routes = [
   {path: '/schedule', exact: true, name: 'routine', element: Schedule},
 
   {path: '/watering', exact: true, name: 'watering', element: Watering},
-  {path: '/log', exact: true, name: 'log', element: Log},
+  // {path: '/log', exact: true, name: 'log', element: Log},
 ]
 
 export default routes

@@ -4,6 +4,7 @@ import getData from "../../api/backend-api/common/getData";
 import Loading from "../../components/data/Loading";
 import NoItemForPlant from "../../components/empty/NoItemForPlant";
 import {useDispatch} from "react-redux";
+import PlantAction from "../../redux/reducer/plants/plantAction";
 
 const Plant = () => {
   const dispatch = useDispatch();
@@ -13,7 +14,8 @@ const Plant = () => {
 
   const onMountPlant = async () => {
     const data = await getData("/garden/plants");
-    dispatch({type: 'setPlants', payload: data});
+    console.log("data", data);
+    dispatch({type: PlantAction.FETCH_PLANT, payload: data});
     setLoading(false);
     setHasPlant(data.length > 0);
   }

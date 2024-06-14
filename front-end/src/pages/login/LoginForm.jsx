@@ -43,7 +43,7 @@ const LoginForm = () => {
       console.log("res", res);
 
       await setLocalStorage(res.data);
-      dispatch({type: 'setName', payload: res.data.info.name});
+      dispatch({type: 'SET_NAME', payload: res.data.info.name});
 
       // garden 페이지로 이동
       navigate('/', {replace: true});

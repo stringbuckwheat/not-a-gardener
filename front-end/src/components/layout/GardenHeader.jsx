@@ -29,7 +29,7 @@ const GardenHeader = () => {
 
   const iconProps = {
     style: {fontSize: "1.2rem", color: "grey"},
-    onClick: () => dispatch({type: 'setSidebar', payload: !collapsed})
+    onClick: () => dispatch({type: 'SET_SIDEBAR', payload: !collapsed})
   }
 
   return (

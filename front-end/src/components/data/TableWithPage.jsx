@@ -14,13 +14,12 @@ const TableWithPage = ({columns, getDataSource, total, rowSelection, key}) => {
   }, []);
 
   return (
-    <>
       <Table
+        style={{marginTop: "1rem"}}
         rowSelection={rowSelection}
         pagination={{onChange: (page) => paging(page), total: total}}
         columns={columns}
         dataSource={dataSource}/>
-    </>
   )
 }
 

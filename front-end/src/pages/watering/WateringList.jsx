@@ -29,7 +29,7 @@ const WateringList = ({wateringDetail, onDelete}) => {
   const handleHover = () => setIsHovered(!isHovered);
 
   return (
-    <>
+    <Space direction={"vertical"}>
       {wateringDetail.map((watering) => {
           console.log("watering in map", watering);
 
@@ -50,7 +50,9 @@ const WateringList = ({wateringDetail, onDelete}) => {
                     onConfirm={() => deleteWatering(forDelete)}>
                     <DeleteOutlined onMouseEnter={handleHover}
                                     onMouseLeave={handleHover}
-                                    className={isHovered ? "text-orange" : ""}/>
+                                    className="text-orange-hover"
+                                    style={{ transition: 'color 0.3s' }} // 크기와 전환 애니메이션을 위해 스타일 추가
+/>
                   </Popconfirm>
                 </Space>
                 </span>
@@ -59,7 +61,7 @@ const WateringList = ({wateringDetail, onDelete}) => {
           )
         }
       )}
-    </>)
+    </Space>)
 }
 
 export default WateringList;

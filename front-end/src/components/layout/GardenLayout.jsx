@@ -16,7 +16,7 @@ const GardenLayout = () => {
   }
 
   const dispatch = useDispatch();
-  dispatch({type: 'setName', payload: localStorage.getItem("name")})
+  dispatch({type: 'SET_NAME', payload: localStorage.getItem("name")})
 
   return (
     <ConfigProvider

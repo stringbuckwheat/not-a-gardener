@@ -4,6 +4,7 @@ import postData from "../../api/backend-api/common/postData";
 import {useDispatch, useSelector} from "react-redux";
 import FormProvider from "../../components/form/FormProvider";
 import mediumArray from "../../utils/dataArray/mediumArray";
+import PlantAction from "../../redux/reducer/plants/plantAction";
 
 const getPlantFormArray = (placeList) => {
   const noPlace = !placeList.length === 0
@@ -93,7 +94,7 @@ const AddPlant = ({afterAdd}) => {
     console.log("res", res);
 
     // redux 업데이트
-    dispatch({type: "addPlant", payload: res});
+    dispatch({type: PlantAction.ADD_PLANT, payload: res});
 
     // 수정 컴포넌트 닫기
     afterAdd && afterAdd();

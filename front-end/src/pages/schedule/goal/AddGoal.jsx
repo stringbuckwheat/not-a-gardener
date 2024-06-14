@@ -14,11 +14,12 @@ const AddGoal = ({onClickGoalFormButton, addGoal}) => {
   const [goal, setGoal] = useState({
     content: "",
     plantId: 0,
+    complete: "N"
   })
 
   const submit = async () => {
-    const data = {...goal, complete: "N"};
-    const res = await postData("/goal", data);
+    console.log("submit req", goal);
+    const res = await postData("/goal", goal);
     addGoal(res);
     onClickGoalFormButton();
   }

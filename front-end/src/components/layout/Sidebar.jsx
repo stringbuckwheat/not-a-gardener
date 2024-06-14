@@ -15,10 +15,10 @@ const items = [
     label: <><span style={{fontSize: "1.2rem", marginRight: "0.7rem"}}>🌿</span> 나의 식물</>,
     key: "/plant",
   },
-  {
-    label: <><span style={{fontSize: "1.2rem", marginRight: "0.7rem"}}>📚 </span> 정원 기록</>,
-    key: "/log"
-  },
+  // {
+  //   label: <><span style={{fontSize: "1.2rem", marginRight: "0.7rem"}}>📚 </span> 정원 기록</>,
+  //   key: "/log"
+  // },
   {
     label: <><span style={{fontSize: "1.2rem", marginRight: "0.7rem"}}>💧</span> 물주기 기록</>,
     key: "/watering"
@@ -56,7 +56,7 @@ const Sidebar = () => {
   }
 
   const onBreakPoint = (broken) => {
-    dispatch({type: "setSidebar", payload: broken})
+    dispatch({type: "SET_SIDEBAR", payload: broken})
   }
 
   return (

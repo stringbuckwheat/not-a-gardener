@@ -4,6 +4,7 @@ import ValidationSubmitButton from "../../components/button/ValidationSubmitButt
 import postData from "../../api/backend-api/common/postData";
 import {useDispatch} from "react-redux";
 import FormProvider from "../../components/form/FormProvider";
+import {PlaceAction} from "../../redux/reducer/places/placeAction";
 
 /**
  * 장소 추가
@@ -33,7 +34,7 @@ const AddPlace = ({afterAdd}) => {
     const res = await postData("/place", place);
 
     // Redux 업데이트
-    dispatch({type: 'addPlace', payload: res});
+    dispatch({type: PlaceAction.ADD_PLACES, payload: res});
 
     // 컴포넌트 변경
     afterAdd();
