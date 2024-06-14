@@ -1,4 +1,4 @@
-package xyz.notagardener.status.service;
+package xyz.notagardener.status.plant.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,11 +8,11 @@ import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.common.validation.YesOrNoType;
-import xyz.notagardener.status.dto.PlantStatusResponse;
-import xyz.notagardener.status.dto.StatusLogResponse;
-import xyz.notagardener.status.model.StatusLog;
-import xyz.notagardener.status.repository.StatusLogRepository;
-import xyz.notagardener.status.repository.StatusRepository;
+import xyz.notagardener.status.plant.dto.PlantStatusResponse;
+import xyz.notagardener.status.plant.dto.StatusLogResponse;
+import xyz.notagardener.status.common.model.StatusLog;
+import xyz.notagardener.status.common.repository.StatusLogRepository;
+import xyz.notagardener.status.common.repository.StatusRepository;
 
 import java.util.List;
 import java.util.Optional;

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.plant.garden.dto.AttentionRequiredPlant;
 import xyz.notagardener.plant.garden.dto.GardenMain;
 import xyz.notagardener.plant.garden.dto.GardenResponse;
@@ -45,7 +44,7 @@ public class GardenServiceImpl implements GardenService {
                 .toList();
 
         // 요주의 식물
-        List<AttentionRequiredPlant> attentions = plantRepository.findByGardener_GardenerIdAndStatus_Attention(gardenerId, YesOrNoType.Y).stream()
+        List<AttentionRequiredPlant> attentions = plantRepository.findAttentionRequiredPlants(gardenerId).stream()
                 .map(AttentionRequiredPlant::new).toList();
 
         return GardenMain.builder()

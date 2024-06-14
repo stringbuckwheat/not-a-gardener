@@ -1,8 +1,8 @@
-package xyz.notagardener.status.dto;
+package xyz.notagardener.status.plant.dto;
 
 import lombok.*;
 import xyz.notagardener.common.validation.YesOrNoType;
-import xyz.notagardener.status.model.Status;
+import xyz.notagardener.status.common.model.Status;
 
 @NoArgsConstructor
 @ToString

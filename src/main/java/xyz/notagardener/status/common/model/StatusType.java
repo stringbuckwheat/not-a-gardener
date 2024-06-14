@@ -1,4 +1,4 @@
-package xyz.notagardener.status.model;
+package xyz.notagardener.status.common.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

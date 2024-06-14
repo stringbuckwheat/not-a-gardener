@@ -23,6 +23,7 @@ import xyz.notagardener.place.dto.ModifyPlace;
 import xyz.notagardener.place.dto.PlaceDto;
 import xyz.notagardener.plant.garden.dto.GardenResponse;
 import xyz.notagardener.plant.garden.dto.PlantResponse;
+import xyz.notagardener.plant.plant.dto.PlantBasic;
 import xyz.notagardener.plant.plant.dto.PlantRequest;
 import xyz.notagardener.plant.plant.service.PlantService;
 
@@ -58,6 +59,11 @@ public class PlantController {
     @GetMapping("")
     public ResponseEntity<List<PlantResponse>> getAll(@AuthenticationPrincipal UserPrincipal user) {
         return ResponseEntity.ok().body(plantService.getAll(user.getId()));
+    }
+
+    @GetMapping("/non-attention")
+    public ResponseEntity<List<PlantBasic>> getAttentionNotRequiredPlants(@AuthenticationPrincipal UserPrincipal user) {
+        return ResponseEntity.ok().body(plantService.getAttentionNotRequiredPlants(user.getId()));
     }
 
     @Operation(summary = "한 식물의 상세 정보")

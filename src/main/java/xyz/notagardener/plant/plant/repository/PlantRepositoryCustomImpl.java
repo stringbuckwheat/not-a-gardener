@@ -3,18 +3,21 @@ package xyz.notagardener.plant.plant.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.garden.dto.PlantResponse;
 import xyz.notagardener.plant.garden.dto.QPlantResponse;
 import xyz.notagardener.plant.garden.dto.QWaitingForWatering;
 import xyz.notagardener.plant.garden.dto.WaitingForWatering;
+import xyz.notagardener.plant.plant.dto.PlantBasic;
+import xyz.notagardener.plant.plant.dto.QPlantBasic;
 
 import java.util.List;
 import java.util.Optional;
 
 import static xyz.notagardener.place.QPlace.place;
 import static xyz.notagardener.plant.QPlant.plant;
-import static xyz.notagardener.status.model.QStatus.status;
+import static xyz.notagardener.status.common.model.QStatus.status;
 import static xyz.notagardener.watering.QWatering.watering;
 
 @RequiredArgsConstructor
@@ -97,5 +100,31 @@ public class PlantRepositoryCustomImpl implements PlantRepositoryCustom {
                 .fetchOne();
 
         return Optional.ofNullable(plantResponse);
+    }
+
+    @Override
+    public List<PlantBasic> findAttentionNotRequiredPlants(Long gardenerId) {
+        return queryFactory.select(
+                        new QPlantBasic(plant)
+                )
+                .from(plant)
+                .leftJoin(plant.status, status)
+                .where(
+                        (plant.status.attention.eq(YesOrNoType.N)
+                                .or(plant.status.isNull()))
+                                .and(plant.gardener.gardenerId.eq(gardenerId))
+                )
+                .fetch();
+    }
+
+    @Override
+    public List<Plant> findAttentionRequiredPlants(Long gardenerId) {
+        return queryFactory
+                .selectFrom(plant)
+                .join(plant.status, status)
+                .where(
+                        status.attention.eq(YesOrNoType.Y)
+                )
+                .fetch();
     }
 }

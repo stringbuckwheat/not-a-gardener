@@ -1,8 +1,8 @@
-package xyz.notagardener.status.repository;
+package xyz.notagardener.status.common.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.Repository;
-import xyz.notagardener.status.model.Status;
+import xyz.notagardener.status.common.model.Status;
 
 import java.util.Optional;
 

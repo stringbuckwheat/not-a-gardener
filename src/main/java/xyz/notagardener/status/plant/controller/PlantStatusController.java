@@ -1,4 +1,4 @@
-package xyz.notagardener.status.controller;
+package xyz.notagardener.status.plant.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -8,10 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import xyz.notagardener.authentication.model.UserPrincipal;
-import xyz.notagardener.status.dto.AddStatusResponse;
-import xyz.notagardener.status.dto.PlantStatusRequest;
-import xyz.notagardener.status.dto.PlantStatusResponse;
-import xyz.notagardener.status.service.PlantStatusService;
+import xyz.notagardener.status.plant.dto.AddStatusResponse;
+import xyz.notagardener.status.plant.dto.PlantStatusRequest;
+import xyz.notagardener.status.plant.dto.PlantStatusResponse;
+import xyz.notagardener.status.plant.service.PlantStatusService;
 
 @RestController
 @Slf4j

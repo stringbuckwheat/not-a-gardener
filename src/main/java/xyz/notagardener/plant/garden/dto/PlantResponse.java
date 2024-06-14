@@ -6,8 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import xyz.notagardener.place.Place;
 import xyz.notagardener.plant.Plant;
-import xyz.notagardener.status.dto.PlantStatusResponse;
-import xyz.notagardener.status.model.Status;
+import xyz.notagardener.status.plant.dto.PlantStatusResponse;
+import xyz.notagardener.status.common.model.Status;
 import xyz.notagardener.watering.Watering;
 
 import java.time.LocalDate;

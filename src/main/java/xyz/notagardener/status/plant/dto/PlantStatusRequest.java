@@ -1,4 +1,4 @@
-package xyz.notagardener.status.dto;
+package xyz.notagardener.status.plant.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -9,9 +9,9 @@ import xyz.notagardener.common.validation.NotFuture;
 import xyz.notagardener.common.validation.PlantStatusConstraints;
 import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.plant.Plant;
-import xyz.notagardener.status.model.Status;
-import xyz.notagardener.status.model.StatusLog;
-import xyz.notagardener.status.model.StatusType;
+import xyz.notagardener.status.common.model.Status;
+import xyz.notagardener.status.common.model.StatusLog;
+import xyz.notagardener.status.common.model.StatusType;
 
 import java.time.LocalDate;
 

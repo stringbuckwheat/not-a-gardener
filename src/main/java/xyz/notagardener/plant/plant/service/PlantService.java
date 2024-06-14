@@ -4,12 +4,15 @@ import xyz.notagardener.place.dto.ModifyPlace;
 import xyz.notagardener.place.dto.PlaceDto;
 import xyz.notagardener.plant.garden.dto.GardenResponse;
 import xyz.notagardener.plant.garden.dto.PlantResponse;
+import xyz.notagardener.plant.plant.dto.PlantBasic;
 import xyz.notagardener.plant.plant.dto.PlantRequest;
 
 import java.util.List;
 
 public interface PlantService {
     List<PlantResponse> getAll(Long gardenerId);
+
+    List<PlantBasic> getAttentionNotRequiredPlants(Long gardenerId);
 
     PlantResponse getDetail(Long plantId, Long gardenerId);
 

@@ -1,8 +1,8 @@
-package xyz.notagardener.status.service;
+package xyz.notagardener.status.plant.service;
 
 import org.springframework.transaction.annotation.Transactional;
-import xyz.notagardener.status.dto.PlantStatusResponse;
-import xyz.notagardener.status.dto.StatusLogResponse;
+import xyz.notagardener.status.plant.dto.PlantStatusResponse;
+import xyz.notagardener.status.plant.dto.StatusLogResponse;
 
 import java.util.List;
 

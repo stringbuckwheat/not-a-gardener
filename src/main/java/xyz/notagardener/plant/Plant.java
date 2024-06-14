@@ -8,7 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import xyz.notagardener.gardener.Gardener;
 import xyz.notagardener.place.Place;
 import xyz.notagardener.plant.plant.dto.PlantRequest;
-import xyz.notagardener.status.model.Status;
+import xyz.notagardener.status.common.model.Status;
 import xyz.notagardener.watering.Watering;
 
 import java.time.LocalDate;

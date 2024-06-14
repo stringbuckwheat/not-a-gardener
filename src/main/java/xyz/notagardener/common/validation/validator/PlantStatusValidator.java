@@ -3,7 +3,7 @@ package xyz.notagardener.common.validation.validator;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import xyz.notagardener.common.validation.PlantStatusConstraints;
-import xyz.notagardener.status.model.StatusType;
+import xyz.notagardener.status.common.model.StatusType;
 
 public class PlantStatusValidator implements ConstraintValidator<PlantStatusConstraints, StatusType> {
     @Override

@@ -1,8 +1,8 @@
-package xyz.notagardener.status.service;
+package xyz.notagardener.status.plant.service;
 
-import xyz.notagardener.status.dto.AddStatusResponse;
-import xyz.notagardener.status.dto.PlantStatusRequest;
-import xyz.notagardener.status.dto.PlantStatusResponse;
+import xyz.notagardener.status.plant.dto.AddStatusResponse;
+import xyz.notagardener.status.plant.dto.PlantStatusRequest;
+import xyz.notagardener.status.plant.dto.PlantStatusResponse;
 
 public interface PlantStatusService {
     AddStatusResponse add(PlantStatusRequest request, Long gardenerId);

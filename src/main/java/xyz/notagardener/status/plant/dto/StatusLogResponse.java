@@ -1,11 +1,11 @@
-package xyz.notagardener.status.dto;
+package xyz.notagardener.status.plant.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import xyz.notagardener.common.validation.YesOrNoType;
-import xyz.notagardener.status.model.StatusLog;
-import xyz.notagardener.status.model.StatusType;
+import xyz.notagardener.status.common.model.StatusLog;
+import xyz.notagardener.status.common.model.StatusType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

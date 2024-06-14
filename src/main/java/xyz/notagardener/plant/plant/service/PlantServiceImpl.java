@@ -14,11 +14,11 @@ import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.garden.dto.GardenResponse;
 import xyz.notagardener.plant.garden.dto.PlantResponse;
 import xyz.notagardener.plant.garden.service.GardenResponseMapperImpl;
+import xyz.notagardener.plant.plant.dto.PlantBasic;
 import xyz.notagardener.plant.plant.dto.PlantRequest;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -44,7 +44,12 @@ public class PlantServiceImpl implements PlantService {
     public List<PlantResponse> getAll(Long gardenerId) {
         return plantRepository.findByGardener_GardenerIdOrderByPlantIdDesc(gardenerId).stream()
                 .map(PlantResponse::new)
-                .collect(Collectors.toList());
+                .toList();
+    }
+
+    @Override
+    public List<PlantBasic> getAttentionNotRequiredPlants(Long gardenerId) {
+        return plantRepository.findAttentionNotRequiredPlants(gardenerId);
     }
 
     @Override

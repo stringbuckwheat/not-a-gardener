@@ -1,11 +1,11 @@
-package xyz.notagardener.status.repository;
+package xyz.notagardener.status.common.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
-import xyz.notagardener.status.model.StatusLog;
-import xyz.notagardener.status.model.StatusType;
+import xyz.notagardener.status.common.model.StatusLog;
+import xyz.notagardener.status.common.model.StatusType;
 
 import java.util.List;
 import java.util.Optional;
