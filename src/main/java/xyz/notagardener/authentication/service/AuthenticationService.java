@@ -4,7 +4,7 @@ import xyz.notagardener.authentication.dto.Info;
 import xyz.notagardener.authentication.dto.Login;
 import xyz.notagardener.authentication.dto.Refresh;
 import xyz.notagardener.authentication.dto.Token;
-import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.model.Gardener;
 
 public interface AuthenticationService {
     Info getGardenerInfo(Long id);

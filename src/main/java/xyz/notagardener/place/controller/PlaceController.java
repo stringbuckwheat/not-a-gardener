@@ -31,7 +31,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/place")
 @RequiredArgsConstructor
-@Tag(name = "Places", description = "장소 관련 API")
+@Tag(name = "Places", description = "장소")
 public class PlaceController {
     private final PlaceService placeService;
 

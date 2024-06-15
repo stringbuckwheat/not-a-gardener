@@ -1,71 +1,42 @@
-package xyz.notagardener.repot.plant.controller;
+package xyz.notagardener.status.garden.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import xyz.notagardener.authentication.model.UserPrincipal;
 import xyz.notagardener.common.error.ErrorResponse;
-import xyz.notagardener.plant.garden.dto.PlantResponse;
-import xyz.notagardener.repot.plant.dto.RepotList;
-import xyz.notagardener.repot.plant.service.PlantRepotService;
-import xyz.notagardener.repot.repot.dto.RepotRequest;
-
-import java.util.List;
+import xyz.notagardener.plant.garden.dto.AttentionRequiredPlant;
+import xyz.notagardener.status.garden.service.GardenStatusService;
+import xyz.notagardener.status.plant.dto.PlantStatusRequest;
 
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/plant/{plantId}/repot")
-@Tag(name = "Plant-Repot", description = "한 식물의 분갈이")
-public class PlantRepotController {
-    private final PlantRepotService plantRepotService;
+@RequestMapping("/api/status")
+public class GardenStatusController {
+    private final GardenStatusService gardenStatusService;
 
-    @Operation(summary = "한 식물의 분갈이 기록")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "OK: 한 식물의 분갈이 기록(10개 단위 페이징)",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            array = @ArraySchema(schema = @Schema(implementation = PlantResponse.class)))
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "UNAUTHORIZED: PLEASE_LOGIN",
-                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = ErrorResponse.class),
-                            examples = @ExampleObject(
-                                    value = "{\"code\": \"PLEASE_LOGIN\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
-                            )
-                    )
-            ),
-    })
-    @GetMapping("")
-    public ResponseEntity<List<RepotList>> get(@PathVariable Long plantId, @PageableDefault(size = 10) Pageable pageable) {
-        return ResponseEntity.ok(plantRepotService.getAllRepotForOnePlant(plantId, pageable));
-    }
-
-    @Operation(summary = "한 식물의 분갈이 기록 추가", description = "인증된 사용자의 분갈이 기록 추가")
+    @Operation(summary = "요주의 식물 설정", description = "인증된 사용자의 식물 상태 추가")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
-                    description = "CREATED: 분갈이 기록 추가 성공",
+                    description = "CREATED: 요주의 식물 설정 성공",
                     content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = RepotList.class)
+                            schema = @Schema(implementation = AttentionRequiredPlant.class)
                     )
             ),
             @ApiResponse(
@@ -105,14 +76,14 @@ public class PlantRepotController {
                             schema = @Schema(implementation = ErrorResponse.class),
                             examples = {
                                     @ExampleObject(
-                                            value = "{\"code\": \"REPOTDATE_NOT_FUTURE\", \"message\": \"미래 날짜를 입력할 수 없어요.\"}"
+                                            value = "{\"code\": \"PLANTID_NOT_NULL\", \"message\": \"식물 정보를 확인해주세요\"}"
                                     ),
                             }
                     )
             ),
     })
     @PostMapping("")
-    public ResponseEntity<RepotList> add(@RequestBody @Valid RepotRequest repotRequest, @AuthenticationPrincipal UserPrincipal user) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(plantRepotService.add(repotRequest, user.getId()));
+    public ResponseEntity<AttentionRequiredPlant> add(@RequestBody @Valid PlantStatusRequest request, @AuthenticationPrincipal UserPrincipal user) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(gardenStatusService.add(request, user.getId()));
     }
 }

@@ -1,4 +1,4 @@
-package xyz.notagardener.gardener;
+package xyz.notagardener.gardener.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

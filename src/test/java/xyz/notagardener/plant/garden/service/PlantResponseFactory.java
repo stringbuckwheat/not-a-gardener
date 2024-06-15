@@ -2,7 +2,7 @@ package xyz.notagardener.plant.garden.service;
 
 import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.plant.garden.dto.PlantResponse;
-import xyz.notagardener.status.dto.PlantStatusResponse;
+import xyz.notagardener.status.plant.dto.PlantStatusResponse;
 
 import java.time.LocalDate;
 

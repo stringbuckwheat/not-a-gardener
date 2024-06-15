@@ -1,6 +1,7 @@
 package xyz.notagardener.plant.garden.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,21 +17,52 @@ import java.util.List;
 @Getter
 @EqualsAndHashCode(of = {"id", "name", "latestWateringDate", "totalWatering"})
 public class PlantResponse {
+    @Schema(description = "식물 id", example = "9")
     private Long id;
+
+    @Schema(description = "식물 이름", example = "보보")
     private String name;
+
+    @Schema(description = "식물 종", example = "샌더소니 블루")
     private String species;
+
+    @Schema(description = "최근 관수 간격", example = "2")
     private int recentWateringPeriod;
+
+    @Schema(description = "초기 관수 간격", example = "5")
     private int earlyWateringPeriod;
+
+    @Schema(description = "식재 환경", example = "흙과 화분")
     private String medium;
+
+    @Schema(description = "키운 날짜", example = "2024-04-01")
     private LocalDate birthday;
+
+    @Schema(description = "(가장 최근)물 안 마른 날짜", example = "2024-05-01")
     private LocalDate conditionDate;
+
+    @Schema(description = "(가장 최근)물 주기 미룬 날짜", example = "2024-05-23")
     private LocalDate postponeDate;
+
+    @Schema(description = "데이터 생성일", example = "2024-04-02")
     private LocalDate createDate;
+
+    @Schema(description = "장소 id", example = "99")
     private Long placeId;
+
+    @Schema(description = "장소 이름", example = "창가")
     private String placeName;
+
+    @Schema(description = "가장 최근 물 준 기록 id", example = "23")
     private Long wateringId;
+
+    @Schema(description = "가장 최근 물 준 기록 id", example = "2024-06-15")
     private LocalDate latestWateringDate;
+
+    @Schema(description = "총 물 준 횟수", example = "20")
     private Long totalWatering;
+
+    @Schema(description = "현재 식물 상태")
     private PlantStatusResponse status;
 
     @QueryProjection

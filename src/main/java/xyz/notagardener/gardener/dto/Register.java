@@ -3,7 +3,7 @@ package xyz.notagardener.gardener.dto;
 import jakarta.validation.constraints.Size;
 import xyz.notagardener.common.validation.PasswordConstraints;
 import xyz.notagardener.common.validation.UsernameConstraints;
-import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.model.Gardener;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;

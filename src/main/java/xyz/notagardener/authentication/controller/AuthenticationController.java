@@ -25,7 +25,7 @@ import xyz.notagardener.common.error.ErrorResponse;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
-@Tag(name = "Authentications", description = "인증 관련 API")
+@Tag(name = "Authentications", description = "인증")
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
@@ -56,8 +56,7 @@ public class AuthenticationController {
     )
     @PostMapping("/login")
     public ResponseEntity<Info> login(@RequestBody @Valid Login login) {
-        Info info = authenticationService.login(login);
-        return ResponseEntity.ok(info);
+        return ResponseEntity.ok(authenticationService.login(login));
     }
 
     @Operation(
@@ -109,8 +108,7 @@ public class AuthenticationController {
     )
     @PostMapping("/token")
     public ResponseEntity<Token> refreshAccessToken(@RequestBody @Valid Refresh refreshToken) {
-        Token token = authenticationService.refreshAccessToken(refreshToken);
-        return ResponseEntity.ok().body(token);
+        return ResponseEntity.ok().body(authenticationService.refreshAccessToken(refreshToken));
     }
 
     @Operation(
@@ -168,7 +166,6 @@ public class AuthenticationController {
     )
     @GetMapping("/info")
     public ResponseEntity<Info> getGardenerInfo(@AuthenticationPrincipal UserPrincipal user) {
-        Info info = authenticationService.getGardenerInfo(user.getId());
-        return ResponseEntity.ok().body(info);
+        return ResponseEntity.ok(authenticationService.getGardenerInfo(user.getId()));
     }
 }

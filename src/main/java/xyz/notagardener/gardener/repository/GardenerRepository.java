@@ -1,7 +1,7 @@
 package xyz.notagardener.gardener.repository;
 
 import org.springframework.data.repository.Repository;
-import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.model.Gardener;
 
 import java.util.Optional;
 

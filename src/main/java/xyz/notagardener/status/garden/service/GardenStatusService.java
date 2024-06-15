@@ -1,4 +1,4 @@
-package xyz.notagardener.status.garden;
+package xyz.notagardener.status.garden.service;
 
 import xyz.notagardener.plant.garden.dto.AttentionRequiredPlant;
 import xyz.notagardener.status.plant.dto.PlantStatusRequest;

@@ -1,6 +1,5 @@
 package xyz.notagardener.gardener.controller;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -25,7 +24,6 @@ import xyz.notagardener.gardener.service.ForgotService;
 @RequiredArgsConstructor
 @RequestMapping("/api/forgot")
 @Tag(name = "Forgots", description = "아이디/비밀번호 찾기")
-@Hidden
 @Slf4j
 public class ForgotController {
     private final ForgotService forgotService;
@@ -51,8 +49,7 @@ public class ForgotController {
     })
     @GetMapping("/email/{email}")
     public ResponseEntity<Forgot> forgotAccount(@PathVariable String email) {
-        Forgot forgot = forgotService.forgotAccount(email);
-        return ResponseEntity.ok().body(forgot);
+        return ResponseEntity.ok(forgotService.forgotAccount(email));
     }
 
     @Operation(summary = "본인 확인 코드 검증", description = "이메일로 보낸 본인 확인 코드와 서버 저장값 대조")
@@ -96,11 +93,10 @@ public class ForgotController {
     })
     @PostMapping("")
     public ResponseEntity<VerifyResponse> verifyIdentificationCode(@RequestBody @Valid VerifyRequest verifyRequest) {
-        VerifyResponse result = forgotService.verifyIdentificationCode(verifyRequest);
-        return ResponseEntity.ok().body(result);
+        return ResponseEntity.ok(forgotService.verifyIdentificationCode(verifyRequest));
     }
 
-    @Operation(summary = "비밀번호 재설정", hidden = true)
+    @Operation(summary = "비밀번호 재설정")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "204",

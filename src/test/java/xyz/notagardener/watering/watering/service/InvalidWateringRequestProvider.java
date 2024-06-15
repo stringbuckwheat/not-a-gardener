@@ -6,7 +6,7 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 import xyz.notagardener.chemical.Chemical;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
-import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.watering.Watering;
 

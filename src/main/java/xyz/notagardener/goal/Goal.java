@@ -1,8 +1,9 @@
 package xyz.notagardener.goal;
 
 import lombok.*;
+import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.plant.Plant;
-import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.model.Gardener;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.OnDelete;
@@ -23,7 +24,8 @@ public class Goal {
     private String content;
 
     // 달성 여부
-    private String complete;
+    @Enumerated(EnumType.STRING)
+    private YesOrNoType complete;
 
     // FK
     @ManyToOne(fetch = FetchType.LAZY)
@@ -37,7 +39,7 @@ public class Goal {
     private Gardener gardener;
 
     @Builder
-    public Goal(Long goalId, String content, String complete, Plant plant, Gardener gardener) {
+    public Goal(Long goalId, String content, YesOrNoType complete, Plant plant, Gardener gardener) {
         this.goalId = goalId;
         this.content = content;
         this.complete = complete;
@@ -50,7 +52,7 @@ public class Goal {
         this.plant = plant;
     }
 
-    public void completeGoal(String complete) {
+    public void completeGoal(YesOrNoType complete) {
         this.complete = complete;
     }
 }

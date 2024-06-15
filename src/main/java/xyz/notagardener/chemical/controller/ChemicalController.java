@@ -31,7 +31,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/chemical")
 @Slf4j
-@Tag(name = "Chemicals", description = "약품 관련 API")
+@Tag(name = "Chemicals", description = "약품")
 public class ChemicalController {
     private final ChemicalService chemicalService;
 
@@ -56,8 +56,7 @@ public class ChemicalController {
     })
     @GetMapping("")
     public ResponseEntity<List<ChemicalDto>> getAll(@AuthenticationPrincipal UserPrincipal user) {
-        List<ChemicalDto> chemicals = chemicalService.getAll(user.getId());
-        return ResponseEntity.ok().body(chemicals);
+        return ResponseEntity.ok(chemicalService.getAll(user.getId()));
     }
 
     @Operation(summary = "한 약품의 상세 정보")
@@ -101,8 +100,7 @@ public class ChemicalController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<ChemicalDetail> getOne(@PathVariable Long id, @AuthenticationPrincipal UserPrincipal user) {
-        ChemicalDetail chemicalDetail = chemicalService.getOne(id, user.getId());
-        return ResponseEntity.ok().body(chemicalDetail);
+        return ResponseEntity.ok(chemicalService.getOne(id, user.getId()));
     }
 
     @Operation(
@@ -129,8 +127,7 @@ public class ChemicalController {
     })
     @GetMapping("/{id}/watering")
     public ResponseEntity<List<WateringResponseInChemical>> getWateringWithPaging(@PathVariable Long id, @PageableDefault(size = 10) Pageable pageable) {
-        List<WateringResponseInChemical> result = chemicalService.getWateringsForChemical(id, pageable);
-        return ResponseEntity.ok().body(result);
+        return ResponseEntity.ok(chemicalService.getWateringsForChemical(id, pageable));
     }
 
     @Operation(summary = "약품 추가", description = "인증된 사용자의 약품 추가")
@@ -170,8 +167,7 @@ public class ChemicalController {
     })
     @PostMapping("")
     public ResponseEntity<ChemicalDto> add(@AuthenticationPrincipal UserPrincipal user, @RequestBody @Valid ChemicalDto chemicalRequest) {
-        ChemicalDto chemicalDto = chemicalService.add(user.getId(), chemicalRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(chemicalDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(chemicalService.add(user.getId(), chemicalRequest));
     }
 
     @Operation(summary = "약품 수정", description = "인증된 사용자의 약품 수정")
@@ -231,8 +227,7 @@ public class ChemicalController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<ChemicalDto> update(@AuthenticationPrincipal UserPrincipal user, @RequestBody @Valid ChemicalDto chemicalRequest) {
-        ChemicalDto chemicalDto = chemicalService.update(user.getId(), chemicalRequest);
-        return ResponseEntity.ok().body(chemicalDto);
+        return ResponseEntity.ok().body(chemicalService.update(user.getId(), chemicalRequest));
     }
 
     @Operation(

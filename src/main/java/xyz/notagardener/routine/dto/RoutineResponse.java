@@ -22,7 +22,7 @@ public class RoutineResponse {
     @Schema(description = "루틴 내용", example = "아디안텀 1일 1관수!")
     private String content;
 
-    @Schema(description = "루틴 주기", example = "1")
+    @Schema(description = "루틴 반복 주기", example = "1")
     private int cycle;
 
     @Schema(description = "루틴 해당 식물 id", example = "2")

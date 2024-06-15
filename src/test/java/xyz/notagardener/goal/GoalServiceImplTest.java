@@ -12,7 +12,8 @@ import org.mockito.MockitoAnnotations;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
-import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.common.validation.YesOrNoType;
+import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.gardener.repository.GardenerRepository;
 import xyz.notagardener.goal.dto.GoalDto;
 import xyz.notagardener.goal.repository.GoalRepository;
@@ -131,12 +132,12 @@ class GoalServiceImplTest {
         Long plantId = 1L;
         Plant plant = Plant.builder().plantId(plantId).gardener(gardener).build();
 
-        GoalDto request = GoalDto.builder().content("식물 목표").complete("N").plantId(plantId).plantName("샌더소니").build();
+        GoalDto request = GoalDto.builder().content("식물 목표").complete(YesOrNoType.N).plantId(plantId).plantName("샌더소니").build();
 
         Goal savedGoal = Goal.builder()
                 .goalId(1L)
                 .content(request.getContent())
-                .complete("N")
+                .complete(YesOrNoType.N)
                 .plant(plant)
                 .gardener(gardener)
                 .build();
@@ -162,12 +163,12 @@ class GoalServiceImplTest {
         Gardener gardener = Gardener.builder().gardenerId(gardenerId).build();
         Plant plant = null;
 
-        GoalDto request = GoalDto.builder().content("식물 목표").complete("N").plantId(0L).plantName("샌더소니").build();
+        GoalDto request = GoalDto.builder().content("식물 목표").complete(YesOrNoType.N).plantId(0L).plantName("샌더소니").build();
 
         Goal savedGoal = Goal.builder()
                 .goalId(1L)
                 .content(request.getContent())
-                .complete("N")
+                .complete(YesOrNoType.N)
                 .plant(plant)
                 .gardener(gardener)
                 .build();
@@ -189,7 +190,7 @@ class GoalServiceImplTest {
         // Given
         Long gardenerId = 1L;
         Long plantId = 10L;
-        GoalDto request = GoalDto.builder().content("식물 목표").complete("N").plantId(plantId).plantName("샌더소니").build();
+        GoalDto request = GoalDto.builder().content("식물 목표").complete(YesOrNoType.N).plantId(plantId).plantName("샌더소니").build();
 
         Gardener gardener = Gardener.builder().gardenerId(gardenerId).build();
 
@@ -208,7 +209,7 @@ class GoalServiceImplTest {
         // Given
         Long gardenerId = 1L;
         Long plantId = 10L;
-        GoalDto request = GoalDto.builder().content("식물 목표").complete("N").plantId(plantId).plantName("샌더소니").build();
+        GoalDto request = GoalDto.builder().content("식물 목표").complete(YesOrNoType.N).plantId(plantId).plantName("샌더소니").build();
 
         Gardener gardener = Gardener.builder().gardenerId(2L).build();
         Plant plant = Plant.builder().plantId(plantId).gardener(gardener).build();
@@ -238,12 +239,12 @@ class GoalServiceImplTest {
         Plant prevPlant = Plant.builder().plantId(prevPlantId).gardener(gardener).build();
         Plant newPlant = Plant.builder().plantId(newPlantId).gardener(gardener).build();
 
-        GoalDto request = GoalDto.builder().id(goalId).content(newContent).complete("N").plantId(newPlantId).build();
+        GoalDto request = GoalDto.builder().id(goalId).content(newContent).complete(YesOrNoType.N).plantId(newPlantId).build();
 
         Goal goal = Goal.builder()
                 .goalId(goalId)
                 .content(prevContent)
-                .complete("N")
+                .complete(YesOrNoType.N)
                 .plant(prevPlant)
                 .gardener(gardener)
                 .build();
@@ -270,7 +271,7 @@ class GoalServiceImplTest {
         Long goalId = 1L;
         Long newPlantId = 2L;
 
-        GoalDto request = GoalDto.builder().id(goalId).content("목표 수정").complete("N").plantId(newPlantId).build();
+        GoalDto request = GoalDto.builder().id(goalId).content("목표 수정").complete(YesOrNoType.N).plantId(newPlantId).build();
 
         when(plantRepository.findByPlantId(newPlantId)).thenReturn(Optional.empty());
 
@@ -293,7 +294,7 @@ class GoalServiceImplTest {
         Gardener gardener = Gardener.builder().gardenerId(actualGardenerId).name("메밀").build(); // 실 소유주
         Plant plant = Plant.builder().plantId(newPlantId).gardener(gardener).build();
 
-        GoalDto request = GoalDto.builder().id(goalId).content("목표 수정").complete("N").plantId(newPlantId).build();
+        GoalDto request = GoalDto.builder().id(goalId).content("목표 수정").complete(YesOrNoType.N).plantId(newPlantId).build();
 
         when(plantRepository.findByPlantId(newPlantId)).thenReturn(Optional.of(plant));
 
@@ -316,7 +317,7 @@ class GoalServiceImplTest {
         Gardener gardener = Gardener.builder().gardenerId(gardenerId).build();
         Plant newPlant = Plant.builder().plantId(newPlantId).gardener(gardener).build();
 
-        GoalDto request = GoalDto.builder().id(goalId).content(newContent).complete("N").plantId(newPlantId).build();
+        GoalDto request = GoalDto.builder().id(goalId).content(newContent).complete(YesOrNoType.N).plantId(newPlantId).build();
 
         when(plantRepository.findByPlantId(newPlantId)).thenReturn(Optional.of(newPlant));
         when(goalRepository.findByGoalId(goalId)).thenReturn(Optional.empty());
@@ -340,7 +341,7 @@ class GoalServiceImplTest {
         Gardener actualGardener = Gardener.builder().gardenerId(actualGardenerId).build(); // 목표의 소유자
         Plant newPlant = Plant.builder().plantId(plantId).gardener(invalidGardener).build();
 
-        GoalDto request = GoalDto.builder().id(goalId).content("새로운 식물 목표").complete("N").plantId(plantId).build();
+        GoalDto request = GoalDto.builder().id(goalId).content("새로운 식물 목표").complete(YesOrNoType.N).plantId(plantId).build();
         Goal goal = Goal.builder().goalId(goalId).gardener(actualGardener).build();
 
         when(plantRepository.findByPlantId(plantId)).thenReturn(Optional.of(newPlant));
@@ -352,14 +353,14 @@ class GoalServiceImplTest {
         assertEquals(ExceptionCode.NOT_YOUR_GOAL, e.getCode());
     }
 
-    static Stream<String> getPrevComplete() {
-        return Stream.of("Y", "N");
+    static Stream<YesOrNoType> getPrevComplete() {
+        return Stream.of(YesOrNoType.Y, YesOrNoType.N);
     }
 
     @ParameterizedTest
     @MethodSource("getPrevComplete")
     @DisplayName("목표 완료")
-    void complete_WhenPrevGoalIncomplete_ReturnCompletedGoalDto(String prevComplete) {
+    void complete_WhenPrevGoalIncomplete_ReturnCompletedGoalDto(YesOrNoType prevComplete) {
         // Given
         Long goalId = 1L;
         Long gardenerId = 2L;
@@ -373,7 +374,7 @@ class GoalServiceImplTest {
         GoalDto result = goalService.complete(goalId, gardenerId);
 
         // Then
-        String expected = prevComplete.equals("Y") ? "N" : "Y";
+        YesOrNoType expected = prevComplete.equals(YesOrNoType.Y) ? YesOrNoType.N : YesOrNoType.Y;
         assertEquals(expected, result.getComplete());
     }
 

@@ -1,5 +1,6 @@
 package xyz.notagardener.status.plant.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import xyz.notagardener.common.validation.NotFuture;
 import xyz.notagardener.common.validation.PlantStatusConstraints;
+import xyz.notagardener.common.validation.YesOrNo;
 import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.status.common.model.Status;
@@ -19,19 +21,25 @@ import java.time.LocalDate;
 @Getter
 @ToString
 public class PlantStatusRequest {
+    @Schema(description = "식물 상태 id", example = "1")
     private Long plantStatusId;
 
     @NotNull(message = "식물 정보를 확인해주세요")
     @Positive(message = "식물 정보를 확인해주세요")
+    @Schema(description = "해당 식물 id", example = "2")
     private Long plantId;
 
     @PlantStatusConstraints
+    @Schema(description = "식물 상태 내용", example = "ATTENTION_PLEASE")
     private StatusType statusType;
 
     @NotNull(message = "식물 상태 기록일은 비워둘 수 없어요")
     @NotFuture(message = "식물 상태 기록일은 미래가 될 수 없어요")
+    @Schema(description = "기록일", example = "2024-06-01")
     private LocalDate recordedDate;
 
+    @YesOrNo
+    @Schema(description = "활성화 여부", example = "Y")
     private YesOrNoType active;
 
     public StatusLog toStatusLogWith(Status status) {

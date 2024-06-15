@@ -17,7 +17,7 @@ import xyz.notagardener.authentication.repository.ActiveGardenerRepository;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.ExpiredRefreshTokenException;
 import xyz.notagardener.common.error.exception.GardenerNotInSessionException;
-import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.gardener.repository.GardenerRepository;
 
 import java.time.LocalDateTime;

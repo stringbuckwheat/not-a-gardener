@@ -22,7 +22,7 @@ import xyz.notagardener.gardener.service.GardenerService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/register")
-@Tag(name = "Register", description = "회원 가입 관련 API")
+@Tag(name = "Register", description = "회원 가입")
 public class RegisterController {
     private final GardenerService gardenerService;
 

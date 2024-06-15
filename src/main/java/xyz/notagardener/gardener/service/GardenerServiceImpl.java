@@ -12,7 +12,7 @@ import xyz.notagardener.authentication.service.AuthenticationService;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.HasSameUsernameException;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
-import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.gardener.dto.GardenerDetail;
 import xyz.notagardener.gardener.dto.Register;
 import xyz.notagardener.gardener.dto.VerifyResponse;

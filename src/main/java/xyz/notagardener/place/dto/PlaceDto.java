@@ -3,7 +3,7 @@ package xyz.notagardener.place.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.place.Place;
 
 import java.time.LocalDateTime;

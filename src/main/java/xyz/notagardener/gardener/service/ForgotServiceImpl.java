@@ -13,9 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.VerificationException;
-import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.authentication.dto.Login;
 import xyz.notagardener.gardener.dto.*;
+import xyz.notagardener.gardener.model.LostGardener;
 import xyz.notagardener.gardener.repository.GardenerRepository;
 import xyz.notagardener.gardener.repository.LostGardenerRepository;
 

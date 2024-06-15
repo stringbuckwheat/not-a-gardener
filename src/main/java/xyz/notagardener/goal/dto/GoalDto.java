@@ -2,7 +2,8 @@ package xyz.notagardener.goal.dto;
 
 import jakarta.validation.constraints.Size;
 import xyz.notagardener.common.validation.YesOrNo;
-import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.common.validation.YesOrNoType;
+import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.goal.Goal;
 import xyz.notagardener.plant.Plant;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,7 +27,7 @@ public class GoalDto {
 
     @Schema(description = "달성 여부", example = "N")
     @YesOrNo
-    private String complete;
+    private YesOrNoType complete;
 
     @Schema(description = "식물 id", example = "8") // nullable
     private Long plantId;
@@ -44,12 +45,12 @@ public class GoalDto {
                 .build();
     }
 
-    public GoalDto (Goal goal) {
+    public GoalDto(Goal goal) {
         this.id = goal.getGoalId();
         this.content = goal.getContent();
         this.complete = goal.getComplete();
 
-        if(goal.getPlant() != null) {
+        if (goal.getPlant() != null) {
             this.plantId = goal.getPlant().getPlantId();
             this.plantName = goal.getPlant().getName();
         }

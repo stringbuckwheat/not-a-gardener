@@ -7,7 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
-import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.common.validation.YesOrNoType;
+import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.gardener.repository.GardenerRepository;
 import xyz.notagardener.goal.Goal;
 import xyz.notagardener.goal.dto.GoalDto;
@@ -96,7 +97,7 @@ public class GoalServiceImpl implements GoalService {
         Goal goal = getGoalByGoalIdAndGardenerId(goalId, gardenerId);
 
         // 들어갈 값 계산
-        String complete = goal.getComplete().equals("Y") ? "N" : "Y";
+        YesOrNoType complete = goal.getComplete().equals(YesOrNoType.Y) ? YesOrNoType.N : YesOrNoType.Y;
         goal.completeGoal(complete);
 
         return new GoalDto(goal);

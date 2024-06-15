@@ -25,7 +25,7 @@ import xyz.notagardener.gardener.service.GardenerService;
 @RestController
 @RequestMapping("/api/gardener")
 @RequiredArgsConstructor
-@Tag(name = "Gardeners", description = "회원 관련 API")
+@Tag(name = "Gardeners", description = "회원 정보")
 public class GardenerController {
     private final GardenerService gardenerService;
 
@@ -48,7 +48,7 @@ public class GardenerController {
                     )
             )
     })
-    @GetMapping("/{gardenerId}")
+    @GetMapping("/{id}")
     public ResponseEntity<GardenerDetail> getOne(@AuthenticationPrincipal UserPrincipal user) {
         return ResponseEntity.ok(gardenerService.getOne(user.getId()));
     }
@@ -84,8 +84,7 @@ public class GardenerController {
     })
     @PostMapping("/password")
     public ResponseEntity<VerifyResponse> identify(@RequestBody Login login, @AuthenticationPrincipal UserPrincipal user) {
-        VerifyResponse result = gardenerService.identify(user.getId(), login);
-        return ResponseEntity.ok().body(result);
+        return ResponseEntity.ok(gardenerService.identify(user.getId(), login));
     }
 
     @Operation(summary = "비밀번호 변경")
@@ -128,7 +127,6 @@ public class GardenerController {
     @PutMapping("/password")
     public ResponseEntity<Void> updatePassword(@RequestBody Login login, @AuthenticationPrincipal UserPrincipal user) {
         gardenerService.updatePassword(user.getId(), login);
-
         return ResponseEntity.noContent().build();
     }
 
@@ -171,10 +169,9 @@ public class GardenerController {
                     )
             )
     })
-    @PutMapping("/{gardenerId}")
-    public ResponseEntity<GardenerDetail> update(@RequestBody @Valid GardenerDetail gardenerDetail, @PathVariable long gardenerId) {
-        GardenerDetail gardenerDetail1 = gardenerService.update(gardenerDetail);
-        return ResponseEntity.ok().body(gardenerDetail1);
+    @PutMapping("/{id}")
+    public ResponseEntity<GardenerDetail> update(@RequestBody @Valid GardenerDetail gardenerDetail, @PathVariable Long id) {
+        return ResponseEntity.ok(gardenerService.update(gardenerDetail));
     }
 
     @Operation(summary = "회원 탈퇴")
@@ -204,8 +201,8 @@ public class GardenerController {
                     )
             )
     })
-    @DeleteMapping("/{gardenerId}")
-    public void delete(@PathVariable("gardenerId") long gardenerId) {
-        gardenerService.delete(gardenerId);
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        gardenerService.delete(id);
     }
 }

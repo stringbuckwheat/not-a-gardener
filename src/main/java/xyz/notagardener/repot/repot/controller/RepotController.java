@@ -1,6 +1,7 @@
 package xyz.notagardener.repot.repot.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -147,6 +148,25 @@ public class RepotController {
         return ResponseEntity.status(HttpStatus.CREATED).body(repotService.addAll(requests, user.getId()));
     }
 
+    @Operation(summary = "전체 분갈이 기록, 10개 단위 페이징")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK: 한 회원의 전체 분갈이 기록 리스트",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            array = @ArraySchema(schema = @Schema(implementation = RepotList.class)))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "UNAUTHORIZED: PLEASE_LOGIN",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{\"code\": \"PLEASE_LOGIN\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
+                            )
+                    )
+            ),
+    })
     @GetMapping("")
     public ResponseEntity<List<RepotList>> getAll(@AuthenticationPrincipal UserPrincipal user, Pageable pageable) {
         return ResponseEntity.ok(repotService.getAll(user.getId(), pageable));

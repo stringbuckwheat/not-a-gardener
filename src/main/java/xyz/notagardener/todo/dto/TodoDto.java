@@ -1,7 +1,7 @@
 package xyz.notagardener.todo.dto;
 
 import jakarta.validation.constraints.Size;
-import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.model.Gardener;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;

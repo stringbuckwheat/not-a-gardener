@@ -1,7 +1,7 @@
 package xyz.notagardener.authentication.service;
 
 import xyz.notagardener.authentication.dto.OAuth2Attribute;
-import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.gardener.repository.GardenerRepository;
 import xyz.notagardener.authentication.model.UserPrincipal;
 import lombok.RequiredArgsConstructor;

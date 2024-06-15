@@ -28,7 +28,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/garden")
-@Tag(name = "Garden", description = "계산을 필요로 하는 식물 API")
+@Tag(name = "Garden", description = "계산 로직을 거친 식물")
 public class GardenController {
     private final GardenService gardenService;
 

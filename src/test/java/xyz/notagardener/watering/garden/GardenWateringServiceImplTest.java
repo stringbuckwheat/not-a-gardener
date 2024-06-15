@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.place.Place;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.garden.dto.GardenDetail;

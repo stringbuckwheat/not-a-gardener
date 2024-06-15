@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import xyz.notagardener.chemical.Chemical;
 import xyz.notagardener.common.validation.ChemicalTypeConstraints;
-import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.model.Gardener;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

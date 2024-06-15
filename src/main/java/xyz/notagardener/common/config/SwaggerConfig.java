@@ -23,7 +23,6 @@ public class SwaggerConfig implements WebMvcConfigurer {
     private Info apiInfo() {
         return new Info()
                 .title("not-a-gardener")
-                .description("not-a-gardener API 문서")
-                .version("1.0.0");
+                .description("not-a-gardener API 문서");
     }
 }

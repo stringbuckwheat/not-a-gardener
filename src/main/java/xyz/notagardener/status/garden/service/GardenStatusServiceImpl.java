@@ -1,4 +1,4 @@
-package xyz.notagardener.status.garden;
+package xyz.notagardener.status.garden.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

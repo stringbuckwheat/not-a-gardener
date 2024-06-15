@@ -33,7 +33,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@Tag(name = "Plants", description = "식물 관련 API")
+@Tag(name = "Plants", description = "식물")
 public class PlantController {
     private final PlantService plantService;
 
@@ -61,6 +61,25 @@ public class PlantController {
         return ResponseEntity.ok().body(plantService.getAll(user.getId()));
     }
 
+    @Operation(summary = "요주의 식물이 아닌 식물들")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK: 요주의 식물이 아닌 식물들",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            array = @ArraySchema(schema = @Schema(implementation = PlantResponse.class)))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "UNAUTHORIZED: PLEASE_LOGIN",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = ErrorResponse.class),
+                            examples = @ExampleObject(
+                                    value = "{\"code\": \"PLEASE_LOGIN\", \"title\": \"인증이 필요한 엔드포인트\", \"message\": \"로그인 해주세요\"}"
+                            )
+                    )
+            ),
+    })
     @GetMapping("/non-attention")
     public ResponseEntity<List<PlantBasic>> getAttentionNotRequiredPlants(@AuthenticationPrincipal UserPrincipal user) {
         return ResponseEntity.ok().body(plantService.getAttentionNotRequiredPlants(user.getId()));

@@ -27,7 +27,7 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/api/goal")
 @RequiredArgsConstructor
-@Tag(name = "Goals", description = "목표 관련 API")
+@Tag(name = "Goals", description = "목표")
 public class GoalController {
     private final GoalService goalService;
 
@@ -217,10 +217,10 @@ public class GoalController {
     }
 
     @Operation(
-            summary = "약품 삭제",
-            description = "인증된 사용자의 약품 삭제",
+            summary = "목표 삭제",
+            description = "인증된 사용자의 목표 삭제",
             responses = {
-                    @ApiResponse(responseCode = "204", description = "NO_CONTENT: 약품 삭제 성공"),
+                    @ApiResponse(responseCode = "204", description = "NO_CONTENT: 목표 삭제 성공"),
 
                     @ApiResponse(
                             responseCode = "401",

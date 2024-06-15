@@ -1,5 +1,6 @@
 package xyz.notagardener.plant.garden.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import xyz.notagardener.common.validation.YesOrNoType;
@@ -9,10 +10,16 @@ import xyz.notagardener.status.common.model.Status;
 @NoArgsConstructor
 @Getter
 public class AttentionRequiredPlant {
+    @Schema(description = "식물 id", example = "99")
     private Long plantId;
+
+    @Schema(description = "식물 이름", example = "무늬 몬스테라")
     private String plantName;
 
+    @Schema(description = "식물 상태 id", example = "9")
     private Long statusId;
+
+    @Schema(description = "설정 여부", example = "Y")
     private YesOrNoType active;
 
     public AttentionRequiredPlant(Plant plant) {

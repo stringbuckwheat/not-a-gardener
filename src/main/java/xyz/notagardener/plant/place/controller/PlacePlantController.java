@@ -27,7 +27,7 @@ import xyz.notagardener.plant.plant.dto.PlantRequest;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/place/{id}/plant")
-@Tag(name = "Place-Plants", description = "장소 페이지 내 식물 관련 API")
+@Tag(name = "Place-Plants", description = "장소 페이지 내 식물")
 public class PlacePlantController {
     private final PlacePlantService placePlantService;
 

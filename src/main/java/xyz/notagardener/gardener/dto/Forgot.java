@@ -17,5 +17,5 @@ public class Forgot {
     private String email;
 
     @Schema(description = "가입 계정들(중복 가입 허용)", example = "[gardener1, gardener2, gardener3]")
-    List<Username> usernames;
+    private List<Username> usernames;
 }

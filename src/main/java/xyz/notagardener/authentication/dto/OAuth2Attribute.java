@@ -1,6 +1,6 @@
 package xyz.notagardener.authentication.dto;
 
-import xyz.notagardener.gardener.Gardener;
+import xyz.notagardener.gardener.model.Gardener;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
