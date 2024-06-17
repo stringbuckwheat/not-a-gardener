@@ -210,6 +210,8 @@ public class WateringCommandServiceImpl implements WateringCommandService {
         plant.updateEarlyWateringPeriod(0);
 
         // HEAVY_DRINKER 상태 삭제
-        plant.getStatus().update(StatusType.HEAVY_DRINKER, YesOrNoType.N);
+        if(plant.getStatus() != null) {
+            plant.getStatus().update(StatusType.HEAVY_DRINKER, YesOrNoType.N);
+        }
     }
 }

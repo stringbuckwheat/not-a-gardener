@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.place.Place;
 import xyz.notagardener.plant.Plant;
 import xyz.notagardener.status.plant.dto.PlantStatusResponse;
@@ -67,6 +69,10 @@ public class PlantResponse {
 
     @QueryProjection
     public PlantResponse(Plant plant, Place place, Long wateringId, LocalDate latestWateringDate, Long totalWatering, Status status) {
+        if (plant == null) {
+            throw new ResourceNotFoundException(ExceptionCode.ACCESS_NOT_ALLOWED);
+        }
+
         this.id = plant.getPlantId();
         this.name = plant.getName();
         this.species = plant.getSpecies();
@@ -84,6 +90,7 @@ public class PlantResponse {
         this.totalWatering = totalWatering;
         this.status = new PlantStatusResponse(status);
     }
+
     public PlantResponse(Plant plant, Long totalWatering, LocalDate latestWateringDate, PlantStatusResponse status) {
         this.id = plant.getPlantId();
         this.name = plant.getName();
@@ -103,7 +110,7 @@ public class PlantResponse {
         this.status = status;
     }
 
-     // Without Status
+    // Without Status
     public PlantResponse(Plant plant) {
         this(plant, null, null, null);
 

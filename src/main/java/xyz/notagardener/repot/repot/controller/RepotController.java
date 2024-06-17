@@ -283,7 +283,7 @@ public class RepotController {
                     )
             ),
     })
-    @PutMapping("/repot/bulk")
+    @PutMapping("/bulk")
     public ResponseEntity<List<RepotResponse>> updateAll(@RequestBody @Valid List<RepotRequest> requests, @AuthenticationPrincipal UserPrincipal user) {
         return ResponseEntity.ok(repotService.updateAll(requests, user.getId()));
     }
@@ -326,8 +326,8 @@ public class RepotController {
             }
     )
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long repotId, @AuthenticationPrincipal UserPrincipal user) {
-        repotService.delete(repotId, user.getId());
+    public ResponseEntity<Void> delete(@PathVariable Long id, @AuthenticationPrincipal UserPrincipal user) {
+        repotService.delete(id, user.getId());
         return ResponseEntity.noContent().build();
     }
 }

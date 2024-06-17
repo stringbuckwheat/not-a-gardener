@@ -11,7 +11,7 @@ import xyz.notagardener.gardener.dto.Username;
 import java.util.List;
 import java.util.Optional;
 
-import static xyz.notagardener.gardener.QGardener.gardener;
+import static xyz.notagardener.gardener.model.QGardener.gardener;
 
 
 @RequiredArgsConstructor

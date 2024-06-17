@@ -95,8 +95,7 @@ public class PlantRepositoryCustomImpl implements PlantRepositoryCustom {
                 .join(plant.place, place)
                 .leftJoin(plant.waterings, watering)
                 .leftJoin(plant.status, status)
-                .where(plant.plantId.eq(plantId)
-                        .and(plant.gardener.gardenerId.eq(gardenerId)))
+                .where(plant.plantId.eq(plantId))
                 .fetchOne();
 
         return Optional.ofNullable(plantResponse);
@@ -124,6 +123,7 @@ public class PlantRepositoryCustomImpl implements PlantRepositoryCustom {
                 .join(plant.status, status)
                 .where(
                         status.attention.eq(YesOrNoType.Y)
+                                .and(plant.gardener.gardenerId.eq(gardenerId))
                 )
                 .fetch();
     }

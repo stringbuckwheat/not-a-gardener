@@ -5,12 +5,16 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.plant.Plant;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "status")
@@ -34,6 +38,10 @@ public class Status {
 
     @CreatedDate
     private LocalDateTime createDate;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "status", cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<StatusLog> statusLogs = new ArrayList<>();
 
     @Builder
     public Status(YesOrNoType attention, YesOrNoType heavyDrinker, Plant plant) {

@@ -3,8 +3,6 @@ package xyz.notagardener.status.common.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import xyz.notagardener.common.validation.YesOrNoType;
@@ -37,7 +35,6 @@ public class StatusLog {
 
     @ManyToOne
     @JoinColumn(name = "status_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Status status;
 
     @CreatedDate
