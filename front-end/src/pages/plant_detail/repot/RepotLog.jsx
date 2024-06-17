@@ -24,9 +24,8 @@ const RepotLog = () => {
   }, []);
 
   const onClickDelete = async (repotId) => {
-    console.log("repotId", repotId);
+    console.log("delete repotId", repotId);
 
-    //
     await deleteData(`/repot/${repotId}`);
     dispatch({type: PlantDetailAction.DELETE_REPOT, payload: repotId});
   }

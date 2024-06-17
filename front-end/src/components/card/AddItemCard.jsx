@@ -1,6 +1,6 @@
 import {Card, Col, Row} from "antd";
 import React from "react";
-import {PlusOutlined} from "@ant-design/icons";
+import {PlusOutlined, PlusSquareFilled} from "@ant-design/icons";
 import Style from './ItemCard.module.scss'
 
 /**
@@ -12,14 +12,20 @@ import Style from './ItemCard.module.scss'
  */
 const AddItemCard = ({addMsg, onClick}) => {
   return (
-    <Col xs={24} sm={12} md={8} lg={6} className={Style.wrapper}>
-      <Card className={Style.card} onClick={onClick}>
-        <Row>
-          <Col style={{alignItems: "center"}}>
-              <PlusOutlined className={Style.icon} />
+    <Col xs={24} sm={12} md={8} lg={6} className={Style.wrapper} style={{marginBottom: "1rem"}}>
+      <Card onClick={onClick} className={Style.card} bodyStyle={{width: "100%", padding: 0}}>
+        <Row align="middle" className={Style.row}>
+          <Col xs={8} className={Style.iconCol}>
+            <div className={Style.iconContainer}>
+              <PlusSquareFilled style={{color: "darkgray"}} className={Style.icon}/>
+            </div>
           </Col>
-          <Col style={{marginLeft: "1.5rem",}}>
-            <div style={{color: "#4f5d73", fontWeight: "bold", fontSize: "1rem", marginTop: "1.5rem"}}>{addMsg}</div>
+          <Col xs={16} className={Style.textCol}>
+            <div style={{
+              color: "#4f5d73",
+              fontWeight: "bold",
+              fontSize: "1rem",
+            }}>{addMsg}</div>
           </Col>
         </Row>
       </Card>

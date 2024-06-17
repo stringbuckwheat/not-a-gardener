@@ -9,10 +9,10 @@ const TodoCardFront = ({ garden, flipCard, color }) => {
   return (
     <Row onClick={() => flipCard(garden.plant.id)} className={Style.frontWrap}>
       <Row className={Style.wrap}>
-        <Col xs={24} sm={6} className={Style.center}>
+        <Col xs={6} className={Style.center}>
           <WateringCodeIcon wateringCode={garden.gardenDetail.wateringCode} size={"3.5rem"} />
         </Col>
-        <Col xs={24} sm={16}>
+        <Col xs={16}>
           <div>
             <div className={Style.name}>{garden.plant.name}</div>
             <div className="new-line">

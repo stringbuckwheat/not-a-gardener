@@ -10,6 +10,7 @@ import HeavyDrinkerModal from "./status/HeavyDrinkerModal";
 import StatusModal from "./status/StatusModal";
 import {useParams} from "react-router-dom";
 import PlantDetailAction from "../../redux/reducer/plant_detail/plantDetailAction";
+import WateringAction from "../../redux/reducer/waterings/wateringAction";
 
 
 const WateringStatusUpdate = ({wateringCallBack}) => {
@@ -21,7 +22,7 @@ const WateringStatusUpdate = ({wateringCallBack}) => {
 
   const deleteAllWatering = async () => {
     await deleteData(`/plant/${plantId}/watering`);
-    dispatch({type: PlantDetailAction.FETCH_WATERING, payload: res});
+    dispatch({type: PlantDetailAction.FETCH_WATERING, payload: []});
     dispatch({type: WateringAction.DELETE_ALL_WATERING, payload: null})
   }
 

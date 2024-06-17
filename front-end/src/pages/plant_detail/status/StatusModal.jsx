@@ -41,7 +41,6 @@ const StatusModal = ({open, hideModal}) => {
   };
 
   const options = Object.values(PlantStatusCode)
-    .filter((value) => value.code !== PlantStatusCode.JUST_REPOTTED.code)
     .map((value) => (
       {value: value.code, label: value.name}
     ));

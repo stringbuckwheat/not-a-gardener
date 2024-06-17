@@ -15,6 +15,7 @@ import AfterWateringCode from "../../utils/code/afterWateringCode";
 import getAfterWateringMsg from "../../utils/function/getAfterWateringMsg";
 import PlantDetailAction from "../../redux/reducer/plant_detail/plantDetailAction";
 import WateringAction from "../../redux/reducer/waterings/wateringAction";
+import Loading from "../../components/data/Loading";
 
 /**
  * 식물 상세 정보 페이지 (해당 식물의 물주기 기록 포함)
@@ -26,6 +27,7 @@ const PlantDetail = () => {
   const state = useLocation().state;
   const plant = useSelector(state => state.plantDetail.detail);
 
+  const [isLoading, setIsLoading] = useState(true);
   const [onModify, setOnModify] = useState(false);
 
   const navigate = useNavigate();
@@ -37,11 +39,13 @@ const PlantDetail = () => {
       console.log("---------- res", res);
       dispatch({type: PlantDetailAction.FETCH_PLANT_DETAIL, payload: res});
       dispatch({type: WateringAction.FETCH_TOTAL_WATERING, payload: res.totalWatering});
+      setIsLoading(false);
     } catch (e) {
       if (e.code === ExceptionCode.NO_SUCH_PLANT) {
         alert("해당 식물을 찾을 수 없어요");
-        navigate("/plant");
       }
+
+      navigate("/plant");
     }
   }
 
@@ -55,6 +59,7 @@ const PlantDetail = () => {
 
   const onClickModifyBtn = async () => {
     const places = await getPlaceList();
+    console.log("places", places);
     dispatch({type: PlantDetailAction.SET_PLACES_FOR_SELECT, payload: places});
     setOnModify(!onModify);
   }
@@ -84,7 +89,7 @@ const PlantDetail = () => {
     }
   }
 
-  return (
+  return isLoading ? (<Loading/>) : (
     <>
       {contextHolder}
 

@@ -1,5 +1,4 @@
-import {Tag} from "antd";
-import PlantStatusCode from "../../utils/code/plantStatusCode";
+import PlantStatusTags from "./PlantStatusTags";
 
 const PlantTitle = ({name, species, status}) => {
   const style = {
@@ -20,14 +19,7 @@ const PlantTitle = ({name, species, status}) => {
       }
       <div>
         {
-          status?.filter(status => status.active == "Y")
-            .map((status) =>
-              <Tag key={status.statusId}
-                   color={PlantStatusCode[status.status].color}
-                   className={PlantStatusCode.ATTENTION_PLEASE.code == status.status ? "text-orange" : ""}>
-                {PlantStatusCode[status.status].name}
-              </Tag>
-            )
+          <PlantStatusTags status={status} />
         }
       </div>
     </>

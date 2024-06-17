@@ -4,7 +4,8 @@ import AddPlace from "./AddPlace";
 import {useSelector} from "react-redux";
 import {BulbOutlined, HomeOutlined, MergeCellsOutlined, PictureOutlined} from "@ant-design/icons";
 import ListItemCard from "../../components/card/ListItemCard";
-import {Row} from "antd";
+import {Col, Row} from "antd";
+import Style from "../../components/card/ItemCard.module.scss";
 
 /**
  * 장소 (카드) 리스트
@@ -26,22 +27,15 @@ const PlaceList = () => {
     let color = "";
     let icon = {};
 
-    const style = {
-      padding: "1.2rem",
-      color: "white",
-      fontSize: "2rem",
-      borderRadius: "8px"
-    }
-
     if (place.option === "실내") {
       color = "green";
-      icon = <HomeOutlined style={{...style, backgroundColor: color}}/>;
+      icon = <HomeOutlined/>;
     } else if (place.option === "베란다") {
       color = "#007BFF";
-      icon = <MergeCellsOutlined style={{...style, backgroundColor: color}}/>;
+      icon = <MergeCellsOutlined/>;
     } else if (place.option === "야외") {
       color = "orange";
-      icon = <PictureOutlined style={{...style, backgroundColor: color}}/>;
+      icon = <PictureOutlined/>;
     }
 
     const name = place.artificialLight === "사용"
@@ -62,20 +56,26 @@ const PlaceList = () => {
   ) : (
     <>
       <Row>
-        <AddItemCard
-          addUrl="/place/add"
-          addMsg="새로운 장소 추가"
-          onClick={switchAddForm}/>
+          <AddItemCard
+            addUrl="/place/add"
+            addMsg="새로운 장소 추가"
+            onClick={switchAddForm}/>
+
         {/* 카드 컴포넌트 반복 */}
         {places.map((place) => {
           const placeForCard = getPlaceForCard(place);
 
-          return <ListItemCard color={placeForCard.color}
-                               icon={placeForCard.icon}
-                               link={`/place/${place.id}`}
-                               name={placeForCard.name}
-                               type={place.option}
-                               detail={`${place.plantListSize}개의 식물이 살고 있어요`}/>
+          return (
+            <Col xs={24} sm={12} md={8} lg={6} className={Style.wrapper} style={{marginBottom: "1rem"}}
+                 key={place.id}>
+              <ListItemCard color={placeForCard.color}
+                            icon={placeForCard.icon}
+                            link={`/place/${place.id}`}
+                            name={placeForCard.name}
+                            type={place.option}
+                            detail={`${place.plantListSize}개의 식물`}/>
+            </Col>
+          )
         })}
       </Row>
     </>

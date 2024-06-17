@@ -9,13 +9,22 @@ import {useSelector} from "react-redux";
 const ModifyPlant = ({changeModifyState}) => {
   const navigate = useNavigate();
   const plant = useSelector(state => state.plantDetail.detail);
-  const places = useSelector(state => state.places.places);
+  const places = useSelector(state => state.plantDetail.places);
+  console.log("modify plant selector", places);
 
   const [updatedPlant, setUpdatedPlant] = useState(plant);
 
   const onChange = (e) => {
     const {name, value} = e.target;
     setUpdatedPlant(setPlant => ({...updatedPlant, [name]: value}));
+  }
+
+  const validation = updatedPlant.name != '';
+
+  const submit = async () => {
+    const res = await updateData(`/plant/${plant.id}`, updatedPlant);
+    navigate("", {replace: true, state: res});
+    changeModifyState();
   }
 
   const itemObjectArray = [
@@ -38,7 +47,7 @@ const ModifyPlant = ({changeModifyState}) => {
       label: "장소",
       name: "placeId",
       defaultValue: plant.placeId,
-      optionArray: places.map((p) => ({key: p.id, value: p.name})),
+      optionArray: places,
       required: true
     },
     {
@@ -56,14 +65,6 @@ const ModifyPlant = ({changeModifyState}) => {
       defaultValue: plant.recentWateringPeriod == 0 ? "" : plant.recentWateringPeriod,
     }
   ];
-
-  const validation = updatedPlant.name != '';
-
-  const submit = async () => {
-    const res = await updateData(`/plant/${plant.id}`, updatedPlant);
-    navigate("", {replace: true, state: res});
-    changeModifyState();
-  }
 
   return (
     <FormProvider

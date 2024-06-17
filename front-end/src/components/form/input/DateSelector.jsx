@@ -16,7 +16,7 @@ const DateSelector = ({
       style={style}
       disabledDate={getDisabledDate}
       format={"YYYY-MM-DD"}
-      value={dayjs(defaultValue, "YYYY-MM-DD")}
+      defaultValue={dayjs(defaultValue, "YYYY-MM-DD")}
       onChange={onChange}
       locale={locale}
     />

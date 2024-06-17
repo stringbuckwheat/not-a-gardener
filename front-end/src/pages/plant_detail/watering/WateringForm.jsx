@@ -26,16 +26,10 @@ const WateringForm = ({wateringCallBack}) => {
     console.log("submit data", watering);
     closeForm();
 
-    try {
-      const res = await postData(`/plant/${plantId}/watering?page=${page - 1}`, watering);
-      console.log("watering form add res", res);
-      dispatch({type: WateringAction.ADD_TOTAL_WATERING, payload: null});
-      wateringCallBack(res);
-    } catch (e) {
-      if (e.code == ExceptionCode.ALREADY_WATERED) {
-        alert(e.message);
-      }
-    }
+    const res = await postData(`/plant/${plantId}/watering?page=${page - 1}`, watering);
+    console.log("watering form add res", res);
+    dispatch({type: WateringAction.ADD_TOTAL_WATERING, payload: null});
+    wateringCallBack(res);
   }
 
   const onChangeWateringDate = (date, dateString) => setWatering(() => ({...watering, wateringDate: dateString}));
