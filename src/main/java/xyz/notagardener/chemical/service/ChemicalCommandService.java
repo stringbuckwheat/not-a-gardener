@@ -1,6 +1,6 @@
 package xyz.notagardener.chemical.service;
 
-import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.chemical.model.Chemical;
 import xyz.notagardener.chemical.dto.ChemicalDto;
 
 public interface ChemicalCommandService {

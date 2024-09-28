@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.chemical.model.Chemical;
 import xyz.notagardener.common.validation.ChemicalTypeConstraints;
 import xyz.notagardener.gardener.model.Gardener;
 

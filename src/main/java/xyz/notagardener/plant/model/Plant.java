@@ -1,4 +1,4 @@
-package xyz.notagardener.plant;
+package xyz.notagardener.plant.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -6,10 +6,10 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import xyz.notagardener.gardener.model.Gardener;
-import xyz.notagardener.place.Place;
+import xyz.notagardener.place.model.Place;
 import xyz.notagardener.plant.plant.dto.PlantRequest;
 import xyz.notagardener.status.common.model.Status;
-import xyz.notagardener.watering.Watering;
+import xyz.notagardener.watering.model.Watering;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

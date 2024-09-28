@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.model.Plant;
 
 import java.time.LocalDate;
 

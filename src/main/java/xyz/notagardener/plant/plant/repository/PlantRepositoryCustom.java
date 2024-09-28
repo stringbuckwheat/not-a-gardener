@@ -1,6 +1,6 @@
 package xyz.notagardener.plant.plant.repository;
 
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.model.Plant;
 import xyz.notagardener.plant.garden.dto.PlantResponse;
 import xyz.notagardener.plant.garden.dto.WaitingForWatering;
 import xyz.notagardener.plant.plant.dto.PlantBasic;

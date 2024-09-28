@@ -1,8 +1,8 @@
 package xyz.notagardener.plant.plant.service;
 
-import xyz.notagardener.place.Place;
+import xyz.notagardener.place.model.Place;
 import xyz.notagardener.place.dto.ModifyPlace;
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.model.Plant;
 import xyz.notagardener.plant.plant.dto.PlantRequest;
 
 public interface PlantCommandService {

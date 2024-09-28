@@ -1,6 +1,6 @@
 package xyz.notagardener.plant.place.service;
 
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.model.Plant;
 import xyz.notagardener.plant.plant.dto.PlantInPlace;
 import xyz.notagardener.plant.plant.dto.PlantRequest;
 import lombok.RequiredArgsConstructor;

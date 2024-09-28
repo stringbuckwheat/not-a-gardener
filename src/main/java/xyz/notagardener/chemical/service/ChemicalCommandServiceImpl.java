@@ -3,7 +3,7 @@ package xyz.notagardener.chemical.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.chemical.model.Chemical;
 import xyz.notagardener.chemical.dto.ChemicalDto;
 import xyz.notagardener.chemical.repository.ChemicalRepository;
 import xyz.notagardener.common.error.code.ExceptionCode;

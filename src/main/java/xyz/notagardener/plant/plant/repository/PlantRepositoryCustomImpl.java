@@ -4,21 +4,21 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.common.validation.YesOrNoType;
-import xyz.notagardener.plant.Plant;
 import xyz.notagardener.plant.garden.dto.PlantResponse;
 import xyz.notagardener.plant.garden.dto.QPlantResponse;
 import xyz.notagardener.plant.garden.dto.QWaitingForWatering;
 import xyz.notagardener.plant.garden.dto.WaitingForWatering;
+import xyz.notagardener.plant.model.Plant;
 import xyz.notagardener.plant.plant.dto.PlantBasic;
 import xyz.notagardener.plant.plant.dto.QPlantBasic;
 
 import java.util.List;
 import java.util.Optional;
 
-import static xyz.notagardener.place.QPlace.place;
-import static xyz.notagardener.plant.QPlant.plant;
+import static xyz.notagardener.place.model.QPlace.place;
+import static xyz.notagardener.plant.model.QPlant.plant;
 import static xyz.notagardener.status.common.model.QStatus.status;
-import static xyz.notagardener.watering.QWatering.watering;
+import static xyz.notagardener.watering.model.QWatering.watering;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)

@@ -1,4 +1,4 @@
-package xyz.notagardener.chemical;
+package xyz.notagardener.chemical.model;
 
 import xyz.notagardener.gardener.model.Gardener;
 import jakarta.persistence.*;

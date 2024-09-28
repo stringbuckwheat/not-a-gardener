@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import xyz.notagardener.watering.Watering;
+import xyz.notagardener.watering.model.Watering;
 
 import java.time.LocalDate;
 

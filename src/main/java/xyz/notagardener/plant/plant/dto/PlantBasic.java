@@ -4,7 +4,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.model.Plant;
 
 @NoArgsConstructor
 @Getter

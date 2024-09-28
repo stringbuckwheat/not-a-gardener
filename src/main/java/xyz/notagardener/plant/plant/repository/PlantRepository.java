@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import xyz.notagardener.common.validation.YesOrNoType;
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.model.Plant;
 import xyz.notagardener.plant.garden.dto.PlantResponse;
 
 import java.util.List;

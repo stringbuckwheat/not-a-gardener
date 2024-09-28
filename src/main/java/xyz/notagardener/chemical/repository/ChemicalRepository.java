@@ -2,7 +2,7 @@ package xyz.notagardener.chemical.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.Repository;
-import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.chemical.model.Chemical;
 
 import java.util.Optional;
 

@@ -2,8 +2,8 @@ package xyz.notagardener.plant.garden.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.ToString;
-import xyz.notagardener.chemical.Chemical;
-import xyz.notagardener.watering.Watering;
+import xyz.notagardener.chemical.model.Chemical;
+import xyz.notagardener.watering.model.Watering;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

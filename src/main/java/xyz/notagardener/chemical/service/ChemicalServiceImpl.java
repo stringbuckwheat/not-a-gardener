@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.chemical.model.Chemical;
 import xyz.notagardener.chemical.dto.ChemicalDetail;
 import xyz.notagardener.chemical.dto.ChemicalDto;
 import xyz.notagardener.chemical.dto.WateringResponseInChemical;

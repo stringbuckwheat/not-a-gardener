@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import xyz.notagardener.common.validation.MediumTypeConstraints;
 import xyz.notagardener.gardener.model.Gardener;
-import xyz.notagardener.place.Place;
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.place.model.Place;
+import xyz.notagardener.plant.model.Plant;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
