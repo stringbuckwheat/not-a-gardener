@@ -9,8 +9,8 @@ import xyz.notagardener.repot.plant.dto.RepotList;
 
 import java.util.List;
 
-import static xyz.notagardener.plant.QPlant.plant;
-import static xyz.notagardener.repot.QRepot.repot;
+import static xyz.notagardener.plant.model.QPlant.plant;
+import static xyz.notagardener.repot.model.QRepot.repot;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)

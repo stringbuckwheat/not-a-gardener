@@ -1,4 +1,4 @@
-package xyz.notagardener.authentication.config;
+package xyz.notagardener.authentication.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -11,7 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import xyz.notagardener.authentication.dto.AccessToken;
+import xyz.notagardener.authentication.token.AccessToken;
 import xyz.notagardener.authentication.service.TokenProvider;
 
 import java.io.IOException;

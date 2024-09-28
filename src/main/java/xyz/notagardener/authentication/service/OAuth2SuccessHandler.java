@@ -1,6 +1,6 @@
 package xyz.notagardener.authentication.service;
 
-import xyz.notagardener.authentication.dto.AccessToken;
+import xyz.notagardener.authentication.token.AccessToken;
 import xyz.notagardener.authentication.model.UserPrincipal;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

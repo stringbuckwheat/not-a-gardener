@@ -2,7 +2,7 @@ package xyz.notagardener.watering.watering.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.model.Plant;
 
 @AllArgsConstructor
 @Getter

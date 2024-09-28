@@ -18,8 +18,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import xyz.notagardener.authentication.dto.AccessToken;
-import xyz.notagardener.authentication.dto.RefreshToken;
+import xyz.notagardener.authentication.token.AccessToken;
+import xyz.notagardener.authentication.token.RefreshToken;
 import xyz.notagardener.authentication.model.ActiveGardener;
 import xyz.notagardener.authentication.repository.ActiveGardenerRepository;
 
@@ -34,7 +34,7 @@ import static org.mockito.Mockito.*;
 @DisplayName("토큰 컴포넌트 테스트")
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class TokenProviderImplTest {
+class AuthTokensProviderImplTest {
 
     @MockBean
     private UserDetailsService userDetailsService;
@@ -73,7 +73,7 @@ class TokenProviderImplTest {
     }
 
     @Test
-    @DisplayName("bearer 토큰 -> Access Token 객체")
+    @DisplayName("bearer 토큰 -> Access AuthTokens 객체")
     void convertAccessToken_WhenValid_ReturnAccessTokenObject() {
         // Given
         String token = tokenProvider.createAccessToken(1L, "메밀").getToken();

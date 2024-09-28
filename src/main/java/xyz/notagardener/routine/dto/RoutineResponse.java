@@ -1,6 +1,6 @@
 package xyz.notagardener.routine.dto;
 
-import xyz.notagardener.routine.Routine;
+import xyz.notagardener.routine.model.Routine;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;

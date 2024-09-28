@@ -29,9 +29,11 @@ public enum ExceptionCode {
     NO_SUCH_ROUTINE("NO_SUCH_ROUTINE", "해당 루틴 없음", "해당 루틴을 찾을 수 없어요"),
     NO_SUCH_TODO("NO_SUCH_TODO", "해당 할 일 없음", "해당 할 일을 찾을 수 없어요"),
     NO_SUCH_WATERING("NO_SUCH_WATERING", "해당 물주기 기록 없음", "해당 물주기 기록을 찾을 수 없어요"),
+    NO_SUCH_GARDENER("NO_SUCH_GARDENER", "사용자를 찾을 수 없음", "해당 사용자를 찾을 수 없어요"),
     NO_SUCH_REPOT("NO_SUCH_REPOT", "해당 분갈이 기록 없음", "해당 분갈이 기록을 찾을 수 없어요"),
     NO_SUCH_PLANT_STATUS("NO_SUCH_PLANT_STATUS", "해당 식물 상태 없음", "해당 식물 상태 정보를 찾을 수 없어요"),
     NO_SUCH_PLANT_STATUS_LOG("NO_SUCH_PLANT_STATUS_LOG", "해당 식물 상태 로그 없음", "해당 식물 상태 로그 정보를 찾을 수 없어요"),
+    NO_SUCH_POST("NO_SUCH_POST", "해당 게시글 없음", "해당 게시글을 찾을 수 없어요"),
 
     NO_ACCOUNT_FOR_EMAIL("NO_ACCOUNT_FOR_EMAIL", "제출 이메일에 해당하는 사용자 없음", "해당 이메일로 가입한 회원이 없어요"), // B007
     NO_TOKEN_IN_REDIS("NO_TOKEN_IN_REDIS", "레디스에 사용자 없음", "로그인 시간이 만료되었습니다. 다시 로그인해주세요"), // B009
@@ -50,6 +52,7 @@ public enum ExceptionCode {
     NOT_YOUR_REPOT("NOT_YOUR_REPOT", "요청자의 분갈이 기록이 아님", "당신의 분갈이 기록이 아니에요"),
     NOT_YOUR_PLANT_STATUS("NOT_YOUR_PLANT_STATUS", "요청자의 식물 상태가 아님", "당신의 식물 상태가 아니에요"),
     NOT_YOUR_PLANT_STATUS_LOG("NOT_YOUR_PLANT_STATUS_LOG", "요청자의 식물 상태 로그가 아님", "당신의 식물 상태 로그가 아니에요"),
+    NOT_YOUR_POST("NOT_YOUR_POST", "요청자의 게시글이 아님", "당신의 게시글이 아니에요"),
 
     INVALID_REQUEST_DATA("INVALID_REQUEST_DATA", "유효하지 않은 데이터", "입력 값을 확인해주세요"), // BE014
     NO_IDENTIFICATION_INFO_IN_REDIS("NO_IDENTIFICATION_INFO_IN_REDIS", "레디스에 해당 확인코드 정보 없음", "본인 확인 코드가 일치하지 않아요"), // BE015

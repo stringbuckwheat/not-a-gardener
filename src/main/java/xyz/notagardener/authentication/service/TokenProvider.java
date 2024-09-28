@@ -1,8 +1,8 @@
 package xyz.notagardener.authentication.service;
 
 import org.springframework.security.core.Authentication;
-import xyz.notagardener.authentication.dto.AccessToken;
-import xyz.notagardener.authentication.dto.RefreshToken;
+import xyz.notagardener.authentication.token.AccessToken;
+import xyz.notagardener.authentication.token.RefreshToken;
 
 public interface TokenProvider {
     AccessToken convertAuthToken(String token);

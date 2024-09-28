@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.plant.garden.dto.PlantResponse;
-import xyz.notagardener.repot.Repot;
+import xyz.notagardener.repot.model.Repot;
 import xyz.notagardener.repot.repot.repository.RepotRepository;
 
 import java.time.LocalDate;

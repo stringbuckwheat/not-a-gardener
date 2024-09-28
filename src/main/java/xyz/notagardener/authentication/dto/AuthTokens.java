@@ -10,7 +10,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode
-public class Token {
+public class AuthTokens {
     @Schema(description = "액세스 토큰")
     private String accessToken;
 

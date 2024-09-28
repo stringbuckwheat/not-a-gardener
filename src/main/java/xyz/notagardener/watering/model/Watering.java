@@ -1,12 +1,12 @@
-package xyz.notagardener.watering;
+package xyz.notagardener.watering.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import xyz.notagardener.chemical.Chemical;
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.chemical.model.Chemical;
+import xyz.notagardener.plant.model.Plant;
 
 import java.time.LocalDate;
 

@@ -2,7 +2,7 @@ package xyz.notagardener.watering.watering.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.Repository;
-import xyz.notagardener.watering.Watering;
+import xyz.notagardener.watering.model.Watering;
 
 import java.util.Optional;
 

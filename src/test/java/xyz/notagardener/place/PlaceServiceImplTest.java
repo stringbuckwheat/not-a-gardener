@@ -17,9 +17,10 @@ import xyz.notagardener.gardener.repository.GardenerRepository;
 import xyz.notagardener.place.dto.PlaceCard;
 import xyz.notagardener.place.dto.PlaceDto;
 import xyz.notagardener.place.dto.PlaceType;
+import xyz.notagardener.place.model.Place;
 import xyz.notagardener.place.repository.PlaceRepository;
 import xyz.notagardener.place.service.PlaceServiceImpl;
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.model.Plant;
 import xyz.notagardener.plant.plant.dto.PlantInPlace;
 
 import java.time.LocalDateTime;

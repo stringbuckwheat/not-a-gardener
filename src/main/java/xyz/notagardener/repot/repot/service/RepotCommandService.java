@@ -1,7 +1,7 @@
 package xyz.notagardener.repot.repot.service;
 
 import org.springframework.transaction.annotation.Transactional;
-import xyz.notagardener.repot.Repot;
+import xyz.notagardener.repot.model.Repot;
 import xyz.notagardener.repot.repot.dto.RepotRequest;
 
 public interface RepotCommandService {

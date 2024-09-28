@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import xyz.notagardener.repot.Repot;
+import xyz.notagardener.repot.model.Repot;
 import xyz.notagardener.repot.plant.dto.RepotList;
 import xyz.notagardener.repot.repot.dto.RepotRequest;
 import xyz.notagardener.repot.repot.repository.RepotRepository;

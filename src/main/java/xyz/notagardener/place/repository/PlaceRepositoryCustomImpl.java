@@ -4,12 +4,12 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.model.Plant;
 
 import java.util.List;
 
-import static xyz.notagardener.place.QPlace.place;
-import static xyz.notagardener.plant.QPlant.plant;
+import static xyz.notagardener.place.model.QPlace.place;
+import static xyz.notagardener.plant.model.QPlant.plant;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)

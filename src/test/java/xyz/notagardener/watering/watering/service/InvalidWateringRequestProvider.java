@@ -3,12 +3,12 @@ package xyz.notagardener.watering.watering.service;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
-import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.chemical.model.Chemical;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.model.Gardener;
-import xyz.notagardener.plant.Plant;
-import xyz.notagardener.watering.Watering;
+import xyz.notagardener.plant.model.Plant;
+import xyz.notagardener.watering.model.Watering;
 
 import java.util.ArrayList;
 import java.util.Optional;

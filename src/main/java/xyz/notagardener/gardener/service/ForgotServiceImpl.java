@@ -37,20 +37,28 @@ public class ForgotServiceImpl implements ForgotService {
     @Override
     @Transactional(readOnly = true)
     public Forgot forgotAccount(String email) {
+        List<Username> usernames = getUsernameByEmail(email);
+
+        // 본인확인 코드 만들기
+        String identificationCode = RandomStringUtils.randomAlphanumeric(6);
+        log.debug("identificationCode: {}", identificationCode);
+//        sendEmail(identificationCode, email); // 이메일 보내기
+
+        // Redis 저장
+        lostGardenerRepository.save(new LostGardener(identificationCode, email, usernames));
+
+        return new Forgot(email, usernames);
+    }
+
+    @Override
+    public List<Username> getUsernameByEmail(String email) {
         List<Username> usernames = gardenerRepository.findByProviderIsNullAndEmail(email);
 
         if (usernames.isEmpty()) {
             throw new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT_FOR_EMAIL.getCode());
         }
 
-        // 본인확인 코드 만들기
-        String identificationCode = RandomStringUtils.randomAlphanumeric(6);
-        sendEmail(identificationCode, email); // 이메일 보내기
-
-        // Redis 저장
-        lostGardenerRepository.save(new LostGardener(identificationCode, email, usernames));
-
-        return new Forgot(email, usernames);
+        return usernames;
     }
 
     private void sendEmail(String identificationCode, String email) {
@@ -71,17 +79,17 @@ public class ForgotServiceImpl implements ForgotService {
 
     @Override
     public VerifyResponse verifyIdentificationCode(VerifyRequest verifyRequest) {
-        // 본인 확인 코드로 redis 검색
-        LostGardener lostGardener = lostGardenerRepository.findById(verifyRequest.getIdentificationCode())
+        // 본인 여부 확인
+        LostGardener lostGardener = lostGardenerRepository.findById(verifyRequest.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_IDENTIFICATION_INFO_IN_REDIS));
 
-        // 본인 여부 확인
-        if(!verifyRequest.getEmail().equals(lostGardener.getEmail())) {
+        // 본인 확인 코드 확인
+        if(!verifyRequest.getIdentificationCode().equals(lostGardener.getIdentificationCode())) {
             throw new VerificationException(ExceptionCode.NOT_YOUR_IDENTIFICATION_CODE);
         }
 
         // redis에서 확인코드 삭제
-        lostGardenerRepository.deleteById(lostGardener.getIdentificationCode());
+        lostGardenerRepository.deleteById(lostGardener.getEmail());
 
         return new VerifyResponse(true);
     }

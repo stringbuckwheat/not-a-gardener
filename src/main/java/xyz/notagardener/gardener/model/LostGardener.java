@@ -17,8 +17,8 @@ import java.util.List;
 @Getter
 public class LostGardener {
     @Id
-    private String identificationCode;
     private String email;
+    private String identificationCode;
     private List<Username> usernames;
     private LocalDateTime createdAt;
 

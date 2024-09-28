@@ -10,7 +10,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import xyz.notagardener.common.validation.YesOrNoType;
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.model.Plant;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

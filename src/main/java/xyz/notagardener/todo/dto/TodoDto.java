@@ -5,7 +5,7 @@ import xyz.notagardener.gardener.model.Gardener;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import xyz.notagardener.todo.Todo;
+import xyz.notagardener.todo.model.Todo;
 
 import java.time.LocalDate;
 

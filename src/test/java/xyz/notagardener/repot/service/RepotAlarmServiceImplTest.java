@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.*;
 import xyz.notagardener.common.validation.YesOrNoType;
-import xyz.notagardener.repot.Repot;
+import xyz.notagardener.repot.model.Repot;
 import xyz.notagardener.repot.repot.repository.RepotRepository;
 import xyz.notagardener.repot.repot.service.RepotAlarmServiceImpl;
 

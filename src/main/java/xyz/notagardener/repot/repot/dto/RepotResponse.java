@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import xyz.notagardener.common.validation.YesOrNoType;
-import xyz.notagardener.repot.Repot;
+import xyz.notagardener.repot.model.Repot;
 import xyz.notagardener.status.plant.dto.PlantStatusResponse;
 
 import java.time.LocalDate;

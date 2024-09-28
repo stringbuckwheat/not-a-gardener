@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.model.Plant;
 import xyz.notagardener.plant.garden.dto.GardenResponse;
 import xyz.notagardener.plant.garden.dto.PlantResponse;
 import xyz.notagardener.plant.garden.service.GardenResponseMapperImpl;

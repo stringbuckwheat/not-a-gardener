@@ -12,6 +12,7 @@ import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.gardener.repository.GardenerRepository;
 import xyz.notagardener.todo.dto.TodoDto;
+import xyz.notagardener.todo.model.Todo;
 import xyz.notagardener.todo.repository.TodoRepository;
 import xyz.notagardener.todo.service.TodoServiceImpl;
 

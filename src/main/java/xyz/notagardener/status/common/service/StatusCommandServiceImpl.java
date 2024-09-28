@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.model.Plant;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
 import xyz.notagardener.status.common.model.Status;
 import xyz.notagardener.status.common.model.StatusEntities;

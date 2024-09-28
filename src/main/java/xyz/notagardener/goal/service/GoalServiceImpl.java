@@ -10,10 +10,10 @@ import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.common.validation.YesOrNoType;
 import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.gardener.repository.GardenerRepository;
-import xyz.notagardener.goal.Goal;
+import xyz.notagardener.goal.model.Goal;
 import xyz.notagardener.goal.dto.GoalDto;
 import xyz.notagardener.goal.repository.GoalRepository;
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.model.Plant;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
 
 import java.util.List;

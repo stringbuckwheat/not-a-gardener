@@ -17,15 +17,15 @@ public class Info {
     private SimpleInfo info;
 
     @Schema(description = "Access Token, Refresh Token")
-    private Token token;
+    private AuthTokens token;
 
     public Info(String accessToken, String refreshToken, Gardener gardener) {
         this.info = new SimpleInfo(gardener);
-        this.token = new Token(accessToken, refreshToken);
+        this.token = new AuthTokens(accessToken, refreshToken);
     }
 
     public Info(ActiveGardener activeGardener) {
         this.info = new SimpleInfo(activeGardener);
-        this.token = new Token("", activeGardener.getRefreshToken().getToken());
+        this.token = new AuthTokens("", activeGardener.getRefreshToken().getToken());
     }
 }

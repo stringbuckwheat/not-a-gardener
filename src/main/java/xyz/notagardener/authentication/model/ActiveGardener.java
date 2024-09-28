@@ -3,7 +3,7 @@ package xyz.notagardener.authentication.model;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
-import xyz.notagardener.authentication.dto.RefreshToken;
+import xyz.notagardener.authentication.token.RefreshToken;
 
 import java.time.LocalDateTime;
 

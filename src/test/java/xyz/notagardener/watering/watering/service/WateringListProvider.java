@@ -3,8 +3,8 @@ package xyz.notagardener.watering.watering.service;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
-import xyz.notagardener.plant.Plant;
-import xyz.notagardener.watering.Watering;
+import xyz.notagardener.plant.model.Plant;
+import xyz.notagardener.watering.model.Watering;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

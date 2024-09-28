@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Pageable;
-import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.chemical.model.Chemical;
 import xyz.notagardener.chemical.dto.ChemicalDetail;
 import xyz.notagardener.chemical.dto.ChemicalDto;
 import xyz.notagardener.chemical.dto.WateringResponseInChemical;
@@ -20,9 +20,9 @@ import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.model.Gardener;
-import xyz.notagardener.place.Place;
-import xyz.notagardener.plant.Plant;
-import xyz.notagardener.watering.Watering;
+import xyz.notagardener.place.model.Place;
+import xyz.notagardener.plant.model.Plant;
+import xyz.notagardener.watering.model.Watering;
 
 import java.util.*;
 

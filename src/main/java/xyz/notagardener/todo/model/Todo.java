@@ -1,4 +1,4 @@
-package xyz.notagardener.todo;
+package xyz.notagardener.todo.model;
 
 import xyz.notagardener.gardener.model.Gardener;
 import jakarta.persistence.*;

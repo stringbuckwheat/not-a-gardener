@@ -4,8 +4,8 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import xyz.notagardener.gardener.model.Gardener;
-import xyz.notagardener.plant.Plant;
-import xyz.notagardener.watering.Watering;
+import xyz.notagardener.plant.model.Plant;
+import xyz.notagardener.watering.model.Watering;
 import xyz.notagardener.watering.watering.AfterWateringCode;
 
 import java.time.LocalDate;

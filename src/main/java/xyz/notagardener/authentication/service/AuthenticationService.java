@@ -3,7 +3,7 @@ package xyz.notagardener.authentication.service;
 import xyz.notagardener.authentication.dto.Info;
 import xyz.notagardener.authentication.dto.Login;
 import xyz.notagardener.authentication.dto.Refresh;
-import xyz.notagardener.authentication.dto.Token;
+import xyz.notagardener.authentication.dto.AuthTokens;
 import xyz.notagardener.gardener.model.Gardener;
 
 public interface AuthenticationService {
@@ -14,5 +14,5 @@ public interface AuthenticationService {
 
     void logOut(Long id);
 
-    Token refreshAccessToken(Refresh token);
+    AuthTokens refreshAccessToken(Refresh token);
 }

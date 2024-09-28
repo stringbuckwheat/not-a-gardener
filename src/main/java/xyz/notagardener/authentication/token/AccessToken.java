@@ -1,4 +1,4 @@
-package xyz.notagardener.authentication.dto;
+package xyz.notagardener.authentication.token;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

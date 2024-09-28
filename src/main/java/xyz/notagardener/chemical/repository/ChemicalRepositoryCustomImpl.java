@@ -7,14 +7,15 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.chemical.dto.ChemicalDto;
 import xyz.notagardener.chemical.dto.QChemicalDto;
-import xyz.notagardener.place.QPlace;
-import xyz.notagardener.plant.QPlant;
-import xyz.notagardener.watering.Watering;
+import xyz.notagardener.watering.model.Watering;
 
 import java.util.List;
 
-import static xyz.notagardener.chemical.QChemical.chemical;
-import static xyz.notagardener.watering.QWatering.watering;
+import static xyz.notagardener.chemical.model.QChemical.chemical;
+import static xyz.notagardener.place.model.QPlace.place;
+import static xyz.notagardener.plant.model.QPlant.plant;
+import static xyz.notagardener.watering.model.QWatering.watering;
+
 
 @RequiredArgsConstructor
 @Repository
@@ -51,9 +52,9 @@ public class ChemicalRepositoryCustomImpl implements ChemicalRepositoryCustom {
     public List<Watering> findWateringsByChemicalIdWithPage(Long chemicalId, Pageable pageable) {
         return queryFactory
                 .selectFrom(watering)
-                .join(watering.plant, QPlant.plant)
+                .join(watering.plant, plant)
                 .fetchJoin()
-                .join(watering.plant.place, QPlace.place)
+                .join(watering.plant.place, place)
                 .fetchJoin()
                 .join(watering.chemical, chemical)
                 .fetchJoin()

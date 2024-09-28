@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 import xyz.notagardener.gardener.model.Gardener;
-import xyz.notagardener.plant.Plant;
-import xyz.notagardener.routine.Routine;
+import xyz.notagardener.plant.model.Plant;
+import xyz.notagardener.routine.model.Routine;
 
 import java.time.LocalDate;
 

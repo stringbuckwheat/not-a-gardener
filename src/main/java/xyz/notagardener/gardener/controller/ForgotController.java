@@ -16,9 +16,12 @@ import org.springframework.web.bind.annotation.*;
 import xyz.notagardener.authentication.dto.Login;
 import xyz.notagardener.common.error.ErrorResponse;
 import xyz.notagardener.gardener.dto.Forgot;
+import xyz.notagardener.gardener.dto.Username;
 import xyz.notagardener.gardener.dto.VerifyRequest;
 import xyz.notagardener.gardener.dto.VerifyResponse;
 import xyz.notagardener.gardener.service.ForgotService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,6 +53,11 @@ public class ForgotController {
     @GetMapping("/email/{email}")
     public ResponseEntity<Forgot> forgotAccount(@PathVariable String email) {
         return ResponseEntity.ok(forgotService.forgotAccount(email));
+    }
+
+    @GetMapping("/email/{email}/username")
+    public ResponseEntity<List<Username>> getUsernameByEmail(@PathVariable String email) {
+        return ResponseEntity.ok(forgotService.getUsernameByEmail(email));
     }
 
     @Operation(summary = "본인 확인 코드 검증", description = "이메일로 보낸 본인 확인 코드와 서버 저장값 대조")

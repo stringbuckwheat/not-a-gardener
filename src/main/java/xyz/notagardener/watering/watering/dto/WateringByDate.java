@@ -1,8 +1,8 @@
 package xyz.notagardener.watering.watering.dto;
 
-import xyz.notagardener.chemical.Chemical;
-import xyz.notagardener.plant.Plant;
-import xyz.notagardener.watering.Watering;
+import xyz.notagardener.chemical.model.Chemical;
+import xyz.notagardener.plant.model.Plant;
+import xyz.notagardener.watering.model.Watering;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 

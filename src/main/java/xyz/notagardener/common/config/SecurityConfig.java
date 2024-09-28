@@ -1,9 +1,9 @@
 package xyz.notagardener.common.config;
 
-import xyz.notagardener.authentication.config.CustomAuthenticationEntryPoint;
-import xyz.notagardener.authentication.config.JwtFilter;
+import xyz.notagardener.authentication.filter.CustomAuthenticationEntryPoint;
+import xyz.notagardener.authentication.filter.JwtFilter;
 import xyz.notagardener.authentication.service.OAuth2SuccessHandler;
-import xyz.notagardener.authentication.config.JwtExceptionFilter;
+import xyz.notagardener.authentication.filter.JwtExceptionFilter;
 import xyz.notagardener.authentication.service.OAuth2MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +22,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -35,6 +36,9 @@ public class SecurityConfig {
 
     @Value("${origin}")
     private String allowedOrigin;
+
+    @Value("${app-origin}")
+    private String allowedAppOrigin;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     private static final String[] AUTH_WHITELIST = {
@@ -47,7 +51,7 @@ public class SecurityConfig {
             config.setAllowedHeaders(Collections.singletonList("*"));
             config.setAllowedMethods(Collections.singletonList("*"));
 
-            config.setAllowedOriginPatterns(Collections.singletonList(allowedOrigin));
+            config.setAllowedOriginPatterns(List.of(allowedOrigin, allowedAppOrigin));
             config.setAllowCredentials(true);
 
             return config;

@@ -2,7 +2,7 @@ package xyz.notagardener.place.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.Repository;
-import xyz.notagardener.place.Place;
+import xyz.notagardener.place.model.Place;
 
 import java.util.List;
 import java.util.Optional;

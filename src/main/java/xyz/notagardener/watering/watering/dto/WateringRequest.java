@@ -2,10 +2,10 @@ package xyz.notagardener.watering.watering.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-import xyz.notagardener.chemical.Chemical;
+import xyz.notagardener.chemical.model.Chemical;
 import xyz.notagardener.common.validation.NotFuture;
-import xyz.notagardener.plant.Plant;
-import xyz.notagardener.watering.Watering;
+import xyz.notagardener.plant.model.Plant;
+import xyz.notagardener.watering.model.Watering;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;

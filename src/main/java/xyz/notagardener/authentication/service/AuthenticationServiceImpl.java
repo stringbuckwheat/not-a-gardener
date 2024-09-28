@@ -14,6 +14,8 @@ import xyz.notagardener.authentication.dto.*;
 import xyz.notagardener.authentication.model.ActiveGardener;
 import xyz.notagardener.authentication.model.UserPrincipal;
 import xyz.notagardener.authentication.repository.ActiveGardenerRepository;
+import xyz.notagardener.authentication.token.AccessToken;
+import xyz.notagardener.authentication.token.RefreshToken;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.ExpiredRefreshTokenException;
 import xyz.notagardener.common.error.exception.GardenerNotInSessionException;
@@ -76,7 +78,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public Token refreshAccessToken(Refresh token) {
+    public AuthTokens refreshAccessToken(Refresh token) {
         String reqRefreshToken = token.getRefreshToken();
         ActiveGardener activeGardener = activeGardenerRepository.findById(token.getGardenerId())
                 .orElseThrow(() -> new GardenerNotInSessionException(ExceptionCode.NO_TOKEN_IN_REDIS));
@@ -95,13 +97,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // 새 access token 만들기
         AccessToken accessToken = tokenProvider.createAccessToken(activeGardener.getGardenerId(), activeGardener.getName());
 
-        // Refresh Token Rotation
+        // Refresh AuthTokens Rotation
         // Access token 재발급 시 Refresh Token도 재발급
         RefreshToken newRefreshToken = new RefreshToken();
         activeGardener.updateRefreshToken(newRefreshToken);
         activeGardenerRepository.save(activeGardener);
 
-        return new Token(accessToken.getToken(), newRefreshToken.getToken());
+        return new AuthTokens(accessToken.getToken(), newRefreshToken.getToken());
     }
 
     @Override

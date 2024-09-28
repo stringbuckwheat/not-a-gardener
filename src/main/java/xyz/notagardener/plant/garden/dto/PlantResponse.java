@@ -7,11 +7,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
-import xyz.notagardener.place.Place;
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.place.model.Place;
+import xyz.notagardener.plant.model.Plant;
 import xyz.notagardener.status.plant.dto.PlantStatusResponse;
 import xyz.notagardener.status.common.model.Status;
-import xyz.notagardener.watering.Watering;
+import xyz.notagardener.watering.model.Watering;
 
 import java.time.LocalDate;
 import java.util.List;

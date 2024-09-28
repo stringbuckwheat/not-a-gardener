@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.model.Plant;
 import xyz.notagardener.plant.garden.dto.*;
 import xyz.notagardener.plant.plant.repository.PlantRepository;
-import xyz.notagardener.routine.Routine;
+import xyz.notagardener.routine.model.Routine;
 import xyz.notagardener.routine.repository.RoutineRepository;
 import xyz.notagardener.watering.watering.dto.ChemicalUsage;
 

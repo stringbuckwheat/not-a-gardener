@@ -13,10 +13,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import xyz.notagardener.authentication.dto.AuthTokens;
 import xyz.notagardener.authentication.dto.Info;
 import xyz.notagardener.authentication.dto.Login;
 import xyz.notagardener.authentication.dto.Refresh;
-import xyz.notagardener.authentication.dto.Token;
 import xyz.notagardener.authentication.model.UserPrincipal;
 import xyz.notagardener.authentication.service.AuthenticationService;
 import xyz.notagardener.common.error.ErrorResponse;
@@ -68,7 +68,7 @@ public class AuthenticationController {
                             description = "OK: 액세스 토큰 갱신 성공",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = Token.class)
+                                    schema = @Schema(implementation = AuthTokens.class)
                             )
                     ),
                     @ApiResponse(
@@ -107,7 +107,7 @@ public class AuthenticationController {
             }
     )
     @PostMapping("/token")
-    public ResponseEntity<Token> refreshAccessToken(@RequestBody @Valid Refresh refreshToken) {
+    public ResponseEntity<AuthTokens> refreshAccessToken(@RequestBody @Valid Refresh refreshToken) {
         return ResponseEntity.ok().body(authenticationService.refreshAccessToken(refreshToken));
     }
 

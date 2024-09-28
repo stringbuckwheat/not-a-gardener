@@ -1,6 +1,6 @@
 package xyz.notagardener.watering.watering.service;
 
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.model.Plant;
 import xyz.notagardener.watering.watering.dto.AfterWatering;
 import xyz.notagardener.watering.watering.dto.WateringMessage;
 import xyz.notagardener.watering.watering.dto.WateringRequest;

@@ -1,4 +1,4 @@
-package xyz.notagardener.authentication.dto;
+package xyz.notagardener.authentication.token;
 
 import lombok.Getter;
 

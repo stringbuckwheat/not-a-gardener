@@ -2,7 +2,7 @@ package xyz.notagardener.repot.repot.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.Repository;
-import xyz.notagardener.repot.Repot;
+import xyz.notagardener.repot.model.Repot;
 
 import java.util.Optional;
 

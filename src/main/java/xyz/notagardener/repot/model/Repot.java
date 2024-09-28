@@ -1,4 +1,4 @@
-package xyz.notagardener.repot;
+package xyz.notagardener.repot.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -6,7 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import xyz.notagardener.common.validation.YesOrNoType;
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.model.Plant;
 
 import java.time.LocalDate;
 

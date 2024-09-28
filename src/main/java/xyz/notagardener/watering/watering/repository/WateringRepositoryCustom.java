@@ -1,7 +1,7 @@
 package xyz.notagardener.watering.watering.repository;
 
 import org.springframework.data.domain.Pageable;
-import xyz.notagardener.watering.Watering;
+import xyz.notagardener.watering.model.Watering;
 import xyz.notagardener.watering.watering.dto.ChemicalUsage;
 
 import java.time.LocalDate;

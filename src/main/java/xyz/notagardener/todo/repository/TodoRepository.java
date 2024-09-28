@@ -1,7 +1,7 @@
 package xyz.notagardener.todo.repository;
 
 import org.springframework.data.repository.Repository;
-import xyz.notagardener.todo.Todo;
+import xyz.notagardener.todo.model.Todo;
 
 import java.util.List;
 import java.util.Optional;

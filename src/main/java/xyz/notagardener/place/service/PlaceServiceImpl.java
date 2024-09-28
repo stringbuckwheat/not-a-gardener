@@ -10,7 +10,7 @@ import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.gardener.repository.GardenerRepository;
-import xyz.notagardener.place.Place;
+import xyz.notagardener.place.model.Place;
 import xyz.notagardener.place.dto.PlaceCard;
 import xyz.notagardener.place.dto.PlaceDto;
 import xyz.notagardener.place.repository.PlaceRepository;

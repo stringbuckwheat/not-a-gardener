@@ -16,6 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import xyz.notagardener.authentication.dto.*;
 import xyz.notagardener.authentication.model.ActiveGardener;
 import xyz.notagardener.authentication.repository.ActiveGardenerRepository;
+import xyz.notagardener.authentication.token.AccessToken;
+import xyz.notagardener.authentication.token.RefreshToken;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.ExpiredRefreshTokenException;
 import xyz.notagardener.common.error.exception.GardenerNotInSessionException;
@@ -194,7 +196,7 @@ class AuthenticationServiceImplTest {
         when(tokenProvider.createAccessToken(gardenerId, name)).thenReturn(new AccessToken("new_access_token", null));
 
         // When
-        Token newToken = authenticationService.refreshAccessToken(new Refresh(gardenerId, refreshToken.getToken()));
+        AuthTokens newToken = authenticationService.refreshAccessToken(new Refresh(gardenerId, refreshToken.getToken()));
 
         // Then
         assertNotNull(newToken);
@@ -218,7 +220,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    @DisplayName("Silent Refresh: 유효하지 않은 Refresh Token")
+    @DisplayName("Silent Refresh: 유효하지 않은 Refresh AuthTokens")
     void refreshAccessToken_WhenRefreshTokenInvalid_ThrowsBadCredentialsException() {
         // Given
         Long gardenerId = 1L;
@@ -234,7 +236,7 @@ class AuthenticationServiceImplTest {
     }
 
     @Test
-    @DisplayName("Silent Refresh: Refresh Token 기한 만료")
+    @DisplayName("Silent Refresh: Refresh AuthTokens 기한 만료")
     void refreshAccessToken_WhenRefreshTokenExpired_ThrowsBadCredentialsException() {
         // Given
         Long gardenerId = 1L;

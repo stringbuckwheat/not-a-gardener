@@ -95,4 +95,9 @@ public class GardenExceptionHandler {
         // code, description, message
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("code", "description", "message"));
     }
+
+    @ExceptionHandler(VerificationException.class)
+    public HttpEntity<ErrorResponse> handleVerificationException(VerificationException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getCode()));
+    }
 }

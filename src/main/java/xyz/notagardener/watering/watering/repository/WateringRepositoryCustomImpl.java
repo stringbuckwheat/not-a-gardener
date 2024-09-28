@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
-import xyz.notagardener.watering.Watering;
+import xyz.notagardener.watering.model.Watering;
 import xyz.notagardener.watering.watering.dto.ChemicalUsage;
 import xyz.notagardener.watering.watering.dto.QChemicalUsage;
 
@@ -13,9 +13,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.hibernate.internal.util.NullnessHelper.coalesce;
-import static xyz.notagardener.chemical.QChemical.chemical;
-import static xyz.notagardener.plant.QPlant.plant;
-import static xyz.notagardener.watering.QWatering.watering;
+import static xyz.notagardener.chemical.model.QChemical.chemical;
+import static xyz.notagardener.plant.model.QPlant.plant;
+import static xyz.notagardener.watering.model.QWatering.watering;
 
 @Slf4j
 @RequiredArgsConstructor

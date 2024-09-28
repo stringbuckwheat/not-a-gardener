@@ -1,4 +1,4 @@
-package xyz.notagardener.authentication.config;
+package xyz.notagardener.authentication.filter;
 
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.ErrorResponse;

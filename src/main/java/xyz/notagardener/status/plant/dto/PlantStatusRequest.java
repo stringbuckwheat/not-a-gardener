@@ -10,7 +10,7 @@ import xyz.notagardener.common.validation.NotFuture;
 import xyz.notagardener.common.validation.PlantStatusConstraints;
 import xyz.notagardener.common.validation.YesOrNo;
 import xyz.notagardener.common.validation.YesOrNoType;
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.model.Plant;
 import xyz.notagardener.status.common.model.Status;
 import xyz.notagardener.status.common.model.StatusLog;
 import xyz.notagardener.status.common.model.StatusType;

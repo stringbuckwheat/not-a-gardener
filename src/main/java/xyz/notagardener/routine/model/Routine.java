@@ -1,8 +1,8 @@
-package xyz.notagardener.routine;
+package xyz.notagardener.routine.model;
 
 import lombok.*;
 import xyz.notagardener.gardener.model.Gardener;
-import xyz.notagardener.plant.Plant;
+import xyz.notagardener.plant.model.Plant;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.OnDelete;
