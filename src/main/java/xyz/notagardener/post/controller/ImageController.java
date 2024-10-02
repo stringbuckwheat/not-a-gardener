@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import xyz.notagardener.common.error.code.ExceptionCode;
+import xyz.notagardener.common.error.exception.ImageFailException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,7 +26,7 @@ public class ImageController {
             Path path = Paths.get(uploadDirectory, filename);
             return Files.readAllBytes(path); // 이미지 파일을 바이트 배열로 반환
         } catch (IOException e) {
-            throw new RuntimeException("이미지를 찾을 수 없습니다.", e);
+            throw new ImageFailException(ExceptionCode.FAIL_TO_DELETE_IMAGE);
         }
     }
 }

@@ -12,6 +12,6 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostQueryRepo
     @EntityGraph(attributePaths = {"gardener", "images"})
     List<Post> findAllByOrderByCreatedDateDesc(Pageable pageable);
 
-    @EntityGraph(attributePaths = {"images"})
+    @EntityGraph(attributePaths = {"images", "gardener"})
     Optional<Post> findById(Long id);
 }

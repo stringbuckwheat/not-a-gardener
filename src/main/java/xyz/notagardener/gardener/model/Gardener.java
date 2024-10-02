@@ -32,6 +32,9 @@ public class Gardener {
 
     private String provider;
 
+    @Column(nullable = true)
+    private String profileImageUrl;
+
     @Builder
     public Gardener(Long gardenerId, String username, String password, String email, String name, LocalDateTime createDate, LocalDateTime recentLogin, String provider) {
         this.gardenerId = gardenerId;

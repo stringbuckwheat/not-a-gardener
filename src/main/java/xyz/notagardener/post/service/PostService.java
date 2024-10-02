@@ -33,7 +33,14 @@ public class PostService {
         return postRepository.getAllBy(pageable, gardenerId);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
+    public PostResponse getOne(Long postId, Long gardenerId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_SUCH_POST));
+
+        LikeResponse like = likeService.getOne(postId, gardenerId);
+        return new PostResponse(post, like);
+    }
+
     public PostResponse save(PostRequest postRequest, Long gardenerId) {
         // 여러 장의 사진 업로드
         Gardener gardener = gardenerRepository.findById(gardenerId)
@@ -92,12 +99,13 @@ public class PostService {
         return new PostResponse(post, like);
     }
 
-    @Transactional
-    public void delete(Long postId, Long gardnerId) {
+
+    // d
+    public void delete(Long postId, Long gardenerId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_SUCH_POST));
 
-        if(!post.getGardener().getGardenerId().equals(gardnerId)) {
+        if(!post.getGardener().getGardenerId().equals(gardenerId)) {
             throw new UnauthorizedAccessException(ExceptionCode.NOT_YOUR_POST);
         }
 

@@ -63,6 +63,11 @@ public enum ExceptionCode {
     INVALID_CHEMICAL_TYPE("INVALID_CHEMICAL_TYPE", "유효한 약품 타입이 아님", "약품 타입을 확인해주세요"),
     INVALID_PASSWORD("INVALID_PASSWORD", "비밀번호 유효성 검사 실패", "숫자, 특수문자를 포함하여 8자리 이상이어야 해요."),
 
+    // 이미지 관련
+    FAIL_TO_UPLOAD_IMAGE("FAIL_TO_UPLOAD_IMAGE", "사진 업로드 실패", "사진 업로드에 실패했어요. 잠시 뒤 다시 시도해주세요"),
+    FAIL_TO_DELETE_IMAGE("FAIL_TO_DELETE_IMAGE", "사진 삭제 실패", "사진 삭제에 실패했어요."),
+    FAIL_TO_GET_IMAGE("FAIL_TO_GET_IMAGE", "사진 불러오기 실패", "사진 불러오기에 실패했어요."),
+
     // 범용
     ACCESS_NOT_ALLOWED("ACCESS_NOT_ALLOWED", "잘못된 접근", "잘못된 접근이에요");
 

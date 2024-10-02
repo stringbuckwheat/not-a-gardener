@@ -100,4 +100,9 @@ public class GardenExceptionHandler {
     public HttpEntity<ErrorResponse> handleVerificationException(VerificationException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getCode()));
     }
+
+    @ExceptionHandler(ImageFailException.class)
+    public HttpEntity<ErrorResponse> handleImageFailException(ImageFailException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(e.getCode()));
+    }
 }

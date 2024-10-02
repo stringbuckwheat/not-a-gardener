@@ -28,6 +28,12 @@ public class PostController {
         return ResponseEntity.ok().body(postService.getAll(pageable, user.getId()));
     }
 
+    @GetMapping("/api/post/{id}")
+    public ResponseEntity<PostResponse> getOne(@PathVariable(name = "id") Long postId,
+                                               @AuthenticationPrincipal UserPrincipal user) {
+        return ResponseEntity.ok().body(postService.getOne(postId, user.getId()));
+    }
+
     @PostMapping("/api/post")
     public ResponseEntity<PostResponse> save(@RequestParam("content") String content,
                                              @RequestParam("images") List<MultipartFile> images,
