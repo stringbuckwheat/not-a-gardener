@@ -9,10 +9,10 @@ import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.gardener.repository.GardenerRepository;
 import xyz.notagardener.like.dto.LikeResponse;
-import xyz.notagardener.notification.dto.NotificationResponse;
+import xyz.notagardener.common.notification.dto.DefaultNotification;
 import xyz.notagardener.like.entity.Like;
 import xyz.notagardener.like.repostiory.LikeRepository;
-import xyz.notagardener.notification.service.NotificationService;
+import xyz.notagardener.common.notification.service.NotificationService;
 import xyz.notagardener.post.model.Post;
 import xyz.notagardener.post.repository.PostRepository;
 
@@ -28,8 +28,7 @@ public class LikeService {
     private final NotificationService notificationService;
 
     // c, d
-    public LikeResponse switchLike(Long postId, Long gardenerId) {
-        log.info("switch like service");
+    public LikeResponse like(Long postId, Long gardenerId) {
         // 이미 좋아요를 누른 상태라면 삭제
         Optional<Like> like = likeRepository.findByGardener_GardenerIdAndPost_Id(gardenerId, postId);
 
@@ -44,7 +43,7 @@ public class LikeService {
             Like newLike = likeRepository.save(new Like(post, likedGardener));
 
             // 웹소켓 알림
-            NotificationResponse notification = new NotificationResponse(newLike);
+            DefaultNotification notification = new DefaultNotification(newLike);
 
             Long postOwnerId = post.getGardener().getGardenerId();
             notificationService.sendLikeNotification(notification, postOwnerId);

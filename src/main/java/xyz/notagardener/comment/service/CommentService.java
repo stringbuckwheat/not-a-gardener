@@ -14,8 +14,8 @@ import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.gardener.repository.GardenerRepository;
-import xyz.notagardener.notification.dto.NotificationResponse;
-import xyz.notagardener.notification.service.NotificationService;
+import xyz.notagardener.common.notification.dto.DefaultNotification;
+import xyz.notagardener.common.notification.service.NotificationService;
 import xyz.notagardener.post.model.Post;
 import xyz.notagardener.post.repository.PostRepository;
 
@@ -53,7 +53,7 @@ public class CommentService {
         );
 
         // 웹소켓 알림 보내기
-        NotificationResponse notification = new NotificationResponse(comment);
+        DefaultNotification notification = new DefaultNotification(comment);
         notificationService.sendLikeNotification(notification, post.getGardener().getGardenerId());
 
         return new CommentResponse(comment);

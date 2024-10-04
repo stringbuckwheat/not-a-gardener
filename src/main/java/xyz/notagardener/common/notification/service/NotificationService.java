@@ -1,10 +1,11 @@
-package xyz.notagardener.notification.service;
+package xyz.notagardener.common.notification.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import xyz.notagardener.notification.dto.NotificationResponse;
+import xyz.notagardener.common.notification.dto.DefaultNotification;
+import xyz.notagardener.common.notification.dto.FollowNotification;
 import xyz.notagardener.like.repostiory.LikeRepository;
 
 import java.util.List;
@@ -17,15 +18,21 @@ public class NotificationService {
     private final SimpMessagingTemplate messagingTemplate; // 웹소켓 메시지 전송
 
 
-    public List<NotificationResponse> getUnreadAll(Long gardenerId) {
+    public List<DefaultNotification> getUnreadAll(Long gardenerId) {
         // TODO 댓글, 팔로우 등 구현 후 수정
         return likeRepository.findByGardener_GardenerIdOrderByCreatedDateDesc(gardenerId).stream()
-                .map(NotificationResponse::new).toList();
+                .map(DefaultNotification::new).toList();
     }
 
-    public void sendLikeNotification(NotificationResponse notificationResponse, Long postOwnerId) {
+    public void sendLikeNotification(DefaultNotification defaultNotification, Long postOwnerId) {
         messagingTemplate.convertAndSend(
                 "/queue/notifications/" + postOwnerId,
-                notificationResponse);
+                defaultNotification);
+    }
+
+    public void sendFollowNotification(FollowNotification followNotification, Long followingId) {
+        messagingTemplate.convertAndSend(
+                "/queue/notifications/" + followingId,
+                followNotification);
     }
 }

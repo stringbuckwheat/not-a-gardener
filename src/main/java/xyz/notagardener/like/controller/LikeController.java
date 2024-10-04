@@ -21,7 +21,7 @@ public class LikeController {
     @PostMapping("/api/post/{id}/like")
     public ResponseEntity<LikeResponse> switchLike(@PathVariable(name = "id") Long postId,
                                                    @AuthenticationPrincipal UserPrincipal user) {
-        return ResponseEntity.ok().body(likeService.switchLike(postId, user.getId()));
+        return ResponseEntity.ok().body(likeService.like(postId, user.getId()));
     }
 
     @PutMapping("/api/post/like/{id}")
