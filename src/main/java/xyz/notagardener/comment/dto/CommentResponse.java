@@ -16,7 +16,6 @@ public class CommentResponse {
 
     public CommentResponse(Comment comment) {
         this.id = comment.getId();
-        this.createdDate = comment.getCreatedDate();
 
         // 삭제된 댓글
         if(comment.getDeletedDate() != null) {
@@ -28,6 +27,7 @@ public class CommentResponse {
             this.commenterId = comment.getGardener().getGardenerId();
             this.username = comment.getGardener().getUsername();
             this.name = comment.getGardener().getName();
+            this.createdDate = comment.getCreatedDate();
         }
     }
 }

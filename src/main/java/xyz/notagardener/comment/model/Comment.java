@@ -36,6 +36,8 @@ public class Comment {
 
     private LocalDateTime deletedDate; // 논리 삭제
 
+    private LocalDateTime readDate;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
 
@@ -55,5 +57,8 @@ public class Comment {
 
     public void delete() {
         this.deletedDate = LocalDateTime.now();
+    }
+    public void readNotification() {
+        this.readDate = LocalDateTime.now();
     }
 }

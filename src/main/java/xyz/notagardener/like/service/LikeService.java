@@ -2,7 +2,6 @@ package xyz.notagardener.like.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.common.error.code.ExceptionCode;
@@ -10,9 +9,10 @@ import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.gardener.repository.GardenerRepository;
 import xyz.notagardener.like.dto.LikeResponse;
-import xyz.notagardener.like.dto.NotificationResponse;
+import xyz.notagardener.notification.dto.NotificationResponse;
 import xyz.notagardener.like.entity.Like;
 import xyz.notagardener.like.repostiory.LikeRepository;
+import xyz.notagardener.notification.service.NotificationService;
 import xyz.notagardener.post.model.Post;
 import xyz.notagardener.post.repository.PostRepository;
 
@@ -25,7 +25,7 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final PostRepository postRepository;
     private final GardenerRepository gardenerRepository;
-    private final SimpMessagingTemplate messagingTemplate; // 웹소켓 메시지 전송
+    private final NotificationService notificationService;
 
     // c, d
     public LikeResponse switchLike(Long postId, Long gardenerId) {
@@ -44,20 +44,10 @@ public class LikeService {
             Like newLike = likeRepository.save(new Like(post, likedGardener));
 
             // 웹소켓 알림
-            NotificationResponse notification = NotificationResponse.builder()
-                    .type("LIKE")
-                    .profileImageUrl("test")
-                    .gardenerName(likedGardener.getName())
-                    .username(likedGardener.getUsername())
-                    .postId(post.getId())
-                    .postImageUrl(post.getImages().get(0).getUrl())
-                    .id(newLike.getId())
-                    .createDate(newLike.getCreatedDate())
-                    .readDate(newLike.getReadDate())
-                    .build();
+            NotificationResponse notification = new NotificationResponse(newLike);
 
             Long postOwnerId = post.getGardener().getGardenerId();
-            sendLikeNotification(notification, postOwnerId);
+            notificationService.sendLikeNotification(notification, postOwnerId);
         }
 
         // Response 만들기
@@ -73,12 +63,6 @@ public class LikeService {
 
     @Transactional
     public void readNotification(Long likeId) {
-        likeRepository.findById(likeId).ifPresent(Like::readAlarm);
-    }
-
-    private void sendLikeNotification(NotificationResponse notificationResponse, Long postOwnerId) {
-        messagingTemplate.convertAndSend(
-                "/queue/notifications/" + postOwnerId,
-                notificationResponse);
+        likeRepository.findById(likeId).ifPresent(Like::readNotification);
     }
 }

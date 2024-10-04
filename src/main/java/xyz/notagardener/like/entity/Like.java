@@ -44,7 +44,7 @@ public class Like {
         this.gardener = gardener;
     }
 
-    public void readAlarm() {
+    public void readNotification() {
         this.readDate = LocalDateTime.now();
     }
 }

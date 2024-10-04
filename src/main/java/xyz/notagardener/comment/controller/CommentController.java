@@ -34,8 +34,14 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(commentService.save(commentRequest, user.getId()));
     }
 
-    @DeleteMapping("/api/post/comment/{commentId}")
-    public ResponseEntity<Void> delete(@PathVariable(name = "commentId") Long commentId,
+    @PutMapping("/api/post/comment/{id}")
+    public ResponseEntity<Void> readNotification(@PathVariable(name = "id") Long commentId) {
+        commentService.readNotification(commentId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/api/post/comment/{id}")
+    public ResponseEntity<Void> delete(@PathVariable(name = "id") Long commentId,
                                        @AuthenticationPrincipal UserPrincipal user) {
         commentService.delete(commentId, user.getId());
         return ResponseEntity.noContent().build();

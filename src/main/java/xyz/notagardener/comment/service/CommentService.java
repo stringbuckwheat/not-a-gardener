@@ -14,6 +14,8 @@ import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
 import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.gardener.repository.GardenerRepository;
+import xyz.notagardener.notification.dto.NotificationResponse;
+import xyz.notagardener.notification.service.NotificationService;
 import xyz.notagardener.post.model.Post;
 import xyz.notagardener.post.repository.PostRepository;
 
@@ -26,14 +28,14 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final GardenerRepository gardenerRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     public CommentResponse save(CommentRequest commentRequest, Long gardenerId) {
-        log.info("commentRequest: {}", commentRequest);
-
         Gardener commenter = gardenerRepository.findById(gardenerId)
                 .orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_SUCH_GARDENER));
-        Post post = postRepository.getReferenceById(commentRequest.getPostId());
+        Post post = postRepository.findById(commentRequest.getPostId())
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_SUCH_POST));
         Comment parent = null;
 
         if (commentRequest.getParentCommentId() != null) {
@@ -50,12 +52,22 @@ public class CommentService {
                         .build()
         );
 
+        // 웹소켓 알림 보내기
+        NotificationResponse notification = new NotificationResponse(comment);
+        notificationService.sendLikeNotification(notification, post.getGardener().getGardenerId());
+
         return new CommentResponse(comment);
     }
 
     @Transactional(readOnly = true)
     public List<CommentResponse> getAllBy(Long postId, Pageable pageable) {
         return commentRepository.findByPost_Id(postId, pageable).stream().map(CommentResponse::new).toList();
+    }
+
+    // 읽음 처리
+    @Transactional
+    public void readNotification(Long commendId) {
+        commentRepository.findById(commendId).ifPresent(Comment::readNotification);
     }
 
     @Transactional
