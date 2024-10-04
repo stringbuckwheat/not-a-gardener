@@ -21,7 +21,6 @@ public class ImageController {
 
     @GetMapping("/api/images/{filename}")
     public byte[] getImage(@PathVariable String filename) throws IOException {
-        log.info("filename: {}", filename);
         try {
             Path path = Paths.get(uploadDirectory, filename);
             return Files.readAllBytes(path); // 이미지 파일을 바이트 배열로 반환

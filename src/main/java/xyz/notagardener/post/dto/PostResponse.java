@@ -19,6 +19,7 @@ public class PostResponse {
     // 유저 정보
     private Long gardenerId;
     private String name;
+    private String username;
 
     private LikeResponse like;
 
@@ -42,5 +43,6 @@ public class PostResponse {
         Gardener gardener = post.getGardener();
         this.gardenerId = gardener.getGardenerId();
         this.name = gardener.getName();
+        this.username = gardener.getUsername();
     }
 }
