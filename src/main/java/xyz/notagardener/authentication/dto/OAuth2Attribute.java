@@ -19,7 +19,7 @@ public class OAuth2Attribute {
     private String name;
     private String provider;
 
-    public static OAuth2Attribute of(String provider, Map<String, Object> attributes){
+    public static OAuth2Attribute of(String provider, Map<String, Object> attributes) {
         switch (provider) {
             case "google":
                 return ofGoogle(attributes);
@@ -42,7 +42,7 @@ public class OAuth2Attribute {
     }
 
     private static OAuth2Attribute ofKakao(
-                                           Map<String, Object> attributes) {
+            Map<String, Object> attributes) {
         Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
         Map<String, Object> kakaoProfile = (Map<String, Object>) kakaoAccount.get("profile");
 
@@ -54,8 +54,7 @@ public class OAuth2Attribute {
                 .build();
     }
 
-    private static OAuth2Attribute ofNaver(
-                                           Map<String, Object> attributes) {
+    private static OAuth2Attribute ofNaver(Map<String, Object> attributes) {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
 
         return OAuth2Attribute.builder()
@@ -67,10 +66,8 @@ public class OAuth2Attribute {
     }
 
     public Gardener toEntity() {
-        // 신규 생성에만 쓰기 때문에 gardenerId는 없음
         return Gardener
                 .builder()
-                .username(this.getEmail())
                 .email(this.getEmail())
                 .password(null)
                 .name(this.getName())

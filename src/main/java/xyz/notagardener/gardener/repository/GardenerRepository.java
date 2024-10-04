@@ -11,6 +11,7 @@ public interface GardenerRepository extends Repository<Gardener, Long>, Gardener
     Optional<Gardener> findById(Long gardenerId);
     Optional<Gardener> findByProviderIsNullAndUsername(String username);
     Optional<Gardener> findByUsernameAndProvider(String username, String provider);
+    Optional<Gardener> findByEmailAndProvider(String email, String provider);
 
     Gardener save(Gardener gardener);
 

@@ -56,7 +56,7 @@ public class OAuth2MemberService implements OAuth2UserService<OAuth2UserRequest,
      * @return
      */
     public Gardener saveOrUpdate(OAuth2Attribute oAuth2Attribute) {
-        Gardener gardener = gardenerRepository.findByUsernameAndProvider(oAuth2Attribute.getEmail(), oAuth2Attribute.getProvider())
+        Gardener gardener = gardenerRepository.findByEmailAndProvider(oAuth2Attribute.getEmail(), oAuth2Attribute.getProvider())
                 .orElse(oAuth2Attribute.toEntity());
         gardener.updateRecentLogin();
 

@@ -16,6 +16,7 @@ public class Gardener {
     private Long gardenerId;
 
     @NotNull
+    @Setter
     private String username;
 
     private String password;

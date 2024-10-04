@@ -22,6 +22,9 @@ public class SimpleInfo {
     @Schema(description = "소셜 로그인 공급자", example = "")
     private String provider;
 
+    @Schema(description = "아이디", example = "stringbuckwheat")
+    private String username;
+
     SimpleInfo(ActiveGardener activeGardener) {
         this.gardenerId = activeGardener.getGardenerId();
         this.name = activeGardener.getName();
@@ -32,5 +35,6 @@ public class SimpleInfo {
         this.gardenerId = gardener.getGardenerId();
         this.name = gardener.getName();
         this.provider = gardener.getProvider();
+        this.username = gardener.getUsername();
     }
 }

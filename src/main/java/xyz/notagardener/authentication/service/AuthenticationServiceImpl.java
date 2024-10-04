@@ -19,6 +19,7 @@ import xyz.notagardener.authentication.token.RefreshToken;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.ExpiredRefreshTokenException;
 import xyz.notagardener.common.error.exception.GardenerNotInSessionException;
+import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.gardener.repository.GardenerRepository;
 
@@ -37,10 +38,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @Transactional(readOnly = true)
     public Info getGardenerInfo(Long id) {
+        Gardener gardener = gardenerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_SUCH_GARDENER));
         ActiveGardener activeGardener = activeGardenerRepository.findById(id)
                 .orElseThrow(() -> new GardenerNotInSessionException(ExceptionCode.NO_TOKEN_IN_REDIS));
 
-        return new Info(activeGardener);
+        return new Info("", activeGardener.getRefreshToken().getToken(), gardener);
     }
 
     @Override

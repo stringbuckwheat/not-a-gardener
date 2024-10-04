@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import xyz.notagardener.gardener.model.Gardener;
 
 import java.time.LocalDateTime;
 
@@ -46,5 +47,14 @@ public class GardenerDetail {
         this.name = name;
         this.createDate = createDate;
         this.provider = provider;
+    }
+
+    public GardenerDetail(Gardener gardener) {
+        this.id = gardener.getGardenerId();
+        this.username = gardener.getUsername();
+        this.email = gardener.getEmail();
+        this.name = gardener.getName();
+        this.createDate = gardener.getCreateDate();
+        this.provider = gardener.getProvider();
     }
 }

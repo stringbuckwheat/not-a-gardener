@@ -12,10 +12,11 @@ import xyz.notagardener.authentication.service.AuthenticationService;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.HasSameUsernameException;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
-import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.gardener.dto.GardenerDetail;
 import xyz.notagardener.gardener.dto.Register;
+import xyz.notagardener.gardener.dto.UpdateUsername;
 import xyz.notagardener.gardener.dto.VerifyResponse;
+import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.gardener.repository.GardenerRepository;
 
 import java.util.Optional;
@@ -50,7 +51,7 @@ public class GardenerServiceImpl implements GardenerService {
     public String hasSameUsername(String username) {
         Optional<Gardener> gardener = gardenerRepository.findByProviderIsNullAndUsername(username);
 
-        if(!gardener.isEmpty()) {
+        if(gardener.isPresent()) {
             throw new HasSameUsernameException(ExceptionCode.HAS_SAME_USERNAME, username);
         }
 
@@ -60,7 +61,7 @@ public class GardenerServiceImpl implements GardenerService {
     @Override
     @Transactional
     public Info add(Register register) {
-        boolean hasSameId = hasSameUsername(register.getUsername()) != null;
+        hasSameUsername(register.getUsername());
 
         // DTO에 암호화된 비밀번호 저장한 뒤 엔티티로 변환
         Gardener gardener = gardenerRepository.save(
@@ -70,6 +71,19 @@ public class GardenerServiceImpl implements GardenerService {
         );
 
         return authenticationService.setAuthentication(gardener);
+    }
+
+    @Transactional
+    public GardenerDetail updateUsername(UpdateUsername updateUsername) {
+        Gardener gardener = gardenerRepository.findById(updateUsername.getId())
+                .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode()));
+
+        // 아이디 중복 검사
+        String validUsername = hasSameUsername(updateUsername.getUsername());
+
+        gardener.setUsername(validUsername);
+
+        return new GardenerDetail(gardener);
     }
 
     @Override
@@ -89,14 +103,7 @@ public class GardenerServiceImpl implements GardenerService {
                 .orElseThrow(() -> new UsernameNotFoundException(ExceptionCode.NO_ACCOUNT.getCode()));
         gardener.updateEmailAndName(gardenerDetail.getEmail(), gardenerDetail.getName());
 
-        return GardenerDetail.builder()
-                .id(gardener.getGardenerId())
-                .username(gardener.getUsername())
-                .email(gardener.getEmail())
-                .name(gardener.getName())
-                .createDate(gardener.getCreateDate())
-                .provider(gardener.getProvider())
-                .build();
+        return new GardenerDetail(gardener);
     }
 
     @Override
