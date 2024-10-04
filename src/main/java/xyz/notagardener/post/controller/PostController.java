@@ -10,9 +10,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import xyz.notagardener.authentication.model.UserPrincipal;
+import xyz.notagardener.post.dto.PostOverview;
 import xyz.notagardener.post.dto.PostRequest;
-import xyz.notagardener.post.dto.PostResponse;
 import xyz.notagardener.post.service.PostService;
+import xyz.notagardener.post.dto.PostResponse;
 
 import java.util.List;
 
@@ -21,6 +22,12 @@ import java.util.List;
 @Slf4j
 public class PostController {
     private final PostService postService;
+
+    @GetMapping("/api/feed/gardener/{username}/post/overview")
+    public ResponseEntity<List<PostOverview>> getOverviews(@PageableDefault(page = 0, size = 12) Pageable pageable,
+                                                           @PathVariable(name = "username") String username) {
+        return ResponseEntity.ok().body(postService.getOverviews(pageable, username));
+    }
 
     @GetMapping("/api/post")
     public ResponseEntity<List<PostResponse>> getAll(@PageableDefault(page = 0, size = 10) Pageable pageable,

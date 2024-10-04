@@ -25,7 +25,7 @@ public class ImageController {
             Path path = Paths.get(uploadDirectory, filename);
             return Files.readAllBytes(path); // 이미지 파일을 바이트 배열로 반환
         } catch (IOException e) {
-            throw new ImageFailException(ExceptionCode.FAIL_TO_DELETE_IMAGE);
+            throw new ImageFailException(ExceptionCode.FAIL_TO_GET_IMAGE);
         }
     }
 }

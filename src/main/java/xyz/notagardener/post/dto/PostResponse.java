@@ -2,9 +2,9 @@ package xyz.notagardener.post.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
+import xyz.notagardener.post.model.Post;
 import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.like.dto.LikeResponse;
-import xyz.notagardener.post.model.Post;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -11,6 +11,7 @@ import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.gardener.repository.GardenerRepository;
 import xyz.notagardener.like.dto.LikeResponse;
 import xyz.notagardener.like.service.LikeService;
+import xyz.notagardener.post.dto.PostOverview;
 import xyz.notagardener.post.dto.PostRequest;
 import xyz.notagardener.post.dto.PostResponse;
 import xyz.notagardener.post.dto.PostUpdate;
@@ -39,6 +40,11 @@ public class PostService {
 
         LikeResponse like = likeService.getOne(postId, gardenerId);
         return new PostResponse(post, like);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostOverview> getOverviews(Pageable pageable, String username) {
+        return postRepository.getOverviews(pageable, username).stream().map(PostOverview::new).toList();
     }
 
     public PostResponse save(PostRequest postRequest, Long gardenerId) {
