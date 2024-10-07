@@ -64,6 +64,7 @@ public enum ExceptionCode {
     // 유효성 검사 관련
     INVALID_CHEMICAL_TYPE("INVALID_CHEMICAL_TYPE", "유효한 약품 타입이 아님", "약품 타입을 확인해주세요"),
     INVALID_PASSWORD("INVALID_PASSWORD", "비밀번호 유효성 검사 실패", "숫자, 특수문자를 포함하여 8자리 이상이어야 해요."),
+    CANNOT_FOLLOW_YOURSELF("CANNOT_FOLLOW_YOURSELF", "스스로를 팔로우", "자기 자신을 팔로우 할 수 없어요"),
 
     // 이미지 관련
     FAIL_TO_UPLOAD_IMAGE("FAIL_TO_UPLOAD_IMAGE", "사진 업로드 실패", "사진 업로드에 실패했어요. 잠시 뒤 다시 시도해주세요"),
