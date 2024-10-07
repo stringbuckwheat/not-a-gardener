@@ -1,9 +1,9 @@
 
 ![logo](https://github.com/stringbuckwheat/not-a-gardener/assets/104717358/f10d393b-13cd-4b9e-9294-47fef4af4dfd)
 
-배포중인 서비스를 확인하고 싶으시다면, [이곳](http://not-a-gardener.xyz/)을 클릭하세요!
+배포중인 서비스를 확인하고 싶으시다면, [이곳](http://not-a-gardener.xyz/)을 클릭하세요!     
+API 명세서는 [이곳](http://not-a-gardener.xyz/swagger-ui/index.html)에서 보실 수 있습니다.
 
-<br>
 
 # 목차
 - [1. not-a-gardener🌿?](#1-not-a-gardener)
@@ -26,7 +26,7 @@
 
 # 1. not-a-gardener🌿?
 
-> 아직 '진정한 가드너'가 되지 못한 이들을 위한 실내 식물 돌보기 서비스
+> '진정한 가드너'가 되지 못한 이들을 위한 실내 식물 돌보기 서비스
 
 실내 가드너를 위해 물을 줄 날짜를 알려줍니다!
 
@@ -47,7 +47,7 @@ not-a-gardener🌿는, 관수 기록 시 직전 물 준 날짜와 비교해서 �
   <img src="https://img.shields.io/badge/JPA-yellow?style=flat-square"/>
   <img src="https://img.shields.io/badge/QueryDsl-purple?style=flat-square"/>
   <img src="https://img.shields.io/badge/React%20(18.2)-61DAFB?style=flat-square&logo=React&logoColor=black"/>
-  <img src="https://img.shields.io/badge/MariaDB%20(10.3)-003545?style=flat-square&logo=MariaDB&logoColor=white"/>
+  <img src="https://img.shields.io/badge/MariaDB%20(11.5)-003545?style=flat-square&logo=MariaDB&logoColor=white"/>
   <img src="https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=Redis&logoColor=white"/>
   <img src="https://img.shields.io/badge/Jenkins-D24939?style=flat-square&logo=Jenkins&logoColor=white"/>
 </div>
@@ -57,49 +57,8 @@ not-a-gardener🌿는, 관수 기록 시 직전 물 준 날짜와 비교해서 �
 
 <br>
 
-## ✔ 디렉토리 구조
-```
-not-a-gardener/
-├── build.gradle
-├── front-end/        ## ⭐️ Frontend
-│ ├── public/
-│ └── src/
-│   ├── App.js  
-│   ├── api/          ## API 모듈, Interceptor
-│   ├── assets/       ## 이미지, 로고 등
-│   ├── components/   ## 재사용할 컴포넌트
-│   ├── pages/        ## 페이지
-│   ├── redux/        ## redux reducer, store...
-│   ├── theme/        ## 디자인(global)
-│   └── utils/        ## util 함수
-├── gradle/  
-│ └── wrapper/  
-└── src/            ## ⭐️ Backend
-   └──  main/  
-       └── java  
-           └── com/buckwheat/garden   
-             ├── GardenApplication.java  
-             ├── domain             ## 도메인 별 분류
-             │   ├── chemical/      ## 비료/살충/살균제
-             │   ├── gardener/      ## 회원
-             │   ├── goal/          ## 목표
-             │   ├── place/         ## 장소
-             │   ├── plant/         ## 식물
-             │   ├── routine/       ## 루틴
-             │   ├── todo/          ## 할일
-             │   └── watering/      ## 물주기
-             └── global
-                ├── code/          ## 관수코드, 관수 후 주기 변경 알림 코드 등
-                ├── config/         ## 설정 클래스
-                ├── error/         ## ExceptionHandler, 응답 객체
-                |   ├── code/      ## 에러코드(Enum)
-                |   └── exception/ ## Custom Exception
-                └── filter/        ## 인증 필터들
-```
-Spring boot 프로젝트 내에 React 디렉토리가 있는 구조입니다.
-
-<br>
-<br>
+## ✔ ERD
+![garden](https://github.com/user-attachments/assets/98b7761b-ae5c-4445-bf37-fdd380dc580e)
 
 # 2. 구현 목록 / 프로젝트 결과물
 
