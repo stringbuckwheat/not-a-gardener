@@ -1,5 +1,6 @@
 package xyz.notagardener.follow.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ public class FollowController {
     private final FollowService followService;
 
     @PostMapping("/api/follow")
-    public ResponseEntity<Void> follow(@RequestBody FollowRequest followRequest) {
+    public ResponseEntity<Void> follow(@RequestBody @Valid FollowRequest followRequest) {
         followService.follow(followRequest);
         return ResponseEntity.noContent().build();
     }
