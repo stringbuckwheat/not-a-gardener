@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import xyz.notagardener.common.model.Notifiable;
 import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.post.model.Post;
 
@@ -19,24 +20,15 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-public class Comment {
+public class Comment implements Notifiable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "gardener_id")
     private Gardener gardener;
-
-    @CreatedDate
-    @Column(updatable = false, nullable = false)
-    private LocalDateTime createdDate; // 생성 일자
-
-    private LocalDateTime deletedDate; // 논리 삭제
-
-    private LocalDateTime readDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
@@ -46,6 +38,12 @@ public class Comment {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent")
     private List<Comment> replies = new ArrayList<>();
+
+    @CreatedDate
+    @Column(updatable = false, nullable = false)
+    private LocalDateTime createdDate; // 생성 일자
+
+    private LocalDateTime deletedDate; // 논리 삭제
 
     @Builder
     private Comment(String content, Gardener gardener, Post post, Comment parent) {
@@ -57,8 +55,5 @@ public class Comment {
 
     public void delete() {
         this.deletedDate = LocalDateTime.now();
-    }
-    public void readNotification() {
-        this.readDate = LocalDateTime.now();
     }
 }

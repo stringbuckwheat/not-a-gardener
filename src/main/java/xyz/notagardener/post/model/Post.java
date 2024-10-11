@@ -7,10 +7,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import xyz.notagardener.common.model.BaseEntity;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import xyz.notagardener.common.model.Notifiable;
 import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.like.entity.Like;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +22,8 @@ import java.util.List;
 @Table(name = "post")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Post extends BaseEntity {
+@EntityListeners(AuditingEntityListener.class)
+public class Post implements Notifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,6 +41,14 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "gardener_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Gardener gardener;
+
+    @CreatedDate
+    @Column(updatable = false, nullable = false)
+    private LocalDateTime createdDate; // 생성 일자
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    private LocalDateTime updatedDate; // 마지막 수정 일자
 
     public Post(String content, Gardener gardener) {
         this.content = content;

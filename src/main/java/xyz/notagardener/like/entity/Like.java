@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import xyz.notagardener.common.model.Notifiable;
 import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.post.model.Post;
 
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EntityListeners(AuditingEntityListener.class)
-public class Like {
+public class Like implements Notifiable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,17 +35,10 @@ public class Like {
 
     @CreatedDate
     @Column(updatable = false, nullable = false)
-    private LocalDateTime createdDate; // 생성 일자
-
-    @Column(nullable = true)
-    private LocalDateTime readDate; // 알림 확인 일자
+    private LocalDateTime createdDate;
 
     public Like(Post post, Gardener gardener) {
         this.post = post;
         this.gardener = gardener;
-    }
-
-    public void readNotification() {
-        this.readDate = LocalDateTime.now();
     }
 }
