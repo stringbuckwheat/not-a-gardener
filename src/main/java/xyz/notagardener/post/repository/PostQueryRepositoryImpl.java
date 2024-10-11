@@ -5,13 +5,13 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-import xyz.notagardener.post.dto.PostOverview;
+import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.post.dto.PostResponse;
 import xyz.notagardener.post.dto.QPostResponse;
 import xyz.notagardener.post.model.Post;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import static xyz.notagardener.gardener.model.QGardener.gardener;
 import static xyz.notagardener.like.entity.QLike.like;
@@ -57,5 +57,16 @@ public class PostQueryRepositoryImpl implements PostQueryRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+    }
+
+    public Optional<Gardener> getGardener(Long gardenerId) {
+        Gardener result = queryFactory
+                .selectFrom(gardener)
+                .leftJoin(gardener.followers)
+                .fetchJoin()
+                .where(gardener.gardenerId.eq(gardenerId))
+                .fetchOne();
+
+        return Optional.ofNullable(result);
     }
 }

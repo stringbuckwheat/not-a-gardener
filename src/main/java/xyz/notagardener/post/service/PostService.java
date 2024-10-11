@@ -1,14 +1,16 @@
 package xyz.notagardener.post.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.UnauthorizedAccessException;
+import xyz.notagardener.notification.service.NotificationService;
+import xyz.notagardener.follow.model.Follow;
 import xyz.notagardener.gardener.model.Gardener;
-import xyz.notagardener.gardener.repository.GardenerRepository;
 import xyz.notagardener.like.dto.LikeResponse;
 import xyz.notagardener.like.service.LikeService;
 import xyz.notagardener.post.dto.PostOverview;
@@ -23,11 +25,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PostService {
     private final ImageStorageService imageStorageService;
     private final LikeService likeService;
     private final PostRepository postRepository;
-    private final GardenerRepository gardenerRepository;
+    private final NotificationService notificationService;
 
     @Transactional(readOnly = true)
     public List<PostResponse> getAll(Pageable pageable, Long gardenerId) {
@@ -49,7 +52,7 @@ public class PostService {
 
     public PostResponse save(PostRequest postRequest, Long gardenerId) {
         // 여러 장의 사진 업로드
-        Gardener gardener = gardenerRepository.findById(gardenerId)
+        Gardener gardener = postRepository.getGardener(gardenerId)
                 .orElseThrow(() -> new ResourceNotFoundException(ExceptionCode.NO_SUCH_GARDENER));
 
         Post post = new Post(postRequest.getContent(), gardener);
@@ -61,6 +64,10 @@ public class PostService {
             image.setPost(post);
             post.getImages().add(image);
         }
+
+        // 웹소켓 알림
+        List<Long> followerIds = gardener.getFollowers().stream().map(Follow::getFollowerId).toList();
+        notificationService.send(post, followerIds);
 
         return new PostResponse(postRepository.save(post), 0L, false);
     }

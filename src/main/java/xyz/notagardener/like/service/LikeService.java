@@ -3,16 +3,14 @@ package xyz.notagardener.like.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.gardener.model.Gardener;
 import xyz.notagardener.gardener.repository.GardenerRepository;
 import xyz.notagardener.like.dto.LikeResponse;
-import xyz.notagardener.common.notification.dto.DefaultNotification;
 import xyz.notagardener.like.entity.Like;
 import xyz.notagardener.like.repostiory.LikeRepository;
-import xyz.notagardener.common.notification.service.NotificationService;
+import xyz.notagardener.notification.service.NotificationService;
 import xyz.notagardener.post.model.Post;
 import xyz.notagardener.post.repository.PostRepository;
 
@@ -43,10 +41,8 @@ public class LikeService {
             Like newLike = likeRepository.save(new Like(post, likedGardener));
 
             // 웹소켓 알림
-            DefaultNotification notification = new DefaultNotification(newLike);
-
             Long postOwnerId = post.getGardener().getGardenerId();
-            notificationService.sendLikeNotification(notification, postOwnerId);
+            notificationService.send(newLike, postOwnerId);
         }
 
         // Response 만들기
@@ -58,10 +54,5 @@ public class LikeService {
         Optional<Like> like = likeRepository.findByGardener_GardenerIdAndPost_Id(gardenerId, postId);
         Long likeCount = likeRepository.countByPost_Id(postId);
         return new LikeResponse(likeCount, like.isPresent());
-    }
-
-    @Transactional
-    public void readNotification(Long likeId) {
-        likeRepository.findById(likeId).ifPresent(Like::readNotification);
     }
 }

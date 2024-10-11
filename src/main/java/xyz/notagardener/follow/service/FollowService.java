@@ -6,8 +6,7 @@ import org.springframework.stereotype.Service;
 import xyz.notagardener.common.error.code.ExceptionCode;
 import xyz.notagardener.common.error.exception.ResourceNotFoundException;
 import xyz.notagardener.common.error.exception.SelfFollowException;
-import xyz.notagardener.common.notification.dto.FollowNotification;
-import xyz.notagardener.common.notification.service.NotificationService;
+import xyz.notagardener.notification.service.NotificationService;
 import xyz.notagardener.follow.dto.FollowRequest;
 import xyz.notagardener.follow.model.Follow;
 import xyz.notagardener.follow.repository.FollowRepository;
@@ -44,12 +43,6 @@ public class FollowService {
         Gardener following = gardenerRepository.getReferenceById(followRequest.getFollowingId());
 
         Follow newFollow = followRepository.save(new Follow(follower, following));
-        sendNotification(newFollow, followRequest.getFollowingId());
-    }
-
-    private void sendNotification(Follow follow, Long followingId) {
-        // 웹소켓 알림
-        FollowNotification notification = new FollowNotification(follow);
-        notificationService.sendFollowNotification(notification, followingId);
+        notificationService.send(newFollow, followRequest.getFollowingId()); // 웹소켓 알림
     }
 }
