@@ -32,7 +32,7 @@ public class SocialController {
         return ResponseEntity.ok().body(socialService.getTagInfoBy(username, user.getId()));
     }
 
-        @PostMapping("/api/social/gardener")
+    @PostMapping("/api/social/gardener")
     public ResponseEntity<SocialGardenerInfo> update(@RequestBody @Valid SocialGardenerRequest request,
                                                      @AuthenticationPrincipal UserPrincipal user) {
         return ResponseEntity.ok().body(socialService.update(request, user.getId()));
