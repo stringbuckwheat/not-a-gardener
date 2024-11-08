@@ -66,8 +66,8 @@ public class PostService {
         }
 
         // 웹소켓 알림
-        List<Long> followerIds = gardener.getFollowers().stream().map(Follow::getFollowerId).toList();
-        notificationService.send(post, followerIds);
+        List<Gardener> gardeners = gardener.getFollowers().stream().map(Follow::getFollower).toList();
+        notificationService.send(post, gardeners);
 
         return new PostResponse(postRepository.save(post), 0L, false);
     }

@@ -50,25 +50,22 @@ public class Notification {
 
     private LocalDateTime readDate;
 
-    public Notification(Notifiable notifiable) {
-        this.gardener = notifiable.getGardener(); // Gardener를 설정
-        setData(notifiable);
+    public Notification(Gardener gardener, NotificationType type, Comment comment, Follow follow, Like like, Post post) {
+        this.gardener = gardener;
+        this.type = type;
+        this.comment = comment;
+        this.follow = follow;
+        this.like = like;
+        this.post = post;
     }
 
-    private void setData(Notifiable notifiable) {
-        if (notifiable instanceof Comment comment) {
-            this.type = NotificationType.COMMENT;
-            this.comment = comment;
-        } else if (notifiable instanceof Follow follow) {
-            this.type = NotificationType.FOLLOW;
-            this.follow = follow;
-        } else if (notifiable instanceof Like like) {
-            this.type = NotificationType.LIKE;
-            this.like = like;
-        } else if (notifiable instanceof Post post) {
-            this.type = NotificationType.POST;
-            this.post = post;
-        }
+    public Notifiable getNotifiable() {
+        return switch (this.getType()) {
+            case COMMENT -> comment;
+            case FOLLOW -> follow;
+            case LIKE -> like;
+            case POST -> post;
+        };
     }
 
     public void read() {
