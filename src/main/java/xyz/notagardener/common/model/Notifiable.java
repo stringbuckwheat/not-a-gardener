@@ -7,5 +7,6 @@ import java.time.LocalDateTime;
 public interface Notifiable {
     Gardener getGardener();
     Long getId(); // ID
+    String getContent();
     LocalDateTime getCreatedDate(); // 생성 날짜
 }

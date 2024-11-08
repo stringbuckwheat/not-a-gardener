@@ -48,4 +48,9 @@ public class Follow implements Notifiable {
     public Gardener getGardener() {
         return follower;
     }
+
+    @Override
+    public String getContent() {
+        return null;
+    }
 }

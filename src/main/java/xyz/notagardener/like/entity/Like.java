@@ -41,4 +41,9 @@ public class Like implements Notifiable {
         this.post = post;
         this.gardener = gardener;
     }
+
+    @Override
+    public String getContent() {
+        return null;
+    }
 }
